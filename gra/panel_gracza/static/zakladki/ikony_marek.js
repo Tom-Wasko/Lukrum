@@ -30,12 +30,11 @@ const WLASNE = {
   "Zakłady Mięsne „Rożen” z Łęcznej": '<path d="M13.2 4.2c3.8-1.6 7.6 2.2 6 6-1 2.4-3.4 3.4-5.6 3.6l-3.4 3.4"/><path d="M13.2 4.2c-2.4 1-3.4 3.4-3.6 5.6l-3.4 3.4"/>'
     + '<path d="M6.2 13.2 10.8 17.8M6.2 13.2a2 2 0 1 0-2.6 2.4 2 2 0 1 0 2.4 2.6M10.8 17.8l-4.8.2"/>',
   // biura rachunkowe (mapa/biura.yaml)
-  "Biuro Rachunkowe J.K.Ś.": '<rect x="5" y="2.5" width="14" height="19" rx="2"/><rect x="8" y="5.5" width="8" height="3.5" rx=".5"/><path d="M15.5 15v3.5"/>'
+  "J.K.Ś.": '<rect x="5" y="2.5" width="14" height="19" rx="2"/><rect x="8" y="5.5" width="8" height="3.5" rx=".5"/><path d="M15.5 15v3.5"/>'
     + kropki([[8.7, 12], [12, 12], [15.3, 12], [8.7, 15.3], [12, 15.3], [8.7, 18.5], [12, 18.5]], 0.95),
-  "Księgowość Pod Trybunałem": '<path d="M3 21h18M5 21V11h14v10M10 11V6.5L12 3l2 3.5V11"/><circle cx="12" cy="8" r="1"/><path d="M8 14v4M12 14v4M16 14v4"/>',
-  "Pani Halinka – księgowość z sercem": '<path d="M12 20.5S3.5 15.6 3.5 9.6A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 8.5 2.2c0 6-8.5 10.9-8.5 10.9z"/><path d="M8.5 12.5l2.4 2.4 4.6-4.6"/>',
-  "e-Księgi24.pl": '<rect x="4" y="4" width="16" height="11.5" rx="1.5"/><path d="M2 19.5h20"/><path d="M14.6 11.6a3 3 0 1 1 .2-3.3M15 6.3v2.2h-2.2"/>',
-  "Kancelaria Podatkowa Debet & Kredyt": '<path d="M12 3v17M7.5 21h9M5 6.5h14"/><path d="M5 6.5 2.5 13a2.5 2.5 0 0 0 5 0L5 6.5zM19 6.5 16.5 13a2.5 2.5 0 0 0 5 0L19 6.5z"/>',
+  "Józef K.": '<path d="M3 21h18M5 21V11h14v10M10 11V6.5L12 3l2 3.5V11"/><circle cx="12" cy="8" r="1"/><path d="M8 14v4M12 14v4M16 14v4"/>',
+  "Scrooge": '<path d="M12 20.5S3.5 15.6 3.5 9.6A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 8.5 2.2c0 6-8.5 10.9-8.5 10.9z"/><path d="M8.5 12.5l2.4 2.4 4.6-4.6"/>',
+  "Asteroida 328": '<path d="M12 3v17M7.5 21h9M5 6.5h14"/><path d="M5 6.5 2.5 13a2.5 2.5 0 0 0 5 0L5 6.5zM19 6.5 16.5 13a2.5 2.5 0 0 0 5 0L19 6.5z"/>',
   Samodzielnie: '<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4L16.5 3.5z"/><path d="M14.5 5.5l3 3M4 22h16"/>',
   // agencje reklamowe (mapa/reklama.yaml)
   "Drukarnia „Papier Przyjmie”": '<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6.5 14h11v7h-11zM9 17h6"/>' + kropki([[17.6, 11.6]], 0.9),

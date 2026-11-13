@@ -349,34 +349,6 @@ narzedzia_internetowe:
     utrzymanie: 500
     zalozenie: true
     od_rundy: 7
-biura_rachunkowe:
-  zrodlo: 'założenie autora: 6 biur rachunkowych, ceny dopasowane do rynku; KPiR: dokument = każda pozycja KPiR poza obsługą
-    kadrowo-płacową'
-  pozycje:
-  - nazwa: Biuro Rachunkowe Sumator
-    ksiegowanie: 1.2
-    etat: 33
-    zlecenie: 10
-  - nazwa: Biuro Rachunkowe Abakus
-    ksiegowanie: 1.2
-    etat: 32
-    zlecenie: 11
-  - nazwa: Biuro Rachunkowe Bilans
-    ksiegowanie: 1.1
-    etat: 37
-    zlecenie: 14
-  - nazwa: Biuro Rachunkowe Liczydło
-    ksiegowanie: 1.3
-    etat: 29
-    zlecenie: 9
-  - nazwa: Biuro Rachunkowe Grodzka
-    ksiegowanie: 1.0
-    etat: 32
-    zlecenie: 12
-  - nazwa: Biuro Rachunkowe Saldo
-    ksiegowanie: 1.5
-    etat: 28
-    zlecenie: 5
 szkolenia:
   zrodlo: 'założenie autora: HR – szkolenia, % pracowników oczekujących i ceny; nazwy firm i szkoleń – gastronomia (F2.6)'
   firmy:

@@ -271,7 +271,7 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
             info[nazwa]["zaproszenie"] = kas.zaproszenie(dane, f, r, ziarno, konfiguracja["liczba_rund"],
                                                          bool(konfiguracja.get("kasyno_botow")))
         if f.biuro in bo.biura(dane):   # biura z mapy albo samodzielna księgowość (silnik/ksiegowosc/biuro.py)
-            info[nazwa]["biuro"] = bo.nalicz(dane, f, ks, rach, *bo._umowy(dane, f))
+            info[nazwa]["biuro"] = bo.nalicz(dane, f, ks, rach, *bo._umowy(dane, f), r)
         # JDG: składki właściciela, zaliczka PIT i VAT (silnik/ksiegowosc/rozliczenie.py)
         samodzielnie = bo.zamknij_samodzielnie(f, r >= konfiguracja["liczba_rund"])
         stan_przed = bo.stan_rozliczen(f)

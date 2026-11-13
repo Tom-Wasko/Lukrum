@@ -38,6 +38,7 @@ Format (słownik; brak klucza = bez zmian względem poprzedniej rundy):
                                                               (silnik/swiat/awarie.py, dane/zdarzenia/losowe.yaml)
     szkolenia:         [{"firma", "szkolenie"}]
     bank, biuro:       nazwa (z lokalami biuro: id z dane/mapa/biura.yaml albo "samodzielnie")
+    pakiet:            "S" | "M" | "L" – pakiet w wybranym biurze (limit dokumentów i dopłata ponad limit)
     debet:             true | false – zgoda na debet w banku konta (limit, opłata za tydzień na minusie, odsetki;
                        bez zgody saldo poniżej zera to alarm i odsetki karne; silnik/pieniadze/banki.py)
     ksiegowosc:        {"zapisy": {id dokumentu: {"kolumna", "stawka"}}, "deklaracja": {"vat", "pit", "zdrowotna"}}
@@ -275,6 +276,8 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         _ceny_domyslne(dane, firma, zadane)
     if d.get("biuro") and bo.poprawny_wybor(dane, d["biuro"]):   # biura z mapy albo samodzielna księgowość
         firma.biuro = d["biuro"]
+    if d.get("pakiet"):   # pakiet S / M / L w biurze z mapy (w biurze „wszystko trwa” zmiana wchodzi po kilku rundach)
+        bo.ustaw_pakiet(dane, firma, d["pakiet"], runda)
     st_trwale.ustaw_niskocenne(dane, firma, d)   # B6 (przeliczenie rundy ustawia to wcześniej – przed giełdą i lokalami)
 
     # stanowiska (działają od razu)

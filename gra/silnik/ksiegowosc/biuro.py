@@ -60,42 +60,92 @@ def poprawny_wybor(dane: Dane, biuro: str) -> bool:
 
 # --- biuro: opłata i błędy -----------------------------------------------------------------------------------
 
-def limit_rundy(biuro: dict) -> int | None:
-    n = biuro["dokumenty_w_ryczalcie"]
-    return None if n is None else round(n * 12 / 52)
+PAKIETY = ("S", "M", "L")
 
 
-def oplata(dane: Dane, biuro: dict, dokumenty: int, etat: int, zlecenie: int) -> dict:
-    """Opłata za rundę (brutto). Etatowi wchodzą do `w_cenie` przed zleceniobiorcami (są drożsi)."""
-    limit = limit_rundy(biuro)
-    ponad = 0 if limit is None else max(0, dokumenty - limit)
-    ryczalt = dane.na_runde(biuro["ryczalt"])
-    za_dokumenty = round(ponad * biuro["za_dokument"], 2)
-    minimum = dane.na_runde(biuro["minimum"])
-    ksiegowanie = round(max(ryczalt + za_dokumenty, minimum), 2)
+def pakiet_firmy(dane: Dane, firma: Firma) -> str:
+    return firma.pakiet_biura or ustawienia(dane)["pakiet_domyslny"]
+
+
+def limit_rundy(biuro: dict, pakiet: str) -> int:
+    return round(biuro["pakiety"][pakiet]["dokumenty"] * 12 / 52)
+
+
+def oplata(dane: Dane, biuro: dict, dokumenty: int, etat: int, zlecenie: int, pakiet: str) -> dict:
+    """Opłata za rundę (brutto): cena pakietu + dopłata za każdy dokument ponad jego limit + kadry. Etatowi wchodzą
+    do `w_cenie` przed zleceniobiorcami (są drożsi)."""
+    p = biuro["pakiety"][pakiet]
+    limit = limit_rundy(biuro, pakiet)
+    ponad = max(0, dokumenty - limit)
+    ryczalt = dane.na_runde(p["cena"])
+    za_dokumenty = round(ponad * p["doplata"], 2)
+    ksiegowanie = round(ryczalt + za_dokumenty, 2)
     k = biuro["kadry"]
     platne_etat = max(0, etat - k["w_cenie"])
     platne_zlecenie = max(0, zlecenie - max(0, k["w_cenie"] - etat))
     kadry = dane.na_runde(platne_etat * k["etat"] + platne_zlecenie * k["zlecenie"])
-    return {"dokumenty": dokumenty, "limit": limit, "ponad": ponad, "ryczalt": ryczalt, "za_dokumenty": za_dokumenty,
-            "minimum": minimum, "ksiegowanie": ksiegowanie, "kadry": kadry, "osoby_platne": platne_etat + platne_zlecenie,
-            "razem": round(ksiegowanie + kadry, 2)}
+    return {"pakiet": pakiet, "dokumenty": dokumenty, "limit": limit, "ponad": ponad, "ryczalt": ryczalt,
+            "za_dokumenty": za_dokumenty, "ksiegowanie": ksiegowanie, "kadry": kadry,
+            "osoby_platne": platne_etat + platne_zlecenie, "razem": round(ksiegowanie + kadry, 2)}
 
 
 def kara_bledu_biura(dane: Dane) -> float:
-    """Mandat za losowy błąd biura (Poprawki 3: osobno od kary za błąd przy samodzielnej księgowości)."""
+    """Mandat za losowy błąd biura (osobno od kary za błąd przy samodzielnej księgowości)."""
     u = ustawienia(dane)
     return float(u.get("kara_bledu_biura") or u["samodzielna"]["kara_blad"])
 
 
-def szacunek(dane: Dane, biuro: dict, dokumenty: int, etat: int, zlecenie: int) -> float:
+def szacunek(dane: Dane, biuro: dict, dokumenty: int, etat: int, zlecenie: int, pakiet: str) -> float:
     """Oczekiwany koszt rundy: opłata + mandat razy ryzyko błędu (gdy biuro nie ma OC)."""
     kara = 0.0 if biuro["oc"] else biuro["ryzyko_bledu"] * kara_bledu_biura(dane)
-    return round(oplata(dane, biuro, dokumenty, etat, zlecenie)["razem"] + kara, 2)
+    return round(oplata(dane, biuro, dokumenty, etat, zlecenie, pakiet)["razem"] + kara, 2)
+
+
+def najlepszy_pakiet(dane: Dane, biuro: dict, dokumenty: int, etat: int, zlecenie: int) -> str:
+    """Pakiet z najniższym oczekiwanym kosztem rundy przy tylu dokumentach."""
+    return min(PAKIETY, key=lambda p: szacunek(dane, biuro, dokumenty, etat, zlecenie, p))
 
 
 def najtansze(dane: Dane, dokumenty: int, etat: int, zlecenie: int) -> str:
-    return min(biura(dane).values(), key=lambda b: szacunek(dane, b, dokumenty, etat, zlecenie))["id"]
+    """Biuro, które przy tylu dokumentach (w swoim najlepszym pakiecie) jest najtańsze."""
+    return min(biura(dane).values(), key=lambda b: szacunek(
+        dane, b, dokumenty, etat, zlecenie, najlepszy_pakiet(dane, b, dokumenty, etat, zlecenie)))["id"]
+
+
+def ustaw_pakiet(dane: Dane, firma: Firma, pakiet: str, runda: int) -> None:
+    """Decyzja `pakiet`: od razu, a w biurze z `zmiana_pakietu_po` dopiero po tylu rundach."""
+    b = biura(dane).get(firma.biuro or "")
+    if pakiet not in PAKIETY or not b or pakiet == pakiet_firmy(dane, firma):
+        firma.pakiet_nastepny = None if pakiet in PAKIETY else firma.pakiet_nastepny
+        return
+    if b["zmiana_pakietu_po"] and firma.pakiet_biura:   # pierwszy wybór pakietu wchodzi od razu
+        if (firma.pakiet_nastepny or {}).get("pakiet") != pakiet:   # ponowna decyzja nie przesuwa terminu
+            firma.pakiet_nastepny = {"pakiet": pakiet, "od_rundy": runda + b["zmiana_pakietu_po"]}
+    else:
+        firma.pakiet_biura, firma.pakiet_nastepny = pakiet, None
+
+
+def wejscie_pakietu(firma: Firma, runda: int) -> None:
+    """Zapowiedziana zmiana pakietu wchodzi, gdy nadejdzie jej runda."""
+    n = firma.pakiet_nastepny
+    if n and runda >= n["od_rundy"]:
+        firma.pakiet_biura, firma.pakiet_nastepny = n["pakiet"], None
+
+
+def swieto_w_rundzie(dane: Dane, runda: int) -> bool:
+    """Czy tydzień rundy ma święto (kalendarz miejski) – Scrooge jest wtedy zamknięty."""
+    from ..rynek import kalendarz as kal
+    from ..rynek import popyt as pp
+    return any(w["rodzaj"] == "swieto" for w in kal.wydarzenia(dane, pp.dni_rundy(dane, runda)))
+
+
+def najnizsza_oplata(dane: Dane, firma: Firma, dokumenty: int) -> tuple[str, float]:
+    """U6: biuro z najniższą opłatą za rundę przy tylu dokumentach i pracownikach firmy – (nazwa, kwota brutto)."""
+    etat, zlecenie = _umowy(dane, firma)
+    oplaty = [(b["nazwa"], oplata(dane, b, dokumenty, etat, zlecenie,
+                                  najlepszy_pakiet(dane, b, dokumenty, etat, zlecenie))["razem"])
+              for b in biura(dane).values()]
+    return min(oplaty, key=lambda x: x[1])
 
 
 def _umowy(dane: Dane, firma: Firma) -> tuple[int, int]:
@@ -105,17 +155,13 @@ def _umowy(dane: Dane, firma: Firma) -> tuple[int, int]:
     return rodzaje.count("etat"), rodzaje.count("zlecenie")
 
 
-def najnizsza_oplata(dane: Dane, firma: Firma, dokumenty: int) -> tuple[str, float]:
-    """U6: biuro z najniższą opłatą za rundę przy tylu dokumentach i pracownikach firmy – (nazwa, kwota brutto)."""
-    oplaty = [(b["nazwa"], oplata(dane, b, dokumenty, *_umowy(dane, firma))["razem"]) for b in biura(dane).values()]
-    return min(oplaty, key=lambda x: x[1])
-
-
-def nalicz(dane: Dane, firma: Firma, ksiega: Ksiega, rachunek: Rachunek, etat: int, zlecenie: int) -> dict:
+def nalicz(dane: Dane, firma: Firma, ksiega: Ksiega, rachunek: Rachunek, etat: int, zlecenie: int,
+           runda: int) -> dict:
     """Faktura biura za rundę – koszt w KPiR (dokumenty rundy + ta faktura)."""
     b = biura(dane)[firma.biuro]
-    o = oplata(dane, b, len(dokumenty(ksiega, rachunek)) + 1, etat, zlecenie)
-    ksieguj(firma, ksiega, rachunek, f"Koszt biura rachunkowego: {b['nazwa']}", o["ksiegowanie"])
+    wejscie_pakietu(firma, runda)
+    o = oplata(dane, b, len(dokumenty(ksiega, rachunek)) + 1, etat, zlecenie, pakiet_firmy(dane, firma))
+    ksieguj(firma, ksiega, rachunek, f"Koszt biura rachunkowego: {b['nazwa']} (pakiet {o['pakiet']})", o["ksiegowanie"])
     ksieguj(firma, ksiega, rachunek, "Obsługa kadrowo-płacowa", o["kadry"])
     return {"biuro": b["id"], "nazwa": b["nazwa"], **o}
 
@@ -124,7 +170,10 @@ def blad_biura(dane: Dane, firma: Firma, nazwa: str, runda: int, ziarno: int, ra
     """Losowy błąd biura w deklaracji: mandat (biuro z OC go oddaje – poza KPiR)."""
     b = biura(dane)[firma.biuro]
     rng = strumien(ziarno, runda, "biuro", nazwa)
-    if rng.random() >= b["ryzyko_bledu"]:
+    ryzyko = b["ryzyko_bledu"]
+    if b.get("ryzyko_w_swieta") is not None and swieto_w_rundzie(dane, runda):
+        ryzyko = b["ryzyko_w_swieta"]   # biuro zamknięte w święta – deklarację składa zastępca
+    if rng.random() >= ryzyko:
         return None
     u = ustawienia(dane)
     kara = kara_bledu_biura(dane)
@@ -189,7 +238,7 @@ def dokumenty(ksiega: Ksiega, rachunek: Rachunek) -> list[dict]:
             typ = ("Faktura sprzedaży" if opis.startswith(SPRZEDAZ_TOWAROW)
                    else "Raport kasy fiskalnej" if kol == "przychod" else "Lista płac" if kol == "wynagrodzenia"
                    else "Deklaracja ZUS" if "ZUS" in opis
-                   else "Wyciąg bankowy" if any(x in opis for x in ("Odsetki", "Prowizja", "Opłata za konto"))
+                   else "Wyciąg bankowy" if any(x in opis for x in ("Odsetki", "Prowizja", "Opłata za konto", "Opłata za tydzień"))
                    else "Faktura sprzedaży" if kol == "przychod_pozostaly" else "Faktura zakupu")
             dodaj(opis, typ, k, kol, wez_wpisy(opis, abs(k)))
         elif rodzaj == "korekta":
@@ -367,8 +416,9 @@ def widok(dane: Dane, firma_przed: Firma, firma: Firma, d: dict, wyniki: dict | 
     u = ustawienia(dane)
     etat, zlecenie = _umowy(dane, firma)
     dok = len(dokumenty_ostatnie := (firma_przed.deklaracja or {}).get("dokumenty") or []) or u["szacunek_dokumentow"]
-    oferty = [{**b, "szacunek": oplata(dane, b, dok, etat, zlecenie),
-               "limit_rundy": limit_rundy(b)} for b in u["biura"]]
+    oferty = [{**b, "szacunki": {p: oplata(dane, b, dok, etat, zlecenie, p) for p in PAKIETY},
+               "limity_rundy": {p: limit_rundy(b, p) for p in PAKIETY},
+               "najlepszy_pakiet": najlepszy_pakiet(dane, b, dok, etat, zlecenie)} for b in u["biura"]]
     dk = firma_przed.deklaracja
     podpowiedzi = {}
     for x in ((wyniki or {}).get("ksiegowosc") or {}).get("zapisy", {}).get("dokumenty", []):
@@ -378,4 +428,5 @@ def widok(dane: Dane, firma_przed: Firma, firma: Firma, d: dict, wyniki: dict | 
             "dokumenty_szacunek": dok, "pracownicy": {"etat": etat, "zlecenie": zlecenie},
             "deklaracja": None if not dk else {"runda": dk["runda"], "dokumenty": publiczne(dk["dokumenty"]),
                                                "stan_przed": dk["stan_przed"], "ulga_na_start": dk["ulga_na_start"]},
-            "podpowiedzi": podpowiedzi, "liczba_dokumentow": len(dokumenty_ostatnie)}
+            "podpowiedzi": podpowiedzi, "liczba_dokumentow": len(dokumenty_ostatnie),
+            "pakiet": pakiet_firmy(dane, firma), "pakiet_nastepny": firma.pakiet_nastepny}

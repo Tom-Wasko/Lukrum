@@ -262,7 +262,9 @@ def _ksiegowosc(dane: Dane, f: Firma, d: dict, wybrane: dict) -> dict:
     wybor = d.get("biuro") or (bo.SAMODZIELNIE if wybrane.get("biuro") == bo.SAMODZIELNIE else None) or f.biuro
     if not bo.biura(dane) or wybor != bo.SAMODZIELNIE:
         return {}
-    return {"biuro": bo.najtansze(dane, bo.ustawienia(dane)["szacunek_dokumentow"], *bo._umowy(dane, f))}
+    dok, umowy = bo.ustawienia(dane)["szacunek_dokumentow"], bo._umowy(dane, f)
+    biuro = bo.najtansze(dane, dok, *umowy)
+    return {"biuro": biuro, "pakiet": bo.najlepszy_pakiet(dane, bo.biura(dane)[biuro], dok, *umowy)}
 
 
 # --- urzędy: higiena domyślna, bez polis ------------------------------------------------------------------------

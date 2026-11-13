@@ -42,7 +42,7 @@ def _dodatki(draw, lokale: bool) -> dict:
     if lokale:
         if draw(st.booleans()):
             d["harpagon_wez" if draw(st.booleans()) else "harpagon_splac"] = draw(st.integers(500, 20000))
-        d["biuro"] = draw(st.sampled_from(["samodzielnie", "samodzielnie", "jks", "eksiegi", "halinka"]))
+        d["biuro"] = draw(st.sampled_from(["samodzielnie", "samodzielnie", "jks", "scrooge", "jozef_k"]))
         d["_deklaracja"] = draw(st.sampled_from(["brak", "dobra", "zla"]))
         if draw(st.integers(0, 3)) == 0:
             d["lokal"] = {"id": draw(st.sampled_from(LOKALE)), "forma": draw(st.sampled_from(["najem", "kupno"]))}

@@ -270,17 +270,24 @@ function wyborNiskocennych(v, d, edycja) {
     dla zakupów od tej rundy (wcześniejszych nie przeksięgowuje) i trwa do zmiany.</p>`;
 }
 
-// biuro jako karta marki w dwóch kolumnach (jak wybór banku)
+// biuro jako karta marki w dwóch kolumnach (jak wybór banku): pakiety S / M / L z limitem dokumentów i dopłatą
 const wb = (a, b) => `<div class="wiersz"><span>${a}</span><span>${b}</span></div>`;
 function kartaBiuraMarki(b, i, wybrane, edycja, K, wyr) {
-  const moj = b.id === wybrane;
-  const limit = b.limit_rundy == null ? "bez limitu" : b.limit_rundy ? `${b.limit_rundy} dok.` : "–";
-  const koszt = kafelOferty({ tytul: "Koszt", pigulka: moj ? "Twoje biuro" : "", duza: zl(b.szacunek.razem), podpis: `szacunek na rundę (${K.dokumenty_szacunek} dok.)`,
-    tresc: wb("Ryczałt (mies.)", zl(b.ryczalt)) + wb("Dokumenty w ryczałcie", limit) + wb(`Za dokument${b.ryczalt ? " ponad limit" : ""}`, zl2(b.za_dokument))
-      + (b.minimum ? wb("Minimum (mies.)", zl(b.minimum)) : ""),
-    stopka: wybierz(b.id, wybrane, edycja) });
+  const moj = b.id === wybrane, dis = edycja ? "" : "disabled";
+  const obecny = K.pakiet_nastepny ? K.pakiet_nastepny.pakiet : K.pakiet;
+  const pakiety = Object.entries(b.pakiety).map(([p, x]) => {
+    const wybrany = moj && obecny === p, sz = b.szacunki[p];
+    return wb(`<b>${p}</b>: ${zl(x.cena)} / mies., do ${b.limity_rundy[p]} dok. / rundę, dopłata ${zl2(x.doplata)} za dok.`
+      + (b.najlepszy_pakiet === p ? ` <span class="pigulka inf">na Twoje dokumenty</span>` : ""),
+    wybrany ? `<button class="btn zielony">✓ ${p}</button>`
+      : `<button class="btn czarny maly" data-akcja="biuro-pakiet" data-b="${esc(b.id)}" data-p="${p}" ${dis}>${p} – ${zl2(sz.razem)} / rundę</button>`);
+  }).join("");
+  const koszt = kafelOferty({ tytul: "Pakiety", pigulka: moj ? "Twoje biuro" : "", duza: zl(b.szacunki[b.najlepszy_pakiet].razem),
+    podpis: `najtańszy pakiet (${b.najlepszy_pakiet}) na rundę przy ${K.dokumenty_szacunek} dok.`, tresc: pakiety, stopka: "" });
   const ryzyko = kafelOferty({ tytul: "Kadry i ryzyko", duza: proc(b.ryzyko_bledu, 0), podpis: "ryzyko błędu w deklaracji",
     tresc: wb("Ubezpieczenie OC", b.oc ? "tak – oddaje mandat" : "<b>nie</b> – mandat płacisz Ty")
+      + wb("Cecha biura", esc(b.cecha)) + (b.ryzyko_w_swieta != null ? wb("Ryzyko w tygodniu ze świętem", proc(b.ryzyko_w_swieta, 0)) : "")
+      + (b.zmiana_pakietu_po ? wb("Zmiana pakietu trwa", `${b.zmiana_pakietu_po} rundy`) : "")
       + wb("Kadry: etat / zlecenie", `${zl2(b.kadry.etat)} / ${zl2(b.kadry.zlecenie)}`) + (b.kadry.w_cenie ? wb("Kadry w cenie", `${b.kadry.w_cenie} os.`) : "") });
   return kartaMarki({ kolor: KOLORY[(i + 1) % KOLORY.length], nazwa: b.nazwa, rodzaj: b.wlasciciel || "",
     opis: (wyr.length ? `<b class="bank-najlepszy">${wyr.join(" · ")}</b>` : "") + `<details class="opis-marki"><summary>O biurze</summary>${esc(b.opis)}</details>`,
@@ -289,19 +296,19 @@ function kartaBiuraMarki(b, i, wybrane, edycja, K, wyr) {
 function kartySamodzielnie(S, tanie, wybrane, edycja) {
   const kafel = kafelOferty({ tytul: "Samodzielne księgowanie", pigulka: wybrane === "samodzielnie" ? "Twój wybór" : "", duza: zl(0), podpis: "opłata – dokumenty i deklaracje robi drużyna",
     tresc: wb("Mandat za błędną deklarację", zl(S.kara_blad)) + wb("Bez deklaracji – mandat co rundę", `<b>${zl(S.kara_brak)}</b>`)
-      + (tanie ? wb(`Najtańsze biuro (${esc(tanie.nazwa)})`, `${zl2(tanie.szacunek.razem)} / rundę`) : ""),
+      + (tanie ? wb(`Najtańsze biuro (${esc(tanie.nazwa)})`, `${zl2(tanie.szacunki[tanie.najlepszy_pakiet].razem)} / rundę`) : ""),
     stopka: wybierz("samodzielnie", wybrane, edycja, "Księguję samodzielnie") });
   return kartaMarki({ kolor: "var(--szary)", nazwa: "Samodzielnie", znak: "✎", rodzaj: "bez biura", opis: `Bez opłaty za biuro – dokumenty księguje i deklaracje składa drużyna.<details class="opis-marki"><summary>Jak to działa</summary>${esc(S.opis)}</details>`, tresc: kafel });
 }
 function wyroznienia(oferty) {   // „Najtańsze”, „Najmniejsze ryzyko” – jak „Najlepszy” przy bankach
   const min = (f) => oferty.reduce((a, b) => (!a || f(b) < f(a) ? b : a), null);
-  const tanie = min((b) => b.szacunek.razem), pewne = min((b) => b.ryzyko_bledu - (b.oc ? 1e-9 : 0));
+  const tanie = min((b) => b.szacunki[b.najlepszy_pakiet].razem), pewne = min((b) => b.ryzyko_bledu - (b.oc ? 1e-9 : 0));
   return (b) => [b === tanie ? "Najtańsze" : "", b === pewne ? "Najmniejsze ryzyko błędu" : ""].filter(Boolean);
 }
 
 function decyzjeKsiegowosci({ v, edycja }) {
   const K = v.ksiegowosc, d = v.decyzje || {}, wybrane = d.biuro || v.stan.biuro, S = K.samodzielna;
-  const tanie = K.oferty.reduce((a, b) => (!a || b.szacunek.razem < a.szacunek.razem ? b : a), null);   // U6: obok mandatu
+  const tanie = K.oferty.reduce((a, b) => (!a || b.szacunki[b.najlepszy_pakiet].razem < a.szacunki[a.najlepszy_pakiet].razem ? b : a), null);   // U6: obok mandatu
   const wyr = wyroznienia(K.oferty);
   const html = `<div class="banki-siatka">${K.oferty.map((b, i) => kartaBiuraMarki(b, i, wybrane, edycja, K, wyr(b))).join("")}${kartySamodzielnie(S, tanie, wybrane, edycja)}</div>`
     + wyborNiskocennych(v, d, edycja);
@@ -348,10 +355,10 @@ function wynikiKsiegowosci({ v }) {
   const W = v.wyniki || {}, B = W.biuro, K = W.ksiegowosc;
   let html = "";
   if (B) {
-    const dok = `${B.dokumenty}${B.limit == null ? " (ryczałt bez limitu)" : B.limit ? ` (w ryczałcie ${B.limit})` : ""}`;
+    const dok = `${B.dokumenty} (limit pakietu ${B.pakiet}: ${B.limit})`;
     html += zwinTabela(`Faktura biura za rundę: ${esc(B.nazwa)}`, ["Pozycja", "Kwota"], [
-      ["Dokumenty w rundzie", dok], ["Ryczałt", zl2(B.ryczalt)], [`Dokumenty ponad ryczałt (${B.ponad})`, zl2(B.za_dokumenty)],
-      ...(B.minimum ? [["Minimum", zl2(B.minimum)]] : []), ["Księgowanie", zl2(B.ksiegowanie)],
+      ["Dokumenty w rundzie", dok], [`Pakiet ${B.pakiet} (cena)`, zl2(B.ryczalt)], [`Dokumenty ponad limit (${B.ponad})`, zl2(B.za_dokumenty)],
+      ["Księgowanie", zl2(B.ksiegowanie)],
       [`Kadry (płatne osoby: ${B.osoby_platne})`, zl2(B.kadry)], ["<b>Razem (koszt w KPiR)</b>", `<b>${zl2(B.razem)}</b>`]], { klasy: ["l", "r"], otwarte: true });
     html += B.blad ? `<div class="komunikat"><p>${esc(B.blad.tekst)}</p><p><b>Mandat ${zl(B.blad.kara)}</b>${B.blad.oc ? " – biuro oddało go z OC." : " – biuro nie ma OC, płacisz Ty."}</p></div>`
       : `<p class="podpowiedz">Biuro rozliczyło podatki bez błędów.</p>`;
@@ -389,15 +396,11 @@ export const biuro = {
   wynikiGdy: (v) => !!v.gra.lokale,
   wyniki: (c) => wynikiKsiegowosci(c),
   decyzje({ v, kat, edycja }) {
-    if (v.gra.lokale && v.ksiegowosc) return decyzjeKsiegowosci({ v, edycja });
-    return `<div class="siatka trojka">${kat.oferty.biura_rachunkowe.pozycje.map((b) => `<div class="kafel ${b.nazwa === v.stan.biuro ? "wybrany" : ""}"><div class="kg">${esc(b.nazwa)}</div><div class="kt">
-      <div class="wiersz"><span>Opłata za pojedyncze księgowanie</span><span>${zl2(b.ksiegowanie)}</span></div>
-      <div class="wiersz"><span>Opłata kadrowa za pracownika etatowego</span><span>${zl(b.etat)}</span></div>
-      <div class="wiersz"><span>Opłata kadrowa za pracownika na umowie cywilno-prawnej</span><span>${zl(b.zlecenie)}</span></div></div>
-      <div class="kd">${b.nazwa === v.stan.biuro ? `<button class="btn zielony">✓ Wybrano</button>` : `<button class="btn czarny" data-akcja="biuro" data-b="${esc(b.nazwa)}" ${edycja ? "" : "disabled"}>Wybierz</button>`}</div></div>`).join("")}</div>`;
+    return decyzjeKsiegowosci({ v, edycja });
   },
   akcje: {
     biuro: (el, c) => c.zmien((d) => { d.biuro = el.dataset.b; }),
+    "biuro-pakiet": (el, c) => c.zmien((d) => { d.biuro = el.dataset.b; d.pakiet = el.dataset.p; }),
     niskocenne: (el, c) => c.zmien((d) => { d.amortyzacja_niskocenna = el.dataset.n; }),
     "ks-podpowiedzi": (el, c) => c.zmien((d) => {
       const zap = zapisy(d), K = c.v.ksiegowosc;

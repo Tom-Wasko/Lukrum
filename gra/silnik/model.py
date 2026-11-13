@@ -407,6 +407,8 @@ class Firma(Model):
     internet: dict[str, int] = Field(default_factory=dict)            # narzędzie → runda uruchomienia
     bank: str | None = None
     biuro: str | None = None
+    pakiet_biura: str = ""            # S / M / L (silnik/ksiegowosc/biuro.py); pusty – pakiet domyślny z danych
+    pakiet_nastepny: dict | None = None   # zmiana pakietu w biurze „wszystko trwa”: {"pakiet", "od_rundy"}
     lokaty: list[Lokata] = Field(default_factory=list)
     kredyty: list[Kredyt] = Field(default_factory=list)
     leasingi: list[Leasing] = Field(default_factory=list)

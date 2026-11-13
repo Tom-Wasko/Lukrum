@@ -337,13 +337,6 @@ class Narzedzie(Schemat):
     zalozenie: bool = False
 
 
-class Biuro(Schemat):
-    nazwa: str
-    ksiegowanie: float
-    etat: float
-    zlecenie: float
-
-
 class FirmaSzkoleniowa(Schemat):
     nazwa: str
     zadowoleni_klienci: float
@@ -368,10 +361,6 @@ class SekcjaNarzedzi(Sekcja):
     pozycje: list[Narzedzie]
 
 
-class SekcjaBiur(Sekcja):
-    pozycje: list[Biuro]
-
-
 class SekcjaSzkolen(Sekcja):
     firmy: list[FirmaSzkoleniowa]
     pozycje: list[Szkolenie]
@@ -394,7 +383,6 @@ class PlikKatalogu(Schemat):
     wyposazenie: SekcjaUdogodnien
     media_tradycyjne: SekcjaMediow
     narzedzia_internetowe: SekcjaNarzedzi
-    biura_rachunkowe: SekcjaBiur
     szkolenia: SekcjaSzkolen
 
 
@@ -904,18 +892,30 @@ class KadryBiura(Schemat):
     zlecenie: float = Field(ge=0)
 
 
+class PakietBiura(Schemat):
+    cena: float = Field(ge=0)            # miesięcznie, brutto
+    dokumenty: int = Field(gt=0)         # limit dokumentów w miesiącu
+    doplata: float = Field(ge=0)         # za każdy dokument ponad limit (brutto)
+
+
 class BiuroMapy(Schemat):
     id: str
     nazwa: str
     wlasciciel: str | None = None
     opis: str
-    ryczalt: float = Field(ge=0)
-    dokumenty_w_ryczalcie: int | None = Field(default=None, ge=0)   # None – bez limitu
-    za_dokument: float = Field(ge=0)
-    minimum: float = Field(ge=0)
+    cecha: str
+    pakiety: dict[Literal["S", "M", "L"], PakietBiura]
     kadry: KadryBiura
     ryzyko_bledu: float = Field(ge=0, lt=1)
     oc: bool
+    ryzyko_w_swieta: float | None = Field(default=None, ge=0, lt=1)   # ryzyko błędu w tygodniu ze świętem
+    zmiana_pakietu_po: int = Field(default=0, ge=0)   # rund do wejścia nowego pakietu
+
+    @model_validator(mode="after")
+    def _trzy_pakiety(self):
+        if set(self.pakiety) != {"S", "M", "L"}:
+            raise ValueError("biuro ma pakiety S, M i L")
+        return self
 
 
 class Samodzielna(Schemat):
@@ -926,6 +926,7 @@ class Samodzielna(Schemat):
 
 class PlikBiur(Plik):
     szacunek_dokumentow: int = Field(gt=0)
+    pakiet_domyslny: Literal["S", "M", "L"] = "M"
     biura: list[BiuroMapy] = Field(min_length=1)
     bledy: list[str] = Field(min_length=1)
     samodzielna: Samodzielna

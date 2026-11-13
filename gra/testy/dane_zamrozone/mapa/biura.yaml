@@ -1,88 +1,84 @@
-# Biura rachunkowe w LUKRUM (F3a.13, silnik/ksiegowosc/biuro.py); biura z katalog.yaml to oferta bazowa
+# Biura rachunkowe w LUKRUM (silnik/ksiegowosc/biuro.py): cztery biura, każde w pakietach S / M / L
 # Sprawdzenie: python -m silnik.dane sprawdz
-opis: 'Oferty biur w Kamienicy biur rachunkowych. Kwoty miesięczne, brutto (z VAT 23%), w rundzie tygodniowej
-  przeliczane jak czynsz (× 12/52); limit dokumentów w ryczałcie – też na rundę (zaokrąglony). Dokument = zapis
-  w KPiR, faktura za środek trwały, operacja poza KPiR (kredyt, lokata, kaucja, podatek) i faktura biura za rundę.
-  Kadry: opłata za każdego pracownika (właściciel się nie liczy), `w_cenie` – tylu ludzi bez dopłaty.
-  `ryzyko_bledu` – szansa na rundę, że biuro pomyli się w deklaracji: firma płaci `kara_bledu` (mandat z urzędu),
-  biuro z ubezpieczeniem OC (`oc: true`) oddaje ją w tej samej rundzie. Teksty błędów: {kara}, {biuro}.'
-zrodlo: 'Notatka „Elementy mapy” (kilka biur z różnymi ofertami: cena za dokument, ryczałt, obsługa kadr; biuro
-  Jakuba Klimka-Ślęzaka; samodzielna księgowość z kontrolą błędów i karą), „Prawidła świata” (realne ceny);
-  cenniki biur KPiR + VAT dla małej JDG (2025/2026): ryczałt 250–900 zł netto, 4–8 zł netto za dokument,
-  kadry 30–60 zł netto za osobę – założenie F3a.13, do kalibracji w kroku 5'
+opis: 'Cztery biura w Kamienicy biur rachunkowych, każde z trzema pakietami S, M i L. Pakiet to miesięczna cena
+  (brutto, z VAT 23%, w rundzie tygodniowej przeliczana jak czynsz × 12/52), limit dokumentów w miesiącu (też na
+  rundę, zaokrąglony) i dopłata za każdy dokument ponad limit. Dokument = zapis w KPiR, faktura za środek trwały,
+  operacja poza KPiR (kredyt, lokata, kaucja, podatek) i faktura biura za rundę. Kadry: opłata za każdego
+  pracownika (właściciel się nie liczy), `w_cenie` – tylu ludzi bez dopłaty. `ryzyko_bledu` – szansa na rundę, że
+  biuro pomyli się w deklaracji: firma płaci `kara_bledu` (mandat z urzędu), biuro z ubezpieczeniem OC (`oc: true`)
+  oddaje ją w tej samej rundzie. `ryzyko_w_swieta` – ryzyko w tygodniu ze świętem (biuro zamknięte), `zmiana_pakietu_po`
+  – ile rund trwa zmiana pakietu. Teksty błędów: {kara}, {biuro}.'
+zrodlo: 'Własna oferta LUKRUM (13.11.2026, tor A). Ceny – rząd wielkości rynku Lublina 2026: kb.pl, Cennik biur
+  rachunkowych w Lublinie 2026 i pobliskich miastach (KPiR do 10 dokumentów ok. 300 zł netto miesięcznie, 90–100
+  dokumentów ok. 1 060 zł netto, kadry ok. 112 zł netto za osobę), przeliczone na brutto (VAT 23%) i na rundę;
+  cechy biur i nazwy – plan przebudowy, rozdz. 11 (J.K.Ś. – życzenie autora; Józef K. – Kafka, „Proces”; Scrooge –
+  Dickens, „Opowieść wigilijna”; Asteroida 328 – Saint-Exupéry, „Mały Książę”)'
 
 szacunek_dokumentow: 30   # ile dokumentów na rundę zakłada szacunek opłaty, zanim drużyna ma własne dokumenty (i bot)
+pakiet_domyslny: M        # pakiet, od którego zaczyna firma po wyborze biura
 biura:
 - id: jks
-  nazwa: Biuro Rachunkowe J.K.Ś.
+  nazwa: J.K.Ś.
   wlasciciel: Jakub Klimek-Ślęzak
   opis: 'Jakub Klimek-Ślęzak przyjmuje w gabinecie, w którym segregatory stoją alfabetycznie, a w każdym
     segregatorze – też alfabetycznie, tylko od tyłu, „żeby urzędnik się zmęczył”. Pan Jakub nie pomylił się
     w deklaracji od 1998 roku, kiedy to wpisał w PIT o jedno zero za mało i do dziś co roku wysyła urzędowi
-    kartkę z przeprosinami. Ryczałt obejmuje kadry do czterech osób, bo „ludzie to też dokumenty, tylko
-    bardziej się ruszają”.'
-  ryczalt: 690
-  dokumenty_w_ryczalcie: 80
-  za_dokument: 4.92
-  minimum: 0
+    kartkę z przeprosinami. Pakiety dla kadr do czterech osób, bo „ludzie to też dokumenty, tylko bardziej się
+    ruszają”.'
+  cecha: dokładne i uczciwe, z ubezpieczeniem OC
+  pakiety:
+    S: {cena: 390, dokumenty: 60, doplata: 6.15}
+    M: {cena: 690, dokumenty: 120, doplata: 5.5}
+    L: {cena: 1050, dokumenty: 200, doplata: 4.9}
   kadry: {w_cenie: 4, etat: 45, zlecenie: 25}
   ryzyko_bledu: 0
   oc: true
-- id: trybunal
-  nazwa: Księgowość Pod Trybunałem
-  opis: 'Biuro na parterze kamienicy przy Trybunale. Pani Kierowniczka liczy wszystko na sztuki: dokumenty,
-    spinacze i westchnienia klientów („to też jest czas pracy”). Płacisz za każdy dokument, ale tylko za ten,
-    który przyniesiesz – zgubionego paragonu nie policzą, za to długo o nim porozmawiają.'
-  ryczalt: 0
-  dokumenty_w_ryczalcie: 0
-  za_dokument: 6.15
-  minimum: 246
+- id: jozef_k
+  nazwa: Józef K.
+  opis: 'Biuro w oficjalnym budynku bez tabliczki. Józef K. jest tani i bardzo uprzejmy, ale wszystko u niego trwa:
+    żeby zmienić pakiet, trzeba złożyć wniosek w trzech egzemplarzach i poczekać dwa tygodnie. Mówią, że sam nie wie,
+    o co jest oskarżony, ale deklaracje składa. Nie ma OC, więc przy pomyłce mandat płacisz Ty.'
+  cecha: tanie, ale wszystko trwa (zmiana pakietu po 2 rundach)
+  zmiana_pakietu_po: 2
+  pakiety:
+    S: {cena: 250, dokumenty: 60, doplata: 4.9}
+    M: {cena: 450, dokumenty: 120, doplata: 4.3}
+    L: {cena: 700, dokumenty: 200, doplata: 3.7}
   kadry: {w_cenie: 0, etat: 61.5, zlecenie: 30.75}
-  ryzyko_bledu: 0.03
-  oc: true
-- id: halinka
-  nazwa: Pani Halinka – księgowość z sercem
-  opis: 'Pani Halinka prowadzi księgi w kuchni swojego mieszkania na trzecim piętrze, między pelargonią
-    a słoikiem z guzikami. Do każdej deklaracji dołącza drożdżówkę. Ryczałt obejmuje czterdzieści dokumentów
-    miesięcznie – „więcej się na stole nie mieści, kiedy rosół stygnie”. Raz na jakiś czas kot Mruczek
-    przestawia przecinek, ale Pani Halinka ma ubezpieczenie i bardzo przeprasza.'
-  ryczalt: 369
-  dokumenty_w_ryczalcie: 40
-  za_dokument: 7.38
-  minimum: 0
-  kadry: {w_cenie: 0, etat: 49.2, zlecenie: 24.6}
-  ryzyko_bledu: 0.06
-  oc: true
-- id: eksiegi
-  nazwa: e-Księgi24.pl
-  opis: 'Księgowość w chmurze: wrzucasz zdjęcie faktury, a algorytm „KsięgoBot 3000” sam ją księguje, sam
-    wylicza VAT i sam wysyła deklarację, zanim zdążysz zapytać, co właściwie wysłał. Najtaniej w mieście.
-    Regulamin ma 74 strony; na stronie 71 drobnym drukiem: „Za błędy algorytmu odpowiada Klient, ponieważ
-    to Klient zrobił zdjęcie”.'
-  ryczalt: 0
-  dokumenty_w_ryczalcie: 0
-  za_dokument: 3.69
-  minimum: 123
-  kadry: {w_cenie: 0, etat: 73.8, zlecenie: 36.9}
-  ryzyko_bledu: 0.12
+  ryzyko_bledu: 0.04
   oc: false
-- id: debet_kredyt
-  nazwa: Kancelaria Podatkowa Debet & Kredyt
-  opis: 'Dwóch wspólników: pan Debet zawsze ma rację po lewej stronie, pan Kredyt – po prawej. Kłócą się
-    o każdą fakturę, więc żadna nie przejdzie bez sprawdzenia dwa razy. Jeden stały ryczałt bez limitu
-    dokumentów („możecie przynieść nawet paragon za gumę do żucia – i tak się o niego pokłócimy”) i najtańsze
-    kadry w mieście.'
-  ryczalt: 984
-  dokumenty_w_ryczalcie: null   # bez limitu
-  za_dokument: 0
-  minimum: 0
-  kadry: {w_cenie: 0, etat: 36.9, zlecenie: 18.45}
+- id: scrooge
+  nazwa: Scrooge
+  opis: 'Najtańsze biuro w mieście. Pan Scrooge uważa święta za wymysł kasjerów: w święta biuro jest zamknięte, a deklaracje
+    składa praktykant, który właśnie liczy, ile kosztują światełka na choince. Poza tym działa jak w zegarku, o ile
+    nie trzeba nic dopłacać do herbaty.'
+  cecha: najtańsze, ale w tygodniach ze świętem zamknięte (większe ryzyko błędu)
+  ryzyko_w_swieta: 0.5
+  pakiety:
+    S: {cena: 190, dokumenty: 60, doplata: 3.7}
+    M: {cena: 360, dokumenty: 120, doplata: 3.3}
+    L: {cena: 560, dokumenty: 200, doplata: 2.9}
+  kadry: {w_cenie: 0, etat: 73.8, zlecenie: 36.9}
+  ryzyko_bledu: 0.02
+  oc: false
+- id: asteroida_328
+  nazwa: Asteroida 328
+  opis: 'Biuro na małej planecie za Kamienicą. Pan Bankier liczy gwiazdy i zapisuje, ile ich ma, żeby nikt mu
+    ich nie ukradł – więc każdy dokument sprawdza trzy razy. Nie pomyli się nigdy i nie bierze mniej niż trzeba. Drogo,
+    ale spokojnie.'
+  cecha: dokładne i drogie, z OC, kadry do sześciu osób w cenie
+  pakiety:
+    S: {cena: 590, dokumenty: 60, doplata: 8.0}
+    M: {cena: 990, dokumenty: 120, doplata: 6.9}
+    L: {cena: 1500, dokumenty: 200, doplata: 6.1}
+  kadry: {w_cenie: 6, etat: 36.9, zlecenie: 18.45}
   ryzyko_bledu: 0
   oc: true
 
+  # przy samodzielnej księgowości. Pewność: założenie
 bledy:   # losowy błąd biura w deklaracji (ryzyko_bledu) – firma płaci {kara}
 - 'Urząd skarbowy przysyła pismo: „W deklaracji VAT za ubiegły tydzień w polu »podatek należny« wpisano numer
-  telefonu Pani Kierowniczki”. {biuro} tłumaczy, że to był bardzo ważny telefon. Mandat: {kara}.'
+  telefonu Pana Kierownika”. {biuro} tłumaczy, że to był bardzo ważny telefon. Mandat: {kara}.'
 - 'W deklaracji PIT przecinek przesunął się o jedno miejsce w prawo i Twój dochód urósł dziesięciokrotnie.
   Urząd skarbowy był zachwycony – do czasu korekty. {biuro} przeprasza i obiecuje, że przecinek dostał
   naganę. Mandat za błędną deklarację: {kara}.'
@@ -90,8 +86,12 @@ bledy:   # losowy błąd biura w deklaracji (ryzyko_bledu) – firma płaci {kar
   Zanim dotarła do właściwego urzędu, minął termin. {biuro} wysyła kwiaty, urząd – mandat: {kara}.'
 
 samodzielna:   # samodzielna księgowość (uproszczona): drużyna księguje dokumenty i składa deklaracje
+  # Kary zaostrzone, żeby samodzielna księgowość ze średnią liczbą błędów nie opłacała się bardziej niż biuro.
+  # kara_blad: ok. 1/10 płacy minimalnej 2026 (4806 zł) – dolna granica mandatu karnoskarbowego (KKS);
+  # kara_brak: więcej niż trzy błędne deklaracje (3 × 480 zł), żeby niezłożenie nie było tańsze od złożenia
+  # z błędami. Pewność: założenie (pomiar balans.warianty)
   kara_blad: 200     # za każdą błędną deklarację (VAT, zaliczka PIT, składka zdrowotna) – różnica od 1 zł
-  kara_brak: 500     # deklaracje niezłożone w terminie (urząd rozlicza z urzędu, z poprawnych zapisów)
+  kara_brak: 500    # deklaracje niezłożone w terminie (urząd rozlicza z urzędu, z poprawnych zapisów)
   opis: 'Księgujesz sam: po każdej rundzie dostajesz paczkę dokumentów z rundy – faktury, paragony, listy płac,
     wyciągi z banku. W następnej rundzie wpisujesz każdy do kolumny KPiR (albo „poza KPiR”) z właściwą stawką
     VAT i składasz trzy deklaracje: VAT, zaliczkę na PIT i składkę zdrowotną. Podatki płacisz z deklaracji,

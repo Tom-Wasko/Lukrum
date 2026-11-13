@@ -703,6 +703,11 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
         d["debet"] = True
     if not (f.biuro and bo.poprawny_wybor(dane, f.biuro)):   # biura z mapy – najtańsze dla typowej rundy
         d["biuro"] = bo.najtansze(dane, bo.ustawienia(dane)["szacunek_dokumentow"], 4, 0)
+    if (biuro := bo.biura(dane).get(d.get("biuro") or f.biuro or "")):   # pakiet na dokumenty z ostatniej rundy
+        dok = ((stan.wyniki.get(runda - 1) or {}).get(nazwa, {}).get("biuro") or {}).get("dokumenty")             or bo.ustawienia(dane)["szacunek_dokumentow"]
+        pakiet = bo.najlepszy_pakiet(dane, biuro, dok, *bo._umowy(dane, f))
+        if pakiet != (f.pakiet_nastepny or {}).get("pakiet", bo.pakiet_firmy(dane, f)) or not f.pakiet_biura:
+            d["pakiet"] = pakiet
 
     # usługi: start z usługami startowymi, potem po 3 nowe aż do celu
     oferta = list(f.oferta) or list(rundy["uslugi_startowe"])
