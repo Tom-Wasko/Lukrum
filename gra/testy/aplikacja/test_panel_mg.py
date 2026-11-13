@@ -83,7 +83,7 @@ def test_domyslny_kredyt_i_przycisk_zamow_brakujace(client):
     """Domyślnie kredyt „na bieżąco” i bez przycisku „Zamów brakujące”; mistrz gry włącza go w trakcie gry."""
     id_ = _nowa(client).json()["id"]
     p = _przeglad(client, id_)
-    assert p["gra"]["kredyt_odnawialny"] == "na_biezaco" and p["gra"]["auto_zamowienia"] is False
+    assert p["gra"]["tryb_debetu"] == "na_biezaco" and p["gra"]["auto_zamowienia"] is False
     gracz = lambda: client.get(f"/api/gry/{id_}/widok/Drużyna 1").json()["gra"]["auto_zamowienia"]  # noqa: E731
     assert gracz() is False
     r = client.post(f"/api/gry/{id_}/prowadzenie", {"auto_zamowienia": True}, content_type="application/json")

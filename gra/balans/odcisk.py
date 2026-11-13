@@ -19,7 +19,7 @@ from silnik.wyniki.wnioski import wnioski
 GRY = [("sredni7", 18, 7, "sredni", {}), ("trudny11", 18, 11, "trudny", {}),
        ("latwy23", 12, 23, "latwy", {}),
        ("opcje5", 14, 5, "sredni", {"ceny_dostawcow": "losowe",
-                                    "kredyt_odnawialny": "jednoczesnie", "auto_zamowienia": True}),
+                                    "tryb_debetu": "jednoczesnie", "auto_zamowienia": True}),
        ("kapital3", 10, 3, "trudny", {"kapital_startowy": 15000})]
 
 

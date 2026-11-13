@@ -5,7 +5,8 @@
   + opłata kadrowa za każdego pracownika (etat / umowa cywilnoprawna),
 - CIT 19% od dodatniego dochodu miesiąca, bez rozliczania strat z poprzednich miesięcy,
 - lokaty i kredyty banków – silnik/pieniadze/banki.py,
-- kredyt odnawialny uruchamia się sam przy braku gotówki i jest spłacany, gdy gotówka wróci.
+- saldo poniżej zera zamienia się w debet (limit i opłaty – bank konta, tylko za zgodą `debet`); debet jest spłacany,
+  gdy gotówka wróci.
 
 Gra z lokalami (F3a.11, dane/podatki_2026.yaml): księga ma reguły VAT (`vat`). Kwoty w grze są brutto – `ksieguj`
 wydziela VAT (stawka podana albo z reguł po opisie), do KPiR idzie netto, do rejestru VAT podatek, a rachunek
@@ -143,30 +144,30 @@ def ksieguj(firma: Firma, ksiega: Ksiega, rachunek: Rachunek, opis: str, kwota: 
     return netto
 
 
-def uruchom_odnawialny(firma: Firma, rachunek: Rachunek) -> float:
-    """Gdy saldo jest ujemne – kredyt odnawialny na brakującą kwotę. Zwraca pobraną kwotę."""
+def uruchom_debet(firma: Firma, rachunek: Rachunek) -> float:
+    """Gdy saldo jest ujemne – debet na brakującą kwotę. Zwraca kwotę."""
     if firma.gotowka >= 0:
         return 0.0
     kwota = round(-firma.gotowka, 2)
-    firma.kredyt_odnawialny = round(firma.kredyt_odnawialny + kwota, 2)
-    rachunek.zapisz(firma, "Uruchomienie kredytu odnawialnego", kwota, "kredyty")
+    firma.debet = round(firma.debet + kwota, 2)
+    rachunek.zapisz(firma, "Debet na koncie (saldo poniżej zera)", kwota, "kredyty")
     return kwota
 
 
 def wyrownaj_gotowke(firma: Firma, rachunek: Rachunek, pobrany_w_miesiacu: float = 0.0) -> float:
-    """Koniec miesiąca: brak gotówki → kredyt odnawialny; nadwyżka → spłata kredytu z poprzednich miesięcy
-    (kredytu pobranego w tym miesiącu nie spłaca się od razu – „w kolejnych rundach”, wg instrukcji)."""
+    """Koniec tygodnia: brak gotówki → debet; nadwyżka → spłata debetu z poprzednich tygodni
+    (debetu z tego tygodnia nie spłaca się od razu – dopiero w kolejnych rundach)."""
     if firma.gotowka < 0:
-        return uruchom_odnawialny(firma, rachunek)
-    do_splaty = max(0.0, firma.kredyt_odnawialny - pobrany_w_miesiacu)
+        return uruchom_debet(firma, rachunek)
+    do_splaty = max(0.0, firma.debet - pobrany_w_miesiacu)
     if do_splaty > 0 and firma.gotowka > 0:
         splata = round(min(do_splaty, firma.gotowka), 2)
-        firma.kredyt_odnawialny = round(firma.kredyt_odnawialny - splata, 2)
-        rachunek.zapisz(firma, "Spłata kredytu odnawialnego", -splata, "kredyty")
+        firma.debet = round(firma.debet - splata, 2)
+        rachunek.zapisz(firma, "Spłata debetu", -splata, "kredyty")
     return 0.0
 
 
 def zadluzenie(firma: Firma) -> float:
     """Kredyty i debet; niezwrócona wpłata inwestora ratunkowego liczy się jak dług (Z3)."""
     inwestor = firma.inwestor.dlug if firma.inwestor else 0.0
-    return round(sum(k.pozostalo for k in firma.kredyty) + firma.kredyt_odnawialny + inwestor, 2)
+    return round(sum(k.pozostalo for k in firma.kredyty) + firma.debet + inwestor, 2)

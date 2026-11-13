@@ -44,7 +44,7 @@ def test_kazdy_plik_ma_opis_i_zrodlo():
         ("sprzet.yaml", lambda d: d["sprzet"]["Rożen"].update(kolor="czerwony"), "kolor"),
         ("uslugi.yaml", lambda d: d["uslugi"]["falafel"]["sprzet"].append("Kasa fiskalna"), "Kasa fiskalna"),
         ("uslugi.yaml", lambda d: d["uslugi"]["falafel"]["zasoby"].update({"Lawasz": 1}), "Lawasz"),
-        ("katalog.yaml", lambda d: d["banki"].pop("zrodlo"), "katalog.yaml: banki.zrodlo"),
+        ("katalog.yaml", lambda d: d["szkolenia"].pop("zrodlo"), "katalog.yaml: szkolenia.zrodlo"),
         ("kandydaci.yaml", lambda d: d["losowanie"]["gwiazdki"].update({"3": 0.5}), "sumować"),
         (
             "boty.yaml",

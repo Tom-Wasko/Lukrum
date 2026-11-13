@@ -45,12 +45,14 @@ poziomy:
     promocje: false
   sredni:
     nazwa: Średni
+    debet: true   # tor A: włącza debet w banku konta
     opis: trzyma się swojej strategii
     planowanie: przepustowosc
     cel_obslugi: 0.97
     narzut_pracy: 1.25
   trudny:
     nazwa: Trudny
+    debet: true   # tor A: włącza debet w banku konta
     opis: planuje zapasy, ceny, reklamę i lokale
     planowanie: przepustowosc
     cel_obslugi: 0.97
@@ -61,6 +63,7 @@ poziomy:
     kolejny_lokal: {obsluga: 0.85, gotowka: 60000, maks_lokali: 2}
   niemozliwy:                    # P19 (pytanie 25): dla chętnych – wyzwanie, którego zwykle nie da się wygrać
     nazwa: Niemożliwy
+    debet: true   # tor A: włącza debet w banku konta
     opis: jak trudny, ale oszukuje – klienci bez powodu wolą jego lokale
     planowanie: przepustowosc
     cel_obslugi: 0.97

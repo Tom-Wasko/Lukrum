@@ -337,16 +337,6 @@ class Narzedzie(Schemat):
     zalozenie: bool = False
 
 
-class Bank(Schemat):
-    nazwa: str
-    konto: float
-    karta: float
-    lokata: float
-    kredyt_odnawialny: float
-    kredyt: float
-    od_rundy: int = 1
-
-
 class Biuro(Schemat):
     nazwa: str
     ksiegowanie: float
@@ -378,12 +368,6 @@ class SekcjaNarzedzi(Sekcja):
     pozycje: list[Narzedzie]
 
 
-class SekcjaBankow(Sekcja):
-    pozycje: list[Bank]
-    kredyt_maks_miesiecy: int = Field(gt=0)
-    lokata_konczy_sie_najpozniej_w_ostatniej_rundzie: bool
-
-
 class SekcjaBiur(Sekcja):
     pozycje: list[Biuro]
 
@@ -410,7 +394,6 @@ class PlikKatalogu(Schemat):
     wyposazenie: SekcjaUdogodnien
     media_tradycyjne: SekcjaMediow
     narzedzia_internetowe: SekcjaNarzedzi
-    banki: SekcjaBankow
     biura_rachunkowe: SekcjaBiur
     szkolenia: SekcjaSzkolen
 
@@ -589,6 +572,7 @@ class PoziomBota(Schemat):
     tylko_pomiar: bool = False   # poziom do pomiarów (balans/), bez wyboru w panelu mistrza gry
     dba_o_ludzi: DbaOLudzi | None = None   # U20: podwyżka dla niezadowolonych (łatwy ich ignoruje)
     limit_handlu: float | None = Field(None, gt=0, le=1)   # giełda handlu: najwyższa cena w licytacji × wartość
+    debet: bool = False   # tor A: włącza debet w banku konta (bez – saldo poniżej zera to alarm i odsetki karne)
     podkupuje_ludzi: bool = False   # kalibracja B9: podkupuje niedopłacanych (zalozenia.yaml: pracownicy.podkupywanie_botow)
 
     @model_validator(mode="after")
@@ -823,9 +807,10 @@ class Terminal(Schemat):
     prowizja: float = Field(ge=0, lt=1)  # od płatności kartą
 
 
-class Limit(Schemat):
-    kwota: float = Field(ge=0)
-    oprocentowanie: float = Field(ge=0, lt=1)
+class Debet(Schemat):
+    limit: float = Field(ge=0)             # najwyżej tyle może wynieść debet za zgodą banku
+    oplata: float = Field(ge=0)            # za każdy tydzień na minusie (brutto, zł)
+    oprocentowanie: float = Field(ge=0, lt=1)   # roczne, od debetu w limicie
 
 
 class ProduktKredytowy(Schemat):
@@ -854,7 +839,7 @@ class BankMapy(Schemat):
     konto: float = Field(ge=0)           # miesięczna opłata
     terminal: Terminal
     lokaty: dict[int, float] = Field(min_length=1)   # okres w rundach → oprocentowanie roczne
-    limit: Limit
+    debet: Debet
     kredyty: list[ProduktKredytowy] = Field(default_factory=list)
     leasing: OfertaLeasingu | None = None
 

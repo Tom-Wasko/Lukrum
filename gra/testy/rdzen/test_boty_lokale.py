@@ -50,13 +50,13 @@ def test_bot_kupuje_lokal_na_kredyt_pod_jego_zastaw():
 def test_bot_kupuje_dzialke_z_budowa_i_doplaca_kredytem_bez_historii():
     """Działka: wejście z budową w ratach ponad kredyt pod zastaw (0,7 × cena z budową) – brakującą kwotę i rezerwę
     bot dopłaca kredytem bez wymogu historii (np. „na start”); bez niej bank przejmował działkę po zaległych ratach.
-    Zastaw (PKO BP) i kredyt bez historii (Crédit Agricole) są w różnych bankach – test bez reguły `tylko_bank_konta`."""
+    Zastaw (Wokulski i S-ka) i kredyt bez historii (Kmicic) są w różnych bankach – test bez reguły `tylko_bank_konta`."""
     g, (d,) = _gra({"lokal": {"typy": ["dzialka"], "forma": "kupno", "rezerwa": 10000}}, tylko_bank_konta=False)
     lok = _lokal(g, d["lokal"]["id"])
     assert lok["typ"] == "dzialka" and d["lokal"]["forma"] == "kupno"
     zastaw, doplata = d["kredyty_wez"]
     assert zastaw["zastaw"] == f"lokal:{lok['id']}" and "zastaw" not in doplata
-    assert 40000 + zastaw["kwota"] + doplata["kwota"] >= lok["cena"] + lok["koszt_budowy"] + 10000
+    assert g.kapital_startowy + zastaw["kwota"] + doplata["kwota"] >= lok["cena"] + lok["koszt_budowy"] + 10000
     f = g.stan().firmy["A"]
     assert [(x.id, x.forma) for x in f.lokale] == [(lok["id"], "kupno")] and len(f.kredyty) == 2
 
@@ -73,7 +73,7 @@ def test_bot_finansuje_sprzet_lokalu_niewyposazonego_leasingiem():
     """Lokal bez zestawu: cały sprzęt 3★ naraz (od tygodnia 2) to więcej, niż bot ma gotówki – najdroższe pozycje
     bierze w leasing (nie liczy się do wskaźnika zadłużenia karty), aż po zakupach i opłatach wstępnych zostanie
     rezerwa (ustawienia.rezerwa_po_sprzecie); bez tego wpadał w debet ponad limit konta."""
-    g, (d1, d2) = _gra({"lokal": {"typy": ["niewyposazony"]}, "jakosc": 3}, rund=2)
+    g, (d1, d2) = _gra({"lokal": {"typy": ["niewyposazony"]}, "jakosc": 3}, rund=2, kapital_startowy=40000)
     assert _lokal(g, d1["lokal"]["id"])["typ"] == "niewyposazony" and not d1.get("kredyty_wez")
     przed = g.stan(1).firmy["A"].gotowka
     cena = lambda x: g.dane.sprzet[x["nazwa"]]["ceny"][str(x["jakosc"])]   # noqa: E731

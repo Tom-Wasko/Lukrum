@@ -6,7 +6,7 @@ zrodlo: notatka „Elementy mapy” (banki w dwóch rzędach po trzy, dostawcy, 
   banków z mapa/banki.yaml (F3a.9), biur, dostawców i firm szkoleniowych z katalog.yaml i dostawcy.yaml
 budynki:
 - id: bank_1
-  nazwa: Crédit Agricole
+  nazwa: Kmicic
   rodzaj: bank
   strefa: centrum
   opis: Bank – kredyt na start dla firmy bez historii (dane/mapa/banki.yaml).
@@ -17,7 +17,7 @@ budynki:
     szer: 1
     gl: 1
 - id: bank_2
-  nazwa: PKO BP
+  nazwa: Wokulski i S-ka
   rodzaj: bank
   strefa: centrum
   opis: Bank – kredyt inwestycyjny pod zastaw (dane/mapa/banki.yaml).
@@ -28,7 +28,7 @@ budynki:
     szer: 1
     gl: 1
 - id: bank_3
-  nazwa: Pekao
+  nazwa: Ziemia Obiecana
   rodzaj: bank
   strefa: centrum
   opis: Bank – leasing sprzętu (dane/mapa/banki.yaml).
@@ -39,7 +39,7 @@ budynki:
     szer: 1
     gl: 1
 - id: bank_4
-  nazwa: ING
+  nazwa: Oszczędności Rzeckiego
   rodzaj: bank
   strefa: centrum
   opis: Bank – najlepsze lokaty (dane/mapa/banki.yaml).
@@ -50,7 +50,7 @@ budynki:
     szer: 1
     gl: 1
 - id: bank_5
-  nazwa: mBank
+  nazwa: Soplicowo
   rodzaj: bank
   strefa: centrum
   opis: Bank – najtańsze konto firmowe i terminal (dane/mapa/banki.yaml).
@@ -61,10 +61,10 @@ budynki:
     szer: 1
     gl: 1
 - id: bank_6
-  nazwa: Santander
+  nazwa: Solaris
   rodzaj: bank
   strefa: centrum
-  opis: Bank – największy limit w koncie (dane/mapa/banki.yaml).
+  opis: Bank – największy debet (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
     x: 10

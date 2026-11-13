@@ -13,12 +13,13 @@ SPRZET = {"typ": "kuchnia", "nr": 2, "nazwa": "Rożen", "jakosc": 2}   # druga k
 
 
 def _w_debecie(ponad=5000):
-    """Runda 1 za nami, firma A (mBank) z debetem ponad limit konta."""
+    """Runda 1 za nami, firma A (Soplicowo) z debetem ponad limit konta."""
     g = _gra(("A", None), ("B", None))
-    _runda(g, A={**_lokal("centrum_3"), "stanowiska": {"kuchnia": 1}, "bank": "mBank"},
-           B={**_lokal("zygmuntowskie_1"), "bank": "mBank"})
+    _runda(g, A={**_lokal("centrum_3"), "stanowiska": {"kuchnia": 1}, "bank": "Soplicowo"},
+           B={**_lokal("zygmuntowskie_1"), "bank": "Soplicowo"})
     f = g.stan(1).firmy["A"]
-    f.kredyt_odnawialny, f.gotowka = bk.banki(g.dane)["mBank"]["limit"]["kwota"] + ponad, 0
+    f.debet_wlaczony = True
+    f.debet, f.gotowka = bk.banki(g.dane)["Soplicowo"]["debet"]["limit"] + ponad, 0
     return g
 
 
@@ -30,8 +31,8 @@ def test_alarm_i_blokada_inwestycji_i_kredytow():
     g = _w_debecie()
     assert g.stan(1).wyniki[1]["B"]["alarm"] == 0
     s = _runda(g, A={"sprzet_kup": [SPRZET], "kredyty_wez": [{"kwota": 5000, "miesiecy": 6}],
-                     "lokaty_zaloz": [{"bank": "mBank", "kwota": 1000, "rund": 4}], "harpagon_wez": 5000},
-               B={"lokaty_zaloz": [{"bank": "mBank", "kwota": 1000, "rund": 4}]})
+                     "lokaty_zaloz": [{"bank": "Soplicowo", "kwota": 1000, "rund": 4}], "harpagon_wez": 5000},
+               B={"lokaty_zaloz": [{"bank": "Soplicowo", "kwota": 1000, "rund": 4}]})
     a = s.firmy["A"]
     assert "Rożen" not in a.stanowisko("kuchnia", 2).sprzet and not a.kredyty and not a.lokaty
     assert a.harpagon is not None   # pilna gotówka u Harpagona zostaje
@@ -57,7 +58,7 @@ def test_alarm_w_podgladzie_szkicu_jako_pierwszy_blad():
 
 def test_inwestor_splaca_debet_i_liczy_sie_jak_dlug():
     g = _w_debecie(ponad=5000)
-    debet = g.stan(1).firmy["A"].kredyt_odnawialny
+    debet = g.stan(1).firmy["A"].debet
     g.ustaw_inwestora("A", 20000)
     s = _runda(g, A={"sprzet_kup": [SPRZET]})
     a, w = s.firmy["A"], s.wyniki[2]["A"]

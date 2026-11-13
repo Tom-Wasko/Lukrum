@@ -28,7 +28,7 @@ def _dodatki(draw, lokale: bool) -> dict:
     """Losowe decyzje finansowe na rundę (część z nich silnik odrzuci – to też ma się uzgadniać)."""
     d = {}
     if draw(st.booleans()):
-        d["kredyty_wez"] = [{"bank": "Crédit Agricole", "produkt": "start", "kwota": draw(st.integers(1000, 30000)),
+        d["kredyty_wez"] = [{"bank": "Kmicic", "produkt": "start", "kwota": draw(st.integers(1000, 30000)),
                              "rund": 26} if lokale else {"kwota": draw(st.integers(1000, 30000)), "miesiecy": 6}]
     if draw(st.booleans()):
         bank = draw(st.sampled_from(sorted(BANKI)))
@@ -101,8 +101,8 @@ def test_kasa_zgadza_sie_z_kpir_w_losowych_grach(lokale, ziarno, strategie, data
 def test_uzgodnienie_obejmuje_wszystkie_rodzaje_operacji():
     """Scenariusz z każdym rodzajem: inwestycje (kupno działki), kaucja, kredyt, lokata, Harpagon, podatki."""
     dodatki = [{"lokal": {"id": "centrum_2", "forma": "najem"}, "harpagon_wez": 3000,
-                "kredyty_wez": [{"bank": "Crédit Agricole", "produkt": "start", "kwota": 20000, "rund": 26}],
-                "lokaty_zaloz": [{"bank": "ING", "kwota": 5000, "rund": 4}]},
+                "kredyty_wez": [{"bank": "Kmicic", "produkt": "start", "kwota": 20000, "rund": 26}],
+                "lokaty_zaloz": [{"bank": "Oszczędności Rzeckiego", "kwota": 5000, "rund": 4}]},
                {"harpagon_splac": 5000}, {}, {"lokal": {"id": "czechow_3", "forma": "kupno"}}]   # lokal co 3 rundy
     s = _graj(True, 3, ["zrownowazony"] * 3, dodatki, tylko_bank_konta=False)   # kredyt i lokata w dwóch bankach
     _sprawdz(s)

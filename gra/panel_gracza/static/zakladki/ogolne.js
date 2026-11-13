@@ -194,7 +194,7 @@ export const dashboard = {
         ? `<div class="maly-tekst">Lokal i budynek: ${proc(v.amortyzacja.stawki.budynek)} rocznie<br>Od ${zl(p.amortyzacja_prog)}: ${proc(v.amortyzacja.stawki.sprzet)} rocznie<br>Do ${zl(p.amortyzacja_prog)}: 100%</div>`
         : `<div class="maly-tekst">Sprzęt powyżej ${zl(p.amortyzacja_prog)}: 10%<br>Sprzęt do ${zl(p.amortyzacja_prog)}: 100%</div>`)}
       ${kafel("Pozostałe informacje", "finanse", `<div class="maly-tekst">PIT liniowy ${proc(v.podatki?.parametry?.pit ?? 0, 0)}<br>Składki ZUS pracodawcy ${proc(p.zus, 0)}
-        <br>Kredyt odnawialny: ${v.gra.kredyt_odnawialny === "na_biezaco" ? "na bieżąco" : "jak w grze (jednocześnie)"}
+        <br>Rozliczanie debetu: ${v.gra.tryb_debetu === "na_biezaco" ? "na bieżąco" : "jak w grze (jednocześnie)"}
         ${d.lokaty ? `<br>Lokaty: ${zl(d.lokaty)}` : ""}${d.zadluzenie ? `<br>Zadłużenie: ${zl(d.zadluzenie)}` : ""}</div>`)}
     </div>${(v.historia || []).length > 1 ? `<div class="wykres"><canvas id="w-dash"></canvas></div>` : ""}`;
   },

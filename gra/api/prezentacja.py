@@ -122,7 +122,7 @@ def stan_po_szkicu(gra: Gra, firma: str):
         info["czas_wlasciciela"] = czas.podsumowanie()
     cw.zastosuj(gra.dane, f, info)   # wolne godziny właściciela – na puste stanowisko
     bledy = alarm + blokady + inw.bledy(f, inwestor) + bledy_funkcji
-    bledy += lista_bledow(gra.dane, f, d, r, poprzednia_oferta, gra.konfiguracja.get("kredyt_odnawialny", "na_biezaco"),
+    bledy += lista_bledow(gra.dane, f, d, r, poprzednia_oferta, gra.konfiguracja.get("tryb_debetu", "na_biezaco"),
                           lokal, info)
     bledy += [{"poziom": "czerwony", "zakladka": "rynek_pracy", "tekst": t} for t in uwagi_rp]
     if rp.podkupywanie(gra.konfiguracja):   # UF18; opcja MG – bez podkupywania nie ma czego ostrzegać
@@ -349,7 +349,7 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
                  "zakonczona": gra.zakonczona, "firmy": gra.konfiguracja["firmy"], "wyslane": gra.wyslane(),
                  "brakujace": gra.brakujace(), "ziarno": gra.konfiguracja["ziarno"], "runda_startowa": gra.runda_startowa,
                  "konkurenci_stali": gra.konfiguracja.get("konkurenci_stali", []),
-                 "kredyt_odnawialny": gra.konfiguracja.get("kredyt_odnawialny", "na_biezaco"),
+                 "tryb_debetu": gra.konfiguracja.get("tryb_debetu", "na_biezaco"),
                  "auto_zamowienia": bool(gra.konfiguracja.get("auto_zamowienia")),
                  "refleksja": gra.tryb_refleksji,
                  "podpowiedzi": bool(gra.konfiguracja.get("podpowiedzi")),
@@ -580,7 +580,7 @@ def _dashboard(gra: Gra, firma: str, runda: int, poprzedni, skum: dict) -> dict:
     f = poprzedni.firmy[firma]
     d = {"nazwa": f.nazwa_wyswietlana or firma, "saldo": f.gotowka, "dochod_netto": 0.0, "miejsce": None,
          "liczba_firm": len(poprzedni.firmy), "lokaty": sum(l.kwota for l in f.lokaty),
-         "zadluzenie": sum(k.pozostalo for k in f.kredyty) + f.kredyt_odnawialny}
+         "zadluzenie": sum(k.pozostalo for k in f.kredyty) + f.debet}
     if runda - 1 in poprzedni.wyniki:
         d["dochod_netto"] = poprzedni.wyniki[runda - 1][firma]["kpir"]["dochod_netto"]
     d["miejsce"] = miejsca(skum).get(firma)   # Z7: jak ranking mistrza gry (średnia z rund 2…)
@@ -672,7 +672,7 @@ def przeglad_mg(gra: Gra) -> dict:
     return {
         "gra": {"nazwa": konf["nazwa"], "runda": r, "liczba_rund": konf["liczba_rund"], "zakonczona": gra.zakonczona,
                 "ziarno": konf["ziarno"], "kapital": gra.kapital_startowy,
-                "kredyt_odnawialny": konf.get("kredyt_odnawialny", "na_biezaco"),
+                "tryb_debetu": konf.get("tryb_debetu", "na_biezaco"),
                 "auto_zamowienia": bool(konf.get("auto_zamowienia")),
                 "refleksja": gra.tryb_refleksji,
                 "podpowiedzi": bool(konf.get("podpowiedzi")),

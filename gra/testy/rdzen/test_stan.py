@@ -59,7 +59,7 @@ firmy = st.builds(
         ),
         max_size=2,
     ),
-    kredyt_odnawialny_gr=KWOTY,
+    debet_gr=KWOTY,
     majatek_gr=KWOTY,
     skumulowany_dochod_netto_gr=KWOTY,
 )

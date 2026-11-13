@@ -413,54 +413,6 @@ narzedzia_internetowe:
     utrzymanie: 500
     zalozenie: true
     od_rundy: 7
-banki:
-  zrodlo: 'założenie autora: oprocentowanie roczne; od rundy 1: Bank Pod Bramą, Kasa Bystrzyca, Bank Zalew; od rundy 4:
-    Bank Kalinowy, Bank Wieniawski, Bank Lubartowska (od użytkownika)'
-  pozycje:
-  - nazwa: Bank Pod Bramą
-    konto: 10
-    karta: 5
-    lokata: 0.02
-    kredyt_odnawialny: 0.07
-    kredyt: 0.05
-    od_rundy: 1
-  - nazwa: Kasa Bystrzyca
-    konto: 5
-    karta: 5
-    lokata: 0.03
-    kredyt_odnawialny: 0.06
-    kredyt: 0.07
-    od_rundy: 1
-  - nazwa: Bank Zalew
-    konto: 15
-    karta: 0
-    lokata: 0.05
-    kredyt_odnawialny: 0.05
-    kredyt: 0.05
-    od_rundy: 1
-  - nazwa: Bank Kalinowy
-    konto: 20
-    karta: 0
-    lokata: 0.07
-    kredyt_odnawialny: 0.12
-    kredyt: 0.1
-    od_rundy: 4
-  - nazwa: Bank Wieniawski
-    konto: 5
-    karta: 15
-    lokata: 0.01
-    kredyt_odnawialny: 0.12
-    kredyt: 0.12
-    od_rundy: 4
-  - nazwa: Bank Lubartowska
-    konto: 10
-    karta: 2
-    lokata: 0.01
-    kredyt_odnawialny: 0.1
-    kredyt: 0.11
-    od_rundy: 4
-  kredyt_maks_miesiecy: 26  # w rundach (tygodniach) – F2.7
-  lokata_konczy_sie_najpozniej_w_ostatniej_rundzie: true
 biura_rachunkowe:
   zrodlo: 'założenie autora: 6 biur rachunkowych, ceny dopasowane do rynku; KPiR: dokument = każda pozycja KPiR poza obsługą
     kadrowo-płacową'

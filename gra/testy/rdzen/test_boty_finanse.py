@@ -155,13 +155,13 @@ def test_bot_obniza_higiene_dopiero_po_odbiorze_lokali():
 
 
 def test_bot_wybiera_bank_z_potrzebnymi_produktami_gdy_tylko_bank_konta():
-    """Sprawa 21: przy `tylko_bank_konta` bot bierze konto w banku z leasingiem i kredytem pod zastaw (PKO BP),
+    """Sprawa 21: przy `tylko_bank_konta` bot bierze konto w banku z leasingiem i kredytem pod zastaw (Wokulski i S-ka),
     a bez tej zasady – najtańsze konto; leasing i lokaty tylko w banku konta."""
     g = _gra(1)
     st = g.dane.boty["strategie"]["zrownowazony"]
     assert bk.tylko_bank_konta(g.dane)
-    assert boty._bank_bota(g.dane, {**st, "lokal": {"forma": "kupno"}}) == "PKO BP"
-    assert boty._bank_bota(g.dane, {**st, "kredyt": {"produkt": "start"}}) in ("Crédit Agricole", "PKO BP")
+    assert boty._bank_bota(g.dane, {**st, "lokal": {"forma": "kupno"}}) == "Wokulski i S-ka"
+    assert boty._bank_bota(g.dane, {**st, "kredyt": {"produkt": "start"}}) in ("Kmicic", "Wokulski i S-ka")
     bez = copy.copy(g.dane)
     bez.mapa = {**bez.mapa, "banki": {**bez.mapa["banki"], "tylko_bank_konta": False}}
     assert boty._bank_bota(bez, st) == bk.najlepsze(bez)["konto"]

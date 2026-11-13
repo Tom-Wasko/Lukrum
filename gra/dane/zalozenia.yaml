@@ -189,9 +189,9 @@ operacje:
       dopasowania'
 finanse:
   kapital_startowy:
-    wartosc: 40000
+    wartosc: 50000
     pewnosc: zalozenie
-    zrodlo: 'notatka „Ustalenia gry”: kapitał startowy 40 000 zł (zmiana 26.10)'
+    zrodlo: 'decyzja autora 13.11.2026 (tor A): kapitał startowy 50 000 zł – tyle, żeby wystarczyło na najem lokalu, sprzęt, pierwszą ekipę i zapas na pierwsze tygodnie; mistrz gry może go zmienić'
   placa_minimalna:
     wartosc: 4806
     pewnosc: potwierdzone

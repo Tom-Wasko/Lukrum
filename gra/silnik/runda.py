@@ -8,7 +8,7 @@ Runda r = tydzień r gry z lokalami (dane/mapa). Kolejność jak w KPiR i banku 
  4. od rundy 2: popyt strefowy → obsługa klientów w lokalach → przychody,
  5. koszty rundy: pensje + ZUS, utrzymanie, lokale, amortyzacja, wynajęta chłodnia i sanepid (silnik/kuchnia/magazyn.py),
     bank, biuro rachunkowe,
- 6. rozliczenie JDG (składki, zaliczka PIT, VAT), kredyt odnawialny przy braku gotówki,
+ 6. rozliczenie JDG (składki, zaliczka PIT, VAT), debet przy braku gotówki,
  7. wynik punktowy (tydzień 1 – Wielkie otwarcie, od tygodnia 2 – pięć działów).
 """
 from __future__ import annotations
@@ -27,7 +27,7 @@ from .ksiegowosc.finanse import (
     Ksiega,
     Rachunek,
     ksieguj,
-    uruchom_odnawialny,
+    uruchom_debet,
     wyrownaj_gotowke,
     zadluzenie,
 )
@@ -88,9 +88,9 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
     kolejnosc = list(strumien(ziarno, r, "kolejnosc").permutation(nazwy))
 
     rachunki, info, bledy, odnawialny = {}, {}, {}, {}
-    # domyślnie "na_biezaco" (jak w banku); "jednoczesnie" (jak w oficjalnej grze): przychody i wydatki miesiąca rozliczane razem – kredyt odnawialny tylko
-    # na niedobór na koniec miesiąca; "na_biezaco": wydatki z decyzji opłacane przed wpływem przychodów
-    tryb_kredytu = konfiguracja.get("kredyt_odnawialny", "na_biezaco")
+    # domyślnie "na_biezaco" (jak w banku); "jednoczesnie": przychody i wydatki tygodnia rozliczane razem – debet tylko
+    # na niedobór na koniec tygodnia; "na_biezaco": wydatki z decyzji opłacane przed wpływem przychodów
+    tryb_kredytu = konfiguracja.get("tryb_debetu", "na_biezaco")
     start = {n: {"magazyn": dict(f.magazyn), "gotowka": f.gotowka, "pracownicy": len(f.pracownicy), "uslugi": len(f.oferta)}
              for n, f in s.firmy.items()}
     for nazwa in nazwy:
@@ -176,7 +176,7 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         info[nazwa]["lokal"] = lokal
         if bank_info is not None:
             info[nazwa]["bank"] = bank_info
-        odnawialny[nazwa] = uruchom_odnawialny(f, rachunki[nazwa]) if tryb_kredytu == "na_biezaco" else 0.0
+        odnawialny[nazwa] = uruchom_debet(f, rachunki[nazwa]) if tryb_kredytu == "na_biezaco" else 0.0
 
     # przejścia pracowników po okresie wypowiedzenia, opłaty headhuntera
     rp.po_decyzjach(dane, s, r, rynek_pracy, ksiegi, rachunki)
@@ -387,7 +387,7 @@ def _wyniki_firmy(dane, f: Firma, r, ks: Ksiega, rach: Rachunek, info, popyt, ob
                   bledy, netto) -> dict:
     z = dane.z
     w = {"runda": r, "miesiac": dane.nazwa_rundy(r), "kpir": ks.do_slownika(),
-         "rachunek": rach.operacje, "gotowka": f.gotowka, "kredyt_odnawialny": f.kredyt_odnawialny,
+         "rachunek": rach.operacje, "gotowka": f.gotowka, "debet": f.debet,
          "zadluzenie": zadluzenie(f), "lokaty": sum(l.kwota for l in f.lokaty), "lista_bledow": bledy,
          "uzgodnienie": uzgodnij(start["gotowka"], f.gotowka, ks, rach)}   # kasa = KPiR ± VAT ± poza KPiR
     # JDG: zaliczka PIT i składka zdrowotna; rejestr VAT

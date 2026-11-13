@@ -1,11 +1,11 @@
 // Bank w grze z lokalami (silnik/pieniadze/banki.py, dane/mapa/banki.yaml): sześć banków, konto firmowe z terminalem
-// i limitem, lokaty, kredyty (na start, inwestycyjny pod zastaw, obrotowy) i leasing sprzętu – przy tylko_bank_konta
+// i debetem, lokaty, kredyty (na start, inwestycyjny pod zastaw, obrotowy) i leasing sprzętu – przy tylko_bank_konta
 // (sprawa 21, poprawki 2) tylko w banku konta firmowego: po wyborze banku zakładka pokazuje tylko ten bank.
 import { esc, inwestorHtml, kafelkiLiczb, kafelOferty, kartaMarki, KOLORY, OKRES, okno, podsumowanie, proc, tabela, znakMarki, toast, zamknijOkno, zl, zl2, zwinTabela } from "./wspolne.js";
 
 const PRODUKTY = { start: "na start", inwestycyjny: "inwestycyjny", obrotowy: "obrotowy" };
 const KATEGORIE = { konto: "Najtańsze konto i terminal", lokata: "Najlepsza lokata", kredyt_bez_historii: "Kredyt bez historii firmy",
-  kredyt_inwestycyjny: "Najtańszy kredyt pod zastaw", leasing: "Najtańszy leasing", limit: "Największy limit w koncie" };
+  kredyt_inwestycyjny: "Najtańszy kredyt pod zastaw", leasing: "Najtańszy leasing", debet: "Największy debet" };
 const rundy = (n) => `${n} ${n === 1 ? "runda" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? "rundy" : "rund"}`;
 const tak = (b) => b ? `<span class="plus">✓</span>` : `<span class="minus">✗</span>`;
 
@@ -28,7 +28,7 @@ const w = (a, b) => `<div class="wiersz"><span>${a}</span><span>${b}</span></div
 function kafelZwarty(v, kat, b, wybrany, edycja) {
   const naj = najlepszyW(v, b.nazwa), moj = b.nazwa === wybrany;
   const konto = kafelOferty({ tytul: "Konto firmowe", pigulka: moj ? "Twoje konto" : "", duza: zl(b.konto + b.terminal.abonament), podpis: "miesięcznie: konto + terminal",
-    tresc: w("Prowizja od kart", proc(b.terminal.prowizja, 2)) + w("Limit w koncie", `${zl(b.limit.kwota)} · ${proc(b.limit.oprocentowanie, 1)}`),
+    tresc: w("Prowizja od kart", proc(b.terminal.prowizja, 2)) + w("Debet (za zgodą)", `${zl(b.debet.limit)} · ${proc(b.debet.oprocentowanie, 1)} · ${zl(b.debet.oplata)} / tydz.`),
     stopka: moj ? `<button class="btn zielony">✓ Konto firmowe</button>`
       : `<button class="btn czarny" data-akcja="bk-konto" data-b="${esc(b.nazwa)}" ${edycja ? "" : "disabled"}>Otwórz konto firmowe</button>` });
   const oferta = kafelOferty({ tytul: "Lokaty, kredyty, leasing", duza: proc(najLokata(b), 1), podpis: "najlepsza lokata (rocznie)",
@@ -42,7 +42,7 @@ function kafelZwarty(v, kat, b, wybrany, edycja) {
 function kafel(v, kat, b, edycja) {
   const naj = najlepszyW(v, b.nazwa);
   const konto = kafelOferty({ tytul: "Konto firmowe", duza: zl(v.stan.gotowka), podpis: "dostępne saldo (po decyzjach tej rundy, przed sprzedażą)",
-    tresc: w("Wolny limit", zl2(v.banki.wolny_limit)) + w("Historia firmy", rundy(v.banki.historia))
+    tresc: w("Wolny limit debetu", zl2(v.banki.wolny_limit)) + w("Debet", debetWlaczony(v) ? "włączony" : "wyłączony") + w("Historia firmy", rundy(v.banki.historia))
       + w("Konto + terminal", `${zl(b.konto + b.terminal.abonament)} / mies. · ${proc(b.terminal.prowizja, 2)} od kart`),
     stopka: `<button class="btn pom" data-akcja="bk-zmien" ${edycja ? "" : "disabled"}>Zmień bank konta</button>` });
   const lokata = kafelOferty({ tytul: "Lokaty", duza: proc(najLokata(b), 1), podpis: "najlepsze oprocentowanie roczne",
@@ -77,7 +77,7 @@ function ofertyKredytow(v, kat, edycja) {
 function porownanie(v, kat) {
   const naj = v.banki.najlepsze;
   const kom = (kategoria, b, tekst) => naj[kategoria] === b.nazwa ? `<b class="akcent">${tekst}</b>` : tekst;
-  return tabela("Porównanie ofert", ["Bank", "Konto + terminal / mies.", "Prowizja od kart", "Lokaty", "Kredyt bez historii", "Kredyt pod zastaw", "Leasing", "Limit w koncie"],
+  return tabela("Porównanie ofert", ["Bank", "Konto + terminal / mies.", "Prowizja od kart", "Lokaty", "Kredyt bez historii", "Kredyt pod zastaw", "Leasing", "Debet (limit · oprocentowanie · opłata za tydzień)"],
     bankiLista(kat).map((b) => {
       const bezHist = b.kredyty.find((p) => !p.historia && !p.od_lokalu), zastaw = b.kredyty.find((p) => p.zastaw);
       return [esc(b.nazwa), kom("konto", b, zl2(b.konto + b.terminal.abonament)), proc(b.terminal.prowizja, 2),
@@ -85,7 +85,7 @@ function porownanie(v, kat) {
         bezHist ? kom("kredyt_bez_historii", b, proc(bezHist.oprocentowanie, 1)) : "–",
         zastaw ? kom("kredyt_inwestycyjny", b, `${proc(zastaw.oprocentowanie, 1)} (do ${proc(zastaw.zastaw, 0)} wartości)`) : "–",
         b.leasing ? kom("leasing", b, proc(b.leasing.oprocentowanie, 1)) : "–",
-        kom("limit", b, `${zl2(b.limit.kwota)} · ${proc(b.limit.oprocentowanie, 1)}`)];
+        kom("debet", b, `${zl2(b.debet.limit)} · ${proc(b.debet.oprocentowanie, 1)} · ${zl2(b.debet.oplata)} / tydz.`)];
     }), { klasy: ["l"] })
     + `<p class="podpowiedz">${tylkoKonto(kat) ? ZASADA : "Konto firmowe może być w jednym banku, a lokaty, kredyty i leasing – w dowolnych."} Oprocentowanie roczne,
       w ${OKRES.miejscownik} naliczana część: 1/${OKRES.rund_w_roku}. Pogrubione – najlepsza oferta w kategorii.</p>`;
@@ -135,11 +135,19 @@ function leasing(v, kat, edycja) {
       i raty idą w koszty (bez amortyzacji), po ostatniej racie wykup za symboliczną kwotę.</span></p>`;
 }
 
-function limit(v, kat, b) {
-  const u = ustawienia(kat);
-  return tabela("Limit w koncie", ["", "Kwota"], [["Limit", zl2(b.limit.kwota)], ["Wykorzystany", zl2(v.stan_przed.kredyt_odnawialny)],
-    ["Wolny", zl2(v.banki.wolny_limit)], ["Oprocentowanie limitu", proc(b.limit.oprocentowanie, 1)], ["Debet ponad limit – odsetki karne", proc(u.stopa_karna, 0)]], { klasy: ["l", "r"] })
-    + `<p class="podpowiedz">Limit uruchamia się sam, gdy na koniec ${OKRES.dopelniacz} zabraknie gotówki, i jest spłacany z nadwyżki.
+// zgoda na debet: decyzja `debet` (true/false) albo stan z poprzedniej rundy
+const debetWlaczony = (v) => (v.decyzje?.debet ?? v.stan_przed?.debet_wlaczony) === true;
+
+function debet(v, kat, b, edycja) {
+  const u = ustawienia(kat), wl = debetWlaczony(v);
+  return tabela("Debet", ["", "Wartość"], [["Zgoda na debet", wl ? "włączona" : "wyłączona"], ["Limit", zl2(b.debet.limit)],
+    ["Obecny debet", zl2(v.stan_przed.debet)], ["Wolny limit", zl2(v.banki.wolny_limit)],
+    ["Opłata za każdy tydzień na minusie", zl2(b.debet.oplata)], ["Oprocentowanie debetu w limicie", proc(b.debet.oprocentowanie, 1)],
+    ["Debet ponad limit albo bez zgody – odsetki karne", proc(u.stopa_karna, 0)]], { klasy: ["l", "r"] })
+    + `<p><button class="btn ${wl ? "pom" : "zielony"}" data-akcja="bk-debet" ${edycja ? "" : "disabled"}>${wl ? "Wyłącz debet" : "Włącz debet"}</button></p>
+    <p class="podpowiedz">Debet nie włącza się sam. Z włączonym, gdy na koniec ${OKRES.dopelniacz} zabraknie gotówki, saldo spada poniżej zera
+      do limitu banku: płacisz opłatę za tydzień na minusie i odsetki, a nadwyżka z kolejnych rund go spłaca. Bez zgody (albo ponad limit)
+      brak gotówki to alarm: odsetki karne i blokada inwestycji, kredytów, leasingu i lokat w następnej rundzie.
       Wolny limit liczy się też przy ratach kredytów i leasingu.</p>`;
 }
 
@@ -153,7 +161,7 @@ export function decyzjeBanku({ v, kat, edycja }) {
       <div class="banki-siatka">${bankiLista(kat).map((x) => kafelZwarty(v, kat, x, wybrany, edycja)).join("")}</div>${porownanie(v, kat)}`;
   }
   // tylko bank konta (porównanie innych banków – po „Zmień bank konta”)
-  const zak = { historia: "Historia rachunku", lokaty: "Lokaty", kredyty: "Kredyty", leasing: "Leasing", limit: "Limit w koncie" };
+  const zak = { historia: "Historia rachunku", lokaty: "Lokaty", kredyty: "Kredyty", leasing: "Leasing", debet: "Debet" };
   if (!zak[podzakladka]) podzakladka = "historia";
   let html = inwestorHtml(v) + kafel(v, kat, b, edycja)
     + `<div class="przelacznik" style="justify-content:flex-end;margin:16px 0;flex-wrap:wrap">${Object.entries(zak).map(([k, n]) => `<a class="${podzakladka === k ? "aktywny" : ""}" data-akcja="bk-zak" data-k="${k}">${n}</a>`).join("")}</div>`;
@@ -164,7 +172,7 @@ export function decyzjeBanku({ v, kat, edycja }) {
   } else if (podzakladka === "lokaty") html += lokaty(v, kat, edycja);
   else if (podzakladka === "kredyty") html += kredyty(v, kat, edycja);
   else if (podzakladka === "leasing") html += leasing(v, kat, edycja);
-  else html += limit(v, kat, b);
+  else html += debet(v, kat, b, edycja);
   return html;
 }
 
@@ -244,6 +252,7 @@ export const akcjeBanku = {
     zamknijOkno();
     await c.zmien((d) => { d.lokaty_zaloz = [...(d.lokaty_zaloz || []), { bank, kwota, rund: +r }]; });
   },
+  "bk-debet": (el, c) => c.zmien((d) => { d.debet = !debetWlaczony(c.v); }),
   "bk-nowy-kredyt": (el, c) => {
     const lista = oferty(c.v, c.kat);
     const { i: wybr, kwota = 10000, rund = 26 } = el.dataset;

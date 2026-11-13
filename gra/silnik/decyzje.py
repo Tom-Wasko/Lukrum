@@ -38,6 +38,8 @@ Format (słownik; brak klucza = bez zmian względem poprzedniej rundy):
                                                               (silnik/swiat/awarie.py, dane/zdarzenia/losowe.yaml)
     szkolenia:         [{"firma", "szkolenie"}]
     bank, biuro:       nazwa (z lokalami biuro: id z dane/mapa/biura.yaml albo "samodzielnie")
+    debet:             true | false – zgoda na debet w banku konta (limit, opłata za tydzień na minusie, odsetki;
+                       bez zgody saldo poniżej zera to alarm i odsetki karne; silnik/pieniadze/banki.py)
     ksiegowosc:        {"zapisy": {id dokumentu: {"kolumna", "stawka"}}, "deklaracja": {"vat", "pit", "zdrowotna"}}
                                                               – samodzielna księgowość za poprzednią rundę (biuro.py)
     lokaty_zaloz:      [{"kwota", "miesiecy"}];  lokaty_zerwij: [id]
@@ -271,8 +273,6 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         pl.synchronizuj(firma)
     if "sprzedaz" in odbl:
         _ceny_domyslne(dane, firma, zadane)
-    if d.get("bank") and d["bank"] in dane.dostepne("banki", runda):
-        firma.bank = d["bank"]
     if d.get("biuro") and bo.poprawny_wybor(dane, d["biuro"]):   # biura z mapy albo samodzielna księgowość
         firma.biuro = d["biuro"]
     st_trwale.ustaw_niskocenne(dane, firma, d)   # B6 (przeliczenie rundy ustawia to wcześniej – przed giełdą i lokalami)
@@ -773,13 +773,16 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
     zakupy = sum(z["wartosc"] for zz in (info or {}).get("zakupy_zasobow", {}).values() for z in zz)
     if firma.gotowka < 0 and lokal is not None and zakupy > -firma.gotowka:
         dodaj("pomaranczowy", "dostawcy", f"Na koncie brakuje ok. {-firma.gotowka:,.0f} zł, a same zamówienia u dostawców "
-              f"to {zakupy:,.0f} zł – jeśli sprzedaż tego nie pokryje, zapłaci za nie kredyt odnawialny (z odsetkami). "
+              f"to {zakupy:,.0f} zł – jeśli sprzedaż tego nie pokryje, zapłaci za nie debet (z opłatą i odsetkami). "
               "Zamów mniej albo zadbaj o finansowanie.".replace(",", " "))
     elif firma.gotowka < 0:
         if tryb_kredytu == "na_biezaco":
-            dodaj("pomaranczowy", "finanse_bank", "Wydatki przekraczają saldo konta – zostanie uruchomiony kredyt odnawialny "
-                  f"(ok. {-firma.gotowka:,.0f} zł).".replace(",", " "))
+            dodaj("pomaranczowy", "finanse_bank", "Wydatki przekraczają saldo konta – powstanie debet "
+                  f"(ok. {-firma.gotowka:,.0f} zł)".replace(",", " ")
+                  + (" z opłatą i odsetkami." if firma.debet_wlaczony else
+                     ", a debet nie jest włączony w banku: alarm, odsetki karne i blokada inwestycji."))
         else:
             dodaj("niebieski", "finanse_bank", "Wydatki przekraczają saldo konta. Jeśli przychody z tej rundy ich nie pokryją, "
-                  "uruchomi się kredyt odnawialny na brakującą kwotę.")
+                  "powstanie debet na brakującą kwotę" + ("." if firma.debet_wlaczony
+                                                          else " (bez włączonego debetu – z odsetkami karnymi)."))
     return wynik

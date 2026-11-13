@@ -173,9 +173,9 @@ def wnioski(dane: Dane, w: dict | None, wp: dict | None = None, runda: int | Non
         poprawa.append(_rada("Runda na minusie",
                              f"Przychody {zl(kpir['przychody'])}, koszty {zl(kpir['koszty'])}. Strata na starcie "
                              "jest normalna – dopiero inwestujecie.", _KOSZTY[najwiekszy], "kpir"))
-    if w.get("kredyt_odnawialny", 0) > 0:
+    if w.get("debet", 0) > 0:
         poprawa.append(_rada("Na koncie zabrakło pieniędzy",
-                             f"Firma korzysta z kredytu odnawialnego: {zl(w['kredyt_odnawialny'])}.",
+                             f"Firma korzysta z kredytu odnawialnego: {zl(w['debet'])}.",
                              "Zostawcie zapas gotówki na pensje i dostawy albo weźcie w banku kredyt z lepszym "
                              "oprocentowaniem, zanim zabraknie.", "bank"))
 

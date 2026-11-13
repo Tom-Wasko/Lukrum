@@ -431,7 +431,8 @@ class Firma(Model):
     rozliczenie: RozliczenieJDG = Field(default_factory=RozliczenieJDG)   # JDG – gra z lokalami
     amortyzacja_niskocenna: str = "koszty"   # B6: zakupy poniżej progu – "koszty" (od razu) albo "amortyzacja" (ewidencja)
     deklaracja: dict | None = None    # samodzielna księgowość: dokumenty i poprawne kwoty rundy (silnik/ksiegowosc/biuro.py)
-    kredyt_odnawialny_gr: int = 0
+    debet_gr: int = 0                 # saldo poniżej zera na koniec tygodnia (silnik/pieniadze/banki.py)
+    debet_wlaczony: bool = False      # zgoda na debet w banku konta – włączana decyzją `debet`
     majatek_gr: int = 0               # suma inwestycji (sprzęt, stanowiska, udogodnienia, wyposażenie) – rozwój firmy
     umorzenie_majatku_gr: int = 0     # amortyzacja tej sumy (karta po amortyzacji, Z1)
     skumulowany_dochod_netto_gr: int = 0
@@ -439,7 +440,7 @@ class Firma(Model):
     licznik: int = 0                  # do numerowania lokat i kredytów
 
     gotowka = _kwota("gotowka")
-    kredyt_odnawialny = _kwota("kredyt_odnawialny")
+    debet = _kwota("debet")
     majatek = _kwota("majatek")
     umorzenie_majatku = _kwota("umorzenie_majatku")
     skumulowany_dochod_netto = _kwota("skumulowany_dochod_netto")

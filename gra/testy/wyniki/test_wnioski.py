@@ -12,7 +12,7 @@ D = dane_domyslne()
 def _w(**zmiany):
     w = {"kpir": {"dochod_netto": 500.0, "przychody": 3000.0, "koszty": 2500.0, "towary": 1000.0,
                   "wynagrodzenia": 1200.0, "pozostale": 300.0},
-         "sprzedaz": {}, "lokale": [{"dziala": True, "dziala_od": 1}], "lista_bledow": [], "kredyt_odnawialny": 0.0}
+         "sprzedaz": {}, "lokale": [{"dziala": True, "dziala_od": 1}], "lista_bledow": [], "debet": 0.0}
     return w | zmiany
 
 

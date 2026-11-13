@@ -699,6 +699,8 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
     miejsca = lk.wolne_miejsca(dane, f, runda)
     if not stan.firmy[nazwa].bank:
         d["bank"] = bank_bota
+    if pz.get("debet") and not f.debet_wlaczony:   # zgoda na debet w banku konta (poziom łatwy o niej zapomina)
+        d["debet"] = True
     if not (f.biuro and bo.poprawny_wybor(dane, f.biuro)):   # biura z mapy – najtańsze dla typowej rundy
         d["biuro"] = bo.najtansze(dane, bo.ustawienia(dane)["szacunek_dokumentow"], 4, 0)
 
