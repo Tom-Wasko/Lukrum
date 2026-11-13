@@ -10,8 +10,13 @@ LUKRUM to edukacyjna symulacja biznesowa dla szkół średnich (lekcje WOS, konk
 - Funkcje gry (zaopatrzenie, marketing, księgowość…) mistrz gry może zakryć. Wtedy robi je autopilot, a drużyny
   odsłaniają je same (`dane/funkcje.yaml`).
 
-Plan przebudowy (mapa Lublina, strefy, lekcje) leży poza repo: `../PLAN_PRZEBUDOWY.md`. Zadania i postęp:
-`dokumentacja/POSTEP.md`.
+Plan przebudowy, wygląd i notatki funkcji są w osobnym prywatnym repo **`Tom-Wasko/Lukrum-notatki`**
+(lokalnie `../notatki/`): `PLAN_PRZEBUDOWY.md`, `Wygląd.md`, `Funkcje/`. Zadania i postęp: `dokumentacja/POSTEP.md`.
+
+**Współpraca (od 13.11):** mapę robi kolega autora (`[mapa]`), mechaniki i wnętrza autor (`[mechaniki]`). Przed pracą
+przeczytaj `WSPOLPRACA.md` w repo notatek i zrób `git pull` w obu repo. Każdy pracuje na swojej gałęzi
+(`mapa-…`, `mechaniki-…`, `wnetrza-…`). Do `main` trafiają tylko pull requesty przejrzane przez drugą stronę. Cudzych
+plików nie ruszamy bez wpisu w `WSPOLPRACA.md`.
 
 **Zasada nadrzędna:** w repo nie może być żadnych wzmianek ani zapożyczeń z innych gier biznesowych. Nowe mechaniki
 projektujemy od zera, opisując je realiami (prawo, rynek, Lublin), a nie odwołaniami do innych gier.
@@ -75,7 +80,7 @@ Poza repo, w `lukrum/`: `notatki/` (notatki autora, Obsidian), `_robocze/` (kopi
 - Nie commituj `gra/db.sqlite3`, `gra/lokalne.json`, `gra/zapisy/` ani `*.log`.
 
 ## Agenci
-Zasady w `../PLAN_PRZEBUDOWY.md`, rozdz. 9, i w `../_robocze/BRIEF_AGENTA.md`. W skrócie:
+Zasady w `PLAN_PRZEBUDOWY.md` (repo notatek), rozdz. 9, i w `../_robocze/BRIEF_AGENTA.md`. W skrócie:
 - Opus decyduje i sprawdza, Sonnet robi prace mechaniczne.
 - Agent dostaje gotowy brief z listą plików i pisze raport do pliku.
 - Poprawki dostaje ten sam agent, bez stawiania nowego.
