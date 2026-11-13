@@ -354,7 +354,6 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         p = firma.pracownicy.get(pid)
         if not p or p.odchodzi:
             continue
-        ksieguj(firma, ksiega, rachunek, f"Koszt zwolnienia {p.imie_nazwisko}", p.koszt_odprawy)   # opis jak w KPiR gry
         okres = rp.okres_wypowiedzenia(dane, p, runda)
         if okres:   # umowa o pracę: pracuje (i kosztuje) do końca wypowiedzenia, potem wraca do puli (P6)
             p.odchodzi = Odejscie(do="", runda=runda + okres, pensja=p.pensja, umowa=p.umowa, od_rundy=runda)
@@ -429,7 +428,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         koszt = rp.koszt(dane, kanal, kandydat)
         p = Pracownik(id=kandydat["id"], imie_nazwisko=kandydat["imie_nazwisko"], zawod=kandydat["zawod"],
                       gwiazdki=kandydat["gwiazdki"], pensja_preferowana=kandydat["pensja_preferowana"],
-                      koszt_rekrutacji=kandydat["koszt_rekrutacji"], koszt_odprawy=kandydat["koszt_odprawy"],
+                      koszt_rekrutacji=kandydat["koszt_rekrutacji"],
                       zadowolenie_klientow=kandydat["zadowolenie_klientow"], ryzyko_reklamacji=kandydat["ryzyko_reklamacji"],
                       pensja=pensja, umowa=umowa, student=bool(kandydat.get("student")),
                       od_rundy=runda, stanowisko=st.nr, cecha=kandydat.get("cecha", ""), opis=kandydat.get("opis", ""),

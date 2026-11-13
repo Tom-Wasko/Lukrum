@@ -187,7 +187,7 @@ export const zatrudnienie = {
     },
     zwolnij: async (el, c) => {
       const id = el.dataset.id, nowy = el.dataset.nowy === "1";
-      if (!nowy && !confirm("Zwolnić pracownika? Trzeba zapłacić odprawę, a na umowie o pracę przez 2 rundy wypowiedzenia nadal pracuje i dostaje pensję.")) return;
+      if (!nowy && !confirm("Wypowiedzieć umowę? Na umowie o pracę pracownik pracuje i dostaje pensję przez okres wypowiedzenia (zależy od stażu: art. 34 i 36 Kodeksu pracy), na zleceniu odchodzi od razu. Odprawy nie ma.")) return;
       zamknijOkno();
       await c.zmien((d) => {
         if (nowy) d.zatrudnij = (d.zatrudnij || []).filter((z) => z.kandydat !== id);
@@ -246,10 +246,10 @@ function oknoKandydatow({ v, kat }, typ, nr) {
   const lista = v.kandydaci.filter((k) => zawody.includes(k.zawod)).sort((a, b) => b.zadowolenie_klientow - a.zadowolenie_klientow);
   const w = lista.map((k) => [esc(k.imie_nazwisko) + pigulkaStudenta(k, kat) + (zajety(v, k.id) ? pigulkaZajety(zajety(v, k.id)) : "") + opisOsoby(k),
     gw(k.gwiazdki), esc(k.zawod), licz(k.pensja_preferowana), licz(k.koszt_rekrutacji),
-    licz(k.koszt_odprawy), proc(k.zadowolenie_klientow, 0), proc(k.ryzyko_reklamacji, 0),
+    proc(k.zadowolenie_klientow, 0), proc(k.ryzyko_reklamacji, 0),
     przyciskZatrudnij(v, k, true, ` data-t="${typ}" data-n="${nr}"`)]);
   okno(`Zatrudnienie na „Stanowisko nr ${nr}”`, tabela(null, ["Imię i nazwisko", "Doświadczenie", "Zawód", "Preferowane wynagrodzenie",
-    "Koszty rekrutacji", "Koszt odprawy", "Zadowolenie klientów", "Ryzyko reklamacji", "Akcje"], w, { klasy: ["l"] })
+    "Koszty rekrutacji", "Zadowolenie klientów", "Ryzyko reklamacji", "Akcje"], w, { klasy: ["l"] })
     + `<p class="podpowiedz">${TYPY.map((t) => `${esc(typy[t].kto)}: ${typy[t].zawody.map(esc).join(", ")}`).join(" · ")}</p>`);
 }
 
@@ -409,7 +409,6 @@ function oknoProfilu({ v, kat, edycja }, id) {
       <div style="margin-top:14px;text-align:left">
       <div class="wiersz"><span>Preferowane wynagrodzenie</span><span>${zl(p.pensja_preferowana)}</span></div>
       <div class="wiersz"><span>Koszty rekrutacji</span><span>${zl(p.koszt_rekrutacji)}</span></div>
-      <div class="wiersz"><span>Koszt odprawy</span><span>${zl(p.koszt_odprawy)}</span></div>
       <div class="wiersz"><span>Zatrudniony od</span><span>runda ${p.od_rundy}</span></div>
       <div class="wiersz"><span>Ryzyko reklamacji</span><span>${proc(p.ryzyko_reklamacji, 0)}</span></div>
       <div class="wiersz"><span>Zadowolenie klientów</span><span>${proc(p.zadowolenie_klientow, 0)}</span></div>

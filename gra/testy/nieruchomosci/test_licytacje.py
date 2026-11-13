@@ -138,7 +138,7 @@ def test_wypowiedzenie_wyprowadzka_i_rozliczenie_ulepszen(ulepszenia):
     assert s.firmy["A"].lokale == [] and s.firmy["A"].stanowiska == [] and s.firmy["A"].pracownicy == {}
     (x,) = s.wyniki[koniec + 1]["A"]["przejecia"]["wyprowadzki"]
     assert x["zwolnieni"] == [k["imie_nazwisko"]] and any(c["id"] == k["id"] for c in s.kandydaci)
-    assert _kpir(s, koniec + 1, "A", f"Koszt zwolnienia {k['imie_nazwisko']}")
+    assert _kpir(s, koniec + 1, "A", f"Wynagrodzenie za okres wypowiedzenia {k['imie_nazwisko']}")
     assert _rachunek(s, koniec + 1, "A", "Zwrot kaucji") == [2 * g.dane.lokale["politechnika_2"]["czynsz"]]
     (lok,) = s.firmy["B"].lokale
     assert (lok.id, lok.forma, lok.dziala_od) == ("politechnika_2", "kupno", koniec + 1) and s.firmy["B"].budynki == []

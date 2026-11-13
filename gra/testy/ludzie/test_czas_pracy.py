@@ -81,4 +81,4 @@ def test_pol_etatu_ma_polowe_godzin():
     k = _kandydat(s, 1)
     s = _runda(g, A={"zatrudnij": [{**_z(k, 1), "umowa": "pol_etatu"}]})
     w = next(x for x in s.wyniki[s.runda]["A"]["pracownicy"] if x["id"] == k["id"])
-    assert w["umowa"] == "pol_etatu" and w["godziny_dostepne"] == 20.0 and 0 <= w["godziny_pracy"] <= 20.0
+    assert w["umowa"] == "pol_etatu" and w["godziny_dostepne"] == 19.0 and 0 <= w["godziny_pracy"] <= 19.0   # pół etatu, 5% urlopu

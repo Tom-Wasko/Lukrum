@@ -594,6 +594,7 @@ pracownicy:   # U20 (decyzja autora 4.11.2026): zadowolenie każdej osoby i odej
         nazwa: Umowa o pracę
         opis: pełny etat, ZUS pracodawcy, okres wypowiedzenia; ludzie najbardziej ją lubią
         etat: 1.0
+        urlop: 0.05
         zus: etat
         wypowiedzenie: true
         kadry: etat
@@ -604,6 +605,7 @@ pracownicy:   # U20 (decyzja autora 4.11.2026): zadowolenie każdej osoby i odej
         nazwa: Umowa o pracę – pół etatu
         opis: połowa godzin za połowę pensji (płaca minimalna – w połowie), ZUS i wypowiedzenie jak na etacie
         etat: 0.5
+        urlop: 0.05
         zus: etat
         wypowiedzenie: true
         kadry: etat
@@ -661,7 +663,10 @@ pracownicy:   # U20 (decyzja autora 4.11.2026): zadowolenie każdej osoby i odej
         faktura: Faktura B2B
     pewnosc: zalozenie
     zrodlo: 'UF21 (decyzja autora 6.11.2026): formy zatrudnienia do wyboru przy zatrudnianiu i w profilu osoby. etat –
-      mnożnik godzin pracy; zus – stawka składek pracodawcy (etat: podatki.zus_pracodawcy, zlecenie:
+      mnożnik godzin pracy; urlop – udział płatnego urlopu wypoczynkowego w czasie pracy (26 dni z ok. 260 dni
+      roboczych w roku, art. 154 KP, to 10%; w grze 5% – pomiar c4_urlop: 10% kosztuje ok. 50 pkt wyniku, 0% daje
+      zlecenie za darmo; zlecenie, B2B i staż go nie mają, więc dają więcej godzin za tę samą pensję, ale
+      bez wypowiedzenia); zus – stawka składek pracodawcy (etat: podatki.zus_pracodawcy, zlecenie:
       podatki.zus_pracodawcy_zlecenie, brak: 0); kadry – opłata biura za osobę (etat/zlecenie/brak); kara_zlecenia –
       składnik „umowa zlecenie” w zadowoleniu; oczekiwana – mnożnik pensji preferowanej, przy którym osoba jest
       zadowolona z płacy (pół etatu 0,5; B2B 1,25 – sama płaci ZUS ok. 1,6–1,9 tys. zł i nie ma urlopu; staż – pensji

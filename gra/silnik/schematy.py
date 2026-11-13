@@ -148,7 +148,6 @@ class ZnanyKandydat(Schemat):
     zawod: str
     pensja_preferowana: float = Field(gt=0)
     koszt_rekrutacji: float = Field(ge=0)
-    koszt_odprawy: float = Field(ge=0)
     zadowolenie_klientow: float = Field(ge=0, le=1)
     ryzyko_reklamacji: float = Field(ge=0, le=1)
 
@@ -168,8 +167,7 @@ class Losowanie(Schemat):
     gwiazdki: dict[Jakosc, float]
     krok_pensji: int = Field(gt=0)
     wg_gwiazdek: dict[Jakosc, Przedzialy]
-    koszty_rekrutacji: list[float] = Field(min_length=1)
-    odprawa_czesc_pensji: list[float] = Field(min_length=1)
+    koszt_rekrutacji_czesc_pensji: tuple[float, float]   # koszt rekrutacji kandydata = pensja × wartość z przedziału
 
     @field_validator("gwiazdki")
     @classmethod
@@ -486,6 +484,7 @@ class Strategia(Schemat):
     jakosc_ludzi: int | None = Field(None, ge=1, le=3)
     kanal: str | None = None
     premia: float = Field(0, ge=0)
+    umowa: Literal["prace", "zlecenie"] = "prace"   # forma zatrudnienia nowych osób (zlecenie: bez urlopu i wypowiedzenia)
     wlasciciel_godziny: float = Field(0, ge=0)
     uslugi: int = Field(gt=0)
     dania_specjalne: list[str] = Field(default_factory=list)   # sprawa 4 (Poprawki 3): po odblokowaniu, ponad uslugi

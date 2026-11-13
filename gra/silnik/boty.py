@@ -841,7 +841,7 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
             k = najlepsi[int(rng.integers(len(najlepsi)))]
             pula.remove(k)
             d["zatrudnij"].append({"kandydat": k["id"], "typ": typ, "nr": nr, "pensja": _pensja(dane, st, k),
-                                   "umowa": "prace", "zastepca": True, "wzor": {"zawod": zawod, "gwiazdki": ql}}
+                                   "umowa": st.get("umowa", "prace"), "zastepca": True, "wzor": {"zawod": zawod, "gwiazdki": ql}}
                                   | ({"kanal": kanal} if kanal else {}))
     else:
         d.pop("_obsada", None)

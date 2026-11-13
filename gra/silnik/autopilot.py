@@ -186,7 +186,7 @@ def _obsadzone_kuchnie(dane: Dane, f: Firma, d: dict, runda: int) -> set[str]:
         st.pracownik = z.get("pracownik") or f"_plan_{z['typ']}_{st.nr}"
         g.pracownicy.setdefault(st.pracownik, Pracownik(
             id=st.pracownik, imie_nazwisko="", zawod=dane.zawody_typu(z["typ"])[0], gwiazdki=1,
-            pensja_preferowana_gr=0, koszt_rekrutacji_gr=0, koszt_odprawy_gr=0, zadowolenie_klientow=0,
+            pensja_preferowana_gr=0, koszt_rekrutacji_gr=0, zadowolenie_klientow=0,
             ryzyko_reklamacji=0))
     g.wlasciciel_na = None
     wynik |= {s.lokal for s in g.stanowiska if s.typ == KUCHNIA and g.pracownik_stanowiska(s)}

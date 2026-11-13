@@ -16,7 +16,7 @@ ETAT = D.z["operacje"]["godziny_pracownika"]
 
 def _pracownik(id_, zawod, nr):
     return Pracownik(id=id_, imie_nazwisko=id_, zawod=zawod, gwiazdki=3, pensja_preferowana=5300,
-                     koszt_rekrutacji=400, koszt_odprawy=2650, zadowolenie_klientow=0.95,
+                     koszt_rekrutacji=400, zadowolenie_klientow=0.95,
                      ryzyko_reklamacji=0.0, pensja=5300, stanowisko=nr)
 
 

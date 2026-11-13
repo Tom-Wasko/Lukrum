@@ -69,7 +69,7 @@ def _firma_kebab(danie, zapas=10_000):
                     Stanowisko(nr=1, typ="kasa", sprzet={n: 3 for n in D.sprzet_kasy}, pracownik="r1")]
     for id_, zawod in (("k1", "Kucharz"), ("r1", "Kasjer")):
         f.pracownicy[id_] = Pracownik(id=id_, imie_nazwisko=id_, zawod=zawod, gwiazdki=3, pensja_preferowana=5300,
-                                      koszt_rekrutacji=400, koszt_odprawy=2650, zadowolenie_klientow=0.95,
+                                      koszt_rekrutacji=400, zadowolenie_klientow=0.95,
                                       ryzyko_reklamacji=0.0, pensja=5300, stanowisko=1)
     for n in D.uslugi[danie]["zasoby"]:
         f.magazyn[f"{n}|3"] = zapas

@@ -80,12 +80,12 @@ stanowiska:
       Kasa fiskalna: 1
       Lada z witryną: 1
       Tablica menu: 1
-  pakiety:
-    '1': 1000
-    '2': 1800
-    '3': 2200
-    '4': 3000
-    '5': 4000
+  pakiety:   # własny cennik LUKRUM: przygotowanie stanowisk (BHP, instalacje, szafki) – 1 200 zł za pierwsze, taniej za kolejne
+    '1': 1200
+    '2': 2200
+    '3': 3000
+    '4': 3700
+    '5': 4300
   typy:
     kuchnia:
       nazwa: Stanowiska kuchenne

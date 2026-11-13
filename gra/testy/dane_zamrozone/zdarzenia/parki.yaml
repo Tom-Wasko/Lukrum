@@ -65,7 +65,6 @@ historie:
             zawod: Kucharz
             pensja_preferowana: 4950
             koszt_rekrutacji: 0
-            koszt_odprawy: 2000
             zadowolenie_klientow: 0.95
             ryzyko_reklamacji: 0.03
       - id: przepis
@@ -810,7 +809,6 @@ historie:
           zawod: Kasjer
           pensja_preferowana: 4900
           koszt_rekrutacji: 0
-          koszt_odprawy: 1800
           zadowolenie_klientow: 0.96
           ryzyko_reklamacji: 0.02
 

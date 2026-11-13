@@ -82,7 +82,7 @@ def jako_kandydat(p: Pracownik) -> dict:
     """Pracownik wracający do puli (zwolniony albo bez stanowiska w nowej firmie)."""
     return {"id": p.id, "imie_nazwisko": p.imie_nazwisko, "gwiazdki": p.gwiazdki, "zawod": p.zawod,
             "pensja_preferowana": p.pensja_preferowana, "koszt_rekrutacji": p.koszt_rekrutacji,
-            "koszt_odprawy": p.koszt_odprawy, "zadowolenie_klientow": p.zadowolenie_klientow,
+            "zadowolenie_klientow": p.zadowolenie_klientow,
             "ryzyko_reklamacji": p.ryzyko_reklamacji, "cecha": p.cecha, "opis": p.opis, "wydajnosc": p.wydajnosc,
             **({"student": True} if p.student else {})}
 

@@ -74,7 +74,6 @@ class Pracownik(Model):
     gwiazdki: int
     pensja_preferowana_gr: int
     koszt_rekrutacji_gr: int
-    koszt_odprawy_gr: int
     zadowolenie_klientow: float
     ryzyko_reklamacji: float
     pensja_gr: int = 0
@@ -93,7 +92,6 @@ class Pracownik(Model):
 
     pensja_preferowana = _kwota("pensja_preferowana")
     koszt_rekrutacji = _kwota("koszt_rekrutacji")
-    koszt_odprawy = _kwota("koszt_odprawy")
     pensja = _kwota("pensja")
     premia = _kwota("premia")
 
@@ -468,7 +466,7 @@ class Firma(Model):
         if w is None or (w.typ, w.nr) != (s.typ, s.nr):
             return None
         return Pracownik(id=WLASCICIEL, imie_nazwisko="Właściciel", zawod=w.zawod, gwiazdki=1,
-                         pensja_preferowana_gr=0, koszt_rekrutacji_gr=0, koszt_odprawy_gr=0,
+                         pensja_preferowana_gr=0, koszt_rekrutacji_gr=0,
                          zadowolenie_klientow=w.zadowolenie_klientow, ryzyko_reklamacji=w.ryzyko_reklamacji,
                          stanowisko=s.nr)
 

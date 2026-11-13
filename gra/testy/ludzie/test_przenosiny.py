@@ -16,7 +16,7 @@ A, B = "politechnika_1", "centrum_1"
 
 def _p(id_, nr, zadowolenie=None):
     return Pracownik(id=id_, imie_nazwisko=id_, zawod="kucharz", gwiazdki=3, pensja_preferowana=5300,
-                     koszt_rekrutacji=400, koszt_odprawy=2650, zadowolenie_klientow=0.95, ryzyko_reklamacji=0.0,
+                     koszt_rekrutacji=400, zadowolenie_klientow=0.95, ryzyko_reklamacji=0.0,
                      pensja=5300, stanowisko=nr, zadowolenie=zadowolenie)
 
 

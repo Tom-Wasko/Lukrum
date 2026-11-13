@@ -168,6 +168,7 @@ strategie:
     higiena: podstawowa          # gra z lokalami: poziom higieny (dane/zdarzenia/urzad.yaml)
   tani:
     nazwa: Tani Kebab Nocny
+    umowa: zlecenie              # tor A: tanio – ludzie na zleceniu (niższe składki, bez urlopu i wypowiedzenia)
     min_kuchnia: 2               # B7: z jednym miejscem kolejka zjadała połowę popytu (b7_cena, b7_jakosc)
     cena: 0.78
     jakosc: 1
@@ -215,6 +216,7 @@ strategie:
     higiena: haccp
   agresywny:
     nazwa: Kebab Głośny Marketing
+    umowa: zlecenie              # tor A: tanio – ludzie na zleceniu (niższe składki, bez urlopu i wypowiedzenia)
     min_kuchnia: 2
     cena: 0.8
     jakosc: 3

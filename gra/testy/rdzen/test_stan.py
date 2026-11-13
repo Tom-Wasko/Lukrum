@@ -33,7 +33,6 @@ pracownicy = st.builds(
     gwiazdki=st.integers(1, 3),
     pensja_preferowana_gr=KWOTY,
     koszt_rekrutacji_gr=KWOTY,
-    koszt_odprawy_gr=KWOTY,
     zadowolenie_klientow=st.floats(0, 2),
     ryzyko_reklamacji=st.floats(0, 1),
     pensja_gr=KWOTY,
