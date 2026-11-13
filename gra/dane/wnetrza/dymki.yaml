@@ -1,0 +1,235 @@
+# Dymki przy ladzie (decyzje autora 13.11.2026, notatka „Wygląd” w repo Lukrum-notatki)
+# Klienci i bywalcy (bywalcy.yaml) mówią w dymkach to, co policzył silnik w ostatniej rundzie. Silnik: silnik/wnetrza/.
+# Sprawdzenie: python -m silnik.dane sprawdz
+#
+# Cztery rodzaje dymków. Każdy włącza i wyłącza mistrz gry (ustawienia gry) i gracz u siebie (filtr w panelu).
+# Pola dymka:
+#   rodzaj: cena_smak | plotki | propozycje | wos
+#   kto: id bywalca, „gosc” (anonimowy klient) albo „kazdy” (bywalec albo gość)
+#   gdy: warunki na wskaźniki, {wskaznik: {od: x, do: y}}. `od` włącznie, `do` wyłącznie. Brak warunków = zawsze
+#   zrodlo (plotki): park | kalendarz | konkurencja. Skąd brać {park}/{tytul}, {wydarzenie}, {konkurent}/{dzielnica}
+#   okazja (wujek): start | pierwsza_strata | rekord | ostatnia_runda
+#   tekst: treść dymka. Pola {cena}, {cena_strefy}, {ocena}, {zmiana_ceny} wstawia silnik
+#   wyjasnienie, zrodlo_prawne, sprawdzone (wos): krótka odpowiedź pod dymkiem. sprawdzone: false = do sprawdzenia
+#     przez autora przed lekcją
+#   szkic: true = jeszcze bez skutków w silniku. Takiego dymka silnik nie pokazuje (propozycje czekają na decyzję)
+opis: 'Co rundę przy ladzie staje kilku gości. Ich dymki to wyniki silnika powiedziane ludzkim głosem.'
+
+zasady:
+  dymkow_na_runde: [3, 6]       # ile dymków losuje silnik na rundę (przed filtrami rodzajów)
+  udzial_bywalcow: 0.5          # szansa, że dymek z „kazdy” powie bywalec, a nie anonimowy gość
+  bywalec_co_rund: 2            # ten sam bywalec najwyżej raz na tyle rund (wujek nie liczy się do tej zasady)
+  wos_na_runde: 1               # najwyżej tyle zaczepek WOS na rundę, żeby nie zasypać lady lekcją
+
+rodzaje:
+  cena_smak: {nazwa: Opinie o cenie i smaku}
+  plotki: {nazwa: Plotki z miasta}
+  propozycje: {nazwa: Propozycje i kłopoty}
+  wos: {nazwa: Zaczepki WOS}
+
+# Wskaźniki liczy silnik z ostatniej rundy lokalu. Nazwy tutaj są umową z silnikiem.
+wskazniki:
+  cena_wzgledem_strefy: 'średnia cena dań w menu ÷ cena strefy (1,0 = jak w okolicy)'
+  zmiana_ceny: 'zmiana średniej ceny dań od poprzedniej rundy, w procentach (np. −10, +15)'
+  ocena: 'ocena lokalu, 1–5 gwiazdek (brak opinii = warunek niespełniony)'
+  kolejka: 'udział klientów, którzy odeszli z kolejki (0–1)'
+  brak_dan: 'udział klientów, którzy odeszli, bo zabrakło dania lub składnika (0–1)'
+  nastroj_zespolu: 'średni nastrój pracowników lokalu, 0–100'
+  runda: 'numer rundy'
+
+dymki:
+# ── Opinie o cenie i smaku ──────────────────────────────────────────────────────────────────────────────────────────
+- rodzaj: cena_smak
+  kto: rzecki
+  gdy: {cena_wzgledem_strefy: {od: 1.15}}
+  tekst: 'Zapisuję w pamiętniku: porcja po {cena} zł, a w okolicy płaci się {cena_strefy}. Zanotowano z żalem.'
+- rodzaj: cena_smak
+  kto: rzecki
+  gdy: {zmiana_ceny: {od: 5}}
+  tekst: 'W zeszłym tygodniu było taniej o {zmiana_ceny}%. Ja wszystko pamiętam, proszę państwa. Wszystko.'
+- rodzaj: cena_smak
+  kto: rzecki
+  gdy: {zmiana_ceny: {do: -5}}
+  tekst: 'Obniżka! Za mojej pamięci zdarzało się to rzadziej niż kometa. Kupuję dwie porcje, na zapas.'
+- rodzaj: cena_smak
+  kto: rzecki
+  gdy: {cena_wzgledem_strefy: {od: 0.9, do: 1.15}}
+  tekst: 'Cena uczciwa, porcja uczciwa. Tak się prowadzi sklep. Znaczy… lokal.'
+
+- rodzaj: cena_smak
+  kto: zagloba
+  gdy: {ocena: {od: 4.3}}
+  tekst: 'Na uczcie u księcia jadłem gorzej, a wierzcie mi, bywałem na niejednej! Mięso jak marzenie!'
+- rodzaj: cena_smak
+  kto: zagloba
+  gdy: {ocena: {do: 3.0}}
+  tekst: 'Mości kucharzu, toż to podeszwa, nie mięso! Ja bym takim kebabem nie poczęstował nawet Tatarzyna!'
+- rodzaj: cena_smak
+  kto: zagloba
+  gdy: {brak_dan: {od: 0.05}}
+  tekst: 'Przychodzę głodny jak wilk, a tu „nie ma, skończyło się”! Zapasy, mości panowie, zapasy to podstawa!'
+
+- rodzaj: cena_smak
+  kto: jozio
+  gdy: {cena_wzgledem_strefy: {od: 1.2}}
+  tekst: 'Za {cena} zł? Ziomki się ze mnie śmieją, że przepłacam. Nie dam sobie przyprawić gęby frajera.'
+- rodzaj: cena_smak
+  kto: jozio
+  gdy: {ocena: {od: 4.0}}
+  tekst: 'Wrzuciłem story stąd i nikt nie napisał „cringe”. To prawie jak pięć gwiazdek.'
+
+- rodzaj: cena_smak
+  kto: dulska
+  gdy: {kolejka: {od: 0.1}}
+  tekst: 'Stałam w kolejce jak za mięsem w osiemdziesiątym pierwszym. Co ludzie powiedzą, że ja tu czekam?'
+
+- rodzaj: cena_smak
+  kto: gosc
+  gdy: {cena_wzgledem_strefy: {od: 1.15}}
+  tekst: 'Za {cena} zł? U konkurencji dają za {cena_strefy}…'
+- rodzaj: cena_smak
+  kto: gosc
+  gdy: {cena_wzgledem_strefy: {do: 0.85}}
+  tekst: 'Tak tanio? Coś musi być nie tak z tym mięsem… Ale dobra, biorę.'
+- rodzaj: cena_smak
+  kto: gosc
+  gdy: {ocena: {od: 4.2}}
+  tekst: 'Najlepszy sos w mieście. Mówię to każdemu, kto chce słuchać, i paru, którzy nie chcą.'
+- rodzaj: cena_smak
+  kto: gosc
+  gdy: {ocena: {do: 3.0}}
+  tekst: 'Bułka czerstwa, mięso letnie. Następnym razem idę gdzie indziej.'
+- rodzaj: cena_smak
+  kto: gosc
+  gdy: {kolejka: {od: 0.15}}
+  tekst: 'Dwadzieścia minut w kolejce! Mam przerwę tylko pół godziny.'
+- rodzaj: cena_smak
+  kto: gosc
+  gdy: {brak_dan: {od: 0.05}}
+  tekst: 'Jak to nie ma falafela? Przecież wisi w menu!'
+- rodzaj: cena_smak
+  kto: gosc
+  tekst: 'Poproszę to samo co zawsze. Pani przy ladzie już wie.'
+
+- rodzaj: cena_smak
+  kto: judym
+  gdy: {nastroj_zespolu: {do: 40}}
+  tekst: 'Pani przy ladzie ledwo stoi na nogach. Jako lekarz mówię: zmęczony pracownik to pomyłki i oparzenia.'
+- rodzaj: cena_smak
+  kto: judym
+  gdy: {nastroj_zespolu: {od: 75}}
+  tekst: 'Uśmiechnięta obsługa to rzadki widok. Widać, że tu się dba o ludzi, nie tylko o utarg.'
+
+# ── Plotki z miasta ─────────────────────────────────────────────────────────────────────────────────────────────────
+- rodzaj: plotki
+  kto: dulska
+  zrodlo: park
+  tekst: 'Pani słyszała? W parku {park} ma być „{tytul}”. Ja tam nie pójdę, ale wszyscy będą gadać.'
+- rodzaj: plotki
+  kto: papkin
+  zrodlo: park
+  tekst: 'Ja, lew Północy, osobiście biorę udział w „{tytul}” w parku {park}. Załatwię wam tam stoisko. Prawie na pewno.'
+- rodzaj: plotki
+  kto: gosc
+  zrodlo: kalendarz
+  tekst: 'Za tydzień {wydarzenie}. Cały Lublin wyjdzie na miasto, przygotujcie więcej mięsa.'
+- rodzaj: plotki
+  kto: dulska
+  zrodlo: konkurencja
+  tekst: 'Na {dzielnica} otworzyli nowy kebab, „{konkurent}”. Byłam, oczywiście tylko popatrzeć. Brudno.'
+- rodzaj: plotki
+  kto: gosc
+  zrodlo: konkurencja
+  tekst: 'Znajomi chwalą „{konkurent}”. Podobno tańszy. Ja tam zostaję przy was, na razie.'
+- rodzaj: plotki
+  kto: papkin
+  tekst: 'Znam szefa największej hurtowni na Tatarach. Powie wam, kiedy mięso stanieje. Za drobną przysługę, rzecz jasna.'
+- rodzaj: plotki
+  kto: jozio
+  tekst: 'U nas w szkole mówią, że na Krakowskim to tylko turyści jedzą. Ale my i tak przychodzimy, bo blisko.'
+
+# ── Propozycje i kłopoty (szkice, bez skutków w silniku do decyzji autora) ──────────────────────────────────────────
+- rodzaj: propozycje
+  kto: gosc
+  szkic: true
+  tekst: 'Dzień dobry, jestem z samorządu studentów UMCS. Catering na 200 osób w piątek, damy radę?'
+- rodzaj: propozycje
+  kto: papkin
+  szkic: true
+  tekst: 'Przyprowadzę wam całą kapelę po koncercie! Tylko pierwsza kolejka na koszt firmy, inaczej nie przyjdą.'
+- rodzaj: propozycje
+  kto: dulska
+  szkic: true
+  tekst: 'Mieszkam piętro wyżej i ten zapach czosnku wchodzi mi do salonu. Albo coś z tym zrobicie, albo piszę skargę.'
+- rodzaj: propozycje
+  kto: gosc
+  szkic: true
+  tekst: 'Szukam pracy na weekendy. Mam książeczkę sanepidowską i dwa lata w pizzerii. Jest coś?'
+
+# ── Zaczepki WOS (jedno pytanie i krótka odpowiedź; sprawdzone: false = do sprawdzenia przez autora) ────────────────
+- rodzaj: wos
+  kto: jozio
+  tekst: 'A paragon będzie? Bo mama mówi, że jak nie ma paragonu, to coś jest nie tak.'
+  wyjasnienie: 'Sprzedawca musi wydać paragon fiskalny przy każdej sprzedaży, nawet gdy klient o niego nie prosi.'
+  zrodlo_prawne: 'ustawa o VAT, art. 111 ust. 3a pkt 4'
+  sprawdzone: false
+- rodzaj: wos
+  kto: zagloba
+  tekst: 'Czy w tym sosie są orzechy? Mam uczulenie, a wolę zginąć w bitwie niż od sosu.'
+  wyjasnienie: 'Lokal musi informować o 14 głównych alergenach także w daniach podawanych na miejscu (np. w menu albo na tablicy).'
+  zrodlo_prawne: 'rozporządzenie (UE) nr 1169/2011, art. 9 i 44'
+  sprawdzone: false
+- rodzaj: wos
+  kto: rzecki
+  tekst: 'Czy ta cena w menu jest z podatkiem? Bo ja liczę co do grosza.'
+  wyjasnienie: 'Ceny dla klientów podaje się zawsze z VAT, czyli brutto. Klient płaci dokładnie tyle, ile widzi.'
+  zrodlo_prawne: 'ustawa o informowaniu o cenach towarów i usług (2014)'
+  sprawdzone: false
+- rodzaj: wos
+  kto: gosc
+  tekst: 'Kebab był zimny. Mogę to zareklamować, czy już po ptakach?'
+  wyjasnienie: 'Klient może złożyć reklamację. Sprzedawca ma 14 dni na odpowiedź, a jeśli milczy, reklamację uważa się za przyjętą.'
+  zrodlo_prawne: 'Kodeks cywilny i ustawa o prawach konsumenta (zasada 14 dni)'
+  sprawdzone: false
+- rodzaj: wos
+  kto: jozio
+  tekst: 'Mam szesnaście lat. Mogę tu dorobić w wakacje?'
+  wyjasnienie: 'Osoba w wieku 15–18 lat może pracować tylko przy lekkich pracach, krócej i nie w nocy. Pracodawca potrzebuje m.in. badania lekarskiego.'
+  zrodlo_prawne: 'Kodeks pracy, dział IX (zatrudnianie młodocianych)'
+  sprawdzone: false
+- rodzaj: wos
+  kto: judym
+  tekst: 'Widzę kamerę nad kasą. Pracownicy wiedzą, że są nagrywani?'
+  wyjasnienie: 'Monitoring w pracy jest dozwolony w określonych celach, ale pracowników trzeba o nim uprzedzić, a teren oznaczyć.'
+  zrodlo_prawne: 'Kodeks pracy, art. 22² i RODO'
+  sprawdzone: false
+- rodzaj: wos
+  kto: gosc
+  tekst: 'Płacę kartą, dobrze? Nie mam przy sobie gotówki.'
+  wyjasnienie: 'Przedsiębiorca, który przyjmuje płatności, musi zapewnić klientom możliwość zapłaty bezgotówkowej (np. kartą lub BLIK-iem).'
+  zrodlo_prawne: 'Prawo przedsiębiorców (obowiązek płatności elektronicznych od 2025 r.)'
+  sprawdzone: false
+- rodzaj: wos
+  kto: papkin
+  tekst: 'Zapłacę jutro, słowo lwa Północy! Albo w ogóle zapiszcie mi to na zeszyt.'
+  wyjasnienie: 'Sprzedaż „na zeszyt” to kredyt kupiecki: ryzyko, że pieniądze nigdy nie wrócą, ponosi sprzedawca. Należność też trzeba zaksięgować.'
+  zrodlo_prawne: 'Kodeks cywilny (umowa sprzedaży, odroczona płatność)'
+  sprawdzone: false
+
+# ── Wujek (specjalny: tylko w ważnych momentach, rodzaj cena_smak, żeby nie zniknął przy filtrach) ──────────────────
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: start
+  tekst: 'No to klucze są wasze. Za Gierka kolejka stała do samego rogu. Zobaczymy, ile wy postoicie.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: pierwsza_strata
+  tekst: 'Pierwszy tydzień na minusie? Ja miałem takich dziesięć z rzędu. Głowa do góry i liczyć, liczyć.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: rekord
+  tekst: 'Taki utarg? Za moich czasów to by mi milicja przyszła sprawdzić, skąd tyle. Gratuluję, naprawdę.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: ostatnia_runda
+  tekst: 'Ostatni tydzień. Cokolwiek wyjdzie w rachunkach, lokal żyje. A to więcej, niż ja potrafiłem.'
