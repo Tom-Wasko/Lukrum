@@ -1,0 +1,27 @@
+from django.urls import path
+
+from . import widoki as w
+
+urlpatterns = [
+    path("katalogi", w.api_katalogi),
+    path("pulpit", w.api_pulpit),
+    path("gry", w.api_gry),
+    path("gry/import", w.api_import),
+    path("konta", w.api_konta),
+    path("konta/<str:login>/haslo", w.api_nowe_haslo),
+    path("gry/<str:id_>", w.api_usun),
+    path("gry/<str:id_>/mg", w.api_mg),
+    path("gry/<str:id_>/druzyny", w.api_druzyny),
+    path("gry/<str:id_>/druzyny/<str:firma>", w.api_druzyna),
+    path("gry/<str:id_>/widok/<str:firma>", w.api_widok),
+    path("gry/<str:id_>/decyzje/<str:firma>", w.api_decyzje),
+    path("gry/<str:id_>/stan/<str:firma>", w.api_stan),
+    path("gry/<str:id_>/wyslij/<str:firma>", w.api_wyslij),
+    path("gry/<str:id_>/logo/<str:firma>", w.api_logo),
+    path("gry/<str:id_>/funkcje/<str:firma>", w.api_funkcje),
+    path("gry/<str:id_>/przelicz", w.api_przelicz),
+    path("gry/<str:id_>/cofnij", w.api_cofnij),
+    path("gry/<str:id_>/eksport", w.api_eksport),
+    path("gry/<str:id_>/prowadzenie", w.api_prowadzenie),
+    path("gry/<str:id_>/<str:co>.csv", w.api_wyniki_csv),
+]

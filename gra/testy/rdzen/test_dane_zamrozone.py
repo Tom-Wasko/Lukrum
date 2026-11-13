@@ -1,0 +1,47 @@
+"""Zamrożona kopia danych dla testów mechanik (B2): testy bez znacznika czytają `testy/dane_zamrozone/`,
+testy zasad ze znacznikiem `dane_gry` – `dane/` (testy/conftest.py)."""
+
+from pathlib import Path
+
+import pytest
+from pomocnicze import DANE_GRY, DANE_ZAMROZONE
+
+from silnik.dane import dane_domyslne, sprawdz
+
+
+def test_testy_mechanik_czytaja_zamrozona_kopie():
+    assert dane_domyslne().katalog == DANE_ZAMROZONE
+
+
+@pytest.mark.dane_gry
+def test_testy_zasad_czytaja_dane_gry():
+    assert dane_domyslne().katalog == DANE_GRY
+
+
+def test_zamrozona_kopia_pasuje_do_schematow():
+    # nowy klucz w schemacie danych – dopisać go też w kopii (bez zmiany jej liczb)
+    assert sprawdz(DANE_ZAMROZONE) == []
+
+
+def test_zamrozona_kopia_ma_wszystkie_pliki_danych():
+    # mapa/klienci.yaml (U24) – plik opcjonalny: bez niego grupy klientów i opinie są wyłączone, testy mechanik
+    # liczą popyt jak przed U24; zdarzenia/falafel.yaml (UF8) – bez niego nie ma bójki o falafel;
+    # mapa/miasto.yaml (M11) – tylko wygląd mapy, silnik go nie czyta; funkcje.yaml (seria „funkcje”) – bez niego
+    # wszystkie funkcje odkryte, jak w grach sprzed serii
+    pliki = {p.relative_to(DANE_GRY) for p in DANE_GRY.rglob("*.yaml")} - {Path("mapa/klienci.yaml"),
+                                                                           Path("zdarzenia/falafel.yaml"),
+                                                                           Path("mapa/miasto.yaml"),
+                                                                           Path("funkcje.yaml")}
+    assert pliki <= {p.relative_to(DANE_ZAMROZONE) for p in DANE_ZAMROZONE.rglob("*.yaml")}
+
+
+def test_wyglad_mapy_miasta_m11():
+    """M11: miasto.yaml (drogi, rzeki, układ dzielnic) trafia do katalogu mapy dla panelu, bez opisu; punkt
+    orientacyjny bez wymiarów zajmuje jedno pole. Bez pliku (kopia zamrożona) – mapa bez wyglądu miasta."""
+    from silnik.dane import Dane
+    miasto = Dane(DANE_GRY).mapa["miasto"]
+    assert {"drogi", "miejsca", "uklad"} <= set(miasto) and "opis" not in miasto
+    assert all(m["mapa"]["szer"] >= 1 and m["mapa"]["gl"] >= 1 for m in miasto["miejsca"])
+    assert all(i in {b["id"] for b in Dane(DANE_GRY).mapa["budynki"]} | {lo["id"] for lo in Dane(DANE_GRY).mapa["lokale"]}
+               for i in miasto["uklad"]["pola"])
+    assert Dane(DANE_ZAMROZONE).mapa["miasto"] is None

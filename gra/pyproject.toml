@@ -1,0 +1,25 @@
+[project]
+name = "lukrum"
+version = "0.1.0"
+description = "LUKRUM – symulacja biznesowa kebabu w Lublinie"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["testy"]
+DJANGO_SETTINGS_MODULE = "lukrum.settings"
+pythonpath = [".", "testy"]
+markers = ["dane_gry: test zasad na danych dane/ zamiast zamrożonej kopii testów mechanik"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# Starszy kod (długie linie, krótkie nazwy). Plik wypada z listy, gdy zostanie przepisany.
+"silnik/**/*.py" = ["E501", "E741", "B023", "B905", "E731"]
+"api/prezentacja.py" = ["E501", "E741", "B023", "B905", "E731"]
+"testy/**/*.py" = ["E501", "E741", "B023", "B905", "E731"]
+"*/migrations/*.py" = ["E501"]

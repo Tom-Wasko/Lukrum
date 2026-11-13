@@ -1,0 +1,698 @@
+# Założenia (parametry mechanik)
+# Sprawdzenie: python -m silnik.dane sprawdz
+opis: 'Parametry mechanik gry, których nie widać wprost w jej interfejsie. Każdy ma: wartosc, pewnosc (potwierdzone /
+  skalibrowane / zalozenie) i zrodlo. Zmiana tu zmienia działanie silnika bez zmian w kodzie. Kalibracje: pomiary botów (balans/),
+  opis: dokumentacja/OPIS_GRY.md.'
+popyt:
+  elastycznosc_ceny:
+    wartosc: 1.096
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
+      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
+      popyt × r^(−E1)'
+  elastycznosc_wzgledem_rynku:
+    wartosc: 1.0035
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
+      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
+      popyt × exp(−E2·(r − średnie r firm oferujących usługę)); bez tego członu błąd 9,2%'
+  wykladnik_liczby_firm:
+    wartosc: 0.247
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
+      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
+      popyt × n^(−K)'
+  mnoznik_bazowy:
+    wartosc: 1.498
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
+      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
+      popyt roczny z instrukcji wystarcza (efekty usług nie poprawiają walidacji), brak różnicy poziomu między grami
+      obu serii (różnica 3%, walidacja lepsza bez niej)'
+  wspolczynniki_jakosci:
+    wartosc:
+      '3': 0.82
+      '2': 0.654
+      '1': 0.55
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
+      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
+      jakość = średnia ważona współczynników gwiazdek sprzętu i zasobów (lepsza od postaci liniowej w gwiazdkach);
+      boty: sprzęt 2★, zasoby 1,35–1,96★ co miesiąc. Kalibracja B7 (6.11.2026): było 1★ 0,616 / 2★ 0,654 /
+      3★ 1,0 – 3★ wygrywało z 2★ w 12/12 par (karta +0,25), a 2★ nie różniło się od 1★ (pomiar b7_cena); 2★ bez
+      zmian (na nim stoją pule stref B5), 1★ i 3★ tak, żeby każdy krok dawał ok. +20–25% (b7_jakosc, b7_jakosc2)'
+  wagi_jakosci:
+    wartosc:
+      pracownicy: 0.0
+      sprzet: 0.407
+      zasoby: 0.593
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
+      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
+      gwiazdki prowadzących (2,5 → 1,33 → 1,67) bez wpływu (współczynnik ≈ 0)'
+  wyposazenie_na_procent_klientow:
+    wartosc: 0.073
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
+      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
+      popyt × (1 + κ · Σ % klientów oczekujących wyposażenia / 100); wyposażenie botów (0 → 340%) odczytane z tabel
+      „posiadane wyposażenie”'
+  wyposazenie_nasycenie:
+    wartosc: 3.0
+    pewnosc: skalibrowane
+    zrodlo: 'B10 (6.11.2026, b10_marketing): przy liniowym wzorze opłacała się każda sztuka – komplet 6 sztuk (430%)
+      dawał +31% klientów za ok. 7 tys. zł i 420 zł utrzymania na tydzień, +0,12–0,13 karty u taniego i zrównoważonego
+      (6/6). Nasycenie 1 + κ · S · (1 − e^(−x/S)) zostawia nachylenie z pomiarów przy pierwszych sztukach, a komplet
+      daje ok. +17%: pierwsze 3–4 sztuki się zwracają, stoliki i telewizor – na granicy albo na minusie'
+  utrata_klientow:
+    wartosc: 0.0
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja: utrata klientów po brakach w poprzednim miesiącu pogarsza walidację krzyżową (8,1%
+      wobec 7,6%) – mechanizmu nie ma; spadek efektu firmy tłumaczy wyposażenie botów i sezonowość XI–XII'
+  recepcja_1gw_mnoznik:
+    wartosc: 1.0
+    pewnosc: zalozenie
+    zrodlo: 'wyłączone (1,0). W pomiarach: cały sprzęt kasy 1★ od października – efekt firmy spadł o ok. 15%, ale zbiega
+      się z innym niewyjaśnionym spadkiem; liniowo dla 2★ psuje drugą serię pomiarów (dwie firmy z kasą 2★: błąd 1,7% →
+      9,4%). Możliwy efekt tylko dla 1★ – do potwierdzenia'
+  korekta_miesiaca:
+    wartosc:
+      styczen: 1.0
+      luty: 1.0
+      marzec: 0.972
+      kwiecien: 0.997
+      maj: 0.924
+      czerwiec: 0.903
+      lipiec: 0.97
+      sierpien: 1.001
+      wrzesien: 0.989
+      pazdziernik: 0.961
+      listopad: 0.808
+      grudzien: 0.796
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
+      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
+      mnożnik ponad sezonowość z instrukcji (luty = 1). Luty–październik w granicach ±10% (sezonowość z instrukcji
+      działa, inne przesunięcia miesięcy wypadają gorzej), listopad–grudzień ok. −20% u wszystkich firm. Styczeń
+      bez danych'
+  szum_proc:
+    wartosc: 0.03
+    pewnosc: zalozenie
+    zrodlo: reszta modelu 4,5% zawiera błędy odczytu; losowe odchylenie popytu firmy na usługę (rozkład log-normalny,
+      ziarno gry); 0 = wyłączone
+  zaokraglenie:
+    wartosc: do_calych_klientow
+    pewnosc: zalozenie
+    zrodlo: 'założenie autora: klientów zaokrągla się do całych osób'
+  postac_ceny:
+    wartosc: potega
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja: popyt ∝ r^(−E1) (walidacja 6,3%) lepsze niż e^(−E1·(r−1)) (8,8%); r = cena po rabacie
+      / cena preferowana'
+reklama:
+  tradycyjna_nasycenie_k:
+    wartosc: 2.2166
+    pewnosc: skalibrowane
+    zrodlo: kalibracja pomiarami; wzrost = Σ_media A_kategorii · zasięg · ln(1 + k · emisje)
+  tradycyjna_maks_kategorii:
+    wartosc:
+      billboard_ulotki: 0.011492
+      prasa: 0.034957
+      radio: 0.029501
+      telewizja: 0.053354
+    pewnosc: skalibrowane
+    zrodlo: kalibracja pomiarami; A_kategorii (mnożone przez zasięg w % i ln(1 + k·emisje)); dopasowanie 0,15 pkt
+      proc. na 8 miesiącach pomiarów
+  internetowa_a:
+    wartosc: 0.1898
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja: pomiary czerwiec–grudzień; wzrost = a · (n / (n + c·(N − n)))^b, n – narzędzia
+      firmy, N – aktywne narzędzia wszystkich firm; walidacja „zostaw miesiąc” 0,21 pkt proc. (sam udział n/N: 0,46)'
+  internetowa_b:
+    wartosc: 2.7561
+    pewnosc: skalibrowane
+    zrodlo: jw.
+  sposob_laczenia:
+    wartosc: suma
+    pewnosc: zalozenie
+    zrodlo: popyt × (1 + wzrost tradycyjna + wzrost internetowa); gra raportuje oba wzrosty osobno
+  tradycyjna_postac:
+    wartosc: log
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja: 7 postaci porównanych walidacją „zostaw miesiąc” na 8 miesiącach pomiarów: ln(1 + k·emisje)
+      w każdym medium 3,0 pkt proc., nasycenie wykładnicze 4,3, hiperbola 5,4, potęga 3,8, nasycenie sumy kategorii
+      11,0, liniowo 12,0'
+  internetowa_waga_konkurencji:
+    wartosc: 0.3971
+    pewnosc: skalibrowane
+    zrodlo: jw.; narzędzie konkurenta waży ok. 0,4 własnego
+operacje:
+  godziny_pracownika:
+    wartosc: 40
+    pewnosc: zalozenie
+    zrodlo: 'F2.7: etat 40 h w tygodniu (runda = tydzień), czyli 160 h w miesiącu'
+  godziny_sprzetu:
+    wartosc: 40
+    pewnosc: zalozenie
+    zrodlo: 'F2.7: jak etat – 40 h sprzętu w tygodniu (160 h w miesiącu)'
+  niskie_obciazenie:
+    wartosc: 0.5
+    pewnosc: zalozenie
+    zrodlo: 'Poprawki 2 (sprawy 17/18, 7.11.2026): wskaźnik czasu pracy osoby w Ludzie ▸ Zespół (wyniki) – poniżej tej
+      części dostępnych godzin osoba ma dużo wolnego czasu (łuk niebieski); od progu przepracowania karty wyników
+      (karta_wynikow.kebab.zadowolenie_pracownikow.prog_przepracowania) – pomarańczowy, pomiędzy – zielony'
+  czas_wlasciciela:
+    wartosc: 20
+    pewnosc: zalozenie
+    zrodlo: 'F3a.7: godziny właściciela na rundę (tydzień) na sprawy poza lokalem – odbiór osobisty w dyskontach,
+      później pracuj.pl i parki; nie zależy od liczby osób w drużynie (firma ma jednego właściciela)'
+  zajecia_zaokraglane_w_gore:
+    wartosc: true
+    pewnosc: zalozenie
+    zrodlo: 'założenie autora: zajęcia liczy się w pełnych godzinach, w górę'
+  model_stanowisk:
+    wartosc: pula
+    pewnosc: skalibrowane
+    zrodlo: 'pomiary: dwie firmy (luty i marzec) prowadziły usługi, których sprzęt stał na nieobsadzonych
+      stanowiskach; obłożenie sprzętu = godziny zajęć / (sztuki × 160 h), wykorzystanie prowadzących = godziny wszystkich
+      usług zawodu / (osoby × 160 h) – co do 0,1 pkt proc. „stanowisko” = dawne założenie (sprzęt i prowadzący na
+      tym samym stanowisku)'
+  kolejnosc_obslugi:
+    wartosc: proporcjonalnie
+    pewnosc: zalozenie
+    zrodlo: przy braku mocy przerobowych klienci usług na stanowisku obsługiwani proporcjonalnie do popytu
+  braki_wykladnik_godzin:
+    wartosc: -1.55
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja: przy braku zasobu obsłużeni ∝ popyt · (godziny zajęć)^α (pomiar z kwietnia – brak płynu,
+      grudzień – brak napoju): błąd 19% wobec 32% przy podziale proporcjonalnym; cena, grupa i popyt nie poprawiają
+      dopasowania'
+finanse:
+  kapital_startowy:
+    wartosc: 40000
+    pewnosc: zalozenie
+    zrodlo: 'notatka „Ustalenia gry”: kapitał startowy 40 000 zł (zmiana 26.10)'
+  placa_minimalna:
+    wartosc: 4806
+    pewnosc: potwierdzone
+    zrodlo: 'rozporządzenie Rady Ministrów: płaca minimalna od 1.01.2026 (4806 zł brutto)'
+  zus_pracodawcy:
+    wartosc: 0.19
+    pewnosc: zalozenie
+    zrodlo: 'założenie autora: składki pracodawcy w przybliżeniu 19% płacy brutto'
+  amortyzacja_prog:
+    wartosc: 10000
+    pewnosc: potwierdzone
+    zrodlo: 'ustawa o PIT: próg środka trwałego 10 000 zł, poniżej – od razu w koszty'
+  amortyzacja_niskocenna:
+    wartosc:
+      wybor: true    # false – gracz nie wybiera, zakupy poniżej progu zawsze w koszty
+      stawka: 0.2    # roczna stawka amortyzacji zakupów poniżej progu, gdy firma je amortyzuje
+    pewnosc: zalozenie
+    zrodlo: 'B6 (decyzja autora 7.11.2026, propozycja 1): gracz wybiera (Księgowość ▸ Biuro rachunkowe), czy zakupy
+      poniżej amortyzacja_prog (sprzęt, wyposażenie, stanowiska, sprzęt w cenie lokalu) idą od razu w koszty (domyślnie,
+      boty), czy do ewidencji z amortyzacją `stawka` rocznie (art. 22d ust. 1 ustawy o PIT – niskocenne środki trwałe
+      do 10 000 zł: jednorazowo w koszty albo amortyzacja; 20% – stawka sprzętu gastronomicznego jak amortyzacja_roczna.sprzet).
+      wybor: false – opcja wyłączona, wszystko w koszty (jak przed 7.11)'
+  amortyzacja_powyzej_progu_miesiecznie:
+    wartosc: 0.1
+    pewnosc: zalozenie
+    zrodlo: 'założenie autora: 10%; nie wiadomo, czy miesięcznie – w pomiarach brak sprzętu powyżej 10 000 zł'
+  amortyzacja_roczna:
+    wartosc:
+      lokal: 0.025
+      budynek: 0.025
+      grunt: 0
+      sprzet: 0.2
+      wyposazenie: 0.2
+    pewnosc: zalozenie
+    zrodlo: 'gra z lokalami (F3a.6): stawki roczne jak w wykazie stawek amortyzacyjnych – budynki i lokale niemieszkalne
+      2,5%, grunt bez amortyzacji, sprzęt i wyposażenie 20%; amortyzacja liniowa co rundę'
+  sprzedaz_sprzetu:
+    wartosc: 0.5
+    pewnosc: skalibrowane
+    zrodlo: 'sprzedaż sprzętu r9: ≈ 50% ceny, w dół do 10 PLN'
+  sprzedaz_udogodnien:
+    wartosc: 0.5
+    pewnosc: zalozenie
+    zrodlo: 'założenie autora: sprzęt sprzedaje się za połowę ceny zakupu'
+  lokata_odsetki:
+    wartosc: proste_miesieczne
+    pewnosc: zalozenie
+    zrodlo: założenie autora (odsetki proste, naliczane co rundę)
+  kredyt_odsetki:
+    wartosc: proste_miesieczne
+    pewnosc: zalozenie
+    zrodlo: 'założenie autora: odsetki proste, np. 100 zł na 1 miesiąc przy 10% rocznie to 0,83 zł'
+  kredyt_odnawialny_automatyczny:
+    wartosc: true
+    pewnosc: zalozenie
+    zrodlo: 'założenie autora: kredyt odnawia się sam, dopóki gracz go nie spłaci'
+  inwestor_ratunkowy:
+    wartosc:
+      max_kwota: 40000
+      udzial: 0.3
+      rund: 8
+    pewnosc: zalozenie
+    zrodlo: 'Z3 (Plan optymalizacji, odpowiedź autora: „Inwestor za udział w wyniku”, „Wpłata jako dług”): mistrz gry
+      ratuje drużynę z debetem ponad limit wpłatą do max_kwota (kapitał startowy); inwestor przez `rund` rund bierze
+      `udzial` dodatniego dochodu netto rundy, a niezwrócona wpłata liczy się jak dług – wartości do kalibracji'
+karta_wynikow:
+  wynik_ekonomiczny_dzielnik:
+    wartosc: 4615
+    pewnosc: zalozenie
+    zrodlo: 'F2.7: 20 000 zł miesięcznego dochodu (założenie autora) × 12/52 – ta sama skala dla dochodu tygodniowego'
+  mandaty_w_dochodzie:
+    wartosc: true
+    pewnosc: zalozenie
+    zrodlo: 'B12 (decyzja autora 7.11.2026): mandaty rundy (skarbowe za deklaracje, z błędu biura bez OC, sanepidu)
+      obniżają dochód do karty jak odsetki Harpagona (Z1); KPiR i podatki bez zmian. false – jak przed 7.11'
+  skala:
+    wartosc:   # [od „średni”, od „dobry”] – słowo i kolor przy wskaźniku w zakładce Karta wyników
+      wynik_dzialalnosci: [0.2, 0.9]   # B13: było 0,1 / 0,7
+      wynik_ekonomiczny: [0.35, 1.4]   # B13: było 0,15 / 1,1
+      zadowolenie_pracownikow: [0.9, 0.98]
+      zadowolenie_klientow: [1.0, 1.1]
+      rozwoj_firmy: [0.54, 0.64]   # B13: było 0,56 / 0,67
+      wskaznik_zadluzenia: [0.6, 0.9]
+    pewnosc: zalozenie
+    zrodlo: 'U10 (4.11.2026): ok. 25. i 75. percentyl kart botów (9 strategii × poziomy łatwy/średni/trudny × ziarna 7, 11,
+      rundy 3–14); zadłużenie: boty go nie mają – progi założone przez autora (zadłużenie 0,2–0,6). B13 (6.11.2026):
+      po kalibracji B6–B12 percentyle przeliczone z 80 gier mieszanych (6 firm, poziomy łatwy/średni/trudny
+      i człowiek słaby/średni/dobry, rundy 3–14) – wynik działalności p25 0,20 / p75 0,83–1,00, wynik ekonomiczny
+      0,36–0,38 / 1,29–1,55, rozwój 0,54 / 0,64; zadowolenia bez zmian'
+  strata:
+    wartosc:
+      waga: 1.0
+    pewnosc: zalozenie
+    zrodlo: 'Z1 (29.10.2026, ustalone z autorem): przy stracie wynik działalności = waga × wynik ekonomiczny
+      (ujemny, proporcjonalny do straty, bez mnożenia przez wskaźniki); wcześniej 0 przy każdej stracie. Do
+      sprawdzenia w B5/B6 (skala straty względem zysku mnożonego przez wskaźniki)'
+  zadowolenie_klientow:
+    wartosc:
+      stala: 0.8486
+      ln_liczby_uslug: 0.1768
+      limit_uslug: 6
+      cena_wzgledem_rynku: -0.193
+      utracona_poprzednio: -0.105
+      jakosc: 0.2282
+      wyposazenie_na_procent: 0.0
+      reklamacje: 0.0
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja z 2026-10-18: 43 karty (3 firmy × 11 mies. z botami, 5 firm × 2 mies.), zespoły z
+      wagą 2: błąd zespoły 0,033, boty 0,042 (dawny wzór: zespoły 0,024, boty 0,090 – nie przenosił się na firmy
+      o niższej jakości). jakosc = średni mnożnik jakości usług (gwiazdki sprzętu i zasobów jak w popycie); cena_wzgledem_rynku
+      = cena / średnia cena firm (ważona klientami); utracona_poprzednio = udział utraconej sprzedaży w poprzednim
+      miesiącu (kwiecień −40% → maj −0,08)'
+  zadowolenie_pracownikow:
+    wartosc:
+      stala: 0.9464
+      placa_wzgledem_preferowanej: 0.3162
+      sprzet_na_gwiazdke: 0.0163
+      udogodnienia_na_procent: 0.01
+      szkolenia_w_miesiacu_na_procent: 0.04
+      udzial_umow_zlecenie: -0.0115
+      zmiany_zatrudnienia: 0.0
+      szkolenie_w_miesiacu: 0.05
+    pewnosc: zalozenie
+    zrodlo: 'kalibracja na 17 kartach zespołów i 43 kartach z botami: szkolenie działa
+      jak włącznik – jedno lub dwa szkolenia w miesiącu dają tyle samo (+0,0755; Firma 1 z jednym szkoleniem = z
+      dwoma), błąd 0,005 zamiast 0,009. Poprawki 3 (decyzja autora 8.11.2026: udogodnienia średnio ≈ 0 albo lekko
+      na plus): udogodnienia_na_procent 0,01 (było 0,0009 – trzy najtańsze udogodnienia, 220%, dawały +0,002, czyli
+      nic; teraz +0,022). Poprawki 3 (decyzja autora 8.11.2026: szkolenia mocniejsze, najlepsze lekko
+      na plus): włącznik szkolenie_w_miesiacu 0,05 (było 0,0755) + szkolenia_w_miesiacu_na_procent 0,04 na każdy
+      ułamek oczekujących (było 0) – jedno szkolenie 90% daje 0,086 (było 0,0755), dwa (90% + 90%) 0,122 (było
+      0,0755), więc drugie szkolenie też coś daje. Liczby – założenie dobrane szybkim pomiarem (balans.warianty:
+      szkolenia, szkolenie:*), nie kalibracja na kartach'
+  rozwoj_firmy:
+    wartosc:
+      stala: 0.5353
+      majatek: 0.1062
+      majatek_skala: 10000
+      inwestycje_netto: 0.3389
+      inwestycje_wzgledne: 1.192
+      przyrost_uslug_i_pracownikow: 0.031
+      wygladzanie: 0.0
+      waga_nieruchomosci: 0.5   # Z1 (decyzja autora 7.11.2026): kupiony lokal, budynek, grunt w majątku rozwoju z tą wagą; 1 – pełna wartość
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja z 2026-10-18: 21 kart (luty–grudzień z wyprzedażą i odkupem sprzętu, plus druga seria luty–marzec):
+      rozwój = stala + majatek·ln(1 + M/skala) + inwestycje_netto·(zakupy − wartość sprzedanego)/max(M sprzed miesiąca,
+      skala), M – majątek po cenach zakupu po odjęciu sprzedanego; błąd 0,089, LOO 0,106 (dawny wzór na tych danych:
+      LOO 0,175). Sprzedaż sprzętu obniża rozwój (wrzesień 0,554, październik 0,603). Niska pewność'
+  wskaznik_zadluzenia:
+    wartosc:
+      bez_kredytu: 1.0
+      wzor: 1 − dług / (majątek + skumulowany dochód netto + dług + gotówka), min 0
+    pewnosc: zalozenie
+    zrodlo: 'założenie autora: zadłużenie 0,2–0,6; „+ dług” w mianowniku (silnik/wyniki/karta.py);
+      gotówka – U22 (decyzja autora 3.11.2026: kredyt leżący na koncie nie ma karać jak przejedzony)'
+  kebab:
+    wartosc:
+      zadowolenie_klientow:
+        brakujace_dania: -0.3
+        kolejki: -0.15
+        kontrola_z_mandatem: -0.05
+        wypadek: -0.03
+      zadowolenie_pracownikow:
+        prog_przepracowania: 0.85
+        przepracowanie: -0.5
+      rozwoj_firmy:
+        kolejny_lokal: 0.08
+        przyrost_dan_i_pracownikow: 0.031
+      wskaznik_zadluzenia:
+        waga_harpagona: 1.5
+    pewnosc: zalozenie
+    zrodlo: 'F4.1, notatka „Ustalenia gry” (karta wyników): w grze z lokalami podstawowe wskaźniki dostają składniki kebabowe
+      (silnik/wyniki/karta.py → kebab). Zadowolenie klientów: cena względem ceny preferowanej strefy lokalu (zamiast średniej
+      rynku), brakujące dania = udział dań-dni wyłączonych z braku składnika, kolejki = udział klientów utraconych w tym
+      tygodniu z braku rąk lub sprzętu (czas obsługi), kontrola sanepidu z mandatem, każdy wypadek w lokalu. Zadowolenie
+      pracowników: przepracowanie = średnia nadwyżka wykorzystania czasu ponad próg. Rozwój: każdy kolejny lokal i przyrost
+      dań w menu i pracowników (jak w podstawowym wzorze). Zadłużenie: dług u Harpagona liczony z wagą (lichwiarz
+      straszy bardziej niż bank). Wartości – założenia do potwierdzenia (PRACA_NOCNA, pyt. 22)'
+losowosc:
+  reklamacje:
+    wartosc: dwumianowo_ryzyko_pracownika
+    pewnosc: zalozenie
+    zrodlo: 'instrukcja: ryzyko reklamacji = prawdopodobieństwo wadliwej usługi; reklamacja zużywa zasoby ponownie
+      (pomiary: zużycie o 0,4–1% większe niż sprzedaż)'
+  reklamacje_mnoznik_ryzyka:
+    wartosc: 0.15
+    pewnosc: skalibrowane
+    zrodlo: 'kalibracja pomiarami (balans/): prawdopodobieństwo reklamacji = ryzyko pracownika
+      × mnożnik; przy 1,0 zużycie zasobów było o 3,6% za duże, przy 0,15 błąd 0,4%'
+  ceny_dostawcow:
+    wartosc:
+      odchylenie: 0.044
+      powrot_do_bazy: 0.6
+      max_zmiana: 0.17
+      mnoznik_odchylenia: 1.3
+    pewnosc: skalibrowane
+    zrodlo: 'analiza_cen_dostawcow.py; mnożnik odchylenia 1,3: odchylenie std cen ≈ 5,7%'
+  kandydaci:
+    wartosc:
+      rozrzut_pensji: 0.03
+    pewnosc: zalozenie
+    zrodlo: te same osoby w różnych grach mają pensje różniące się o 2–4%
+magazyn:   # gra z lokalami (zmiana 26.10): bez kosztu magazynowania i zwrotów – wynajem chłodni i kontrole sanepidu
+  wynajem_zl_za_litr:
+    wartosc: 1
+    pewnosc: zalozenie
+    zrodlo: 'odpowiedź użytkownika 26.10: towar, który nie mieści się w chłodni lub zamrażarce lokalu, jedzie do
+      wynajętej chłodni – 1 zł brutto (VAT 23%) za litr nadmiaru przy dostawie'
+  wynajem_skrocenie_terminu_dni:
+    wartosc: 2
+    pewnosc: zalozenie
+    zrodlo: 'odpowiedź użytkownika 26.10: towar w wynajętej chłodni ma termin krótszy o 2 dni (nie krótszy niż do
+      dnia dostawy)'
+  sanepid:
+    wartosc:
+      szansa_bazowa: 0.03
+      szansa_za_litr_wynajmu: 0.0005
+      szansa_za_zl_przeterminowanych: 0.0004
+      szansa_max: 0.6
+      mandat_min: 300
+      mandat_za_litr_wynajmu: 1
+      mandat_za_zl_przeterminowanych: 0.5
+      mandat_max: 3000
+      popyt_po_mandacie: 0.93
+      rund_spadku: 2
+      od_rundy: 4    # UF6: pierwsze kontrole od tygodnia 4 (higiena i odbiory lokali – od 1)
+    pewnosc: zalozenie
+    zrodlo: 'odpowiedź użytkownika 26.10 (kontrole sanepidu zamiast kosztu magazynowania): co rundę szansa kontroli =
+      bazowa + za litr w wynajętej chłodni + za zł przeterminowanego towaru (najwyżej szansa_max); kontrola kończy
+      się mandatem z szansą (szansa − bazowa) / szansa; mandat = min + za litr + za zł strat (od min do max, co 50
+      zł), poza KPiR; po mandacie popyt × popyt_po_mandacie przez rund_spadku rund. Liczby – założenie do kalibracji
+      w kroku 5 (100 l w wynajmie i 300 zł przeterminowanych → ok. 20% na kontrolę)'
+  przewoz:
+    wartosc:
+      od_rundy: 2
+      czas_wlasciciela: 1
+      koszt_kursu: 30
+      skrocenie_terminu_dni: 1
+    pewnosc: zalozenie
+    zrodlo: 'przebudowa 2.11.2026 (Z2, raporty/przebudowa_zakladek.md): towar między własnymi lokalami przewozi
+      właściciel – kurs (para lokali, jeden dzień) zajmuje 1 h jego czasu i kosztuje 30 zł brutto (paliwo,
+      parkowanie); przewieziona partia traci 1 dzień terminu (nie krótszy niż dzień przewozu). Pracowników nie
+      przenosi się. Liczby – założenie do kalibracji'
+  auto_dostawca:
+    wartosc:
+      od_rundy: 2
+      dostawca: Auchan
+      abonament: 120
+      prowizja: 0.06
+      przechowanie_zl_za_litr_dzien: 0.15
+    pewnosc: zalozenie
+    zrodlo: 'przebudowa 2.11.2026 (Z4, raporty/przebudowa_zakladek.md): lokal na auto-dostawach – gracz wpisuje
+      tygodniową ilość składników i płaci za całość (cena Auchan + prowizja 10%, abonament 120 zł brutto na lokal
+      tygodniowo); dostawca co rano dowozi tyle, ile lokal zużyje (w lokalu nic się nie psuje, chłodnia nie jest
+      potrzebna), resztę po tygodniu trzyma u siebie za 0,15 zł brutto za litr dziennie, a termin liczy się od
+      ostatniego dnia tygodnia. Liczby – założenie do kalibracji (przechowanie tygodnia ≈ 1 zł/l, tyle co wynajęta
+      chłodnia, ale za każdy tydzień). Prowizja 7% (było 10%) – pomiar J10, 10.11.2026 (seria funkcje, decyzja autora:
+      samodzielne zaopatrzenie ma dawać ok. 15–20% więcej zysku niż automat): para gier, drużyna z decyzjami bota
+      na zaopatrzeniu samodzielnym vs autopilot (zakryte), 12 rund, 5 ziaren, 3 rywali-boty; przy 10% strategia
+      zrównoważona +23,2% dochodu netto (razem ze strategiami tani i premium +22,0%), przy 7% +18,1% (razem +16,2%).
+      Prowizja 6% – pomiar K5, 10.11.2026 (autopilot: jakość składników jak stanowiska lokalu, bez dostaw do lokalu
+      bez obsady kuchni, prognoza z kampaniami i promocjami; ta sama para gier): przy 7% zrównoważona +22,1%, premium
+      +1,4%, tani +26,1%; przy 6% zrównoważona +20,4%, premium +0,1% (automat już nie wygrywa), tani +23,7%; przy 5%
+      zrównoważona +18,7%, ale premium −1,3% (automat znów wygrywa)'
+pracownicy:   # U20 (decyzja autora 4.11.2026): zadowolenie każdej osoby i odejścia z niezadowolenia (silnik/ludzie/zadowolenie.py)
+  odejscia:
+    wartosc:
+      prog_zadowolenia: 0.87
+      szansa_na_setna: 0.05
+      szansa_maks: 0.5
+      tygodnie_ostrzezenia: 1
+      sprzet_bez_sprzetu: 2
+    pewnosc: zalozenie
+    zrodlo: 'U20: zadowolenie osoby – wzór karty (karta_wynikow.zadowolenie_pracownikow) liczony dla jednej osoby: jej
+      pensja i premia ÷ preferowana, sprzęt jej stanowiska (bez sprzętu – sprzet_bez_sprzetu gwiazdki), udogodnienia
+      jej lokalu, szkolenia firmy, umowa zlecenie i przepracowanie jak w kebabie karty, do tego ukryta cecha
+      (kandydaci.yaml: cechy). Poniżej progu przez pierwszy tydzień tylko ostrzeżenie (lista błędów); od kolejnego
+      tygodnia z rzędu losowanie wypowiedzenia: szansa = szansa_na_setna za każde 0,01 poniżej progu (najwyżej
+      szansa_maks) × mnożnik cechy. Odejście jak zwolnienie: umowa o pracę – okres wypowiedzenia, zlecenie – od razu,
+      bez odprawy. Próg 0,87: osoba przy pensji preferowanej, sprzęcie 2★ i wykorzystaniu do 85% ma ok. 0,93, przy
+      pełnym wykorzystaniu ok. 0,855 – założenie do kalibracji'
+  przenosiny:
+    wartosc:
+      baza: 0.7
+      za_zadowolenie: 3.0
+      kara_za_pole: 0.03
+      za_dodatek: 0.6
+      szansa_min: 0.05
+      szansa_maks: 0.98
+    pewnosc: zalozenie
+    zrodlo: 'UF20: zgoda pracownika na przejście do innego lokalu firmy (w tym samym lokalu – zawsze). Szansa = baza
+      + za_zadowolenie × (zadowolenie − próg odejść; nieznane zadowolenie = próg) − kara_za_pole × odległość lokali
+      na mapie (pola siatki; między lokalami Lublina średnio ok. 8,5, najwyżej ok. 23) + za_dodatek × min(1, dodatek
+      ÷ pensja), w granicach szansa_min…szansa_maks. Zadowolony pracownik przy średniej odległości zgadza się w ok.
+      45–70%, dodatek równy pensji podnosi szansę o 0,6. Losowanie przy przeliczeniu rundy – założenie do kalibracji'
+  formy_zatrudnienia:
+    wartosc:
+      prace:
+        nazwa: Umowa o pracę
+        opis: pełny etat, ZUS pracodawcy, okres wypowiedzenia; ludzie najbardziej ją lubią
+        etat: 1.0
+        zus: etat
+        wypowiedzenie: true
+        kadry: etat
+        kara_zlecenia: false
+        oczekiwana: 1.0
+        placa_minimalna: true
+      pol_etatu:
+        nazwa: Umowa o pracę – pół etatu
+        opis: połowa godzin za połowę pensji (płaca minimalna – w połowie), ZUS i wypowiedzenie jak na etacie
+        etat: 0.5
+        zus: etat
+        wypowiedzenie: true
+        kadry: etat
+        kara_zlecenia: false
+        oczekiwana: 0.5
+        placa_minimalna: true
+      zlecenie:
+        nazwa: Umowa zlecenie
+        opis: bez ZUS pracodawcy i bez wypowiedzenia (odchodzi od razu), ale ludzie są mniej zadowoleni
+        etat: 1.0
+        zus: zlecenie
+        wypowiedzenie: false
+        kadry: zlecenie
+        kara_zlecenia: true
+        oczekiwana: 1.0
+        placa_minimalna: true
+      student:
+        nazwa: Zlecenie ze studentem
+        opis: tylko dla studentów do 26 lat – bez ZUS i bez PIT, więc zgodzą się na niższą pensję; mniej godzin, częściej odchodzą
+        etat: 1.0
+        zus: brak
+        wypowiedzenie: false
+        kadry: zlecenie
+        kara_zlecenia: true
+        oczekiwana: 1.0
+        placa_minimalna: true
+        tylko_studenci: true
+      staz:
+        nazwa: Staż z urzędu pracy
+        opis: urząd płaci stypendium, firma nie płaci pensji ani ZUS; tylko osoby bez doświadczenia (1★), jedna naraz,
+          po stażu zostaje na umowie o pracę za pensję preferowaną
+        etat: 1.0
+        zus: brak
+        wypowiedzenie: false
+        kadry: zlecenie
+        kara_zlecenia: false
+        oczekiwana: 0.0
+        placa_minimalna: false
+        staz:
+          rund: 6
+          max_gwiazdek: 1
+          naraz: 1
+          stypendium: 2000
+      b2b:
+        nazwa: Kontrakt B2B
+        opis: osoba prowadzi firmę i wystawia fakturę z VAT 23% (VAT odliczasz); bez ZUS i bez wypowiedzenia, ale chce
+          wyższej stawki, bo sama płaci swój ZUS
+        etat: 1.0
+        zus: brak
+        wypowiedzenie: false
+        kadry: brak
+        kara_zlecenia: false
+        oczekiwana: 1.25
+        placa_minimalna: false
+        faktura: Faktura B2B
+    pewnosc: zalozenie
+    zrodlo: 'UF21 (decyzja autora 6.11.2026): formy zatrudnienia do wyboru przy zatrudnianiu i w profilu osoby. etat –
+      mnożnik godzin pracy; zus – stawka składek pracodawcy (etat: podatki.zus_pracodawcy, zlecenie:
+      podatki.zus_pracodawcy_zlecenie, brak: 0); kadry – opłata biura za osobę (etat/zlecenie/brak); kara_zlecenia –
+      składnik „umowa zlecenie” w zadowoleniu; oczekiwana – mnożnik pensji preferowanej, przy którym osoba jest
+      zadowolona z płacy (pół etatu 0,5; B2B 1,25 – sama płaci ZUS ok. 1,6–1,9 tys. zł i nie ma urlopu; staż – pensji
+      nie ma); placa_minimalna – czy pensja musi być co najmniej płacą minimalną × etat. Staż: stypendium 120% zasiłku
+      dla bezrobotnych (ustawa o rynku pracy i służbach zatrudnienia z 20.03.2025, ok. 2 tys. zł – płaci urząd, w grze
+      tylko informacyjnie), staż trwa rund tygodni, potem umowa o pracę. B2B: faktura z VAT (podatki.vat.koszty:
+      „Faktura B2B”), w KPiR w pozostałych wydatkach. Boty zatrudniają tylko na umowę o pracę. Liczby – założenie
+      do kalibracji'
+  studenci:
+    wartosc:
+      wiek_do: 26
+      udzial: 1.0
+      godziny: 0.6
+      odejscia: 1.5
+      pensja: 0.92
+    pewnosc: zalozenie
+    zrodlo: 'UF10/UF21 (decyzja autora 6.11.2026): student do 26 lat – kandydat młodszy niż wiek_do jest studentem z
+      szansą udzial (osobne losowanie, strumień „studenci”). Bez PIT (ulga dla młodych, art. 21 ust. 1 pkt 148 ustawy
+      o PIT) na każdej umowie, więc przy tej samej pensji brutto dostaje więcej na rękę – zadowala go pensja ×
+      pensja; na zleceniu bez ZUS (art. 6 ust. 4 ustawy o systemie ubezpieczeń społecznych). Uczy się, więc pracuje
+      godziny × zwykłych godzin i odchodzi z niezadowolenia odejscia × częściej. Liczby – założenie. Decyzja autora
+      7.11.2026: udzial 1,0 (każdy kandydat młodszy niż wiek_do jest studentem, było 0,8), a wiek kandydatów 19–39
+      lat (kandydaci.yaml: losowanie.wiek, było 22–49), żeby studentem był co trzeci kandydat'
+  oferta_pracy:   # kalibracja B9 (decyzja autora 7.11.2026): „im mniej pieniędzy, tym mniej zadowoleni pracownicy”
+    wartosc:
+      wlaczone: true
+      prog_odrzucenia: 0.95
+      kara_ponizej_oczekiwanej: 1.0
+    pewnosc: zalozenie
+    zrodlo: 'Kalibracja B9 (decyzja autora 7.11.2026, silnik/ludzie/formy.py: prog_oferty, silnik/ludzie/zadowolenie.py):
+      kandydat z rynku pracy odrzuca ofertę niższą niż prog_odrzucenia × pensja oczekiwana w tej formie (pół etatu,
+      student – jak w UF21; staż bez pensji – zawsze przyjmuje); w licytacji takie oferty się nie liczą. Pensja
+      poniżej oczekiwanej obniża zadowolenie mocniej niż wyższa je podnosi: do składnika płacy (karta, nachylenie
+      0,3162) dochodzi −kara_ponizej_oczekiwanej × (1 − pensja ÷ oczekiwana), liczone co tydzień, więc spadek trwa
+      tak długo jak niska pensja i od pierwszego tygodnia (przed poprawkami 3 przy 95% oczekiwanej: −0,016 − 0,025 = −0,041,
+      osoba przy sprzęcie 2★ ok. 0,89 zamiast 0,93). Boty oferują co najmniej próg. wlaczone: false – bez odrzucania, bez
+      dodatkowej kary i bez progu w ofertach botów (zachowanie sprzed kalibracji). Liczby – założenie (decyzja autora:
+      ok. 95%, spadek mniej więcej liniowy). Poprawki 3 (decyzja autora 8.11.2026: „mniej pieniędzy – mniej
+      zadowoleni”, pensja minimalna wyraźnie gorsza): kara_ponizej_oczekiwanej 1,0 (było 0,5) – przy 95% oczekiwanej
+      −0,016 − 0,05 = −0,066, osoba przy sprzęcie 2★ ma ok. 0,86 (poniżej progu odejść 0,87 i tempa 0,9)'
+  szkolenia:   # kalibracja B9 (decyzja autora 7.11.2026): cena miesięczna raz, działa 4 tygodnie
+    wartosc:
+      wlaczone: true
+      tygodni: 4
+    pewnosc: zalozenie
+    zrodlo: 'Kalibracja B9 (decyzja autora 7.11.2026, silnik/ludzie/szkolenia.py): szkolenie kosztuje raz cenę z
+      katalogu (cena miesięczna, bez przeliczania na rundę) i działa przez tygodni tygodni od tygodnia zakupu (w grze
+      tygodniowej – tyle rund). Szkolenie, które jeszcze trwa, można kupić ponownie dopiero po jego końcu.
+      wlaczone: false – dawne zachowanie: cena miesięczna × 12 ÷ rund_w_roku co rundę, działa tylko w tygodniu zakupu'
+  wydajnosc_z_zadowolenia:   # kalibracja B10 (decyzja autora 7.11.2026)
+    wartosc:
+      wlaczone: true
+      prog_gorny: 0.95
+      prog_dolny: 0.9
+      premia: 0.05
+      kara: 0.05
+    pewnosc: zalozenie
+    zrodlo: 'Kalibracja B10 (decyzja autora 7.11.2026, silnik/ludzie/zadowolenie.py: tempo): zadowolenie osoby z
+      poprzedniego tygodnia zmienia jej tempo pracy w tym tygodniu – powyżej prog_gorny o +premia, poniżej prog_dolny
+      o −kara (godziny stanowiska × mnożnik, jak cecha „szybki”/„niespieszny” ×1,1/×0,9). Umiarkowanie (±5%): badania
+      nad zadowoleniem i wydajnością (Oswald, Proto, Sgroi 2015, Journal of Labor Economics: szczęśliwsi o ok. 12%
+      wydajniejsi w zadaniach na czas) dają górną granicę, a w grze tempo działa naraz na całą zmianę i łączy się z
+      cechą osoby. Osoba przy pensji preferowanej i sprzęcie 2★ (ok. 0,93) – bez zmiany; ze szkoleniem (od +0,076, decyzja autora 8.11.2026)
+      albo przy pensji ok. 110% oczekiwanej i sprzęcie 3★ – szybciej; przy 95% oczekiwanej (ok. 0,86) albo
+      przepracowana – wolniej. Nowa osoba (zadowolenie jeszcze nieznane) – bez zmiany. wlaczone: false – bez wpływu'
+  podkupywanie_botow:   # kalibracja B9 (decyzja autora 7.11.2026): boty podkupują niedopłacanych
+    wartosc:
+      wlaczone: true
+      placa_ponizej: 0.97
+      zadowolenie_ponizej: 0.9
+      oferta: 1.06
+      oferta_maks: 1.1
+      przebicie: 0.05
+      na_runde: 1
+      od_botow: false
+    pewnosc: zalozenie
+    zrodlo: 'Kalibracja B9 (decyzja autora 7.11.2026, silnik/boty.py: _podkup, silnik/ludzie/rynek_pracy.py): bot na
+      poziomie z podkupuje_ludzi (boty.yaml) – tylko gdy mistrz gry pozwala podkupywać (opcja podkupywanie) i od rundy
+      headhuntera – składa ofertę osobie z innej firmy (także drużyny graczy) na stanowisko, które chce obsadzić, gdy
+      osoba ma pensję poniżej placa_ponizej × oczekiwana albo zadowolenie poniżej zadowolenie_ponizej (np. przyjęta
+      za 95–97% oczekiwanej albo przepracowana). Oferta: obecna pensja × oferta (co najmniej pensja minimalna),
+      najwyżej oczekiwana × oferta_maks; najwyżej na_runde ofert na rundę; stanowisko czeka na osobę przez okres
+      wypowiedzenia. Każda oferta podkupienia (botów i drużyn) wygrywa dopiero, gdy jest o przebicie wyższa od
+      obecnej pensji i od kontroferty (przy 0 – jak dotąd: wystarczy wyższa). od_botow: false – bot podkupuje tylko
+      od drużyn graczy (gra samych botów na poziomie średnim, ziarna 1 i 7, 12 rund: podkupywanie bot–bot obniżało
+      średnią gotówkę o ok. 14%, bo stanowisko stoi puste przez okres wypowiedzenia, a ofiara traci przeszkoloną
+      osobę – boty wzajemnie się osłabiały, a celem jest kara dla drużyny, która płaci za mało); true – także od
+      innych botów. wlaczone: false – boty nie podkupują, a przebicie wynosi 0. Liczby – założenie'
+lista_bledow:   # gra z lokalami (F4.2): progi ostrzeżeń na liście błędów
+  udzial_skladnikow:
+    wartosc: 0.5
+    pewnosc: zalozenie
+    zrodlo: 'F4.2: pomarańczowe ostrzeżenie, gdy koszt składników porcji (po cenie zapasu, a bez zapasu – po
+      najniższej średniej cenie z danych) przekracza tę część ceny dania; poniżej kosztu – czerwone. W gastronomii
+      składniki to zwykle 25–35% ceny (PRACA_NOCNA, pyt. 23)'
+  przeterminowanie_min_zl:
+    wartosc: 20
+    pewnosc: zalozenie
+    zrodlo: 'F4.2: ostrzeżenie o składniku, który przy prognozie popytu przeterminuje się przed użyciem, dopiero od tej
+      wartości straty w tygodniu (drobne resztki nie zaśmiecają listy błędów; PRACA_NOCNA, pyt. 23)'
+  scal_dania_od:
+    wartosc: 2
+    pewnosc: zalozenie
+    zrodlo: 'U5 (analiza gracza [5]): od tylu dań bez sprzętu (albo bez kucharza) w jednym lokalu lista błędów pokazuje
+      jedną pozycję „lokal do urządzenia” zamiast osobnej linijki na każde danie'
+wnioski:   # gra z lokalami (Q13): zakładka „Wnioski z rundy” – od jakich progów pojawia się rada (silnik/wyniki/wnioski.py)
+  utracona:
+    wartosc: 0.1
+    pewnosc: zalozenie
+    zrodlo: 'test gry 28.10: rada „klienci odeszli” dla dania, gdy nieobsłużona część chętnych to co najmniej tyle
+      (drobne straty w szczycie nie zaśmiecają wniosków)'
+  prognoza:
+    wartosc: 0.3
+    pewnosc: zalozenie
+    zrodlo: 'test gry 28.10: rada o prognozie popytu (Menu), gdy różni się od prawdziwego popytu dania o co najmniej
+      tyle w górę albo w dół'
+  wzrost_klientow:
+    wartosc: 0.05
+    pewnosc: zalozenie
+    zrodlo: 'UF23 (7.11.2026): pochwała „klientów więcej niż tydzień wcześniej” – od takiego względnego wzrostu
+      liczby obsłużonych klientów'
+  dlaczego_min:
+    wartosc: 0.05
+    pewnosc: zalozenie
+    zrodlo: 'U16 (4.11.2026): „Dlaczego mój wynik się zmienił?” – od takiej zmiany wyniku działalności między rundami
+      gra szuka przyczyny (mniejsza zmiana: jedno zdanie „prawie bez zmian”)'
+  bledy_max:
+    wartosc: 3
+    pewnosc: zalozenie
+    zrodlo: 'test gry 28.10: najwyżej tyle czerwonych punktów listy błędów rundy we wnioskach (reszta – zakładka Lista
+      błędów), żeby wnioski nie zniechęcały'
+  rozruch_do_rundy:
+    wartosc: 3
+    pewnosc: zalozenie
+    zrodlo: 'UF5 (poprawka autora 6.11.2026): we wnioskach z rund do tej włącznie – zdanie o rozruchu (każda firma
+      potrzebuje kilku tygodni, zanim się rozkręci)'

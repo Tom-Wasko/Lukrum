@@ -1,0 +1,81 @@
+// Ubezpieczenia (gra z lokalami, silnik/swiat/awarie.py): polisy TUW na wypadki w lokalu. Decyzja `polisy: [rodzaj]` – pełna
+// lista; polisa chroni po karencji i trwa, dopóki drużyna jej nie wypowie. Same wypadki – w Moim lokalu (część Sprawy w lokalu).
+import { brakWynikow, esc, kafelkiLiczb, kafelOferty, kartaMarki, KOLORY, naOkres, pasekDo, podsumowanie, proc, zl2, zwinTabela, zl } from "./wspolne.js";
+
+const rund = (n) => `${n} ${n === 1 ? "runda" : n < 5 ? "rundy" : "rund"}`;
+
+function szkodyHtml(S, tytul, otwarte = false) {
+  return S?.length ? zwinTabela(tytul, ["Runda", "Wypadek", "Szkoda", "Koszt", "Odszkodowanie", "Uwagi"], S.map((s) => [s.runda, esc(s.tytul),
+    esc(s.opis), `<span class="minus">${zl2(-s.kwota)}</span>`, s.odszkodowanie ? `<span class="plus">${zl2(s.odszkodowanie)}</span>` : "–",
+    esc(s.powod || "")]), { klasy: ["", "l", "l", "", "", "l"], otwarte }) : "";
+}
+
+const nazwaPolisy = (U, r) => U.oferta.find((p) => p.rodzaj === r)?.nazwa ?? r;
+
+export const ubezpieczenia = {
+  tytul: "Ubezpieczenia", tytulPelny: "Ubezpieczenia lokalu", ikona: "tarcza", odblokowanie: (v) => !!v.ubezpieczenia && v.runda >= (v.ubezpieczenia.polisy_od ?? 1), ukryta: (v) => !v.ubezpieczenia,
+  info: `W lokalu zdarzają się wypadki – zwykle śmieszne, czasem poważne – i każdy kosztuje. Polisa nie zapobiegnie wypadkowi,
+    ale zwraca część szkody: (koszt − franszyza) × pokrycie, jako przychód pozostały w KPiR. Chroni dopiero po karencji
+    i tylko przed wypadkami, które zaczęły się, gdy już chroniła. Składka jest kosztem co rundę, dopóki polisy nie wypowiesz.
+    Ubezpieczyciel ma siedzibę na <a data-zakladka-k="mapa">mapie miasta</a>.`,
+  decyzje({ v, edycja }) {
+    const U = v.ubezpieczenia;
+    if (!U) return `<p class="podpowiedz">Brak danych.</p>`;
+    const maLokal = !!v.stan?.lokale?.length;
+    // polisy jako kafelki ofert w karcie ubezpieczyciela (jak kanały w Ulotkach i radiu)
+    const w = (x, y) => `<div class="wiersz"><span>${x}</span><span>${y}</span></div>`;
+    const kafle = U.oferta.map((p) => {
+      const od = U.posiadane[p.rodzaj];
+      const stan = od == null ? "" : od <= v.runda ? "chroni" : `od rundy ${od}`;
+      const btn = edycja && maLokal ? `<button class="btn ${od == null ? "zielony" : "jasny"}" data-akcja="ub-przelacz" data-r="${esc(p.rodzaj)}">${od == null ? "Kup polisę" : "Wypowiedz"}</button>` : "";
+      return kafelOferty({ tytul: esc(p.nazwa), pigulka: stan, duza: zl2(p.skladka), podpis: `składka${naOkres()}`, klasa: od == null ? "" : "wybrany",
+        tresc: `<p class="podpowiedz">${esc(p.opis)}</p>` + w("Pokrycie szkody", proc(p.pokrycie, 0)) + pasekDo(p.pokrycie, 1, `zwrot ${proc(p.pokrycie, 0)} szkody ponad franszyzę`)
+          + w("Franszyza (płacisz zawsze)", zl2(p.franszyza)), stopka: btn });
+    });
+    const ile = Object.keys(U.posiadane).length;
+    const D = U.decyzja;
+    const zmiany = D ? [...D.nowe.map((r) => `Nowa polisa: ${esc(nazwaPolisy(U, r))}.`),
+      ...D.wypowiedziane.map((r) => `Wypowiedziana: ${esc(nazwaPolisy(U, r))}.`)] : [];
+    return `<div class="karta"><p>W ${esc(U.nazwa)} pachnie kawą z ekspresu i papierem. Agent wita Cię jak starego znajomego, choć
+        widzi Cię pierwszy raz, i od razu pyta, czy w lokalu bywają gołębie. „Pytam rutynowo” – mówi i coś notuje.</p></div>
+      <div class="pasek ciemny"><span>Karencja: <span class="kwota">${rund(U.karencja_rund)}</span></span>
+        <span>Wypadki od rundy: <span class="kwota">${U.od_rundy}</span></span>
+        <span>Najwyższa szkoda: <span class="kwota">${zl(U.max_strata)}</span></span>
+        ${U.ryzyko ? `<span>Ryzyko wypadku w tym tygodniu: <span class="kwota">${proc(U.ryzyko.szansa, 0)}</span></span>` : ""}
+        ${D ? `<span>Składki w tej rundzie: <span class="kwota">${zl(D.skladki)}</span></span>` : ""}</div>`
+      + (U.ryzyko ? `<p class="podpowiedz">Agent przegląda statystyki: „${U.ryzyko.rundy_bez_wypadku
+        ? `${U.ryzyko.rundy_bez_wypadku} ${U.ryzyko.rundy_bez_wypadku === 1 ? "tydzień" : U.ryzyko.rundy_bez_wypadku < 5 ? "tygodnie" : "tygodni"} bez wypadku? Statystycznie coś się już szykuje.”`
+        : "Świeża sprawa – licznik spokoju dopiero rusza.”"} Ryzyko rośnie o ${proc(U.ryzyko.przyrost, 0)} za każdy spokojny tydzień
+        (od ${proc(U.ryzyko.bazowa, 0)} do najwyżej ${proc(U.ryzyko.maks, 0)}), a po wypadku spada do ${proc(U.ryzyko.bazowa, 0)}.</p>` : "")
+      + kartaMarki({ kolor: KOLORY[6], nazwa: U.nazwa, rodzaj: "ubezpieczenia", opis: "Polisy chronią po karencji i trwają, dopóki ich nie wypowiesz.",
+        suma: ile ? `polisy · <b>${ile}</b>` : "", tresc: `<div class="siatka trojka">${kafle.join("")}</div>` })
+      + (maLokal ? "" : `<p class="podpowiedz">Polisy są dla firm z lokalem.</p>`)
+      + (zmiany.length ? `<div class="komunikat">${zmiany.join("<br>")}</div>` : "")
+      + `<p class="podpowiedz">Składka zależy od liczby lokali (polisa na lokal) i wartości majątku (polisa na sprzęt) – po decyzjach tej rundy.</p>`;
+  },
+  wyniki({ v }) {
+    const W = v.wyniki?.ubezpieczenia, U = v.ubezpieczenia;
+    if (!W) return brakWynikow();
+    const razem = [["Składki", `<span class="minus">${zl2(-W.skladki)}</span>`], ["Szkody z wypadków", `<span class="minus">${zl2(-W.szkody_razem)}</span>`],
+      ["Odszkodowania", `<span class="plus">${zl2(W.odszkodowania)}</span>`]];
+    const dawne = (U?.szkody || []).filter((s) => s.runda < v.runda - 1);
+    const ns = W.szkody.length, netto = W.szkody_razem - W.odszkodowania;
+    const lead = podsumowanie([ns ? `W tej rundzie zdarzy${ns === 1 ? "ł się" : "ły się"} ${ns} ${ns === 1 ? "wypadek" : ns < 5 ? "wypadki" : "wypadków"} ze szkodami na ${zl(W.szkody_razem)}; polisy zwróciły ${zl(W.odszkodowania)}.`
+      : "W tej rundzie obyło się bez szkód.", W.polisy.length ? `Składki za ${W.polisy.length} ${W.polisy.length === 1 ? "polisę" : W.polisy.length < 5 ? "polisy" : "polis"} to ${zl2(W.skladki)}.`
+      : "Firma nie miała żadnej polisy, więc każda szkoda byłaby w całości na Twój koszt."], ns && netto > W.skladki ? "uwaga" : "");
+    const kafle = kafelkiLiczb([{ etykieta: "Składki", wartosc: zl(W.skladki), ton: W.skladki ? "minus" : "" }, { etykieta: "Szkody", wartosc: zl(W.szkody_razem), ton: W.szkody_razem ? "minus" : "plus" },
+      { etykieta: "Odszkodowania", wartosc: zl(W.odszkodowania), ton: W.odszkodowania ? "plus" : "" }]);
+    return lead + kafle + zwinTabela("Ubezpieczenia w rundzie", ["Co", "Kwota"], razem, { klasy: ["l"], sortuj: false })
+      + (W.polisy.length ? zwinTabela("Polisy w rundzie", ["Polisa", "Chroni od rundy", "Składka"], W.polisy.map((p) => [esc(p.nazwa), p.od_rundy, zl2(p.skladka)]), { klasy: ["l"] })
+        : `<p class="podpowiedz">W tej rundzie firma nie miała żadnej polisy.</p>`)
+      + szkodyHtml(W.szkody, "Szkody w rundzie", true)
+      + szkodyHtml(dawne, "Wcześniejsze szkody")
+      + (U ? `<p class="podpowiedz">Od początku gry: składki ${zl2(U.skladki_razem)}, odszkodowania ${zl2(U.odszkodowania_razem)}.</p>` : "");
+  },
+  akcje: {
+    "ub-przelacz": (el, c) => c.zmien((d) => {
+      const teraz = d.polisy ?? Object.keys(c.v.ubezpieczenia.posiadane), r = el.dataset.r;
+      d.polisy = teraz.includes(r) ? teraz.filter((x) => x !== r) : [...teraz, r];
+    }),
+  },
+};

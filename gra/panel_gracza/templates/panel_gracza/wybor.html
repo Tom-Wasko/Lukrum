@@ -1,0 +1,15 @@
+{% extends "panel_gracza/_pulpit.html" %}
+{% block tytul %}{{ gra.nazwa }} – wybór firmy{% endblock %}
+{% block podpis %}{{ gra.nazwa }}{% endblock %}
+{% block tresc %}
+  <main class="scena-p">
+    <div class="glowa-p"><div>
+      <h1>Którą firmą grasz?</h1>
+      <p class="pod-tytul">Gra na jednym komputerze: każda drużyna wybiera swoją firmę, podejmuje decyzje i klika „Wyślij decyzje”.
+        Runda przelicza się, gdy wszystkie drużyny wyślą.</p>
+    </div><a class="btn jasny" href="/">Moje gry</a></div>
+    <div class="siatka-firm">
+      {% for f in ludzie %}<a href="/gra/{{ id|urlencode }}/{{ f|urlencode:'' }}">{{ f }}<small>Graj jako {{ f }} →</small></a>{% endfor %}
+    </div>
+  </main>
+{% endblock %}

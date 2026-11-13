@@ -1,0 +1,260 @@
+# Wygląd mapy Lublina (M1–M11): układ dzielnic, drogi, rzeka, punkty orientacyjne, ruch i pora dnia. Tylko wygląd –
+# nic tu nie zmienia zasad gry (silnik liczy z położeń w lokale.yaml, budynki.yaml, strefy.yaml).
+# Sprawdzenie: python -m silnik.dane sprawdz
+opis: 'Schematyczna mapa Lublina. uklad – siatka do rysowania (x na wschód, y na południe), kształty dzielnic z pól
+  (wiersze liter) i pola lokali oraz budynków; drogi, kolej i rzeka to gładkie krzywe przez punkty kontrolne (x 0–szer,
+  y 0–gl, margines – teren podmiejski; końce na brzegu marginesu ciągną się za kadr) i nie mogą przecinać zajętych pól.
+  Punkty orientacyjne zajmują wolne pola. ruch.godziny – natężenie ruchu o każdej pełnej godzinie (0–1). wspolrzedne –
+  do położenia słońca.'
+zrodlo: 'decyzje autora 8.11.2026 (mapa schematyczna, lekka izometria, drogi tylko wizualne, bez Majdanka, ruch,
+  warstwy, pora dnia; potem: układ jak plan Lublina, drogi nie proste, porządek, lokale łatwe do znalezienia);
+  przebieg ulic i rzeki uproszczony względem prawdziwego Lublina'
+margines: 2
+wspolrzedne:
+  szerokosc: 51.25   # Lublin, °N
+  dlugosc: 22.57     # °E
+drogi:
+  - id: obwodnica
+    nazwa: Obwodnica Lublina (S19 / S17 / S12)
+    rodzaj: ekspresowa
+    punkty: [[-1.4, -2], [-1.2, 8], [-1.2, 20], [1.5, 26.2], [8, 27.4], [20, 27.3], [27.5, 26.9], [31.3, 22.2], [31.3, 10], [31.2, -2]]
+  - id: warszawska
+    nazwa: Aleje Racławickie i Aleja Warszawska
+    rodzaj: aleja
+    punkty: [[9.5, 10.5], [4.5, 10.5], [1.6, 10.35], [1, 8.2], [0.9, 3], [-1, -2]]
+  - id: krakowskie
+    nazwa: Krakowskie Przedmieście (deptak)
+    rodzaj: deptak
+    punkty: [[9.5, 10.5], [16.6, 10.5]]
+  - id: solidarnosci
+    nazwa: Aleja Solidarności
+    rodzaj: aleja
+    punkty: [[1.05, 7.5], [6, 7.1], [10, 7.35], [16, 7.45], [20.4, 7.45], [23.55, 7.5]]
+  - id: tysiaclecia
+    nazwa: Aleja Tysiąclecia i Aleja Unii Lubelskiej
+    rodzaj: aleja
+    punkty: [[23.6, -2], [23.5, 6], [23.55, 13], [23.6, 19.5], [24.4, 22.5], [25, 28]]
+  - id: andersa
+    nazwa: Aleja Andersa
+    rodzaj: ulica
+    punkty: [[15.5, 7.4], [15.45, 3], [15.6, -2]]
+  - id: lubartowska
+    nazwa: ulica Lubartowska
+    rodzaj: ulica
+    punkty: [[16.6, 7.45], [17.4, 4.8], [19.6, -2]]
+  - id: kompozytorow
+    nazwa: Aleja Kompozytorów Polskich
+    rodzaj: ulica
+    punkty: [[8, 7.2], [8.45, 4.5], [9.8, 1.8], [11, -2]]
+  - id: witosa
+    nazwa: Aleja Witosa
+    rodzaj: aleja
+    punkty: [[23.5, 13.6], [27, 13.5], [32, 13.6]]
+  - id: melgiewska
+    nazwa: ulica Mełgiewska
+    rodzaj: ulica
+    punkty: [[23.55, 5], [27, 5.9], [32, 6.4]]
+  - id: krasnicka
+    nazwa: Aleja Kraśnicka
+    rodzaj: aleja
+    punkty: [[9.5, 10.5], [9.5, 12.8], [8.6, 14.8], [4, 19.5], [1, 22.5], [-2, 25.4]]
+  - id: jana_pawla
+    nazwa: Aleja Jana Pawła II
+    rodzaj: ulica
+    punkty: [[2.5, 21], [3.6, 22.4], [6.5, 22.9], [8.6, 23.5], [11.5, 24.35], [16.45, 24.9]]
+  - id: zemborzycka
+    nazwa: ulica Nadbystrzycka i Zemborzycka
+    rodzaj: ulica
+    punkty: [[9.5, 13], [13, 13.3], [15.6, 13.5], [16.9, 14.3], [17.5, 15.6], [17.55, 17.2], [17, 20.4], [16.5, 23], [16.5, 28]]
+  - id: kolej
+    nazwa: Linia kolejowa Warszawa – Lublin – Chełm
+    rodzaj: kolej
+    punkty: [[-2, 14.45], [32, 14.55]]
+rzeki:
+  - id: bystrzyca
+    nazwa: Bystrzyca
+    punkty: [[12.5, 28], [12.7, 24.4], [13.5, 21], [16, 20.2], [18.5, 19.2], [18.5, 15], [18.7, 13.4], [21, 13.35], [24.5, 13], [24.5, 8], [24.4, 3], [26, 0.5], [29, -2]]
+miejsca:
+  - id: zamek
+    nazwa: Zamek Lubelski
+    ksztalt: zamek
+    opis: Królewski zamek na wzgórzu, dziś muzeum. W środku Kaplica Trójcy Świętej z bizantyjsko-ruskimi freskami.
+    mapa: {x: 20, y: 8, szer: 3, gl: 2}
+  - id: brama_krakowska
+    nazwa: Brama Krakowska
+    ksztalt: brama
+    opis: Gotycka brama z XIV wieku – wejście na Stare Miasto od strony Krakowskiego Przedmieścia.
+    mapa: {x: 17, y: 10}
+  - id: wieza_trynitarska
+    nazwa: Wieża Trynitarska
+    ksztalt: wieza
+    opis: Najwyższa wieża starego Lublina (ok. 40 m) – z tarasu widać całe Stare Miasto i Zamek.
+    mapa: {x: 19, y: 12}
+  - id: plac_po_farze
+    nazwa: Plac Po Farze
+    ksztalt: plac
+    opis: Plac na miejscu dawnego kościoła farnego – zarys fundamentów widać w bruku.
+    mapa: {x: 20, y: 11}
+  - id: plac_litewski
+    nazwa: Plac Litewski
+    ksztalt: fontanna
+    opis: Główny plac miasta przy Krakowskim Przedmieściu, z multimedialną fontanną i pomnikiem Unii Lubelskiej.
+    mapa: {x: 10, y: 9}
+  - id: csk
+    nazwa: Centrum Spotkania Kultur
+    ksztalt: csk
+    opis: Nowoczesny gmach teatru i opery z ogrodem na dachu, przy Placu Teatralnym.
+    mapa: {x: 10, y: 8}
+  - id: umcs
+    nazwa: UMCS
+    ksztalt: uczelnia
+    opis: Uniwersytet Marii Curie-Skłodowskiej – największa uczelnia w mieście, sporo głodnych studentów.
+    mapa: {x: 5, y: 8, szer: 2}
+  - id: kul
+    nazwa: KUL
+    ksztalt: uczelnia
+    opis: Katolicki Uniwersytet Lubelski przy Alejach Racławickich – najstarsza uczelnia Lublina (1918).
+    mapa: {x: 7, y: 11, szer: 2}
+  - id: politechnika_lubelska
+    nazwa: Politechnika Lubelska
+    ksztalt: uczelnia
+    opis: Kampus przy ulicy Nadbystrzyckiej – inżynierowie, laboratoria i kolejki po obiad.
+    mapa: {x: 10, y: 15, szer: 2}
+  - id: dworzec_metropolitalny
+    nazwa: Dworzec Metropolitalny
+    ksztalt: dworzec
+    opis: Węzeł autobusów miejskich, podmiejskich i dalekobieżnych obok dworca kolejowego Lublin Główny.
+    mapa: {x: 14, y: 15, szer: 3, gl: 2}
+  - id: arena
+    nazwa: Arena Lublin
+    ksztalt: stadion
+    opis: Stadion miejski na kilkanaście tysięcy kibiców – w dni meczów kebaby w okolicy mają pełne ręce roboty.
+    mapa: {x: 21, y: 16, szer: 2, gl: 2}
+  - id: lotnisko
+    nazwa: Port Lotniczy Lublin
+    ksztalt: lotnisko
+    opis: Lotnisko w Świdniku, na wschód od miasta – samoloty do Londynu, Oslo i na wakacje.
+    mapa: {x: 26, y: 21, szer: 3, gl: 3}
+  - id: gorki_czechowskie
+    nazwa: Górki Czechowskie
+    ksztalt: gorki
+    opis: Dzikie wzgórza i wąwozy na Czechowie – ulubione miejsce spacerów, biegów i wiosennych pikników.
+    mapa: {x: 5, y: 2, szer: 3, gl: 3}
+ruch:
+  # natężenie ruchu o godzinie 0, 1, …, 23 (szczyty rano i po pracy, nocne powroty)
+  godziny: [0.15, 0.1, 0.06, 0.05, 0.06, 0.15, 0.35, 0.75, 1.0, 0.75, 0.6, 0.65, 0.8, 0.8, 0.75, 0.85, 1.0, 1.0,
+            0.85, 0.7, 0.55, 0.45, 0.35, 0.25]
+uklad:
+  # wygląd mapy (M11): siatka i pola obiektów tylko do rysowania – silnik liczy odległości z położeń
+  # w strefy.yaml / lokale.yaml / budynki.yaml, więc zmiana tu nie zmienia wyników gry
+  siatka: {szer: 30, gl: 26}
+  legenda: {S: stare_miasto, C: centrum, A: akademickie, P: politechnika, D: dworzec, Z: zygmuntowskie, L: lsm_czuby, H: czechow, F: felin, M: zemborzyce}
+  wiersze:   # litera – strefa z legendy, kropka – teren bez strefy (dolina Bystrzycy, zieleń, okolica); kształty jak plan Lublina
+    - '.....HHHHH....HHHH............'
+    - '...HHHHHHHHHHHHHHHHHH.........'
+    - '...HHHHHHHHHHHHHHHHHHHH.......'
+    - '...HHHHHHHHHHHHHHHHHHHH.......'
+    - '...HHHHHHHHHHHHHHHHHHHH.......'
+    - '..HHHHHHHHHHHHHHHHHHHHH.......'
+    - '..HHHHHHHHHHHHHHHHHHHHH.......'
+    - '..AHHAHAHHCCHHHCSSSSSHS...FFF.'
+    - '..AAAAAAACCCCCCCCSSSSSS..FFFFF'
+    - '..AAAAAAAACCCCCCCSSSSSS..FFFFF'
+    - '..AAAAAAACCCCCCCSSSSSSS...FFFF'
+    - '.AAAAAAAACCCCCCCCSSSSSS..FFFFF'
+    - '.AAAAAAAACCCCCCCCS.S......FFFF'
+    - '.AAAAAAAACCCCCCCC.........FFFF'
+    - '.LLLLLLLLPPPDDDDD.....ZZFFFFFF'
+    - 'LLLLLLLLPPPPPDDDD..ZZZZZFFFFFF'
+    - 'LLLLLLLLLPPPPDDDD..ZZZZZFFFFFF'
+    - 'LLLLLLLLLPPPPDDDD...ZZZZFFFFFF'
+    - 'LLLLLLLLLPPPPDDDD..ZZZZZFFFFFF'
+    - 'LLLLLLLLLMMPMM.....ZZZZZFFFFFF'
+    - 'LLLLLLLLLMMM......MMZ.........'
+    - '..LLLLLLLMMMMMM.MMMMM.........'
+    - '....LLLLLMMMMMMMMMMM..........'
+    - '.........MMMMMMMMMMM..........'
+    - '.........MM...MMMMMM..........'
+    - '..............................'
+  polowa_szerokosci: {ekspresowa: 0.45, aleja: 0.18, ulica: 0.14, deptak: 0.17, kolej: 0.25, rzeka: 0.25}
+  pola:   # id lokalu albo budynku → [x, y] lewego górnego pola
+    biura: [17, 8]
+    piekarnia: [19, 8]
+    kozi_grod_events: [19, 9]
+    ratusz: [18, 10]
+    blonia: [21, 10]
+    stare_miasto_1: [17, 9]
+    stare_miasto_2: [18, 9]
+    stare_miasto_3: [20, 10]
+    stare_miasto_4: [17, 11]
+    stare_miasto_5: [17, 12]
+    redakcja: [11, 8]
+    fala_koziolka: [12, 8]
+    agencja_nieruchomosci: [14, 8]
+    agencja_pracy: [15, 8]
+    poczta: [11, 9]
+    galeria: [13, 9]
+    gielda: [14, 9]
+    bank_1: [11, 11]
+    bank_2: [12, 11]
+    bank_3: [13, 11]
+    bank_4: [11, 12]
+    bank_5: [12, 12]
+    bank_6: [13, 12]
+    ubezpieczyciel: [14, 12]
+    centrum_1: [15, 9]
+    centrum_2: [16, 9]
+    centrum_3: [14, 11]
+    centrum_4: [15, 11]
+    centrum_5: [16, 11]
+    drukarnia: [2, 8]
+    agencja_lajk: [2, 9]
+    uczelnia: [3, 8]
+    ogrod_saski: [7, 8]
+    ogrod_botaniczny: [2, 11]
+    biedronka: [5, 12]
+    akademickie_1: [5, 9]
+    akademickie_2: [6, 9]
+    akademickie_3: [4, 11]
+    akademickie_4: [5, 11]
+    akademia: [9, 17]
+    politechnika_1: [9, 15]
+    politechnika_2: [12, 16]
+    politechnika_3: [11, 18]
+    harpagon: [13, 16]
+    detektyw: [16, 17]
+    dworzec_1: [13, 15]
+    dworzec_2: [13, 17]
+    dworzec_3: [14, 17]
+    dworzec_4: [15, 18]
+    park_ludowy: [19, 15]
+    auchan: [19, 18]
+    stolarnia: [21, 19]
+    zygmuntowskie_1: [21, 15]
+    zygmuntowskie_2: [22, 18]
+    zygmuntowskie_3: [20, 17]
+    park_bronowicki: [25, 8]
+    makro: [27, 8]
+    selgros: [27, 11]
+    eurocash: [25, 16]
+    sprzet_gastro: [27, 16]
+    felin_1: [25, 11]
+    felin_2: [29, 12]
+    felin_3: [27, 18]
+    lidl: [0, 15]
+    park_rury: [3, 16]
+    market_budowlany: [4, 20]
+    lsm_czuby_1: [6, 15]
+    lsm_czuby_2: [5, 16]
+    lsm_czuby_3: [3, 18]
+    lsm_czuby_4: [6, 18]
+    stokrotka: [9, 5]
+    czechow_1: [11, 6]
+    czechow_2: [14, 6]
+    czechow_3: [16, 4]
+    czechow_4: [19, 6]
+    zalew: [11, 21]
+    rozen: [9, 22]
+    zemborzyce_1: [10, 20]
+    zemborzyce_2: [15, 22]
+    zemborzyce_3: [17, 22]

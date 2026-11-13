@@ -1,0 +1,264 @@
+"""Gra: konfiguracja + decyzje wszystkich firm we wszystkich rundach. Stan liczony jest od nowa z decyzji
+(event sourcing), więc zapis gry to mały plik JSON, a powrót do dowolnej rundy jest prosty.
+
+Użycie:
+    g = Gra.nowa("Trening", [("Moja firma", None), ("Bot 1", "zrownowazony")], liczba_rund=12)
+    g.ustaw_decyzje("Moja firma", {...})      # decyzje bieżącej rundy
+    g.przelicz()                               # boty decydują same, runda się przelicza
+    g.stan().wyniki[2]["Moja firma"]
+"""
+from __future__ import annotations
+
+import json
+import secrets
+from copy import deepcopy
+from pathlib import Path
+
+from . import funkcje as fn
+from . import harmonogram as hm
+from .dane import Dane, dane_domyslne
+from .ludzie.kandydaci import pula_startowa
+from .model import Firma, StanGry, firma_z_slownika
+
+WERSJA_SILNIKA = "1.2"  # 1.1: kwoty w groszach; 1.2: lokale na mapie miasta
+# U17: refleksja drużyny przy wysyłaniu decyzji („Co zmieniamy w tej rundzie i dlaczego?”) – bez wpływu na wynik
+REFLEKSJA = ("wylaczona", "opcjonalna", "wymagana")
+
+
+class Gra:
+    def __init__(self, konfiguracja: dict, decyzje: dict | None = None, dane: Dane | None = None):
+        self.konfiguracja = konfiguracja
+        self.decyzje: dict[int, dict[str, dict]] = {int(k): v for k, v in (decyzje or {}).items()}
+        self.dane = hm.dla_gry(dane or dane_domyslne(), konfiguracja)   # z lokalami – z harmonogramem gry
+        self._stany: dict[int, StanGry] = {}
+
+    # --- tworzenie i zapis -----------------------------------------------------------------------
+    @classmethod
+    def nowa(cls, nazwa: str, firmy: list[tuple[str, str | None]], liczba_rund: int | None = None,
+             ziarno: int | str | None = None, dane: Dane | None = None, **opcje) -> Gra:
+        dane = dane or dane_domyslne()
+        if dane.mapa is None:
+            raise ValueError("Dane bez mapy miasta – gra bez lokali nie jest obsługiwana.")
+        konf = {"nazwa": nazwa, "ziarno": ziarno if ziarno is not None else secrets.randbelow(10**9),
+                "liczba_rund": liczba_rund or dane.katalog_ofert["rundy"]["domyslna_liczba"],
+                "firmy": [{"nazwa": n, "bot": b, **({"poziom": opcje["poziomy"][n]} if b and n in opcje.get("poziomy", {})
+                                                    else {})} for n, b in firmy],
+                "ceny_dostawcow": opcje.get("ceny_dostawcow", "dane"),
+                "kredyt_odnawialny": opcje.get("kredyt_odnawialny", "na_biezaco"),
+                "auto_zamowienia": bool(opcje.get("auto_zamowienia", False)),   # przycisk „Zamów brakujące” (MG)
+                # B11: zaproszenia do klubu także dla botów (pomiary balans.warianty – bot ze strategią `kasyno`)
+                **({"kasyno_botow": True} if opcje.get("kasyno_botow") else {}),
+                # poprawki 2 (sprawa 6): MG może wyłączyć podkupywanie pracowników (bez klucza – wolno)
+                **({"podkupywanie": False} if opcje.get("podkupywanie") is False else {}),
+                "refleksja": _refleksja(opcje.get("refleksja") or "opcjonalna"),
+                "podpowiedzi": bool(opcje.get("podpowiedzi", False)),   # U19: rady na pierwsze rundy (MG)
+                "wersja_silnika": WERSJA_SILNIKA, "wersja_danych": dane.wersja,
+                "lokale": True}   # lokale z mapy miasta (dane/mapa); zapisy bez tego klucza – bez lokali
+        if opcje.get("kapital_startowy") is not None:  # mistrz gry może zmienić kapitał z danych
+            konf["kapital_startowy"] = float(opcje["kapital_startowy"])
+        # funkcje gry (raporty/funkcje/plan.md): pełna lista stanów; bez pola (testy, pomiary, stare gry) – odkryte
+        if (stany := fn.sprawdz_stany(dane, opcje.get("funkcje"))) is not None:
+            konf["funkcje"] = stany
+        if opcje.get("odblokowanie"):   # mistrz gry może zmienić tygodnie odblokowań
+            konf["odblokowanie"] = hm.sprawdz_zmiany(dane, opcje["odblokowanie"], {}, 1, konf["liczba_rund"], konf)
+        return cls(konf, {}, dane)
+
+    def do_slownika(self) -> dict:
+        return {"konfiguracja": self.konfiguracja, "decyzje": {str(k): v for k, v in self.decyzje.items()}}
+
+    def zapisz(self, plik: str | Path) -> None:
+        Path(plik).write_text(json.dumps(self.do_slownika(), ensure_ascii=False, indent=1), encoding="utf-8")
+
+    @classmethod
+    def wczytaj(cls, plik: str | Path, dane: Dane | None = None) -> Gra:
+        d = json.loads(Path(plik).read_text(encoding="utf-8"))
+        return cls(d["konfiguracja"], d.get("decyzje"), dane)
+
+    # --- stan ------------------------------------------------------------------------------------
+    @property
+    def runda_startowa(self) -> int:
+        """Pierwsza runda gry: 1 albo runda, od której gra startuje z zaimportowanego stanu prawdziwej gry."""
+        return int(self.konfiguracja.get("import", {}).get("runda", 1))
+
+    @property
+    def kapital_startowy(self) -> float:
+        return self.konfiguracja.get("kapital_startowy", self.dane.z["finanse"]["kapital_startowy"])
+
+    def stan_poczatkowy(self) -> StanGry:
+        kapital = self.kapital_startowy
+        firmy = {f["nazwa"]: Firma(nazwa=f["nazwa"], bot=f["bot"], nazwa_wyswietlana=f["nazwa"], gotowka=kapital)
+                 for f in self.konfiguracja["firmy"]}
+        # drużyna zaczyna bez lokalu – wybiera go z mapy miasta w rundzie przygotowawczej
+        imp = self.konfiguracja.get("import")
+        if imp:
+            for nazwa, d in imp.get("firmy", {}).items():
+                f = firma_z_slownika(d)
+                f.bot = firmy[nazwa].bot
+                firmy[nazwa] = f
+        return StanGry(runda=self.runda_startowa - 1, firmy=firmy,
+                       kandydaci=pula_startowa(self.dane, self.konfiguracja["ziarno"]))
+
+    @property
+    def runda(self) -> int:
+        """Bieżąca runda (do której zbierane są decyzje)."""
+        return max(self.decyzje_kompletne(), default=self.runda_startowa - 1) + 1
+
+    def decyzje_kompletne(self) -> list[int]:
+        """Rundy już przeliczone."""
+        return sorted(r for r, d in self.decyzje.items() if d.get("_przeliczona"))
+
+    def stan(self, runda: int | None = None) -> StanGry:
+        """Stan po rundzie `runda` (domyślnie po ostatniej przeliczonej)."""
+        start = self.runda_startowa - 1
+        cel = max(start, self.runda - 1 if runda is None else runda)
+        if cel in self._stany:
+            return self._stany[cel]
+        from .runda import przelicz_runde
+        poprz = max((r for r in self._stany if r < cel), default=None)
+        s = self._stany[poprz] if poprz is not None else self.stan_poczatkowy()
+        for r in range((poprz if poprz is not None else start) + 1, cel + 1):
+            s = przelicz_runde(self.dane, s, self._decyzje_do_przeliczenia(r), self.konfiguracja)
+            self._stany[r] = s
+        self._stany.setdefault(start, s if cel == start else self.stan_poczatkowy())
+        return s
+
+    def _decyzje_do_przeliczenia(self, runda: int) -> dict[str, dict]:
+        return {n: d for n, d in self.decyzje.get(runda, {}).items() if not n.startswith("_")}
+
+    # --- decyzje ---------------------------------------------------------------------------------
+    def ustaw_decyzje(self, firma: str, decyzje: dict, runda: int | None = None) -> None:
+        runda = runda or self.runda
+        if runda != self.runda:
+            raise ValueError(f"Decyzje można zmieniać tylko w bieżącej rundzie ({self.runda}).")
+        self.decyzje.setdefault(runda, {})[firma] = decyzje
+
+    def szkic(self, firma: str) -> dict:
+        """Decyzje firmy w bieżącej rundzie (wysłane albo robocze)."""
+        return self.decyzje.get(self.runda, {}).get(firma, {})
+
+    def wyslij(self, firma: str, wyslane: bool = True, refleksja: str | None = None) -> None:
+        """„Wyślij decyzje” (albo „Wróć do podejmowania decyzji”, gdy wyslane=False). `refleksja` – 1–2 zdania drużyny
+        dla mistrza gry (U17); przy opcji gry „wymagana” bez niej nie można wysłać decyzji."""
+        tekst = " ".join(str(refleksja or "").split())
+        if wyslane and not tekst and self.tryb_refleksji == "wymagana":
+            raise ValueError("Przed wysłaniem napiszcie w 1–2 zdaniach, co zmieniacie w tej rundzie i dlaczego.")
+        d = self.decyzje.setdefault(self.runda, {})
+        if wyslane and refleksja is not None and self.tryb_refleksji != "wylaczona":
+            if tekst:
+                d.setdefault("_refleksje", {})[firma] = tekst
+            else:
+                d.get("_refleksje", {}).pop(firma, None)
+        d.setdefault(firma, {})
+        lista = d.setdefault("_wyslane", [])
+        if wyslane and firma not in lista:
+            lista.append(firma)
+        elif not wyslane and firma in lista:
+            lista.remove(firma)
+
+    @property
+    def tryb_refleksji(self) -> str:
+        return self.konfiguracja.get("refleksja", "opcjonalna")   # zapisy sprzed U17 – opcjonalna
+
+    def ustaw_refleksje(self, tryb: str) -> None:
+        self.konfiguracja["refleksja"] = _refleksja(tryb)
+
+    def refleksje(self, runda: int) -> dict[str, str]:
+        """Refleksje drużyn zapisane przy wysłaniu decyzji danej rundy ({firma: tekst})."""
+        return dict(self.decyzje.get(runda, {}).get("_refleksje", {}))
+
+    def wyslane(self) -> list[str]:
+        return list(self.decyzje.get(self.runda, {}).get("_wyslane", []))
+
+    def brakujace(self) -> list[str]:
+        """Firmy prowadzone przez ludzi, które nie wysłały decyzji w bieżącej rundzie."""
+        wyslane = self.wyslane()
+        return [f["nazwa"] for f in self.konfiguracja["firmy"] if not f["bot"] and f["nazwa"] not in wyslane]
+
+    @property
+    def zakonczona(self) -> bool:
+        return self.runda > self.konfiguracja["liczba_rund"]
+
+    def przelicz(self, wymus: bool = False) -> StanGry:
+        """Przelicza bieżącą rundę (boty decydują same). Bez `wymus` wymaga decyzji wszystkich ludzi."""
+        r = self.runda
+        if r > self.konfiguracja["liczba_rund"]:
+            raise ValueError("Gra jest zakończona.")
+        if self.brakujace() and not wymus:
+            raise ValueError("Brak decyzji: " + ", ".join(self.brakujace()))
+        stan = self.stan(r - 1)
+        from .boty import decyzje_bota
+        d = self.decyzje.setdefault(r, {})
+        # „kto pierwszy, ten lepszy”: boty nie biorą kandydatów ze szkiców drużyn ludzi (silnik/ludzie/rynek_pracy.py)
+        from .ludzie.rynek_pracy import boty, zajeci
+        ludzi = set(zajeci(d, pomin=boty(self.konfiguracja)))
+        for f in self.konfiguracja["firmy"]:
+            if f["bot"] and f["nazwa"] not in d:
+                d[f["nazwa"]] = decyzje_bota(self.dane, stan, f["nazwa"], f["bot"], r, self.konfiguracja,
+                                             zajeci=ludzi)
+            d.setdefault(f["nazwa"], {})
+        d["_przeliczona"] = True
+        self._stany = {k: v for k, v in self._stany.items() if k < r}
+        return self.stan(r)
+
+    def cofnij(self) -> None:
+        """Cofa ostatnią przeliczoną rundę (decyzje ludzi zostają do poprawienia, botów są usuwane)."""
+        r = self.runda - 1
+        if r < self.runda_startowa:
+            return
+        d = self.decyzje.get(r, {})
+        d.pop("_przeliczona", None)
+        d.pop("_wyslane", None)
+        for f in self.konfiguracja["firmy"]:
+            if f["bot"]:
+                d.pop(f["nazwa"], None)
+        self._stany = {k: v for k, v in self._stany.items() if k < r}
+
+    def odslon(self, firma: str, funkcja: str, odslonic: bool = True) -> None:
+        """Drużyna odsłania zakrytą funkcję (albo znów ją zakrywa) – od bieżącej, jeszcze nieprzeliczonej rundy."""
+        if self.runda > self.konfiguracja["liczba_rund"]:
+            raise ValueError("Gra jest zakończona.")
+        if not odslonic and fn.odslonieta(self.konfiguracja, firma, funkcja, self.runda) and (
+                b := fn.blokada_zakrycia(funkcja, self.stan(self.runda - 1).firmy.get(firma))):
+            raise ValueError(b)   # K2: np. Harpagon z niespłaconą pożyczką
+        fn.odslon(self.konfiguracja, firma, funkcja, odslonic, self.runda)
+
+    def ustaw_odblokowanie(self, zmiany: dict) -> None:
+        """Mistrz gry zmienia tygodnie odblokowań ({element: tydzień}) – tylko elementy jeszcze zablokowane."""
+        if not self.konfiguracja.get("lokale"):
+            raise ValueError("Harmonogram odblokowań jest tylko w grze z lokalami.")
+        nowe = hm.sprawdz_zmiany(self.dane, zmiany, self.konfiguracja.get("odblokowanie") or {}, self.runda,
+                                 self.konfiguracja["liczba_rund"], self.konfiguracja)
+        self.konfiguracja.pop("odblokowanie", None)
+        if nowe:
+            self.konfiguracja["odblokowanie"] = nowe
+        self.dane = hm.dla_gry(self.dane, self.konfiguracja)
+        self._stany = {k: v for k, v in self._stany.items() if k < self.runda}   # przeliczone rundy bez zmian
+
+    def ustaw_inwestora(self, firma: str, kwota: float) -> None:
+        """Mistrz gry przysyła firmie z debetem ponad limit inwestora ratunkowego – wpłata na początku bieżącej rundy
+        (kwota 0 odwołuje); warunki w dane/zalozenia.yaml (silnik/pieniadze/inwestor.py)."""
+        from .pieniadze import inwestor as inw
+        if self.zakonczona:
+            raise ValueError("Gra jest zakończona.")
+        stan = self.stan(self.runda - 1)
+        if firma not in stan.firmy:
+            raise ValueError("Nie ma takiej firmy w grze.")
+        inwestorzy = dict(self.konfiguracja.get("inwestorzy") or {})
+        if kwota > 0:
+            inw.sprawdz(self.dane, stan.firmy[firma], kwota)
+            inwestorzy[firma] = {"runda": self.runda, "kwota": round(float(kwota), 2)}
+        elif (inwestorzy.get(firma) or {}).get("runda", 0) >= self.runda:   # wpłata jeszcze nieprzeliczona
+            inwestorzy.pop(firma)
+        self.konfiguracja.pop("inwestorzy", None)
+        if inwestorzy:
+            self.konfiguracja["inwestorzy"] = inwestorzy
+        self._stany = {k: v for k, v in self._stany.items() if k < self.runda}   # przeliczone rundy bez zmian
+
+    def kopia(self) -> Gra:
+        return Gra(deepcopy(self.konfiguracja), deepcopy(self.decyzje), self.dane)
+
+
+def _refleksja(tryb: str) -> str:
+    if tryb not in REFLEKSJA:
+        raise ValueError(f"Refleksja drużyn: {', '.join(REFLEKSJA)}.")
+    return tryb

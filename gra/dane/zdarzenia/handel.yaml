@@ -1,0 +1,47 @@
+opis: >-
+  Giełda handlu (gra z lokalami, silnik/rynek/handel.py). Każda drużyna i każdy bot może wystawić ogłoszenie:
+  towar z magazynu albo sprzęt ze stanowiska z ceną wywoławczą w widełkach. Wszyscy widzą ogłoszenia i licytują
+  je jawnie w następnej rundzie – wygrywa najwyższa oferta przy zamknięciu rundy. Obie strony dostają fakturę
+  w KPiR (VAT należny u sprzedawcy, naliczony u kupującego). Widełki ceny wywoławczej chronią przed przelewaniem
+  pieniędzy między drużynami „za grosz”.
+zrodlo: >-
+  Notatki „Prawidła świata” (handel między drużynami: towar, sprzęt i lokale po uzgodnionej cenie, z fakturą, w KPiR)
+  i „Ustalenia gry” (odblokowanie w rundzie 5); decyzja autora z 7.11.2026 (sprawa 19: rynek globalny dla wszystkich
+  graczy i botów, licytacja ogłoszeń). Widełki, krok przebicia, limity, zachowanie botów i teksty – założenia gry
+  (do potwierdzenia).
+handel:
+  od_rundy: 6
+  maks_ogloszen: 5       # ogłoszeń wystawionych przez drużynę w jednej rundzie
+  cena_min: 0.5          # cena wywoławcza brutto od 50% wartości (towar – koszt zakupu, sprzęt – cena katalogowa nowego)
+  cena_maks: 2.0         # do 200% wartości
+  krok_przebicia: 0.03   # kolejna oferta w licytacji – co najmniej 3% ponad prowadzącą (założenie: 2–5%)
+boty:                    # boty na giełdzie (limit ceny wg poziomu bota – dane/boty.yaml: poziomy.*.limit_handlu)
+  zapas_tygodni: 1.5     # zapas bota w tygodniach zużycia: nadwyżkę ponad niego wystawia, do niego dokupuje
+  min_wartosc: 150       # zł – mniejszej nadwyżki bot nie wystawia
+  cena_min: 0.6          # cena wywoławcza ogłoszeń bota: 60% wartości
+  maks_ogloszen: 2       # ogłoszeń bota w jednej rundzie
+  min_dni_terminu: 10    # bot kupuje tylko towar ważny co najmniej 10 dni od początku rundy licytacji
+  rezerwa_gotowki: 5000  # zł – gotówki, której bot nie przeznacza na licytacje
+  limit_handlu: 0.8      # najwyższa cena w licytacji (× wartość), gdy poziom bota jej nie podaje
+teksty:
+- >-
+  Przekazanie odbyło się na parkingu pod galerią, z bagażnika do bagażnika. Przechodzień zapytał, czy to legalne.
+  Było – ekipa {sprzedawca} wręczyła fakturę w dwóch egzemplarzach, a ekipa {kupujacy} podpisała się na masce
+  samochodu. Towar: {co}.
+- >-
+  Ekipa {kupujacy} przyjechała po {co} wózkiem sklepowym „pożyczonym” spod dyskontu. Pół drogi powrotnej wózek
+  skręcał sam w lewo, jakby chciał wrócić do domu. Dojechali. Faktura przetrwała, choć ma odcisk koła.
+- >-
+  Ekipa {sprzedawca} wystawiła fakturę ręcznie, bo drukarka akurat postanowiła mieć dzień refleksji. Pismo jest
+  czytelne w 80%, a pozostałe 20% ekipa {kupujacy} postanowiła traktować jako tajemnicę handlową. {co} – dostarczone.
+- >-
+  Licytacja była zacięta do ostatniej minuty, a ekipa {kupujacy} i tak chciała jeszcze rabat „za ładne oczy”.
+  Ekipa {sprzedawca} odpowiedziała, że oczy nie są środkiem płatniczym. Stanęło na cenie z licytacji i wspólnym
+  zdjęciu z {co}.
+- >-
+  Kurier miał przewieźć {co} „w godzinę”. Po trzech godzinach przysłał zdjęcie zachodu słońca nad Zalewem
+  Zemborzyckim z podpisem „prawie jestem”. Dojechał. Ekipy {kupujacy} i {sprzedawca} wymieniły się fakturą
+  i spojrzeniem pełnym zrozumienia.
+- >-
+  {co} przyjechało osobiście z ekipą {sprzedawca}, ubraną w koszulki z napisem „Nie jesteśmy hurtownią”. Ekipa
+  {kupujacy} uznała to za element negocjacji. Faktura ma pieczątkę w kształcie kota – innej nie było pod ręką.

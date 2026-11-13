@@ -1,0 +1,396 @@
+"""Agencja pracy w grze z lokalami (F3a.8): globalna pula, kanały rekrutacji, limit nowych, licytacje, podkupienia.
+
+Dane: dane/kandydaci.yaml – agencja (kanały pracuj.pl / agencja pracy / headhunter, limit, okresy wypowiedzenia).
+- Pula jest wspólna: zatrudniony kandydat znika z puli, zwolniony pracownik do niej wraca.
+- Kandydata widać w kanale, gdy kanał jest odblokowany i obejmuje jego gwiazdki. Bez wskazanego kanału zatrudnienie
+  idzie najtańszym (w złotych) kanałem, na który starcza czasu właściciela.
+- Najwyżej `limit_nowych` nowych pracowników na rundę (zatrudnienia + oferty podkupienia).
+- „Kto pierwszy, ten lepszy” (poprawki 2, sprawa 6): kandydata dostaje drużyna, która pierwsza zapisze zatrudnienie –
+  kontrola przy zapisie (`kontrola_zatrudnien`, silnik/na_zywo.py) odrzuca zatrudnienie kandydata, którego ma już
+  w szkicu decyzji inna drużyna; panel pokazuje go na żywo jako „zajęty” (`zajeci`). Boty nie biorą kandydatów
+  ze szkiców ludzi (silnik/gra.py → boty.decyzje_bota).
+- Licytacja (zapasowa – stare zapisy, boty): kilka firm zatrudnia tę samą osobę w tej samej rundzie → drużyna
+  prowadzona przez ludzi wygrywa z botem; między drużynami ludzi wygrywa wyższa pensja, przy remisie losowanie.
+  UF18: licytacje są widoczne – przy kandydacie panel pokazuje, ile innych drużyn złożyło już ofertę (bez kwot,
+  `zainteresowanie`), szef pracownika dostaje ostrzeżenie o próbie podkupienia (`ostrzezenia`), a po rundzie
+  raport mówi, kto wygrał i za ile.
+- Podkupienie (tylko przez headhuntera; mistrz gry może je wyłączyć – opcja gry `podkupywanie`): oferta dla pracownika innej firmy; obecny pracodawca może złożyć kontrofertę
+  w tej samej rundzie. Pracownik przyjmuje najlepszą ofertę, jeśli jest wyższa od jego pensji i od kontroferty;
+  wygrana kontroferta podnosi mu pensję. Umowa zlecenie – przejście od razu, umowa o pracę – po okresie
+  wypowiedzenia. Pracownika w okresie wypowiedzenia nie można zwolnić ani podkupić.
+- Okres wypowiedzenia (P6): jedna długość z danych (2 rundy) w obie strony – zwolniony pracownik na umowie o pracę
+  pracuje i dostaje pensję jeszcze przez okres wypowiedzenia, potem wraca do puli (`Odejscie` z pustym `do`).
+
+Kolejność w rundzie (silnik/runda.py): `przed_decyzjami` (limit, licytacje, podkupienia, zgoda na przenosiny) → decyzje firm
+(`zastosuj`: kanał, koszt, czas właściciela) → `po_decyzjach` (przejścia pracowników, opłaty headhuntera).
+"""
+from __future__ import annotations
+
+from .. import na_zywo as nz
+from ..dane import Dane
+from ..ksiegowosc.finanse import Ksiega, Rachunek, ksieguj
+from ..losowosc import strumien
+from ..model import Firma, Odejscie, Pracownik, StanGry
+from . import formy as fz
+from . import przenosiny as przen
+
+HEADHUNTER = "headhunter"
+
+
+def ustawienia(dane: Dane) -> dict:
+    return dane.rynek_pracy["agencja"]
+
+
+def kanaly(dane: Dane, runda: int) -> dict[str, dict]:
+    """Kanały rekrutacji z flagą `dostepny` w tej rundzie (kolejność jak w danych)."""
+    return {n: {**k, "dostepny": k["od_rundy"] <= runda} for n, k in ustawienia(dane)["kanaly"].items()}
+
+
+def koszt(dane: Dane, kanal: str, kandydat: dict) -> float:
+    k = ustawienia(dane)["kanaly"][kanal]
+    return k["oplata"] + k["mnoznik_rekrutacji"] * kandydat["koszt_rekrutacji"]
+
+
+def kanaly_kandydata(dane: Dane, kandydat: dict, runda: int) -> list[str]:
+    """Odblokowane kanały, w których widać kandydata – od najtańszego."""
+    ok = [n for n, k in kanaly(dane, runda).items() if k["dostepny"] and kandydat["gwiazdki"] in k["gwiazdki"]]
+    return sorted(ok, key=lambda n: koszt(dane, n, kandydat))
+
+
+def widoczni(dane: Dane, pula: list[dict], runda: int) -> list[dict]:
+    return [k for k in pula if kanaly_kandydata(dane, k, runda)]
+
+
+def staz(p: Pracownik, runda: int) -> int:
+    return max(0, runda - p.od_rundy)
+
+
+def okres_wypowiedzenia(dane: Dane, p: Pracownik, runda: int) -> int:
+    """Rundy do odejścia: bez wypowiedzenia (zlecenie, staż, B2B – UF21) 0, umowa o pracę wg danych (jedna długość,
+    wpisy wg stażu – na przyszłość)."""
+    if not fz.forma(dane, p.umowa)["wypowiedzenie"]:
+        return 0
+    s = staz(p, runda)
+    return max((w["rund"] for w in ustawienia(dane)["wypowiedzenie"] if s >= w["staz_od"]), default=0)
+
+
+def headhunter_dostepny(dane: Dane, runda: int) -> bool:
+    return kanaly(dane, runda)[HEADHUNTER]["dostepny"]
+
+
+def jako_kandydat(p: Pracownik) -> dict:
+    """Pracownik wracający do puli (zwolniony albo bez stanowiska w nowej firmie)."""
+    return {"id": p.id, "imie_nazwisko": p.imie_nazwisko, "gwiazdki": p.gwiazdki, "zawod": p.zawod,
+            "pensja_preferowana": p.pensja_preferowana, "koszt_rekrutacji": p.koszt_rekrutacji,
+            "koszt_odprawy": p.koszt_odprawy, "zadowolenie_klientow": p.zadowolenie_klientow,
+            "ryzyko_reklamacji": p.ryzyko_reklamacji, "cecha": p.cecha, "opis": p.opis, "wydajnosc": p.wydajnosc,
+            **({"student": True} if p.student else {})}
+
+
+def _raport() -> dict:
+    return {"zatrudnieni": [], "licytacje": [], "ponad_limit": [], "oferty_zlozone": [], "oferty_otrzymane": [], "odrzucone": [],
+            "odejscia": [], "przyjscia": [], "uwagi": [], "przenosiny": [], "przeniesieni": []}
+
+
+def podkupywanie_botow(dane: Dane) -> dict | None:
+    """Kalibracja B9: boty podkupują niedopłacanych (zalozenia.yaml: pracownicy.podkupywanie_botow); None – wyłączone."""
+    u = (dane.z.get("pracownicy") or {}).get("podkupywanie_botow")
+    return u if u and u.get("wlaczone") else None
+
+
+def przebicie(dane: Dane) -> float:
+    """O ile (ułamek) oferta podkupienia musi przebić obecną pensję i kontrofertę; 0 – wystarczy wyższa."""
+    u = podkupywanie_botow(dane)
+    return u["przebicie"] if u else 0.0
+
+
+def podkupywanie(konfiguracja: dict | None) -> bool:
+    """Opcja mistrza gry (poprawki 2, sprawa 6): czy wolno podkupywać pracowników innych firm (headhunter, kontroferty).
+    Domyślnie tak – jak przed wprowadzeniem opcji."""
+    return bool((konfiguracja or {}).get("podkupywanie", True))
+
+
+def boty(konfiguracja: dict | None) -> set[str]:
+    """Nazwy firm prowadzonych przez boty (z konfiguracji gry)."""
+    return {f["nazwa"] for f in (konfiguracja or {}).get("firmy", []) if f.get("bot")}
+
+
+def zajeci(szkice: dict, firma: str | None = None, pomin=frozenset()) -> dict[str, str]:
+    """„Kto pierwszy, ten lepszy”: kandydaci z puli, których zatrudnienie zapisała już inna drużyna (szkice decyzji
+    bieżącej rundy, bez `firma` i firm z `pomin`, np. botów): {id kandydata: firma}. Przy starych zapisach z tym samym
+    kandydatem u kilku drużyn – pierwsza alfabetycznie (silnik i tak rozstrzyga to licytacją)."""
+    wynik: dict[str, str] = {}
+    for n, d in sorted(nz.szkice_innych(szkice, firma or "").items()):
+        if n in pomin:
+            continue
+        for z in d.get("zatrudnij") or []:
+            if z.get("kandydat"):
+                wynik.setdefault(z["kandydat"], n)
+    return wynik
+
+
+@nz.kontrola
+def kontrola_zatrudnien(dane, szkice: dict, firma: str, nowe: dict, stare: dict, runda: int,
+                        opcje: dict) -> list[str]:
+    """Kontrola zapisu (silnik/na_zywo.py): nowe zatrudnienie kandydata, którego ma już w szkicu inna drużyna ludzi,
+    jest odrzucone; przy wyłączonym przez MG podkupywaniu – także nowe oferty podkupienia. Wpisy obecne już
+    w poprzednim szkicu drużyny (`stare`) przechodzą – zapis innych zmian nie jest blokowany."""
+    bledy: list[str] = []
+    zaj = zajeci(szkice, firma, boty(opcje))
+    byli = {z.get("kandydat") for z in stare.get("zatrudnij") or []}
+    for z in nowe.get("zatrudnij") or []:
+        kid = z.get("kandydat")
+        if not kid or kid in byli or kid not in zaj:
+            continue
+        kto = zaj[kid]
+        imie = z.get("imie_nazwisko") or next((x.get("imie_nazwisko") for x in szkice[kto].get("zatrudnij") or []
+                                               if x.get("kandydat") == kid and x.get("imie_nazwisko")), None)
+        bledy.append(f"{'Kandydat ' + imie if imie else 'Ten kandydat'} jest już zatrudniany przez drużynę "
+                     f"{szkice[kto].get('nazwa') or kto} – kandydata dostaje drużyna, która pierwsza zapisze "
+                     "zatrudnienie.")
+    if not podkupywanie(opcje):
+        byly = {(o.get("firma"), o.get("pracownik")) for o in stare.get("podkup") or []}
+        if any((o.get("firma"), o.get("pracownik")) not in byly for o in nowe.get("podkup") or []):
+            bledy.append("Mistrz gry wyłączył w tej grze podkupywanie pracowników innych drużyn.")
+    return bledy
+
+
+def przed_decyzjami(dane: Dane, s: StanGry, decyzje: dict[str, dict], runda: int, ziarno,
+                    podglad: bool = False, podkupywanie: bool = True) -> tuple[dict, dict, dict]:
+    """Limit nowych, licytacje kandydatów, oferty podkupienia i zgoda na przenosiny do innego lokalu (UF20; w podglądzie
+    decyzji bez losowania). Zwraca (decyzje po filtrze, rezerwacje kandydatów {id: firma}, raporty firm).
+    Wygrane kontroferty podnoszą pensje, przyjęte oferty ustawiają `odchodzi`. `podkupywanie=False` (opcja MG)
+    – oferty podkupienia są odrzucane."""
+    limit = ustawienia(dane)["limit_nowych"]
+    raport = {n: _raport() for n in s.firmy}
+    nowe = {}
+    for n in s.firmy:
+        d = dict(decyzje.get(n, {}))
+        zatr = list(d.get("zatrudnij") or [])
+        podk = [o for o in (d.get("podkup") or []) if o.get("firma") != n]
+        if podk and not podkupywanie:
+            raport[n]["uwagi"].append("Mistrz gry wyłączył podkupywanie pracowników innych firm – "
+                                      f"oferty podkupienia odrzucone ({len(podk)}).")
+            podk = []
+        nadmiar = (zatr + podk)[limit:]
+        if nadmiar:
+            raport[n]["ponad_limit"] = nadmiar
+            raport[n]["uwagi"].append(f"Najwyżej {limit} nowych pracowników na rundę (zatrudnienia i oferty podkupienia) "
+                                      f"– {len(nadmiar)} odrzucone.")
+        d["zatrudnij"] = zatr[:limit]
+        d["podkup"] = podk[: max(0, limit - len(zatr))]
+        if d.get("zwolnij"):
+            f = s.firmy[n]
+            w_wypowiedzeniu = [pid for pid in d["zwolnij"] if pid in f.pracownicy and f.pracownicy[pid].odchodzi]
+            if w_wypowiedzeniu:
+                d["zwolnij"] = [pid for pid in d["zwolnij"] if pid not in w_wypowiedzeniu]
+                raport[n]["uwagi"].append("Pracownik w okresie wypowiedzenia odchodzi sam – nie można go zwolnić.")
+        if d.get("przenosiny") and not podglad:
+            d["przenosiny"], raport[n]["przenosiny"] = przen.rozstrzygnij(dane, s.firmy[n], n, d["przenosiny"], runda, ziarno)
+            for x in raport[n]["przenosiny"]:
+                if not x["zgoda"]:
+                    raport[n]["uwagi"].append(f"{x['imie_nazwisko']} nie zgodził(a) się na przejście do innego lokalu"
+                                              f"{' (' + x['powod'] + ')' if x.get('powod') else ''}.")
+        nowe[n] = d
+
+    # licytacje: ta sama osoba z puli u kilku firm
+    pula = {k["id"]: k for k in s.kandydaci}
+    oferty: dict[str, list[tuple[float, str]]] = {}
+    for n in sorted(nowe):
+        for z in nowe[n]["zatrudnij"]:
+            if z.get("kandydat") in pula:
+                pensja = float(z.get("pensja") or pula[z["kandydat"]]["pensja_preferowana"])
+                if not z.get("zastepca") and fz.odrzuca(dane, pula[z["kandydat"]], pensja, z.get("umowa", fz.PRACE)):
+                    continue   # kalibracja B9: oferta poniżej progu się nie liczy (kandydat ją odrzuci – decyzje.py)
+                # UF21: oferty różnych form porównywane w przeliczeniu na umowę o pracę (B2B ÷ 1,25, pół etatu × 2)
+                oferty.setdefault(z["kandydat"], []).append((round(fz.porownawcza(dane, pensja, z.get("umowa", "prace")), 2), n))
+    rezerwacje = {}
+    for kid, lista in sorted(oferty.items()):
+        # poprawki 2 (sprawa 6): drużyna ludzi wygrywa z botem; między drużynami ludzi – najwyższa pensja, remis losowo
+        rozstrzyga = [(p, n) for p, n in lista if not s.firmy[n].bot] or lista
+        najwyzsza = max(p for p, _ in rozstrzyga)
+        najlepsi = sorted({n for p, n in rozstrzyga if p == najwyzsza})
+        wygral = najlepsi[int(strumien(ziarno, runda, "rynek_pracy", "licytacja", kid).integers(len(najlepsi)))] \
+            if len(najlepsi) > 1 else najlepsi[0]
+        rezerwacje[kid] = wygral
+        if len({n for _, n in lista}) < 2:
+            continue
+        for p, n in lista:
+            raport[n]["licytacje"].append({"kandydat": kid, "imie_nazwisko": pula[kid]["imie_nazwisko"], "pensja": p,
+                                           "najwyzsza": najwyzsza, "wygrana": n == wygral, "remis": len(najlepsi) > 1,
+                                           "wygral": wygral, "druzyn": len({m for _, m in lista})})   # UF18
+            if n != wygral:
+                # przegrana licytacja: bot (zastepca) zatrudni kogoś podobnego, gracz – nikogo
+                nowe[n]["zatrudnij"] = [z for z in nowe[n]["zatrudnij"] if z.get("kandydat") != kid or z.get("zastepca")]
+                raport[n]["uwagi"].append(f"{pula[kid]['imie_nazwisko']}: licytację wygrała inna firma "
+                                          f"({_nazwa(s.firmy, wygral)}, pensja {najwyzsza:.0f} zł).")
+
+    # podkupienia
+    hh = headhunter_dostepny(dane, runda)
+    do_pracownika: dict[tuple[str, str], list[dict]] = {}
+    for n in sorted(nowe):
+        for o in nowe[n]["podkup"]:
+            cel = s.firmy.get(o.get("firma"))
+            p = cel.pracownicy.get(o.get("pracownik")) if cel else None
+            pensja = float(o.get("pensja") or 0)
+            wpis = {"pracownik": o.get("pracownik"), "firma": o.get("firma"), "pensja": pensja,
+                    "umowa": o.get("umowa", "prace"), "imie_nazwisko": p.imie_nazwisko if p else "?"}
+            powod = ("headhunter od rundy " + str(kanaly(dane, runda)[HEADHUNTER]["od_rundy"]) if not hh
+                     else "pracownika już nie ma" if p is None
+                     else "pracownik jest w okresie wypowiedzenia" if p.odchodzi
+                     else "na staż przyjmuje się tylko osoby z puli kandydatów" if wpis["umowa"] == fz.STAZ
+                     else f"pensja poniżej płacy minimalnej ({fz.placa_minimalna(dane, wpis['umowa']):.0f} zł)"
+                     if pensja < fz.placa_minimalna(dane, wpis["umowa"]) else None)
+            if powod:
+                raport[n]["oferty_zlozone"].append({**wpis, "wynik": "nieważna", "powod": powod})
+                raport[n]["uwagi"].append(f"Oferta dla {wpis['imie_nazwisko']} nieważna: {powod}.")
+                continue
+            do_pracownika.setdefault((o["firma"], o["pracownik"]), []).append({**wpis, "od": n})
+    for (firma, pid), lista in sorted(do_pracownika.items()):
+        f = s.firmy[firma]
+        p = f.pracownicy[pid]
+        kontra = float((nowe[firma].get("kontroferty") or {}).get(pid) or 0)
+        najwyzsza = max(o["pensja"] for o in lista)
+        najlepsi = [o for o in lista if o["pensja"] == najwyzsza]
+        best = najlepsi[int(strumien(ziarno, runda, "rynek_pracy", "podkupienie", pid).integers(len(najlepsi)))] \
+            if len(najlepsi) > 1 else najlepsi[0]
+        # kalibracja B9: oferta wygrywa, gdy jest o `przebicie` wyższa od pensji i kontroferty (0 – wystarczy wyższa)
+        prog = 1 + przebicie(dane)
+        przyjeta = najwyzsza > max(p.pensja, kontra) * prog
+        kontra_wygrywa = kontra * prog >= najwyzsza
+        okres = okres_wypowiedzenia(dane, p, runda)
+        if przyjeta:
+            p.odchodzi = Odejscie(do=best["od"], runda=runda + okres, pensja=best["pensja"], umowa=best["umowa"],
+                                  od_rundy=runda)
+            raport[firma]["uwagi"].append(f"{p.imie_nazwisko} przyjmuje ofertę firmy {_nazwa(s.firmy, best['od'])} "
+                                          f"({najwyzsza:.0f} zł) – " + (f"pracuje do rundy {runda + okres - 1}, potem odchodzi."
+                                                                       if okres else "odchodzi od razu."))
+        elif kontra_wygrywa and kontra > p.pensja:
+            p.pensja = kontra
+        wynik_pr = "odchodzi" if przyjeta else "kontroferta" if kontra_wygrywa else "odrzucona"
+        raport[firma]["oferty_otrzymane"].append({
+            "pracownik": pid, "imie_nazwisko": p.imie_nazwisko, "od": sorted({o["od"] for o in lista}), "najwyzsza": najwyzsza,
+            "kontroferta": kontra or None, "wynik": wynik_pr, "do": best["od"] if przyjeta else None,
+            "runda_odejscia": runda + okres if przyjeta else None})
+        for o in lista:
+            wygrana = przyjeta and o is best
+            raport[o["od"]]["oferty_zlozone"].append({
+                **{k: v for k, v in o.items() if k != "od"},
+                "wynik": "przyjeta" if wygrana else "kontroferta" if wynik_pr == "kontroferta"
+                else "inna_firma" if przyjeta else "odrzucona",
+                "runda_przejscia": runda + okres if wygrana else None,
+                # UF18: kto wygrał i za ile (kontroferta – kwota szefa)
+                "wygral": best["od"] if przyjeta else firma if wynik_pr == "kontroferta" else None,
+                "najwyzsza": najwyzsza if przyjeta else kontra if wynik_pr == "kontroferta" else None})
+    return nowe, rezerwacje, raport
+
+
+def pula_dla(pula: list[dict], rezerwacje: dict[str, str], firma: str) -> list[dict]:
+    """Kandydaci dostępni dla firmy w tej rundzie: bez tych, których licytację wygrała inna firma."""
+    return [k for k in pula if rezerwacje.get(k["id"], firma) == firma]
+
+
+def wolne_stanowisko(dane: Dane, f: Firma, zawod: str):
+    typ = dane.typ_zawodu(zawod)
+    return next((st for st in sorted(f.stanowiska_typu(typ), key=lambda st: st.nr) if not st.pracownik), None)
+
+
+def po_decyzjach(dane: Dane, s: StanGry, runda: int, raport: dict, ksiegi: dict[str, Ksiega],
+                 rachunki: dict[str, Rachunek]) -> None:
+    """Przejścia pracowników, których okres wypowiedzenia minął (i zleceniobiorców od razu), oraz opłaty headhuntera
+    za oferty przyjęte w tej rundzie. Nowa firma bez wolnego stanowiska – pracownik wraca do puli."""
+    czesc = ustawienia(dane)["kanaly"][HEADHUNTER]["podkupienie_czesc_pensji"]
+    for n in sorted(s.firmy):
+        f = s.firmy[n]
+        for pid in sorted(f.pracownicy):
+            p = f.pracownicy[pid]
+            o = p.odchodzi
+            if not o:
+                continue
+            if o.od_rundy == runda and o.do in s.firmy:   # opłata headhuntera przy przyjęciu oferty
+                ksieguj(s.firmy[o.do], ksiegi[o.do], rachunki[o.do], f"Headhunter: podkupienie {p.imie_nazwisko}",
+                        o.pensja * czesc)
+            if o.runda > runda:
+                continue
+            del f.pracownicy[pid]
+            st = f.stanowisko(dane.typ_zawodu(p.zawod), p.stanowisko)
+            if st and st.pracownik == pid:
+                st.pracownik = None
+            raport[n]["odejscia"].append({"pracownik": pid, "imie_nazwisko": p.imie_nazwisko, "do": o.do})
+            nowa = s.firmy.get(o.do)
+            st_n = wolne_stanowisko(dane, nowa, p.zawod) if nowa else None
+            if st_n is None:
+                s.kandydaci.append(jako_kandydat(p))
+                if nowa:
+                    raport[o.do]["uwagi"].append(f"{p.imie_nazwisko}: brak wolnego stanowiska w dniu przejścia "
+                                                 "– osoba wraca do puli kandydatów.")
+                continue
+            nowy = p.model_copy(update={"pensja_gr": 0, "odchodzi": None, "od_rundy": runda, "stanowisko": st_n.nr,
+                                        "premia_gr": 0, "umowa": o.umowa, "zadowolenie": None, "niezadowolony": 0})
+            nowy.pensja = o.pensja
+            nowa.pracownicy[pid] = nowy
+            st_n.pracownik = pid
+            raport[o.do]["przyjscia"].append({"pracownik": pid, "imie_nazwisko": p.imie_nazwisko, "od": n,
+                                              "stanowisko": st_n.nr})
+
+
+def oferty_dla(gra_decyzje: dict[str, dict], firma: Firma, nazwa: str) -> list[dict]:
+    """Bieżące (zapisane) oferty innych firm dla pracowników `firma` – do kontroferty w zakładce Rynek pracy."""
+    wynik = []
+    for od, d in sorted(gra_decyzje.items()):
+        if od == nazwa or od.startswith("_"):
+            continue
+        for o in d.get("podkup") or []:
+            p = firma.pracownicy.get(o.get("pracownik")) if o.get("firma") == nazwa else None
+            if p and not p.odchodzi:
+                wynik.append({"pracownik": p.id, "imie_nazwisko": p.imie_nazwisko, "od": od, "pensja": float(o.get("pensja") or 0),
+                              "umowa": o.get("umowa", "prace"), "obecna_pensja": p.pensja})
+    return wynik
+
+
+def zainteresowanie(gra_decyzje: dict[str, dict], nazwa: str) -> dict:
+    """UF18: ile innych drużyn złożyło w zapisanych decyzjach tej rundy ofertę dla kandydata z puli i dla pracownika
+    innej firmy – bez kwot: {"kandydaci": {id: liczba drużyn}, "pracownicy": {id: liczba drużyn}}."""
+    kto: dict[str, dict[str, set]] = {"kandydaci": {}, "pracownicy": {}}
+    for od, d in gra_decyzje.items():
+        if od == nazwa or od.startswith("_"):
+            continue
+        for z in d.get("zatrudnij") or []:
+            if z.get("kandydat"):
+                kto["kandydaci"].setdefault(z["kandydat"], set()).add(od)
+        for o in d.get("podkup") or []:
+            if o.get("pracownik") and o.get("firma") != od:
+                kto["pracownicy"].setdefault(o["pracownik"], set()).add(od)
+    return {r: {i: len(f) for i, f in sorted(m.items())} for r, m in kto.items()}
+
+
+def _nazwa(firmy: dict[str, Firma], n: str) -> str:
+    return (firmy[n].nazwa_wyswietlana or n) if n in firmy else n
+
+
+def ostrzezenia(oferty: list[dict], kontroferty: dict | None, firmy: dict[str, Firma] | None = None) -> list[dict]:
+    """UF18: lista błędów – próba podkupienia moich pracowników (oferty z `oferty_dla`). Bez kontroferty albo
+    z niższą – pomarańczowe, z kontrofertą nie niższą od najwyższej oferty – niebieskie."""
+    kf, wynik = kontroferty or {}, []
+    for pid in dict.fromkeys(o["pracownik"] for o in oferty):
+        moje = [o for o in oferty if o["pracownik"] == pid]
+        naj, k = max(o["pensja"] for o in moje), float(kf.get(pid) or 0)
+        kto = ", ".join(sorted({_nazwa(firmy or {}, o["od"]) for o in moje}))
+        if naj <= moje[0]["obecna_pensja"]:
+            continue   # oferta nie wyższa od pensji – pracownik i tak zostanie
+        if k >= naj:
+            wynik.append({"poziom": "niebieski", "zakladka": "rynek_pracy",
+                          "tekst": f"{moje[0]['imie_nazwisko']}: Twoja kontroferta ({k:.0f} zł) przebija ofertę drużyny {kto}."})
+        else:
+            wynik.append({"poziom": "pomaranczowy", "zakladka": "rynek_pracy",
+                          "tekst": f"{moje[0]['imie_nazwisko']} dostał(a) ofertę pracy od drużyny {kto} ({naj:.0f} zł, "
+                                   f"teraz {moje[0]['obecna_pensja']:.0f} zł) – bez kontroferty odejdzie."})
+    return wynik
+
+
+def pracownicy_rynku(dane: Dane, s: StanGry, nazwa: str, runda: int) -> list[dict]:
+    """Pracownicy innych firm (dla headhuntera): pensja, staż i okres wypowiedzenia."""
+    return [{"id": p.id, "imie_nazwisko": p.imie_nazwisko, "firma": n, "zawod": p.zawod, "gwiazdki": p.gwiazdki,
+             "pensja": p.pensja, "umowa": p.umowa, "student": p.student, "staz": staz(p, runda), "okres": okres_wypowiedzenia(dane, p, runda),
+             "odchodzi": bool(p.odchodzi)}
+            for n, f in sorted(s.firmy.items()) if n != nazwa for p in f.pracownicy.values()]

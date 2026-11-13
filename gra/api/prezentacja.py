@@ -1,0 +1,691 @@
+"""Dane dla interfejsu: wszystko, czego potrzebuje strona firmy w danej rundzie (jeden słownik JSON)."""
+from __future__ import annotations
+
+from fnmatch import fnmatchcase
+
+from silnik import autopilot as ap
+from silnik import funkcje as fn
+from silnik import harmonogram as hm
+from silnik import na_zywo as nz
+from silnik.dane import Dane
+from silnik.decyzje import (
+    cena_sprzedazy_sprzetu,
+    gotowe_uslugi,
+    kandydaci_firmy,
+    lista_bledow,
+    zastosuj,
+)
+from silnik.gra import Gra
+from silnik.ksiegowosc import biuro as bo
+from silnik.ksiegowosc import rozliczenie as rz
+from silnik.ksiegowosc import urzad as urz
+from silnik.ksiegowosc.finanse import Ksiega, Rachunek, zadluzenie
+from silnik.ksiegowosc.srodki_trwale import ewidencja, wybor_niskocennych
+from silnik.kuchnia import auto_dostawca as ad
+from silnik.kuchnia import magazyn as mag
+from silnik.kuchnia import menu as mn
+from silnik.kuchnia import swiezosc
+from silnik.kuchnia.dostawcy import ceny_rundy, oferta_rundy
+from silnik.kuchnia.dostawcy import info as info_dostawcy
+from silnik.ludzie import czas_wlasciciela as cw
+from silnik.ludzie import formy as fz
+from silnik.ludzie import przenosiny as przen
+from silnik.ludzie import rynek_pracy as rp
+from silnik.ludzie import szkolenia as szk
+from silnik.ludzie import zadowolenie as zo
+from silnik.model import Firma, do_slownika
+from silnik.nieruchomosci import licytacja_jawna as lj
+from silnik.nieruchomosci import per_lokal as pl
+from silnik.nieruchomosci import przejecia as pr
+from silnik.nieruchomosci.lokale import (
+    dostepne,
+    komunikat_odpoczynku,
+    koszt_wejscia,
+    na_mapie,
+    runda_nowego_lokalu,
+    stan_lokali,
+    wybierz,
+    zajete,
+)
+from silnik.pieniadze import banki as bk
+from silnik.pieniadze import inwestor as inw
+from silnik.pieniadze import kasyno as kas
+from silnik.pieniadze import lichwiarz as lw
+from silnik.pieniadze import wlasciciel as wl
+from silnik.rynek import handel as hd
+from silnik.rynek import kalendarz as kl
+from silnik.rynek import konkurencja as kn
+from silnik.rynek import opinie as op
+from silnik.rynek import promocje as pm
+from silnik.rynek import reklama as rk
+from silnik.rynek.popyt import rozruch, widok_popytu
+from silnik.swiat import awarie as aw
+from silnik.swiat import zdarzenia as zd
+from silnik.wyniki import karta as kw
+from silnik.wyniki.wnioski import dlaczego, tydzien, wnioski
+
+
+def _firma_slownik(f: Firma) -> dict:
+    d = do_slownika(f)
+    d["pracownicy"] = list(d["pracownicy"].values())
+    return d
+
+
+def stan_po_szkicu(gra: Gra, firma: str):
+    """Stan firmy po zastosowaniu roboczych decyzji bieżącej rundy (bez sprzedaży) + koszty tych decyzji."""
+    r = gra.runda
+    stan = gra.stan(r - 1).kopia()
+    f = stan.firmy[firma]
+    d = gra.szkic(firma)
+    ks, rach = Ksiega(vat=rz.reguly_vat(gra.dane)), Rachunek()
+    # funkcje gry – jak w przeliczeniu (silnik/autopilot.py): przepadek przy ponownym zakryciu (K1), wyłączone
+    # pominięte, zakryte robi gra
+    przepadek = ap.przepadek(gra.dane, f, gra.konfiguracja, r, ks)
+    d, bledy_funkcji = ap.decyzje_firmy(gra.dane, stan, firma, d, gra.konfiguracja, r)
+    bledy_funkcji = bledy_funkcji + przepadek["bledy"]
+    poprzednia_oferta = list(f.oferta)
+    # inwestor ratunkowy i blokada przy debecie ponad limit – jak w przeliczeniu (silnik/runda.py), U2: alarm na górze
+    inwestor = inw.poczatek_rundy(gra.dane, f, inw.przyznany(gra.konfiguracja, firma, r), r, rach)
+    alarm = inw.alarm(gra.dane, f)
+    d, blokady = inw.blokada(gra.dane, f, d)
+    # giełda handlu: licytacje, w których drużyna bierze udział, wg obecnych ofert wszystkich drużyn – na kopii
+    # stanu (druga strona – w pustej księdze; ostateczny wynik – w przeliczeniu, gdy oferty się już nie zmienią)
+    handel = hd.rozstrzygnij(gra.dane, stan.firmy, {**gra.decyzje.get(r, {}), firma: d}, r, {firma: ks},
+                             {firma: rach}, gra.konfiguracja["ziarno"], tylko=firma)[firma]
+    # lokal: pula po poprzedniej rundzie (o lokal wybrany w tej rundzie przez kilka drużyn rozstrzyga przeliczenie)
+    lokal = wybierz(gra.dane, f, d.get("lokal"), r, zajete(stan.firmy), ks, rach, liczba_firm=len(stan.firmy))
+    # kupno budynku i wypowiedzenia na kopii stanu (licytacja z innymi drużynami – dopiero w przeliczeniu)
+    przejecia = {"przejecie": pr.przejmij(gra.dane, stan.firmy, firma, d.get("przejecie"), r, None, ks, rach),
+                 "wypowiedzenia": pr.wypowiedz(gra.dane, stan.firmy, firma, d.get("wypowiedz"), r)}
+    # limit nowych i ważność ofert podkupienia (licytacje i odpowiedzi pracowników – dopiero w przeliczeniu)
+    dd, _, raport = rp.przed_decyzjami(gra.dane, stan.kopia(), {firma: d}, r, gra.konfiguracja["ziarno"], podglad=True,
+                                       podkupywanie=rp.podkupywanie(gra.konfiguracja))
+    d, uwagi_rp = dd[firma], raport[firma]["uwagi"]
+    bank_info = bk.poczatek_rundy(gra.dane, f, d, r, ks, rach)
+    harpagon_info = lw.poczatek_rundy(gra.dane, f, d, r, rach)   # wizyty – dopiero w przeliczeniu
+    # portfel właściciela i klub: stawki schodzą, wyniki gier – dopiero w przeliczeniu
+    portfel_info = wl.poczatek_rundy(gra.dane, f, d, r, rach, gra.konfiguracja["ziarno"], podglad=True)
+    info = zastosuj(gra.dane, f, d, r, stan.kandydaci, ceny_rundy(gra.dane, gra.konfiguracja["ziarno"], r,
+                                                                  gra.konfiguracja.get("ceny_dostawcow", "dane")), ks, rach)
+    info["lokal"] = lokal
+    info["bank"], info["leasing"] = bank_info, bk.leasing_wez(gra.dane, f, d, r, ks, rach)
+    info["harpagon"], info["przejecia"] = harpagon_info, przejecia
+    info["wlasciciel"], info["kasyno"] = portfel_info
+    info["urzad"] = urz.ustaw(gra.dane, f, d, r, gra.konfiguracja["ziarno"], ks, rach)
+    # nowe ogłoszenia – sprawdzone na stanie po zakupach (w przeliczeniu: po tygodniu sprzedaży)
+    info["handel"] = hd.raport(handel, hd.wystaw(gra.dane, stan.firmy, firma, d, r))
+    if gra.dane.zdarzenia:   # eventy w parkach: koszty wybranych opcji (skutki – dopiero w przeliczeniu)
+        czas = cw.z_podsumowania(info["czas_wlasciciela"])
+        info["zdarzenia"] = zd.rozegraj(gra.dane, f, d, r, gra.konfiguracja["ziarno"], ks, rach, czas, podglad=True)
+        info["konkurencja"] = kn.zlec(gra.dane, f, d, r, gra.konfiguracja["ziarno"], sorted(stan.firmy), ks, rach, czas,
+                                      podglad=True)   # wpadka – dopiero w przeliczeniu
+        info["czas_wlasciciela"] = czas.podsumowanie()
+    cw.zastosuj(gra.dane, f, info)   # wolne godziny właściciela – na puste stanowisko
+    bledy = alarm + blokady + inw.bledy(f, inwestor) + bledy_funkcji
+    bledy += lista_bledow(gra.dane, f, d, r, poprzednia_oferta, gra.konfiguracja.get("kredyt_odnawialny", "na_biezaco"),
+                          lokal, info)
+    bledy += [{"poziom": "czerwony", "zakladka": "rynek_pracy", "tekst": t} for t in uwagi_rp]
+    if rp.podkupywanie(gra.konfiguracja):   # UF18; opcja MG – bez podkupywania nie ma czego ostrzegać
+        bledy += rp.ostrzezenia(rp.oferty_dla(gra.decyzje.get(r, {}), f, firma), d.get("kontroferty"), stan.firmy)
+    # odrzucone kredyty, lokaty i leasing (zaległości i debet – dopiero w przeliczeniu)
+    odrzucone = (bank_info or {}).get("odrzucone", []) + info["leasing"]["odrzucone"]
+    bledy += [{"poziom": "czerwony", "zakladka": "finanse_bank", "tekst": f"{o['co']}: {o['powod']}."} for o in odrzucone]
+    bledy += lw.bledy(gra.dane, f, harpagon_info, r)
+    bledy += wl.bledy(*portfel_info)
+    bledy += hd.bledy(info["handel"])
+    bledy += pr.bledy(gra.dane, stan.firmy, firma, r, przejecia)
+    bledy += (info.get("zdarzenia") or {}).get("bledy", [])
+    bledy += kn.bledy(info.get("konkurencja"))
+    return stan, f, ks, info, fn.bez_ukrytych(gra.dane, gra.konfiguracja, firma, r, bledy)
+
+
+def _harmonogram(dane: Dane, runda: int) -> dict[str, int]:
+    """Tydzień elementów harmonogramu dla panelu; „reklama” – pierwsza agencja reklamowa (UF6: zakładka „Agencje reklamowe”)."""
+    h = {x["klucz"]: x["tydzien"] for x in hm.widok(dane, runda)}
+    if agencje := [t for k, t in h.items() if k.startswith("reklama_")]:
+        h["reklama"] = min(agencje)
+    return h
+
+
+def funkcje_widok(gra: Gra, firma: str, runda: int, harmonogram: dict[str, int]) -> dict[str, dict]:
+    """Funkcje gry dla drużyny (seria „funkcje”): {klucz: opis z funkcje.yaml + stan (mistrz gry), odslonieta,
+    aktywna (drużyna decyduje sama), od_rundy (najwcześniejszy element harmonogramu funkcji) i znaczek (J9)}.
+    Pusty słownik – dane bez funkcje.yaml (menu jak dawniej)."""
+    w = {}
+    for k, f in fn.rejestr(gra.dane).items():
+        tyg = [t for e, t in harmonogram.items() if any(fnmatchcase(e, x) for x in f.get("elementy", []))]
+        w[k] = {**{p: f[p] for p in ("nazwa", "krotko", "ikona", "opis", "zakryta", "zakladki")},
+                "zakrycie": f.get("zakrycie") or "",   # K1: co przepada przy ponownym zakryciu
+                "stan": fn.stan(gra.konfiguracja, k), "odslonieta": fn.odslonieta(gra.konfiguracja, firma, k, runda),
+                "aktywna": fn.aktywna(gra.konfiguracja, firma, k, runda), "od_rundy": min(tyg) if tyg else None,
+                "znaczek": None, "zakrycie_zablokowane": ""}
+        if w[k]["odslonieta"]:   # K2: np. Harpagona z niespłaconą pożyczką nie da się znów zakryć
+            w[k]["zakrycie_zablokowane"] = fn.blokada_zakrycia(k, gra.stan(runda - 1).firmy.get(firma))
+    return w
+
+
+def _zakryte(v: dict) -> set[str]:
+    """Funkcje, które gra robi za drużynę (zakryte przez mistrza gry i nieodsłonięte)."""
+    return {k for k, f in (v.get("funkcje") or {}).items() if f["stan"] == "zakryta" and not f["aktywna"]}
+
+
+def _zl(x: float) -> str:
+    return f"{x:,.0f}".replace(",", " ") + " zł"
+
+
+def znaczki_funkcji(v: dict) -> None:
+    """J9: znaczki na wyszarzonych pozycjach menu – co się dzieje w funkcji, którą gra robi za drużynę (krótki
+    tekst; zaczyna się liczbą – panel pokazuje liczbę, inaczej kropkę). Handel innych drużyn zakrytej funkcji
+    znika z widoku (ogłoszenia i zapowiedzi); zostaje tylko ich liczba w znaczku."""
+    zakryte, funkcje = _zakryte(v), v.get("funkcje") or {}
+    if not zakryte:
+        return
+    poprzednia = v["runda"] - 1
+    marki = v.get("marki") or {}
+    nazwa = lambda n: (marki.get(n) or {}).get("nazwa") or n   # noqa: E731
+    znaczki: dict[str, str | None] = {}
+    if "marketing" in zakryte and (r := v.get("reklama")):
+        strefy = {*r.get("moje_strefy", []), "miasto"}
+        kto = sorted({nazwa(n) for x in (r.get("konkurencja") or {}).values() for z, lista in x.items() if z in strefy
+                      for n in lista})
+        if kto:
+            znaczki["marketing"] = f"Kampanie konkurencji w Waszej strefie: {', '.join(kto)}"
+    if "urzedy" in zakryte:
+        teksty = [f"awaria bez ubezpieczenia ({s['tytul']}, {_zl(s['kwota'])})"
+                  for s in (v.get("ubezpieczenia") or {}).get("szkody", []) if s["runda"] == poprzednia and not s["ubezpieczona"]]
+        teksty += [f"kontrola sanepidu{f' – mandat {_zl(k['mandat'])}' if k.get('mandat') else ''}"
+                   for k in (v.get("urzad") or {}).get("kontrole", []) if k["runda"] == poprzednia]
+        if teksty:
+            znaczki["urzedy"] = "W zeszłej rundzie: " + "; ".join(teksty)
+    if "handel" in zakryte and (h := v.get("handel")):
+        cudze = [o for o in h.get("ogloszenia", []) if not o.get("moje")] + list(h.get("zapowiedzi", []))
+        if cudze:
+            znaczki["handel"] = f"{len(cudze)} – tyle ogłoszeń innych drużyn czeka na handlu"
+    if "zaopatrzenie" in zakryte:
+        braki = ((v.get("wyniki") or {}).get("swiezosc") or {}).get("wylaczone", [])
+        if braki:
+            co = sorted({b["skladnik"] for b in braki})
+            znaczki["zaopatrzenie"] = (f"{len(braki)} – tyle razy w zeszłej rundzie auto-dostawy nie wystarczyły i danie "
+                                       f"zniknęło z menu (brakło: {', '.join(co)})")
+    for k, t in znaczki.items():
+        funkcje[k]["znaczek"] = t
+    if "handel" in zakryte and v.get("handel"):   # cudze ogłoszenia – dopiero po odsłonięciu Handlu
+        v["handel"] = {**v["handel"], "ogloszenia": [o for o in v["handel"].get("ogloszenia", []) if o.get("moje")],
+                       "zapowiedzi": []}
+
+
+def kalendarz(dane: Dane, liczba_rund: int) -> dict:
+    """Nazwy rund dla strony: okres („tydzień”/„miesiąc” w przypadkach), nazwy i skróty rund 1…liczba_rund."""
+    rundy = range(1, liczba_rund + 1)
+    return {"okres": dane.okres, "tygodniowe": dane.tygodniowe, "rund_w_roku": dane.rund_w_roku,
+            "nazwy": [dane.nazwa_rundy(r) for r in rundy], "skroty": [dane.skrot_rundy(r) for r in rundy],
+            "miesiace": [dane.miesiac_rundy(r) for r in rundy]}
+
+
+def zadania_z_poprzedniej(gra, firma: str, szkic: dict) -> dict:
+    """UF22: nieodhaczone własne zadania drużyny przechodzą na kolejną rundę – szkic bez listy zadań dostaje
+    listę z ostatniej rundy, w której drużyna ją miała (do decyzji trafi przy pierwszym zapisie)."""
+    if "zadania_wlasne" in szkic:
+        return szkic
+    for r in range(gra.runda - 1, gra.runda_startowa - 1, -1):
+        stare = gra.decyzje.get(r, {}).get(firma, {}).get("zadania_wlasne")
+        if stare is not None:
+            reszta = [z for z in stare if isinstance(z, dict) and not z.get("zrobione")]
+            return {**szkic, "zadania_wlasne": reszta} if reszta else szkic
+    return szkic
+
+
+def nazwy_dan(dane: Dane, f: Firma) -> dict:
+    """Sprawa 4 (Poprawki 3): nazwy dań specjalnych strefy widoczne dla drużyny – w strefach jej lokali i w raportach
+    firmy (`mn.nazwa_dania`). Nazw innych stref panel nie dostaje (katalog dań wysyła tylko nazwy ogólne)."""
+    spec = mn.specjalne(dane)
+    return {"firma": {u: mn.nazwa_dania(dane, u, firma=f) for u in spec},
+            "strefy": {z: {u: mn.nazwa_dania(dane, u, strefa=z) for u in spec} for z in sorted(mn.strefy_firmy(dane, f))}}
+
+
+def katalogi(dane: Dane) -> dict:
+    uslugi = {u: {k: x for k, x in du.items() if k != "nazwy_stref"} for u, du in dane.uslugi.items()}
+    return {"mapa": dane.mapa, "uslugi": uslugi, "sprzet": dane.sprzet, "sprzet_kasy": dane.sprzet_kasy, "zawody": dane.zawody, "zasoby": dane.zasoby,
+            "oferty": dane.katalog_ofert, "placa_minimalna": dane.z["finanse"]["placa_minimalna"],
+            "parametry": {"kapital": dane.z["finanse"]["kapital_startowy"], "godziny": dane.z["operacje"]["godziny_pracownika"],
+                          "godziny_sprzetu": dane.z["operacje"]["godziny_sprzetu"],   # poprawki 3 (sprawa 11): wykres obłożenia sprzętu
+                          "zus": rz.zus_pracodawcy(dane), "zus_zlecenie": rz.zus_pracodawcy(dane, "zlecenie"),
+                          **fz.widok(dane),   # UF21: formy zatrudnienia i studenci
+                          # kalibracja B9/B10: ile rund działa szkolenie (0 – jedną, cena na rundę), tempo z zadowolenia
+                          "szkolenia_rund": szk.rund(dane), "wydajnosc_z_zadowolenia": zo.zasady_tempa(dane),
+                          "podkupywanie_botow": rp.podkupywanie_botow(dane),
+                          "amortyzacja_prog": dane.z["finanse"]["amortyzacja_prog"],
+                          "na_runde": 12 / dane.rund_w_roku, "rund_w_roku": dane.rund_w_roku,
+                          "sprzedaz_sprzetu": dane.z["finanse"]["sprzedaz_sprzetu"]}}
+
+
+def karta_skumulowana(gra: Gra, do_rundy: int) -> dict:
+    """Średnia kart wyników z rund 2…do_rundy (dla każdej firmy)."""
+    if do_rundy < 2:
+        return {}
+    stan = gra.stan(do_rundy)
+    wynik = {}
+    for f in stan.firmy:
+        karty = [stan.wyniki[r][f]["karta"] for r in range(2, do_rundy + 1)
+                 if r in stan.wyniki and f in stan.wyniki[r] and "karta" in stan.wyniki[r][f]]
+        if karty:
+            wynik[f] = {k: round(sum(c[k] for c in karty) / len(karty), 3) for k in karty[0]}
+    return wynik
+
+
+def historia_rankingu(dane, stan, do_rundy: int) -> dict:
+    """UF11: miejsca firm po każdej rundzie 2…do_rundy – jak `miejsca(karta_skumulowana(gra, R))`, ale z jednego stanu
+    (średni wynik działalności z rund 2…R, zaokrąglony jak w karcie skumulowanej; remis – kolejność firm w grze)."""
+    rundy = [r for r in range(2, do_rundy + 1) if r in stan.wyniki]
+    sumy: dict[str, list[float]] = {}
+    miejsca_r = {}
+    for r in rundy:
+        for f in stan.firmy:
+            karta = (stan.wyniki[r].get(f) or {}).get("karta")
+            if karta:
+                sumy.setdefault(f, []).append(karta["wynik_dzialalnosci"])
+        srednie = {f: round(sum(x) / len(x), 3) for f, x in sumy.items()}
+        miejsca_r[r] = miejsca({f: {"wynik_dzialalnosci": s} for f, s in srednie.items()})
+    return {"rundy": rundy, "etykiety": [dane.skrot_rundy(r) for r in rundy], "miejsca": miejsca_r,
+            "ostatnia": dane.nazwa_rundy(rundy[-1]) if rundy else ""}
+
+
+def miejsca(skum: dict) -> dict[str, int]:
+    """Miejsca firm w rankingu: średni wynik działalności z karty skumulowanej (pulpit drużyny i mistrz gry)."""
+    ranking = sorted(skum, key=lambda n: -skum[n]["wynik_dzialalnosci"])
+    return {n: i + 1 for i, n in enumerate(ranking)}
+
+
+# U19: tryb podpowiedzi (włącza mistrz gry) – przez pierwsze rundy Dashboard pokazuje 3 rzeczy do sprawdzenia.
+# Teksty z INSTRUKCJA rozdz. 15 („Dziesięć rad na dobry start”); trzeci element – zakładka panelu gracza.
+PODPOWIEDZI = (
+    (("Policz, zanim kupisz", "Kapitał startowy znika szybciej, niż się wydaje: kaucja, sprzęt, pierwsze pensje "
+      "i towar. Zostaw zapas na pensje i zamówienia następnej rundy.", "dashboard"),
+     ("Lokal to połowa sukcesu", "Tani lokal w pustej strefie jest drogi. Porównaj na mapie ruch i konkurencję "
+      "w strefach, zanim podpiszesz najem.", "lokale"),
+     ("Najedź na kółko „i”", "Każda zakładka i pole ma tam wyjaśnienie – przeczytaj je, zanim zgadniesz. "
+      "Przed wysłaniem sprawdź listę błędów.", "lista_bledow")),
+    (("Patrz na utraconą sprzedaż", "Jeśli klienci odchodzą z kolejki, brakuje ludzi, sprzętu albo miejsc "
+      "przy kasie. Sprawdź, ile sprzedaży przepadło w poprzedniej rundzie.", "sprzedaz"),
+     ("Cena to nie wszystko", "Najtańszy kebab w mieście z jednym kucharzem to kolejka, której nikt nie obsłuży. "
+      "Sprawdź obsadę kuchni i kasy.", "zatrudnienie"),
+     ("Zamawiaj pod prognozę, nie na zapas", "Przeterminowane jedzenie to strata i zaproszenie dla sanepidu. "
+      "Zamów tyle, ile sprzedasz do następnej dostawy.", "dostawcy")),
+    (("Czytaj kalendarz miejski", "Sesja, mecz, jarmark – zaplanuj obsadę i zamówienia, zanim tydzień "
+      "się zacznie.", "kalendarz"),
+     ("Dbaj o ludzi", "Niezadowolony pracownik odchodzi, a nowego trzeba znaleźć i przyuczyć. Lista błędów ostrzega "
+      "tydzień wcześniej – sprawdź pensje, sprzęt i przepracowanie.", "zatrudnienie"),
+     ("Nie bierz od Harpagona", "Szybka pożyczka kosztuje dużo więcej, niż pożyczasz. Gdy brakuje gotówki, "
+      "sprawdź najpierw kredyt w banku.", "bank")),
+)
+
+
+def podpowiedzi(gra, runda: int) -> list[dict]:
+    """U19: rady na Dashboardzie w pierwszych rundach gry, gdy mistrz gry włączył tryb podpowiedzi."""
+    nr = runda - gra.runda_startowa
+    if not gra.konfiguracja.get("podpowiedzi") or not 0 <= nr < len(PODPOWIEDZI):
+        return []
+    return [{"tytul": t, "tekst": x, "zakladka": z} for t, x, z in PODPOWIEDZI[nr]]
+
+
+def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
+    """Widok firmy w rundzie `runda` (domyślnie bieżąca). Decyzje: bieżąca runda – edytowalne, wcześniejsze – podgląd.
+    Wyniki w rundzie r: skutki decyzji z rundy r−1 (tak jak w całej grze). Po końcu gry runda N+1 to podsumowanie: wyniki
+    ostatniej rundy i końcowe miejsce, bez decyzji (Z7)."""
+    dane = gra.dane
+    biezaca = gra.runda
+    runda = min(runda or biezaca, biezaca)
+    runda = max(runda, gra.runda_startowa)
+    edycja = runda == biezaca and not gra.zakonczona
+    koniec = runda == biezaca and gra.zakonczona   # podsumowanie po ostatniej rundzie
+    v = {"gra": {"nazwa": gra.konfiguracja["nazwa"], "runda": biezaca, "liczba_rund": gra.konfiguracja["liczba_rund"],
+                 "zakonczona": gra.zakonczona, "firmy": gra.konfiguracja["firmy"], "wyslane": gra.wyslane(),
+                 "brakujace": gra.brakujace(), "ziarno": gra.konfiguracja["ziarno"], "runda_startowa": gra.runda_startowa,
+                 "konkurenci_stali": gra.konfiguracja.get("konkurenci_stali", []),
+                 "kredyt_odnawialny": gra.konfiguracja.get("kredyt_odnawialny", "na_biezaco"),
+                 "auto_zamowienia": bool(gra.konfiguracja.get("auto_zamowienia")),
+                 "refleksja": gra.tryb_refleksji,
+                 "podpowiedzi": bool(gra.konfiguracja.get("podpowiedzi")),
+                 "formy_zatrudnienia": fz.dozwolone(dane, gra.konfiguracja),   # UF21 (TYMCZASOWE – opcja MG)
+                 "podkupywanie": rp.podkupywanie(gra.konfiguracja),   # poprawki 2 (sprawa 6) – opcja MG
+                 "lokale": True,
+                 "kalendarz": kalendarz(dane, gra.konfiguracja["liczba_rund"])},
+         "refleksja": gra.refleksje(runda).get(firma),   # U17: co drużyna napisała przy wysłaniu decyzji
+         "podpowiedzi": podpowiedzi(gra, runda) if edycja else [],
+         "firma": firma, "runda": runda, "miesiac": dane.nazwa_rundy(runda), "edycja": edycja, "koniec": koniec,
+         "odblokowane": sorted(dane.odblokowane(runda)),
+         "harmonogram": _harmonogram(dane, runda)}   # z lokalami: tydzień elementu
+    v["funkcje"] = funkcje_widok(gra, firma, runda, v["harmonogram"])   # seria „funkcje”: menu używa tylko tego
+
+    if edycja:
+        stan, f, ks, info, bledy = stan_po_szkicu(gra, firma)
+        v["decyzje"] = zadania_z_poprzedniej(gra, firma, gra.szkic(firma))
+        v["wyslane"] = firma in gra.wyslane()
+    elif koniec:
+        stan = gra.stan(runda - 1)
+        f = stan.firmy[firma]
+        ks, info, bledy = Ksiega([]), {}, []
+        v["decyzje"], v["wyslane"] = {}, True
+    else:
+        stan = gra.stan(runda)
+        f = stan.firmy[firma]
+        ks = Ksiega(stan.wyniki[runda][firma]["kpir"]["pozycje"])
+        info, bledy = {}, stan.wyniki[runda][firma]["lista_bledow"]
+        v["decyzje"] = {k: w for k, w in gra.decyzje.get(runda, {}).get(firma, {}).items()}
+        v["wyslane"] = True
+    wr = stan.wyniki.get(runda, {}).get(firma, {})   # wyniki tej rundy (podgląd minionej rundy)
+    poprzedni = gra.stan(runda - 1)
+    v["stan"] = _firma_slownik(f)
+    v["nazwy_dan"] = nazwy_dan(dane, f)
+    v["stan"]["gotowe_uslugi"] = gotowe_uslugi(dane, f)
+    v["stan_przed"] = _firma_slownik(poprzedni.firmy[firma])
+    v["koszty_decyzji"] = ks.pozycje
+    v["nieudane_zatrudnienia"] = info.get("nieudane_zatrudnienia", [])
+    v["lista_bledow"] = bledy
+    v["kandydaci"] = (kandydaci_firmy(stan.kandydaci, f) if edycja
+                      else kandydaci_firmy(poprzedni.kandydaci, poprzedni.firmy[firma]))
+    v["ceny_dostawcow"], v["gazetki"] = oferta_rundy(dane, gra.konfiguracja["ziarno"], runda,
+                                                     gra.konfiguracja.get("ceny_dostawcow", "dane"))
+    v["dostawcy_info"] = {d: info_dostawcy(dane, d) for d in v["ceny_dostawcow"]}
+    v["ceny_sprzedazy_sprzetu"] = {n: {q: cena_sprzedazy_sprzetu(dane, c) for q, c in s["ceny"].items()}
+                                   for n, s in dane.sprzet.items()}
+
+    # marki firm (nazwa, slogan, kolor na mapie) – logo dopisuje api/widoki.py (_z_druzyna)
+    v["marki"] = {n: {"nazwa": f.nazwa_wyswietlana or n, "slogan": f.misja, "kolor": f.kolor}
+                  for n, f in poprzedni.firmy.items()}
+
+    # wyniki poprzedniej rundy (widoczne w tej rundzie)
+    if runda - 1 in poprzedni.wyniki:
+        w = poprzedni.wyniki.get(runda - 1, {})
+        v["wyniki"] = w.get(firma)
+        v["wnioski"] = wnioski(dane, v["wyniki"], poprzedni.wyniki.get(runda - 2, {}).get(firma), runda - 1, f)   # „Wnioski z rundy”
+        v["dlaczego"] = dlaczego(dane, v["wyniki"], poprzedni.wyniki.get(runda - 2, {}).get(firma))   # U16
+        # UF23: „Tydzień w liczbach” – liczby rundy z poprzednią (strzałki) i zdania-historie tygodnia
+        v["tydzien"] = tydzien(dane, v["wyniki"], poprzedni.wyniki.get(runda - 2, {}).get(firma), f)
+        v["rynek"] = poprzedni.rynek.get(runda - 1)
+        v["karta_skumulowana"] = karta_skumulowana(gra, runda - 1) if runda - 1 >= 2 else {}
+        v["dzielnik_karty"] = dane.z["karta_wynikow"]["wynik_ekonomiczny_dzielnik"]
+        # kalibracja 7.11: B12 – mandaty w dochodzie do karty, Z1 – waga nieruchomości w rozwoju (opis w Karcie wyników)
+        v["zasady_karty"] = {"mandaty": bool(dane.z["karta_wynikow"].get("mandaty_w_dochodzie")),
+                             "waga_nieruchomosci": kw.waga_nieruchomosci(dane)}
+        v["skala_karty"] = dane.z["karta_wynikow"].get("skala")   # U10: progi „średni” i „dobry” przy wskaźnikach
+        # poprawki 2 (sprawy 17/18): kolory wskaźników czasu pracy w Ludzie ▸ Zespół (wyniki)
+        v["progi_czasu_pracy"] = {"niski": dane.z["operacje"].get("niskie_obciazenie"),   # brak w danych zamrożonych testów
+                                  "przepracowanie": dane.z["karta_wynikow"]["kebab"]["zadowolenie_pracownikow"]["prog_przepracowania"]}
+        v["majatek_firm"] = {n: _majatek_netto(x) for n, x in w.items()}   # U13: majątek netto obok wyniku w rankingu
+        v["ranking"] = historia_rankingu(dane, poprzedni, runda - 1)   # UF11: zakładka Wyniki ▸ Ranking
+        v["historia"] = [{"runda": r, "miesiac": dane.nazwa_rundy(r), "skrot": dane.skrot_rundy(r), "karta": poprzedni.wyniki[r][firma].get("karta"),
+                          "dochod_netto": poprzedni.wyniki[r][firma]["kpir"]["dochod_netto"],
+                          "gotowka": poprzedni.wyniki[r][firma]["gotowka"]}
+                         for r in range(1, runda) if r in poprzedni.wyniki]
+    v["dashboard"] = _dashboard(gra, firma, runda, poprzedni, v.get("karta_skumulowana") or {})
+    v["lokale"] = _lokale(gra, firma, runda, f, poprzedni, stan, info if edycja else None)
+    zk = ((poprzedni.wyniki.get(runda - 1) or {}).get(firma, {}).get("karta") or {}).get("zadowolenie_klientow")
+    v["popyt"] = widok_popytu(dane, poprzedni, f, runda, zk)
+    v["kalendarz_miasta"] = kl.widok(dane, runda, gra.konfiguracja["liczba_rund"])
+    v["swiezosc"] = swiezosc.podsumowanie(dane, f, runda)
+    przet = sum(x["wartosc"] for x in ((v.get("wyniki") or {}).get("swiezosc") or {}).get("straty", []) if x["powod"] == "termin")
+    v["magazyn"] = mag.ryzyko(dane, f, runda, przet, urz.modyfikatory(dane, f, runda))
+    if urz.dane_urzedu(dane):
+        v["urzad"] = urz.widok(dane, f, runda, info.get("urzad") if edycja else wr.get("urzad"),
+                               poprzedni.wyniki, firma, przet)
+    v["dostawy_plan"] = (info or {}).get("dostawy") if edycja else wr.get("dostawy")
+    v["srodki_trwale"] = ewidencja(f)
+    v["czas_wlasciciela"] = ((info or {}).get("czas_wlasciciela") if edycja
+                             else wr.get("czas_wlasciciela")) or cw.nowy(dane).podsumowanie()
+    v["wlasciciel_stanowisko"] = ((info or {}).get("wlasciciel_stanowisko") if edycja
+                                  else wr.get("wlasciciel_stanowisko"))
+    if ad.zasady(dane) and f.lokale:   # Z4: auto-dostawca (zakładka Lokale → Dostawy i magazyn)
+        v["auto_dostawca"] = {"zasady": ad.zasady(dane),
+                              "przyjete": ((info or {}).get("auto_dostawy") if edycja else wr.get("auto_dostawy")) or {}}
+    if len(f.lokale) > 1:   # Z3: przewozy towaru między lokalami (zakładka Lokale → Dostawy i magazyn)
+        v["przewozy"] = {"zasady": pl.zasady_przewozu(dane), "przyjete": (info or {}).get("przewozy", []) if edycja else [],
+                         "uwagi": (info or {}).get("uwagi_przewozow", []) if edycja else []}
+    v["agencja"] = _agencja(gra, firma, runda, f, stan, edycja)
+    zam = ((info.get("kampanie") or {}) if edycja else (wr.get("reklama_agencje") or {}))
+    v["reklama"] = rk.widok(dane, f, runda, poprzedni.rynek.get(runda - 1), zam.get("zamowione"))
+    if pm.zasady(dane):
+        v["promocje"] = pm.widok(dane, f, runda, poprzedni.rynek.get(runda - 1),
+                                 info.get("promocje") if edycja else wr.get("promocje"))
+    v["przejecia"] = pr.widok(dane, stan.firmy, firma, runda,
+                              info.get("przejecia") if edycja else wr.get("przejecia"),
+                              (v.get("wyniki") or {}).get("przejecia"))
+    if dane.zdarzenia:
+        v["zdarzenia"] = zd.widok(dane, poprzedni.firmy[firma], runda, gra.konfiguracja["ziarno"], poprzedni.wyniki, firma)
+        wolne = {w["historia"]: w.get("wolne_przed") for w in ((info or {}).get("zdarzenia") or {}).get("sceny", [])}
+        for s in v["zdarzenia"]["aktywne"] if edycja else []:   # U8: godziny wolne na tę scenę (po wcześniejszych)
+            s["wolne"] = wolne.get(s["historia"])
+    if aw.dane_wypadkow(dane):
+        v["ubezpieczenia"] = aw.widok(dane, f, runda, info.get("ubezpieczenia") if edycja
+                                      else wr.get("ubezpieczenia"), poprzedni.wyniki, firma)
+    fp = poprzedni.firmy[firma]   # zastawy i limit – stan na początku rundy (przed decyzjami)
+    v["inwestor"] = inw.raport(f, None, 0.0)   # U11: inwestor ratunkowy (z wpłatą w tej rundzie – w podglądzie)
+    v["banki"] = {"najlepsze": bk.najlepsze(dane), "historia": bk.historia(fp, runda), "zastawy": bk.zastawy(dane, fp),
+                  "wolny_limit": bk.wolny_limit(dane, fp), "decyzja": {"bank": info.get("bank"), "leasing": info.get("leasing")}}
+    v["kandydaci"] = rp.widoczni(dane, v["kandydaci"], runda)
+    if wl.dane_portfela(dane):
+        v["wlasciciel"] = wl.widok(dane, fp, f, info.get("wlasciciel") if edycja
+                                   else wr.get("wlasciciel"))
+    historia = [{**t, "runda": t.get("runda", r)} for r in sorted(poprzedni.wyniki, reverse=True)
+                for t in ((poprzedni.wyniki[r].get(firma) or {}).get("handel") or {}).get("transakcje", [])]
+    v["handel"] = hd.widok(dane, poprzedni.firmy, firma, runda, info.get("handel") if edycja
+                           else wr.get("handel"), gra.decyzje.get(runda, {}) if edycja else None, historia)
+    # licytacja jawna: najwyższe oferty innych drużyn ze szkiców rundy (silnik/nieruchomosci/licytacja_jawna.py)
+    v["licytacja_jawna"] = lj.widok(dane, gra.decyzje.get(runda, {}), firma, stan.firmy, runda) if edycja else None
+    # poprawki 2: znacznik spraw na żywo (licytacje, zatrudnienia, handel innych drużyn) – panel porównuje go z api_stan
+    v["na_zywo"] = {"znacznik": nz.znacznik(gra.decyzje.get(runda, {}), firma)} if edycja else None
+    v["konkurencja"] = kn.widok(dane, firma, runda, gra.konfiguracja["ziarno"], v.get("rynek"),
+                                info.get("konkurencja") if edycja
+                                else (wr.get("konkurencja") or {}).get("zlecenie"))
+    klub = kas.widok(dane, fp, runda, info.get("kasyno") if edycja
+                     else (wr.get("kasyno") or {}).get("gry"), v.get("wyniki"))
+    if klub:
+        v["kasyno"] = klub
+    u = lw.ustawienia(dane)
+    v["harpagon"] = {"przed": lw.stan(dane, fp, runda), "po": lw.stan(dane, f, runda),
+                     "decyzja": info.get("harpagon"),
+                     "warunki": {k: u[k] for k in ("maks_kwota", "min_kwota", "oprocentowanie_rundy", "termin_rund",
+                                                   "odsetki_karne_rundy", "karne_od", "wizyty_od")}}
+    v["podatki"] = _podatki(dane, fp, runda, rz.rejestr(ks) if edycja else wr.get("vat"))
+    v["amortyzacja"] = {"prog": dane.z["finanse"]["amortyzacja_prog"], "stawki": dane.z["finanse"]["amortyzacja_roczna"],
+                        "niskocenne": wybor_niskocennych(dane)}   # B6: None – zakupy poniżej progu zawsze w koszty
+    v["ksiegowosc"] = bo.widok(dane, fp, f, v["decyzje"], v.get("wyniki"))
+    if edycja and fp.deklaracja:   # samodzielna księgowość: wynik podatkowy dopiero po deklaracji drużyny
+        v["wyniki"] = bo.ukryj(v.get("wyniki"))
+        v["ksiegowosc"]["ukryte"] = True
+        if v.get("historia"):
+            v["historia"][-1]["dochod_netto"] = None
+        v["dashboard"]["dochod_netto"] = None
+        v["podatki"]["stan"] = fp.deklaracja["stan_przed"]
+        v["podatki"]["stan_przed_deklaracja"] = True
+    znaczki_funkcji(v)   # J9: znaczki zakrytych funkcji; cudzy handel tylko po odsłonięciu
+    return v
+
+
+def _podatki(dane: Dane, fp: Firma, runda: int, rejestr: dict | None) -> dict:
+    """JDG (F3a.11): stawki, stan rozliczeń na początku rundy i VAT z decyzji (szkic) albo z rundy (wyniki)."""
+    p, roz = dane.podatki, fp.rozliczenie
+    return {"rejestr": rejestr, "ulga_na_start": rz.ulga_na_start(dane, runda),
+            "stan": {"vat_nadwyzka": roz.vat_nadwyzka, "dochod": roz.dochod, "zaliczki": roz.zaliczki,
+                     "zdrowotna_odliczona": roz.zdrowotna_odliczona, "zaplacone": roz.zaplacone},
+            "parametry": {"pit": p["pit_liniowy"], "zdrowotna": p["zdrowotna"]["stawka"],
+                          "zdrowotna_minimum": dane.na_runde(p["zdrowotna"]["minimalna_miesieczna"]),
+                          "limit_odliczenia": p["zdrowotna"]["limit_odliczenia_roczny"],
+                          "spoleczne": dane.na_runde(p["zus_wlasciciela"]["spoleczne_miesieczne"]),
+                          "ulga_rund": p["zus_wlasciciela"]["ulga_na_start_rund"], "zus_pracodawcy": p["zus_pracodawcy"],
+                          "zus_pracodawcy_zlecenie": rz.zus_pracodawcy(dane, "zlecenie"),
+                          "vat_uslug": {u: rz.stawka_sprzedazy(dane, u) for u in dane.uslugi},
+                          "vat_zasobow": {z: rz.stawka_zasobu(dane, z) for z in dane.zasoby},
+                          "vat_kosztow": p["vat"]["koszty"], "vat_srodkow_trwalych": p["vat"]["srodki_trwale"]}}
+
+
+def _agencja(gra: Gra, firma: str, runda: int, f: Firma, stan, edycja: bool) -> dict:
+    """Zakładka Rynek pracy: kanały rekrutacji, pracownicy innych firm (headhunter), oferty dla moich pracowników
+    (zapisane decyzje innych firm w tej rundzie – do kontroferty), staż i okres wypowiedzenia moich pracowników."""
+    dane = gra.dane
+    u = rp.ustawienia(dane)
+    szkice = gra.decyzje.get(runda, {})
+    podk = rp.podkupywanie(gra.konfiguracja)   # opcja MG (poprawki 2, sprawa 6)
+    zainteresowanie = rp.zainteresowanie(szkice, firma) if edycja else {"kandydaci": {}, "pracownicy": {}}
+    if not podk:
+        zainteresowanie["pracownicy"] = {}
+    return {"kanaly": rp.kanaly(dane, runda), "limit": u["limit_nowych"], "wypowiedzenie": u["wypowiedzenie"],
+            "kanaly_kandydatow": {k["id"]: rp.kanaly_kandydata(dane, k, runda) for k in stan.kandydaci},
+            "headhunter": rp.headhunter_dostepny(dane, runda),
+            "podkupywanie": podk,
+            "cudzy": rp.pracownicy_rynku(dane, stan, firma, runda) if podk and rp.headhunter_dostepny(dane, runda) else [],
+            "oferty_dla_mnie": rp.oferty_dla(szkice, f, firma) if edycja and podk else [],
+            # UF18: ile innych drużyn złożyło już ofertę (kandydaci z puli, pracownicy innych drużyn) – bez kwot
+            "zainteresowanie": zainteresowanie,
+            # „kto pierwszy, ten lepszy”: kandydaci, których zatrudnienie zapisała już inna drużyna ludzi
+            # {id: nazwa drużyny} – na żywo (silnik/na_zywo.py), przycisk „Zatrudnij” wyłączony
+            "zajeci": {kid: szkice[n].get("nazwa") or rp._nazwa(stan.firmy, n)
+                       for kid, n in rp.zajeci(szkice, firma, rp.boty(gra.konfiguracja)).items()} if edycja else {},
+            # UF20: szansa zgody na przejście do innego lokalu – panel liczy ją na żywo (wzór jak przenosiny.szansa)
+            "przenosiny": {"zasady": przen.ustawienia(dane),
+                           "prog": ((dane.z.get("pracownicy") or {}).get("odejscia") or {}).get("prog_zadowolenia", 0.0),
+                           "odleglosci": {a.id: {b.id: przen.odleglosc(dane, a.id, b.id) for b in f.lokale} for a in f.lokale}},
+            "moi": [{"id": p.id, "imie_nazwisko": p.imie_nazwisko, "zawod": p.zawod, "gwiazdki": p.gwiazdki, "pensja": p.pensja,
+                     "umowa": p.umowa, "student": p.student, "staz": rp.staz(p, runda), "okres": rp.okres_wypowiedzenia(dane, p, runda),
+                     "odchodzi": do_slownika(p.odchodzi) if p.odchodzi else None}
+                    for p in sorted(f.pracownicy.values(), key=lambda p: p.id)]}
+
+
+def _lokale(gra: Gra, firma: str, runda: int, f: Firma, poprzedni, stan, info: dict | None) -> dict:
+    """Zakładka Lokale i mapa: wolne lokale na początku rundy (z kosztem wejścia), kto zajmuje które lokale,
+    lokale firmy po decyzjach i wynik decyzji o lokalu."""
+    dane = gra.dane
+    zaj = zajete(poprzedni.firmy)
+    decyzja = info.get("lokal") if info is not None else stan.wyniki.get(runda, {}).get(firma, {}).get("lokal_decyzja")
+    return {"oferta": [{**lok, "wejscie": {fm: koszt_wejscia(dane, lok, fm) for fm in ("najem", "kupno")
+                                          if lok.get("czynsz" if fm == "najem" else "cena")}}
+                       for lok in dostepne(dane, runda, zaj, len(poprzedni.firmy))],
+            "na_mapie": [lok["id"] for lok in dane.mapa["lokale"] if na_mapie(lok, len(poprzedni.firmy))],
+            "zajete": zajete(stan.firmy) if info is None else zaj,
+            "moje": stan_lokali(dane, f, runda),
+            "nowy_od": runda_nowego_lokalu(dane, poprzedni.firmy[firma]),
+            "odpoczynek": komunikat_odpoczynku(dane, poprzedni.firmy[firma], runda)
+            if runda < runda_nowego_lokalu(dane, poprzedni.firmy[firma]) else None,
+            "decyzja": decyzja,
+            # U24: oceny i komentarze klientów (stan po poprzedniej rundzie) – publiczne, widać je na mapie
+            "opinie": op.publiczne(poprzedni.firmy) if op.ustawienia(dane) else {}}
+
+
+def _dashboard(gra: Gra, firma: str, runda: int, poprzedni, skum: dict) -> dict:
+    f = poprzedni.firmy[firma]
+    d = {"nazwa": f.nazwa_wyswietlana or firma, "saldo": f.gotowka, "dochod_netto": 0.0, "miejsce": None,
+         "liczba_firm": len(poprzedni.firmy), "lokaty": sum(l.kwota for l in f.lokaty),
+         "zadluzenie": sum(k.pozostalo for k in f.kredyty) + f.kredyt_odnawialny}
+    if runda - 1 in poprzedni.wyniki:
+        d["dochod_netto"] = poprzedni.wyniki[runda - 1][firma]["kpir"]["dochod_netto"]
+    d["miejsce"] = miejsca(skum).get(firma)   # Z7: jak ranking mistrza gry (średnia z rund 2…)
+    zr = gra.dane.mapa["popyt"]["model"].get("rozruch")
+    if zr:   # U9: lokale w rozruchu (poprzedni i bieżący tydzień sprzedaży) – wyjaśnienie straty na starcie
+        def mnoznik(lok, r):
+            return round(rozruch(gra.dane, lok, r), 2) if r >= max(lok.dziala_od, 2) else None
+        lokale = [{"nazwa": gra.dane.lokale[lok.id]["nazwa"], "poprzednia": mnoznik(lok, runda - 1),
+                   "teraz": mnoznik(lok, runda)} for lok in f.lokale]
+        d["rozruch"] = {"start": zr["start"], "przyrost": zr["przyrost"],
+                        "lokale": [x for x in lokale if any(m is not None and m < 1 for m in (x["poprzednia"], x["teraz"]))]}
+    return d
+
+
+def _majatek_netto(w: dict | None) -> float | None:
+    """Majątek netto firmy na koniec rundy (Z2); gry zapisane przed Z2 go nie mają."""
+    return ((w or {}).get("majatek_netto") or {}).get("razem")
+
+
+def _pusty(x):
+    return "" if x is None else x
+
+
+def tabela_wynikow(gra: Gra, co: str = "wyniki") -> tuple[list[str], list[list]]:
+    """Wyniki do arkusza (eksport CSV mistrza gry). `wyniki` – wiersz na firmę w każdej przeliczonej rundzie,
+    `ranking` – ranking po ostatniej przeliczonej rundzie (jak w panelu mistrza gry)."""
+    if co == "ranking":
+        p = przeglad_mg(gra)
+        firmy = sorted(p["firmy"], key=lambda f: (f.get("miejsce") is None, f.get("miejsce") or 0, f["nazwa"]))
+        return (["miejsce", "firma", "bot", "wynik działalności (średnia)", "dochód netto razem", "majątek netto",
+                 "gotówka", "zadłużenie", "lokaty", "pracownicy"],
+                [[f.get("miejsce", ""), f["nazwa"], f["strategia"] or "", f["wynik_skumulowany"] if f["wynik_skumulowany"] is not None else "",
+                  f["dochod_suma"], _pusty(f["majatek_netto"]), f["gotowka"], f["zadluzenie"], f["lokaty"],
+                  f["pracownicy"]] for f in firmy])
+    ostatnia = gra.runda - 1
+    stan = gra.stan(ostatnia)
+    strategie = gra.dane.boty["strategie"]
+    boty = {f["nazwa"]: strategie.get(f["bot"], {}).get("nazwa", f["bot"]) for f in gra.konfiguracja["firmy"] if f["bot"]}
+    wiersze = []
+    for r in range(gra.runda_startowa, ostatnia + 1):
+        karta = stan.rynek.get(r, {}).get("karta", {})
+        for n, w in stan.wyniki.get(r, {}).items():
+            k = w["kpir"]
+            wynik = karta.get(n, {}).get("wynik_dzialalnosci")
+            wiersze.append([r, gra.dane.skrot_rundy(r), n, boty.get(n, ""), k["przychody"], k["koszty"], k["dochod_netto"],
+                            w["gotowka"], w["zadluzenie"], _pusty(_majatek_netto(w)),
+                            float(wynik) if wynik is not None else "", gra.refleksje(r).get(n, "")])
+    return (["runda", "tydzień", "firma", "bot", "przychody", "koszty", "dochód netto", "gotówka", "zadłużenie",
+             "majątek netto", "wynik działalności", "refleksja drużyny"], wiersze)
+
+
+def przeglad_mg(gra: Gra) -> dict:
+    """Widok mistrza gry: bieżąca runda, kto wysłał decyzje, wyniki i ranking wszystkich firm, historia rund."""
+    dane, konf = gra.dane, gra.konfiguracja
+    r = gra.runda
+    ostatnia = r - 1  # ostatnia przeliczona runda
+    stan = gra.stan(ostatnia)
+    wyslane = set(gra.wyslane())
+    strategie = dane.boty["strategie"]
+    skum = karta_skumulowana(gra, ostatnia)
+    karta_ost = stan.rynek.get(ostatnia, {}).get("karta", {}) if ostatnia >= 2 else {}
+    rundy = [x for x in range(gra.runda_startowa, ostatnia + 1) if x in stan.wyniki]
+    firmy = []
+    for f in konf["firmy"]:
+        n = f["nazwa"]
+        fs = stan.firmy[n]
+        wyn = [stan.wyniki[x][n]["kpir"]["dochod_netto"] for x in rundy if n in stan.wyniki[x]]
+        firmy.append({
+            "nazwa": n, "kolor": fs.kolor, "bot": f["bot"], "strategia": strategie.get(f["bot"], {}).get("nazwa") if f["bot"] else None,
+            "poziom": f.get("poziom") if f["bot"] else None,
+            "wyslane": None if f["bot"] else n in wyslane,
+            "gotowka": fs.gotowka,
+            "zadluzenie": zadluzenie(fs),
+            "lokaty": sum(lk.kwota for lk in fs.lokaty),
+            "majatek_netto": _majatek_netto(stan.wyniki.get(ostatnia, {}).get(n)),
+            # Z3: debet ponad limit (blokada w bieżącej rundzie), inwestor ratunkowy i wpłata przysłana na tę rundę
+            "alarm": bk.debet_ponad_limit(dane, fs) if ostatnia >= gra.runda_startowa else 0.0,
+            "inwestor": inw.raport(fs, None, 0.0),
+            "inwestor_przyslany": inw.przyznany(konf, n, r),
+            "pracownicy": len(fs.pracownicy), "stanowiska": len(fs.stanowiska),
+            "dochod_ostatni": wyn[-1] if wyn else None, "dochod_suma": round(sum(wyn), 2),
+            "wynik_ostatni": karta_ost.get(n, {}).get("wynik_dzialalnosci"),
+            "wynik_skumulowany": skum.get(n, {}).get("wynik_dzialalnosci"),
+        })
+    miejsce = miejsca(skum)
+    for f in firmy:
+        if f["nazwa"] in miejsce:
+            f["miejsce"] = miejsce[f["nazwa"]]
+    return {
+        "gra": {"nazwa": konf["nazwa"], "runda": r, "liczba_rund": konf["liczba_rund"], "zakonczona": gra.zakonczona,
+                "ziarno": konf["ziarno"], "kapital": gra.kapital_startowy,
+                "kredyt_odnawialny": konf.get("kredyt_odnawialny", "na_biezaco"),
+                "auto_zamowienia": bool(konf.get("auto_zamowienia")),
+                "refleksja": gra.tryb_refleksji,
+                "podpowiedzi": bool(konf.get("podpowiedzi")),
+                # UF21 – TYMCZASOWE, usunąć przed oficjalną wersją: które formy zatrudnienia są w grze
+                "formy_zatrudnienia": fz.dozwolone(dane, konf),
+                "formy_wszystkie": {k: f["nazwa"] for k, f in fz.formy(dane).items()},
+                "podkupywanie": rp.podkupywanie(konf),   # poprawki 2 (sprawa 6): headhunter i kontroferty
+                "ceny_dostawcow": konf.get("ceny_dostawcow", "dane"),
+                "lokale": True,
+                "inwestor": inw.warunki(dane),   # warunki inwestora ratunkowego (Z3)
+                "brakujace": [] if gra.zakonczona else gra.brakujace(),
+                "kalendarz": kalendarz(dane, konf["liczba_rund"])},
+        "firmy": firmy,
+        # U17: refleksje drużyn – od najnowszej rundy (bieżąca: tylko wysłane decyzje)
+        "refleksje": [{"runda": x, "firma": n, "tekst": t} for x in range(r, gra.runda_startowa - 1, -1)
+                      for n, t in sorted(gra.refleksje(x).items())],
+        "historia": [{"runda": x, "skrot": dane.skrot_rundy(x),
+                      "dochod": {n: w["kpir"]["dochod_netto"] for n, w in stan.wyniki[x].items()},
+                      "gotowka": {n: w["gotowka"] for n, w in stan.wyniki[x].items()},
+                      "majatek": {n: _majatek_netto(w) for n, w in stan.wyniki[x].items()}} for x in rundy],
+    }

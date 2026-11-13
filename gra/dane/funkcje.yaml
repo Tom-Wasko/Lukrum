@@ -1,0 +1,168 @@
+opis: >-
+  Funkcje gry, które mistrz gry może zostawić odkryte, zakryć albo wyłączyć (seria „funkcje”). Podstawa gry (pulpit,
+  mapa, wyniki, wybór lokalu, mój lokal, kuchnia, rynek pracy i zespół, stanowiska i sprzęt, wyniki finansowe i bank,
+  biuro rachunkowe, lista błędów, wysyłanie decyzji) jest zawsze odkryta i jej tu nie ma.
+  Zakryta funkcja – drużyna widzi ją w menu wyszarzoną i sama odsłania; do tego czasu gra robi ją za drużynę
+  (pole `zakryta`). Wyłączona – nie ma jej w grze dla nikogo, także dla botów. Boty korzystają ze wszystkich funkcji,
+  które nie są wyłączone. `zakladki` – klucze zakładek panelu gracza (MENU w panel_gracza/static/zakladki/index.js;
+  budynki mapy z tą zakładką znikają razem z nią), `elementy` – elementy harmonogramu odblokowań
+  (silnik/harmonogram.py: elementy; `*` – dowolny ciąg, np. reklama_* – każda agencja), które wyłączona funkcja
+  wyłącza (tydzień liczba_rund + 1, jak „wyłączone” w harmonogramie mistrza gry). `zakrycie` – co przepada, gdy
+  drużyna znów zakryje odsłoniętą funkcję (silnik/autopilot.py: przepadek; brak – nic), pokazywane w oknie
+  ostrzeżenia przed zakryciem.
+zrodlo: decyzje autora 9–10.11.2026 (raporty/funkcje/plan.md, pomysł nauczyciela – gra przytłacza licealistów)
+# Zakupy, które gra robi za drużynę (zaopatrzenie zakryte albo wyłączone – silnik/autopilot.py): auto-dostawy
+# na prognozowany popyt lokalu × zapas, składniki w tej jakości (albo najbliższej niższej u auto-dostawcy).
+autopilot:
+  jakosc_zasobow: 2
+  zapas_zasobow: 1.2
+  zrodlo: jak boty (boty.yaml ustawienia.zapas_zasobow – B8, b8_zaopatrzenie); założenie serii funkcje (J5),
+    sprawdzane pomiarem pierwszej gry bez decyzji zakupowych. K5 (decyzja autora 10.11.2026) – jakość składników
+    jak stanowiska kuchni lokalu (lepsze z gwiazdek prowadzącego i sprzętu, ważone prognozą porcji;
+    silnik/autopilot.py, _jakosc_lokalu), jakosc_zasobow tylko dla lokalu bez stanowisk dań (2★ – podstawa gry)
+domyslny_zestaw: pierwsza_gra
+funkcje:
+  zaopatrzenie:
+    nazwa: Zaopatrzenie
+    krotko: dostawy, magazyn i świeżość
+    ikona: dostawcy
+    opis: >-
+      Sami wybieracie dostawców, jakość i dni dostaw oraz pilnujecie, co leży w chłodni. Dobrze zaplanowane zakupy
+      są tańsze niż automat i mniej towaru się psuje – samodzielne zamawianie daje wyraźnie większy zysk.
+    zakryta: >-
+      Gra zamawia składniki za Was: auto-dostawy u jednego dostawcy z ilościami liczonymi z prognozy sprzedaży
+      (automat bierze prowizję i nie szuka okazji).
+    zakladki: [zaop_dostawy, zaop_magazyn]
+    elementy: []
+  marketing:
+    nazwa: Marketing
+    krotko: promocje, ulotki i radio, internet
+    ikona: marketing
+    opis: >-
+      Kampanie reklamowe i promocje przyciągają klientów do Waszych lokali – do kilkudziesięciu procent więcej
+      popytu w strefie, ale kosztują i działają tylko wtedy, gdy kuchnia nadąży z obsługą.
+    zakryta: >-
+      Drużyna nie zamawia kampanii ani promocji – nie płaci, ale też nie dostaje dodatkowych klientów, a konkurenci
+      z kampanią w Waszej strefie odciągają część gości.
+    zakladki: [promocje, agencje, internet]
+    zakrycie: Trwające kampanie reklamowe i internetowe oraz promocje kończą się od razu.
+    elementy: [promocje, reklama_*, internet]
+  wyposazenie:
+    nazwa: Wyposażenie
+    krotko: stoliki, TV, klimatyzacja
+    ikona: wyposazenie
+    opis: >-
+      Rzeczy dla klientów w lokalu: stoliki, telewizor, klimatyzacja. Podnoszą atrakcyjność lokalu i ocenę gości.
+    zakryta: Lokal działa bez dodatków – nic się nie psuje, ale część klientów wybiera ładniejsze lokale.
+    zakladki: [wnetrze_wyposazenie]
+    zakrycie: Całe kupione wyposażenie we wszystkich lokalach przepada (jego wartość idzie w koszty).
+    elementy: [inwestycje_wyposazenie]
+  rozwoj:
+    nazwa: Rozwój ludzi
+    krotko: szkolenia i udogodnienia
+    ikona: szkolenia
+    opis: >-
+      Szkolenia podnoszą umiejętności zespołu, a udogodnienia (np. pokój socjalny) – zadowolenie pracowników.
+      Zadowoleni ludzie pracują szybciej i rzadziej odchodzą.
+    zakryta: Bez szkoleń i udogodnień – zadowolenie zależy tylko od pensji i warunków pracy.
+    zakladki: [hr_rozwoj]
+    zakrycie: >-
+      Trwające szkolenia się urywają, a udogodnienia we wszystkich lokalach przepadają (ich wartość idzie
+      w koszty).
+    elementy: [hr_udogodnienia, hr_szkolenia]
+  analiza:
+    nazwa: Analiza rynku
+    krotko: strefy, konkurencja, kalendarz
+    ikona: analiza
+    opis: >-
+      Dane o klientach w strefach miasta, o lokalach konkurencji i o wydarzeniach z kalendarza. Pomagają lepiej
+      przewidzieć popyt i dobrać ceny.
+    zakryta: Nic się nie zmienia w grze – to tylko widok danych, z którego na razie nie korzystacie.
+    zakladki: [klienci, konkurencja, kalendarz]
+    elementy: [detektyw]
+  siec:
+    nazwa: Sieć lokali
+    krotko: licytacje, przejęcia, przewozy
+    ikona: lokale
+    opis: >-
+      Licytacje wolnych lokali (oferta ponad cenę wywoławczą), kupno budynku z najemcą i przewozy towaru między
+      Waszymi lokalami. Kolejny lokal z „Nowych lokali” po cenie wywoławczej można wziąć zawsze.
+    zakryta: >-
+      Drużyna nie licytuje – lokal bierze po cenie wywoławczej; nie kupuje budynków z najemcą i nie przewozi
+      towaru między lokalami.
+    zakladki: [licytacje, przejecia, zaop_przewozy]
+    zakrycie: Lokale zostają. Licytacje, kupno budynku i przewozy z tej rundy się nie odbędą.
+    elementy: [licytacje, przejecia]
+  handel:
+    nazwa: Handel
+    krotko: handel z innymi drużynami
+    ikona: handel
+    opis: Ogłoszenia i licytacje między firmami – można sprzedać nadmiar towaru albo sprzęt i kupić taniej.
+    zakryta: Drużyna nie wystawia ogłoszeń i nie licytuje, a cudzych ogłoszeń nie widać.
+    zakladki: [handel]
+    zakrycie: >-
+      Wasze ogłoszenia znikają z giełdy (towar i sprzęt zostają w firmie), a oferty w licytacjach tej rundy
+      się nie liczą.
+    elementy: [handel]
+  ksiegowosc:
+    nazwa: Samodzielna księgowość
+    krotko: KPiR, VAT, podatki
+    ikona: kpir
+    opis: >-
+      Sami prowadzicie księgę przychodów i rozchodów, rozliczacie VAT i podatek. Oszczędzacie na biurze rachunkowym,
+      ale za błędy w księdze grożą kary.
+    zakryta: Firmę rozlicza biuro rachunkowe (wybór „samodzielnie” jest niedostępny), bez kar za błędy w księdze.
+    zakladki: [kpir, vat, podatki]
+    elementy: []
+  urzedy:
+    nazwa: Urzędy
+    krotko: urząd, sanepid, ubezpieczenia
+    ikona: urzad
+    opis: >-
+      Sprawy urzędowe lokalu: poziom higieny i kontrole sanepidu oraz ubezpieczenia, które chronią przed kosztami
+      awarii i wypadków.
+    zakryta: >-
+      Higiena na poziomie domyślnym, a lokal jest bez ubezpieczenia – awaria albo wypadek kosztuje całą kwotę.
+    zakladki: [urzad, sanepid, ubezpieczenia]
+    zakrycie: Polisy ubezpieczeniowe zostają wypowiedziane, a higiena wraca do poziomu domyślnego.
+    elementy: [sanepid, ubezpieczenia]
+  harpagon:
+    nazwa: Harpagon
+    krotko: pożyczki poza bankiem
+    ikona: harpagon
+    opis: Szybka, droga pożyczka poza bankiem – na ratunek, gdy bank nie da kredytu.
+    zakryta: Nic się nie dzieje – drużyna korzysta tylko z banku.
+    zakladki: [harpagon]
+    elementy: []
+  wlasciciel:
+    nazwa: Właściciel
+    krotko: czas właściciela, portfel
+    ikona: osoba
+    opis: >-
+      Właściciel firmy: na co poświęca czas (praca w lokalu, sprawy firmy) i jego prywatny portfel – wypłaty z firmy
+      i wpłaty do niej.
+    zakryta: Właściciel sam staje na pustym stanowisku, bez wypłat i wpłat.
+    zakladki: [czas_wlasciciela, wlasciciel]
+    elementy: []
+  gielda:
+    nazwa: Giełda
+    krotko: akcje i inwestycje właściciela
+    ikona: wykres
+    opis: Właściciel może inwestować prywatne pieniądze w akcje na giełdzie.
+    zakryta: Nic się nie dzieje – właściciel nie inwestuje.
+    zakladki: [gielda]
+    elementy: []
+zestawy:
+  pierwsza_gra:
+    nazwa: Pierwsza gra
+    opis: wszystkie funkcje zakryte – drużyny zaczynają od podstawy i same odsłaniają resztę
+    reszta: zakryta
+  pelna_gra:
+    nazwa: Pełna gra
+    opis: wszystkie funkcje odkryte (jak w grach sprzed serii „funkcje”)
+    reszta: odkryta
+  krotka_lekcja:
+    nazwa: Krótka lekcja
+    opis: na 1–2 lekcje – bez długich wątków (handel, harpagon, giełda, sieć lokali), reszta zakryta
+    reszta: zakryta
+    stany: {handel: wylaczona, harpagon: wylaczona, gielda: wylaczona, siec: wylaczona}

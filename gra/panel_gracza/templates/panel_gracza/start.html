@@ -1,0 +1,19 @@
+{% extends "panel_gracza/_pulpit.html" %}
+{% block tytul %}LUKRUM – moje gry{% endblock %}
+{% block podpis %}Moje gry{% endblock %}
+{% block tresc %}
+  <main class="scena-p">
+    <div class="glowa-p"><div>
+      <h1>{% if konto.nazwa %}Cześć, {{ konto.nazwa }}!{% else %}Twoje gry{% endif %}</h1>
+      <p class="pod-tytul">Tu widzisz, co dzieje się w Twoich grach: którą rundę gracie, czy drużyna wysłała decyzje i co nowego czeka w tej rundzie.</p>
+    </div><a class="btn jasny" href="/jak-grac">Jak grać – instrukcja</a></div>
+    {% if mg %}<div class="baner" id="baner-mg"><span class="ikona-mg"></span><span>Jesteś mistrzem gry: tu widzisz wszystkie gry tak jak drużyny.
+      Nowe gry zakładasz i prowadzisz na pulpicie mistrza gry.</span><a class="btn pom maly" href="/mg/">Pulpit mistrza gry</a></div>{% endif %}
+    <div id="gry"><p class="podpowiedz">Wczytywanie…</p></div>
+  </main>
+  <div class="stopka">Nazwy prawdziwych firm i miejsc oddają realia Lublina, a oferty, ceny i zdarzenia w grze są fikcyjne. Gra nie jest związana z tymi firmami.</div>
+{% endblock %}
+{% block skrypty %}
+  {{ mg|json_script:"mg" }}
+  <script type="module" src="{{ statyczne }}pulpit_ucznia.js"></script>
+{% endblock %}

@@ -1,0 +1,628 @@
+"""Dane gry i założenia (`dane/*.yaml`) w jednym obiekcie.
+
+Każdy plik ma `opis` i `zrodlo`; schematy w `silnik/schematy.py`. Sprawdzenie danych (schematy i odwołania
+między plikami, np. sprzęt usługi musi być w `sprzet.yaml`):
+
+    python -m silnik.dane sprawdz
+"""
+from __future__ import annotations
+
+import hashlib
+import sys
+from datetime import date, timedelta
+from functools import cached_property, lru_cache
+from pathlib import Path
+
+import yaml
+from pydantic import ValidationError
+
+from .schematy import (
+    OPCJONALNE,
+    SCHEMATY,
+    SCHEMATY_KALENDARZA,
+    SCHEMATY_MAPY,
+    SCHEMATY_ZDARZEN,
+    ZDARZENIA_OPCJONALNE,
+    PlikBankow,
+    PlikBiur,
+    PlikHarpagona,
+    PlikKlientow,
+    PlikPromocji,
+    PlikReklamy,
+    sprawdz_zalozenia,
+)
+
+KATALOG_GRY = Path(__file__).resolve().parents[1]
+KATALOG_DANYCH = KATALOG_GRY / "dane"   # testy mechanik: zamrożona kopia (testy/conftest.py)
+
+MIESIACE = ["styczen", "luty", "marzec", "kwiecien", "maj", "czerwiec", "lipiec", "sierpien", "wrzesien",
+            "pazdziernik", "listopad", "grudzien"]
+MIESIACE_NAZWY = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień",
+                  "Październik", "Listopad", "Grudzień"]
+# Słowa okresu rundy (katalog.yaml: rundy.kalendarz.okres)
+OKRESY = {
+    "tydzien": {"mianownik": "tydzień", "dopelniacz": "tygodnia", "miejscownik": "tygodniu", "skrot": "tydz.",
+                "przymiotnik": "Tygodniowy", "mnoga": "tygodnie"},
+    "miesiac": {"mianownik": "miesiąc", "dopelniacz": "miesiąca", "miejscownik": "miesiącu", "skrot": "mies.",
+                "przymiotnik": "Miesięczny", "mnoga": "miesiące"},
+}
+# Typy stanowisk (budowa modelu): kuchnia – pracownicy przygotowują dania, kasa – obsługa klientów.
+# Nazwy i zawody typów są w katalog.yaml: stanowiska.typy.
+KUCHNIA, KASA = "kuchnia", "kasa"
+TYPY_STANOWISK = (KUCHNIA, KASA)
+
+_Loader = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
+
+
+def _wczytaj(plik: Path):
+    return yaml.load(plik.read_text(encoding="utf-8"), Loader=_Loader)
+
+
+def _wartosci(wezel):
+    """Z drzewa założeń zostawia same wartości: {"a": {"wartosc": 1, ...}} → {"a": 1}."""
+    if isinstance(wezel, dict):
+        if "wartosc" in wezel:
+            return wezel["wartosc"]
+        return {k: _wartosci(v) for k, v in wezel.items() if k != "opis"}
+    return wezel
+
+
+def _wczytaj_mape(katalog: Path) -> dict | None:
+    """Mapa miasta (`dane/mapa/`): strefy, lokale z zasadami i zestawami sprzętu, budynki. Brak katalogu = gra bez lokali."""
+    if not (katalog / "strefy.yaml").exists():
+        return None
+    st, lo, bu, po, me, ba, ha, bi, re, pm = (_wczytaj(katalog / n) for n in SCHEMATY_MAPY if n != "klienci.yaml")
+    kl, mi = katalog / "klienci.yaml", katalog / "miasto.yaml"
+    return {"siatka": st["siatka"], "strefy": st["strefy"], "zasady": lo["zasady"], "zestawy": lo["zestawy"],
+            "lokale": lo["lokale"], "budynki": bu["budynki"],
+            "popyt": {k: po[k] for k in ("model", "dni_tygodnia", "strefy")},
+            "menu": {k: me[k] for k in ("jakosc", "zmiana_dania", "ceny")},
+            "banki": PlikBankow.model_validate(ba).model_dump(exclude={"opis", "zrodlo"}),  # z domyślnymi polami
+            "harpagon": PlikHarpagona.model_validate(ha).model_dump(exclude={"opis", "zrodlo"}),
+            "biura": PlikBiur.model_validate(bi).model_dump(exclude={"opis", "zrodlo"}),
+            "reklama": PlikReklamy.model_validate(re).model_dump(exclude={"opis", "zrodlo"}),
+            "promocje": PlikPromocji.model_validate(pm).model_dump(exclude={"opis", "zrodlo"}),
+            # U24: grupy klientów i opinie (brak pliku – mechanika wyłączona, np. dane zamrożone testów)
+            "klienci": PlikKlientow.model_validate(_wczytaj(kl)).model_dump(exclude={"opis", "zrodlo"}) if kl.exists() else None,
+            # M11: wygląd mapy Lublina (drogi, rzeka, układ dzielnic, ruch) – tylko do rysowania, silnik go nie czyta;
+            # brak pliku (np. dane zamrożone testów) – mapa rysowana prościej
+            "miasto": _wczytaj_miasto(mi) if mi.exists() else None}
+
+
+def _wczytaj_miasto(plik: Path) -> dict:
+    """Wygląd mapy (`dane/mapa/miasto.yaml`) bez opisu; punkt orientacyjny bez wymiarów zajmuje jedno pole."""
+    m = {k: w for k, w in _wczytaj(plik).items() if k not in ("opis", "zrodlo")}
+    for mc in m.get("miejsca", []):
+        mc["mapa"] = {"szer": 1, "gl": 1, **mc["mapa"]}
+    return m
+
+
+def _wczytaj_zdarzenia(katalog: Path) -> dict | None:
+    """Eventy (`dane/zdarzenia/`): parki (F3b.1), sanepid i bank żywności (magazyn), wypadki i ubezpieczyciel (losowe,
+    F3b.5), urząd i higiena (urzad, F3b.6). Brak katalogu = gra bez eventów."""
+    if not (katalog / "parki.yaml").exists():
+        return None
+    return {n.removesuffix(".yaml"): s.model_validate(_wczytaj(katalog / n)).model_dump(exclude={"opis", "zrodlo"})
+            for n, s in SCHEMATY_ZDARZEN.items()
+            if n not in ZDARZENIA_OPCJONALNE or (katalog / n).exists()}   # z domyślnymi polami
+
+
+def _wczytaj_kalendarz(katalog: Path) -> dict | None:
+    """Kalendarz miejski (`dane/kalendarz/`, F3b.9): święta, uczelnie, ferie, wydarzenia. Brak katalogu = bez kalendarza."""
+    if not (katalog / "kalendarz.yaml").exists():
+        return None
+    return {k: v for n, s in SCHEMATY_KALENDARZA.items()
+            for k, v in s.model_validate(_wczytaj(katalog / n)).model_dump(exclude={"opis", "zrodlo"}).items()}
+
+
+class Dane:
+    def __init__(self, katalog: Path | None = None):
+        self.katalog = katalog = katalog or KATALOG_DANYCH
+        self.pliki: dict[str, dict] = {p.name: _wczytaj(p) for p in sorted(katalog.glob("*.yaml"))}
+        p = self.pliki
+        self.uslugi: dict = p["uslugi.yaml"]["uslugi"]
+        self.pensje_kasy: dict = p["uslugi.yaml"]["pensje_rynkowe_kasy"]
+        self.sprzet: dict = p["sprzet.yaml"]["sprzet"]
+        self.zasoby: dict = p["zasoby.yaml"]["zasoby"]          # kolejność = kolejność w raportach
+        self.dostawcy: dict = p["dostawcy.yaml"]["ceny"]
+        self.dostawcy_pierwsi: list[str] = p["dostawcy.yaml"]["pierwsi"]
+        self.dostawcy_wszyscy_od: int = MIESIACE.index(p["dostawcy.yaml"]["wszyscy_od_miesiaca"])
+        self.dostawcy_info: dict = p["dostawcy.yaml"].get("dostawcy", {})   # dni dostaw, koszty, gazetki (F3a.6)
+        self.kandydaci: list = p["kandydaci.yaml"]["znani"]
+        self.rynek_pracy: dict = p["kandydaci.yaml"]
+        self.katalog_ofert: dict = p["katalog.yaml"]
+        kal = self.katalog_ofert["rundy"]["kalendarz"]
+        kal["start"] = str(kal["start"])  # YAML daje datę – w słownikach (i JSON-ie dla strony) tekst ISO
+        self.typy_stanowisk: dict = self.katalog_ofert["stanowiska"]["typy"]
+        self.boty: dict = p["boty.yaml"]
+        self.zalozenia_pelne: dict = p["zalozenia.yaml"]
+        self.z: dict = _wartosci(self.zalozenia_pelne)
+        self.mapa: dict | None = _wczytaj_mape(katalog / "mapa")
+        self.zdarzenia: dict | None = _wczytaj_zdarzenia(katalog / "zdarzenia")
+        self.kalendarz_miasta: dict | None = _wczytaj_kalendarz(katalog / "kalendarz")
+        self.podatki: dict | None = _wartosci(p["podatki_2026.yaml"]) if "podatki_2026.yaml" in p else None   # JDG (F3a.11)
+        # funkcje gry – zakryte i wyłączone (silnik/funkcje.py); brak pliku – wszystko odkryte
+        self.funkcje: dict | None = {k: v for k, v in p["funkcje.yaml"].items() if k not in ("opis", "zrodlo")}             if "funkcje.yaml" in p else None
+        # widok danych gry z lokalami (silnik/harmonogram.py: dla_gry) – harmonogram zakładek i tygodnie mistrza gry
+        self.odblokowanie_rund: dict[str, list[str]] | None = None
+        self.nadpisane_rundy: dict[str, int] = {}
+
+    @cached_property
+    def lokale(self) -> dict[str, dict]:
+        """Lokale z mapy po id (pusty słownik, gdy dane nie mają mapy)."""
+        return {lok["id"]: lok for lok in self.mapa["lokale"]} if self.mapa else {}
+
+    @cached_property
+    def sprzet_kasy(self) -> list[str]:
+        return [n for n, s in self.sprzet.items() if s["dla"] == KASA]
+
+    @cached_property
+    def zawody(self) -> list[str]:
+        """Wszystkie zawody: najpierw kuchni, potem kasy (kolejność jak w raportach)."""
+        return [z for t in TYPY_STANOWISK for z in self.typy_stanowisk[t]["zawody"]]
+
+    def zawody_typu(self, typ: str) -> list[str]:
+        return self.typy_stanowisk[typ]["zawody"]
+
+    def typ_zawodu(self, zawod: str) -> str:
+        """Typ stanowiska, na którym pracuje zawód."""
+        return KASA if zawod in self.zawody_typu(KASA) else KUCHNIA
+
+    @cached_property
+    def wersja(self) -> str:
+        """Skrót danych i założeń – w grze wieloosobowej wszyscy muszą mieć ten sam."""
+        h = hashlib.sha256()
+        for plik in sorted([*self.katalog.glob("*.yaml"), *self.katalog.glob("mapa/*.yaml"),
+                              *self.katalog.glob("zdarzenia/*.yaml"), *self.katalog.glob("kalendarz/*.yaml")]):
+            h.update(plik.read_bytes())
+        return h.hexdigest()[:12]
+
+    @cached_property
+    def maks_nowych_stanowisk(self) -> int:
+        """Największy pakiet stanowisk kupowany w jednej rundzie."""
+        return max(int(n) for n in self.katalog_ofert["stanowiska"]["pakiety"])
+
+    # --- kalendarz rund -------------------------------------------------------------------------
+    # Dane (pensje, czynsz, utrzymanie, opłaty) są w złotych na miesiąc; silnik księguje je na rundę (na_runde).
+    @property
+    def kalendarz(self) -> dict:
+        return self.katalog_ofert["rundy"]["kalendarz"]
+
+    @property
+    def rund_w_roku(self) -> int:
+        return int(self.kalendarz["rund_w_roku"])
+
+    @property
+    def tygodniowe(self) -> bool:
+        return self.kalendarz["okres"] == "tydzien"
+
+    @property
+    def okres(self) -> dict[str, str]:
+        """Słowa okresu rundy, np. {"mianownik": "tydzień", "dopelniacz": "tygodnia", …}."""
+        return OKRESY[self.kalendarz["okres"]]
+
+    def na_runde(self, kwota_miesieczna: float) -> float:
+        """Kwota miesięczna z danych przeliczona na jedną rundę (runda miesięczna – bez zmian)."""
+        if self.rund_w_roku == 12:
+            return kwota_miesieczna
+        return round(kwota_miesieczna * 12 / self.rund_w_roku, 2)
+
+    def data_rundy(self, runda: int) -> date:
+        """Pierwszy dzień rundy."""
+        s = date.fromisoformat(self.kalendarz["start"])
+        if self.tygodniowe:
+            return s + timedelta(days=7 * (runda - 1))
+        m = s.month - 1 + runda - 1
+        return date(s.year + m // 12, m % 12 + 1, 1)
+
+    def miesiac_rundy(self, runda: int) -> int:
+        """Miesiąc rundy (0 = styczeń) – do sezonowości i cen dostawców; tydzień należy do miesiąca swojego czwartku."""
+        d = self.data_rundy(runda)
+        return ((d + timedelta(days=3)) if self.tygodniowe else d).month - 1
+
+    def nazwa_rundy(self, runda: int) -> str:
+        """„Tydzień 3 (19–25.10)” albo „Luty”."""
+        if not self.tygodniowe:
+            return MIESIACE_NAZWY[self.miesiac_rundy(runda)]
+        a = self.data_rundy(runda)
+        b = a + timedelta(days=6)
+        od = f"{a.day}" if a.month == b.month else f"{a.day}.{a.month:02d}"
+        return f"Tydzień {runda} ({od}–{b.day}.{b.month:02d})"
+
+    def skrot_rundy(self, runda: int) -> str:
+        """Etykieta osi wykresów: „T3” albo „Lut”."""
+        return f"T{runda}" if self.tygodniowe else MIESIACE_NAZWY[self.miesiac_rundy(runda)][:3]
+
+    def odblokowane(self, runda: int) -> set[str]:
+        wynik = set()
+        for r, zakladki in (self.odblokowanie_rund or self.katalog_ofert["rundy"]["odblokowanie"]).items():
+            if int(r) <= runda:
+                wynik |= set(zakladki)
+        return wynik
+
+    def pozycje(self, rodzaj: str) -> dict[str, dict]:
+        """Pozycje katalogu po nazwie: udogodnienia, wyposazenie, media_tradycyjne, narzedzia_internetowe, banki, …"""
+        return {p["nazwa"]: p for p in self.katalog_ofert[rodzaj]["pozycje"]}
+
+    def dostepne(self, rodzaj: str, runda: int) -> dict[str, dict]:
+        """Pozycje katalogu dostępne w rundzie (pole od_rundy; brak = od początku gry)."""
+        return {n: p for n, p in self.pozycje(rodzaj).items() if p.get("od_rundy", 1) <= runda}
+
+
+def sprawdz(katalog: Path | None = None) -> list[str]:
+    """Błędy danych: brakujące pliki, schematy, założenia i odwołania między plikami (pusta lista = dane dobre)."""
+    katalog = katalog or KATALOG_DANYCH
+    bledy = []
+    for nazwa in [*SCHEMATY, "zalozenia.yaml"]:
+        if not (katalog / nazwa).exists() and nazwa not in OPCJONALNE:
+            bledy.append(f"brak pliku dane/{nazwa}")
+    if bledy:
+        return bledy
+    pliki = {p.name: _wczytaj(p) for p in sorted(katalog.glob("*.yaml"))}
+    for nazwa, schemat in SCHEMATY.items():
+        if nazwa not in pliki:
+            continue
+        try:
+            schemat.model_validate(pliki[nazwa])
+        except ValidationError as e:
+            for b in e.errors():
+                bledy.append(f"{nazwa}: {'.'.join(map(str, b['loc']))}: {b['msg']}")
+    bledy += sprawdz_zalozenia(pliki["zalozenia.yaml"])
+    mapa = katalog / "mapa"
+    if mapa.exists():
+        for nazwa, schemat in SCHEMATY_MAPY.items():
+            if not (mapa / nazwa).exists():
+                if nazwa == "klienci.yaml":   # U24: plik opcjonalny – bez niego grupy i opinie wyłączone
+                    continue
+                bledy.append(f"brak pliku dane/mapa/{nazwa}")
+                continue
+            try:
+                schemat.model_validate(_wczytaj(mapa / nazwa))
+            except ValidationError as e:
+                for b in e.errors():
+                    bledy.append(f"mapa/{nazwa}: {'.'.join(map(str, b['loc']))}: {b['msg']}")
+    zd = katalog / "zdarzenia"
+    if zd.exists():
+        for nazwa, schemat in SCHEMATY_ZDARZEN.items():
+            if not (zd / nazwa).exists():
+                if nazwa not in ZDARZENIA_OPCJONALNE:
+                    bledy.append(f"brak pliku dane/zdarzenia/{nazwa}")
+                continue
+            try:
+                schemat.model_validate(_wczytaj(zd / nazwa))
+            except ValidationError as e:
+                for b in e.errors():
+                    bledy.append(f"zdarzenia/{nazwa}: {'.'.join(map(str, b['loc']))}: {b['msg']}")
+    kal = katalog / "kalendarz"
+    if kal.exists():
+        for nazwa, schemat in SCHEMATY_KALENDARZA.items():
+            if not (kal / nazwa).exists():
+                bledy.append(f"brak pliku dane/kalendarz/{nazwa}")
+                continue
+            try:
+                schemat.model_validate(_wczytaj(kal / nazwa))
+            except ValidationError as e:
+                for b in e.errors():
+                    bledy.append(f"kalendarz/{nazwa}: {'.'.join(map(str, b['loc']))}: {b['msg']}")
+    if bledy:
+        return bledy
+
+    d = Dane(katalog)
+
+    def brak(co: str, gdzie: str, czego: str, plik: str):
+        bledy.append(f"{gdzie}: {co} – nie ma w {plik} ({czego})")
+
+    vat = d.podatki["vat"] if d.podatki else {"sprzedaz": {"uslugi": {}}, "zasoby": {"zasoby": {}}}
+    for u in vat["sprzedaz"]["uslugi"]:
+        if u not in d.uslugi:
+            brak(u, "podatki_2026.yaml: vat.sprzedaz.uslugi", "usługa", "uslugi.yaml")
+    for z in vat["zasoby"]["zasoby"]:
+        if z not in d.zasoby:
+            brak(z, "podatki_2026.yaml: vat.zasoby.zasoby", "zasób", "zasoby.yaml")
+    for u, x in d.uslugi.items():
+        for n in x["sprzet"]:
+            if d.sprzet.get(n, {}).get("dla") != KUCHNIA:
+                brak(n, f"uslugi.yaml: {u}", "sprzęt kuchni", "sprzet.yaml")
+        for z in x["zasoby"]:
+            if z not in d.zasoby:
+                brak(z, f"uslugi.yaml: {u}", "zasób", "zasoby.yaml")
+        if x["prowadzacy"] not in d.zawody_typu(KUCHNIA):
+            brak(x["prowadzacy"], f"uslugi.yaml: {u}", "zawód kuchni", "katalog.yaml: stanowiska.typy")
+    for z, x in d.zasoby.items():
+        g = x.get("zamiennik_dla")
+        if g is None:
+            continue
+        if g not in d.zasoby or d.zasoby[g].get("zamiennik_dla"):
+            brak(g, f"zasoby.yaml: {z}.zamiennik_dla", "zasób podstawowy", "zasoby.yaml")
+        elif d.zasoby[g]["jednostka"] != x["jednostka"]:
+            bledy.append(f"zasoby.yaml: {z}: zamiennik musi mieć tę samą jednostkę co {g}")
+    for m, ceny in d.dostawcy.items():
+        if m not in MIESIACE:
+            brak(m, "dostawcy.yaml: ceny", "miesiąc", "MIESIACE")
+        for dost, zasoby in ceny.items():
+            for z in zasoby:
+                if z not in d.zasoby:
+                    brak(z, f"dostawcy.yaml: {m}.{dost}", "zasób", "zasoby.yaml")
+    wszyscy = {dost for ceny in d.dostawcy.values() for dost in ceny}
+    for dost in d.dostawcy_pierwsi:
+        if dost not in wszyscy:
+            brak(dost, "dostawcy.yaml: pierwsi", "dostawca", "dostawcy.yaml: ceny")
+    if d.dostawcy_info:
+        for dost in sorted(wszyscy - set(d.dostawcy_info)):
+            brak(dost, "dostawcy.yaml: ceny", "dostawca", "dostawcy.yaml: dostawcy")
+        for dost, x in d.dostawcy_info.items():
+            g = x.get("gazetka")
+            if g and g["rabat_min"] > g["rabat_max"]:
+                bledy.append(f"dostawcy.yaml: {dost}.gazetka: rabat_min > rabat_max")
+    for b in (d.mapa or {}).get("budynki", []):
+        if b["rodzaj"] == "dostawca" and d.dostawcy_info and b["nazwa"] not in d.dostawcy_info:
+            brak(b["nazwa"], f"mapa/budynki.yaml: {b['id']}", "dostawca", "dostawcy.yaml: dostawcy")
+    for k in d.kandydaci:
+        if k["zawod"] not in d.zawody:
+            brak(k["zawod"], f"kandydaci.yaml: {k['imie_nazwisko']}", "zawód", "katalog.yaml: stanowiska.typy")
+    for i, st in enumerate(d.katalog_ofert["stanowiska"].get("startowe", [])):
+        for n, q in st["sprzet"].items():
+            if d.sprzet.get(n, {}).get("dla") != st["typ"]:
+                brak(n, f"katalog.yaml: stanowiska.startowe[{i}]", f"sprzęt typu {st['typ']}", "sprzet.yaml")
+            elif str(q) not in d.sprzet[n]["ceny"]:
+                brak(str(q), f"katalog.yaml: stanowiska.startowe[{i}].{n}", "jakość", "sprzet.yaml")
+    for u in d.katalog_ofert["rundy"]["uslugi_startowe"]:
+        if u not in d.uslugi:
+            brak(u, "katalog.yaml: rundy.uslugi_startowe", "usługa", "uslugi.yaml")
+    media, narzedzia = d.pozycje("media_tradycyjne"), d.pozycje("narzedzia_internetowe")
+    for s, st in d.boty["strategie"].items():
+        for u in st.get("dania_specjalne", []):
+            if u not in d.uslugi:
+                brak(u, f"boty.yaml: {s}.dania_specjalne", "danie", "uslugi.yaml")
+        for n in st["reklama"]:
+            if n not in media:
+                brak(n, f"boty.yaml: {s}.reklama", "medium", "katalog.yaml: media_tradycyjne")
+        for n in st["internet"]:
+            if n not in narzedzia:
+                brak(n, f"boty.yaml: {s}.internet", "narzędzie", "katalog.yaml: narzedzia_internetowe")
+    if d.funkcje:
+        bledy += _sprawdz_funkcje(d)
+    if d.kalendarz_miasta and not d.mapa:
+        bledy.append("kalendarz/: kalendarz miejski wymaga mapy (dane/mapa/)")
+    if d.mapa:
+        bledy += _sprawdz_mape(d, brak)
+        bledy += _sprawdz_dania_stref(d)
+        agencje = {**d.mapa["reklama"]["agencje"], **((d.mapa["reklama"].get("internet") or {}).get("agencje") or {})}
+        for s, st in d.boty["strategie"].items():
+            for x in st.get("kampanie", []):
+                a, _, k = x.partition("/")
+                if k not in (agencje.get(a) or {}).get("kanaly", {}):
+                    brak(x, f"boty.yaml: {s}.kampanie", "kampania (agencja/kanał)", "mapa/reklama.yaml")
+            for x in st.get("promocje", []):
+                if x["typ"] not in d.mapa["promocje"]["typy"]:
+                    brak(x["typ"], f"boty.yaml: {s}.promocje", "typ promocji", "mapa/promocje.yaml")
+    return bledy
+
+
+def _sprawdz_funkcje(d: Dane) -> list[str]:
+    """funkcje.yaml: każdy wzorzec elementu pasuje do elementu harmonogramu (silnik/harmonogram.py: elementy)."""
+    from fnmatch import fnmatchcase
+
+    from .harmonogram import elementy
+    el, bledy = elementy(d), []
+    for k, f in d.funkcje["funkcje"].items():
+        for w in f.get("elementy", []):
+            if el and not any(fnmatchcase(e, w) for e in el):
+                bledy.append(f"funkcje.yaml: {k}.elementy: {w} – nie ma takiego elementu harmonogramu")
+    return bledy
+
+
+def _sprawdz_dania_stref(d: Dane) -> list[str]:
+    """Dania specjalne strefy (sprawa 4, Poprawki 3): nazwa w każdej strefie mapy, nazwy różne od siebie i od innych dań."""
+    bledy, strefy = [], set(d.mapa["strefy"])
+    zajete = {du["nazwa"]: u for u, du in d.uslugi.items()}
+    for u, du in d.uslugi.items():
+        nazwy = du.get("nazwy_stref")
+        if not nazwy:
+            continue
+        for s in sorted(strefy ^ set(nazwy)):
+            bledy.append(f"uslugi.yaml: {u}.nazwy_stref: " + (f"brak nazwy dla strefy {s}" if s in strefy
+                                                              else f"nieznana strefa {s} (mapa/strefy.yaml)"))
+        for s, n in nazwy.items():
+            if n in zajete and zajete[n] != (u, s):
+                bledy.append(f"uslugi.yaml: {u}.nazwy_stref.{s}: nazwa „{n}” jest już użyta")
+            zajete[n] = (u, s)
+    return bledy
+
+
+def _sprawdz_mape(d: Dane, brak) -> list[str]:
+    """Odwołania mapy: strefy, zestawy (sprzęt i miejsca), położenie na siatce bez nakładania się."""
+    bledy = []
+    m = d.mapa
+    sz, gl = m["siatka"]["szer"], m["siatka"]["gl"]
+    pola: dict[tuple[int, int], str] = {}
+
+    def poloz(co: str, strefa: str, x: int, y: int, w: int = 1, h: int = 1):
+        if strefa not in m["strefy"]:
+            brak(strefa, co, "strefa", "mapa/strefy.yaml")
+            return
+        r = m["strefy"][strefa]["mapa"]
+        if not (r["x"] <= x and x + w <= r["x"] + r["szer"] and r["y"] <= y and y + h <= r["y"] + r["gl"]):
+            bledy.append(f"{co}: pole ({x}, {y}) poza strefą {strefa}")
+        for px in range(x, x + w):
+            for py in range(y, y + h):
+                if (px, py) in pola:
+                    bledy.append(f"{co}: pole ({px}, {py}) zajmuje już {pola[(px, py)]}")
+                pola[(px, py)] = co
+
+    for s, x in m["strefy"].items():
+        r = x["mapa"]
+        if r["x"] + r["szer"] > sz or r["y"] + r["gl"] > gl:
+            bledy.append(f"mapa/strefy.yaml: {s}: strefa wychodzi poza siatkę {sz}×{gl}")
+    for k, z in m["zestawy"].items():
+        for i, st in enumerate(z["stanowiska"]):
+            for n, q in st["sprzet"].items():
+                if d.sprzet.get(n, {}).get("dla") != st["typ"]:
+                    brak(n, f"mapa/lokale.yaml: zestawy.{k}[{i}]", f"sprzęt typu {st['typ']}", "sprzet.yaml")
+                elif str(q) not in d.sprzet[n]["ceny"]:
+                    brak(str(q), f"mapa/lokale.yaml: zestawy.{k}[{i}].{n}", "jakość", "sprzet.yaml")
+    ids = set()
+    for lok in m["lokale"]:
+        co = f"mapa/lokale.yaml: {lok['id']}"
+        if lok["id"] in ids:
+            bledy.append(f"{co}: powtórzone id")
+        ids.add(lok["id"])
+        if lok.get("zestaw"):
+            if lok["zestaw"] not in m["zestawy"]:
+                brak(lok["zestaw"], co, "zestaw", "mapa/lokale.yaml: zestawy")
+            else:
+                for typ in TYPY_STANOWISK:
+                    n = sum(st["typ"] == typ for st in m["zestawy"][lok["zestaw"]]["stanowiska"])
+                    if n > lok["miejsca"][typ]:
+                        bledy.append(f"{co}: zestaw {lok['zestaw']} ma {n} stanowisk typu {typ}, "
+                                     f"lokal mieści {lok['miejsca'][typ]}")
+        poloz(co, lok["strefa"], lok["mapa"]["x"], lok["mapa"]["y"])
+    for b in m["budynki"]:
+        co = f"mapa/budynki.yaml: {b['id']}"
+        if b["id"] in ids:
+            bledy.append(f"{co}: powtórzone id")
+        ids.add(b["id"])
+        r = b["mapa"]
+        poloz(co, b["strefa"], r["x"], r["y"], r["szer"], r["gl"])
+    budynki = {b["id"]: b for b in m["budynki"]}
+    internet = (m["reklama"].get("internet") or {}).get("agencje") or {}
+    for a, ag, zakl in [(a, ag, "agencje") for a, ag in m["reklama"]["agencje"].items()] + \
+            [(a, ag, "internet") for a, ag in internet.items()]:
+        co = f"mapa/reklama.yaml: {'internet.' if zakl == 'internet' else ''}agencje.{a}"
+        if ag["budynek"] not in budynki:
+            brak(ag["budynek"], co, "budynek", "mapa/budynki.yaml")
+        elif budynki[ag["budynek"]]["zakladka"] != zakl:
+            bledy.append(f"{co}: budynek {ag['budynek']} nie prowadzi do zakładki {zakl}")
+        for k, kan in ag["kanaly"].items():
+            for s in kan["strefy"] or []:
+                if s not in m["strefy"]:
+                    brak(s, f"{co}.kanaly.{k}", "strefa", "mapa/strefy.yaml")
+            for t in kan["teksty"]:
+                if t.replace("{strefa}", "").count("{"):
+                    bledy.append(f"{co}.kanaly.{k}: tekst z nieznanym polem {{…}} (dozwolone: {{strefa}})")
+    for t, typ in m["promocje"]["typy"].items():
+        co = f"mapa/promocje.yaml: typy.{t}"
+        for s in typ["strefy_klientow"] or []:
+            if s not in m["strefy"]:
+                brak(s, f"{co}.strefy_klientow", "strefa", "mapa/strefy.yaml")
+        for tekst in typ["teksty"]:
+            if tekst.replace("{nazwa}", "").replace("{danie}" if typ["zakres"] == "danie" else "{nazwa}", "").count("{"):
+                bledy.append(f"{co}: tekst z nieznanym polem {{…}} (dozwolone: {{nazwa}}"
+                             + (", {danie})" if typ["zakres"] == "danie" else ")"))
+    po = m["popyt"]
+    for s in sorted(set(m["strefy"]) ^ set(po["strefy"])):
+        bledy.append(f"mapa/popyt.yaml: strefa {s} " + ("bez popytu" if s in m["strefy"] else "nie ma jej w mapa/strefy.yaml"))
+    _sprawdz_klientow(d, bledy, brak)
+    _sprawdz_kalendarz(d, bledy, brak)
+    _sprawdz_zdarzenia(d, bledy, brak)
+    return bledy
+
+
+def _sprawdz_klientow(d: Dane, bledy: list[str], brak):
+    """U24 – mapa/klienci.yaml: każda strefa popytu ma udziały grup, dania z uslugi.yaml."""
+    k = d.mapa.get("klienci")
+    if not k:
+        return
+    co = "mapa/klienci.yaml"
+    for s in sorted(set(d.mapa["popyt"]["strefy"]) ^ set(k["strefy"])):
+        bledy.append(f"{co}: strefa {s} " + ("bez udziałów grup" if s in d.mapa["popyt"]["strefy"] else "nie ma jej w mapa/popyt.yaml"))
+    if k["wydarzenia"] in {g for u in k["strefy"].values() for g in u}:
+        bledy.append(f"{co}: grupa {k['wydarzenia']} pochodzi z kalendarza – nie dawaj jej udziałów w strefach")
+    for gdzie, dania in [("mieso", k["mieso"]), ("wege", k["wege"]), *((f"zastepstwo.grupy_dan[{i}]", g)
+                         for i, g in enumerate(k["zastepstwo"]["grupy_dan"]))]:
+        for u in dania:
+            if u not in d.uslugi:
+                brak(u, f"{co}: {gdzie}", "danie", "uslugi.yaml")
+    for g, x in k["grupy"].items():
+        for u in sorted(set(d.uslugi) ^ set(x["koszyk"])):
+            bledy.append(f"{co}: grupy.{g}.koszyk: " + (f"brak dania {u}" if u in d.uslugi else f"nieznane danie {u}"))
+
+
+def _sprawdz_kalendarz(d: Dane, bledy: list[str], brak):
+    """Kalendarz miejski: strefy z mapy, dania z uslugi.yaml, daty ruchome na każdy rok gry o domyślnej długości."""
+    k = d.kalendarz_miasta
+    if not k:
+        return
+    for w in k["wydarzenia"]:
+        for s in w["strefy"]:
+            if s != "wszystkie" and s not in d.mapa["strefy"]:
+                brak(s, f"kalendarz/kalendarz.yaml: {w['nazwa']}", "strefa", "mapa/strefy.yaml")
+        for u in w.get("dania") or {}:
+            if u not in d.uslugi:
+                brak(u, f"kalendarz/kalendarz.yaml: {w['nazwa']}", "danie", "uslugi.yaml")
+    lata = range(d.data_rundy(1).year, d.data_rundy(d.katalog_ofert["rundy"]["domyslna_liczba"] + 1).year + 1)
+    for n, daty in k["ruchome"].items():
+        for rok in lata:
+            if rok not in daty:
+                bledy.append(f"kalendarz/kalendarz.yaml: ruchome.{n}: brak daty na rok {rok} (rok gry)")
+
+
+def _sprawdz_zdarzenia(d: Dane, bledy: list[str], brak):
+    """Odwołania eventów: park z mapy (park albo woda), budynek ubezpieczyciela, zawód kandydata, id historii
+    unikalne we wszystkich plikach."""
+    if not d.zdarzenia:
+        return
+    if not d.mapa:
+        bledy.append("zdarzenia/: eventy w parkach wymagają mapy (dane/mapa/)")
+        return
+    parki = {b["id"] for b in d.mapa["budynki"] if b["rodzaj"] in ("park", "woda")}
+    bank = d.zdarzenia["magazyn"]["bank_zywnosci"]["historia"]
+    pliki = [("parki", h) for h in d.zdarzenia["parki"]["historie"]] + [("magazyn", bank)]         + [("losowe", h) for h in d.zdarzenia["losowe"]["historie"]]         + ([("falafel", d.zdarzenia["falafel"]["historia"])] if "falafel" in d.zdarzenia else [])
+    if "falafel" in d.zdarzenia and d.zdarzenia["falafel"]["zasady"]["usluga"] not in d.uslugi:
+        brak(d.zdarzenia["falafel"]["zasady"]["usluga"], "zdarzenia/falafel.yaml: zasady", "usluga", "uslugi.yaml")
+    gdzie: dict[str, str] = {}
+    for plik, h in pliki:
+        if h["id"] in gdzie:
+            bledy.append(f"zdarzenia/{plik}.yaml: id historii {h['id']!r} jest już w {gdzie[h['id']]}.yaml")
+        gdzie.setdefault(h["id"], plik)
+    ub = d.zdarzenia["losowe"]["ubezpieczyciel"]["budynek"]
+    if ub and ub not in {b["id"] for b in d.mapa["budynki"]}:
+        brak(ub, "zdarzenia/losowe.yaml: ubezpieczyciel", "budynek", "mapa/budynki.yaml")
+    polisy = d.zdarzenia["losowe"]["ubezpieczyciel"]["polisy"]
+    for s, st in d.boty["strategie"].items():
+        for x in st.get("polisy", []):
+            if x not in polisy:
+                brak(x, f"boty.yaml: {s}.polisy", "rodzaj polisy", "zdarzenia/losowe.yaml: ubezpieczyciel.polisy")
+    det = d.zdarzenia["detektyw"]["detektyw"]["budynek"]
+    if det and det not in {b["id"] for b in d.mapa["budynki"]}:
+        brak(det, "zdarzenia/detektyw.yaml: detektyw", "budynek", "mapa/budynki.yaml")
+    urz = d.zdarzenia["urzad"]
+    if urz["urzad"]["budynek"] and urz["urzad"]["budynek"] not in {b["id"] for b in d.mapa["budynki"]}:
+        brak(urz["urzad"]["budynek"], "zdarzenia/urzad.yaml: urzad", "budynek", "mapa/budynki.yaml")
+    for s, st in d.boty["strategie"].items():
+        if st.get("higiena") and st["higiena"] not in urz["higiena"]["poziomy"]:
+            brak(st["higiena"], f"boty.yaml: {s}.higiena", "poziom higieny", "zdarzenia/urzad.yaml: higiena.poziomy")
+    for plik, h in pliki:
+        co = f"zdarzenia/{plik}.yaml: {h['id']}"
+        if h["park"] and h["park"] not in parki:
+            brak(h["park"], co, "park albo woda", "mapa/budynki.yaml")
+        for nazwa, s in h["sceny"].items():
+            for sk in [*s["skutki"], *(x for o in s["opcje"] for x in o["skutki"])]:
+                if sk["kandydat"] and sk["kandydat"]["zawod"] not in d.zawody:
+                    brak(sk["kandydat"]["zawod"], f"{co}.{nazwa}", "zawód", "katalog.yaml: stanowiska.typy")
+
+
+@lru_cache(maxsize=2)
+def _wczytane(katalog: Path) -> Dane:
+    return Dane(katalog)
+
+
+def dane_domyslne() -> Dane:
+    return _wczytane(KATALOG_DANYCH)
+
+
+def main(argv: list[str]) -> int:
+    if argv[:1] != ["sprawdz"]:
+        print("Użycie: python -m silnik.dane sprawdz [katalog]")
+        return 2
+    katalog = Path(argv[1]) if len(argv) > 1 else KATALOG_DANYCH
+    bledy = sprawdz(katalog)
+    for b in bledy:
+        print("BŁĄD", b)
+    if not bledy:
+        print(f"Dane w porządku: {katalog} (wersja {Dane(katalog).wersja}).")
+    return 1 if bledy else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

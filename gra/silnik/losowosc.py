@@ -1,0 +1,59 @@
+"""Jedyne źródło losowości w grze: nazwane strumienie `numpy.random.Generator(PCG64)`.
+
+Strumień wyznaczają (ziarno gry, runda, cel, klucze), np. `strumien(ziarno, 3, "popyt", firma, danie)`.
+Ziarno strumienia to pełny skrót SHA-256 tych wartości (przez `SeedSequence`), więc:
+- ten sam strumień zawsze daje te same liczby, na każdym komputerze – ważne w grze wieloosobowej, gdzie
+  każdy przelicza rundę sam;
+- kolejność obliczeń nie zmienia wyników – każde zdarzenie ma własny strumień;
+- dodanie nowego losowania nie przesuwa liczb w innych strumieniach.
+
+Cele są wymienione w `CELE` – literówka w nazwie celu to błąd, a nie cicho inny strumień.
+Poza tym modułem silnik nie używa `numpy.random` ani `random` (pilnuje tego test).
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+
+import numpy as np
+
+Strumien = np.random.Generator   # typ strumienia losowego (adnotacje w innych modułach)
+
+CELE = frozenset({
+    "bot",         # decyzje bota: runda, nazwa firmy
+    "wypadki",     # wypadki w lokalu (silnik/swiat/awarie.py): runda, firma
+    "falafel",     # bójka o falafel (silnik/swiat/falafel.py, UF8): runda, firma
+    "biuro",       # błąd biura rachunkowego w deklaracji: runda, firma
+    "dostawcy",    # ceny dostawców w trybie losowym: runda = miesiąc (0 = styczeń)
+    "gazetki",     # promocje w gazetkach dyskontów: runda, dostawca
+    "harpagon",    # wizyty Harpagona u dłużnika: runda, firma
+    "detektyw",    # cena, wpadka i teksty detektywa (silnik/rynek/konkurencja.py): runda, firma, co
+    "handel",      # tekst transakcji na giełdzie handlu (silnik/rynek/handel.py): runda, id ogłoszenia
+    "kasyno",      # zaproszenie i gry w klubie (silnik/pieniadze/kasyno.py): runda, firma[, nr zakładu]
+    "kandydaci",   # rynek pracy: runda 0 = pula startowa
+    "cechy",       # ukryta cecha i opis osoby (U20): runda dołączenia do puli, id osoby
+    "opinie",      # rozrzut nowych opinii i komentarze o lokalu (silnik/rynek/opinie.py): runda, firma, lokal
+    "odejscia",    # wypowiedzenie z niezadowolenia (silnik/ludzie/zadowolenie.py): runda, firma, id osoby
+    "przenosiny",  # zgoda na przejście do innego lokalu (silnik/ludzie/przenosiny.py, UF20): runda, firma, id osoby
+    "studenci",    # czy kandydat do 26 lat jest studentem (silnik/ludzie/kandydaci.py, UF21): runda, id osoby
+    "kolejnosc",   # kolejność firm w rundzie
+    "parki",       # kolejność historii w parkach: runda = numer cyklu wszystkich historii
+    "lokal",       # wybór lokalu przez bota: runda, nazwa firmy
+    "licytacje",   # remis w licytacji lokalu: runda, id lokalu
+    "popyt",       # szum popytu: runda, firma, usługa
+    "reklamacje",  # reklamacje: runda, firma, usługa
+    "rynek_pracy", # remisy w licytacjach i ofertach podkupienia: runda, rodzaj, id osoby
+    "sanepid",     # kontrola sanepidu w lokalu (silnik/kuchnia/magazyn.py): runda, firma
+    "odbior",      # tekst odbioru lokalu przez sanepid (silnik/ksiegowosc/urzad.py): runda, firma, lokal
+    "promocje",    # komiczny raport z pierwszej rundy promocji: runda, firma, typ
+    "reklama",     # tekst raportu agencji reklamowej (silnik/rynek/reklama.py): runda, firma, agencja, kanał
+    "zdarzenia",   # ciąg dalszy historii z parku: runda, firma, historia
+})
+
+
+def strumien(ziarno: int | str, runda: int, cel: str, *klucze: int | str) -> np.random.Generator:
+    if cel not in CELE:
+        raise ValueError(f"nieznany cel losowania {cel!r} – dopisz go do CELE w silnik/losowosc.py")
+    tekst = json.dumps([ziarno, runda, cel, *klucze], ensure_ascii=False)
+    skrot = hashlib.sha256(tekst.encode("utf-8")).digest()
+    return np.random.Generator(np.random.PCG64(np.random.SeedSequence(int.from_bytes(skrot, "little"))))

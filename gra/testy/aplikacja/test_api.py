@@ -1,0 +1,192 @@
+"""Widoki Django: strony, API zakładek i zapis gry w bazie (konfiguracja + decyzje)."""
+
+import json
+
+import pytest
+from django.contrib.staticfiles import finders
+from django.test import Client
+
+from gry import serwisy
+from gry.models import Decyzja, Gra, Runda
+
+pytestmark = pytest.mark.django_db
+
+GRACZ = "Moja firma"
+
+
+def _nowa(client, **zmiany) -> str:
+    d = {
+        "nazwa": "Test API",
+        "liczba_rund": 4,
+        "ziarno": "2026",
+        "firmy": [{"nazwa": GRACZ, "bot": None}, {"nazwa": "Bot 1", "bot": "zrownowazony"}],
+    } | zmiany
+    r = client.post("/api/gry", d, content_type="application/json")
+    assert r.status_code == 200, r.json()
+    return r.json()["id"]
+
+
+def _url(id_: str, co: str, firma: str = GRACZ) -> str:
+    return f"/api/gry/{id_}/{co}/{firma}"
+
+
+def test_strony_i_statyki(client):
+    assert client.get("/").status_code == 200
+    id_ = _nowa(client)
+    r = client.get(f"/gra/{id_}")
+    assert r.status_code == 302 and r["Location"].endswith("/Moja%20firma")
+    r = client.get(f"/gra/{id_}/{GRACZ}")
+    assert r.status_code == 200 and "csrftoken" in r.cookies
+    assert client.get(f"/gra/{id_}/Nikt").status_code == 404
+    assert client.get("/gra/nie-ma-takiej").status_code == 404
+    # testy działają z DEBUG=False, więc statyki sprawdzamy przez wyszukiwarkę Django
+    assert finders.find("app.js") and finders.find("zakladki/index.js")
+
+
+def test_domyslna_gra_tygodniowa(client):
+    strona = client.get("/mg/").content.decode()   # kreator nowej gry na pulpicie mistrza gry
+    assert 'value="18"' in strona and "40 000&nbsp;zł" in strona
+    id_ = _nowa(client, liczba_rund="")
+    v = client.get(_url(id_, "widok")).json()
+    kal = v["gra"]["kalendarz"]
+    assert v["gra"]["liczba_rund"] == 18 and kal["rund_w_roku"] == 52 and len(kal["nazwy"]) == 18
+    assert v["miesiac"] == kal["nazwy"][0] and kal["nazwy"][0].startswith("Tydzień 1")
+    # drużyna zaczyna bez lokalu i wybiera go na mapie
+    assert v["gra"]["lokale"] and v["stan"]["stanowiska"] == [] and v["lokale"]["oferta"]
+
+
+def test_nowa_gra_walidacja(client):
+    def blad(firmy):
+        r = client.post("/api/gry", {"firmy": firmy}, content_type="application/json")
+        return r.status_code, r.json().get("blad", "")
+
+    assert blad([]) == (400, "Podaj różne nazwy firm.")
+    assert blad([{"nazwa": "A"}, {"nazwa": "A"}])[0] == 400
+    assert blad([{"nazwa": "A", "bot": "tani"}])[1].startswith("Co najmniej jedna")
+    assert blad([{"nazwa": "_A"}])[0] == 400
+    r = client.post("/api/gry", "nie json", content_type="application/json")
+    assert r.status_code == 400
+
+
+def test_runda_od_decyzji_do_przeliczenia(client):
+    id_ = _nowa(client)
+    assert [g["id"] for g in client.get("/api/gry").json()] == [id_]
+    assert client.get("/api/katalogi").status_code == 200
+
+    v = client.get(_url(id_, "widok")).json()
+    assert v["runda"] == 1
+    r = client.put(_url(id_, "decyzje"), {"nazwa": "Kebab Test"}, content_type="application/json")
+    assert r.status_code == 200
+    assert Decyzja.objects.get(runda__gra_id=id_, firma=GRACZ).dane["nazwa"] == "Kebab Test"
+
+    r = client.post(_url(id_, "wyslij"), {"wyslane": True}, content_type="application/json")
+    assert r.status_code == 200 and r.json()["przeliczono"] is True
+    assert client.get("/api/gry").json()[0]["runda"] == 2
+    assert Runda.objects.get(gra_id=id_, numer=1).przeliczona
+
+    assert client.post(f"/api/gry/{id_}/przelicz").json()["runda"] == 3
+    assert client.post(f"/api/gry/{id_}/cofnij").json()["runda"] == 2
+    assert client.get(_url(id_, "widok") + "?runda=1").json()["runda"] == 1
+
+
+def test_wyslane_decyzje_czekaja_na_drugiego_gracza(client):
+    firmy = [{"nazwa": GRACZ}, {"nazwa": "Druga"}, {"nazwa": "Bot 1", "bot": "tani"}]
+    id_ = _nowa(client, firmy=firmy)
+    r = client.post(_url(id_, "wyslij"), {"wyslane": True}, content_type="application/json")
+    assert r.json()["przeliczono"] is False
+    assert client.put(_url(id_, "decyzje"), {}, content_type="application/json").status_code == 400
+    client.post(_url(id_, "wyslij"), {"wyslane": False}, content_type="application/json")
+    assert client.put(_url(id_, "decyzje"), {}, content_type="application/json").status_code == 200
+    assert client.post(f"/api/gry/{id_}/przelicz").json()["runda"] == 2  # mistrz gry wymusza
+
+
+def test_eksport_import_i_usuwanie(client):
+    id_ = _nowa(client)
+    client.post(f"/api/gry/{id_}/przelicz")
+    r = client.get(f"/api/gry/{id_}/eksport")
+    assert r.status_code == 200 and "attachment" in r["Content-Disposition"]
+    plik = json.loads(r.content)
+    assert plik["decyzje"]["1"]["_przeliczona"] is True
+
+    from django.core.files.uploadedfile import SimpleUploadedFile
+
+    r = client.post("/api/gry/import", {"plik": SimpleUploadedFile("g.json", r.content)})
+    nowy = r.json()["id"]
+    assert serwisy.wczytaj(nowy).runda == 2
+    r = client.post("/api/gry/import", {"plik": SimpleUploadedFile("g.json", b"{}")})
+    assert r.status_code == 400
+
+    assert client.delete(f"/api/gry/{id_}").status_code == 200
+    assert not Gra.objects.filter(pk=id_).exists()
+    assert client.get(_url(id_, "widok")).status_code == 404
+
+
+def test_odczyt_z_bazy_daje_ten_sam_stan(client):
+    """Event sourcing: gra wczytana z bazy (bez pamięci podręcznej) liczy te same wyniki."""
+    id_ = _nowa(client)
+    client.put(_url(id_, "decyzje"), {"nazwa": "Kebab Test"}, content_type="application/json")
+    for _ in range(3):
+        client.post(f"/api/gry/{id_}/przelicz")
+    przed = client.get(_url(id_, "widok") + "?runda=3").json()
+    serwisy._pamiec.clear()
+    g = serwisy.wczytaj(id_)
+    assert g.runda == 4
+    assert client.get(_url(id_, "widok") + "?runda=3").json() == przed
+
+
+def test_csrf_wymagany_poza_testami(mistrz):
+    c = Client(enforce_csrf_checks=True)
+    c.force_login(mistrz)
+    assert c.post("/api/gry", {}, content_type="application/json").status_code == 403
+    c.get("/")
+    token = c.cookies["csrftoken"].value
+    r = c.post(
+        "/api/gry",
+        {"firmy": [{"nazwa": "A"}]},
+        content_type="application/json",
+        headers={"X-CSRFToken": token},
+    )
+    assert r.status_code == 200
+
+
+def test_marka_firmy_w_pierwszej_rundzie(client):
+    """Runda 1: nazwa, slogan i kolor (decyzje) oraz wgrane logo (PNG/JPG) – widoczne dla innych firm."""
+    import base64
+
+    id_ = _nowa(client)
+    png = "data:image/png;base64," + base64.b64encode(b"\x89PNG\r\n\x1a\n" + b"0" * 64).decode()
+    r = client.put(_url(id_, "logo"), {"logo": png}, content_type="application/json")
+    assert r.status_code == 200, r.json()
+    logo = r.json()["marki"][GRACZ]["logo"]
+    obraz = client.get(logo)
+    assert obraz.status_code == 200 and obraz["Content-Type"] == "image/png" and obraz.content.startswith(b"\x89PNG")
+    zly = "data:image/png;base64," + base64.b64encode(b"<svg></svg>").decode()
+    r = client.put(_url(id_, "logo"), {"logo": zly}, content_type="application/json")
+    assert r.status_code == 400 and "PNG albo JPG" in r.json()["blad"]
+
+    client.put(_url(id_, "decyzje"), {"nazwa": "Kebab Test", "misja": "Zawsze ciepły", "kolor": "#2D73D6"},
+               content_type="application/json")
+    client.post(_url(id_, "wyslij"), {"wyslane": True}, content_type="application/json")
+    v = client.get(_url(id_, "widok")).json()
+    assert v["marki"][GRACZ] == {"nazwa": "Kebab Test", "slogan": "Zawsze ciepły", "kolor": "#2d73d6", "logo": logo}
+    r = client.put(_url(id_, "logo"), {"logo": ""}, content_type="application/json")
+    assert r.status_code == 400 and "pierwszej rundzie" in r.json()["blad"]
+
+
+def test_wlasne_zadania_druzyny_przechodza_na_kolejna_runde(client):
+    """UF22: lista zadań – własne zadania w decyzjach rundy, nieodhaczone przechodzą dalej, walidacja przy zapisie."""
+    id_ = _nowa(client)
+    zadania = [{"id": "a", "tekst": "  Sprawdzić   ceny konkurencji ", "zrobione": False},
+               {"id": "b", "tekst": "Kupić grill", "zrobione": True}]
+    v = client.put(_url(id_, "decyzje"), {"zadania_wlasne": zadania}, content_type="application/json").json()
+    assert v["decyzje"]["zadania_wlasne"][0]["tekst"] == "Sprawdzić ceny konkurencji"
+    for zle in ("nie lista", [{"tekst": " "}], [{"tekst": "x"}] * 31):
+        r = client.put(_url(id_, "decyzje"), {"zadania_wlasne": zle}, content_type="application/json")
+        assert r.status_code == 400
+    client.post(f"/api/gry/{id_}/przelicz")
+    v = client.get(_url(id_, "widok")).json()
+    assert v["runda"] == 2 and [z["id"] for z in v["decyzje"]["zadania_wlasne"]] == ["a"]
+    client.post(f"/api/gry/{id_}/przelicz")   # runda 2 bez zapisu – zadania dalej z rundy 1
+    assert [z["id"] for z in client.get(_url(id_, "widok")).json()["decyzje"]["zadania_wlasne"]] == ["a"]
+    client.put(_url(id_, "decyzje"), {"zadania_wlasne": []}, content_type="application/json")
+    assert client.get(_url(id_, "widok")).json()["decyzje"]["zadania_wlasne"] == []

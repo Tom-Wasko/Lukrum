@@ -1,0 +1,111 @@
+{% extends "panel_gracza/_pulpit.html" %}
+{% block tytul %}LUKRUM – pulpit mistrza gry{% endblock %}
+{% block podpis %}Mistrz gry{% endblock %}
+{% block konto %}<a href="/jak-grac">Instrukcja</a><a href="/">Moje gry</a>{% include "konta/_konto.html" with bez_mg=True %}{% endblock %}
+{% block tresc %}
+<div class="pm">
+  <nav class="pm-bok" id="bok" aria-label="Pulpit mistrza gry">
+    <a data-widok="pulpit" href="#pulpit"><span data-ikona="dashboard"></span>Pulpit</a>
+    <a data-widok="wczytaj" href="#wczytaj"><span data-ikona="wczytaj"></span>Wczytaj z pliku</a>
+    <a class="nowa" data-widok="nowa" href="#nowa"><span data-ikona="plus"></span>Nowa gra</a>
+    <div class="sekcja-bok">Dla graczy</div>
+    <a href="/"><span data-ikona="hr"></span>Strona drużyn</a>
+    <a href="/jak-grac" target="_blank" rel="noopener"><span data-ikona="ksiazka"></span>Instrukcja</a>
+    {% if not konto.lokalne %}<a href="/admin/"><span data-ikona="klucz"></span>Konta</a>{% endif %}
+  </nav>
+  <main class="pm-tresc">
+
+    <section id="w-pulpit" data-widok="pulpit">
+      <div class="glowa-p"><div><h1>Pulpit mistrza gry</h1>
+        <p class="pod-tytul">Twoje gry: która runda trwa, które drużyny wysłały decyzje i kiedy runda się zamknie.</p></div></div>
+      <div class="liczniki" id="liczniki"></div>
+      <div class="siatka-gier" id="gry"><p class="podpowiedz">Wczytywanie…</p></div>
+    </section>
+
+    <section id="w-nowa" data-widok="nowa" hidden>
+      <div class="glowa-p"><div><h1>Nowa gra</h1>
+        <p class="pod-tytul">Cztery kroki. Ustawienia z kroków 1–3 możesz poprawić aż do kliknięcia „Utwórz grę”.</p></div></div>
+      <ol class="kroki" id="kroki">
+        <li data-krok="1">Podstawy</li><li data-krok="2">Drużyny i boty</li><li data-krok="3">Funkcje gry</li><li data-krok="4">Sprawdź i utwórz</li>
+      </ol>
+
+      <div class="panel-kroku" data-krok="1">
+        <h2>Podstawy</h2>
+        <p class="opis-kroku">Runda to {{ ustawienia.okres }}. Gra zaczyna się w rundzie 1 – {{ ustawienia.pierwsza }} – od przygotowania lokalu;
+          sprzedaż zaczyna się w rundzie 2.</p>
+        <div class="pola">
+          <label class="pole">Nazwa gry<input type="text" id="nazwa" value="Klasa 3B" maxlength="100"></label>
+          <label class="pole">Liczba rund ({{ ustawienia.mnoga }})<input type="number" id="rundy" min="2" max="{{ ustawienia.maks_rund }}" value="{{ ustawienia.rundy }}"><small>od 2 do {{ ustawienia.maks_rund }}</small></label>
+          <label class="pole">Kapitał startowy drużyny (zł)<input type="number" id="kapital" min="1" step="1000" value="{{ ustawienia.kapital|floatformat:0 }}"><small>domyślnie {{ ustawienia.kapital_tekst }}&nbsp;zł</small></label>
+        </div>
+        <details class="wiecej"><summary>Więcej ustawień</summary>
+          <div class="pola">
+            <label class="pole">Kredyt odnawialny<select id="kredyt">
+              <option value="na_biezaco">na bieżąco – jak w banku: zakupy opłacane przed wpływem przychodów</option>
+              <option value="jednoczesnie">jak w oficjalnej grze – kredyt tylko na niedobór na koniec rundy</option></select></label>
+            <label class="pole">Ziarno losowości<input type="text" id="ziarno" placeholder="puste = losowe, np. 2026">
+              <small>ta sama liczba daje za każdym razem tę samą grę – do powtórek i porównań</small></label>
+          </div>
+        </details>
+      </div>
+
+      <div class="panel-kroku" data-krok="2" hidden>
+        <h2>Drużyny i boty</h2>
+        <p class="opis-kroku">Drużyny to firmy uczniów (1–4 osoby). Uczniów dopisujesz po utworzeniu gry, w zakładce „Drużyny” gry –
+          tam też założysz im konta. Boty to firmy komputerowe – konkurencja dla drużyn na tym samym rynku.</p>
+        <div class="podsekcja">Drużyny uczniów</div>
+        <div class="lista-druzyn" id="druzyny"></div>
+        <p><button class="btn jasny" type="button" id="dodaj">+ Drużyna</button></p>
+        <div class="podsekcja"><label><input type="checkbox" id="boty" checked> Boty na rynku</label></div>
+        <div class="boty-p" id="lista-botow"></div>
+      </div>
+
+      <div class="panel-kroku" data-krok="3" hidden>
+        <h2>Funkcje gry</h2>
+        <p class="opis-kroku">Podstawa gry jest zawsze odkryta. Pozostałe funkcje możesz zostawić <b>odkryte</b>, <b>zakryć</b>
+          (drużyna widzi je wyszarzone i sama odsłania, gdy jest gotowa – do tego czasu gra robi je za nią) albo <b>wyłączyć</b>
+          (nie ma ich w grze dla nikogo, także dla botów). Po utworzeniu gry stanów funkcji nie można zmienić.</p>
+        <div class="zestawy" id="zestawy"></div>
+        <table class="tabela-funkcji" id="funkcje"></table>
+        <div class="podsekcja">Pomoc dla drużyn</div>
+        <div class="opcje-p">
+          <label class="przelacznik"><input type="checkbox" id="podpowiedzi"><span>Podpowiedzi na Pulpicie drużyny
+            <small>przez 3 pierwsze rundy „3 rzeczy do sprawdzenia” – rady z instrukcji</small></span></label>
+          <label class="przelacznik"><input type="checkbox" id="auto-zamowienia"><span>Przycisk „Zamów brakujące u najtańszych” w Dostawcach
+            <small>domyślnie wyłączony – drużyny liczą zamówienia same</small></span></label>
+          <label class="pole" style="max-width:420px">Refleksja przy wysyłaniu decyzji („Co zmieniamy i dlaczego?”)<select id="refleksja">
+            <option value="opcjonalna">nieobowiązkowa</option><option value="wymagana">wymagana</option>
+            <option value="wylaczona">wyłączona</option></select><small>widzisz ją w panelu gry i w pliku CSV</small></label>
+        </div>
+      </div>
+
+      <div class="panel-kroku" data-krok="4" hidden>
+        <h2>Sprawdź i utwórz</h2>
+        <p class="opis-kroku">Tak będzie wyglądała gra. Kliknij krok u góry, żeby coś poprawić.</p>
+        <div class="podsumowanie" id="podsumowanie"></div>
+        <p class="blad-formularza" id="blad" hidden></p>
+      </div>
+
+      <div class="nawigacja-kroku">
+        <button class="btn jasny" type="button" id="wstecz">Wstecz</button>
+        <button class="btn pom dalej" type="button" id="dalej">Dalej</button>
+        <button class="btn pom duzy dalej" type="button" id="utworz" hidden>Utwórz grę</button>
+      </div>
+    </section>
+
+    <section id="w-wczytaj" data-widok="wczytaj" hidden>
+      <div class="glowa-p"><div><h1>Wczytaj grę z pliku</h1>
+        <p class="pod-tytul">Plik .json pobrany przyciskiem „Pobierz plik” przy grze – np. z innego komputera albo kopia zapasowa.
+          Wczytana gra pojawi się na pulpicie jako nowa gra (bez kont uczniów – drużyny dopiszesz w panelu gry).</p></div></div>
+      <div class="panel-kroku plik-p">
+        <label class="btn pom">{% comment %}ikona dokładana w pulpit.js{% endcomment %}<span data-ikona="wczytaj"></span>Wybierz plik gry (.json)<input type="file" id="import" accept=".json" hidden></label>
+        <p class="blad-formularza" id="blad-importu" hidden></p>
+      </div>
+    </section>
+  </main>
+</div>
+{% endblock %}
+{% block skrypty %}
+  {{ ustawienia|json_script:"ustawienia" }}
+  <script type="module" src="{{ statyczne }}mg/pulpit.js"></script>
+{% endblock %}

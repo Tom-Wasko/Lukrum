@@ -1,0 +1,10 @@
+django>=5.2,<5.3
+django-allauth[socialaccount]>=65,<66
+hypothesis>=6.100
+numpy>=2.0
+pydantic>=2.9
+pytest-django>=4.9
+pytest>=8.0
+pyyaml>=6.0
+ruff>=0.6
+scipy>=1.13
