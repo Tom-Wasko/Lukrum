@@ -320,7 +320,8 @@ def _marketing(dane: Dane, f: Firma, runda: int, ksiega: Ksiega, wynik: dict) ->
     (`decyzje_firmy` – bez promocji); narzędzia internetowe – wyłączone."""
     trwaja = [k for k in f.kampanie if rk.dziala(dane, k, runda)]
     f.kampanie = [k for k in f.kampanie if k not in trwaja]
-    narzedzia, f.internet = len(f.internet), {}
+    narzedzia = len(f.internet)
+    f.internet = {}
     return (_ile("kampanie reklamowe", len(trwaja)) + _ile("promocje", len(f.promocje))
             + _ile("narzędzia internetowe", narzedzia))
 

@@ -318,23 +318,6 @@ class Udogodnienie(Schemat):
     opis: str | None = None       # UF9: krótki opis w kafelku (panel)
 
 
-class Medium(Schemat):
-    nazwa: str
-    kategoria: str
-    zasieg: float
-    cena: float
-    znizki: list[tuple[int, float]]  # [od emisji, %]
-    od_rundy: int = 1
-
-
-class Narzedzie(Schemat):
-    nazwa: str
-    uruchomienie: float
-    utrzymanie: float
-    od_rundy: int = 1
-    zalozenie: bool = False
-
-
 class FirmaSzkoleniowa(Schemat):
     nazwa: str
     zadowoleni_klienci: float
@@ -349,14 +332,6 @@ class Szkolenie(Schemat):
 
 class SekcjaUdogodnien(Sekcja):
     pozycje: list[Udogodnienie]
-
-
-class SekcjaMediow(Sekcja):
-    pozycje: list[Medium]
-
-
-class SekcjaNarzedzi(Sekcja):
-    pozycje: list[Narzedzie]
 
 
 class SekcjaSzkolen(Sekcja):
@@ -379,8 +354,6 @@ class PlikKatalogu(Schemat):
     stanowiska: Stanowiska
     udogodnienia: SekcjaUdogodnien
     wyposazenie: SekcjaUdogodnien
-    media_tradycyjne: SekcjaMediow
-    narzedzia_internetowe: SekcjaNarzedzi
     szkolenia: SekcjaSzkolen
 
 
@@ -491,8 +464,6 @@ class Strategia(Schemat):
     pokrycie: float = Field(gt=0)
     wyposazenie: int = Field(ge=0)
     udogodnienia: int = Field(ge=0)
-    reklama: dict[str, int]
-    internet: list[str]
     szkolenia: int = Field(ge=0)
     kampanie: list[str] = Field(default_factory=list)   # gra z lokalami: "agencja/kanał" z mapa/reklama.yaml
     # B10: emisje w kampanii i rundy przerwy po kampanii w tym kanale i strefie (bez – ustawienia botów)

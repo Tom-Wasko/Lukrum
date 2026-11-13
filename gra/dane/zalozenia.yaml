@@ -109,43 +109,6 @@ popyt:
     pewnosc: skalibrowane
     zrodlo: 'kalibracja: popyt ∝ r^(−E1) (walidacja 6,3%) lepsze niż e^(−E1·(r−1)) (8,8%); r = cena po rabacie
       / cena preferowana'
-reklama:
-  tradycyjna_nasycenie_k:
-    wartosc: 2.2166
-    pewnosc: skalibrowane
-    zrodlo: kalibracja pomiarami; wzrost = Σ_media A_kategorii · zasięg · ln(1 + k · emisje)
-  tradycyjna_maks_kategorii:
-    wartosc:
-      billboard_ulotki: 0.011492
-      prasa: 0.034957
-      radio: 0.029501
-      telewizja: 0.053354
-    pewnosc: skalibrowane
-    zrodlo: kalibracja pomiarami; A_kategorii (mnożone przez zasięg w % i ln(1 + k·emisje)); dopasowanie 0,15 pkt
-      proc. na 8 miesiącach pomiarów
-  internetowa_a:
-    wartosc: 0.1898
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja: pomiary czerwiec–grudzień; wzrost = a · (n / (n + c·(N − n)))^b, n – narzędzia
-      firmy, N – aktywne narzędzia wszystkich firm; walidacja „zostaw miesiąc” 0,21 pkt proc. (sam udział n/N: 0,46)'
-  internetowa_b:
-    wartosc: 2.7561
-    pewnosc: skalibrowane
-    zrodlo: jw.
-  sposob_laczenia:
-    wartosc: suma
-    pewnosc: zalozenie
-    zrodlo: popyt × (1 + wzrost tradycyjna + wzrost internetowa); gra raportuje oba wzrosty osobno
-  tradycyjna_postac:
-    wartosc: log
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja: 7 postaci porównanych walidacją „zostaw miesiąc” na 8 miesiącach pomiarów: ln(1 + k·emisje)
-      w każdym medium 3,0 pkt proc., nasycenie wykładnicze 4,3, hiperbola 5,4, potęga 3,8, nasycenie sumy kategorii
-      11,0, liniowo 12,0'
-  internetowa_waga_konkurencji:
-    wartosc: 0.3971
-    pewnosc: skalibrowane
-    zrodlo: jw.; narzędzie konkurenta waży ok. 0,4 własnego
 operacje:
   godziny_pracownika:
     wartosc: 40
@@ -172,11 +135,8 @@ operacje:
     zrodlo: 'założenie autora: zajęcia liczy się w pełnych godzinach, w górę'
   model_stanowisk:
     wartosc: pula
-    pewnosc: skalibrowane
-    zrodlo: 'pomiary: dwie firmy (luty i marzec) prowadziły usługi, których sprzęt stał na nieobsadzonych
-      stanowiskach; obłożenie sprzętu = godziny zajęć / (sztuki × 160 h), wykorzystanie prowadzących = godziny wszystkich
-      usług zawodu / (osoby × 160 h) – co do 0,1 pkt proc. „stanowisko” = dawne założenie (sprzęt i prowadzący na
-      tym samym stanowisku)'
+    pewnosc: zalozenie
+    zrodlo: 'pula godzin (decyzja autora 13.11.2026): w małym kebabie z jednym grillem wszyscy stoją przy tym samym ladzie, więc godziny kucharzy i godziny każdego rodzaju sprzętu liczą się wspólnie dla całego lokalu – sprzęt nie musi stać przy konkretnym kucharzu. „stanowisko” = surowsze założenie, w którym danie wymaga kucharza i sprzętu na jednym stanowisku'
   kolejnosc_obslugi:
     wartosc: proporcjonalnie
     pewnosc: zalozenie

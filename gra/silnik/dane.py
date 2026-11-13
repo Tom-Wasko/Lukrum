@@ -241,7 +241,7 @@ class Dane:
         return wynik
 
     def pozycje(self, rodzaj: str) -> dict[str, dict]:
-        """Pozycje katalogu po nazwie: udogodnienia, wyposazenie, media_tradycyjne, narzedzia_internetowe, banki, …"""
+        """Pozycje katalogu po nazwie: udogodnienia, wyposazenie, szkolenia, …"""
         return {p["nazwa"]: p for p in self.katalog_ofert[rodzaj]["pozycje"]}
 
     def dostepne(self, rodzaj: str, runda: int) -> dict[str, dict]:
@@ -369,17 +369,10 @@ def sprawdz(katalog: Path | None = None) -> list[str]:
     for u in d.katalog_ofert["rundy"]["uslugi_startowe"]:
         if u not in d.uslugi:
             brak(u, "katalog.yaml: rundy.uslugi_startowe", "usługa", "uslugi.yaml")
-    media, narzedzia = d.pozycje("media_tradycyjne"), d.pozycje("narzedzia_internetowe")
     for s, st in d.boty["strategie"].items():
         for u in st.get("dania_specjalne", []):
             if u not in d.uslugi:
                 brak(u, f"boty.yaml: {s}.dania_specjalne", "danie", "uslugi.yaml")
-        for n in st["reklama"]:
-            if n not in media:
-                brak(n, f"boty.yaml: {s}.reklama", "medium", "katalog.yaml: media_tradycyjne")
-        for n in st["internet"]:
-            if n not in narzedzia:
-                brak(n, f"boty.yaml: {s}.internet", "narzędzie", "katalog.yaml: narzedzia_internetowe")
     if d.funkcje:
         bledy += _sprawdz_funkcje(d)
     if d.kalendarz_miasta and not d.mapa:

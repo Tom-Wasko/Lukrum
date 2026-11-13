@@ -33,10 +33,9 @@ EPS = 1e-9
 
 
 def model_puli(dane: Dane) -> bool:
-    """„pula” (oficjalna gra): godziny prowadzących danego zawodu i godziny każdego rodzaju sprzętu są wspólne dla
-    całej firmy – sprzęt nie musi stać na stanowisku prowadzącego (pomiary: danie prowadzone,
-    choć jego sprzęt stał na nieobsadzonym stanowisku; obłożenie sprzętu = godziny / (sztuki × 160 h)).
-    „stanowisko”: usługa tylko na stanowisku, które ma prowadzącego i cały sprzęt (wcześniejsze założenie)."""
+    """„pula”: w małym kebabie z jednym grillem wszyscy stoją przy tym samym ladzie, więc godziny kucharzy i godziny
+    każdego rodzaju sprzętu są wspólne dla całej firmy (obłożenie sprzętu = godziny / (sztuki × 160 h)).
+    „stanowisko”: danie tylko na stanowisku, które ma kucharza i cały sprzęt (surowsze założenie)."""
     return dane.z["operacje"].get("model_stanowisk", "pula") == "pula"
 
 

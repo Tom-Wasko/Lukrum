@@ -48,7 +48,7 @@ def test_kazdy_plik_ma_opis_i_zrodlo():
         ("kandydaci.yaml", lambda d: d["losowanie"]["gwiazdki"].update({"3": 0.5}), "sumować"),
         (
             "boty.yaml",
-            lambda d: d["strategie"]["tani"]["reklama"].update({"Gazeta X": 1}),
+            lambda d: d["strategie"]["tani"]["dania_specjalne"].append("Gazeta X"),
             "Gazeta X",
         ),
         (

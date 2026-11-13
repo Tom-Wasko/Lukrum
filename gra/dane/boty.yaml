@@ -1,8 +1,8 @@
 # Boty
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Strategie botów: cena w ułamku ceny preferowanej (null = średnia rynku), jakość, docelowa liczba dań, pokrycie popytu,
-  wyposażenie i udogodnienia (sztuki), reklama (medium → emisje), internet, szkolenia; gra z lokalami: kampanie
-  (agencja/kanał z mapa/reklama.yaml) zamiast reklamy i internetu, bufor_kampanii – gotówka po kampaniach,
+  wyposażenie i udogodnienia (sztuki), szkolenia; kampanie
+  (agencja/kanał z mapa/reklama.yaml), bufor_kampanii – gotówka po kampaniach,
   emisje_kampanii – tyle emisji w kampanii, przerwa_kampanii – rund przerwy po kampanii w tym kanale i strefie; promocje (typ z mapa/promocje.yaml
   i ozdobna nazwa) – na najdroższe danie w sprzedaży („2 za 1” – na najtańsze i tylko przy obciążeniu kuchni
   ≤ maks_obciazenie_kuchni_porcji), nowe tylko z buforem gotówki, wszystkie wyłączone, gdy bot
@@ -157,8 +157,6 @@ strategie:
     pokrycie: 0.9
     wyposazenie: 6   # B10: przy wolnej kuchni komplet +0,06 karty (b10_po, 6/6)
     udogodnienia: 2
-    reklama: {}
-    internet: []
     szkolenia: 1   # B9: jedno szkolenie +0,02 karty (b9_po), dwa już tracą
     kampanie:
     - papier_przyjmie/ulotki
@@ -177,10 +175,6 @@ strategie:
     pokrycie: 0.85
     wyposazenie: 3   # B10: WiFi, parking, terminal +0,05 karty (b10_po, 5/6)
     udogodnienia: 0
-    reklama:
-      Ulotki: 10
-    internet:
-    - Informacje na forach internetowych
     szkolenia: 0
     kampanie:
     - papier_przyjmie/ulotki
@@ -200,10 +194,6 @@ strategie:
     pokrycie: 1.0
     wyposazenie: 6
     udogodnienia: 3   # B10: przy uczciwej płacy udogodnienia nic nie dają (9 → 3: +0,055 karty)
-    reklama:
-      Smaki Lublina (dziennik): 6
-    internet:
-    - Strona www firmy
     szkolenia: 1   # B9: drugie szkolenie nic nie daje (efekt włącznik), −0,02 karty
     kampanie:
     - lajk/influencer
@@ -225,15 +215,6 @@ strategie:
     pokrycie: 1.0
     wyposazenie: 6
     udogodnienia: 3   # B10: jak premium (6 → 3: +0,024 karty)
-    reklama:
-      Ulotki: 20
-      Ekrany LED: 11
-      Smaki Lublina (dziennik): 14
-      Radio Czechówka: 21
-    internet:
-    - Strona www firmy
-    - Profil na Facebook
-    - Informacje na forach internetowych
     szkolenia: 1   # B9: jak premium
     kampanie:
     - papier_przyjmie/plakaty
@@ -256,6 +237,4 @@ strategie:
     pokrycie: 0.9
     wyposazenie: 3
     udogodnienia: 3
-    reklama: {}
-    internet: []
     szkolenia: 1
