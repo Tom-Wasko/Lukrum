@@ -238,17 +238,23 @@ finanse:
     zrodlo: 'Z3 (Plan optymalizacji, odpowiedź autora: „Inwestor za udział w wyniku”, „Wpłata jako dług”): mistrz gry
       ratuje drużynę z debetem ponad limit wpłatą do max_kwota (kapitał startowy); inwestor przez `rund` rund bierze
       `udzial` dodatniego dochodu netto rundy, a niezwrócona wpłata liczy się jak dług – wartości do kalibracji'
-losowosc:
-  reklamacje:
-    wartosc: dwumianowo_ryzyko_pracownika
+pomylki:   # pomyłki w szczycie (silnik/kuchnia/operacje.py) zamiast reklamacji
+  szansa:
+    wartosc:
+      prog_szczytu: 0.7
+      za_szczyt: 0.10
+      zmeczenie_od: 0.85
+      za_zmeczenie: 0.06
+      bez_szkolen: 0.02
+      maks: 0.4
     pewnosc: zalozenie
-    zrodlo: 'instrukcja: ryzyko reklamacji = prawdopodobieństwo wadliwej usługi; reklamacja zużywa zasoby ponownie
-      (pomiary: zużycie o 0,4–1% większe niż sprzedaż)'
-  reklamacje_mnoznik_ryzyka:
-    wartosc: 0.15
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja pomiarami (balans/): prawdopodobieństwo reklamacji = ryzyko pracownika
-      × mnożnik; przy 1,0 zużycie zasobów było o 3,6% za duże, przy 0,15 błąd 0,4%'
+    zrodlo: 'własny model LUKRUM (tor A): szansa pomyłki przy daniu = skłonność do pomyłek kucharza (kandydaci.yaml, 0,2–4%)
+      + za_szczyt × (obciążenie kuchni − prog_szczytu) ÷ (1 − prog_szczytu), obciążenie = godziny potrzebne ÷ dostępne
+      w danym dniu (najwyżej pełny dodatek) + za_zmeczenie × udział nadgodzin obsady (wykorzystanie w poprzednim tygodniu
+      ponad zmeczenie_od) + bez_szkolen, gdy firma nie ma w tym tygodniu żadnego szkolenia; najwyżej maks. Pomyłka =
+      to samo danie robione ponownie (zużywa składniki) i obniżona ocena gości. Liczby okrągłe, dobrane pomiarem botów
+      (raport mechaniki-a); dawny mnożnik 0,15 na ryzyku pracownika usunięty'
+losowosc:
   ceny_dostawcow:
     wartosc:
       odchylenie: 0.044

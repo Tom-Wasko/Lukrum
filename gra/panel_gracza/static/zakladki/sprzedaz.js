@@ -36,7 +36,7 @@ export const sprzedaz = {
     const kafle = S.length ? kafelkiLiczb([
       { etykieta: "Chętni", wartosc: licz(chetni) }, { etykieta: "Obsłużeni", wartosc: licz(obsl), opis: proc(chetni ? obsl / chetni : 0, 0) + " chętnych" },
       { etykieta: "Odeszli bez kebaba", wartosc: licz(utr), ton: utr >= 1 ? "minus" : "plus" },
-      { etykieta: "Przychód ze sprzedaży", wartosc: zl(suma("przychod")) }, { etykieta: "Reklamacje", wartosc: licz(suma("reklamacje")), ton: suma("reklamacje") ? "minus" : "" }]) : "";
+      { etykieta: "Przychód ze sprzedaży", wartosc: zl(suma("przychod")) }, { etykieta: "Pomyłki w szczycie", wartosc: licz(suma("reklamacje")), ton: suma("reklamacje") ? "minus" : "" }]) : "";
     return lead + kafle
       + `<div class="wykres"><canvas id="w-sprzedaz"></canvas></div>`
       + zwinTabela("Sprzedaż vs utracona sprzedaż", ["Danie", "Popyt", "Sprzedaż", "Utracona sprzedaż", "Przyczyna", "Reklamacje", "Przychód"], own,

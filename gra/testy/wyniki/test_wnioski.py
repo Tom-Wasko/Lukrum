@@ -18,7 +18,7 @@ def _w(**zmiany):
 
 def _danie(popyt, sprzedaz, prognoza, przyczyna="", reklamacje=0):
     return {"popyt": popyt, "sprzedaz": sprzedaz, "utracona": popyt - sprzedaz, "prognoza": prognoza,
-            "przyczyna": przyczyna, "reklamacje": reklamacje}
+            "przyczyna": przyczyna, "pomylki": reklamacje}
 
 
 def test_brak_wynikow_i_dobra_runda():
@@ -39,7 +39,7 @@ def test_rady_wedlug_przyczyny_i_prognozy():
     assert tytuly["Kolejka przy kasie"]["zakladka"] == "zatrudnienie"
     assert "Kebab box" in tytuly["Chętnych było więcej, niż zakładała prognoza"]["co"]
     assert "Talerz" in tytuly["Prognoza była wyższa niż popyt"]["co"]
-    assert "Klienci reklamowali dania" in tytuly
+    assert "Pomyłki w szczycie" in tytuly
 
 
 def test_strata_i_mandaty_z_rada():

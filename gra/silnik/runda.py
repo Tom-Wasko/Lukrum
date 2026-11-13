@@ -403,7 +403,7 @@ def _wyniki_firmy(dane, f: Firma, r, ks: Ksiega, rach: Rachunek, info, popyt, ob
                            "utracona": obsluga["utracona"][u], "przyczyna": obsluga["przyczyna"].get(u, ""),
                            "cena": f.ceny[u].cena, "rabat": f.ceny[u].rabat, "cena_po_rabacie": o["cena"],
                            "przychod": round((info.get("przychod_sprzedazy") or {}).get(
-                               u, obsluga["obsluzeni"][u] * o["cena"]), 2), "reklamacje": obsluga["reklamacje"][u],
+                               u, obsluga["obsluzeni"][u] * o["cena"]), 2), "pomylki": obsluga["pomylki"][u],
                            "jakosc": o["jakosc"], "skladniki_popytu": rynek[u][f.nazwa]["skladniki"]}
     w["sprzedaz"] = sprzedaz
 

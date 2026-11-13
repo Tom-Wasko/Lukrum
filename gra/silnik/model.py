@@ -75,7 +75,7 @@ class Pracownik(Model):
     pensja_preferowana_gr: int
     koszt_rekrutacji_gr: int
     zadowolenie_klientow: float
-    ryzyko_reklamacji: float
+    ryzyko_pomylki: float
     pensja_gr: int = 0
     umowa: str = "prace"          # forma zatrudnienia (UF21, silnik/ludzie/formy.py): "prace", "zlecenie", "pol_etatu", …
     student: bool = False         # UF21: student do 26 lat – bez PIT, mniej godzin, częściej odchodzi
@@ -107,7 +107,7 @@ class WlascicielNaStanowisku(Model):
     godziny: float
     zawod: str
     zadowolenie_klientow: float
-    ryzyko_reklamacji: float
+    ryzyko_pomylki: float
 
 
 class Stanowisko(Model):
@@ -467,7 +467,7 @@ class Firma(Model):
             return None
         return Pracownik(id=WLASCICIEL, imie_nazwisko="Właściciel", zawod=w.zawod, gwiazdki=1,
                          pensja_preferowana_gr=0, koszt_rekrutacji_gr=0,
-                         zadowolenie_klientow=w.zadowolenie_klientow, ryzyko_reklamacji=w.ryzyko_reklamacji,
+                         zadowolenie_klientow=w.zadowolenie_klientow, ryzyko_pomylki=w.ryzyko_pomylki,
                          stanowisko=s.nr)
 
     def godziny_stanowiska(self, s: Stanowisko, godziny_pracownika: float, dane: Any = None) -> float:

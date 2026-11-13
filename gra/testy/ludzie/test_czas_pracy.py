@@ -63,7 +63,7 @@ def test_wlasciciel_na_stanowisku(gra):
     g, s, *_ = gra
     f = s.firmy["A"].model_copy(deep=True)
     f.wlasciciel_na = WlascicielNaStanowisku(typ="kuchnia", nr=2, godziny=10, zawod="Kucharz", zadowolenie_klientow=0.5,
-                                             ryzyko_reklamacji=0.1)
+                                             ryzyko_pomylki=0.1)
     assert _czas_pracy(g.dane, f, _obsluga({2: 5.0}), 40) == {"godziny_pracy": 5.0, "godziny_dostepne": 10.0, "obciazenie": 0.5}
 
 

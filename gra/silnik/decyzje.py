@@ -429,7 +429,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         p = Pracownik(id=kandydat["id"], imie_nazwisko=kandydat["imie_nazwisko"], zawod=kandydat["zawod"],
                       gwiazdki=kandydat["gwiazdki"], pensja_preferowana=kandydat["pensja_preferowana"],
                       koszt_rekrutacji=kandydat["koszt_rekrutacji"],
-                      zadowolenie_klientow=kandydat["zadowolenie_klientow"], ryzyko_reklamacji=kandydat["ryzyko_reklamacji"],
+                      zadowolenie_klientow=kandydat["zadowolenie_klientow"], ryzyko_pomylki=kandydat["ryzyko_pomylki"],
                       pensja=pensja, umowa=umowa, student=bool(kandydat.get("student")),
                       od_rundy=runda, stanowisko=st.nr, cecha=kandydat.get("cecha", ""), opis=kandydat.get("opis", ""),
                       wydajnosc=kandydat.get("wydajnosc", 1.0))

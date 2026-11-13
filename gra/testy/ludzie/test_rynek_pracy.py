@@ -159,7 +159,7 @@ def test_wlasciciel_na_stanowisku_jako_pracownik_1_gwiazdka():
     kasa = f.stanowisko("kasa", 1)
     assert f.pracownik_stanowiska(kasa) is None and not kasjerzy(g.dane, f)
     f.wlasciciel_na = WlascicielNaStanowisku(typ="kasa", nr=1, godziny=12, zawod="Kasjer", zadowolenie_klientow=0.5,
-                                             ryzyko_reklamacji=0.1)
+                                             ryzyko_pomylki=0.1)
     p = f.pracownik_stanowiska(kasa)
     assert (p.id, p.gwiazdki, p.pensja) == (WLASCICIEL, 1, 0) and kasjerzy(g.dane, f) == [kasa]
     assert f.godziny_stanowiska(kasa, 40) == 12 and f.godziny_stanowiska(f.stanowisko("kuchnia", 1), 40) == 0

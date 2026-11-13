@@ -293,7 +293,7 @@ def rynek_lokali(dane: Dane, firmy: dict[str, Firma], oferty: dict[str, dict[str
         popyt[f] = {}
         dzienne = {u: {"popyt": [0] * len(dni), "sprzedaz": [0] * len(dni)} for lok in lokale for u in lokale[lok]}
         lokale_wynik, przyczyny = [], {}
-        laczna = {"obsluzeni": {}, "utracona": {}, "reklamacje": {}, "zuzyte_zasoby": {}, "godziny_stanowisk": {},
+        laczna = {"obsluzeni": {}, "utracona": {}, "pomylki": {}, "zuzyte_zasoby": {}, "godziny_stanowisk": {},
                   "godziny_kasy": 0.0, "godziny_kasy_lokali": {}, "liczba_kasjerow": 0, "godziny_sprzetu": {},
                   # P6 (tylko raport): dzień po dniu [potrzebne, pojemność] godzin – stanowiska kuchni i kasy lokali
                   "dni_stanowisk": {}, "dni_kasy_lokali": {lok: [None] * len(dni) for lok in lokale}}
@@ -309,7 +309,7 @@ def rynek_lokali(dane: Dane, firmy: dict[str, Firma], oferty: dict[str, dict[str
             widoki.setdefault(lok, widok_lokalu(firma, lok))
         przew = (przewozy or {}).get(f, [])
         sprzedaz_lokalu = {lok: 0 for lok in lokale}
-        obsluga_lokalu = {lok: {"obsluzeni": {}, "kolejka": 0, "brak": 0, "reklamacje": 0} for lok in lokale}   # U24
+        obsluga_lokalu = {lok: {"obsluzeni": {}, "kolejka": 0, "brak": 0, "pomylki": 0} for lok in lokale}   # U24
         # Z3: przychód (ceny lokalu, bez promocji) i wartość zużytych składników każdego lokalu – zakładka Mój lokal
         przychod_lokalu = {lok: 0.0 for lok in lokale}
         skladniki_lokalu = {lok: 0.0 for lok in lokale}
@@ -346,7 +346,7 @@ def rynek_lokali(dane: Dane, firmy: dict[str, Firma], oferty: dict[str, dict[str
                 for u, k in o["obsluzeni"].items():
                     laczna["obsluzeni"][u] = laczna["obsluzeni"].get(u, 0) + k
                     laczna["utracona"][u] = laczna["utracona"].get(u, 0) + o["utracona"][u]
-                    laczna["reklamacje"][u] = laczna["reklamacje"].get(u, 0) + o["reklamacje"][u]
+                    laczna["pomylki"][u] = laczna["pomylki"].get(u, 0) + o["pomylki"][u]
                     dzienne[u]["popyt"][i] += d[u]
                     dzienne[u]["sprzedaz"][i] += k
                     sprzedaz_lokalu[lok] += k
@@ -357,7 +357,7 @@ def rynek_lokali(dane: Dane, firmy: dict[str, Firma], oferty: dict[str, dict[str
                         przych[u] = przych.get(u, 0.0) + k * lokale[lok][u]["cena"]
                     ol = obsluga_lokalu[lok]
                     ol["obsluzeni"][u] = ol["obsluzeni"].get(u, 0) + k
-                    ol["reklamacje"] += o["reklamacje"][u]
+                    ol["pomylki"] += o["pomylki"][u]
                     if o["utracona"][u]:
                         ol[op.rodzaj_utraty(o["przyczyna"][u])] += o["utracona"][u]
                         p = przyczyny.setdefault(u, {})
@@ -395,7 +395,7 @@ def rynek_lokali(dane: Dane, firmy: dict[str, Firma], oferty: dict[str, dict[str
         laczna["przyczyna"] = {u: max(p, key=p.get) for u, p in przyczyny.items()}
         for u in dzienne:
             laczna["obsluzeni"].setdefault(u, 0)
-            laczna["reklamacje"].setdefault(u, 0)
+            laczna["pomylki"].setdefault(u, 0)
             popyt[f][u] = sum(dzienne[u]["popyt"])
             laczna["utracona"][u] = popyt[f][u] - laczna["obsluzeni"][u]
         obsluga[f] = laczna

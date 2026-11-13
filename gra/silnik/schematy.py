@@ -149,7 +149,7 @@ class ZnanyKandydat(Schemat):
     pensja_preferowana: float = Field(gt=0)
     koszt_rekrutacji: float = Field(ge=0)
     zadowolenie_klientow: float = Field(ge=0, le=1)
-    ryzyko_reklamacji: float = Field(ge=0, le=1)
+    ryzyko_pomylki: float = Field(ge=0, le=1)
 
 
 class Przedzialy(Schemat):
@@ -1085,7 +1085,7 @@ class UstawieniaOpinii(Schemat):
     cena_limit: float = Field(ge=0)
     kolejka: float = Field(ge=0)
     brak: float = Field(ge=0)
-    reklamacje: float = Field(ge=0)
+    pomylki: float = Field(ge=0)
     wyposazenie: float = Field(ge=0)
     udzial_opinii: float = Field(gt=0, le=1)
     rozrzut: float = Field(ge=0)

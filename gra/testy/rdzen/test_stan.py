@@ -34,7 +34,7 @@ pracownicy = st.builds(
     pensja_preferowana_gr=KWOTY,
     koszt_rekrutacji_gr=KWOTY,
     zadowolenie_klientow=st.floats(0, 2),
-    ryzyko_reklamacji=st.floats(0, 1),
+    ryzyko_pomylki=st.floats(0, 1),
     pensja_gr=KWOTY,
     premia_gr=KWOTY,
 )

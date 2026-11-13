@@ -81,7 +81,7 @@ def dane_rywala(w: dict) -> dict:
             "lokale": [{"nazwa": lk["nazwa"], "strefa": lk["strefa"], "forma": lk["forma"]} for lk in w.get("lokale", [])],
             "menu": [{"usluga": u, "cena": s["cena"], "cena_po_rabacie": s.get("cena_po_rabacie", s["cena"]),
                       "popyt": s["popyt"], "sprzedaz": s["sprzedaz"], "przychod": s["przychod"],
-                      "reklamacje": s.get("reklamacje", 0)} for u, s in w.get("sprzedaz", {}).items()],
+                      "pomylki": s.get("pomylki", 0)} for u, s in w.get("sprzedaz", {}).items()],
             "zaloga": [{"zawod": zw, "gwiazdki": g, "liczba": n, "pensja": round(pensje[zw, g] / n, 2)}
                        for (zw, g), n in sorted(zaloga.items())],
             "kampanie": [{"nazwa": k["nazwa"], "agencja": k.get("agencja_nazwa"), "strefa": k.get("strefa_nazwa"),

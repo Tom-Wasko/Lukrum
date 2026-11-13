@@ -15,7 +15,7 @@ pytestmark = pytest.mark.dane_gry
 
 def _osoba(umowa="prace", od_rundy=1):
     return Pracownik(id="x", imie_nazwisko="Jan Kowalski", zawod="Kucharz", gwiazdki=2, pensja_preferowana_gr=500000,
-                     koszt_rekrutacji_gr=0, zadowolenie_klientow=0.9, ryzyko_reklamacji=0.05, pensja=5400,
+                     koszt_rekrutacji_gr=0, zadowolenie_klientow=0.9, ryzyko_pomylki=0.05, pensja=5400,
                      umowa=umowa, od_rundy=od_rundy)
 
 

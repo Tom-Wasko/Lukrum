@@ -144,7 +144,7 @@ def miary_gosci(dane: Dane, f, w: dict, sprzedaz: dict) -> dict:
         "brakujace_dania": min(1.0, len(wylaczone) / dania_dni) if dania_dni else ZERO,
         "mandat": float(((w.get("urzad") or {}).get("kontrola") or {}).get("mandat") or 0),
         "wypadki": len((w.get("zdarzenia") or {}).get("szkody") or []),
-        "pomylki": sum(v.get("reklamacje", 0) for v in sprzedaz.values()) / klienci if klienci else ZERO,
+        "pomylki": sum(v.get("pomylki", 0) for v in sprzedaz.values()) / klienci if klienci else ZERO,
         "klienci": klienci,
         "popyt": popyt,
     }

@@ -83,7 +83,7 @@ def jako_kandydat(p: Pracownik) -> dict:
     return {"id": p.id, "imie_nazwisko": p.imie_nazwisko, "gwiazdki": p.gwiazdki, "zawod": p.zawod,
             "pensja_preferowana": p.pensja_preferowana, "koszt_rekrutacji": p.koszt_rekrutacji,
             "zadowolenie_klientow": p.zadowolenie_klientow,
-            "ryzyko_reklamacji": p.ryzyko_reklamacji, "cecha": p.cecha, "opis": p.opis, "wydajnosc": p.wydajnosc,
+            "ryzyko_pomylki": p.ryzyko_pomylki, "cecha": p.cecha, "opis": p.opis, "wydajnosc": p.wydajnosc,
             **({"student": True} if p.student else {})}
 
 

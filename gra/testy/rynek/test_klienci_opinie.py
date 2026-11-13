@@ -86,7 +86,7 @@ def test_lokal_bez_dania_sprzedaje_zamiennik(monkeypatch):
 
 def _wynik(obsluzeni=100, kolejka=0, brak=0, reklamacje=0, grupy=None):
     return {"popyt": obsluzeni + kolejka + brak, "grupy": grupy or {"studenci": obsluzeni},
-            "obsluga": {"obsluzeni": {BULKA: obsluzeni}, "kolejka": kolejka, "brak": brak, "reklamacje": reklamacje}}
+            "obsluga": {"obsluzeni": {BULKA: obsluzeni}, "kolejka": kolejka, "brak": brak, "pomylki": reklamacje}}
 
 
 @dane_gry
@@ -142,7 +142,7 @@ def test_opinie_w_grze_deterministyczne_i_publiczne():
     # liczba opinii rośnie ze sprzedażą
     assert sum(o["liczba"] for o in pub.values()) > sum(o["liczba"] for o in s.rynek[3]["opinie"].values())
     w = s.wyniki[4]["Premium"]["opinie"]
-    assert all(set(x["powody"]) == {"jakosc", "cena", "kolejka", "brak", "reklamacje", "wyposazenie"} for x in w.values())
+    assert all(set(x["powody"]) == {"jakosc", "cena", "kolejka", "brak", "pomylki", "wyposazenie"} for x in w.values())
 
 
 def test_dane_zamrozone_bez_grup_i_opinii():

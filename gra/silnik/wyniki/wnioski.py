@@ -147,12 +147,12 @@ def wnioski(dane: Dane, w: dict | None, wp: dict | None = None, runda: int | Non
                              "Ryzyko kontroli rośnie z przeterminowanym towarem i wynajętą chłodnią – trzymajcie "
                              "mniejszy zapas i zadbajcie o higienę (Urzędy ▸ Sanepid).", "urzad"))
 
-    # reklamacje
-    reklamacje = round(sum(v["reklamacje"] for v in sprzedaz.values()))
-    if reklamacje:
-        poprawa.append(_rada("Klienci reklamowali dania", f"Reklamacji: {reklamacje}.",
-                             "Reklamacje biorą się z jakości – sprawdźcie gwiazdki składników u dostawców i stan "
-                             "sprzętu w kuchni.", "dostawcy"))
+    # pomyłki w szczycie
+    pomylki = round(sum(v["pomylki"] for v in sprzedaz.values()))
+    if pomylki:
+        poprawa.append(_rada("Pomyłki w szczycie", f"Pomyłek w kuchni: {pomylki} (danie robione drugi raz).",
+                             "Pomyłki biorą się z przeciążonej kuchni, zmęczonej obsady i braku szkoleń – dodajcie kucharza "
+                             "albo stanowisko, nie przepracowujcie ludzi i kupcie szkolenie.", "zatrudnienie"))
 
     # księgowość
     if ks.get("kara"):
