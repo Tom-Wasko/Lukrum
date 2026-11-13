@@ -1,6 +1,6 @@
 # LUKRUM – postęp prac
 
-Zadania i stan etapów. Pełny plan przebudowy leży poza repo (`../PLAN_PRZEBUDOWY.md`). Każdy etap kończy się
+Zadania i stan etapów. Pełny plan przebudowy jest w repo `Tom-Wasko/Lukrum-notatki` (`PLAN_PRZEBUDOWY.md`). Każdy etap kończy się
 przeglądem autora.
 
 ## Etap 1 – gra pod nową nazwą (zrobione 13.11.2026, poprawki po przeglądzie)
