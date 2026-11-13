@@ -1537,6 +1537,7 @@ class Klub(Schemat):
     adres: str
     tekst: str = Field(min_length=3)
     kod_od_rundy: int | None = Field(default=None, ge=1)   # UF2: wejście z hasłem
+    rekopis_znaleziony_w_jsonie: str | None = None   # wskazówka dla tego, kto zajrzy w surowe dane (hasło „saragossa”)
 
 
 

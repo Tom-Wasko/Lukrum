@@ -1,6 +1,5 @@
 """Poprawki 3 (uwaga autora 8.11.2026): każda marka, rola i sprawa, która w kartach (kartaMarki, wspolne.js) dostawała
-dwie litery w kwadracie, ma ikonę w panel_gracza/static/zakladki/ikony_marek.js (słownik WLASNE). Prawdziwe firmy
-dostają tam ogólne ikony branżowe: znaków firm nie rysujemy, bo są chronione (nazwy zostają)."""
+dwie litery w kwadracie, ma ikonę w panel_gracza/static/zakladki/ikony_marek.js (prawdziwe marki – LOGA, nasze – WLASNE)."""
 
 import re
 from pathlib import Path
@@ -22,8 +21,11 @@ def _yaml(sciezka: Path):
 
 def _ikony() -> set[str]:
     kod = (ZAKLADKI / "ikony_marek.js").read_text(encoding="utf-8")
-    cialo = re.search(r"const WLASNE = \{\n(.*?)\n\};", kod, re.S).group(1)
-    return {a or b for a, b in re.findall(r'^ {2}(?:"([^"]+)"|([^\s"/:]+)):', cialo, re.M)}
+    klucze = set()
+    for slownik in ("WLASNE", "LOGA"):
+        cialo = re.search(rf"const {slownik} = \{{\n(.*?)\n\}};", kod, re.S).group(1)
+        klucze |= {a or b for a, b in re.findall(r'^ {2}(?:"([^"]+)"|([^\s"/:]+)):', cialo, re.M)}
+    return klucze
 
 
 def _historie(x):
@@ -71,13 +73,3 @@ def test_kazda_marka_ma_ikone():
     assert len(nazwy) > 50 and {"Biedronka", "Kasjer", "Kucharz", "mBank", "IKEA", "Pożar w kuchni"} <= set(nazwy)
     brak = sorted(f"{n} ({skad})" for n, skad in nazwy.items() if n not in ikony)
     assert brak == [], "Bez ikony w ikony_marek.js:\n" + "\n".join(brak)
-
-
-def test_bez_znakow_prawdziwych_firm():
-    """Brak słownika LOGA i kafelków 32×32 w barwach marek: tylko jednobarwne ikony liniowe (currentColor)."""
-    kod = (ZAKLADKI / "ikony_marek.js").read_text(encoding="utf-8")
-    assert "LOGA" not in kod and "logo-marki" not in kod
-    assert not re.search(r'fill="#|stroke="#', kod), "kolory firm w ikonach – tylko currentColor"
-    reszta = "".join(p.read_text(encoding="utf-8") for p in ZAKLADKI.glob("*.js") if p.name != "ikony_marek.js")
-    css = (ZAKLADKI.parent / "styl.css").read_text(encoding="utf-8")
-    assert "logo-marki" not in reszta + css

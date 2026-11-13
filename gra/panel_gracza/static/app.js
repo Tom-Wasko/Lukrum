@@ -6,7 +6,7 @@ import { ikona } from "./zakladki/ikony.js";
 import { przebiteOferty } from "./zakladki/lokale.js";
 import { kolko, zwinPodpowiedzi } from "./zakladki/dymki.js";
 import { AKCJE_ZADAN, podepnijZadania, rysujZadania } from "./zakladki/zadania.js";
-import { HASLO, zapamietajHaslo } from "./zakladki/kasyno.js";
+import { HASLO, HASLO_SZPERACZ, jestSzperaczem, zapamietajHaslo, zapamietajSzperacza } from "./zakladki/kasyno.js";
 import { funkcjaZakladki, funkcjeZakladek, oknoFunkcji, oknoUstawienFunkcji, oknoZakryciaFunkcji, saZakryte, ukryta as ukrytaF, wylaczona as wylaczonaF,
   zakryta as zakrytaF, zakrytaFunkcja, znaczekFunkcji } from "./zakladki/funkcje.js";
 
@@ -314,6 +314,7 @@ function rysuj() {
   const grupa = MENU.find((p) => p.pod ? p.pod.includes(S.zakladka) : p.klucz === S.zakladka);
   document.body.dataset.dzial = grupa ? grupa.klucz : "dashboard";
   document.getElementById("nazwa-firmy").textContent = v.dashboard.nazwa;
+  odznakaSzperacza();
   const st = document.getElementById("status-gry");
   st.innerHTML = `<span class="chip">${esc(v.gra.nazwa)}</span>${chipDruzyny(v)}${ostatniZapis(v)}<span class="chip pom">${ikona("portfel", 14)}${zl(v.dashboard.saldo)}</span>`
     + (v.gra.zakonczona ? `<span class="chip">Gra zakończona</span>` : v.wyslane && v.edycja
@@ -431,12 +432,26 @@ document.addEventListener("keydown", (e) => {
   setTimeout(() => { if (el.isConnected && niezatwierdzone(el)) el.dispatchEvent(new Event("change", { bubbles: true })); });
 });
 
+// mała ikonka obok nazwy drużyny w nagłówku – tylko u tego, kto wpisał „saragossa”
+function odznakaSzperacza() {
+  const el = document.getElementById("nazwa-firmy");
+  el?.querySelector(".odznaka-szperacz")?.remove();
+  if (!el || !jestSzperaczem()) return;
+  el.insertAdjacentHTML("beforeend", `<span class="odznaka-szperacz" title="Szperacz" style="margin-left:6px;vertical-align:middle;opacity:.85">${ikona("analiza", 14)}</span>`);
+}
+
 // hasło do klubu „Pod Złotym Koziołkiem” wpisane z klawiatury na dowolnej zakładce (poza polami formularzy)
 let wpisane = "";
 document.addEventListener("keydown", (e) => {
   if (e.ctrlKey || e.altKey || e.metaKey || e.key.length !== 1 || e.target.closest?.("input, textarea, select, [contenteditable]")) return;
-  wpisane = (wpisane + e.key.toLowerCase()).slice(-HASLO.length);
-  if (wpisane !== HASLO || !S.v) return;
+  wpisane = (wpisane + e.key.toLowerCase()).slice(-Math.max(HASLO.length, HASLO_SZPERACZ.length));
+  if (S.v && wpisane.endsWith(HASLO_SZPERACZ)) {
+    wpisane = "";
+    zapamietajSzperacza();
+    odznakaSzperacza();
+    return toast("Szperacz! Znalazłeś rękopis w danych gry. Koziołek kłania się nisko.");
+  }
+  if (!wpisane.endsWith(HASLO) || !S.v) return;
   wpisane = "";
   zapamietajHaslo();
   if (!S.v.kasyno?.otwarte) return toast("Pod Złotym Koziołkiem nikt teraz nie otwiera. Spróbuj w innym tygodniu.");

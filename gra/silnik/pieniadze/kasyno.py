@@ -145,7 +145,8 @@ def widok(dane: Dane, fp: Firma, runda: int, decyzja: dict | None, wyniki: dict 
     if not K or not (drzwi(dane, fp, runda) or (ost and ost.get("gry"))):
         return None
     otw = drzwi(dane, fp, runda)
-    return {"otwarte": otw, "adres": K["kasyno"]["adres"], "zaproszenie": tekst_zaproszenia(dane, fp, runda),
+    return {"otwarte": otw, "adres": K["kasyno"]["adres"], "rekopis_znaleziony_w_jsonie": K["kasyno"].get("rekopis_znaleziony_w_jsonie"),
+            "zaproszenie": tekst_zaproszenia(dane, fp, runda),
             "klub": {k: K["kasyno"][k] for k in ("nazwa", "tekst")} if otw else None,
             "gry": {k: {"typ": g["typ"], "nazwa": g["nazwa"], "opis": g["opis"],
                         "zaklady": {z: {"nazwa": x["nazwa"], "mnoznik": x["mnoznik"]} for z, x in (g.get("zaklady") or {}).items()}}

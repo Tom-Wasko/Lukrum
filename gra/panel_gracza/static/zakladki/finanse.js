@@ -255,6 +255,21 @@ export function podsumowanieDeklaracji(D, zapisy, P) {
 const wybierz = (id, wybrane, edycja, napis = "Wybierz") => id === wybrane ? `<button class="btn zielony">✓ Wybrano</button>`
   : `<button class="btn czarny" data-akcja="biuro" data-b="${esc(id)}" ${edycja ? "" : "disabled"}>${napis}</button>`;
 
+// B6: zakupy poniżej progu amortyzacji – od razu w koszty (domyślnie) albo do ewidencji z amortyzacją
+function wyborNiskocennych(v, d, edycja) {
+  const a = v.amortyzacja || {}, N = a.niskocenne;
+  if (!N) return "";
+  const wyb = d.amortyzacja_niskocenna || v.stan.amortyzacja_niskocenna || "koszty", dis = edycja ? "" : "disabled";
+  const opcja = (id, napis) => wyb === id ? `<button class="btn zielony">✓ ${napis}</button>`
+    : `<button class="btn czarny" data-akcja="niskocenne" data-n="${id}" ${dis}>${napis}</button>`;
+  return `<h3>Zakupy tańsze niż ${zl(a.prog)}</h3>
+    <div class="wiersz">${opcja("koszty", "Od razu w koszty")} ${opcja("amortyzacja", `Amortyzuję (${proc(N.stawka, 0)} rocznie)`)}</div>
+    <p class="podpowiedz">Sprzęt, wyposażenie i stanowiska tańsze niż próg możesz wpisać od razu w koszty (niższy dochód i podatek
+    w rundzie zakupu) albo do ewidencji środków trwałych – wtedy koszt w KPiR rozkłada się na lata, od rundy po zakupie.
+    Podatek nie znika, tylko przesuwa się w czasie; majątek firmy w karcie wyników liczy się tak samo. Wybór obowiązuje
+    dla zakupów od tej rundy (wcześniejszych nie przeksięgowuje) i trwa do zmiany.</p>`;
+}
+
 // biuro jako karta marki w dwóch kolumnach (jak wybór banku)
 const wb = (a, b) => `<div class="wiersz"><span>${a}</span><span>${b}</span></div>`;
 function kartaBiuraMarki(b, i, wybrane, edycja, K, wyr) {

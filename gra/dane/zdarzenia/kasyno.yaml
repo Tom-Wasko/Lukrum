@@ -1,14 +1,15 @@
 opis: >-
   Tajny klub z grami (gra z lokalami, silnik/pieniadze/kasyno.py). Nie ma go na mapie ani w menu – otwiera się na jedną
   rundę, gdy drużyna dostanie zaproszenie, albo dla każdego, kto wpisze w panelu z klawiatury hasło „koziol” (UF2). Zaproszenie niczego nie sugeruje. Gra się z prywatnego portfela właściciela
-  (silnik/pieniadze/wlasciciel.py); do firmy pieniądze trafiają tylko jako zwykła wpłata własna. Mistrz gry nie widzi klubu
-  w żadnym widoku, rankingu ani eksporcie.
+  (silnik/pieniadze/wlasciciel.py); do firmy pieniądze trafiają tylko jako zwykła wpłata własna. W widoku firmy klub widzi też
+  mistrz gry (hasło „koziol” działa każdemu); w przeglądzie, rankingu i eksporcie klubu nie ma.
 zrodlo: >-
   Notatka „Elementy mapy” – Kasyno (tajne). Ruletka europejska (37 pól, zero). Automat – tabela wyników gry
   (zwrot około 82% stawek).
 kasyno:
   nazwa: „Pod Złotym Koziołkiem”
   adres: ul. Nocna 13, wejście od podwórza
+  rekopis_znaleziony_w_jsonie: "Kto czyta cudze dane, ten trafi pod Złotego Koziołka. Wpisz w grze »koziol«. A jeśli chcesz zostać Szperaczem, wpisz »saragossa«."   # nagroda za zajrzenie w surowe dane API (nawiązanie do „Rękopisu znalezionego w Saragossie”)
   kod_od_rundy: 1         # hasło „koziol” otwiera drzwi zawsze, od pierwszej rundy (UF2); zaproszenie – od `zaproszenie.od_rundy`
   tekst: >-
     Drzwi od podwórza otwiera ochroniarz Mariusz – dwa metry wzrostu, garnitur o rozmiar za mały i plakietka

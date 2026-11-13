@@ -1,9 +1,9 @@
 // Poprawki 3 (uwaga autora 8.11): ikony marek i ról w kwadracie karty (.agencja-znak) zamiast dwóch liter („KA” przy „Kasjer”).
 // WLASNE – ikony liniowe 24×24 (kreska currentColor) na kolorze karty (--agencja): dla naszych, wymyślonych marek, ról i spraw
-// oraz ogólne ikony branżowe dla firm, których nazwy oddają realia Lublina (dyskont, hurtownia, bank, sklep budowlany).
-// Znaków prawdziwych firm nie rysujemy – są chronione. Brak ikony – znakMarki (wspolne.js) zostawia litery.
-// Klucz = nazwa dokładnie jak w danych (dane/*.yaml, dane/mapa/*.yaml) albo w wywołaniu kartaMarki;
-// test: testy/aplikacja/test_ikony_marek.py.
+// oraz ogólne ikony branżowe jako zapas dla marek bez logo.
+// LOGA – uproszczone znaki marek (nazwy prawdziwych firm – zastrzeżenie w stopce): kafelek 32×32 we własnych barwach.
+// Brak ikony – znakMarki (wspolne.js) zostawia litery. Klucz = nazwa dokładnie jak w danych (dane/*.yaml, dane/mapa/*.yaml)
+// albo w wywołaniu kartaMarki; test: testy/aplikacja/test_ikony_marek.py.
 
 const kropki = (lista, r = 1.1) => lista.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="currentColor" stroke="none"/>`).join("");
 
@@ -78,7 +78,7 @@ const WLASNE = {
   "Bójka o falafel": '<circle cx="7.5" cy="16.5" r="4"/><circle cx="16.5" cy="16.5" r="4"/><circle cx="12" cy="9.5" r="4"/><path d="M3.5 4.5l2 2M20.5 4.5l-2 2M12 1.5v1.8"/>'
     + kropki([[11, 8.5], [13.2, 10.5], [6.5, 15.5], [8.7, 17.6], [15.5, 15.5], [17.6, 17.6]], 0.6),
   "Pani Halina z banku żywności": '<path d="M3 10h18l-2 10.5H5L3 10z"/><path d="M7.5 10l3-6M16.5 10l-3-6"/><path d="M12 18.5s-3-1.8-3-3.8a1.5 1.5 0 0 1 3-.6 1.5 1.5 0 0 1 3 .6c0 2-3 3.8-3 3.8z"/>',
-  // prawdziwe firmy (nazwy z danych): ogólne ikony branżowe zamiast ich znaków
+  // prawdziwe firmy: zapas na wypadek braku logo w LOGA (logo ma pierwszeństwo)
   Biedronka: KOSZYK,
   Lidl: KOSZYK,
   Stokrotka: KOSZYK,
@@ -101,12 +101,60 @@ const WLASNE = {
   kebab: ROZEN,
 };
 
+// prawdziwe marki: kafelek 32×32 we własnych barwach (tło rysuje sam znak)
+const t = (tlo, srodek) => `<rect width="32" height="32" fill="${tlo}"/>${srodek}`;
+const LOGA = {
+  // dyskonty, markety, hurtownie (dostawcy.yaml)
+  Biedronka: t("#fff", '<path d="M16 4.5v4" stroke="#1d1d1b" stroke-width="1.4" stroke-linecap="round"/>'
+    + '<path d="M12.2 5.2c1.2 1.2 2 2.3 2.4 3.4M19.8 5.2c-1.2 1.2-2 2.3-2.4 3.4" fill="none" stroke="#1d1d1b" stroke-width="1.3" stroke-linecap="round"/>'
+    + '<circle cx="16" cy="11" r="4.6" fill="#1d1d1b"/><circle cx="14.2" cy="10" r="1" fill="#fff"/><circle cx="17.8" cy="10" r="1" fill="#fff"/>'
+    + '<circle cx="16" cy="19.5" r="9.5" fill="#e30613"/><path d="M16 10v19" stroke="#1d1d1b" stroke-width="1.3"/>'
+    + '<g fill="#1d1d1b"><circle cx="11.2" cy="16" r="2"/><circle cx="20.8" cy="16" r="2"/><circle cx="10.6" cy="22.4" r="1.7"/><circle cx="21.4" cy="22.4" r="1.7"/><circle cx="14" cy="26.4" r="1.2"/><circle cx="18" cy="26.4" r="1.2"/></g>'),
+  Lidl: t("#0050aa", '<circle cx="16" cy="16" r="11.5" fill="#fff000" stroke="#e60a14" stroke-width="2.2"/>'),
+  Stokrotka: t("#0cb26c", `<g fill="#fff">${Array.from({ length: 10 }, (_, i) => `<ellipse cx="16" cy="8.3" rx="2.4" ry="5.2" transform="rotate(${i * 36} 16 16)"/>`).join("")}</g>`
+    + '<circle cx="16" cy="16" r="4.2" fill="#fcde2c"/>'),
+  Auchan: t("#fff", '<path d="M5 20.5c3.5-1 6-4 8.5-8.2C15.6 8.6 18.5 6 22.5 6c2.4 0 4 1.2 4.6 2.6l-3 1.2c-.6 4.8-3.6 9.2-9 11.5-3.5 1.5-7 1.3-10.1-.8z" fill="#e2001a"/>'
+    + '<path d="M13 21.2c2.6-2 4.6-4.8 5.4-8.2-3 2.2-6 4.6-9.6 6.4 1.4 1.3 2.8 1.8 4.2 1.8z" fill="#7ab51d"/><circle cx="22.4" cy="8.6" r=".95" fill="#fff"/>'
+    + '<path d="M10 25.5h12" stroke="#e2001a" stroke-width="2" stroke-linecap="round"/>'),
+  Makro: t("#ffdd00", '<path d="M7 23V13.5a3.3 3.3 0 0 1 6.5 0V23M13.5 13.5a3.3 3.3 0 0 1 6.5 0V23M20 13.5a3.3 3.3 0 0 1 6.5 0V23" fill="none" stroke="#ed1c24" stroke-width="3" stroke-linecap="round" transform="translate(-0.8 -2)"/>'
+    + '<path d="M6 26h20" stroke="#003a70" stroke-width="2" stroke-linecap="round"/>'),
+  Selgros: t("#d6001c", '<path d="M5.5 8h3.2l2.6 11.5h11.6L25.5 11.5H10" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>'
+    + '<circle cx="12.5" cy="24" r="2" fill="#fff"/><circle cx="21" cy="24" r="2" fill="#fff"/>'),
+  Eurocash: t("#003a8c", `<g fill="#ffcc00">${Array.from({ length: 8 }, (_, i) => {
+    const a = (i * 45 - 90) * Math.PI / 180;
+    return `<circle cx="${(16 + 9.5 * Math.cos(a)).toFixed(2)}" cy="${(16 + 9.5 * Math.sin(a)).toFixed(2)}" r="1.6"/>`;
+  }).join("")}</g><rect x="11" y="11" width="10" height="10" rx="1.5" fill="#fff"/><path d="M11 14.5h10M16 11v3.5" stroke="#003a8c" stroke-width="1.3"/>`),
+  // banki (mapa/banki.yaml)
+  "Crédit Agricole": t("#00828c", '<path d="M16 6.5 7 25.5h4.8L16 16l4.2 9.5H25L16 6.5z" fill="#fff"/><path d="M4 25.5h24" stroke="#7ec242" stroke-width="2.6"/>'),
+  "PKO BP": t("#003574", '<path d="M8 18.5c0-4.6 3.8-7.5 8.5-7.5 3 0 5.2 1 6.6 2.6l2.6-.6-.8 3c.6.8 1 1.6 1.1 2.5H27.5v3h-1.8c-.7 1.3-1.8 2.3-3.2 3V27h-3v-1.6c-.9.2-1.9.2-3 .2s-2-.1-3-.3V27h-3v-3c-2.2-1.2-3.5-3.2-3.5-5.5z" fill="#fff"/>'
+    + '<path d="M13.5 13.6h5" stroke="#003574" stroke-width="1.3" stroke-linecap="round"/><circle cx="16" cy="7.2" r="3" fill="#e2b33c"/><circle cx="23" cy="16.8" r=".9" fill="#003574"/>'),
+  Pekao: t("#c8102e", '<path d="M3.5 24c0-6 2.6-11.5 8-13 3-.8 6.5-.8 9 .2 1.8-.6 3.8.1 4.8 1.6l2.2 3-1.4 1.6c-.6 1.6-1.6 2.6-3 3.2V27h-2.8v-4c-2 .5-4 .6-6 .3V27h-2.8v-4.2c-1.3-.5-2.3-1.2-3-2L6.5 27H4l-.5-3z" fill="#fff"/>'
+    + '<path d="M21.5 11.4c-.2-1.8.6-3.2 2.2-3.8M25.2 12.4c.8-1.4 2.2-2 3.4-1.6" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/><path d="M24.5 19.5l.6 2.5 1-2.2" fill="#fff"/><circle cx="23.8" cy="14.2" r=".9" fill="#c8102e"/>'),
+  ING: t("#fff", `<g fill="#ff6200">${Array.from({ length: 9 }, (_, i) => {
+    const a = (i * 40) * Math.PI / 180;
+    return `<circle cx="${(10 + 5.2 * Math.cos(a)).toFixed(2)}" cy="${(13 + 5.2 * Math.sin(a)).toFixed(2)}" r="2.6"/>`;
+  }).join("")}<circle cx="10" cy="13" r="5.5"/><path d="M13 11h10.5c1.5 0 2.5 1.2 2.5 2.6V19c0 .8-.6 1.5-1.4 1.5V25h-2.3v-4.5h-6V25H14v-4.5h-1V11z"/></g>`
+    + '<path d="M26 13.5c1.8-.4 2.6-2 2.2-4" fill="none" stroke="#ff6200" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="10.7" r="2.9" fill="#ffb27a"/><circle cx="11.4" cy="10.2" r=".7" fill="#1d1d1b"/>'),
+  mBank: t("#fff", '<rect x="4" y="9" width="7" height="14" rx="3.5" fill="#e2001a"/><rect x="12.5" y="9" width="7" height="14" rx="3.5" fill="#f39200"/><rect x="21" y="9" width="7" height="14" rx="3.5" fill="#e5007e"/>'),
+  Santander: t("#ec0000", '<path d="M16.5 5c1.2 2.8 4.6 5.6 4.6 9.6 0 1.6-.6 3-1.6 4 .3-2-.6-3.8-2-5.4.2 2-.6 3.4-1.8 4.4-1 .8-2.4 1.1-3.4 1-.8-.8-1.4-2.1-1.4-3.4 0-3 2.4-4.6 3.6-6.8.8-1.4 1.8-2.4 2-3.4z" fill="#fff"/>'
+    + '<path d="M6.5 22.5c3-2 6-2.8 9.5-2.8s6.5.8 9.5 2.8c-3 1.5-6 2.2-9.5 2.2s-6.5-.7-9.5-2.2z" fill="#fff"/>'),
+  // sklepy z wyposażeniem (katalog.yaml: wyposazenie.sklep)
+  IKEA: t("#0058a3", '<ellipse cx="16" cy="16" rx="13" ry="8.2" fill="#ffdb00"/>'),
+  OBI: t("#ff7d00", '<path d="M6.5 25.5 17 15" stroke="#fff" stroke-width="3" stroke-linecap="round"/>'
+    + '<path d="M14.5 9.5l4-4 2.5 1.2 4.3 4.3-2.6 2.6-2.4-1.4-3.5 3.5-2.6-2.6 1.7-1.7-1.4-1.9z" fill="#fff"/>'),
+  Castorama: t("#0078c8", '<path d="M5 17 16 7.5 27 17" fill="none" stroke="#ffd200" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>'
+    + '<path d="M8.5 15.5V25h15v-9.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/><rect x="14" y="18.5" width="4" height="6.5" fill="#fff"/>'),
+  Jula: t("#e30613", '<path d="M18.7 9.3a1.2 1.2 0 0 0 0 1.7l2.3 2.3a1.2 1.2 0 0 0 1.7 0l3.6-3.6a7 7 0 0 1-9.3 9.3l-7.2 7.2a2.5 2.5 0 0 1-3.5-3.5l7.2-7.2a7 7 0 0 1 9.3-9.3l-4.1 3.1z" fill="#fff"/>'),
+  "Leroy Merlin": t("#78be20", '<path d="M6 25V15L16 6.5 26 15v10z" fill="#fff"/><path d="M11 25v-7h10v7" fill="#78be20"/>'),
+};
+
 const PRZEDROSTKI = /^Konto firmowe: /;   // banki.js: karta konta z nazwą „Konto firmowe: mBank”
 const klucz = (nazwa) => String(nazwa ?? "").replace(PRZEDROSTKI, "").trim();
 
-// SVG ikony marki albo "" (brak ikony – wtedy litery w znakMarki)
+// SVG znaku marki albo "" (brak ikony – wtedy litery w znakMarki)
 export function ikonaMarki(nazwa) {
   const k = klucz(nazwa);
+  if (LOGA[k]) return `<svg class="logo-marki" viewBox="0 0 32 32" aria-hidden="true">${LOGA[k]}</svg>`;
   if (WLASNE[k]) return `<svg class="ikona-marki" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${WLASNE[k]}</svg>`;
   return "";
 }

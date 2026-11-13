@@ -100,15 +100,14 @@ def sprawdz_firme(request, id_: str, g: GraSilnika, firma: str) -> None:
 
 
 def _bez_klubu(request) -> bool:
-    """Klub z silnik/pieniadze/kasyno.py jest tajny: mistrz gry go nie widzi,
-    a LUKRUM_KASYNO=0 wyłącza go na serwerze."""
-    return jest_mg(request.user) or not settings.LUKRUM_KASYNO
+    """Klub z silnik/pieniadze/kasyno.py (hasło „koziol”) widzi każdy, także mistrz gry;
+    LUKRUM_KASYNO=0 wyłącza go na serwerze. Bez klubu są tylko zestawienia mistrza gry."""
+    return not settings.LUKRUM_KASYNO
 
 
 def _dla(request, v: dict) -> dict:
-    """Widok firmy bez klubu dla mistrza gry (także bez portfela właściciela)
-    i przy wyłączonym klubie."""
-    return kas.ukryj(v, portfel=jest_mg(request.user)) if _bez_klubu(request) else v
+    """Widok firmy bez klubu przy wyłączonym klubie (portfel właściciela zostaje)."""
+    return kas.ukryj(v, portfel=False) if _bez_klubu(request) else v
 
 
 def _bez_klubu_w_decyzjach(decyzje: dict) -> dict:

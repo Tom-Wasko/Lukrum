@@ -52,6 +52,11 @@ export const HASLO = "koziol";
 const KLUCZ_HASLA = "lukrum-nocna13";
 export const znaHaslo = () => { try { return localStorage.getItem(KLUCZ_HASLA) === "1"; } catch { return false; } };
 export const zapamietajHaslo = () => { try { localStorage.setItem(KLUCZ_HASLA, "1"); } catch { /* bez pamięci */ } };
+// nagroda za zajrzenie w surowe dane gry (pole rekopis_znaleziony_w_jsonie w widoku): hasło „saragossa” daje odznakę Szperacz
+export const HASLO_SZPERACZ = "saragossa";
+const KLUCZ_SZPERACZA = "lukrum-szperacz";
+export const jestSzperaczem = () => { try { return localStorage.getItem(KLUCZ_SZPERACZA) === "1"; } catch { return false; } };
+export const zapamietajSzperacza = () => { try { localStorage.setItem(KLUCZ_SZPERACZA, "1"); } catch { /* bez pamięci */ } };
 const widoczna = (v) => !!v.kasyno && (!!v.kasyno.zaproszenie || znaHaslo() || !!v.wyniki?.kasyno?.gry || !!v.kasyno.decyzja);
 
 export const kasyno = {

@@ -3,6 +3,7 @@ ukrycie klubu (i portfela) przed mistrzem gry oraz wyłączenie klubu na serwerz
 
 import copy
 import json
+from pathlib import Path
 
 import pytest
 import yaml
@@ -158,7 +159,7 @@ def test_podglad_bez_wynikow_i_ukrycie(zawsze_zaproszenie):
 
 
 @pytest.mark.django_db
-def test_mistrz_gry_nie_widzi_klubu(client, uczen, zawsze_zaproszenie, settings):
+def test_mistrz_gry_widzi_klub(client, uczen, zawsze_zaproszenie, settings):
     firmy = [{"nazwa": DRUZYNA, "bot": None}, {"nazwa": "Bot tani", "bot": "tani"}]
     gra = client.post("/api/gry", {"nazwa": "Klasa", "ziarno": "7", "liczba_rund": 4, "firmy": firmy},
                       content_type=JSON).json()["id"]
@@ -183,11 +184,13 @@ def test_mistrz_gry_nie_widzi_klubu(client, uczen, zawsze_zaproszenie, settings)
     r = ala.put(f"/api/gry/{gra}/decyzje/{DRUZYNA}?wersja={v['druzyna']['autorzy']['wersja']}",
                 {**v["decyzje"], "kasyno": [{"gra": automat, "stawka": 100}]}, content_type=JSON)
     assert r.status_code == 200
-    # mistrz gry: ani śladu klubu ani portfela (wpłaty i wypłaty widać tylko jako operacje na koncie)
-    odpowiedzi = [client.get(f"/api/gry/{gra}/mg"), client.get(f"/api/gry/{gra}/widok/{DRUZYNA}"),
-                  client.get(f"/api/gry/{gra}/widok/{DRUZYNA}?runda=2"),
-                  client.get(f"/api/gry/{gra}/eksport"), client.get(f"/api/gry/{gra}/wyniki.csv"),
-                  client.get(f"/api/gry/{gra}/ranking.csv")]
+    # decyzja autora (13.11): hasło „koziol” otwiera klub każdemu, także mistrzowi gry – jego widok firmy ma klub i portfel
+    for sciezka in (f"/api/gry/{gra}/widok/{DRUZYNA}", f"/api/gry/{gra}/widok/{DRUZYNA}?runda=2"):
+        vm = client.get(sciezka).json()
+        assert vm["kasyno"]["otwarte"] and "wlasciciel" in vm, sciezka
+    # zestawienia mistrza gry (przegląd, eksport, CSV) dalej bez śladu klubu i portfela
+    odpowiedzi = [client.get(f"/api/gry/{gra}/mg"), client.get(f"/api/gry/{gra}/eksport"),
+                  client.get(f"/api/gry/{gra}/wyniki.csv"), client.get(f"/api/gry/{gra}/ranking.csv")]
     for r in odpowiedzi:
         assert r.status_code == 200
         tekst = r.content.decode("utf-8")
@@ -197,6 +200,23 @@ def test_mistrz_gry_nie_widzi_klubu(client, uczen, zawsze_zaproszenie, settings)
     settings.LUKRUM_KASYNO = False
     v = ala.get(f"/api/gry/{gra}/widok/{DRUZYNA}?runda=2").json()
     assert "kasyno" not in v and "wlasciciel" in v and "kasyno" not in v["decyzje"]
+
+
+@pytest.mark.django_db
+def test_rekopis_w_surowych_danych_od_pierwszej_rundy(client, uczen, monkeypatch):
+    """Nagroda za zajrzenie w JSON: widok firmy od rundy 1 niesie wskazówkę o haśle „saragossa” (odznaka Szperacz w panelu).
+    Dane kasyna z żywego pliku gry (testy mechanik czytają zamrożoną kopię, bez tego pola)."""
+    zywe = yaml.safe_load((Path(__file__).resolve().parents[2] / "dane" / "zdarzenia" / "kasyno.yaml").read_text(encoding="utf-8"))
+    monkeypatch.setattr(kas, "dane_kasyna", lambda d: copy.deepcopy(zywe))
+    firmy = [{"nazwa": DRUZYNA, "bot": None}, {"nazwa": "Bot tani", "bot": "tani"}]
+    gra = client.post("/api/gry", {"nazwa": "Klasa", "ziarno": "7", "liczba_rund": 4, "firmy": firmy},
+                      content_type=JSON).json()["id"]
+    ala = uczen("ala")
+    assert client.post(f"/api/gry/{gra}/druzyny/{DRUZYNA}", {"dodaj": "ala"}, content_type=JSON).status_code == 200
+    v = ala.get(f"/api/gry/{gra}/widok/{DRUZYNA}").json()
+    assert v["gra"]["runda"] == 1 and v["kasyno"]["otwarte"]
+    tekst = v["kasyno"]["rekopis_znaleziony_w_jsonie"]
+    assert "koziol" in tekst and "saragossa" in tekst
 
 
 def test_haslo_otwiera_drzwi_bez_zaproszenia(monkeypatch):
