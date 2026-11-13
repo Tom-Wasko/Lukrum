@@ -681,7 +681,7 @@ export const szkolenia = {
       : "")
       + (akt.length ? zwinTabela("Szkolenia działające w tej rundzie", ["Szkolenie", "Firma szkoleniowa", "% pracowników oczekujących", "Od rundy", "Działa do rundy"],
         akt.map((x) => [esc(x.szkolenie), esc(x.firma), `${x.procent}%`, licz(x.od_rundy), licz(x.do_rundy)]), { klasy: ["l", "l"], otwarte: true }) : "")
-      + (k ? zwinTabela("Efekt", ["Zadowolenie pracowników (karta wyników)"], [[licz(k.zadowolenie_pracownikow, 3)]]) : "");
+      + (k ? zwinTabela("Efekt", ["Zadowolenie zespołu (karta wyników)"], [[licz(k.wskazniki?.zadowolenie_zespolu, 3)]]) : "");
   },
   akcje: {
     szkolenie: (el, c) => c.zmien((d) => {

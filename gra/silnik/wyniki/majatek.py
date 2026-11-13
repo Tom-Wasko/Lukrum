@@ -11,7 +11,7 @@ Prywatny portfel właściciela jest poza majątkiem firmy: wynik widzi mistrz gr
 from __future__ import annotations
 
 from ..model import Firma
-from .karta import NIERUCHOMOSCI
+from .punkty import NIERUCHOMOSCI
 
 
 def majatek_netto(f: Firma) -> dict:

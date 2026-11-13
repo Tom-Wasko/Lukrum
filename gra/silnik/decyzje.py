@@ -696,10 +696,9 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
             dodaj(b["poziom"], b["zakladka"], b["tekst"])
         if (koszt := (info or {}).get("inwestycje_w_koszty", 0.0)) > 0:   # U1: tylko ostrzeżenie
             prog, zl = (f"{x:,.0f}".replace(",", " ") for x in (dane.z["finanse"]["amortyzacja_prog"], koszt))
-            karta = f"{koszt / dane.z['karta_wynikow']['wynik_ekonomiczny_dzielnik']:.2f}".replace(".", ",")
             dodaj("pomaranczowy", "sprzet", f"Sprzęt, wyposażenie i stanowiska tańsze niż {prog} zł od razu idą "
-                  f"w koszty: ten zakup obniży dochód tej rundy o ok. {zl} zł (bez VAT), a kartę wyników tej rundy – "
-                  f"o ok. {karta}. Wartość zakupu zostaje w majątku firmy i liczy się do jej rozwoju."
+                  f"w koszty: ten zakup obniży dochód tej rundy o ok. {zl} zł (bez VAT), a tym samym punkty działu "
+                  "Finanse. Wartość zakupu zostaje w majątku firmy i liczy się do jej rozwoju."
                   + (" Zamiast tego możesz je amortyzować (koszt rozłożony na lata) – wybór w "
                      "Księgowość ▸ Biuro rachunkowe." if st_trwale.wybor_niskocennych(dane) else ""))
         # przekroczenia odrzuca zapis decyzji (API), a przeliczenie przycina – tu czerwone są w uwagach rynku pracy i lokali

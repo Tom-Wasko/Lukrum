@@ -141,11 +141,11 @@ def test_historia_rankingu_jak_ranking_mistrza_gry():
     for _ in range(6):
         g.przelicz(wymus=True)
     stan = g.stan(6)
-    h = pr.historia_rankingu(g.dane, stan, 6)
-    assert h["rundy"] == [2, 3, 4, 5, 6] and len(h["etykiety"]) == 5 and h["ostatnia"]
+    h = pr.historia_rankingu(g.dane, stan, 6, 6)
+    assert h["rundy"] == [1, 2, 3, 4, 5, 6] and len(h["etykiety"]) == 6 and h["ostatnia"]
     for r in h["rundy"]:
         assert h["miejsca"][r] == pr.miejsca(pr.karta_skumulowana(g, r))
-    assert pr.historia_rankingu(g.dane, stan, 1)["rundy"] == []
+    assert pr.historia_rankingu(g.dane, stan, 0, 6)["rundy"] == []
 
 
 def test_po_koncu_gry_druzyna_widzi_wyniki_ostatniej_rundy():

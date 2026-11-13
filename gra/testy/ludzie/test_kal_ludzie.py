@@ -76,7 +76,7 @@ def test_oferta_miedzy_progiem_a_oczekiwana_trwale_obniza_zadowolenie(monkeypatc
     assert 0.95 <= pw < 1
     z_kara = zo.skladniki(d, s.firmy["A"], p, 0.5, 0.0)["placa"]
     kara = d.z["pracownicy"]["oferta_pracy"]["kara_ponizej_oczekiwanej"]
-    nachylenie = d.z["karta_wynikow"]["zadowolenie_pracownikow"]["placa_wzgledem_preferowanej"]
+    nachylenie = d.z["zadowolenie_osoby"]["wspolczynniki"]["placa_wzgledem_preferowanej"]
     assert z_kara == pytest.approx(nachylenie * (pw - 1) - kara * (1 - pw))
     s = _runda(g)   # kilka tygodni później kara wciąż ta sama (zależy od pensji, nie od czasu)
     assert zo.skladniki(d, s.firmy["A"], s.firmy["A"].pracownicy[k["id"]], 0.5, 0.0)["placa"] == pytest.approx(z_kara)
@@ -295,8 +295,8 @@ def test_trwajace_szkolenie_o_dawnej_nazwie_to_trwajace_polaczone():
 
 # --- B10: tempo pracy z zadowolenia -----------------------------------------------------------------------------
 
-@pytest.mark.parametrize("zadowolenie, mnoznik", [(None, 1.0), (0.97, 1.05), (0.95, 1.0), (0.92, 1.0), (0.9, 1.0),
-                                                  (0.85, 0.95)])
+@pytest.mark.parametrize("zadowolenie, mnoznik", [(None, 1.0), (1.02, 1.05), (1.0, 1.0), (0.97, 1.0), (0.95, 1.0),
+                                                  (0.9, 0.95)])
 def test_tempo_z_zadowolenia(zadowolenie, mnoznik):
     g, s = _start()
     k = _kucharz(g.dane, s)

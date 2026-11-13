@@ -88,7 +88,7 @@ def dane_rywala(w: dict) -> dict:
                           "koszt": k.get("koszt", 0)} for k in (w.get("reklama_agencje") or {}).get("kampanie", [])],
             "promocje": [{"nazwa": p["nazwa"], "rodzaj": p.get("rodzaj"), "danie": p.get("danie")}
                          for p in (w.get("promocje") or {}).get("promocje", [])],
-            "zadowolenie_klientow": (w.get("karta") or {}).get("zadowolenie_klientow")}
+            "zadowolenie_klientow": ((w.get("karta") or {}).get("wskazniki") or {}).get("zadowolenie_gosci")}
 
 
 def raporty(dane: Dane, wyniki: dict[str, dict], zlecenia: dict[str, dict | None], runda: int, ziarno: int) -> None:

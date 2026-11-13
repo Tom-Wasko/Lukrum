@@ -4,33 +4,50 @@ import { ikona } from "./ikony.js";
 import { ikonaMarki } from "./ikony_marek.js";
 import { ukryta, wylaczona } from "./funkcje.js";
 
-const WSKAZNIKI = [["wynik_dzialalnosci", "Wynik działalności"], ["wynik_ekonomiczny", "Wynik ekonomiczny"],
-  ["zadowolenie_pracownikow", "Zadowolenie pracowników"], ["zadowolenie_klientow", "Zadowolenie klientów"],
-  ["rozwoj_firmy", "Rozwój firmy"], ["wskaznik_zadluzenia", "Wskaźnik zadłużenia"]];
+const DZIALY = ["finanse", "goscie", "zespol", "rozwoj", "bezpieczenstwo"];
+const NAZWY_DZIALOW = { finanse: "Finanse", goscie: "Goście", zespol: "Zespół", rozwoj: "Rozwój", bezpieczenstwo: "Bezpieczeństwo finansowe" };
 
 let skumulowana = false;
 
-// U10: co podnosi wskaźnik (INSTRUKCJA rozdz. 3) i ocena według progów z dane/zalozenia.yaml: karta_wynikow.skala
-const PODNOSI = {
-  wynik_dzialalnosci: "Iloczyn pozostałych – najpierw popraw najsłabszy składnik.",
-  wynik_ekonomiczny: "Sprzedawać więcej i z sensowną marżą, pilnować kosztów.",
-  zadowolenie_pracownikow: "Uczciwe pensje, dobry sprzęt, udogodnienia, szkolenia, bez przepracowania.",
-  zadowolenie_klientow: "Rozsądne ceny, dobra jakość, szersze menu, bez braków dań i kolejek.",
-  rozwoj_firmy: "Nowy sprzęt i wyposażenie, kupione lokale, kolejne lokale.",
-  wskaznik_zadluzenia: "Nie żyć na kredycie (zwłaszcza u Harpagona) dłużej, niż trzeba.",
-};
-function ocena(skala, k, x) {
-  const p = skala?.[k];
-  if (!p || x == null) return null;
-  return x >= p[1] ? ["dobry", "dobry"] : x >= p[0] ? ["sredni", "średni"] : ["niski", "niski"];
+const pkt = (x) => x == null ? "–" : licz(Math.round(x));
+// punkty działu z karty tygodnia (publiczna: liczba, własna: obiekt) albo ze skumulowanej (liczba)
+const dzial = (k, d) => (typeof k.dzialy?.[d] === "object" ? k.dzialy[d].punkty : k.dzialy?.[d]);
+function ocena(v, x) {
+  const [sredni, dobry] = v.tabela_punktow?.oceny || [0.45, 0.7];
+  return x == null ? null : x >= dobry * 200 ? ["dobry", "dobry"] : x >= sredni * 200 ? ["sredni", "średni"] : ["niski", "niski"];
 }
-function skalaKarty(v, karta) {
-  if (!karta || !v.skala_karty) return "";
-  return `<div class="skala-karty">${WSKAZNIKI.map(([k, n]) => {
-    const o = ocena(v.skala_karty, k, karta[k]);
-    return `<div class="wsk ${o?.[0] || ""}" title="${esc(PODNOSI[k])}"><span class="maly-tekst">${n}</span><b>${wsk(karta[k])}</b>
-      ${o ? `<span class="ocena ${o[0]}">${o[1]}</span>` : ""}<div class="maly-tekst">${PODNOSI[k]}</div></div>`;
+function kartyDzialow(v, karta) {
+  if (!karta?.dzialy || !v.tabela_punktow) return "";
+  return `<div class="skala-karty">${DZIALY.map((d) => {
+    const o = ocena(v, dzial(karta, d)), opis = v.tabela_punktow.dzialy[d];
+    return `<div class="wsk ${o?.[0] || ""}" title="${esc(opis.opis)}"><span class="maly-tekst">${esc(opis.nazwa)}</span><b>${pkt(dzial(karta, d))}</b>
+      <span class="ocena ${o?.[0] || ""}">${o?.[1] || ""}</span><div class="maly-tekst">${esc(opis.opis)}</div></div>`;
   }).join("")}</div>`;
+}
+
+// jawna tabela punktów: z czego składa się każdy dział i ile punktów daje każdy próg
+function tabelaPunktow(v) {
+  const T = v.tabela_punktow;
+  if (!T) return "";
+  const wiersze = DZIALY.flatMap((d) => Object.values(T.dzialy[d].skladniki).map((s) => [esc(T.dzialy[d].nazwa), esc(s.nazwa),
+    s.progi.map(([x, p]) => `${licz(x)} → ${licz(p)}`).join(" · ") + (s.ponad ? ` · potem +${s.ponad.pkt} za każde ${licz(s.ponad.za)} (najwyżej +${s.ponad.maks})` : ""),
+    esc(s.podpowiedz)]));
+  return zwinTabela("Tabela punktów: ile daje każdy próg", ["Dział", "Składnik", "Miara → punkty", "Jak podnieść"], wiersze, { klasy: ["l", "l", "l", "l"], sortuj: false })
+    + `<p class="podpowiedz">Każdy dział to do 200 punktów, razem do 1000 – ale wyjątkowa gra (np. bardzo hojny socjal) może dać więcej.
+      Tydzień 1, „Wielkie otwarcie”, nagradza przygotowanie. Ranking to suma punktów z tygodni, a ostatnie tygodnie ważą więcej
+      (waga rośnie od ${licz(T.ranking.waga_pierwszego_pelnego)} do ${licz(T.ranking.waga_ostatniego)}).</p>`;
+}
+
+// szczegóły własnej karty tygodnia: miara i punkty każdego składnika
+function szczegolyKarty(v) {
+  const K = v.wyniki?.karta;
+  if (!K || skumulowana) return "";
+  if (K.otwarcie) {
+    return zwinTabela("Wielkie otwarcie – punkty za przygotowanie", ["Składnik", "Miara", "Punkty"],
+      Object.values(K.przygotowanie).map((s) => [esc(s.nazwa), licz(s.miara), pkt(s.punkty)]), { klasy: ["l"], otwarte: true, sortuj: false });
+  }
+  const wiersze = DZIALY.flatMap((d) => Object.values(K.dzialy[d].skladniki).map((s) => [esc(K.dzialy[d].nazwa), esc(s.nazwa), licz(s.miara, 2), pkt(s.punkty)]));
+  return zwinTabela("Skąd Twoje punkty w minionym tygodniu", ["Dział", "Składnik", "Miara", "Punkty"], wiersze, { klasy: ["l", "l"], otwarte: true, sortuj: false });
 }
 
 // U16: „Dlaczego mój wynik się zmienił?” – zdania z silnik/wyniki/wnioski.py: dlaczego (karta ostatniej i poprzedniej rundy)
@@ -58,32 +75,6 @@ function tydzienHtml(v, tytulZakladki, { sprawy = true } = {}) {
     ${top.length ? `<div class="sprawy"><b>3 najważniejsze sprawy na tę rundę</b><ol>${top.map((r) => `<li><b>${esc(r.tytul)}</b> – ${esc(r.co)}
       <a href="#" data-zakladka-k="${esc(r.zakladka)}">${esc(tytulZakladki ? tytulZakladki(r.zakladka) : r.zakladka)} →</a></li>`).join("")}</ol></div>` : ""}
   </section>`;
-}
-
-// składniki kebabowe karty (gra z lokalami, silnik/wyniki/karta.py → kebab): wskaźnik, miernik, jak pokazać miarę
-const SKLADNIKI_KEBABU = [
-  ["zadowolenie_klientow", "kolejki", "Klienci, którzy nie doczekali się obsługi", (m) => proc(m.kolejki)],
-  ["zadowolenie_klientow", "brakujace_dania", "Dania wyłączone z braku składnika (dania × dni)", (m) => proc(m.brakujace_dania)],
-  ["zadowolenie_klientow", "kontrola_z_mandatem", "Mandat sanepidu", (m) => zl2(m.mandat)],
-  ["zadowolenie_klientow", "wypadki", "Wypadki w lokalu", (m) => licz(m.wypadki)],
-  ["zadowolenie_pracownikow", "przepracowanie", "Przepracowanie (wykorzystanie czasu ponad próg)", (m) => proc(m.przepracowanie)],
-  ["rozwoj_firmy", "kolejne_lokale", "Lokale", (m) => licz(m.lokale)],
-  ["wskaznik_zadluzenia", "dlug_harpagona", "Dług u Harpagona", (m) => zl2(m.dlug_harpagona)],
-];
-
-function kartaKebabu(v) {
-  const K = v.wyniki?.karta_kebab;
-  if (!K || skumulowana) return "";
-  const nazwa = Object.fromEntries(WSKAZNIKI);
-  const plus = (x) => x ? `<span class="${x > 0 ? "plus" : "minus"}">${x > 0 ? "+" : "−"}${wsk(Math.abs(x))}</span>` : "–";
-  const wiersze = [["Zadowolenie klientów", "Cena względem ceny preferowanej w strefie lokalu", proc(K.miary.cena_wzgledem_strefy, 0), "we wzorze"]]
-    .concat(SKLADNIKI_KEBABU.map(([s, k, opis, miara]) => [nazwa[s], opis, miara(K.miary), plus(K.skladniki[s]?.[k])]));
-  return zwinTabela("Skąd Twoja karta – sprawy kebabowe", ["Wskaźnik", "Miernik", "W minionym tygodniu", "Poprawka"], wiersze,
-    { klasy: ["l", "l"], sortuj: false })
-    + `<p class="podpowiedz">Kolejki, braki w menu, mandaty i wypadki obniżają zadowolenie klientów. Kolejki, braki,
-      reklamacje, cena i jakość trafiają też do opinii o lokalu (gwiazdki na mapie) – a od nich zależy, ilu klientów
-      przyjdzie w następnych tygodniach. Przepracowana załoga jest mniej zadowolona, każdy kolejny lokal podnosi
-      rozwój firmy, a dług u Harpagona waży w zadłużeniu więcej niż kredyt bankowy.</p>`;
 }
 
 const MAKS_LOGO_KB = 300;   // konta/druzyny.py: MAKS_LOGO_KB
@@ -253,48 +244,48 @@ export const wnioski = {
 
 export const karta_wynikow = {
   tytul: "Karta wyników", ikona: "☷", wynikiOd: 3, odblokowanie: "karta_wynikow",
-  info: () => "Karta wyników pokazuje rezultaty decyzji podjętych w poprzedniej rundzie.",
+  info: () => "Karta wyników pokazuje punkty (0–1000) za decyzje z poprzedniego tygodnia: pięć działów po 0–200 punktów.",
   wyniki({ v, tytulZakladki }) {
     const karty = skumulowana ? v.karta_skumulowana : v.rynek.karta;
     const moja = karty?.[v.firma], hist = (v.historia || []).filter((x) => x.karta), pop = hist.length > 1 ? hist[hist.length - 2].karta : null;
-    const miejsce = moja ? Object.values(karty).filter((k) => k.wynik_dzialalnosci > moja.wynik_dzialalnosci).length + 1 : null;
-    const lead = moja ? podsumowanie([`Wynik działalności <b>${wsk(moja.wynik_dzialalnosci)}</b>${!skumulowana && pop
-      ? ` ${strzalka(moja.wynik_dzialalnosci, pop.wynik_dzialalnosci, { format: wsk, prog: 0.0005 })}` : ""} – ${miejsce === 1
+    const miejsce = moja ? Object.values(karty).filter((k) => k.punkty > moja.punkty).length + 1 : null;
+    const lead = moja ? podsumowanie([`Wynik <b>${pkt(moja.punkty)} pkt</b>${!skumulowana && pop
+      ? ` ${strzalka(moja.punkty, pop.punkty, { format: pkt, prog: 0.5 })}` : ""} – ${miejsce === 1
       ? "najlepszy wśród wszystkich drużyn." : `${miejsce}. miejsce na ${Object.keys(karty).length} drużyn.`}`,
     ...(v.dlaczego || []).slice(1).map(esc)], miejsce === 1 ? "ok" : "") : "";
-    const firmy = Object.keys(karty || {}).sort((a, b) => karty[b].wynik_dzialalnosci - karty[a].wynik_dzialalnosci);
+    const firmy = Object.keys(karty || {}).sort((a, b) => karty[b].punkty - karty[a].punkty);
     const wiersze = firmy.map((f) => [`${kropkaFirmy(v, f)}${f === v.firma ? "<b>" : ""}${esc(nazwaFirmy(v, f))}${f === v.firma ? "</b>" : ""}`,
-      ...WSKAZNIKI.map(([k]) => `<span class="ocena-tekst ${ocena(v.skala_karty, k, karty[f][k])?.[0] || ""}">${wsk(karty[f][k])}</span>`),
+      `<b>${pkt(karty[f].punkty)}</b>`,
+      ...DZIALY.map((d) => `<span class="ocena-tekst ${ocena(v, dzial(karty[f], d))?.[0] || ""}">${pkt(dzial(karty[f], d))}</span>`),
       zl2(v.majatek_firm?.[f])]);
     return `${skumulowana ? "" : tydzienHtml(v, tytulZakladki)}${lead}<div style="display:flex;gap:10px;justify-content:center">
         <button class="btn ${skumulowana ? "jasny" : "pom"}" data-akcja="karta-skum" data-s="0">Karta wyników</button>
-        <button class="btn ${skumulowana ? "pom" : "jasny"}" data-akcja="karta-skum" data-s="1" ${v.odblokowane.includes("karta_skumulowana") ? "" : "disabled"}>Skumulowana karta wyników</button></div>
-      ${karty?.[v.firma] ? `<div class="sekcja-tytul">${skumulowana ? "Twoja skumulowana karta" : "Twoja karta"} – niski, średni czy dobry?</div>
-        ${skalaKarty(v, karty[v.firma])}` : ""}
-      ${zwinTabela("Karty wszystkich zespołów", ["Firma", ...WSKAZNIKI.map(([, n]) => n), "Majątek netto"], wiersze, { klasy: ["l"], otwarte: true })}
+        <button class="btn ${skumulowana ? "pom" : "jasny"}" data-akcja="karta-skum" data-s="1" ${v.odblokowane.includes("karta_skumulowana") ? "" : "disabled"}>Wynik gry (ranking)</button></div>
+      ${moja ? `<div class="sekcja-tytul">${skumulowana ? "Twój wynik gry – działy (średnia ważona)" : "Twoja karta"} – niski, średni czy dobry?</div>
+        ${kartyDzialow(v, moja)}` : ""}
+      ${zwinTabela("Karty wszystkich zespołów", ["Firma", "Wynik (pkt)", ...DZIALY.map((d) => NAZWY_DZIALOW[d]), "Majątek netto"], wiersze, { klasy: ["l"], otwarte: true })}
       <p class="podpowiedz">${RANKING_DLACZEGO} Majątek netto – stan na koniec ostatniej przeliczonej rundy.</p>
-      ${kartaKebabu(v)}
+      ${szczegolyKarty(v)}
+      ${tabelaPunktow(v)}
       <div class="wykres"><canvas id="w-karta"></canvas></div>
       <div class="wykres"><canvas id="w-historia"></canvas></div>
-      <p class="podpowiedz">Ocena „niski / średni / dobry” porównuje wskaźnik z typowymi wynikami firm w grze
-      (dolna i górna ćwiartka). Wynik działalności = iloczyn pozostałych wskaźników; przy stracie ujemny, proporcjonalny do straty. Wynik ekonomiczny = (dochód netto rundy − odsetki Harpagona${v.zasady_karty?.mandaty ? " − mandaty (skarbowe, sanepidu)" : ""}) / ${zl(v.dzielnik_karty)}.${(v.zasady_karty?.waga_nieruchomosci ?? 1) < 1 ? ` Kupiony lokal, budynek i działka liczą się w rozwoju firmy w ${Math.round(v.zasady_karty.waga_nieruchomosci * 100)}% wartości (we wskaźniku zadłużenia – w pełnej).` : ""}
-      Zadowolenie i rozwój liczone są ze skalibrowanych wzorów (dane/zalozenia.yaml) – mogą odbiegać od prawdziwej gry.</p>`;
+      <p class="podpowiedz">Ocena „niski / średni / dobry” to udział w 200 punktach działu (poniżej ${licz(Math.round((v.tabela_punktow?.oceny?.[0] || 0.45) * 200))} niski,
+      od ${licz(Math.round((v.tabela_punktow?.oceny?.[1] || 0.7) * 200))} dobry). Dochód do działu Finanse to dochód netto tygodnia pomniejszony o odsetki Harpagona${v.zasady_karty?.mandaty ? " i mandaty (skarbowe, sanepidu)" : ""}.</p>`;
   },
   po({ v }) {
     const karty = skumulowana ? v.karta_skumulowana : v.rynek.karta;
     const firmy = Object.keys(karty || {});
-    wykres("w-karta", "bar", WSKAZNIKI.map(([, n]) => n), firmy.map((f) => seriaFirmy(v, f, WSKAZNIKI.map(([k]) => karty[f][k]), "bar")));
+    wykres("w-karta", "bar", DZIALY.map((d) => NAZWY_DZIALOW[d]), firmy.map((f) => seriaFirmy(v, f, DZIALY.map((d) => dzial(karty[f], d)), "bar")));
     const h = (v.historia || []).filter((x) => x.karta);
-    wykres("w-historia", "line", h.map((x) => x.skrot || x.miesiac), [{ label: "Twój wynik działalności", data: h.map((x) => x.karta.wynik_dzialalnosci) },
-      { label: "Wynik ekonomiczny", data: h.map((x) => x.karta.wynik_ekonomiczny) }]);
+    wykres("w-historia", "line", h.map((x) => x.skrot || x.miesiac), [{ label: "Twoje punkty tygodnia", data: h.map((x) => x.karta.punkty) }]);
   },
   akcje: { "karta-skum": (el, c) => { skumulowana = el.dataset.s === "1"; c.idz("karta_wynikow", "wyniki"); } },
 };
 
-// UF11: ranking drużyn – miejsca jak u mistrza gry (średni wynik działalności z rund 2…), zmiana miejsca i wykres miejsc
+// UF11: ranking drużyn – miejsca jak u mistrza gry (wynik gry w punktach z tygodni 1…), zmiana miejsca i wykres miejsc
 export const ranking = {
   tytul: "Ranking", tytulPelny: "Ranking drużyn", ikona: "karta", wynikiOd: 3, odblokowanie: "karta_wynikow",
-  info: () => "Kto prowadzi? Miejsce liczy się ze średniego wyniku działalności z kart od rundy 2 – tak samo jak w panelu mistrza gry i na Dashboardzie.",
+  info: () => "Kto prowadzi? Miejsce liczy się z punktów z kolejnych tygodni (ostatnie ważą więcej) – tak samo jak w panelu mistrza gry i na Dashboardzie.",
   wyniki({ v }) {
     const R = v.ranking, skum = v.karta_skumulowana || {}, teraz = v.rynek?.karta || {};
     if (!R?.rundy?.length) return `<p class="podpowiedz">Ranking pojawi się, gdy przeliczy się runda 2.</p>`;
@@ -310,14 +301,13 @@ export const ranking = {
       const ja = f === v.firma, m = marka(v, f);
       return [`<b>${MEDAL[ost[f]] || ""} ${ost[f]}.</b>`,
         `<span class="kropka" style="background:${esc(m.kolor)}"></span> ${ja ? "<b>" : ""}${esc(m.nazwa)}${ja ? " (Ty)</b>" : ""}`,
-        zmiana(f), wsk(skum[f]?.wynik_dzialalnosci), wsk(teraz[f]?.wynik_dzialalnosci), wsk(skum[f]?.wynik_ekonomiczny), zl2(v.majatek_firm?.[f])];
+        zmiana(f), pkt(skum[f]?.punkty), pkt(teraz[f]?.punkty), zl2(v.majatek_firm?.[f])];
     });
     const moje = ost[v.firma], lider = firmy[0];
     const naglowek = moje === 1 ? `Prowadzisz! ${przed?.[v.firma] === 1 ? "Utrzymaj tempo." : "Awans na pierwsze miejsce."}`
       : moje ? `Jesteś na ${moje}. miejscu z ${firmy.length}. Prowadzi ${esc(nazwaFirmy(v, lider))}.` : "";
     return `${naglowek ? `<div class="komunikat ok">${naglowek}</div>` : ""}
-      ${tabela(`Ranking po: ${esc(R.ostatnia || `runda ${R.rundy[R.rundy.length - 1]}`)}`, ["Miejsce", "Drużyna", "Zmiana", "Wynik działalności (średnia)", "Ostatnia runda",
-        "Wynik ekonomiczny (średnia)", "Majątek netto"], wiersze, { klasy: ["", "l"] })}
+      ${tabela(`Ranking po: ${esc(R.ostatnia || `runda ${R.rundy[R.rundy.length - 1]}`)}`, ["Miejsce", "Drużyna", "Zmiana", "Wynik gry (pkt)", "Ostatni tydzień (pkt)", "Majątek netto"], wiersze, { klasy: ["", "l"] })}
       <p class="podpowiedz">${RANKING_DLACZEGO} „Zmiana” – o ile miejsc w górę albo w dół od poprzedniej rundy.
         Majątek netto – stan na koniec ostatniej przeliczonej rundy.</p>
       ${R.rundy.length > 1 ? `<div class="sekcja-tytul" style="margin-top:20px">Miejsca w kolejnych rundach</div><div class="wykres"><canvas id="w-ranking"></canvas></div>` : ""}`;
@@ -438,4 +428,4 @@ export const wyslij = {
   },
 };
 
-export { WSKAZNIKI, gw };
+export { DZIALY, gw };

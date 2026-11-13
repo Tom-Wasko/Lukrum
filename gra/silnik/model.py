@@ -434,12 +434,7 @@ class Firma(Model):
     kredyt_odnawialny_gr: int = 0
     majatek_gr: int = 0               # suma inwestycji (sprzęt, stanowiska, udogodnienia, wyposażenie) – rozwój firmy
     umorzenie_majatku_gr: int = 0     # amortyzacja tej sumy (karta po amortyzacji, Z1)
-    szczyt_majatku_gr: int = 0        # najwyższa suma inwestycji z minionych rund – odkup nie jest inwestycją (Z1)
-    rozwoj_poprzedni: float | None = None
     skumulowany_dochod_netto_gr: int = 0
-    poprzednio_uslug: int = 0         # liczba usług i pracowników w poprzedniej rundzie (przyrost → rozwój firmy)
-    poprzednio_pracownikow: int = 0
-    utracona_poprzednio: float = 0.0  # udział utraconej sprzedaży w poprzedniej rundzie (zadowolenie klientów)
     baza_klientow: float = 1.0        # trwała utrata klientów po utraconej sprzedaży (mnożnik popytu firmy)
     licznik: int = 0                  # do numerowania lokat i kredytów
 
@@ -447,7 +442,6 @@ class Firma(Model):
     kredyt_odnawialny = _kwota("kredyt_odnawialny")
     majatek = _kwota("majatek")
     umorzenie_majatku = _kwota("umorzenie_majatku")
-    szczyt_majatku = _kwota("szczyt_majatku")
     skumulowany_dochod_netto = _kwota("skumulowany_dochod_netto")
 
     def wartosc_magazynu(self, klucz: str) -> float:

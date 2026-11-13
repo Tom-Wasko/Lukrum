@@ -238,108 +238,6 @@ finanse:
     zrodlo: 'Z3 (Plan optymalizacji, odpowiedź autora: „Inwestor za udział w wyniku”, „Wpłata jako dług”): mistrz gry
       ratuje drużynę z debetem ponad limit wpłatą do max_kwota (kapitał startowy); inwestor przez `rund` rund bierze
       `udzial` dodatniego dochodu netto rundy, a niezwrócona wpłata liczy się jak dług – wartości do kalibracji'
-karta_wynikow:
-  wynik_ekonomiczny_dzielnik:
-    wartosc: 4615
-    pewnosc: zalozenie
-    zrodlo: 'F2.7: 20 000 zł miesięcznego dochodu (założenie autora) × 12/52 – ta sama skala dla dochodu tygodniowego'
-  mandaty_w_dochodzie:
-    wartosc: false
-    pewnosc: zalozenie
-    zrodlo: 'B12: w danych zamrożonych wyłączone (jak przed 7.11); testy B12 włączają'
-  skala:
-    wartosc:   # [od „średni”, od „dobry”] – słowo i kolor przy wskaźniku w zakładce Karta wyników
-      wynik_dzialalnosci: [0.1, 0.7]
-      wynik_ekonomiczny: [0.15, 1.1]
-      zadowolenie_pracownikow: [0.9, 0.98]
-      zadowolenie_klientow: [1.0, 1.1]
-      rozwoj_firmy: [0.56, 0.67]
-      wskaznik_zadluzenia: [0.6, 0.9]
-    pewnosc: zalozenie
-    zrodlo: 'U10 (4.11.2026): ok. 25. i 75. percentyl kart botów (9 strategii × poziomy łatwy/średni/trudny × ziarna 7, 11,
-      rundy 3–14); zadłużenie: boty go nie mają – progi założone przez autora (zadłużenie 0,2–0,6)'
-  strata:
-    wartosc:
-      waga: 1.0
-    pewnosc: zalozenie
-    zrodlo: 'Z1 (29.10.2026, ustalone z autorem): przy stracie wynik działalności = waga × wynik ekonomiczny
-      (ujemny, proporcjonalny do straty, bez mnożenia przez wskaźniki); wcześniej 0 przy każdej stracie. Do
-      sprawdzenia w B5/B6 (skala straty względem zysku mnożonego przez wskaźniki)'
-  zadowolenie_klientow:
-    wartosc:
-      stala: 0.8486
-      ln_liczby_uslug: 0.1768
-      limit_uslug: 6
-      cena_wzgledem_rynku: -0.193
-      utracona_poprzednio: -0.105
-      jakosc: 0.2282
-      wyposazenie_na_procent: 0.0
-      reklamacje: 0.0
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja z 2026-10-18: 43 karty (3 firmy × 11 mies. z botami, 5 firm × 2 mies.), zespoły z
-      wagą 2: błąd zespoły 0,033, boty 0,042 (dawny wzór: zespoły 0,024, boty 0,090 – nie przenosił się na firmy
-      o niższej jakości). jakosc = średni mnożnik jakości usług (gwiazdki sprzętu i zasobów jak w popycie); cena_wzgledem_rynku
-      = cena / średnia cena firm (ważona klientami); utracona_poprzednio = udział utraconej sprzedaży w poprzednim
-      miesiącu (kwiecień −40% → maj −0,08)'
-  zadowolenie_pracownikow:
-    wartosc:
-      stala: 0.9464
-      placa_wzgledem_preferowanej: 0.3162
-      sprzet_na_gwiazdke: 0.0163
-      udogodnienia_na_procent: 0.0009
-      szkolenia_w_miesiacu_na_procent: 0.0
-      udzial_umow_zlecenie: -0.0115
-      zmiany_zatrudnienia: 0.0
-      szkolenie_w_miesiacu: 0.0755
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja na 17 kartach zespołów i 43 kartach z botami: szkolenie działa
-      jak włącznik – jedno lub dwa szkolenia w miesiącu dają tyle samo (+0,0755; Firma 1 z jednym szkoleniem = z
-      dwoma), błąd 0,005 zamiast 0,009'
-  rozwoj_firmy:
-    wartosc:
-      stala: 0.5353
-      majatek: 0.1062
-      majatek_skala: 10000
-      inwestycje_netto: 0.3389
-      inwestycje_wzgledne: 1.192
-      przyrost_uslug_i_pracownikow: 0.031
-      wygladzanie: 0.0
-      waga_nieruchomosci: 1   # Z1: w danych zamrożonych pełna wartość (jak przed 7.11)
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja z 2026-10-18: 21 kart (luty–grudzień z wyprzedażą i odkupem sprzętu, plus druga seria luty–marzec):
-      rozwój = stala + majatek·ln(1 + M/skala) + inwestycje_netto·(zakupy − wartość sprzedanego)/max(M sprzed miesiąca,
-      skala), M – majątek po cenach zakupu po odjęciu sprzedanego; błąd 0,089, LOO 0,106 (dawny wzór na tych danych:
-      LOO 0,175). Sprzedaż sprzętu obniża rozwój (wrzesień 0,554, październik 0,603). Niska pewność'
-  wskaznik_zadluzenia:
-    wartosc:
-      bez_kredytu: 1.0
-      wzor: 1 − dług / (majątek + skumulowany dochód netto + dług + gotówka), min 0
-    pewnosc: zalozenie
-    zrodlo: 'założenie autora: zadłużenie 0,2–0,6; „+ dług” w mianowniku (silnik/wyniki/karta.py);
-      gotówka – U22 (decyzja autora 3.11.2026: kredyt leżący na koncie nie ma karać jak przejedzony)'
-  kebab:
-    wartosc:
-      zadowolenie_klientow:
-        brakujace_dania: -0.3
-        kolejki: -0.15
-        kontrola_z_mandatem: -0.05
-        wypadek: -0.03
-      zadowolenie_pracownikow:
-        prog_przepracowania: 0.85
-        przepracowanie: -0.5
-      rozwoj_firmy:
-        kolejny_lokal: 0.08
-        przyrost_dan_i_pracownikow: 0.031
-      wskaznik_zadluzenia:
-        waga_harpagona: 1.5
-    pewnosc: zalozenie
-    zrodlo: 'F4.1, notatka „Ustalenia gry” (karta wyników): w grze z lokalami podstawowe wskaźniki dostają składniki kebabowe
-      (silnik/wyniki/karta.py → kebab). Zadowolenie klientów: cena względem ceny preferowanej strefy lokalu (zamiast średniej
-      rynku), brakujące dania = udział dań-dni wyłączonych z braku składnika, kolejki = udział klientów utraconych w tym
-      tygodniu z braku rąk lub sprzętu (czas obsługi), kontrola sanepidu z mandatem, każdy wypadek w lokalu. Zadowolenie
-      pracowników: przepracowanie = średnia nadwyżka wykorzystania czasu ponad próg. Rozwój: każdy kolejny lokal i przyrost
-      dań w menu i pracowników (jak w podstawowym wzorze). Zadłużenie: dług u Harpagona liczony z wagą (lichwiarz
-      straszy bardziej niż bank). Wartości – założenia do potwierdzenia (PRACA_NOCNA, pyt. 22)'
 losowosc:
   reklamacje:
     wartosc: dwumianowo_ryzyko_pracownika
@@ -447,3 +345,219 @@ wnioski:   # gra z lokalami (Q13): zakładka „Wnioski z rundy” – od jakich
     pewnosc: zalozenie
     zrodlo: 'test gry 28.10: najwyżej tyle czerwonych punktów listy błędów rundy we wnioskach (reszta – zakładka Lista
       błędów), żeby wnioski nie zniechęcały'
+
+wynik:   # wynik punktowy: pięć działów po 0–200 pkt, tydzień 1 to „Wielkie otwarcie” (silnik/wyniki/punkty.py)
+  mandaty_w_dochodzie:
+    wartosc: true
+    pewnosc: zalozenie
+    zrodlo: 'mandaty rundy (skarbowe za deklaracje, z błędu biura bez OC, sanepidu) i odsetki Harpagona obniżają dochód
+      tygodnia, który liczy dział „Finanse”; KPiR i podatki bez zmian. false – wynik liczy dochód z KPiR'
+  dzialy:
+    wartosc:
+      finanse:
+        nazwa: Finanse
+        opis: Ile firma zarabia w tygodniu i ile z każdej złotówki sprzedaży zostaje po kosztach.
+        skladniki:
+          dochod:
+            nazwa: Dochód netto tygodnia
+            jednostka: zł
+            podpowiedz: Sprzedawaj więcej i z rozsądną marżą, pilnuj kosztów stałych.
+            progi: [[-3000, 0], [0, 20], [3000, 60], [6000, 105], [10000, 140]]
+            ponad: {za: 1000, pkt: 10, maks: 40}
+          marza:
+            nazwa: Marża (dochód ÷ przychód)
+            jednostka: udział
+            podpowiedz: Wysoka marża to dobre ceny przy rozsądnych kosztach towaru i płac.
+            progi: [[-0.2, 0], [0, 15], [0.1, 35], [0.2, 50], [0.3, 60]]
+            ponad: {za: 0.1, pkt: 8, maks: 20}
+      goscie:
+        nazwa: Goście
+        opis: Czy goście dostają to, po co przyszli, i ilu ich jest.
+        skladniki:
+          zadowolenie:
+            nazwa: Zadowolenie gości (0–100)
+            jednostka: pkt
+            podpowiedz: Dobre składniki i obsługa, uczciwa cena, bez kolejek, braków dań i pomyłek.
+            progi: [[30, 0], [60, 40], [80, 70], [95, 80]]
+          obsluzeni:
+            nazwa: Obsłużeni z chętnych
+            jednostka: udział
+            podpowiedz: Więcej rąk, sprzętu i towaru na szczyt, żeby nikt nie odchodził z kolejki.
+            progi: [[0.4, 0], [0.7, 35], [0.9, 60], [1.0, 70]]
+          liczba:
+            nazwa: Liczba obsłużonych gości
+            jednostka: osób
+            podpowiedz: Dobry lokal, reklama i cena przyciągają tłum, ale trzeba go obsłużyć.
+            progi: [[200, 0], [1000, 25], [2000, 50]]
+            ponad: {za: 400, pkt: 8, maks: 30}
+      zespol:
+        nazwa: Zespół
+        opis: Jak się pracuje w firmie – nastrój, obciążenie, szkolenia i udogodnienia.
+        skladniki:
+          nastroj:
+            nazwa: Zadowolenie zespołu
+            jednostka: wskaźnik
+            podpowiedz: Uczciwe pensje, dobry sprzęt, umowa o pracę, szkolenia i odpowiednie obciążenie.
+            progi: [[0.85, 0], [0.95, 40], [1.02, 85], [1.12, 110]]
+          przepracowanie:
+            nazwa: Przepracowanie
+            jednostka: udział
+            podpowiedz: Każdy, kto pracuje ponad próg obciążenia, traci siły. Zatrudnij kogoś albo rozłóż pracę.
+            progi: [[0, 40], [0.1, 20], [0.2, 0]]
+          szkolenia:
+            nazwa: Szkolenia w tym tygodniu
+            jednostka: udział
+            podpowiedz: Szkolenie działa tydzień po tygodniu, więc opłaca się je powtarzać.
+            progi: [[0, 0], [0.9, 30]]
+          udogodnienia:
+            nazwa: Udogodnienia i socjal
+            jednostka: wskaźnik
+            podpowiedz: Hojny socjal może dać więcej niż 20 pkt, ale kosztuje co tydzień.
+            progi: [[0, 0], [1, 20]]
+            ponad: {za: 1, pkt: 10, maks: 30}
+      rozwoj:
+        nazwa: Rozwój
+        opis: Majątek, kolejne lokale, szersze menu i większa załoga.
+        skladniki:
+          majatek:
+            nazwa: Majątek trwały
+            jednostka: zł
+            podpowiedz: Sprzęt, wyposażenie i kupione nieruchomości (wartość po amortyzacji).
+            progi: [[0, 0], [5000, 40], [15000, 80]]
+            ponad: {za: 10000, pkt: 10, maks: 30}
+          lokale:
+            nazwa: Liczba lokali
+            jednostka: lokali
+            podpowiedz: Każdy kolejny lokal to nowy rynek, ale i nowe koszty.
+            progi: [[0, 0], [1, 20], [2, 40], [3, 50]]
+            ponad: {za: 1, pkt: 10, maks: 30}
+          menu:
+            nazwa: Dania w menu
+            jednostka: dań
+            podpowiedz: Szersze menu przyciąga więcej gości, o ile starcza składników i rąk.
+            progi: [[0, 0], [3, 15], [6, 30], [9, 40]]
+          zaloga:
+            nazwa: Wielkość załogi
+            jednostka: osób
+            podpowiedz: Zespół, który się rozrasta razem z lokalem.
+            progi: [[0, 0], [3, 15], [6, 30]]
+      bezpieczenstwo:
+        nazwa: Bezpieczeństwo finansowe
+        opis: Czy firma przetrwa gorszy tydzień – zapas gotówki, mało długów, brak zaległości.
+        skladniki:
+          zapas:
+            nazwa: Zapas gotówki (tygodnie kosztów)
+            jednostka: tygodni
+            podpowiedz: Trzymaj w kasie równowartość kilku tygodni kosztów.
+            progi: [[0, 0], [1, 25], [3, 60], [6, 95], [10, 120]]
+            ponad: {za: 5, pkt: 10, maks: 30}
+          kapital:
+            nazwa: Udział kapitału własnego
+            jednostka: udział
+            podpowiedz: Im mniej długów w stosunku do majątku i gotówki, tym bezpieczniej.
+            progi: [[0.5, 0], [0.8, 15], [1.0, 40]]
+          dlug:
+            nazwa: Długi do spłaty (tygodnie kosztów)
+            jednostka: tygodni
+            podpowiedz: Debet, pożyczka u Harpagona i zaległości odejmują punkty.
+            progi: [[0, 40], [0.5, 20], [2, 0]]
+    pewnosc: zalozenie
+    zrodlo: 'własny system punktowy LUKRUM (13.11.2026, tor A): tabela jawnych progów, punkty rosną liniowo między
+      progami, poniżej pierwszego progu – wartość pierwszego, powyżej ostatniego – „ponad” (za każde `za` jednostek
+      `pkt` punktów, najwyżej `maks`), więc dział może przekroczyć 200. Progi dobrane pomiarami botów
+      (balans.symuluj, raport mechaniki-a): dobra gra ≈ 1000 pkt, słaba 400–600'
+  oceny:
+    wartosc: [0.45, 0.7]   # udział 200 pkt działu: od „średni”, od „dobry”
+    pewnosc: zalozenie
+    zrodlo: 'słowo i kolor przy dziale w karcie wyników: poniżej 90 pkt niski, od 140 pkt dobry (założenie autora toru A)'
+  goscie:
+    wartosc:
+      baza: 40
+      jakosc: 25
+      jakosc_od: 0.55
+      jakosc_do: 0.82
+      cena: 15
+      cena_tania: 0.8
+      cena_droga: 1.3
+      czekanie: 15
+      czekanie_zero_przy: 0.3
+      braki: 10
+      braki_zero_przy: 0.3
+      mandat: -10
+      wypadek: -4
+      pomylki: -40
+      do_popytu: 0.012
+    pewnosc: zalozenie
+    zrodlo: 'własny wzór LUKRUM (tor A; zastąpią go gwiazdki gości w torze B): zadowolenie gości 0–100 = baza + jakość
+      dania (mnożnik jakości między jakosc_od a jakosc_do, do `jakosc` pkt) + cena względem ceny strefy lokalu (tania
+      cena_tania – pełne `cena`, droga cena_droga – zero) + brak kolejek i brak braków dań (udział utraconych/wyłączonych
+      do `…_zero_przy`) − mandat, wypadki i pomyłki w szczycie. `do_popytu` przelicza punkty na mnożnik atrakcyjności
+      używany, gdy lokal nie ma jeszcze opinii'
+  otwarcie:
+    wartosc:
+      waga_tygodnia: 0.5
+      skladniki:
+        lokal:
+          nazwa: Lokal
+          podpowiedz: Wynajmij albo kup lokal jeszcze w pierwszym tygodniu.
+          progi: [[0, 0], [1, 250]]
+        menu:
+          nazwa: Menu
+          podpowiedz: Ustaw ceny i zaplanuj przynajmniej kilka dań.
+          progi: [[0, 0], [3, 120], [6, 200]]
+        ekipa:
+          nazwa: Ekipa
+          podpowiedz: Zatrudnij ludzi na stanowiska kuchni i kasy.
+          progi: [[0, 0], [1, 100], [3, 250]]
+        zaopatrzenie:
+          nazwa: Zaopatrzenie
+          podpowiedz: Zamów towar na pierwszy tydzień sprzedaży.
+          progi: [[0, 0], [800, 150]]
+        rezerwa:
+          nazwa: Rezerwa w kasie
+          podpowiedz: Po przygotowaniach zostaw gotówkę na pensje i zamówienia.
+          progi: [[0, 0], [10000, 60], [25000, 150]]
+    pewnosc: zalozenie
+    zrodlo: 'tydzień 1 to „Wielkie otwarcie”: sprzedaży jeszcze nie ma, więc zamiast działów liczy się przygotowanie
+      – lokal, menu, ekipa, zaopatrzenie i rezerwa w kasie (razem 1000 pkt); tydzień ma w rankingu mniejszą wagę'
+  ranking:
+    wartosc:
+      waga_pierwszego_pelnego: 1.0
+      waga_ostatniego: 2.0
+    pewnosc: zalozenie
+    zrodlo: 'ranking = suma punktów z tygodni z wagami: tydzień 1 (Wielkie otwarcie) ma wagę otwarcie.waga_tygodnia, tygodnie
+      2…ostatni – wagę rosnącą liniowo od `waga_pierwszego_pelnego` do `waga_ostatniego`, więc końcówka gry waży
+      dwa razy więcej niż początek. Wynik gry (0–1000) = suma ważona ÷ suma wag'
+  waga_nieruchomosci:
+    wartosc: 0.5
+    pewnosc: zalozenie
+    zrodlo: 'kupiony lokal, budynek albo grunt liczy się do majątku w dziale „Rozwój” w połowie wartości netto, żeby
+      jedna duża transakcja nie zastępowała rozwoju firmy'
+  maks_dzialu:
+    wartosc: 200
+    pewnosc: zalozenie
+    zrodlo: 'punkty działu, od których liczy się ocena „niski / średni / dobry” (progi w `oceny` to udział tej wartości)'
+  koszty_tygodniowe_min:
+    wartosc: 2000
+    pewnosc: zalozenie
+    zrodlo: 'dolna granica kosztów tygodnia przy liczeniu zapasu gotówki i długów w tygodniach (żeby wolny tydzień
+      nie dawał nieskończonego zapasu)'
+zadowolenie_osoby:   # zadowolenie każdej osoby w zespole (silnik/ludzie/zadowolenie.py); 1,0 = typowa osoba
+  wspolczynniki:
+    wartosc:
+      stala: 1.0
+      placa_wzgledem_preferowanej: 0.3
+      sprzet_na_gwiazdke: 0.02
+      udogodnienia_na_procent: 0.01
+      szkolenia_w_tygodniu_na_procent: 0.04
+      szkolenie_w_tygodniu: 0.05
+      umowa_zlecenie: -0.02
+      prog_przepracowania: 0.85
+      sprzet_bez_sprzetu: 2
+      przepracowanie: -0.5
+    pewnosc: zalozenie
+    zrodlo: 'własny wzór LUKRUM (tor A; w torze B zastąpi go nastrój zespołu 0–100): zadowolenie osoby = stala + 0,3 za
+      każdą pełną pensję ponad (lub poniżej) oczekiwanej + 0,02 za gwiazdkę sprzętu ponad 3★ + 0,01 za każdy procent
+      gości, którym odpowiada udogodnienie + szkolenia (włącznik + udział) − zlecenie − przepracowanie ponad progiem
+      obciążenia. Liczby okrągłe, dobrane tak, żeby osoba z pensją oczekiwaną, sprzętem 2★ i obciążeniem do 85% była
+      tuż nad progiem odejść'

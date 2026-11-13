@@ -94,10 +94,10 @@ def test_zleceniobiorca_odchodzi_od_razu_i_wraca_do_puli_z_cecha(monkeypatch):
 def test_podwyzka_w_projekcie_usuwa_ostrzezenie():
     g, s, p = _start()
     f = s.firmy["A"]
-    p.zadowolenie, p.niezadowolony, p.wykorzystanie = 0.85, 1, 0.5
+    p.zadowolenie, p.niezadowolony, p.wykorzystanie = 0.90, 1, 0.5
     p.pensja = p.pensja_preferowana
     [(poziom, tekst)] = zo.ostrzezenia(g.dane, f, {}, s.runda + 1)
-    assert poziom == "pomaranczowy" and "szansa ok. 10%" in tekst and "0,85" in tekst
+    assert poziom == "pomaranczowy" and "szansa ok. 10%" in tekst and "0,90" in tekst
     assert zo.ostrzezenia(g.dane, f, {p.id: {"pensja": p.pensja * 1.2}}, s.runda + 1) == []
 
 
@@ -113,7 +113,7 @@ def test_szansa_rosnie_z_niezadowoleniem_i_zalezy_od_cechy():
 def test_bot_daje_podwyzke_niezadowolonemu():
     g, s, p = _start()
     ust = g.dane.boty["poziomy"]["sredni"]["dba_o_ludzi"]
-    p.zadowolenie, p.niezadowolony = 0.85, 1
+    p.zadowolenie, p.niezadowolony = 0.90, 1
     stara = p.pensja
     nowa = _podwyzki(g.dane, s.firmy["A"], ust)[p.id]["pensja"]
     assert stara < nowa <= p.pensja_preferowana * ust["podwyzka_maks"]

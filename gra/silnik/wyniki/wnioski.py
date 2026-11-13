@@ -194,22 +194,9 @@ def wnioski(dane: Dane, w: dict | None, wp: dict | None = None, runda: int | Non
             "rozruch": ROZRUCH if runda is not None and rozruch is not None and runda <= rozruch else None}
 
 
-# U16: „Dlaczego mój wynik się zmienił?” – 1–3 zdania z porównania kart dwóch kolejnych rund
-WSKAZNIKI = {"wynik_ekonomiczny": "wynik ekonomiczny", "zadowolenie_pracownikow": "zadowolenie pracowników",
-             "zadowolenie_klientow": "zadowolenie klientów", "rozwoj_firmy": "rozwój firmy",
-             "wskaznik_zadluzenia": "wskaźnik zadłużenia"}
-
-
+# U16: „Dlaczego mój wynik się zmienił?” – 1–3 zdania z porównania wyniku punktowego dwóch kolejnych tygodni
 def _liczba(x: float) -> str:
-    return f"{x:.2f}".replace(".", ",").replace("-", "−")
-
-
-def _wynik(dane: Dane, k: dict) -> float:
-    """Wynik działalności z wskaźników karty – jak silnik/wyniki/karta.py: karta (przy stracie bez mnożenia)."""
-    we = k["wynik_ekonomiczny"]
-    if we < 0:
-        return we * dane.z["karta_wynikow"]["strata"]["waga"]
-    return we * k["zadowolenie_pracownikow"] * k["zadowolenie_klientow"] * k["rozwoj_firmy"] * k["wskaznik_zadluzenia"]
+    return f"{x:.0f}".replace("-", "−")
 
 
 def _pozycje(kpir: dict) -> dict[str, float]:
@@ -222,41 +209,38 @@ def _pozycje(kpir: dict) -> dict[str, float]:
 
 
 def dlaczego(dane: Dane, w: dict | None, wp: dict | None) -> list[str] | None:
-    """Zdania o zmianie wyniku działalności między rundą poprzednią (wp) a ostatnią (w); None – brak karty w.
-    Pierwsza karta (runda przygotowawcza bez karty) – porównanie z zerem: wynik ekonomiczny 0, KPiR bez pozycji.
-    Przyczyna: wskaźnik, którego sama zmiana (przy pozostałych z poprzedniej rundy) najbardziej przesuwa wynik;
-    przy wyniku ekonomicznym – pozycja KPiR o największej zmianie w tę samą stronę."""
+    """Zdania o zmianie wyniku punktowego między tygodniem poprzednim (wp) a ostatnim (w); None – brak karty w.
+    Przyczyna: dział, którego punkty zmieniły się najbardziej (w tę samą stronę co wynik); w nim składnik z największą
+    zmianą. Tydzień 1 („Wielkie otwarcie”) i pierwszy tydzień sprzedaży – bez porównania działów."""
     k, kp = (w or {}).get("karta"), (wp or {}).get("karta")
     if not k:
         return None
-    pierwsza = not kp
-    if pierwsza:
-        kp, wp = {**k, "wynik_ekonomiczny": 0.0, "wynik_dzialalnosci": 0.0}, {"kpir": {"dochod_netto": 0.0, "pozycje": []}}
-    a, b = kp["wynik_dzialalnosci"], k["wynik_dzialalnosci"]
-    if abs(b - a) < dane.z["wnioski"]["dlaczego_min"] and not pierwsza:
-        return [f"Wynik działalności prawie się nie zmienił ({_liczba(a)} → {_liczba(b)})."]
-    zdania = [f"Pierwsza karta wyników: wynik działalności {_liczba(b)}." if pierwsza
-              else f"Wynik działalności {'wzrósł' if b > a else 'spadł'} z {_liczba(a)} do {_liczba(b)}."]
-    wplyw = {s: _wynik(dane, {**kp, s: k[s]}) - a for s in WSKAZNIKI}
-    zgodne = [s for s in WSKAZNIKI if wplyw[s] * (b - a) > 0] or list(WSKAZNIKI)
-    glowny = max(zgodne, key=lambda s: abs(wplyw[s]))
-    if glowny == "wynik_ekonomiczny":
+    if k.get("otwarcie"):
+        return [f"Wielkie otwarcie: {_liczba(k['punkty'])} pkt za przygotowanie (lokal, menu, ekipa, zaopatrzenie, rezerwa)."]
+    if not kp or kp.get("otwarcie"):
+        naj = max(k["dzialy"], key=lambda d: k["dzialy"][d]["punkty"])
+        return [f"Pierwszy tydzień sprzedaży: {_liczba(k['punkty'])} pkt. Najwięcej dał dział „{k['dzialy'][naj]['nazwa']}” "
+                f"({_liczba(k['dzialy'][naj]['punkty'])} z 200)."]
+    a, b = kp["punkty"], k["punkty"]
+    if abs(b - a) < dane.z["wnioski"]["dlaczego_min"]:
+        return [f"Wynik prawie się nie zmienił ({_liczba(a)} → {_liczba(b)} pkt)."]
+    zdania = [f"Wynik {'wzrósł' if b > a else 'spadł'} z {_liczba(a)} do {_liczba(b)} pkt."]
+    zmiany = {d: k["dzialy"][d]["punkty"] - kp["dzialy"][d]["punkty"] for d in k["dzialy"]}
+    zgodne = [d for d in zmiany if zmiany[d] * (b - a) > 0] or list(zmiany)
+    glowny = max(zgodne, key=lambda d: abs(zmiany[d]))
+    sk = {s: k["dzialy"][glowny]["skladniki"][s]["punkty"] - kp["dzialy"][glowny]["skladniki"][s]["punkty"]
+          for s in k["dzialy"][glowny]["skladniki"]}
+    s = max(sk, key=lambda x: abs(sk[x]))
+    zdania.append(f"Najwięcej zmienił dział „{k['dzialy'][glowny]['nazwa']}” ({_liczba(kp['dzialy'][glowny]['punkty'])} → "
+                  f"{_liczba(k['dzialy'][glowny]['punkty'])} pkt), głównie „{k['dzialy'][glowny]['skladniki'][s]['nazwa']}”.")
+    if glowny == "finanse":
         dn, dnp = w["kpir"]["dochod_netto"], wp["kpir"]["dochod_netto"]
-        zmiana = "zysk zamienił się w stratę" if dnp > 0 > dn else "strata zamieniła się w zysk" if dn > 0 > dnp             else f"dochód netto {'wzrósł' if dn > dnp else 'spadł'}"
-        zdanie = f"Dochód netto: {zl_pelne(dn)}" if pierwsza             else f"Najwięcej zmienił wynik ekonomiczny: {zmiana} ({zl_pelne(dnp)} → {zl_pelne(dn)})"
         teraz, przed = _pozycje(w["kpir"]), _pozycje(wp["kpir"])
         roznice = {p: teraz.get(p, 0.0) - przed.get(p, 0.0) for p in set(teraz) | set(przed)}
         kierunek = [p for p in roznice if roznice[p] * (dn - dnp) > 0]
         if kierunek:
             p = max(kierunek, key=lambda x: abs(roznice[x]))
-            rodzaj = "przychód" if teraz.get(p, 0.0) + przed.get(p, 0.0) > 0 else "koszt"
-            zdanie += f" – najbardziej zaważył {rodzaj} „{p}”: {zl_pelne(abs(teraz.get(p, 0.0)))}"                       + ("" if pierwsza else f", rundę wcześniej {zl_pelne(abs(przed.get(p, 0.0)))}")
-        zdania.append(zdanie + ".")
-    else:
-        zdania.append(f"Najwięcej zmienił wskaźnik „{WSKAZNIKI[glowny]}”: {_liczba(kp[glowny])} → {_liczba(k[glowny])}.")
-    if k["wynik_ekonomiczny"] < 0:
-        zdania.append("Przy stracie wynik działalności to sam (ujemny) wynik ekonomiczny – zadowolenie i rozwój "
-                      "zaczną się liczyć, gdy firma wyjdzie na plus.")
+            zdania.append(f"Dochód netto: {zl_pelne(dnp)} → {zl_pelne(dn)}; najbardziej zaważyła pozycja „{p}”.")
     return zdania
 
 

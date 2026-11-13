@@ -57,7 +57,7 @@ from .rynek import promocje as pm
 from .rynek import reklama as rk
 from .swiat import awarie as aw
 from .swiat import zdarzenia as zd
-from .wyniki.karta import KOLEJKI
+from .wyniki.punkty import KOLEJKI
 
 DOMYSLNY_POZIOM = "sredni"
 
@@ -86,7 +86,7 @@ def _podwyzki(dane: Dane, f: Firma, ust: dict) -> dict:
     u = zo.ustawienia(dane)
     if not u:
         return {}
-    waga = dane.z["karta_wynikow"]["zadowolenie_pracownikow"]["placa_wzgledem_preferowanej"]
+    waga = dane.z["zadowolenie_osoby"]["wspolczynniki"]["placa_wzgledem_preferowanej"]
     zmiany = {}
     for p in sorted(f.pracownicy.values(), key=lambda p: p.id):
         if p.odchodzi or not p.niezadowolony or p.zadowolenie is None:
