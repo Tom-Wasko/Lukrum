@@ -286,7 +286,7 @@ function kartaBiuraMarki(b, i, wybrane, edycja, K, wyr) {
     podpis: `najtańszy pakiet (${b.najlepszy_pakiet}) na rundę przy ${K.dokumenty_szacunek} dok.`, tresc: pakiety, stopka: "" });
   const ryzyko = kafelOferty({ tytul: "Kadry i ryzyko", duza: proc(b.ryzyko_bledu, 0), podpis: "ryzyko błędu w deklaracji",
     tresc: wb("Ubezpieczenie OC", b.oc ? "tak – oddaje mandat" : "<b>nie</b> – mandat płacisz Ty")
-      + wb("Cecha biura", esc(b.cecha)) + (b.ryzyko_w_swieta != null ? wb("Ryzyko w tygodniu ze świętem", proc(b.ryzyko_w_swieta, 0)) : "")
+      + wb("Cecha biura", esc(b.cecha)) + (b.zamkniete_w_swieta ? wb("W tygodniu ze świętem", `zamknięte, dopłata ${zl2(b.zamkniete_w_swieta.doplata)} za dokument`) : "")
       + (b.zmiana_pakietu_po ? wb("Zmiana pakietu trwa", `${b.zmiana_pakietu_po} rundy`) : "")
       + wb("Kadry: etat / zlecenie", `${zl2(b.kadry.etat)} / ${zl2(b.kadry.zlecenie)}`) + (b.kadry.w_cenie ? wb("Kadry w cenie", `${b.kadry.w_cenie} os.`) : "") });
   return kartaMarki({ kolor: KOLORY[(i + 1) % KOLORY.length], nazwa: b.nazwa, rodzaj: b.wlasciciel || "",

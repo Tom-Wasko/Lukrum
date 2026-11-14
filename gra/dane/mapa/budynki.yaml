@@ -273,10 +273,10 @@ budynki:
     szer: 1
     gl: 1
 - id: akademia
-  nazwa: Akademia Gastro
+  nazwa: Lubelska Szkoła Kebabu
   rodzaj: szkola
   strefa: politechnika
-  opis: 'Szkolenia: Akademia Gastro, Mistrzowie Rożna i Sanepid bez Stresu.'
+  opis: 'Szkolenia: Lubelska Szkoła Kebabu, Rożen i Rozum oraz HACCP w Pięć Minut.'
   zakladka: szkolenia
   mapa:
     x: 0

@@ -868,6 +868,11 @@ class PakietBiura(Schemat):
     doplata: float = Field(ge=0)         # za każdy dokument ponad limit (brutto)
 
 
+class ZamknieteWSwieta(Schemat):
+    doplata: float = Field(ge=0)         # za każdy dokument przeniesiony na następny tydzień (brutto, zł)
+    zrodlo: str = Zrodlo
+
+
 class BiuroMapy(Schemat):
     id: str
     nazwa: str
@@ -878,7 +883,7 @@ class BiuroMapy(Schemat):
     kadry: KadryBiura
     ryzyko_bledu: float = Field(ge=0, lt=1)
     oc: bool
-    ryzyko_w_swieta: float | None = Field(default=None, ge=0, lt=1)   # ryzyko błędu w tygodniu ze świętem
+    zamkniete_w_swieta: ZamknieteWSwieta | None = None   # w tygodniu ze świętem dokumenty czekają do następnego
     zmiana_pakietu_po: int = Field(default=0, ge=0)   # rund do wejścia nowego pakietu
 
     @model_validator(mode="after")

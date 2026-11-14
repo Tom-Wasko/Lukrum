@@ -461,7 +461,7 @@ wynik:   # wynik punktowy: pięć działów po 0–200 pkt, tydzień 1 to „Wie
       używany, gdy lokal nie ma jeszcze opinii'
   otwarcie:
     wartosc:
-      waga_tygodnia: 0.5
+      waga_tygodnia: 1.0
       skladniki:
         lokal:
           nazwa: Lokal
@@ -485,13 +485,13 @@ wynik:   # wynik punktowy: pięć działów po 0–200 pkt, tydzień 1 to „Wie
           progi: [[0, 0], [10000, 60], [25000, 150]]
     pewnosc: zalozenie
     zrodlo: 'tydzień 1 to „Wielkie otwarcie”: sprzedaży jeszcze nie ma, więc zamiast działów liczy się przygotowanie
-      – lokal, menu, ekipa, zaopatrzenie i rezerwa w kasie (razem 1000 pkt); tydzień ma w rankingu mniejszą wagę'
+      – lokal, menu, ekipa, zaopatrzenie i rezerwa w kasie (razem 1000 pkt); tydzień ma w rankingu wagę zwykłego tygodnia (decyzja autora 14.11.2026)'
   ranking:
     wartosc:
       waga_pierwszego_pelnego: 1.0
       waga_ostatniego: 2.0
     pewnosc: zalozenie
-    zrodlo: 'ranking = suma punktów z tygodni z wagami: tydzień 1 (Wielkie otwarcie) ma wagę otwarcie.waga_tygodnia, tygodnie
+    zrodlo: 'ranking = suma punktów z tygodni z wagami: tydzień 1 (Wielkie otwarcie) ma wagę otwarcie.waga_tygodnia (1,0, jak zwykły tydzień), tygodnie
       2…ostatni – wagę rosnącą liniowo od `waga_pierwszego_pelnego` do `waga_ostatniego`, więc końcówka gry waży
       dwa razy więcej niż początek. Wynik gry (0–1000) = suma ważona ÷ suma wag'
   waga_nieruchomosci:

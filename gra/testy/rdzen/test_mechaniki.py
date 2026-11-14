@@ -48,9 +48,11 @@ def test_oblozenie_kucharza_i_kasy():
 def test_zuzycie_zasobow_na_klienta():
     f = firma_kebab("kebab_w_bulce")
     w = obsluz(D, f, {"kebab_w_bulce": 400}, ziarno=1, runda=3)
+    # pomyłka w szczycie to danie robione drugi raz, więc zużywa składniki jak obsłużony klient (zamierzone, tor A)
+    porcje = 400 + w["pomylki"]["kebab_w_bulce"]
     for n, ile in D.uslugi["kebab_w_bulce"]["zasoby"].items():
-        assert w["zuzyte_zasoby"][n]["ilosc"] == pytest.approx(400 * ile / D.zasoby[n]["opakowanie"])
-        assert f.magazyn[f"{n}|3"] == pytest.approx(1000 - 400 * ile / D.zasoby[n]["opakowanie"])
+        assert w["zuzyte_zasoby"][n]["ilosc"] == pytest.approx(porcje * ile / D.zasoby[n]["opakowanie"])
+        assert f.magazyn[f"{n}|3"] == pytest.approx(1000 - porcje * ile / D.zasoby[n]["opakowanie"])
 
 
 def test_brak_pojemnosci_ogranicza_sprzedaz():

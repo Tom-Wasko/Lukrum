@@ -63,8 +63,8 @@ def test_pensje_kandydatow_z_ofert_lublina_2026():
 
 def test_umowa_o_prace_ma_urlop_a_zlecenie_nie():
     d = dane_domyslne()
-    assert fz.forma(d, "prace")["urlop"] == 0.05 and fz.forma(d, "zlecenie").get("urlop", 0) == 0
-    assert fz.etat(d, _osoba("prace")) == pytest.approx(0.95)
+    assert fz.forma(d, "prace")["urlop"] == 0.1 and fz.forma(d, "zlecenie").get("urlop", 0) == 0
+    assert fz.etat(d, _osoba("prace")) == pytest.approx(0.9)
     assert fz.etat(d, _osoba("zlecenie")) == 1.0
     assert fz.forma(d, "zlecenie")["wypowiedzenie"] is False and fz.forma(d, "prace")["wypowiedzenie"] is True
 

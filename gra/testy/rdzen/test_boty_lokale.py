@@ -119,14 +119,14 @@ def test_bot_z_dwoma_lokalami_zamawia_z_zapasow_kazdego_lokalu(monkeypatch):
     zapasów całej firmy – nadmiar jednego lokalu „pokrywał” braki drugiego; drugi lokal tracił sprzedaż)."""
     g = Gra.nowa("t", [("A", "zrownowazony"), ("B", "tani")], 12, 5, poziomy={"A": "trudny", "B": "sredni"},
                  kapital_startowy=200000)
-    for _ in range(6):
+    for _ in range(7):   # drugi lokal bot otwiera w tygodniu 7 (po części 4 kadr dopiero w 7, wcześniej w 6)
         g.przelicz(wymus=True)
-    f = g.stan(6).firmy["A"]
+    f = g.stan(7).firmy["A"]
     assert len(f.lokale) == 2
     wywolania, oryginal = [], boty.zamowienie_zasobow
     monkeypatch.setattr(boty, "zamowienie_zasobow", lambda dane, firma, *a: (
         wywolania.append((tuple(x.id for x in firma.lokale), dict(firma.magazyn))) or oryginal(dane, firma, *a)))
-    d = boty.decyzje_bota(g.dane, g.stan(6), "A", "zrownowazony", 7, g.konfiguracja)
+    d = boty.decyzje_bota(g.dane, g.stan(7), "A", "zrownowazony", 8, g.konfiguracja)
     assert sorted(lok for lok, _ in wywolania) == sorted((x.id,) for x in f.lokale)
     for (lok,), mag in wywolania:   # zapasy z widoku lokalu, nie całej firmy
         assert mag == boty.pl.widok(f, lok).magazyn

@@ -6,7 +6,7 @@ opis: 'Cztery biura w Kamienicy biur rachunkowych, każde z trzema pakietami S, 
   operacja poza KPiR (kredyt, lokata, kaucja, podatek) i faktura biura za rundę. Kadry: opłata za każdego
   pracownika (właściciel się nie liczy), `w_cenie` – tylu ludzi bez dopłaty. `ryzyko_bledu` – szansa na rundę, że
   biuro pomyli się w deklaracji: firma płaci `kara_bledu` (mandat z urzędu), biuro z ubezpieczeniem OC (`oc: true`)
-  oddaje ją w tej samej rundzie. `ryzyko_w_swieta` – ryzyko w tygodniu ze świętem (biuro zamknięte), `zmiana_pakietu_po`
+  oddaje ją w tej samej rundzie. `zamkniete_w_swieta` – w tygodniu ze świętem biuro jest zamknięte: dokumenty czekają do następnego tygodnia z dopłatą, `zmiana_pakietu_po`
   – ile rund trwa zmiana pakietu. Teksty błędów: {kara}, {biuro}.'
 zrodlo: 'Własna oferta LUKRUM (13.11.2026, tor A). Ceny – rząd wielkości rynku Lublina 2026: kb.pl, Cennik biur
   rachunkowych w Lublinie 2026 i pobliskich miastach (KPiR do 10 dokumentów ok. 300 zł netto miesięcznie, 90–100
@@ -52,8 +52,10 @@ biura:
   opis: 'Najtańsze biuro w mieście. Pan Scrooge uważa święta za wymysł kasjerów: w święta biuro jest zamknięte, a deklaracje
     składa praktykant, który właśnie liczy, ile kosztują światełka na choince. Poza tym działa jak w zegarku, o ile
     nie trzeba nic dopłacać do herbaty.'
-  cecha: najtańsze, ale w tygodniach ze świętem zamknięte (większe ryzyko błędu)
-  ryzyko_w_swieta: 0.5
+  cecha: najtańsze, ale w tygodniach ze świętem zamknięte (dokumenty czekają tydzień z dopłatą)
+  zamkniete_w_swieta:
+    doplata: 3.0
+    zrodlo: 'Własna liczba LUKRUM (14.11.2026): w tygodniu ze świętem biuro jest zamknięte, dokumenty przechodzą na następny tydzień, a biuro dolicza 3 zł brutto za każdy dokument (ok. połowa zwykłej dopłaty za dokument ponad limit w pakiecie S).'
   pakiety:
     S: {cena: 190, dokumenty: 60, doplata: 3.7}
     M: {cena: 360, dokumenty: 120, doplata: 3.3}

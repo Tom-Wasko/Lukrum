@@ -208,10 +208,25 @@ udogodnienia:
     utrzymanie: 0
     od_rundy: 14
     opis: 'Piętnaście minut drzemki w przerwie. Budzik obowiązkowy, chrapanie zabronione.'
+  - nazwa: Karta sportowa dla zespołu
+    procent: 14
+    cena: 600
+    utrzymanie: 450
+    od_rundy: 10
+    opis: 'Basen i siłownia po zmianie przy rożnie. Pakiet dla całego zespołu kosztuje co tydzień, ale nikt nie narzeka na plecy.'
+  - nazwa: Posiłki pracownicze
+    procent: 10
+    cena: 400
+    utrzymanie: 120
+    od_rundy: 9
+    opis: 'Kebab na koszt firmy dla każdego, kto stoi przy grillu. Kucharze twierdzą, że to tylko test jakości.'
 wyposazenie:
   zrodlo: 'założenie autora: wyposażenie lokalu; cena = 2 × cena sprzedaży; parking i terminal – cena zakupu nieznana (sprzedaż
     0); sklep – notatka „Elementy mapy” (Leroy Merlin, IKEA, OBI, Jula, Castorama), przypisanie – założenie F3a.6;
-    Poprawki 3 (8.11) – autor chce tylko dwa sklepy, IKEA (meble) i Leroy Merlin (reszta)'
+    Poprawki 3 (8.11) – autor chce tylko dwa sklepy, IKEA (meble) i Leroy Merlin (reszta). Tor A (14.11.2026): pozycje dla kebaba
+    (ogródek, ładowarki, BLIK, kiosk, muzyka, toaleta dla gości, dostawa przez aplikację) z cenami rynkowymi 2026: meble ogrodowe
+    i parasole ok. 6 tys. zł, kiosk samoobsługowy 8–10 tys. zł, licencja muzyczna (ZAiKS, STOART) ok. 60 zł miesięcznie,
+    prowizja platform dowozowych ok. 300 zł tygodniowo przy małym obrocie'
   pozycje:
   - nazwa: Darmowe WiFi
     procent: 95
@@ -247,14 +262,54 @@ wyposazenie:
     utrzymanie: 10
     od_rundy: 5
     sklep: Leroy Merlin
+  - nazwa: Ogródek z parasolami
+    procent: 45
+    cena: 6000
+    utrzymanie: 120
+    od_rundy: 6
+    sklep: IKEA
+  - nazwa: Ładowarki do telefonów przy stolikach
+    procent: 35
+    cena: 900
+    utrzymanie: 10
+    od_rundy: 5
+    sklep: Leroy Merlin
+  - nazwa: Płatności BLIK i kodem QR
+    procent: 85
+    cena: 0
+    utrzymanie: 40
+    od_rundy: 4
+  - nazwa: Kiosk do zamówień
+    procent: 40
+    cena: 9000
+    utrzymanie: 150
+    od_rundy: 7
+    sklep: Leroy Merlin
+  - nazwa: Muzyka w lokalu (licencja)
+    procent: 50
+    cena: 800
+    utrzymanie: 60
+    od_rundy: 5
+    sklep: Leroy Merlin
+  - nazwa: Toaleta dla gości
+    procent: 55
+    cena: 5500
+    utrzymanie: 80
+    od_rundy: 6
+    sklep: Leroy Merlin
+  - nazwa: Dostawa przez aplikację
+    procent: 30
+    cena: 0
+    utrzymanie: 300
+    od_rundy: 8
 szkolenia:
-  zrodlo: 'założenie autora: HR – szkolenia, % pracowników oczekujących i ceny; nazwy firm i szkoleń – gastronomia (F2.6); poprawki 3 (sprawa 8, 8.11.2026): 12 → 8 szkoleń – podobne połączone, cena połączonego ≈ 80% sumy cen (zaokr. do 50 zł), procent – zaokrąglony maks. łączonych; `dawne` – dawne nazwy (stare zapisy gier)'
+  zrodlo: 'Tor A (14.11.2026): własne firmy szkoleniowe i ceny – kursy branżowe w Lublinie 2026 (HACCP i higiena ok. 250–400 zł od osoby, szkolenia zespołowe 800–2 000 zł); założenie autora: HR – szkolenia, % pracowników oczekujących; nazwy firm i szkoleń – gastronomia (F2.6); poprawki 3 (sprawa 8, 8.11.2026): 12 → 8 szkoleń – podobne połączone, cena połączonego ≈ 80% sumy cen (zaokr. do 50 zł), procent – zaokrąglony maks. łączonych; `dawne` – dawne nazwy (stare zapisy gier)'
   firmy:
-  - nazwa: Akademia Gastro
+  - nazwa: Lubelska Szkoła Kebabu
     zadowoleni_klienci: 90
-  - nazwa: Mistrzowie Rożna
+  - nazwa: Rożen i Rozum
     zadowoleni_klienci: 83
-  - nazwa: Sanepid bez Stresu
+  - nazwa: HACCP w Pięć Minut
     zadowoleni_klienci: 80
   pozycje:
   - nazwa: Higiena, BHP i HACCP
@@ -263,57 +318,57 @@ szkolenia:
     - HACCP w praktyce
     - Higiena i BHP w kuchni
     ceny:
-    - 3000
-    - 2900
-    - 2900
+    - 1400
+    - 1250
+    - 1300
   - nazwa: Krojenie mięsa z rożna
     procent: 90
     ceny:
-    - 2500
-    - 2100
-    - 2100
+    - 1500
+    - 1200
+    - 1300
   - nazwa: 'Kasa: szybka obsługa i „a może z serem?”'
     procent: 85
     dawne:
     - Szybka obsługa przy kasie
     - 'Sprzedaż dodatkowa: „a może z serem?”'
     ceny:
-    - 3500
-    - 3200
-    - 3250
+    - 2000
+    - 1900
+    - 1950
   - nazwa: Sosy firmowe od podstaw
     procent: 70
     ceny:
-    - 1200
-    - 950
-    - 1000
+    - 800
+    - 650
+    - 700
   - nazwa: Kultura obsługi i trudny klient o 3 w nocy
     procent: 75
     dawne:
     - Obsługa trudnego klienta o 3 w nocy
     - Kultura obsługi klienta
     ceny:
-    - 2950
-    - 2600
-    - 2700
+    - 1700
+    - 1500
+    - 1600
   - nazwa: Frytki i falafel bez wpadek
     procent: 65
     dawne:
     - Frytki idealnie chrupiące
     - Falafel bez rozpadania
     ceny:
-    - 3500
-    - 3500
-    - 3350
+    - 1800
+    - 1700
+    - 1650
   - nazwa: Organizacja pracy w godzinach szczytu
     procent: 90
     ceny:
-    - 1600
-    - 1600
-    - 1650
+    - 1100
+    - 1000
+    - 1150
   - nazwa: Pierwsza pomoc w kuchni
     procent: 80
     ceny:
-    - 3500
-    - 3200
-    - 3000
+    - 1600
+    - 1450
+    - 1400

@@ -136,7 +136,7 @@ def test_karta_skumulowana_i_widok(gra_botow):
 def test_ostatnie_tygodnie_waza_wiecej():
     d = dane_domyslne()
     w = [pk.waga_tygodnia(d, r, 12) for r in range(1, 13)]
-    assert w[0] < w[1] and w[1:] == sorted(w[1:]) and w[-1] > w[1]    # otwarcie lekkie, potem coraz więcej
+    assert w[0] == w[1] == 1.0 and w[1:] == sorted(w[1:]) and w[-1] > w[1]    # otwarcie jak zwykły tydzień, potem coraz więcej
     wzrost = {r: 500.0 for r in range(1, 12)} | {12: 900.0}
     spadek = {r: 500.0 for r in range(1, 12)} | {1: 900.0}
     assert pk.ranking(d, wzrost, 12)["wynik"] > pk.ranking(d, spadek, 12)["wynik"]

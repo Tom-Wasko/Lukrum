@@ -133,7 +133,7 @@ def wejscie_pakietu(firma: Firma, runda: int) -> None:
 
 
 def swieto_w_rundzie(dane: Dane, runda: int) -> bool:
-    """Czy tydzień rundy ma święto (kalendarz miejski) – Scrooge jest wtedy zamknięty."""
+    """Czy tydzień rundy ma święto (kalendarz miejski) – biuro z `zamkniete_w_swieta` jest wtedy zamknięte."""
     from ..rynek import kalendarz as kal
     from ..rynek import popyt as pp
     return any(w["rodzaj"] == "swieto" for w in kal.wydarzenia(dane, pp.dni_rundy(dane, runda)))
@@ -160,7 +160,19 @@ def nalicz(dane: Dane, firma: Firma, ksiega: Ksiega, rachunek: Rachunek, etat: i
     """Faktura biura za rundę – koszt w KPiR (dokumenty rundy + ta faktura)."""
     b = biura(dane)[firma.biuro]
     wejscie_pakietu(firma, runda)
-    o = oplata(dane, b, len(dokumenty(ksiega, rachunek)) + 1, etat, zlecenie, pakiet_firmy(dane, firma))
+    n = len(dokumenty(ksiega, rachunek)) + 1
+    zamkniete = b.get("zamkniete_w_swieta") and swieto_w_rundzie(dane, runda)
+    przeniesione = firma.dokumenty_przeniesione
+    if zamkniete:   # biuro zamknięte w święta: dokumenty tygodnia czekają na następny tydzień, pakiet płatny jak zawsze
+        o = oplata(dane, b, 0, etat, zlecenie, pakiet_firmy(dane, firma))
+        firma.dokumenty_przeniesione += n
+        o.update(dokumenty=0, zamkniete=True, przeniesione=firma.dokumenty_przeniesione, za_swieta=0.0)
+    else:   # dokumenty z zamkniętego tygodnia wchodzą do tego tygodnia z dopłatą za każdy
+        o = oplata(dane, b, n + przeniesione, etat, zlecenie, pakiet_firmy(dane, firma))
+        za = round(przeniesione * (b.get("zamkniete_w_swieta") or {}).get("doplata", 0.0), 2)
+        firma.dokumenty_przeniesione = 0
+        o.update(zamkniete=False, przeniesione=przeniesione, za_swieta=za, ksiegowanie=round(o["ksiegowanie"] + za, 2),
+                 razem=round(o["razem"] + za, 2))
     ksieguj(firma, ksiega, rachunek, f"Koszt biura rachunkowego: {b['nazwa']} (pakiet {o['pakiet']})", o["ksiegowanie"])
     ksieguj(firma, ksiega, rachunek, "Obsługa kadrowo-płacowa", o["kadry"])
     return {"biuro": b["id"], "nazwa": b["nazwa"], **o}
@@ -170,10 +182,7 @@ def blad_biura(dane: Dane, firma: Firma, nazwa: str, runda: int, ziarno: int, ra
     """Losowy błąd biura w deklaracji: mandat (biuro z OC go oddaje – poza KPiR)."""
     b = biura(dane)[firma.biuro]
     rng = strumien(ziarno, runda, "biuro", nazwa)
-    ryzyko = b["ryzyko_bledu"]
-    if b.get("ryzyko_w_swieta") is not None and swieto_w_rundzie(dane, runda):
-        ryzyko = b["ryzyko_w_swieta"]   # biuro zamknięte w święta – deklarację składa zastępca
-    if rng.random() >= ryzyko:
+    if rng.random() >= b["ryzyko_bledu"]:
         return None
     u = ustawienia(dane)
     kara = kara_bledu_biura(dane)

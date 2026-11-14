@@ -66,7 +66,7 @@ def test_cztery_biura_o_roznych_cechach(dane):
     cena = lambda i: b[i]["pakiety"]["M"]["cena"]   # noqa: E731
     assert cena("scrooge") < cena("jozef_k") < cena("jks") < cena("asteroida_328")   # Asteroida – dokładna i droga
     assert b["asteroida_328"]["ryzyko_bledu"] == 0 and b["asteroida_328"]["oc"] and not b["scrooge"]["oc"]
-    assert b["scrooge"]["ryzyko_w_swieta"] > b["scrooge"]["ryzyko_bledu"] and b["jozef_k"]["zmiana_pakietu_po"] == 2
+    assert b["scrooge"]["zamkniete_w_swieta"]["doplata"] > 0 and b["jozef_k"]["zmiana_pakietu_po"] == 2
 
 
 def test_biuro_z_mapy_nalicza_koszt_i_rozlicza_od_razu():
@@ -98,10 +98,24 @@ def test_zmiana_pakietu_u_jozefa_k_trwa_dwie_rundy_a_gdzie_indziej_jest_od_razu(
     assert g2.stan().firmy["H"].pakiet_biura == "L"            # J.K.Ś. – od razu
 
 
-def test_scrooge_w_swieta_ma_wieksze_ryzyko_bledu(dane):
-    swieto = [r for r in range(1, 40) if bo.swieto_w_rundzie(dane, r)]
-    zwykly = [r for r in range(1, 40) if not bo.swieto_w_rundzie(dane, r)]
-    assert swieto and zwykly
+def test_scrooge_w_swieta_zamkniety_dokumenty_czekaja_z_doplata(dane):
+    swieto = [r for r in range(2, 20) if bo.swieto_w_rundzie(dane, r)]
+    assert swieto and [r for r in range(2, 20) if not bo.swieto_w_rundzie(dane, r)]
+    r = swieto[0]
+    g = _gra(rund=r + 3)
+    while g.runda < r:
+        w = _runda(g, biuro="scrooge", pakiet="M")
+    # w tygodniu r-1 zdarzył się ostatni tydzień bez święta; następny przeliczany to r
+    w = _runda(g, biuro="scrooge", pakiet="M")
+    assert g.runda - 1 == r and w["biuro"]["zamkniete"] and w["biuro"]["dokumenty"] == 0 and w["biuro"]["przeniesione"] > 0
+    f = g.stan().firmy["H"]
+    ile = f.dokumenty_przeniesione
+    if not bo.swieto_w_rundzie(dane, r + 1):
+        w2 = _runda(g, biuro="scrooge", pakiet="M")
+        assert not w2["biuro"]["zamkniete"] and w2["biuro"]["przeniesione"] == ile
+        assert w2["biuro"]["za_swieta"] == round(ile * dane_domyslne().mapa["biura"]["biura"][2]["zamkniete_w_swieta"]["doplata"], 2)
+        assert g.stan().firmy["H"].dokumenty_przeniesione == 0
+    assert bo.biura(dane)["jks"].get("zamkniete_w_swieta") is None
 
 
 def test_blad_biura_bez_oc_kosztuje_mandat(dane, monkeypatch):
