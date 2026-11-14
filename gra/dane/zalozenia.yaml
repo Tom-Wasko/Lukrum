@@ -359,7 +359,7 @@ zadowolenie_osoby:   # zadowolenie każdej osoby w zespole (silnik/ludzie/zadowo
       udogodnienia_na_procent: 0.01
       szkolenia_w_tygodniu_na_procent: 0.04
       szkolenie_w_tygodniu: 0.05
-      umowa_zlecenie: -0.02
+      umowa_zlecenie: -0.04
       prog_przepracowania: 0.85
       sprzet_bez_sprzetu: 2
       przepracowanie: -0.5
@@ -592,6 +592,21 @@ pracownicy:   # U20 (decyzja autora 4.11.2026): zadowolenie każdej osoby i odej
       godziny × zwykłych godzin i odchodzi z niezadowolenia odejscia × częściej. Liczby – założenie. Decyzja autora
       7.11.2026: udzial 1,0 (każdy kandydat młodszy niż wiek_do jest studentem, było 0,8), a wiek kandydatów 19–39
       lat (kandydaci.yaml: losowanie.wiek, było 22–49), żeby studentem był co trzeci kandydat'
+  kontrola_pip:   # decyzja autora 14.11.2026 (silnik/ludzie/kontrola_pip.py): zlecenie jak etat grozi kontrolą PIP
+    wartosc:
+      prog_godzin: 30        # godzin w tygodniu przy stanowisku (pełny wymiar w stałym grafiku)
+      tygodni_z_rzedu: 4     # tyle tygodni z rzędu, zanim PIP „zauważy”
+      szansa: 0.05           # szansa kontroli co tydzień, dopóki ktoś na zleceniu pracuje jak etatowiec
+      kara: 2000
+      tekst: >-
+        Do lokalu wchodzi inspektorka Państwowej Inspekcji Pracy z teczką grubą jak książka telefoniczna. Sprawdza grafik
+        i zauważa, że {osoby} od {tygodni} tygodni przychodzi na stałe godziny, pod kierownictwem szefa, w pełnym wymiarze –
+        czyli pracuje jak na etacie, tylko na „zleceniu”. Pani inspektor uprzejmie wyjaśnia, że o rodzaju umowy decyduje
+        sposób pracy, a nie nazwa na papierze (art. 22 § 1 Kodeksu pracy). Wystawia mandat: {kara}.
+    pewnosc: zalozenie
+    zrodlo: 'decyzja autora 14.11.2026; liczby – założenie: próg 30 h w tygodniu przez 4 tygodnie, szansa kontroli 5% na
+      tydzień, kara 2 000 zł (art. 281 Kodeksu pracy: grzywna 1 000–30 000 zł za wykroczenie, np. zawarcie umowy
+      cywilnoprawnej w warunkach stosunku pracy). Kontrola jak sanepid: osobne losowanie (strumień „pip”), kara poza KPiR'
   oferta_pracy:   # kalibracja B9 (decyzja autora 7.11.2026): „im mniej pieniędzy, tym mniej zadowoleni pracownicy”
     wartosc:
       wlaczone: true

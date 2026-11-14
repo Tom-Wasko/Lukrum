@@ -142,6 +142,12 @@ def wnioski(dane: Dane, w: dict | None, wp: dict | None = None, runda: int | Non
                              f"Wyrzucony towar był wart {zl(sanepid['przeterminowane'])}.",
                              "Zamawiajcie mniejsze partie, częściej i bliżej prognozy – terminy przydatności widać "
                              "w Zaopatrzenie ▸ Dostawy.", "swiezosc"))
+    pip = w.get("pip") or {}
+    if pip.get("kontrola"):
+        poprawa.append(_rada("Kontrola PIP: zlecenie jak etat", f"Kara {zl(pip['kara'])}: zlecenie w pełnym wymiarze godzin, jak etat "
+                             f"(osoby: {', '.join(pip['osoby'])}).",
+                             "Zatrudnijcie taką osobę na umowę o pracę albo zmniejszcie jej godziny – o rodzaju umowy "
+                             "decyduje sposób pracy, a nie nazwa.", "zatrudnienie"))
     if sanepid.get("mandat"):
         poprawa.append(_rada("Mandat z sanepidu", f"Kontrola zakończyła się mandatem {zl(sanepid['mandat'])}.",
                              "Ryzyko kontroli rośnie z przeterminowanym towarem i wynajętą chłodnią – trzymajcie "

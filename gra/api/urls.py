@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import widoki as w
+from . import wnetrza as wn
 
 urlpatterns = [
     path("katalogi", w.api_katalogi),
@@ -19,6 +20,9 @@ urlpatterns = [
     path("gry/<str:id_>/wyslij/<str:firma>", w.api_wyslij),
     path("gry/<str:id_>/logo/<str:firma>", w.api_logo),
     path("gry/<str:id_>/funkcje/<str:firma>", w.api_funkcje),
+    path("gry/<str:id_>/wnetrza/<str:firma>", wn.api_wnetrza),
+    path("gry/<str:id_>/wnetrza/<str:firma>/odpowiedz", wn.api_wnetrza_odpowiedz),
+    path("gry/<str:id_>/wnetrza-ustawienia", wn.api_wnetrza_ustawienia),
     path("gry/<str:id_>/przelicz", w.api_przelicz),
     path("gry/<str:id_>/cofnij", w.api_cofnij),
     path("gry/<str:id_>/eksport", w.api_eksport),

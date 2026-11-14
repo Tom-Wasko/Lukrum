@@ -1,0 +1,8 @@
+opis: 'Parametry silnika wnętrz do testów.'
+zrodlo: 'dane testowe'
+nastroj: {zadowolenie_zero: 0.75, zadowolenie_sto: 1.05}
+miny:
+  smutna: {nastroj_do: 40}
+  zmeczona: {wykorzystanie_od: 0.85}
+  wesola: {nastroj_od: 75}
+dymki: {waga_dba_o: 3, gosc: Gość}

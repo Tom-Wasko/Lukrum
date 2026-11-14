@@ -1,0 +1,81 @@
+# Bywalcy przy ladzie (decyzje autora 13.11.2026, notatka „Wygląd” w repo Lukrum-notatki)
+# Stali goście z lektur, wprost z imionami, w dzisiejszym Lublinie. Dymki są w `dymki.yaml`. Silnik: silnik/wnetrza/.
+# Sprawdzenie: python -m silnik.dane sprawdz
+#
+# Pola:
+#   id, imie: nazwa w dymku i na tabliczce
+#   lektura, autor: skąd postać (do podpowiedzi „Skąd go znasz?” i do notatki funkcji)
+#   wyglad: jedno zdanie dla rysownika wnętrz (dzisiejsze ubranie i jeden rekwizyt z lektury)
+#   rys: jak mówi i czego się czepia (dla piszących nowe dymki)
+#   dba_o: wskaźniki, na które reaguje częściej (nazwy jak w `dymki.yaml` → wskazniki)
+#   od_rundy: od której rundy przychodzi
+#   specjalny: przychodzi tylko w ważnych momentach (zob. dymki.yaml → okazje), a nie co rundę
+#
+# Postacie z lektur szkolnych. Utwory Prusa, Fredry, Sienkiewicza, Zapolskiej i Żeromskiego są w domenie publicznej.
+# Gombrowicz (Józio) jeszcze nie jest, dlatego tylko imię i aluzja, a nie cytaty.
+opis: 'Stali bywalcy kebaba. Przychodzą co kilka rund, pamiętają ceny i komentują to, co policzył silnik.'
+
+bywalcy:
+- id: rzecki
+  imie: Pan Ignacy Rzecki
+  lektura: Lalka
+  autor: Bolesław Prus
+  wyglad: starszy pan w wytartym, ale wyprasowanym garniturze, z grubym zeszytem pod pachą
+  rys: Skrupulatny, pamięta każdą cenę z ostatnich tygodni i zapisuje ją w pamiętniku. Grzeczny, trochę staroświecki.
+  dba_o: [cena_wzgledem_strefy, zmiana_ceny]
+  od_rundy: 1
+
+- id: zagloba
+  imie: Pan Zagłoba
+  lektura: Trylogia (Ogniem i mieczem)
+  autor: Henryk Sienkiewicz
+  wyglad: tęgi, wąsaty, w kamizelce wędkarskiej, z opaską na oku zamiast okularów przeciwsłonecznych
+  rys: Smakosz i gawędziarz. Wszystko porównuje do uczt, które „sam wydawał”. Chwali głośno, gani jeszcze głośniej.
+  dba_o: [ocena, brak_dan]
+  od_rundy: 1
+
+- id: dulska
+  imie: Pani Aniela Dulska
+  lektura: Moralność pani Dulskiej
+  autor: Gabriela Zapolska
+  wyglad: elegancka pani w płaszczu z futrzanym kołnierzem, z torebką trzymaną jak tarcza
+  rys: Najważniejsze, co ludzie powiedzą. Zna wszystkie plotki z kamienicy i z miasta. Brudy pierze się w domu.
+  dba_o: [ocena, kolejka]
+  od_rundy: 2
+
+- id: judym
+  imie: Doktor Tomasz Judym
+  lektura: Ludzie bezdomni
+  autor: Stefan Żeromski
+  wyglad: młody lekarz w kurtce narzuconej na fartuch, ze stetoskopem w kieszeni
+  rys: Społecznik. Patrzy na higienę, na zmęczonych pracowników i na to, czy ktoś tu nie jest krzywdzony.
+  dba_o: [nastroj_zespolu, kolejka]
+  od_rundy: 2
+
+- id: papkin
+  imie: Papkin
+  lektura: Zemsta
+  autor: Aleksander Fredro
+  wyglad: chudy elegant w zbyt dużej skórzanej kurtce, z gitarą na plecach zamiast szpady
+  rys: Samochwała, „lew Północy”. Zna wszystkich, zawsze ma interes życia, rzadko ma przy sobie pieniądze.
+  dba_o: [runda]
+  od_rundy: 3
+
+- id: jozio
+  imie: Józio
+  lektura: Ferdydurke
+  autor: Witold Gombrowicz
+  wyglad: licealista w za dużej bluzie, z telefonem w ręce, przy nim ciągle ktoś z klasy
+  rys: Boi się, że ktoś mu „przyprawi gębę”. Ocenia, czy lokal jest wstydliwy, czy na czasie. Mówi jak nastolatek.
+  dba_o: [ocena, cena_wzgledem_strefy]
+  od_rundy: 1
+
+- id: wujek
+  imie: Wujek
+  lektura: ''
+  autor: ''
+  wyglad: starszy pan w kraciastej koszuli i kamizelce, ze zwiniętą gazetą. Ten sam co na zdjęciu przy dawnym barze
+  rys: Prowadził tu kiedyś bar. Mówi krótko, ciepło i trochę z przekąsem. Zawsze wspomina, jak było „za Gierka”.
+  dba_o: []
+  od_rundy: 1
+  specjalny: true

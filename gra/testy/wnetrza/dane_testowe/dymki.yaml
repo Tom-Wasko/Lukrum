@@ -1,0 +1,66 @@
+opis: 'Dymki do testów silnika wnętrz.'
+zasady: {dymkow_na_runde: [3, 3], udzial_bywalcow: 0.5, bywalec_co_rund: 2, wos_na_runde: 1}
+rodzaje:
+  cena_smak: {nazwa: Opinie o cenie i smaku}
+  plotki: {nazwa: Plotki z miasta}
+  propozycje: {nazwa: Propozycje i kłopoty}
+  wos: {nazwa: Zaczepki WOS}
+wskazniki:
+  cena_wzgledem_strefy: 'cena ÷ cena strefy'
+  zmiana_ceny: 'zmiana ceny w %'
+  ocena: 'ocena 1–5'
+  kolejka: 'udział odeszłych z kolejki'
+  brak_dan: 'udział odeszłych z braku dań'
+  nastroj_zespolu: 'nastrój 0–100'
+  runda: 'numer rundy'
+dymki:
+- {rodzaj: cena_smak, kto: rzecki, gdy: {cena_wzgledem_strefy: {od: 1.15}}, tekst: 'RZ-DROGO {cena} zł, strefa {cena_strefy} zł'}
+- {rodzaj: cena_smak, kto: rzecki, gdy: {ocena: {od: 4.0}}, tekst: 'RZ-OCENA {ocena}'}
+- {rodzaj: cena_smak, kto: dulska, gdy: {kolejka: {od: 0.1}}, tekst: 'DU-KOLEJKA'}
+- {rodzaj: cena_smak, kto: gosc, tekst: 'GOSC-ZAWSZE'}
+- {rodzaj: cena_smak, kto: kazdy, gdy: {ocena: {do: 3.0}}, tekst: 'KAZDY-ZIMNE'}
+- {rodzaj: cena_smak, kto: gosc, gdy: {zmiana_ceny: {od: 5}}, tekst: 'GOSC-DROZEJE o {zmiana_ceny}%'}
+- {rodzaj: plotki, kto: gosc, zrodlo: park, tekst: 'PARK {park}: {tytul}'}
+- {rodzaj: plotki, kto: gosc, zrodlo: konkurencja, tekst: 'KONK {konkurent} na {dzielnica}'}
+- {rodzaj: plotki, kto: gosc, zrodlo: kalendarz, tekst: 'KAL {wydarzenie}'}
+- {rodzaj: wos, kto: gosc, tekst: 'WOS-OK-1', wyjasnienie: 'w', zrodlo_prawne: 'z', sprawdzone: true}
+- {rodzaj: wos, kto: gosc, tekst: 'WOS-OK-2', wyjasnienie: 'w', zrodlo_prawne: 'z', sprawdzone: true}
+- {rodzaj: wos, kto: gosc, tekst: 'WOS-NIE', wyjasnienie: 'w', zrodlo_prawne: 'z', sprawdzone: false}
+- {rodzaj: cena_smak, kto: wujek, okazja: start, tekst: 'WUJ-START'}
+- {rodzaj: cena_smak, kto: wujek, okazja: pierwsza_strata, tekst: 'WUJ-STRATA'}
+- {rodzaj: cena_smak, kto: wujek, okazja: rekord, tekst: 'WUJ-REKORD'}
+- {rodzaj: cena_smak, kto: wujek, okazja: ostatnia_runda, tekst: 'WUJ-KONIEC'}
+propozycje_zasady:
+  co_ile_rund: {wartosc: 2, pewnosc: zalozenie, zrodlo: 'test'}
+  od_rundy: {wartosc: 2, pewnosc: zalozenie, zrodlo: 'test'}
+  bez_odpowiedzi: odmowa
+propozycje:
+- id: pierwsza
+  kto: gosc
+  od_rundy: 2
+  tekst: 'Pierwsza propozycja'
+  odpowiedzi:
+  - {id: tak, tekst: 'Tak', reakcja: 'Dzięki', wskazowka: 'Więcej gości, mniej zysku', skutki: {porcje: 10, opinia: 0.1}}
+  - {id: odmowa, tekst: 'Nie', reakcja: 'Szkoda', wskazowka: 'Więcej gości, mniej zysku', skutki: {}}
+- id: druga
+  kto: rzecki
+  od_rundy: 2
+  tekst: 'Druga propozycja'
+  odpowiedzi:
+  - {id: ryzyko, tekst: 'Ryzyko', reakcja: 'Hm', wskazowka: 'Więcej gości, mniej zysku', szansa: 0.5, skutki: {porcje: 40}, skutki_porazka: {darmowe_porcje: 8}}
+  - {id: odmowa, tekst: 'Nie', reakcja: 'Szkoda', wskazowka: 'Więcej gości, mniej zysku', skutki: {}}
+- id: trzecia
+  kto: gosc
+  od_rundy: 4
+  tekst: 'Trzecia propozycja'
+  odpowiedzi:
+  - {id: tak, tekst: 'Tak', reakcja: 'Dzięki', wskazowka: 'Więcej gości, mniej zysku', skutki: {kandydat: true}}
+  - {id: odmowa, tekst: 'Nie', reakcja: 'Szkoda', wskazowka: 'Więcej gości, mniej zysku', skutki: {}}
+- id: warunkowa
+  kto: gosc
+  od_rundy: 2
+  gdy: {ocena: {od: 99}}
+  tekst: 'Nigdy'
+  odpowiedzi:
+  - {id: tak, tekst: 'Tak', reakcja: 'ok', wskazowka: 'Więcej gości, mniej zysku', skutki: {}}
+  - {id: odmowa, tekst: 'Nie', reakcja: 'ok', wskazowka: 'Więcej gości, mniej zysku', skutki: {}}

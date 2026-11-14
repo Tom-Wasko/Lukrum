@@ -115,6 +115,17 @@ def _wczytaj_kalendarz(katalog: Path) -> dict | None:
             for k, v in s.model_validate(_wczytaj(katalog / n)).model_dump(exclude={"opis", "zrodlo"}).items()}
 
 
+def _wczytaj_wnetrza(katalog: Path) -> dict | None:
+    """Wnętrze kebaba (`dane/wnetrza/`): bywalcy, dymki z propozycjami i parametry silnika wnętrza (silnik/wnetrza/).
+    Brak katalogu = gra bez wnętrz."""
+    if not katalog.exists():
+        return None
+    from .wnetrza.schematy import PlikBywalcow, PlikDymkow, PlikSilnika
+    return {"bywalcy": PlikBywalcow.model_validate(_wczytaj(katalog / "bywalcy.yaml")).model_dump(),
+            "dymki": PlikDymkow.model_validate(_wczytaj(katalog / "dymki.yaml")).model_dump(),
+            "silnik": PlikSilnika.model_validate(_wczytaj(katalog / "silnik.yaml")).model_dump()}
+
+
 class Dane:
     def __init__(self, katalog: Path | None = None):
         self.katalog = katalog = katalog or KATALOG_DANYCH
@@ -140,6 +151,7 @@ class Dane:
         self.mapa: dict | None = _wczytaj_mape(katalog / "mapa")
         self.zdarzenia: dict | None = _wczytaj_zdarzenia(katalog / "zdarzenia")
         self.kalendarz_miasta: dict | None = _wczytaj_kalendarz(katalog / "kalendarz")
+        self.wnetrza: dict | None = _wczytaj_wnetrza(katalog / "wnetrza")   # brak folderu – gra bez wnętrz
         self.podatki: dict | None = _wartosci(p["podatki_2026.yaml"]) if "podatki_2026.yaml" in p else None   # JDG (F3a.11)
         # funkcje gry – zakryte i wyłączone (silnik/funkcje.py); brak pliku – wszystko odkryte
         self.funkcje: dict | None = {k: v for k, v in p["funkcje.yaml"].items() if k not in ("opis", "zrodlo")}             if "funkcje.yaml" in p else None
@@ -304,6 +316,11 @@ def sprawdz(katalog: Path | None = None) -> list[str]:
             except ValidationError as e:
                 for b in e.errors():
                     bledy.append(f"kalendarz/{nazwa}: {'.'.join(map(str, b['loc']))}: {b['msg']}")
+    wn = katalog / "wnetrza"
+    if wn.exists():
+        from .wnetrza.schematy import sprawdz as sprawdz_wnetrza
+        bledy += sprawdz_wnetrza(*(_wczytaj(wn / n) if (wn / n).exists() else None
+                                   for n in ("bywalcy.yaml", "dymki.yaml", "silnik.yaml")))
     if bledy:
         return bledy
 

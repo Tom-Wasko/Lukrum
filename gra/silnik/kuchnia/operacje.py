@@ -208,6 +208,21 @@ def obsluz(dane: Dane, firma: Firma, popyt: dict[str, int], ziarno, runda: int,
             ryzyko = 0.0
         pomylki[u] = int(strumien(ziarno, runda, "pomylki", firma.nazwa, u, *klucze).binomial(k, ryzyko)) if k else 0
 
+    # Pomyłka przy pustym magazynie: powtórka dania wymaga składników ponad te, które czekają na obsłużonych klientów.
+    # Gdy ich nie ma, zepsuta porcja zużywa składniki klienta i klient odchodzi bez dania (utracona sprzedaż), zamiast
+    # pomyłki, która nic nie kosztuje. Zużycie niżej (obsłużeni + pomyłki) zostaje poprawne w obu przypadkach.
+    na_klienta = {u: {n: ile / dane.zasoby[n]["opakowanie"] for n, ile in dane.uslugi[u]["zasoby"].items()} for u in obsluzeni}
+    zapas = {n: sw.dostepne(dane, firma.magazyn, n) - sum(obsluzeni[u] * na_klienta[u][n] for u in obsluzeni if n in na_klienta[u])
+             for n in {n for x in na_klienta.values() for n in x}}
+    for u in obsluzeni:
+        for _ in range(pomylki[u]):
+            if all(zapas[n] >= x - EPS for n, x in na_klienta[u].items()):
+                for n, x in na_klienta[u].items():
+                    zapas[n] -= x
+            elif obsluzeni[u] > 0:
+                obsluzeni[u] -= 1
+                przyczyna[u] = przyczyna.get(u) or "pomyłka bez składników na powtórkę dania"
+
     zuzycie = {}
     for u in obsluzeni:
         for nazwa, ile in dane.uslugi[u]["zasoby"].items():

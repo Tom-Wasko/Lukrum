@@ -40,6 +40,7 @@ CELE = frozenset({
     "parki",       # kolejność historii w parkach: runda = numer cyklu wszystkich historii
     "lokal",       # wybór lokalu przez bota: runda, nazwa firmy
     "licytacje",   # remis w licytacji lokalu: runda, id lokalu
+    "pip",         # kontrola PIP przy zleceniu jak etat (silnik/ludzie/kontrola_pip.py): runda, firma
     "popyt",       # szum popytu: runda, firma, usługa
     "pomylki",  # pomyłki w szczycie: runda, firma, usługa
     "rynek_pracy", # remisy w licytacjach i ofertach podkupienia: runda, rodzaj, id osoby
@@ -47,6 +48,7 @@ CELE = frozenset({
     "odbior",      # tekst odbioru lokalu przez sanepid (silnik/ksiegowosc/urzad.py): runda, firma, lokal
     "promocje",    # komiczny raport z pierwszej rundy promocji: runda, firma, typ
     "reklama",     # tekst raportu agencji reklamowej (silnik/rynek/reklama.py): runda, firma, agencja, kanał
+    "wnetrza",     # dymki i propozycje przy ladzie (silnik/wnetrza/): runda, firma, co[, id]
     "zdarzenia",   # ciąg dalszy historii z parku: runda, firma, historia
 })
 
