@@ -12,7 +12,7 @@
 #   tekst: treść dymka. Pola {cena}, {cena_strefy}, {ocena}, {zmiana_ceny} wstawia silnik
 #   wyjasnienie, zrodlo_prawne, sprawdzone (wos): krótka odpowiedź pod dymkiem. sprawdzone: false = do sprawdzenia
 #     przez autora przed lekcją
-#   szkic: true = jeszcze bez skutków w silniku. Takiego dymka silnik nie pokazuje (propozycje czekają na decyzję)
+#   Propozycje (rodzaj „propozycje”) mają osobną listę `propozycje` z odpowiedziami i skutkami, niżej.
 opis: 'Co rundę przy ladzie staje kilku gości. Ich dymki to wyniki silnika powiedziane ludzkim głosem.'
 
 zasady:
@@ -148,24 +148,6 @@ dymki:
   kto: jozio
   tekst: 'U nas w szkole mówią, że na Krakowskim to tylko turyści jedzą. Ale my i tak przychodzimy, bo blisko.'
 
-# ── Propozycje i kłopoty (szkice, bez skutków w silniku do decyzji autora) ──────────────────────────────────────────
-- rodzaj: propozycje
-  kto: gosc
-  szkic: true
-  tekst: 'Dzień dobry, jestem z samorządu studentów UMCS. Catering na 200 osób w piątek, damy radę?'
-- rodzaj: propozycje
-  kto: papkin
-  szkic: true
-  tekst: 'Przyprowadzę wam całą kapelę po koncercie! Tylko pierwsza kolejka na koszt firmy, inaczej nie przyjdą.'
-- rodzaj: propozycje
-  kto: dulska
-  szkic: true
-  tekst: 'Mieszkam piętro wyżej i ten zapach czosnku wchodzi mi do salonu. Albo coś z tym zrobicie, albo piszę skargę.'
-- rodzaj: propozycje
-  kto: gosc
-  szkic: true
-  tekst: 'Szukam pracy na weekendy. Mam książeczkę sanepidowską i dwa lata w pizzerii. Jest coś?'
-
 # ── Zaczepki WOS (jedno pytanie i krótka odpowiedź; sprawdzone: false = do sprawdzenia przez autora) ────────────────
 - rodzaj: wos
   kto: jozio
@@ -233,3 +215,87 @@ dymki:
   kto: wujek
   okazja: ostatnia_runda
   tekst: 'Ostatni tydzień. Cokolwiek wyjdzie w rachunkach, lokal żyje. A to więcej, niż ja potrafiłem.'
+
+# ── Propozycje i kłopoty (decyzja autora 13.11: 2–3 odpowiedzi z prawdziwym skutkiem, najwyżej jedna na kilka rund) ──
+# Pola propozycji: id, kto, od_rundy, gdy, tekst, odpowiedzi [{id, tekst, reakcja, skutki, szansa, skutki_porazka}].
+# Skutki (słownik, wszystko opcjonalne; liczy silnik w rundzie po odpowiedzi):
+#   porcje: dodatkowa sprzedaż, przychód = porcje × średnia cena menu × (1 − rabat), składniki wg receptur
+#   rabat: 0–1, upust od ceny menu dla tych porcji
+#   darmowe_porcje: porcje na koszt firmy (tylko składniki, bez przychodu)
+#   koszt: jednorazowy wydatek w zł (brutto)
+#   opinia: zmiana oceny lokalu w gwiazdkach na następną rundę (np. 0.1)
+#   ryzyko_kontroli: dodatek do szansy kontroli sanepidu w następnej rundzie (zalozenia.yaml magazyn.sanepid)
+#   kandydat: true – osoba trafia do puli kandydatów bez kosztu ogłoszenia
+# szansa: prawdopodobieństwo, że wyjdzie `skutki`; inaczej `skutki_porazka` (brak pola = zawsze `skutki`)
+# Liczby to założenia (pewnosc: zalozenie) do sprawdzenia po grze testowej.
+propozycje_zasady:
+  co_ile_rund: {wartosc: 3, pewnosc: zalozenie, zrodlo: 'decyzja autora 13.11: „od czasu do czasu”, najwyżej jedna na kilka rund'}
+  od_rundy: {wartosc: 2, pewnosc: zalozenie, zrodlo: 'pierwszy tydzień to otwarcie, bez dodatkowych spraw'}
+  bez_odpowiedzi: odmowa   # gdy drużyna nie odpowie do końca rundy, liczy się odpowiedź o tym id
+
+propozycje:
+- id: catering_umcs
+  kto: gosc
+  od_rundy: 3
+  tekst: 'Dzień dobry, jestem z samorządu studentów UMCS. Catering na 120 osób w piątek, damy radę? Płacimy przelewem.'
+  odpowiedzi:
+  - id: tak
+    tekst: 'Bierzemy, po cenie z menu.'
+    reakcja: 'Super! To w piątek o 18:00 pod Chatką Żaka.'
+    skutki: {porcje: 120, opinia: 0.05, ryzyko_kontroli: 0.05}
+  - id: rabat
+    tekst: 'Bierzemy, z rabatem 15% za dużą ilość.'
+    reakcja: 'Z rabatem? To biorę od razu i polecę was na grupie roku.'
+    skutki: {porcje: 120, rabat: 0.15, opinia: 0.1, ryzyko_kontroli: 0.05}
+  - id: odmowa
+    tekst: 'Nie damy rady, kuchnia jest za mała.'
+    reakcja: 'Szkoda. To zamówimy pizzę.'
+    skutki: {}
+
+- id: kapela_papkina
+  kto: papkin
+  od_rundy: 3
+  tekst: 'Przyprowadzę wam całą kapelę po koncercie! Tylko pierwsza kolejka na koszt firmy, inaczej nie przyjdą.'
+  odpowiedzi:
+  - id: tak
+    tekst: 'Dobra, pierwsza kolejka od nas.'
+    reakcja: 'Lew Północy dotrzymuje słowa! Zazwyczaj.'
+    szansa: 0.5
+    skutki: {darmowe_porcje: 8, porcje: 40, opinia: 0.05}
+    skutki_porazka: {darmowe_porcje: 8}
+  - id: odmowa
+    tekst: 'Najpierw kapela, potem rozmowa o rabatach.'
+    reakcja: 'Ech, bez fantazji. Ale może kiedyś wpadnę.'
+    skutki: {}
+
+- id: skarga_dulskiej
+  kto: dulska
+  od_rundy: 4
+  tekst: 'Mieszkam piętro wyżej i ten zapach czosnku wchodzi mi do salonu. Albo coś z tym zrobicie, albo piszę skargę.'
+  odpowiedzi:
+  - id: pochlaniacz
+    tekst: 'Montujemy lepszy pochłaniacz.'
+    reakcja: 'No proszę. Kulturalni ludzie jednak.'
+    skutki: {koszt: 1800}
+  - id: przeprosiny
+    tekst: 'Przepraszamy i zapraszamy na obiad.'
+    reakcja: 'Obiad przyjmę. Ale ja tu będę wąchać, proszę pamiętać.'
+    skutki: {darmowe_porcje: 2, ryzyko_kontroli: 0.1}
+  - id: odmowa
+    tekst: 'To lokal gastronomiczny, tu pachnie jedzeniem.'
+    reakcja: 'Zobaczymy, co na to sanepid!'
+    skutki: {ryzyko_kontroli: 0.3, opinia: -0.05}
+
+- id: prosba_o_prace
+  kto: gosc
+  od_rundy: 2
+  tekst: 'Szukam pracy na weekendy. Mam orzeczenie do celów sanitarno-epidemiologicznych i dwa lata w pizzerii. Jest coś?'
+  odpowiedzi:
+  - id: tak
+    tekst: 'Proszę zostawić CV, odezwiemy się.'
+    reakcja: 'Dziękuję! Mogę zacząć choćby od jutra.'
+    skutki: {kandydat: true}
+  - id: odmowa
+    tekst: 'Na razie nikogo nie szukamy.'
+    reakcja: 'Rozumiem. To powodzenia.'
+    skutki: {}
