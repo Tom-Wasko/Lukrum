@@ -120,6 +120,39 @@ dymki:
   gdy: {nastroj_zespolu: {od: 75}}
   tekst: 'Uśmiechnięta obsługa to rzadki widok. Widać, że tu się dba o ludzi, nie tylko o utarg.'
 
+# ── Cytaty z lektur (decyzja autora 13.11: humor + prawdziwe cytaty; brzmienie sprawdzić w Wolnych Lekturach) ─────
+# cytat: fragment w cudzysłowie to dosłowny cytat; cytat_zrodlo: skąd i w jakim stanie jest sprawdzenie
+- rodzaj: cena_smak
+  kto: dulska
+  gdy: {ocena: {do: 3.0}}
+  tekst: 'Smakowało średnio, ale nikomu nie powiem. „Na to mamy cztery ściany i sufit, aby brudy swoje prać w domu”.'
+  cytat: true
+  cytat_zrodlo: 'Zapolska, Moralność pani Dulskiej; brzmienie za zpe.gov.pl i opracowaniami, do porównania z Wolnymi Lekturami'
+- rodzaj: cena_smak
+  kto: zagloba
+  gdy: {ocena: {od: 4.0}}
+  tekst: '„Mości panowie! gdybym zaczął wszystko szczegółowie opowiadać, tedy i dziesięciu nocy by nie starczyło”. Krótko: dobry kebab!'
+  cytat: true
+  cytat_zrodlo: 'Sienkiewicz, Ogniem i mieczem; brzmienie za quizem wprost.pl, do porównania z Wolnymi Lekturami'
+- rodzaj: cena_smak
+  kto: zagloba
+  gdy: {kolejka: {od: 0.15}}
+  tekst: 'Tyle czekać na jedną porcję? „Zdechnę ja i pchły moje!”'
+  cytat: true
+  cytat_zrodlo: 'Sienkiewicz, Trylogia; za artykułem w Folia Linguistica (UŁ), do porównania z Wolnymi Lekturami'
+- rodzaj: cena_smak
+  kto: papkin
+  gdy: {cena_wzgledem_strefy: {od: 1.15}}
+  tekst: 'Za {cena} zł? „Jeśli nie chcesz mojej zguby, krokodyla daj mi, luby”. Albo chociaż rabat.'
+  cytat: true
+  cytat_zrodlo: 'Fredro, Zemsta; w źródłach są dwie wersje („daj mi” / „kup mi”), sprawdzić w Wolnych Lekturach'
+- rodzaj: cena_smak
+  kto: rzecki
+  gdy: {zmiana_ceny: {od: 10}}
+  tekst: 'Ceny rosną jak gwiazda Napoleonów. Ale i ta gwiazda kiedyś zgasła pod Sedanem.'
+  cytat: false
+  cytat_zrodlo: 'aluzja do Lalki (Rzecki i Bonapartowie), nie dosłowny cytat'
+
 # ── Plotki z miasta ─────────────────────────────────────────────────────────────────────────────────────────────────
 - rodzaj: plotki
   kto: dulska
@@ -148,54 +181,64 @@ dymki:
   kto: jozio
   tekst: 'U nas w szkole mówią, że na Krakowskim to tylko turyści jedzą. Ale my i tak przychodzimy, bo blisko.'
 
-# ── Zaczepki WOS (jedno pytanie i krótka odpowiedź; sprawdzone: false = do sprawdzenia przez autora) ────────────────
+# ── Zaczepki WOS (jedno pytanie i krótka odpowiedź) ─────────────────────────────────────────────────────────────────
+# Sprawdzone przez Claude 14.11.2026 w opracowaniach i tekstach przepisów (pole `sprawdzil`). Do gry wchodzą dopiero
+# po zatwierdzeniu przez autora (`sprawdzone: true`).
 - rodzaj: wos
   kto: jozio
   tekst: 'A paragon będzie? Bo mama mówi, że jak nie ma paragonu, to coś jest nie tak.'
-  wyjasnienie: 'Sprzedawca musi wydać paragon fiskalny przy każdej sprzedaży, nawet gdy klient o niego nie prosi.'
-  zrodlo_prawne: 'ustawa o VAT, art. 111 ust. 3a pkt 4'
+  wyjasnienie: 'Sprzedawca z kasą fiskalną musi przy każdej sprzedaży wydrukować i wydać paragon, nawet gdy klient o niego nie prosi. Za zgodą klienta może to być e-paragon.'
+  zrodlo_prawne: 'ustawa o VAT, art. 111 ust. 3a pkt 1'
+  sprawdzil: 'Claude 14.11: obowiązek wydania bez żądania potwierdza orzecznictwo NSA (infor.pl, ifirma.pl); e-paragon za zgodą od 2020'
   sprawdzone: false
 - rodzaj: wos
   kto: zagloba
   tekst: 'Czy w tym sosie są orzechy? Mam uczulenie, a wolę zginąć w bitwie niż od sosu.'
-  wyjasnienie: 'Lokal musi informować o 14 głównych alergenach także w daniach podawanych na miejscu (np. w menu albo na tablicy).'
-  zrodlo_prawne: 'rozporządzenie (UE) nr 1169/2011, art. 9 i 44'
+  wyjasnienie: 'Lokal musi informować o 14 alergenach z unijnej listy (m.in. orzechy, gluten, mleko, sezam) także przy daniach bez opakowania, podawanych na miejscu.'
+  zrodlo_prawne: 'rozporządzenie (UE) nr 1169/2011, art. 44 ust. 1 lit. a i załącznik II'
+  sprawdzil: 'Claude 14.11: komunikat Komisji 2017/C 428/01, kary UOKiK/IH za brak informacji w gastronomii. Forma (ustnie czy na piśmie) zależy od przepisów krajowych, dlatego w tekście jej nie podajemy'
   sprawdzone: false
 - rodzaj: wos
   kto: rzecki
   tekst: 'Czy ta cena w menu jest z podatkiem? Bo ja liczę co do grosza.'
-  wyjasnienie: 'Ceny dla klientów podaje się zawsze z VAT, czyli brutto. Klient płaci dokładnie tyle, ile widzi.'
-  zrodlo_prawne: 'ustawa o informowaniu o cenach towarów i usług (2014)'
+  wyjasnienie: 'Cena dla klienta zawsze zawiera VAT (jest brutto). Klient płaci dokładnie tyle, ile widzi w menu.'
+  zrodlo_prawne: 'ustawa z 9 maja 2014 r. o informowaniu o cenach towarów i usług, art. 3 ust. 1 pkt 1'
+  sprawdzil: 'Claude 14.11: definicja ceny obejmuje podatek od towarów i usług (z pamięci, numer punktu do potwierdzenia w ISAP)'
   sprawdzone: false
 - rodzaj: wos
   kto: gosc
   tekst: 'Kebab był zimny. Mogę to zareklamować, czy już po ptakach?'
-  wyjasnienie: 'Klient może złożyć reklamację. Sprzedawca ma 14 dni na odpowiedź, a jeśli milczy, reklamację uważa się za przyjętą.'
-  zrodlo_prawne: 'Kodeks cywilny i ustawa o prawach konsumenta (zasada 14 dni)'
+  wyjasnienie: 'Można złożyć reklamację. Firma ma 14 dni od jej otrzymania na odpowiedź. Jeśli nie odpowie w terminie, uznaje się, że reklamację przyjęła.'
+  zrodlo_prawne: 'ustawa o prawach konsumenta, art. 7a'
+  sprawdzil: 'Claude 14.11: termin skrócony z 30 do 14 dni nowelizacją (Senat, druk 830); skutek milczenia potwierdzają poradniki (ifirma.pl, poradnikprzedsiebiorcy.pl)'
   sprawdzone: false
 - rodzaj: wos
   kto: jozio
   tekst: 'Mam szesnaście lat. Mogę tu dorobić w wakacje?'
-  wyjasnienie: 'Osoba w wieku 15–18 lat może pracować tylko przy lekkich pracach, krócej i nie w nocy. Pracodawca potrzebuje m.in. badania lekarskiego.'
-  zrodlo_prawne: 'Kodeks pracy, dział IX (zatrudnianie młodocianych)'
+  wyjasnienie: 'Tak, ale tylko przy lekkich pracach i po badaniu lekarskim. W wakacje najwyżej 7 godzin dziennie i 35 w tygodniu, bez nadgodzin i nie w nocy (22–6).'
+  zrodlo_prawne: 'Kodeks pracy, art. 200¹, 200², 201 i 203'
+  sprawdzil: 'Claude 14.11: limity wakacyjne 7 h / 35 h (art. 200² § 3), zakaz nadgodzin i pracy nocnej (art. 203), badania (art. 201) – opracowania infor.pl i PIP'
   sprawdzone: false
 - rodzaj: wos
   kto: judym
   tekst: 'Widzę kamerę nad kasą. Pracownicy wiedzą, że są nagrywani?'
-  wyjasnienie: 'Monitoring w pracy jest dozwolony w określonych celach, ale pracowników trzeba o nim uprzedzić, a teren oznaczyć.'
-  zrodlo_prawne: 'Kodeks pracy, art. 22² i RODO'
+  wyjasnienie: 'Muszą wiedzieć. Pracodawca informuje o monitoringu najpóźniej 2 tygodnie przed jego uruchomieniem, określa jego cel i oznacza nagrywany teren.'
+  zrodlo_prawne: 'Kodeks pracy, art. 22² i RODO (art. 13)'
+  sprawdzil: 'Claude 14.11: termin 2 tygodni i oznaczenie – opracowania (ifirma.pl, poradnikprzedsiebiorcy.pl); numery paragrafów różnią się w źródłach, dlatego podajemy sam artykuł'
   sprawdzone: false
 - rodzaj: wos
   kto: gosc
   tekst: 'Płacę kartą, dobrze? Nie mam przy sobie gotówki.'
-  wyjasnienie: 'Przedsiębiorca, który przyjmuje płatności, musi zapewnić klientom możliwość zapłaty bezgotówkowej (np. kartą lub BLIK-iem).'
-  zrodlo_prawne: 'Prawo przedsiębiorców (obowiązek płatności elektronicznych od 2025 r.)'
+  wyjasnienie: 'Firma musi dać klientowi możliwość zapłaty bezgotówkowej, np. kartą albo BLIK-iem. Od 2025 r. kasa fiskalna musi być połączona z terminalem płatniczym.'
+  zrodlo_prawne: 'Prawo przedsiębiorców, art. 19a (ust. 1 od 2022 r., ust. 3 od 2025 r.)'
+  sprawdzil: 'Claude 14.11: rp.pl, infor.pl, prawnik.cc. Zakres (czy dotyczy wszystkich, czy tylko firm z kasą) do potwierdzenia w ISAP'
   sprawdzone: false
 - rodzaj: wos
   kto: papkin
-  tekst: 'Zapłacę jutro, słowo lwa Północy! Albo w ogóle zapiszcie mi to na zeszyt.'
-  wyjasnienie: 'Sprzedaż „na zeszyt” to kredyt kupiecki: ryzyko, że pieniądze nigdy nie wrócą, ponosi sprzedawca. Należność też trzeba zaksięgować.'
-  zrodlo_prawne: 'Kodeks cywilny (umowa sprzedaży, odroczona płatność)'
+  tekst: 'Zapłacę jutro, słowo lwa Północy! Albo zapiszcie mi to na zeszyt.'
+  wyjasnienie: '„Na zeszyt” to odroczona płatność, czyli kredyt dla klienta. Ryzyko, że pieniądze nie wrócą, ponosi sprzedawca, a sprzedaż i tak trzeba zarejestrować na kasie w chwili wydania jedzenia.'
+  zrodlo_prawne: 'Kodeks cywilny, art. 535 (umowa sprzedaży); ustawa o VAT, art. 111 (ewidencja na kasie)'
+  sprawdzil: 'Claude 14.11: zasada ogólna, bez osobnego źródła. Moment ewidencji na kasie do potwierdzenia w rozporządzeniu w sprawie kas rejestrujących'
   sprawdzone: false
 
 # ── Wujek (specjalny: tylko w ważnych momentach, rodzaj cena_smak, żeby nie zniknął przy filtrach) ──────────────────
