@@ -264,6 +264,29 @@ def powod_kredytu(dane: Dane, firma: Firma, d: dict, runda: int, nowy: dict | No
     return None
 
 
+def oplata_przejecia_debetu(dane: Dane, kwota: float) -> float:
+    """Opłata za przejęcie debetu przez nowy bank: procent kwoty, nie mniej niż najmniejsza opłata za debet w bankach."""
+    p = ustawienia(dane).get("przejecie_debetu")
+    minimum = min(b["debet"]["oplata"] for b in banki(dane).values())
+    return round(max(minimum, kwota * (p["procent"] if p else 0.0)), 2) if p else 0.0
+
+
+def _debet_przy_zmianie(dane: Dane, firma: Firma, nowy: str, ksiega: Ksiega, rachunek: Rachunek) -> dict:
+    """Zmiana banku przy otwartym debecie: gdy gotówka wystarcza, debet jest najpierw spłacany ze starego banku; gdy nie
+    – nowy bank przejmuje debet za jednorazową opłatą (koszt w KPiR). Komunikat neutralny płciowo."""
+    kwota = firma.debet
+    if firma.gotowka >= kwota - EPS:
+        rachunek.zapisz(firma, f"Spłata debetu przed zmianą banku ({firma.bank})", -kwota, "kredyty")
+        firma.debet = 0.0
+        return {"tryb": "splata", "kwota": kwota, "oplata": 0.0,
+                "komunikat": f"Debet {kwota:,.2f} zł został spłacony w banku {firma.bank} przed zmianą banku.".replace(",", " ")}
+    oplata = oplata_przejecia_debetu(dane, kwota)
+    ksieguj(firma, ksiega, rachunek, f"Opłata za przejęcie debetu przez bank {nowy}", oplata)
+    return {"tryb": "przejecie", "kwota": kwota, "oplata": oplata,
+            "komunikat": (f"Gotówki nie wystarcza na spłatę debetu {kwota:,.2f} zł, więc przejmuje go bank {nowy}; "
+                          f"jednorazowa opłata za przejęcie: {oplata:,.2f} zł.").replace(",", " ")}
+
+
 def poczatek_rundy(dane: Dane, firma: Firma, decyzje: dict, runda: int, ksiega: Ksiega, rachunek: Rachunek) -> dict:
     """Zmiana konta, zerwane lokaty, spłaty kredytów, nowe kredyty i lokaty (przed zakupami rundy). Kredyty pod
     zastaw lokalu kupowanego w tej rundzie – odłożone do `kredyty_na_lokal` (info["odlozone"])."""
@@ -271,6 +294,8 @@ def poczatek_rundy(dane: Dane, firma: Firma, decyzje: dict, runda: int, ksiega: 
             "odlozone": []}
     nowy = nowy_lokal(dane, decyzje, runda, firma)
     if decyzje.get("bank") in banki(dane):
+        if firma.bank and decyzje["bank"] != firma.bank and firma.debet > EPS:
+            info["debet_przy_zmianie"] = _debet_przy_zmianie(dane, firma, decyzje["bank"], ksiega, rachunek)
         firma.bank = decyzje["bank"]
     if "debet" in decyzje:   # zgoda na debet w banku konta (limit, opłata i odsetki – oferta banku)
         if decyzje["debet"] and firma.bank:

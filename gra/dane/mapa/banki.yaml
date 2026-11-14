@@ -23,6 +23,12 @@ stopa_karna: 0.19         # odsetki za opóźnienie i debet ponad limit albo bez
 # debet bez zgody banku na koniec tygodnia: stała opłata za niedozwolone saldo debetowe (wyższa niż opłata którego-
 # kolwiek banku za debet za zgodą) i stopa karna – zawsze drożej niż debet za zgodą
 oplata_debet_bez_zgody: 120
+# zmiana banku przy otwartym debecie: gdy gotówka wystarcza, debet jest spłacany ze starego banku; gdy nie – nowy bank
+# przejmuje go za jednorazową opłatą (procent kwoty, nie mniej niż najmniejsza opłata za debet w bankach)
+przejecie_debetu:
+  procent: 0.02
+  pewnosc: zalozenie
+  zrodlo: 'decyzja autora 14.11.2026 (założenie 2% kwoty debetu); w rzeczywistości przeniesienie zadłużenia w rachunku do innego banku to refinansowanie z prowizją (zwykle ok. 1–3%)'
 przejecie_po: 3           # tyle rund z rzędu bez raty → bank przejmuje zastaw (kredyt) albo sprzęt (leasing)
 wycena_zastawu: 0.8       # bank przyjmuje zastaw po tej części wartości netto
 # lokaty, kredyty i leasing tylko w banku konta firmowego – wybór banku to wybór oferty (np. kredyt pod zastaw tylko

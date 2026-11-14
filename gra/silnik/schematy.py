@@ -815,7 +815,16 @@ class BankMapy(Schemat):
     leasing: OfertaLeasingu | None = None
 
 
+class PrzejecieDebetu(Schemat):
+    """Zmiana banku z debetem, na który nie starcza gotówki: nowy bank przejmuje debet za opłatę (procent kwoty,
+    nie mniej niż najmniejsza opłata za debet w bankach)."""
+    procent: float = Field(ge=0, lt=1)
+    pewnosc: Literal["potwierdzone", "skalibrowane", "zalozenie"]
+    zrodlo: str = Zrodlo
+
+
 class PlikBankow(Plik):
+    przejecie_debetu: PrzejecieDebetu | None = None   # brak – debet przechodzi do nowego banku bez opłaty
     udzial_kart: float = Field(ge=0, le=1)
     historia_rund: int = Field(ge=0)
     stopa_referencyjna_nbp: float | None = Field(default=None, gt=0, lt=1)   # podstawa limitów prawnych (silnik.dane sprawdz)
@@ -902,6 +911,7 @@ class BiuroMapy(Schemat):
     oc: bool
     zamkniete_w_swieta: ZamknieteWSwieta | None = None   # w tygodniu ze świętem dokumenty czekają do następnego
     zmiana_pakietu_po: int = Field(default=0, ge=0)   # rund do wejścia nowego pakietu
+    bez_limitu: bool = False   # pakiety bez limitu dokumentów – żadnej dopłaty za dokument (Asteroida 328)
 
     @model_validator(mode="after")
     def _trzy_pakiety(self):
@@ -916,7 +926,15 @@ class Samodzielna(Schemat):
     opis: str
 
 
+class ZmianaBiura(Schemat):
+    """Jednorazowa opłata za zmianę biura: tyle tygodni pakietu NOWEGO biura (pierwszy wybór – bez opłaty)."""
+    tygodni_pakietu: float = Field(gt=0)
+    pewnosc: Literal["potwierdzone", "skalibrowane", "zalozenie"]
+    zrodlo: str = Zrodlo
+
+
 class PlikBiur(Plik):
+    zmiana_biura: ZmianaBiura | None = None   # brak – zmiana biura bez opłaty
     szacunek_dokumentow: int = Field(gt=0)
     pakiet_domyslny: Literal["S", "M", "L"] = "M"
     biura: list[BiuroMapy] = Field(min_length=1)

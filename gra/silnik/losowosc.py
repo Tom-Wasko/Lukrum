@@ -40,6 +40,7 @@ CELE = frozenset({
     "parki",       # kolejność historii w parkach: runda = numer cyklu wszystkich historii
     "lokal",       # wybór lokalu przez bota: runda, nazwa firmy
     "licytacje",   # remis w licytacji lokalu: runda, id lokalu
+    "pip",         # kontrola PIP przy zleceniu jak etat (silnik/ludzie/kontrola_pip.py): runda, firma
     "popyt",       # szum popytu: runda, firma, usługa
     "pomylki",  # pomyłki w szczycie: runda, firma, usługa
     "rynek_pracy", # remisy w licytacjach i ofertach podkupienia: runda, rodzaj, id osoby
