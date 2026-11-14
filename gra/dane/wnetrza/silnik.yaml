@@ -1,0 +1,18 @@
+# Parametry silnika wnętrza kebaba (silnik/wnetrza/): nastrój, miny, tłok i wagi losowania dymków.
+# Sprawdzenie: python -m silnik.dane sprawdz
+opis: 'Liczby, których silnik wnętrza potrzebuje poza tekstami: skala nastroju, progi min pracowników, waga tematów
+  bywalców i nazwa anonimowego gościa. Teksty i zasady dymków są w dymki.yaml, bywalcy w bywalcy.yaml.'
+zrodlo: 'założenie (13.11.2026, wnętrza kebaba); skala nastroju dopasowana do zadowolenia pracowników z pomiarów
+  (próg odejść 0,87 ≈ nastrój 40); progi min do sprawdzenia po grze testowej'
+nastroj:
+  # zadowolenie osoby (0,75 → nastrój 0, 1,05 → nastrój 100; poza zakresem przycięte)
+  zadowolenie_zero: 0.75
+  zadowolenie_sto: 1.05
+miny:
+  # kolejność = pierwszeństwo: pierwsza pasująca mina wygrywa; ostatnia („neutralna”) pasuje zawsze
+  smutna: {nastroj_do: 40}
+  zmeczona: {wykorzystanie_od: 0.85}
+  wesola: {nastroj_od: 75}
+dymki:
+  waga_dba_o: 3        # ile razy częściej wypada dymek na temat z `dba_o` bywalca (zwykły dymek ma wagę 1)
+  gosc: Gość           # imię anonimowego klienta w dymku

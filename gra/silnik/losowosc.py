@@ -47,6 +47,7 @@ CELE = frozenset({
     "odbior",      # tekst odbioru lokalu przez sanepid (silnik/ksiegowosc/urzad.py): runda, firma, lokal
     "promocje",    # komiczny raport z pierwszej rundy promocji: runda, firma, typ
     "reklama",     # tekst raportu agencji reklamowej (silnik/rynek/reklama.py): runda, firma, agencja, kanał
+    "wnetrza",     # dymki i propozycje przy ladzie (silnik/wnetrza/): runda, firma, co[, id]
     "zdarzenia",   # ciąg dalszy historii z parku: runda, firma, historia
 })
 

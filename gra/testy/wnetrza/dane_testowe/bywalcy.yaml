@@ -1,0 +1,5 @@
+opis: 'Bywalcy do testów silnika wnętrz.'
+bywalcy:
+- {id: rzecki, imie: Rzecki, lektura: Lalka, autor: Prus, wyglad: starszy pan z zeszytem, rys: skrupulatny, dba_o: [cena_wzgledem_strefy], od_rundy: 1}
+- {id: dulska, imie: Dulska, lektura: Moralność, autor: Zapolska, wyglad: pani w płaszczu, rys: plotkara, dba_o: [kolejka], od_rundy: 3}
+- {id: wujek, imie: Wujek, lektura: '', autor: '', wyglad: starszy pan w kamizelce, rys: ciepły z przekąsem, dba_o: [], od_rundy: 1, specjalny: true}

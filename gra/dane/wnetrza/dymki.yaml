@@ -169,7 +169,7 @@ dymki:
 - rodzaj: plotki
   kto: dulska
   zrodlo: konkurencja
-  tekst: 'Na {dzielnica} otworzyli nowy kebab, „{konkurent}”. Byłam, oczywiście tylko popatrzeć. Brudno.'
+  tekst: 'Słyszałam, że {dzielnica} ma nowy kebab, „{konkurent}”. Byłam, oczywiście tylko popatrzeć. Brudno.'
 - rodzaj: plotki
   kto: gosc
   zrodlo: konkurencja
