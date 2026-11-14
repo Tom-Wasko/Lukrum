@@ -42,7 +42,7 @@ WYJASNIENIA = {
 TYPY_POZA = {"podatki": "Potwierdzenie przelewu do urzędu / ZUS", "kredyty": "Umowa kredytu i wyciąg bankowy",
              "lokaty": "Wyciąg bankowy – lokata", "kaucje": "Umowa najmu – kaucja",
              "harpagon": "Kwit Harpagona (na serwetce)", "inwestycje": "Umowa kupna / akt notarialny",
-             "kary": "Mandat karny (sanepid)"}
+             "kary": "Mandat karny (sanepid, PIP)"}
 POLA = {"vat": "VAT", "pit": "zaliczka na PIT", "zdrowotna": "składka zdrowotna"}
 
 
@@ -76,7 +76,7 @@ def oplata(dane: Dane, biuro: dict, dokumenty: int, etat: int, zlecenie: int, pa
     do `w_cenie` przed zleceniobiorcami (są drożsi)."""
     p = biuro["pakiety"][pakiet]
     limit = limit_rundy(biuro, pakiet)
-    ponad = max(0, dokumenty - limit)
+    ponad = 0 if biuro.get("bez_limitu") else max(0, dokumenty - limit)   # Asteroida 328: bez dopłat za dokumenty
     ryczalt = dane.na_runde(p["cena"])
     za_dokumenty = round(ponad * p["doplata"], 2)
     ksiegowanie = round(ryczalt + za_dokumenty, 2)
@@ -113,14 +113,22 @@ def najtansze(dane: Dane, dokumenty: int, etat: int, zlecenie: int) -> str:
 
 
 def ustaw_pakiet(dane: Dane, firma: Firma, pakiet: str, runda: int) -> None:
-    """Decyzja `pakiet`: od razu, a w biurze z `zmiana_pakietu_po` dopiero po tylu rundach."""
+    """Decyzja `pakiet`: od razu, a w biurze z `zmiana_pakietu_po` dopiero po tylu rundach. Pierwszy wybór pakietu jest
+    zawsze od razu i zawsze się zapisuje (także równy domyślnemu – inaczej dałoby się ominąć opóźnienie). Zapowiedź
+    zmiany nie znika po wyjściu do biura bez opóźnienia: nowa decyzja zmienia tylko pakiet docelowy, termin zostaje."""
     b = biura(dane).get(firma.biuro or "")
-    if pakiet not in PAKIETY or not b or pakiet == pakiet_firmy(dane, firma):
-        firma.pakiet_nastepny = None if pakiet in PAKIETY else firma.pakiet_nastepny
+    if pakiet not in PAKIETY or not b:
         return
-    if b["zmiana_pakietu_po"] and firma.pakiet_biura:   # pierwszy wybór pakietu wchodzi od razu
-        if (firma.pakiet_nastepny or {}).get("pakiet") != pakiet:   # ponowna decyzja nie przesuwa terminu
-            firma.pakiet_nastepny = {"pakiet": pakiet, "od_rundy": runda + b["zmiana_pakietu_po"]}
+    zapowiedz = firma.pakiet_nastepny
+    if not firma.pakiet_biura:   # pierwszy wybór pakietu w grze – od razu
+        firma.pakiet_biura, firma.pakiet_nastepny = pakiet, None
+    elif pakiet == pakiet_firmy(dane, firma):
+        if b["zmiana_pakietu_po"]:   # zostaję przy obecnym pakiecie: anuluje zapowiedź (tylko w biurze z opóźnieniem)
+            firma.pakiet_nastepny = None
+    elif b["zmiana_pakietu_po"] or zapowiedz:
+        if (zapowiedz or {}).get("pakiet") != pakiet:   # ponowna decyzja nie przesuwa terminu
+            od = zapowiedz["od_rundy"] if zapowiedz else runda + b["zmiana_pakietu_po"]
+            firma.pakiet_nastepny = {"pakiet": pakiet, "od_rundy": od}
     else:
         firma.pakiet_biura, firma.pakiet_nastepny = pakiet, None
 
@@ -175,9 +183,25 @@ def nalicz(dane: Dane, firma: Firma, ksiega: Ksiega, rachunek: Rachunek, etat: i
         firma.dokumenty_przeniesione = 0
         o.update(zamkniete=False, przeniesione=przeniesione, za_swieta=za, ksiegowanie=round(o["ksiegowanie"] + za, 2),
                  razem=round(o["razem"] + za, 2))
+    zmiana = oplata_zmiany(dane, firma, b, o["pakiet"])
+    o["zmiana_biura"] = zmiana
+    firma.ostatnie_biuro = b["id"]
     ksieguj(firma, ksiega, rachunek, f"Koszt biura rachunkowego: {b['nazwa']} (pakiet {o['pakiet']})", o["ksiegowanie"])
     ksieguj(firma, ksiega, rachunek, "Obsługa kadrowo-płacowa", o["kadry"])
+    if zmiana:
+        ksieguj(firma, ksiega, rachunek, f"Koszt biura rachunkowego: opłata za zmianę biura ({b['nazwa']})", zmiana)
+        o["razem"] = round(o["razem"] + zmiana, 2)
     return {"biuro": b["id"], "nazwa": b["nazwa"], **o}
+
+
+def oplata_zmiany(dane: Dane, firma: Firma, biuro: dict, pakiet: str) -> float:
+    """Jednorazowa opłata za zmianę biura: tydzień pakietu NOWEGO biura (brutto). Pierwszy wybór biura jest bez opłaty;
+    powrót do poprzedniego biura jest płatny jak każda zmiana. Samodzielna księgowość „w międzyczasie” nie zeruje
+    pamięci: liczy się biuro, które ostatnio naliczyło opłatę."""
+    z = ustawienia(dane).get("zmiana_biura")
+    if not z or not firma.ostatnie_biuro or firma.ostatnie_biuro == biuro["id"]:
+        return 0.0
+    return round(dane.na_runde(biuro["pakiety"][pakiet]["cena"]) * z["tygodni_pakietu"], 2)
 
 
 def blad_biura(dane: Dane, firma: Firma, nazwa: str, runda: int, ziarno: int, rachunek: Rachunek) -> dict | None:
@@ -249,7 +273,7 @@ def dokumenty(ksiega: Ksiega, rachunek: Rachunek) -> list[dict]:
             typ = ("Faktura sprzedaży" if opis.startswith(SPRZEDAZ_TOWAROW)
                    else "Raport kasy fiskalnej" if kol == "przychod" else "Lista płac" if kol == "wynagrodzenia"
                    else "Deklaracja ZUS" if "ZUS" in opis
-                   else "Wyciąg bankowy" if any(x in opis for x in ("Odsetki", "Prowizja", "Opłata za konto", "Opłata za tydzień"))
+                   else "Wyciąg bankowy" if any(x in opis for x in ("Odsetki", "Prowizja", "Opłata za konto", "Opłata za tydzień", "Opłata za przejęcie debetu"))
                    else "Faktura sprzedaży" if kol == "przychod_pozostaly" else "Faktura zakupu")
             dodaj(opis, typ, k, kol, wez_wpisy(opis, abs(k)))
         elif rodzaj == "korekta":

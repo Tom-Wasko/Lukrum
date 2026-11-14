@@ -89,6 +89,7 @@ class Pracownik(Model):
     zadowolenie: float | None = None   # U20: zadowolenie osoby po ostatniej rundzie
     niezadowolony: int = 0        # U20: tygodnie z rzędu poniżej progu zadowolenia
     wykorzystanie: float = 0.0    # U20: wykorzystanie godzin w ostatniej rundzie (do ostrzeżeń)
+    tygodnie_jak_etat: int = 0    # tygodnie z rzędu, gdy zleceniobiorca pracuje w pełnym wymiarze (kontrola PIP)
 
     pensja_preferowana = _kwota("pensja_preferowana")
     koszt_rekrutacji = _kwota("koszt_rekrutacji")
@@ -408,6 +409,7 @@ class Firma(Model):
     dokumenty_przeniesione: int = 0   # dokumenty z tygodni, w których biuro było zamknięte (Scrooge w święta)
     pakiet_biura: str = ""            # S / M / L (silnik/ksiegowosc/biuro.py); pusty – pakiet domyślny z danych
     pakiet_nastepny: dict | None = None   # zmiana pakietu w biurze „wszystko trwa”: {"pakiet", "od_rundy"}
+    ostatnie_biuro: str | None = None     # biuro z mapy, które ostatnio naliczyło opłatę (opłata za zmianę biura)
     lokaty: list[Lokata] = Field(default_factory=list)
     kredyty: list[Kredyt] = Field(default_factory=list)
     leasingi: list[Leasing] = Field(default_factory=list)

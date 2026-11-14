@@ -40,6 +40,7 @@ from .kuchnia.operacje import kasjerzy
 from .losowosc import strumien
 from .ludzie import czas_wlasciciela as cw
 from .ludzie import formy as fz
+from .ludzie import kontrola_pip as kpip
 from .ludzie import rynek_pracy as rp
 from .ludzie import zadowolenie as zo
 from .ludzie.kandydaci import dodaj_nowych
@@ -266,6 +267,7 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         # wynajęta chłodnia i kontrola sanepidu (silnik/kuchnia/magazyn.py)
         info[nazwa]["magazyn"] = mag.koniec_rundy(dane, f, r, ziarno, (strefowy or {}).get("swiezosc", {}).get(nazwa) or {},
                                                   ks, rach, urz.modyfikatory(dane, f, r))
+        info[nazwa]["pip"] = kpip.koniec_rundy(dane, f, r, ziarno, rach)   # zlecenie jak etat: szansa kontroli PIP
         wyrownaj_gotowke(f, rach)   # saldo końca tygodnia: przychody spłacają debet z wydatków, opłata tylko od reszty
         bank_koniec = bk.koniec_rundy(dane, f, r, ks, rach, {b.id: n[1] for b in f.budynki if (n := pr.najem(s.firmy, b.id))})
         info[nazwa]["harpagon_odsetki"] = lw.koniec_rundy(dane, f, r)   # doliczone do długu, poza KPiR
@@ -306,6 +308,7 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         if aw.dane_wypadkow(dane):
             w["ubezpieczenia"] = aw.raport(info[nazwa].get("ubezpieczenia"), info[nazwa].get("zdarzenia"))
         w["magazyn"] = info[nazwa].get("magazyn")
+        w["pip"] = info[nazwa].get("pip")
         if urz.dane_urzedu(dane):
             w["urzad"] = urz.raport(info[nazwa].get("urzad"), info[nazwa].get("magazyn"))
         w["biuro"] = info[nazwa].get("biuro")
@@ -527,7 +530,8 @@ def mandaty_rundy(info: dict) -> float:
     blad = (info.get("biuro") or {}).get("blad") or {}
     return round(((info.get("ksiegowosc") or {}).get("kara") or 0.0)
                  + (0.0 if blad.get("oc") else blad.get("kara") or 0.0)
-                 + (((info.get("magazyn") or {}).get("sanepid") or {}).get("mandat") or 0.0), 2)
+                 + (((info.get("magazyn") or {}).get("sanepid") or {}).get("mandat") or 0.0)
+                 + ((info.get("pip") or {}).get("kara") or 0.0), 2)
 
 
 def _netto_karty(dane: Dane, netto: float, info: dict) -> float:

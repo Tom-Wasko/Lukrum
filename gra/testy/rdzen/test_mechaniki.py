@@ -55,6 +55,23 @@ def test_zuzycie_zasobow_na_klienta():
         assert f.magazyn[f"{n}|3"] == pytest.approx(1000 - porcje * ile / D.zasoby[n]["opakowanie"])
 
 
+def test_pomylka_przy_pustym_magazynie_kosztuje_klienta_a_nie_jest_darmowa():
+    def gra(zapas):
+        f = firma_kebab("kebab_w_bulce")
+        for n, ile in D.uslugi["kebab_w_bulce"]["zasoby"].items():
+            f.magazyn[f"{n}|3"] = zapas * ile / D.zasoby[n]["opakowanie"]
+        return f, obsluz(D, f, {"kebab_w_bulce": 300}, ziarno=1, runda=3)
+    f, w = gra(1000)                                       # zapas na wszystko i na powtórki
+    assert w["pomylki"]["kebab_w_bulce"] > 0 and w["obsluzeni"]["kebab_w_bulce"] == 300
+    f, w = gra(300)                                        # zapas dokładnie na 300 dań: powtórka nie ma z czego
+    p = w["pomylki"]["kebab_w_bulce"]
+    assert p > 0 and w["obsluzeni"]["kebab_w_bulce"] == 300 - p      # każda pomyłka to utracony klient
+    assert "pomyłka" in w["przyczyna"]["kebab_w_bulce"]
+    for n, ile in D.uslugi["kebab_w_bulce"]["zasoby"].items():       # składniki i tak poszły (zepsute porcje)
+        assert w["zuzyte_zasoby"][n]["ilosc"] == pytest.approx(300 * ile / D.zasoby[n]["opakowanie"])
+        assert f.magazyn.get(f"{n}|3", 0.0) == pytest.approx(0.0, abs=1e-6)
+
+
 def test_brak_pojemnosci_ogranicza_sprzedaz():
     f = firma_kebab("kebab_w_bulce", "kebab_w_tortilli")
     w = obsluz(D, f, {"kebab_w_bulce": 2000, "kebab_w_tortilli": 2000}, ziarno=1, runda=3)

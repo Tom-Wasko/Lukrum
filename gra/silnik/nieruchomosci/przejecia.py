@@ -31,6 +31,7 @@ from ..decyzje import cena_sprzedazy_sprzetu
 from ..ksiegowosc import srodki_trwale as st_trwale
 from ..ksiegowosc.finanse import Ksiega, Rachunek, ksieguj
 from ..losowosc import strumien
+from ..ludzie import formy as fz
 from ..ludzie.rynek_pracy import jako_kandydat, okres_wypowiedzenia
 from ..model import Firma, KupionyBudynek, Lokal, StanGry, Stanowisko
 from ..pieniadze import banki as bk
@@ -278,9 +279,12 @@ def _wyprowadzka(dane: Dane, s: StanGry, nazwa: str, umowa: Lokal, runda: int, z
         else:
             del najemca.pracownicy[p.id]
             okres = okres_wypowiedzenia(dane, p, runda)   # pensja za okres wypowiedzenia (art. 36 KP), bez odprawy
-            if okres:
-                ksieguj(najemca, ks_n, rach_n, f"Wynagrodzenie za okres wypowiedzenia {p.imie_nazwisko}",
-                        dane.na_runde(p.pensja) * okres)
+            if okres:   # jak lista płac (silnik/runda.py): pensja w kolumnie wynagrodzeń i ZUS pracodawcy wg formy
+                pensja = dane.na_runde(p.pensja) * okres
+                ksieguj(najemca, ks_n, rach_n, f"Wynagrodzenie za okres wypowiedzenia {p.imie_nazwisko}", pensja,
+                        "wynagrodzenia")
+                ksieguj(najemca, ks_n, rach_n, f"Składki ZUS pracodawcy za okres wypowiedzenia {p.imie_nazwisko}",
+                        round(pensja * fz.stawka_zus(dane, p.umowa, p.student), 2))
             s.kandydaci.append(jako_kandydat(p))
             info["zwolnieni"].append(p.imie_nazwisko)
     # budynek – lokal właściciela
