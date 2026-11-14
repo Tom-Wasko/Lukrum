@@ -99,7 +99,7 @@ def na_pustym_stanowisku(dane: Dane, firma: Firma, czas: Czas) -> dict | None:
     r = dane.rynek_pracy["losowanie"]["wg_gwiazdek"]["1"]
     firma.wlasciciel_na = WlascicielNaStanowisku(
         typ=st.typ, nr=st.nr, godziny=godziny, zawod=dane.zawody_typu(st.typ)[0],
-        zadowolenie_klientow=round(sum(r["zk"]) / 2, 2), ryzyko_reklamacji=round(sum(r["ryzyko"]) / 2, 2))
+        zadowolenie_klientow=round(sum(r["zk"]) / 2, 2), ryzyko_pomylki=round(sum(r["ryzyko"]) / 2, 2))
     return {"typ": st.typ, "nr": st.nr, "godziny": godziny, "przyjete": True, "powod": None}
 
 

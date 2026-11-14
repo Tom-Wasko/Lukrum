@@ -80,12 +80,12 @@ stanowiska:
       Kasa fiskalna: 1
       Lada z witryną: 1
       Tablica menu: 1
-  pakiety:
-    '1': 1000
-    '2': 1800
-    '3': 2200
-    '4': 3000
-    '5': 4000
+  pakiety:   # własny cennik LUKRUM: przygotowanie stanowisk (BHP, instalacje, szafki) – 1 200 zł za pierwsze, taniej za kolejne
+    '1': 1200
+    '2': 2200
+    '3': 3000
+    '4': 3700
+    '5': 4300
   typy:
     kuchnia:
       nazwa: Stanowiska kuchenne
@@ -98,53 +98,59 @@ stanowiska:
       zawody:
       - Kasjer
 udogodnienia:
-  zrodlo: 'założenie autora: HR – udogodnienia odblokowywane w kolejnych rundach; sprzedaż za 50% ceny; od rundy 3 automat z kawą,
-    kuchenka, stojak na rowery, od 4 klimatyzacja, fotel do masażu (utrzymanie 10), roślinność'
+  zrodlo: 'Tor A (14.11.2026), pozycje własne LUKRUM liczone od zera: cena – ceny detaliczne 2026 w sklepach i u instalatorów
+    (ekspres automatyczny do kawy ziarnistej ok. 3 400 zł, dwa klimatyzatory split z montażem ok. 4 200 zł, czajnik z mikrofalą
+    ok. 480 zł, wiata rowerowa na 8 rowerów ok. 1 400 zł, 4 maty antyzmęczeniowe i krzesła ok. 1 900 zł, szatnia na 8 osób
+    ok. 1 300 zł, radio ok. 220 zł, szafa chłodnicza ok. 1 650 zł, kanapa z telewizorem ok. 3 300 zł); utrzymanie miesięczne –
+    zużycie z cenników (kawa ok. 4 kg miesięcznie ≈ 320 zł, prąd klimatyzatorów ≈ 90 zł, prąd szafy chłodniczej ≈ 60 zł);
+    procent – szacunek projektanta, jaka część załogi gastronomii na zmianie korzysta z danej rzeczy (rowery 35% – nie
+    wszyscy dojeżdżają rowerem; kawa 85% – prawie wszyscy; pokój socjalny 18% – tylko ci, którzy mają przerwę dłuższą niż 30 min);
+    od_rundy – im droższe i mniej oczywiste, tym później. Sprzedaż za 50% ceny. Pozycje UF9 poniżej mają osobne opisy'
   pozycje:
-  - nazwa: Automat z kawą fair trade
-    procent: 95
-    cena: 2500
-    utrzymanie: 200
+  - nazwa: Ekspres do kawy ziarnistej dla zespołu
+    procent: 85
+    cena: 3400
+    utrzymanie: 320
     od_rundy: 3
-  - nazwa: Klimatyzacja
-    procent: 80
-    cena: 3000
-    utrzymanie: 100
-    od_rundy: 4
-  - nazwa: Kuchenka mikrofalowa
-    procent: 60
-    cena: 202
-    utrzymanie: 5
-    od_rundy: 3
-  - nazwa: Stojak na rowery
-    procent: 40
-    cena: 1000
-    utrzymanie: 0
-    od_rundy: 3
-  - nazwa: Fotel do masażu
-    procent: 30
-    cena: 2500
-    utrzymanie: 10
-    od_rundy: 4
-  - nazwa: Kwiaty na zapleczu
-    procent: 15
-    cena: 1100
-    utrzymanie: 0
-    od_rundy: 4
-  - nazwa: Głośnik Bluetooth
-    procent: 90
-    cena: 75
-    utrzymanie: 0
-    od_rundy: 8
-  - nazwa: Lodówka z napojami
+  - nazwa: Klimatyzatory split w kuchni i na zapleczu
     procent: 70
-    cena: 1000
+    cena: 4200
+    utrzymanie: 90
+    od_rundy: 4
+  - nazwa: Kącik socjalny z czajnikiem i mikrofalą
+    procent: 55
+    cena: 480
+    utrzymanie: 10
+    od_rundy: 3
+  - nazwa: Wiata rowerowa przy lokalu
+    procent: 35
+    cena: 1400
     utrzymanie: 0
+    od_rundy: 3
+  - nazwa: Maty antyzmęczeniowe i krzesła przy rożnie
+    procent: 40
+    cena: 1900
+    utrzymanie: 0
+    od_rundy: 4
+  - nazwa: Szatnia z szafkami na klucz
+    procent: 60
+    cena: 1300
+    utrzymanie: 0
+    od_rundy: 4
+  - nazwa: Radio w kuchni
+    procent: 75
+    cena: 220
+    utrzymanie: 0
+    od_rundy: 6
+  - nazwa: Szafa chłodnicza z napojami dla zespołu
+    procent: 55
+    cena: 1650
+    utrzymanie: 60
     od_rundy: 8
-  - nazwa: Strefa relaksu
-    procent: 22
-    cena: 4000
-    utrzymanie: 0
+  - nazwa: Pokój socjalny z kanapą i telewizorem
+    procent: 18
+    cena: 3300
+    utrzymanie: 25
     od_rundy: 8
   # UF9: nowe udogodnienia (rundy 5–14); cena za punkt procentu > 37,5 zł (gorsza niż klimatyzacja), przed rundą 9
   # tylko drogie (≥ 1500 zł) – boty (wg ceny za punkt, 2–3 sztuki, do rundy 8 komplet) wybierają jak dotąd
@@ -208,296 +214,108 @@ udogodnienia:
     utrzymanie: 0
     od_rundy: 14
     opis: 'Piętnaście minut drzemki w przerwie. Budzik obowiązkowy, chrapanie zabronione.'
+  - nazwa: Karta sportowa dla zespołu
+    procent: 14
+    cena: 600
+    utrzymanie: 450
+    od_rundy: 10
+    opis: 'Basen i siłownia po zmianie przy rożnie. Pakiet dla całego zespołu kosztuje co tydzień, ale nikt nie narzeka na plecy.'
+  - nazwa: Posiłki pracownicze
+    procent: 10
+    cena: 400
+    utrzymanie: 120
+    od_rundy: 9
+    opis: 'Kebab na koszt firmy dla każdego, kto stoi przy grillu. Kucharze twierdzą, że to tylko test jakości.'
 wyposazenie:
   zrodlo: 'założenie autora: wyposażenie lokalu; cena = 2 × cena sprzedaży; parking i terminal – cena zakupu nieznana (sprzedaż
     0); sklep – notatka „Elementy mapy” (Leroy Merlin, IKEA, OBI, Jula, Castorama), przypisanie – założenie F3a.6;
-    Poprawki 3 (8.11) – autor chce tylko dwa sklepy, IKEA (meble) i Leroy Merlin (reszta)'
+    Poprawki 3 (8.11) – autor chce tylko dwa sklepy, IKEA (meble) i Leroy Merlin (reszta). Tor A (14.11.2026): pozycje dla kebaba
+    (ogródek, ładowarki, BLIK, kiosk, muzyka, toaleta dla gości, dostawa przez aplikację) z cenami rynkowymi 2026: meble ogrodowe
+    i parasole ok. 6 tys. zł, kiosk samoobsługowy 8–10 tys. zł, licencja muzyczna (ZAiKS, STOART) ok. 60 zł miesięcznie,
+    prowizja platform dowozowych ok. 300 zł tygodniowo przy małym obrocie. Pierwsze sześć pozycji (14.11.2026) przeliczone od zera: WiFi – router i punkt dostępowy ok. 350 zł, łącze światłowodowe ok. 90 zł miesięcznie; miejsca postojowe – dzierżawa 6 miejsc po ok. 150 zł miesięcznie = 900 zł; drugi terminal ok. 70 zł miesięcznie (abonament); filtr z kranem i serwisem ok. 1 750 zł plus 90 zł miesięcznie za wkłady; stoły i ławy dla 24 gości ok. 3 100 zł; ekran 55 cali z uchwytem i dekoderem ok. 2 900 zł plus abonament sportowy dla lokali ok. 120 zł miesięcznie. Procent – szacunek projektanta, jaka część gości oczekuje danej rzeczy (WiFi 90%, parking 70% – część gości przychodzi pieszo, mecze 35%)'
   pozycje:
-  - nazwa: Darmowe WiFi
-    procent: 95
-    cena: 200
-    utrzymanie: 20
-    od_rundy: 4
-    sklep: Leroy Merlin
-  - nazwa: Miejsca parkingowe dla klientów
+  - nazwa: WiFi dla gości (światłowód)
     procent: 90
-    cena: 0
-    utrzymanie: 1500
+    cena: 350
+    utrzymanie: 90
     od_rundy: 4
-  - nazwa: Terminal płatniczy
-    procent: 80
+  - nazwa: Miejsca postojowe przy lokalu (dzierżawa)
+    procent: 70
     cena: 0
-    utrzymanie: 100
+    utrzymanie: 900
     od_rundy: 4
-  - nazwa: Dystrybutor wody dla klientów
-    procent: 75
-    cena: 2000
-    utrzymanie: 200
+  - nazwa: Drugi terminal przy okienku wydawczym
+    procent: 65
+    cena: 0
+    utrzymanie: 70
+    od_rundy: 4
+  - nazwa: Filtrowana woda do dzbanków dla gości
+    procent: 60
+    cena: 1750
+    utrzymanie: 90
     od_rundy: 5
     sklep: Leroy Merlin
-  - nazwa: Stoliki i krzesła dla klientów
-    procent: 60
-    cena: 2500
+  - nazwa: Stoły i ławy z jasnego drewna
+    procent: 55
+    cena: 3100
     utrzymanie: 0
     od_rundy: 5
     sklep: IKEA
-  - nazwa: Telewizor z meczami
-    procent: 30
-    cena: 2300
+  - nazwa: Ekran z transmisją meczów Motoru Lublin
+    procent: 35
+    cena: 2900
+    utrzymanie: 120
+    od_rundy: 5
+    sklep: Leroy Merlin
+  - nazwa: Ogródek z parasolami
+    procent: 45
+    cena: 6000
+    utrzymanie: 120
+    od_rundy: 6
+    sklep: IKEA
+  - nazwa: Ładowarki do telefonów przy stolikach
+    procent: 35
+    cena: 900
     utrzymanie: 10
     od_rundy: 5
     sklep: Leroy Merlin
-media_tradycyjne:
-  zrodlo: 'założenie autora: marketing tradycyjny; zniżka: [od emisji, %]; od rundy 5: billboard/ulotki i prasa, od 6: radio,
-    od 7: telewizja (od użytkownika)'
-  pozycje:
-  - nazwa: Ulotki
-    kategoria: billboard_ulotki
-    zasieg: 0.75
-    cena: 220
-    znizki:
-    - - 4
-      - 15
-    - - 11
-      - 30
-    od_rundy: 5
-  - nazwa: Ekrany LED
-    kategoria: billboard_ulotki
-    zasieg: 0.5
-    cena: 700
-    znizki:
-    - - 4
-      - 20
-    - - 11
-      - 30
-    od_rundy: 5
-  - nazwa: Billboard (tradycyjny)
-    kategoria: billboard_ulotki
-    zasieg: 0.45
-    cena: 500
-    znizki:
-    - - 4
-      - 15
-    - - 11
-      - 30
-    od_rundy: 5
-  - nazwa: Smaki Lublina (dziennik)
-    kategoria: prasa
-    zasieg: 0.6
-    cena: 750
-    znizki:
-    - - 6
-      - 20
-    - - 14
-      - 30
-    od_rundy: 5
-  - nazwa: Kurier Staromiejski (dziennik)
-    kategoria: prasa
-    zasieg: 0.55
-    cena: 650
-    znizki:
-    - - 6
-      - 15
-    - - 14
-      - 25
-    od_rundy: 5
-  - nazwa: Dziennik Bystrzycki (dziennik)
-    kategoria: prasa
-    zasieg: 0.5
-    cena: 500
-    znizki:
-    - - 6
-      - 10
-    - - 14
-      - 20
-    od_rundy: 5
-  - nazwa: Radio Czechówka
-    kategoria: radio
-    zasieg: 0.7
-    cena: 400
-    znizki:
-    - - 10
-      - 20
-    - - 21
-      - 30
-    od_rundy: 6
-  - nazwa: Radio Rożen FM
-    kategoria: radio
-    zasieg: 0.65
-    cena: 300
-    znizki:
-    - - 10
-      - 15
-    - - 21
-      - 20
-    od_rundy: 6
-  - nazwa: Radio Wieniawa
-    kategoria: radio
-    zasieg: 0.62
-    cena: 200
-    znizki:
-    - - 10
-      - 10
-    - - 21
-      - 20
-    od_rundy: 6
-  - nazwa: Smakołyk TV
-    kategoria: telewizja
-    zasieg: 0.72
-    cena: 30000
-    znizki:
-    - - 3
-      - 20
-    - - 7
-      - 30
-    od_rundy: 7
-  - nazwa: Kanał Głodomora
-    kategoria: telewizja
-    zasieg: 0.7
-    cena: 25000
-    znizki:
-    - - 3
-      - 10
-    - - 7
-      - 20
-    od_rundy: 7
-  - nazwa: Studencka TV
-    kategoria: telewizja
-    zasieg: 0.35
-    cena: 20000
-    znizki:
-    - - 2
-      - 15
-    - - 5
-      - 25
-    od_rundy: 7
-narzedzia_internetowe:
-  zrodlo: 'cenniki usług (uruchomienie i utrzymanie); Instagram i aplikacja mobilna – założenie; od rundy 6: 5 pierwszych
-    + Facebook, od 7: reszta (od użytkownika)'
-  pozycje:
-  - nazwa: Strona www firmy
-    uruchomienie: 2500
-    utrzymanie: 250
-    od_rundy: 6
-  - nazwa: Informacja na portalu gastronomicznym
-    uruchomienie: 3000
-    utrzymanie: 200
-    od_rundy: 6
-  - nazwa: Informacja na portalu Księga Firm Lubelskich
-    uruchomienie: 3500
-    utrzymanie: 250
-    od_rundy: 6
-  - nazwa: Informacje na forach internetowych
-    uruchomienie: 100
-    utrzymanie: 500
-    od_rundy: 6
-  - nazwa: Informacja na portalu lokalnym miejscowości
-    uruchomienie: 500
-    utrzymanie: 700
-    od_rundy: 6
-  - nazwa: Kanał na YouTube
-    uruchomienie: 500
-    utrzymanie: 750
-    od_rundy: 7
-  - nazwa: Profil na Facebook
-    uruchomienie: 1200
-    utrzymanie: 1000
-    od_rundy: 6
-  - nazwa: Profil na Instagram
-    uruchomienie: 1200
-    utrzymanie: 1000
-    zalozenie: true
-    od_rundy: 7
-  - nazwa: Aplikacja mobilna
-    uruchomienie: 8000
-    utrzymanie: 500
-    zalozenie: true
-    od_rundy: 7
-banki:
-  zrodlo: 'założenie autora: oprocentowanie roczne; od rundy 1: Bank Pod Bramą, Kasa Bystrzyca, Bank Zalew; od rundy 4:
-    Bank Kalinowy, Bank Wieniawski, Bank Lubartowska (od użytkownika)'
-  pozycje:
-  - nazwa: Bank Pod Bramą
-    konto: 10
-    karta: 5
-    lokata: 0.02
-    kredyt_odnawialny: 0.07
-    kredyt: 0.05
-    od_rundy: 1
-  - nazwa: Kasa Bystrzyca
-    konto: 5
-    karta: 5
-    lokata: 0.03
-    kredyt_odnawialny: 0.06
-    kredyt: 0.07
-    od_rundy: 1
-  - nazwa: Bank Zalew
-    konto: 15
-    karta: 0
-    lokata: 0.05
-    kredyt_odnawialny: 0.05
-    kredyt: 0.05
-    od_rundy: 1
-  - nazwa: Bank Kalinowy
-    konto: 20
-    karta: 0
-    lokata: 0.07
-    kredyt_odnawialny: 0.12
-    kredyt: 0.1
+  - nazwa: Płatności BLIK i kodem QR
+    procent: 85
+    cena: 0
+    utrzymanie: 40
     od_rundy: 4
-  - nazwa: Bank Wieniawski
-    konto: 5
-    karta: 15
-    lokata: 0.01
-    kredyt_odnawialny: 0.12
-    kredyt: 0.12
-    od_rundy: 4
-  - nazwa: Bank Lubartowska
-    konto: 10
-    karta: 2
-    lokata: 0.01
-    kredyt_odnawialny: 0.1
-    kredyt: 0.11
-    od_rundy: 4
-  kredyt_maks_miesiecy: 26  # w rundach (tygodniach) – F2.7
-  lokata_konczy_sie_najpozniej_w_ostatniej_rundzie: true
-biura_rachunkowe:
-  zrodlo: 'założenie autora: 6 biur rachunkowych, ceny dopasowane do rynku; KPiR: dokument = każda pozycja KPiR poza obsługą
-    kadrowo-płacową'
-  pozycje:
-  - nazwa: Biuro Rachunkowe Sumator
-    ksiegowanie: 1.2
-    etat: 33
-    zlecenie: 10
-  - nazwa: Biuro Rachunkowe Abakus
-    ksiegowanie: 1.2
-    etat: 32
-    zlecenie: 11
-  - nazwa: Biuro Rachunkowe Bilans
-    ksiegowanie: 1.1
-    etat: 37
-    zlecenie: 14
-  - nazwa: Biuro Rachunkowe Liczydło
-    ksiegowanie: 1.3
-    etat: 29
-    zlecenie: 9
-  - nazwa: Biuro Rachunkowe Grodzka
-    ksiegowanie: 1.0
-    etat: 32
-    zlecenie: 12
-  - nazwa: Biuro Rachunkowe Saldo
-    ksiegowanie: 1.5
-    etat: 28
-    zlecenie: 5
+  - nazwa: Kiosk do zamówień
+    procent: 40
+    cena: 9000
+    utrzymanie: 150
+    od_rundy: 7
+    sklep: Leroy Merlin
+  - nazwa: Muzyka w lokalu (licencja)
+    procent: 50
+    cena: 800
+    utrzymanie: 60
+    od_rundy: 5
+    sklep: Leroy Merlin
+  - nazwa: Toaleta dla gości
+    procent: 55
+    cena: 5500
+    utrzymanie: 80
+    od_rundy: 6
+    sklep: Leroy Merlin
+  - nazwa: Dostawa przez aplikację
+    procent: 30
+    cena: 0
+    utrzymanie: 300
+    od_rundy: 8
 szkolenia:
-  zrodlo: 'założenie autora: HR – szkolenia, % pracowników oczekujących i ceny; nazwy firm i szkoleń – gastronomia (F2.6); poprawki 3 (sprawa 8, 8.11.2026): 12 → 8 szkoleń – podobne połączone, cena połączonego ≈ 80% sumy cen (zaokr. do 50 zł), procent – zaokrąglony maks. łączonych; `dawne` – dawne nazwy (stare zapisy gier)'
+  zrodlo: 'Tor A (14.11.2026): własne firmy szkoleniowe i ceny – kursy branżowe w Lublinie 2026 (HACCP i higiena ok. 250–400 zł od osoby, szkolenia zespołowe 800–2 000 zł); założenie autora: HR – szkolenia, % pracowników oczekujących; oceny firm szkoleniowych (zadowoleni_klienci 87 / 79 / 74) – własne wartości fikcyjnych firm: wyższa dla szkoły o węższej, kebabowej specjalizacji; nazwy firm i szkoleń – gastronomia (F2.6); poprawki 3 (sprawa 8, 8.11.2026): 12 → 8 szkoleń – podobne połączone, cena połączonego ≈ 80% sumy cen (zaokr. do 50 zł), procent – zaokrąglony maks. łączonych; `dawne` – dawne nazwy (stare zapisy gier)'
   firmy:
-  - nazwa: Akademia Gastro
-    zadowoleni_klienci: 90
-  - nazwa: Mistrzowie Rożna
-    zadowoleni_klienci: 83
-  - nazwa: Sanepid bez Stresu
-    zadowoleni_klienci: 80
+  - nazwa: Lubelska Szkoła Kebabu
+    zadowoleni_klienci: 87
+  - nazwa: Rożen i Rozum
+    zadowoleni_klienci: 79
+  - nazwa: HACCP w Pięć Minut
+    zadowoleni_klienci: 74
   pozycje:
   - nazwa: Higiena, BHP i HACCP
     procent: 89
@@ -505,57 +323,57 @@ szkolenia:
     - HACCP w praktyce
     - Higiena i BHP w kuchni
     ceny:
-    - 3000
-    - 2900
-    - 2900
+    - 1400
+    - 1250
+    - 1300
   - nazwa: Krojenie mięsa z rożna
     procent: 90
     ceny:
-    - 2500
-    - 2100
-    - 2100
+    - 1500
+    - 1200
+    - 1300
   - nazwa: 'Kasa: szybka obsługa i „a może z serem?”'
     procent: 85
     dawne:
     - Szybka obsługa przy kasie
     - 'Sprzedaż dodatkowa: „a może z serem?”'
     ceny:
-    - 3500
-    - 3200
-    - 3250
+    - 2000
+    - 1900
+    - 1950
   - nazwa: Sosy firmowe od podstaw
     procent: 70
     ceny:
-    - 1200
-    - 950
-    - 1000
+    - 800
+    - 650
+    - 700
   - nazwa: Kultura obsługi i trudny klient o 3 w nocy
     procent: 75
     dawne:
     - Obsługa trudnego klienta o 3 w nocy
     - Kultura obsługi klienta
     ceny:
-    - 2950
-    - 2600
-    - 2700
+    - 1700
+    - 1500
+    - 1600
   - nazwa: Frytki i falafel bez wpadek
     procent: 65
     dawne:
     - Frytki idealnie chrupiące
     - Falafel bez rozpadania
     ceny:
-    - 3500
-    - 3500
-    - 3350
+    - 1800
+    - 1700
+    - 1650
   - nazwa: Organizacja pracy w godzinach szczytu
     procent: 90
     ceny:
-    - 1600
-    - 1600
-    - 1650
+    - 1100
+    - 1000
+    - 1150
   - nazwa: Pierwsza pomoc w kuchni
     procent: 80
     ceny:
-    - 3500
-    - 3200
-    - 3000
+    - 1600
+    - 1450
+    - 1400

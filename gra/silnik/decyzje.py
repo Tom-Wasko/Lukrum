@@ -38,6 +38,9 @@ Format (słownik; brak klucza = bez zmian względem poprzedniej rundy):
                                                               (silnik/swiat/awarie.py, dane/zdarzenia/losowe.yaml)
     szkolenia:         [{"firma", "szkolenie"}]
     bank, biuro:       nazwa (z lokalami biuro: id z dane/mapa/biura.yaml albo "samodzielnie")
+    pakiet:            "S" | "M" | "L" – pakiet w wybranym biurze (limit dokumentów i dopłata ponad limit)
+    debet:             true | false – zgoda na debet w banku konta (limit, opłata i odsetki, gdy tydzień kończy się
+                       na minusie; bez zgody – stała opłata, odsetki karne, alarm; silnik/pieniadze/banki.py)
     ksiegowosc:        {"zapisy": {id dokumentu: {"kolumna", "stawka"}}, "deklaracja": {"vat", "pit", "zdrowotna"}}
                                                               – samodzielna księgowość za poprzednią rundę (biuro.py)
     lokaty_zaloz:      [{"kwota", "miesiecy"}];  lokaty_zerwij: [id]
@@ -271,10 +274,10 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         pl.synchronizuj(firma)
     if "sprzedaz" in odbl:
         _ceny_domyslne(dane, firma, zadane)
-    if d.get("bank") and d["bank"] in dane.dostepne("banki", runda):
-        firma.bank = d["bank"]
     if d.get("biuro") and bo.poprawny_wybor(dane, d["biuro"]):   # biura z mapy albo samodzielna księgowość
         firma.biuro = d["biuro"]
+    if d.get("pakiet"):   # pakiet S / M / L w biurze z mapy (w biurze „wszystko trwa” zmiana wchodzi po kilku rundach)
+        bo.ustaw_pakiet(dane, firma, d["pakiet"], runda)
     st_trwale.ustaw_niskocenne(dane, firma, d)   # B6 (przeliczenie rundy ustawia to wcześniej – przed giełdą i lokalami)
 
     # stanowiska (działają od razu)
@@ -351,7 +354,6 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         p = firma.pracownicy.get(pid)
         if not p or p.odchodzi:
             continue
-        ksieguj(firma, ksiega, rachunek, f"Koszt zwolnienia {p.imie_nazwisko}", p.koszt_odprawy)   # opis jak w KPiR gry
         okres = rp.okres_wypowiedzenia(dane, p, runda)
         if okres:   # umowa o pracę: pracuje (i kosztuje) do końca wypowiedzenia, potem wraca do puli (P6)
             p.odchodzi = Odejscie(do="", runda=runda + okres, pensja=p.pensja, umowa=p.umowa, od_rundy=runda)
@@ -426,8 +428,8 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         koszt = rp.koszt(dane, kanal, kandydat)
         p = Pracownik(id=kandydat["id"], imie_nazwisko=kandydat["imie_nazwisko"], zawod=kandydat["zawod"],
                       gwiazdki=kandydat["gwiazdki"], pensja_preferowana=kandydat["pensja_preferowana"],
-                      koszt_rekrutacji=kandydat["koszt_rekrutacji"], koszt_odprawy=kandydat["koszt_odprawy"],
-                      zadowolenie_klientow=kandydat["zadowolenie_klientow"], ryzyko_reklamacji=kandydat["ryzyko_reklamacji"],
+                      koszt_rekrutacji=kandydat["koszt_rekrutacji"],
+                      zadowolenie_klientow=kandydat["zadowolenie_klientow"], ryzyko_pomylki=kandydat["ryzyko_pomylki"],
                       pensja=pensja, umowa=umowa, student=bool(kandydat.get("student")),
                       od_rundy=runda, stanowisko=st.nr, cecha=kandydat.get("cecha", ""), opis=kandydat.get("opis", ""),
                       wydajnosc=kandydat.get("wydajnosc", 1.0))
@@ -696,10 +698,9 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
             dodaj(b["poziom"], b["zakladka"], b["tekst"])
         if (koszt := (info or {}).get("inwestycje_w_koszty", 0.0)) > 0:   # U1: tylko ostrzeżenie
             prog, zl = (f"{x:,.0f}".replace(",", " ") for x in (dane.z["finanse"]["amortyzacja_prog"], koszt))
-            karta = f"{koszt / dane.z['karta_wynikow']['wynik_ekonomiczny_dzielnik']:.2f}".replace(".", ",")
             dodaj("pomaranczowy", "sprzet", f"Sprzęt, wyposażenie i stanowiska tańsze niż {prog} zł od razu idą "
-                  f"w koszty: ten zakup obniży dochód tej rundy o ok. {zl} zł (bez VAT), a kartę wyników tej rundy – "
-                  f"o ok. {karta}. Wartość zakupu zostaje w majątku firmy i liczy się do jej rozwoju."
+                  f"w koszty: ten zakup obniży dochód tej rundy o ok. {zl} zł (bez VAT), a tym samym punkty działu "
+                  "Finanse. Wartość zakupu zostaje w majątku firmy i liczy się do jej rozwoju."
                   + (" Zamiast tego możesz je amortyzować (koszt rozłożony na lata) – wybór w "
                      "Księgowość ▸ Biuro rachunkowe." if st_trwale.wybor_niskocennych(dane) else ""))
         # przekroczenia odrzuca zapis decyzji (API), a przeliczenie przycina – tu czerwone są w uwagach rynku pracy i lokali
@@ -772,15 +773,18 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
     if puste and runda >= 2:
         dodaj("niebieski", "hr_zatrudnienie", f"Puste stanowiska: {len(puste)} (nie generują kosztów).")
     zakupy = sum(z["wartosc"] for zz in (info or {}).get("zakupy_zasobow", {}).values() for z in zz)
+    koniec = ("Chwilowy minus w trakcie tygodnia nic nie kosztuje; liczy się saldo na koniec tygodnia: "
+              + ("z włączonym debetem – opłata i odsetki." if firma.debet_wlaczony else
+                 "bez włączonego debetu – opłata za niedozwolone saldo, odsetki karne, alarm i blokada inwestycji."))
     if firma.gotowka < 0 and lokal is not None and zakupy > -firma.gotowka:
         dodaj("pomaranczowy", "dostawcy", f"Na koncie brakuje ok. {-firma.gotowka:,.0f} zł, a same zamówienia u dostawców "
-              f"to {zakupy:,.0f} zł – jeśli sprzedaż tego nie pokryje, zapłaci za nie kredyt odnawialny (z odsetkami). "
-              "Zamów mniej albo zadbaj o finansowanie.".replace(",", " "))
+              f"to {zakupy:,.0f} zł – jeśli sprzedaż do końca tygodnia tego nie pokryje, tydzień skończy się na minusie. "
+              f"{koniec} Zamów mniej albo zadbaj o finansowanie.".replace(",", " "))
     elif firma.gotowka < 0:
         if tryb_kredytu == "na_biezaco":
-            dodaj("pomaranczowy", "finanse_bank", "Wydatki przekraczają saldo konta – zostanie uruchomiony kredyt odnawialny "
-                  f"(ok. {-firma.gotowka:,.0f} zł).".replace(",", " "))
+            dodaj("pomaranczowy", "finanse_bank", f"Wydatki przekraczają saldo konta (ok. {-firma.gotowka:,.0f} zł). "
+                  "Jeśli przychody tego tygodnia ich nie pokryją, tydzień skończy się na minusie. ".replace(",", " ") + koniec)
         else:
             dodaj("niebieski", "finanse_bank", "Wydatki przekraczają saldo konta. Jeśli przychody z tej rundy ich nie pokryją, "
-                  "uruchomi się kredyt odnawialny na brakującą kwotę.")
+                  "tydzień skończy się na minusie. " + koniec)
     return wynik

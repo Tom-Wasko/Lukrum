@@ -44,7 +44,7 @@ class Gra:
                 "firmy": [{"nazwa": n, "bot": b, **({"poziom": opcje["poziomy"][n]} if b and n in opcje.get("poziomy", {})
                                                     else {})} for n, b in firmy],
                 "ceny_dostawcow": opcje.get("ceny_dostawcow", "dane"),
-                "kredyt_odnawialny": opcje.get("kredyt_odnawialny", "na_biezaco"),
+                "tryb_debetu": opcje.get("tryb_debetu", "na_biezaco"),
                 "auto_zamowienia": bool(opcje.get("auto_zamowienia", False)),   # przycisk „Zamów brakujące” (MG)
                 # B11: zaproszenia do klubu także dla botów (pomiary balans.warianty – bot ze strategią `kasyno`)
                 **({"kasyno_botow": True} if opcje.get("kasyno_botow") else {}),

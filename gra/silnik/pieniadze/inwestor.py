@@ -50,10 +50,10 @@ def poczatek_rundy(dane: Dane, f: Firma, kwota: float | None, runda: int, rachun
     w = warunki(dane)
     f.inwestor = Inwestor(kwota=kwota, od_rundy=runda, do_rundy=runda + w["rund"] - 1, udzial=w["udzial"])
     rachunek.zapisz(f, "Wpłata inwestora ratunkowego (poza KPiR)", kwota, "inwestor")
-    splata = round(min(f.kredyt_odnawialny, kwota), 2)
+    splata = round(min(f.debet, kwota), 2)
     if splata > 0:
-        f.kredyt_odnawialny = round(f.kredyt_odnawialny - splata, 2)
-        rachunek.zapisz(f, "Spłata kredytu odnawialnego", -splata, "kredyty")
+        f.debet = round(f.debet - splata, 2)
+        rachunek.zapisz(f, "Spłata debetu", -splata, "kredyty")
     return {"wplata": round(kwota, 2), "splata_debetu": splata}
 
 

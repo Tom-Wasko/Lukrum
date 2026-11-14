@@ -34,7 +34,7 @@ def _do_przejec(wlaczony=True, kapital=300000):
 
 
 def _kredyt(kwota, zastaw=f"lokal:{LOKAL}"):
-    return {"bank": "PKO BP", "produkt": "inwestycyjny", "kwota": kwota, "rund": 104, "zastaw": zastaw}
+    return {"bank": "Wokulski i S-ka", "produkt": "inwestycyjny", "kwota": kwota, "rund": 104, "zastaw": zastaw}
 
 
 def _bledy_banku(s, r, firma):
@@ -42,7 +42,7 @@ def _bledy_banku(s, r, firma):
 
 
 def _zalegla_runda(dane, f, runda, najemcy=None):
-    f.gotowka, f.kredyt_odnawialny = -1e6, 1e6      # ani gotówki, ani wolnego limitu
+    f.gotowka, f.debet = -1e6, 1e6      # ani gotówki, ani wolnego limitu
     return bk.koniec_rundy(dane, f, runda, Ksiega(), Rachunek(), najemcy)
 
 
@@ -89,7 +89,7 @@ def _kupno_na_kredyt(wlaczony=True):
     gotowka = g.stan().firmy["B"].gotowka
     kwota = round(0.7 * cena - 1, 2)
     assert gotowka < cena <= gotowka + kwota
-    s = _runda(g, B={"przejecie": {"id": LOKAL}, "bank": "PKO BP", "kredyty_wez": [_kredyt(kwota)]})
+    s = _runda(g, B={"przejecie": {"id": LOKAL}, "bank": "Wokulski i S-ka", "kredyty_wez": [_kredyt(kwota)]})
     return g, s, od, kwota
 
 
@@ -124,7 +124,7 @@ def test_budynek_niekupiony_kredyt_przepada_z_komunikatem():
     """Przed rundą przejęć budynku nie można kupić – kredyt pod jego zastaw nie wchodzi."""
     g = _gra(rund=14, kapital_startowy=300000, dane=_dane())
     _runda(g, A=_lokal(LOKAL))
-    s = _runda(g, B={**_lokal("centrum_3"), "przejecie": {"id": LOKAL}, "bank": "PKO BP",
+    s = _runda(g, B={**_lokal("centrum_3"), "przejecie": {"id": LOKAL}, "bank": "Wokulski i S-ka",
                      "kredyty_wez": [_kredyt(10000)]})
     assert not s.firmy["B"].kredyty and not s.firmy["B"].budynki
     assert any("budynek pod zastaw nie został kupiony" in t and "Przejęcia" in t for t in _bledy_banku(s, 2, "B"))

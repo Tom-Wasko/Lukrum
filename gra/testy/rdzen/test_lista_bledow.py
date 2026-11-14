@@ -111,12 +111,12 @@ def test_zamowienia_ponad_saldo(gra_botow):
     f.gotowka_gr = -500_000
     info = {"zakupy_zasobow": {"Hurtownia": [{"wartosc": 6000.0}]}}
     lb = lista_bledow(dane, f, {}, r, list(f.oferta), lokal={}, info=info)
-    t = [b for b in lb if b["zakladka"] == "dostawcy"]
+    t = [b for b in lb if b["zakladka"] == "dostawcy" and b["poziom"] == "pomaranczowy"]   # czerwone braki składników – osobna sprawa
     assert len(t) == 1 and t[0]["poziom"] == "pomaranczowy" and "5 000 zł" in t[0]["tekst"] and "6 000 zł" in t[0]["tekst"]
-    # brak wynika z czegoś innego niż zamówienia – ogólna uwaga o kredycie odnawialnym
+    # brak wynika z czegoś innego niż zamówienia – ogólna uwaga o debecie
     info = {"zakupy_zasobow": {"Hurtownia": [{"wartosc": 100.0}]}}
     lb = lista_bledow(dane, f, {}, r, list(f.oferta), lokal={}, info=info)
-    assert not [b for b in lb if b["zakladka"] == "dostawcy"] and any("kredyt odnawialny" in t for t in _teksty(lb))
+    assert not [b for b in lb if b["zakladka"] == "dostawcy" and b["poziom"] == "pomaranczowy"] and any("skończy się na minusie" in t for t in _teksty(lb))
 
 
 def test_cena_poza_widelkami_rynku_odrzucona():
@@ -147,14 +147,14 @@ def test_puste_menu(gra_botow):
         assert len(b) == 1 and b[0]["poziom"] == "czerwony" and b[0]["zakladka"] == "oferta" and tekst in b[0]["tekst"]
 
 
-def test_zakup_ponizej_progu_amortyzacji_ostrzega_o_karcie(gra_botow):
+def test_zakup_ponizej_progu_amortyzacji_ostrzega_o_wyniku(gra_botow):
     dane, f, r = _firma(gra_botow)
-    dz = dane.z["karta_wynikow"]["wynik_ekonomiczny_dzielnik"]
+    dz = 4615
     assert not [t for t in _teksty(lista_bledow(dane, f, {}, r, list(f.oferta), lokal={}, info={})) if "w koszty" in t]
     lb = lista_bledow(dane, f, {}, r, list(f.oferta), lokal={}, info={"inwestycje_w_koszty": 2.5 * dz})
     [b] = [b for b in lb if "w koszty" in b["tekst"]]
     assert b["poziom"] == "pomaranczowy" and b["zakladka"] == "sprzet"
-    assert "kartę wyników tej rundy – o ok. 2,50" in b["tekst"]
+    assert "punkty działu Finanse" in b["tekst"]
 
 
 def test_dania_jednego_lokalu_scalone_w_jedna_pozycje(gra_botow):

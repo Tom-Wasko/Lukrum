@@ -1,8 +1,8 @@
 # Boty
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Strategie botów: cena w ułamku ceny preferowanej (null = średnia rynku), jakość, docelowa liczba dań, pokrycie popytu,
-  wyposażenie i udogodnienia (sztuki), reklama (medium → emisje), internet, szkolenia; gra z lokalami: kampanie
-  (agencja/kanał z mapa/reklama.yaml) zamiast reklamy i internetu, bufor_kampanii – gotówka po kampaniach,
+  wyposażenie i udogodnienia (sztuki), szkolenia; kampanie
+  (agencja/kanał z mapa/reklama.yaml), bufor_kampanii – gotówka po kampaniach,
   emisje_kampanii – tyle emisji w kampanii, przerwa_kampanii – rund przerwy po kampanii w tym kanale i strefie; promocje (typ z mapa/promocje.yaml
   i ozdobna nazwa) – na najdroższe danie w sprzedaży („2 za 1” – na najtańsze i tylko przy obciążeniu kuchni
   ≤ maks_obciazenie_kuchni_porcji), nowe tylko z buforem gotówki, wszystkie wyłączone, gdy bot
@@ -74,6 +74,7 @@ poziomy:
     dba_o_ludzi: {podwyzka_maks: 1.15, zapas: 0.01}   # U20: niezadowolonemu podnosi pensję (do 115% preferowanej)
     limit_handlu: 0.8
     podkupuje_ludzi: true
+    debet: true   # tor A: włącza debet w banku konta (łatwy i słaby „człowiek” o nim zapominają)
   trudny:
     nazwa: Trudny
     opis: planuje zapasy, ceny, reklamę i lokale
@@ -87,6 +88,7 @@ poziomy:
     dba_o_ludzi: {podwyzka_maks: 1.15, zapas: 0.01}
     limit_handlu: 0.85
     podkupuje_ludzi: true
+    debet: true   # tor A: włącza debet w banku konta (łatwy i słaby „człowiek” o nim zapominają)
   niemozliwy:                    # P19 (pytanie 25): dla chętnych – wyzwanie, którego zwykle nie da się wygrać
     nazwa: Niemożliwy
     opis: jak trudny, ale oszukuje – klienci bez powodu wolą jego lokale
@@ -101,6 +103,7 @@ poziomy:
     przewaga_popytu: 1.3         # klienci wolą jego lokale o 30% (jak stała kampania, której nikt nie widzi)
     limit_handlu: 0.9
     podkupuje_ludzi: true
+    debet: true   # tor A: włącza debet w banku konta (łatwy i słaby „człowiek” o nim zapominają)
   # Z5: bot „jak człowiek” – wersje różnią się staraniem, nie wiedzą (cele trudności: notatki/Plan optymalizacji)
   czlowiek_slaby:
     nazwa: Jak człowiek – słaby
@@ -127,6 +130,7 @@ poziomy:
     dba_o_ludzi: {podwyzka_maks: 1.15, zapas: 0.01}
     limit_handlu: 0.8
     podkupuje_ludzi: true
+    debet: true   # tor A: włącza debet w banku konta (łatwy i słaby „człowiek” o nim zapominają)
   czlowiek_dobry:
     nazwa: Jak człowiek – dobry
     tylko_pomiar: true
@@ -141,6 +145,7 @@ poziomy:
     dba_o_ludzi: {podwyzka_maks: 1.15, zapas: 0.01}
     limit_handlu: 0.85
     podkupuje_ludzi: true
+    debet: true   # tor A: włącza debet w banku konta (łatwy i słaby „człowiek” o nim zapominają)
 strategie:
   zrownowazony:
     nazwa: Kebab u Zrównoważonego
@@ -152,8 +157,6 @@ strategie:
     pokrycie: 0.9
     wyposazenie: 6   # B10: przy wolnej kuchni komplet +0,06 karty (b10_po, 6/6)
     udogodnienia: 2
-    reklama: {}
-    internet: []
     szkolenia: 1   # B9: jedno szkolenie +0,02 karty (b9_po), dwa już tracą
     kampanie:
     - papier_przyjmie/ulotki
@@ -163,6 +166,7 @@ strategie:
     higiena: podstawowa          # gra z lokalami: poziom higieny (dane/zdarzenia/urzad.yaml)
   tani:
     nazwa: Tani Kebab Nocny
+    umowa: zlecenie              # tor A: tanio – ludzie na zleceniu (niższe składki, bez urlopu i wypowiedzenia)
     min_kuchnia: 2               # B7: z jednym miejscem kolejka zjadała połowę popytu (b7_cena, b7_jakosc)
     cena: 0.78
     jakosc: 1
@@ -171,10 +175,6 @@ strategie:
     pokrycie: 0.85
     wyposazenie: 3   # B10: WiFi, parking, terminal +0,05 karty (b10_po, 5/6)
     udogodnienia: 0
-    reklama:
-      Ulotki: 10
-    internet:
-    - Informacje na forach internetowych
     szkolenia: 0
     kampanie:
     - papier_przyjmie/ulotki
@@ -194,10 +194,6 @@ strategie:
     pokrycie: 1.0
     wyposazenie: 6
     udogodnienia: 3   # B10: przy uczciwej płacy udogodnienia nic nie dają (9 → 3: +0,055 karty)
-    reklama:
-      Smaki Lublina (dziennik): 6
-    internet:
-    - Strona www firmy
     szkolenia: 1   # B9: drugie szkolenie nic nie daje (efekt włącznik), −0,02 karty
     kampanie:
     - lajk/influencer
@@ -210,6 +206,7 @@ strategie:
     higiena: haccp
   agresywny:
     nazwa: Kebab Głośny Marketing
+    umowa: zlecenie              # tor A: tanio – ludzie na zleceniu (niższe składki, bez urlopu i wypowiedzenia)
     min_kuchnia: 2
     cena: 0.8
     jakosc: 3
@@ -218,15 +215,6 @@ strategie:
     pokrycie: 1.0
     wyposazenie: 6
     udogodnienia: 3   # B10: jak premium (6 → 3: +0,024 karty)
-    reklama:
-      Ulotki: 20
-      Ekrany LED: 11
-      Smaki Lublina (dziennik): 14
-      Radio Czechówka: 21
-    internet:
-    - Strona www firmy
-    - Profil na Facebook
-    - Informacje na forach internetowych
     szkolenia: 1   # B9: jak premium
     kampanie:
     - papier_przyjmie/plakaty
@@ -249,6 +237,4 @@ strategie:
     pokrycie: 0.9
     wyposazenie: 3
     udogodnienia: 3
-    reklama: {}
-    internet: []
     szkolenia: 1

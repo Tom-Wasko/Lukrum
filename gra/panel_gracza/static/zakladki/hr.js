@@ -187,7 +187,7 @@ export const zatrudnienie = {
     },
     zwolnij: async (el, c) => {
       const id = el.dataset.id, nowy = el.dataset.nowy === "1";
-      if (!nowy && !confirm("Zwolnić pracownika? Trzeba zapłacić odprawę, a na umowie o pracę przez 2 rundy wypowiedzenia nadal pracuje i dostaje pensję.")) return;
+      if (!nowy && !confirm("Wypowiedzieć umowę? Na umowie o pracę pracownik pracuje i dostaje pensję przez okres wypowiedzenia (zależy od stażu: art. 34 i 36 Kodeksu pracy), na zleceniu odchodzi od razu. Odprawy nie ma.")) return;
       zamknijOkno();
       await c.zmien((d) => {
         if (nowy) d.zatrudnij = (d.zatrudnij || []).filter((z) => z.kandydat !== id);
@@ -246,10 +246,10 @@ function oknoKandydatow({ v, kat }, typ, nr) {
   const lista = v.kandydaci.filter((k) => zawody.includes(k.zawod)).sort((a, b) => b.zadowolenie_klientow - a.zadowolenie_klientow);
   const w = lista.map((k) => [esc(k.imie_nazwisko) + pigulkaStudenta(k, kat) + (zajety(v, k.id) ? pigulkaZajety(zajety(v, k.id)) : "") + opisOsoby(k),
     gw(k.gwiazdki), esc(k.zawod), licz(k.pensja_preferowana), licz(k.koszt_rekrutacji),
-    licz(k.koszt_odprawy), proc(k.zadowolenie_klientow, 0), proc(k.ryzyko_reklamacji, 0),
+    proc(k.zadowolenie_klientow, 0), proc(k.ryzyko_pomylki, 0),
     przyciskZatrudnij(v, k, true, ` data-t="${typ}" data-n="${nr}"`)]);
   okno(`Zatrudnienie na „Stanowisko nr ${nr}”`, tabela(null, ["Imię i nazwisko", "Doświadczenie", "Zawód", "Preferowane wynagrodzenie",
-    "Koszty rekrutacji", "Koszt odprawy", "Zadowolenie klientów", "Ryzyko reklamacji", "Akcje"], w, { klasy: ["l"] })
+    "Koszty rekrutacji", "Zadowolenie klientów", "Skłonność do pomyłek", "Akcje"], w, { klasy: ["l"] })
     + `<p class="podpowiedz">${TYPY.map((t) => `${esc(typy[t].kto)}: ${typy[t].zawody.map(esc).join(", ")}`).join(" · ")}</p>`);
 }
 
@@ -308,7 +308,7 @@ function kolumnyKandydatow(v, kat, lista, edycja) {
   const zawody = [...new Set(lista.map((k) => k.zawod))];
   const wiersz = (k) => `<div class="oferta-wiersz kandydat"><div><b>${esc(k.imie_nazwisko)}</b> ${gw(k.gwiazdki)}${pigulkaStudenta(k, kat)}
       ${zajety(v, k.id) ? pigulkaZajety(zajety(v, k.id)) : pigulkaOfert(v, "kandydaci", k.id)}${opisOsoby(k)}
-      <span class="podpowiedz zostaw" title="Zadowolenie klientów · ryzyko reklamacji · bazowy koszt rekrutacji">zadowolenie ${proc(k.zadowolenie_klientow, 0)} · reklamacje ${proc(k.ryzyko_reklamacji, 0)}
+      <span class="podpowiedz zostaw" title="Zadowolenie klientów · skłonność do pomyłek · bazowy koszt rekrutacji">zadowolenie ${proc(k.zadowolenie_klientow, 0)} · pomyłki ${proc(k.ryzyko_pomylki, 1)}
         · rekrutacja ${zl(k.koszt_rekrutacji)}</span></div>
     <b class="cena" title="Preferowane wynagrodzenie (miesięcznie)">${zl(k.pensja_preferowana)}</b>${przyciskZatrudnij(v, k, edycja)}</div>`;
   return `<div class="banki-siatka">${zawody.map((z, i) => {
@@ -409,9 +409,8 @@ function oknoProfilu({ v, kat, edycja }, id) {
       <div style="margin-top:14px;text-align:left">
       <div class="wiersz"><span>Preferowane wynagrodzenie</span><span>${zl(p.pensja_preferowana)}</span></div>
       <div class="wiersz"><span>Koszty rekrutacji</span><span>${zl(p.koszt_rekrutacji)}</span></div>
-      <div class="wiersz"><span>Koszt odprawy</span><span>${zl(p.koszt_odprawy)}</span></div>
       <div class="wiersz"><span>Zatrudniony od</span><span>runda ${p.od_rundy}</span></div>
-      <div class="wiersz"><span>Ryzyko reklamacji</span><span>${proc(p.ryzyko_reklamacji, 0)}</span></div>
+      <div class="wiersz"><span>Skłonność do pomyłek</span><span>${proc(p.ryzyko_pomylki, 0)}</span></div>
       <div class="wiersz"><span>Zadowolenie klientów</span><span>${proc(p.zadowolenie_klientow, 0)}</span></div>
       <div class="wiersz"><span>Zadowolenie z pracy (ostatni tydzień)</span><span>${zadowolenieOsoby(p)}</span></div></div>
       ${p.niezadowolony && !p.odchodzi ? `<p class="minus" style="text-align:left">Niezadowolony od ${p.niezadowolony} tyg. – szczegóły na liście błędów.
@@ -681,7 +680,7 @@ export const szkolenia = {
       : "")
       + (akt.length ? zwinTabela("Szkolenia działające w tej rundzie", ["Szkolenie", "Firma szkoleniowa", "% pracowników oczekujących", "Od rundy", "Działa do rundy"],
         akt.map((x) => [esc(x.szkolenie), esc(x.firma), `${x.procent}%`, licz(x.od_rundy), licz(x.do_rundy)]), { klasy: ["l", "l"], otwarte: true }) : "")
-      + (k ? zwinTabela("Efekt", ["Zadowolenie pracowników (karta wyników)"], [[licz(k.zadowolenie_pracownikow, 3)]]) : "");
+      + (k ? zwinTabela("Efekt", ["Zadowolenie zespołu (karta wyników)"], [[licz(k.wskazniki?.zadowolenie_zespolu, 3)]]) : "");
   },
   akcje: {
     szkolenie: (el, c) => c.zmien((d) => {

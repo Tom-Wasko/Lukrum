@@ -8,8 +8,8 @@ samych klientów, tych samych pracowników i te same lokale.
 > **W pięciu zdaniach.** Jedna runda to jeden tydzień, gra ma zwykle 18 rund (1.09.2025 – 4.01.2026). W każdej
 > rundzie oglądasz wyniki poprzedniego tygodnia, podejmujesz decyzje na następny i klikasz **Wyślij decyzje**.
 > Mistrz gry zamyka rundę, a gra liczy tydzień dzień po dniu: klientów, sprzedaż, koszty i podatki. Wygrywa
-> drużyna z najwyższym średnim **wynikiem działalności** na skumulowanej karcie wyników. Kapitał na start:
-> **40 000 zł** – i nic więcej, więc licz, zanim wydasz.
+> drużyna z najwyższym **wynikiem gry** (0–1000 pkt). Kapitał na start:
+> **50 000 zł** – i nic więcej, więc licz, zanim wydasz.
 
 Mistrz gry może skrócić albo wydłużyć grę – kalendarz miejski sięga do kwietnia 2026 (WOŚP, Wielkanoc, wiosenne
 mecze Motoru).
@@ -138,30 +138,28 @@ stanowiska, zareagować w parku, spłacić Harpagona, wysłać decyzje. Zadania 
 podjęta; kliknięcie zadania przenosi do właściwej zakładki. Niżej drużyna dopisuje **własne zadania** (widzą je wszyscy
 z drużyny) – nieodhaczone przechodzą na następny tydzień.
 
-## 3. Cel gry – karta wyników
+## 3. Cel gry – wynik 0–1000 pkt
 
-Na końcu liczy się **wynik działalności** z karty wyników – średnia ze wszystkich tygodni sprzedaży (od tygodnia 2;
-tydzień przygotowawczy się nie liczy). Tę średnią pokazuje **skumulowana karta wyników**, a według niej mistrz gry
-układa ranking i Dashboard pokazuje Twoje miejsce. Liczy się zarabianie co tydzień, zadowolenie i rozwój, a nie sam
-stan konta – dlatego firma z mniejszym **majątkiem netto** (widać go w rankingu obok wskaźników) może stać wyżej. Wynik działalności jednego tygodnia to iloczyn:
+Na końcu liczy się **wynik gry** (0–1000 pkt): średnia z punktów tygodni, w której późniejsze tygodnie ważą więcej
+(ostatni dwa razy więcej niż pierwszy pełny). Tydzień 1 to „Wielkie otwarcie” – punkty za przygotowanie lokalu, menu, ekipy
+i zaopatrzenia. Od tygodnia 2 tydzień ma do 1000 pkt z pięciu działów po 200: Finanse, Goście, Zespół, Rozwój i Bezpieczeństwo
+finansowe. Zakładka Karta wyników pokazuje progi punktów każdego składnika i podpowiada, co go podnosi.
 
-| Składnik | Co mierzy | Jak go poprawić |
+| Dział | Co mierzy | Jak go poprawić |
 |---|---|---|
-| Wynik ekonomiczny | Dochód netto tygodnia (minus odsetki Harpagona i mandaty) | Sprzedawać więcej i z sensowną marżą, pilnować kosztów |
-| Zadowolenie klientów | Czy klienci są zadowoleni | Rozsądne ceny, dobra jakość, szersze menu, nikt nie odchodzi z kolejki |
-| Zadowolenie pracowników | Czy załodze dobrze się pracuje | Uczciwe pensje, dobry sprzęt, udogodnienia, szkolenia |
-| Rozwój firmy | Czy firma inwestuje i ile jest warta | Nowy sprzęt i wyposażenie, kupione lokale, kolejne lokale |
-| Wskaźnik zadłużenia | Jaką część firmy (majątku i gotówki) finansuje dług | Nie żyć na kredycie dłużej, niż trzeba |
+| Finanse | Dochód netto tygodnia (minus odsetki Harpagona i mandaty) i marża | Sprzedawać więcej i z sensowną marżą, pilnować kosztów |
+| Goście | Zadowolenie gości, udział obsłużonych, liczba gości | Rozsądne ceny, dobra jakość, szersze menu, nikt nie odchodzi z kolejki, mało pomyłek w szczycie |
+| Zespół | Nastrój załogi, przepracowanie, szkolenia, udogodnienia | Uczciwe pensje, dobry sprzęt, udogodnienia, szkolenia |
+| Rozwój | Majątek, lokale, menu, załoga | Nowy sprzęt i wyposażenie, kupione lokale, kolejne lokale |
+| Bezpieczeństwo finansowe | Zapas gotówki, udział kapitału własnego, dług | Trzymać zapas na koszty i nie żyć na kredycie dłużej, niż trzeba |
 
-Iloczyn działa bezlitośnie: słaby jeden składnik ciągnie w dół wszystkie pozostałe. Lepiej być dobrym we
-wszystkim niż genialnym w jednym.
-Zakładka Karta wyników przy każdym Twoim wskaźniku pisze **niski / średni / dobry** (kolorem) – w porównaniu
-z typowymi wynikami firm w grze – i podpowiada, co go podnosi.
-Zakładka **Ranking** (od rundy 3) pokazuje miejsca wszystkich drużyn: średni wynik działalności z kart od rundy 2,
-wynik ostatniej rundy, majątek netto, o ile miejsc ktoś awansował lub spadł oraz wykres miejsc w kolejnych rundach.
+Punkty za Gości, Zespół i Bezpieczeństwo liczą się proporcjonalnie do działalności: firma, która nic nie sprzedaje, ma łącznie
+ok. 0–100 pkt (pełne punkty dopiero od 100 obsłużonych gości w tygodniu).
+Zakładka **Ranking** (od rundy 3) pokazuje miejsca wszystkich drużyn: wynik gry, wynik ostatniej rundy, majątek netto,
+o ile miejsc ktoś awansował lub spadł oraz wykres miejsc w kolejnych rundach.
 
-**Tydzień ze stratą daje wynik ujemny** – tym niższy, im większa strata (proporcjonalnie do wyniku ekonomicznego,
-bez mnożenia przez pozostałe składniki). Mała strata na rozruchu kosztuje mało, duża – dużo.
+**Strata obniża dział Finanse** – dochód poniżej zera daje mało punktów (od 0 przy stracie 3 000 zł). Mała strata na rozruchu
+kosztuje mało, duża – dużo.
 
 Kilka zasad, które warto znać:
 - **Odsetki Harpagona i mandaty** (skarbowe za deklaracje, z błędu biura bez OC, sanepidu) nie trafiają do KPiR
@@ -254,7 +252,7 @@ Klienci wybierają lokal według:
 - **odległości** – sąsiednie strefy też przychodzą, ale mniej chętnie,
 - **opinii o lokalu** – gwiazdki na mapie (ocena 1–5★ i liczba opinii, kliknij lokal, żeby przeczytać
   komentarze). Klienci oceniają to, co przeżyli w lokalu: jakość dań, cenę na tle strefy, czekanie w kolejce,
-  brakujące dania, reklamacje i wyposażenie. Ocena to średnia z opinii – nowe ważą więcej niż stare. Im więcej
+  brakujące dania, pomyłki w szczycie i wyposażenie. Ocena to średnia z opinii – nowe ważą więcej niż stare. Im więcej
   opinii, tym bardziej klienci jej ufają: lokal z oceną powyżej przeciętnej przyciąga więcej klientów, poniżej –
   mniej. Rozbicie oceny Twoich lokali na powody jest w wynikach zakładki Klienci i strefy.
 - **renomy lokalu** – nowy lokal dopiero zdobywa stałych bywalców: w pierwszym tygodniu sprzedaży
@@ -368,7 +366,7 @@ widoczna w wynikach Menu i cen, bolesna dla zadowolenia klientów i dla opinii o
   materializm, optymizm), a w kółku „i” i w profilu pracownika – jak wpływa na zadowolenie (na przykład „zadowolenie +0,04”,
   „szansa odejścia ×0,3”, „pensja waży ×2”). Nic nie trzeba zgadywać – dobierz zespół do tego, co możesz mu zaoferować.
 - Zwolnienie i odejście do konkurencji mają **2 rundy wypowiedzenia** (umowa o pracę) – pracownik przez ten czas
-  jeszcze pracuje i dostaje pensję; odprawę płacisz od razu. Na zleceniu, stażu i B2B odchodzi się bez wypowiedzenia.
+  jeszcze pracuje i dostaje pensję (odprawy w firmie poniżej 20 osób nie ma). Długość wypowiedzenia zależy od stażu u Ciebie: przy okresie próbnym do 2 tygodni 3 dni robocze, dłuższym 1 tydzień, przy okresie próbnym 3 miesiące 2 tygodnie (art. 34 KP); potem 2 tygodnie, miesiąc i 3 miesiące (art. 36 KP). Na zleceniu, stażu i B2B odchodzi się bez wypowiedzenia.
 - **Puste stanowisko?** Właściciel sam na nim staje – zawsze, bez żadnego przycisku. Pracuje jak pracownik 1★ i nie bierze
   pensji, ale tylko w godzinach, które zostają mu po sprawach poza lokalem (zakładka *Czas właściciela*).
 
@@ -417,8 +415,7 @@ Zakładka **Czas właściciela** pokazuje licznik: pula / sprawy poza lokalem / 
 - **Podatki**: PIT liniowy, składka zdrowotna i ZUS rozliczają się same na koniec tygodnia – ale płacisz je z konta.
 - **Bank**: konto, lokaty, kredyty i leasing. Produkty bierzesz tylko w banku, w którym firma ma konto firmowe – wybór
   banku to wybór oferty (inne banki widać po „Zmień bank konta”; zmiana działa od tej samej rundy, a wzięte wcześniej
-  kredyty i lokaty trwają dalej). Kredyt odnawialny ratuje, gdy na koncie zabraknie pieniędzy – kosztuje odsetki
-  i psuje wskaźnik zadłużenia. Kredyt inwestycyjny spłacasz w ratach.
+  kredyty i lokaty trwają dalej). **Debet** (zgoda w banku konta) działa, gdy tydzień kończy się na minusie: płacisz opłatę i odsetki (nie wyższe niż odsetki maksymalne, art. 359 § 2¹ KC). Chwilowy minus w trakcie tygodnia nic nie kosztuje. Bez zgody banku na minusie na koniec tygodnia jest drożej: stała opłata, odsetki karne (maksymalne za opóźnienie, art. 481 § 2¹ KC), alarm i blokada inwestycji. Kredyt inwestycyjny spłacasz w ratach.
 - **Zastaw kredytu inwestycyjnego**: kupiony lokal, kupiony budynek z najemcą albo kupiony sprzęt (wartość netto).
   Zastawem może być też lokal albo budynek z najemcą kupowany w tym samym tygodniu (Nowe lokale ▸ Przejęcia) –
   kredyt pokrywa wtedy część ceny, a gdy zakup się nie uda, przepada. Gdy raty zalegają kilka tygodni, bank zabiera
@@ -511,7 +508,7 @@ Mistrz gry może przesunąć te terminy (poza tygodniem 1 – tydzień przygotow
 
 ## 15. Dziesięć rad na dobry start
 
-1. **Policz, zanim kupisz.** 40 000 zł znika szybciej, niż się wydaje: kaucja, sprzęt, pierwsze pensje i towar.
+1. **Policz, zanim kupisz.** 50 000 zł znika szybciej, niż się wydaje: kaucja, sprzęt, pierwsze pensje i towar.
 2. **Lokal to połowa sukcesu.** Tani lokal w pustej strefie jest drogi.
 3. **Cena to nie wszystko.** Najtańszy kebab w mieście z jednym kucharzem to kolejka, której nikt nie obsłuży.
 4. **Patrz na utraconą sprzedaż i opinie.** Jeśli klienci odchodzą z kolejki – brakuje ludzi, sprzętu albo miejsc

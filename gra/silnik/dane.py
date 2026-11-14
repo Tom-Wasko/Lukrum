@@ -241,7 +241,7 @@ class Dane:
         return wynik
 
     def pozycje(self, rodzaj: str) -> dict[str, dict]:
-        """Pozycje katalogu po nazwie: udogodnienia, wyposazenie, media_tradycyjne, narzedzia_internetowe, banki, …"""
+        """Pozycje katalogu po nazwie: udogodnienia, wyposazenie, szkolenia, …"""
         return {p["nazwa"]: p for p in self.katalog_ofert[rodzaj]["pozycje"]}
 
     def dostepne(self, rodzaj: str, runda: int) -> dict[str, dict]:
@@ -369,17 +369,10 @@ def sprawdz(katalog: Path | None = None) -> list[str]:
     for u in d.katalog_ofert["rundy"]["uslugi_startowe"]:
         if u not in d.uslugi:
             brak(u, "katalog.yaml: rundy.uslugi_startowe", "usługa", "uslugi.yaml")
-    media, narzedzia = d.pozycje("media_tradycyjne"), d.pozycje("narzedzia_internetowe")
     for s, st in d.boty["strategie"].items():
         for u in st.get("dania_specjalne", []):
             if u not in d.uslugi:
                 brak(u, f"boty.yaml: {s}.dania_specjalne", "danie", "uslugi.yaml")
-        for n in st["reklama"]:
-            if n not in media:
-                brak(n, f"boty.yaml: {s}.reklama", "medium", "katalog.yaml: media_tradycyjne")
-        for n in st["internet"]:
-            if n not in narzedzia:
-                brak(n, f"boty.yaml: {s}.internet", "narzędzie", "katalog.yaml: narzedzia_internetowe")
     if d.funkcje:
         bledy += _sprawdz_funkcje(d)
     if d.kalendarz_miasta and not d.mapa:
@@ -512,6 +505,7 @@ def _sprawdz_mape(d: Dane, brak) -> list[str]:
     po = m["popyt"]
     for s in sorted(set(m["strefy"]) ^ set(po["strefy"])):
         bledy.append(f"mapa/popyt.yaml: strefa {s} " + ("bez popytu" if s in m["strefy"] else "nie ma jej w mapa/strefy.yaml"))
+    _sprawdz_banki(m, bledy)
     _sprawdz_klientow(d, bledy, brak)
     _sprawdz_kalendarz(d, bledy, brak)
     _sprawdz_zdarzenia(d, bledy, brak)
@@ -536,6 +530,28 @@ def _sprawdz_klientow(d: Dane, bledy: list[str], brak):
     for g, x in k["grupy"].items():
         for u in sorted(set(d.uslugi) ^ set(x["koszyk"])):
             bledy.append(f"{co}: grupy.{g}.koszyk: " + (f"brak dania {u}" if u in d.uslugi else f"nieznane danie {u}"))
+
+
+def _sprawdz_banki(m: dict, bledy: list[str]):
+    """Stopy debetu nie przekraczają limitów prawnych liczonych ze stopy referencyjnej NBP (banki.yaml)."""
+    b = m["banki"]
+    ref = b.get("stopa_referencyjna_nbp")
+    if ref is None:
+        return
+    maks_zgoda = 2 * (ref + b["marza_odsetki_maksymalne"])       # odsetki maksymalne, art. 359 § 2¹ KC
+    maks_opoznienie = 2 * (ref + b["marza_odsetki_opoznienie"])  # maksymalne odsetki za opóźnienie, art. 481 § 2¹ KC
+    for bank in b["banki"]:
+        if bank["debet"]["oprocentowanie"] > maks_zgoda + 1e-9:
+            bledy.append(f"mapa/banki.yaml: {bank['nazwa']}: debet za zgodą {bank['debet']['oprocentowanie']:.2%} "
+                         f"przekracza odsetki maksymalne {maks_zgoda:.2%} (art. 359 § 2¹ KC)")
+    if b["stopa_karna"] > maks_opoznienie + 1e-9:
+        bledy.append(f"mapa/banki.yaml: stopa_karna {b['stopa_karna']:.2%} przekracza maksymalne odsetki za opóźnienie "
+                     f"{maks_opoznienie:.2%} (art. 481 § 2¹ KC)")
+    najdrozszy = max(bank["debet"]["oprocentowanie"] for bank in b["banki"])
+    if b["stopa_karna"] < najdrozszy:
+        bledy.append("mapa/banki.yaml: stopa_karna niższa niż debet za zgodą – bez zgody miałoby być drożej")
+    if b["oplata_debet_bez_zgody"] <= max(bank["debet"]["oplata"] for bank in b["banki"]):
+        bledy.append("mapa/banki.yaml: oplata_debet_bez_zgody nie jest wyższa niż opłata za debet za zgodą w żadnym banku")
 
 
 def _sprawdz_kalendarz(d: Dane, bledy: list[str], brak):

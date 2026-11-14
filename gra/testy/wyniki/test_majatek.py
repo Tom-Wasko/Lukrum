@@ -10,7 +10,7 @@ from silnik.wyniki.majatek import majatek_netto, z_portfelem
 
 
 def test_skladniki_i_dlugi():
-    f = Firma(nazwa="A", gotowka=10000, kredyt_odnawialny=500, majatek=8000, umorzenie_majatku=1000)
+    f = Firma(nazwa="A", gotowka=10000, debet=500, majatek=8000, umorzenie_majatku=1000)
     f.lokaty = [Lokata(id=1, kwota=3000, oprocentowanie=0.05, od_rundy=1, miesiecy=3)]
     f.lokale = [Lokal(id="x", forma="najem", od_rundy=1, dziala_od=1, kaucja=4000),
                 Lokal(id="y", forma="kupno", od_rundy=1, dziala_od=1, cena=200000)]
@@ -20,7 +20,7 @@ def test_skladniki_i_dlugi():
     f.wartosc_magazynu_gr = {"mieso|2": 150000}
     f.kredyty = [Kredyt(id=2, kwota=20000, oprocentowanie=0.1, od_rundy=1, miesiecy=12, pozostalo=18000)]
     f.harpagon = PozyczkaHarpagona(kwota=5000, dlug=5250, od_rundy=1, termin=4)
-    f.leasingi = [Leasing(id=3, bank="ING", typ="kuchnia", nr=1, nazwa="grill", jakosc=2, cena=30000, od_rundy=1,
+    f.leasingi = [Leasing(id=3, bank="Oszczędności Rzeckiego", typ="kuchnia", nr=1, nazwa="grill", jakosc=2, cena=30000, od_rundy=1,
                           rund=12, pozostalo_rat=10, rata=900, wykup=300, zalegle=1)]
     m = majatek_netto(f)
     aktywa = 10000 + 3000 + 4000 + 700 + 1500 + 198000 + 7000   # bez portfela właściciela

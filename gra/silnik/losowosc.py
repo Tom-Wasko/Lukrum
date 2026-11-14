@@ -41,7 +41,7 @@ CELE = frozenset({
     "lokal",       # wybór lokalu przez bota: runda, nazwa firmy
     "licytacje",   # remis w licytacji lokalu: runda, id lokalu
     "popyt",       # szum popytu: runda, firma, usługa
-    "reklamacje",  # reklamacje: runda, firma, usługa
+    "pomylki",  # pomyłki w szczycie: runda, firma, usługa
     "rynek_pracy", # remisy w licytacjach i ofertach podkupienia: runda, rodzaj, id osoby
     "sanepid",     # kontrola sanepidu w lokalu (silnik/kuchnia/magazyn.py): runda, firma
     "odbior",      # tekst odbioru lokalu przez sanepid (silnik/ksiegowosc/urzad.py): runda, firma, lokal

@@ -29,27 +29,27 @@ def test_wartosci_wzorcowe():
 
 
 def test_ten_sam_strumien_te_same_liczby_niezaleznie_od_kolejnosci():
-    a = strumien(7, 2, "reklamacje", "F1", "joga").random(5).tolist()
+    a = strumien(7, 2, "pomylki", "F1", "joga").random(5).tolist()
     for cel in sorted(CELE):  # inne losowania pomiędzy nie zmieniają wyniku
         strumien(7, 2, cel, "F1").random(100)
-    assert strumien(7, 2, "reklamacje", "F1", "joga").random(5).tolist() == a
+    assert strumien(7, 2, "pomylki", "F1", "joga").random(5).tolist() == a
 
 
 @pytest.mark.parametrize(
     "inny",
     [
-        (8, 2, "reklamacje", "F1", "joga"),
-        (7, 3, "reklamacje", "F1", "joga"),
+        (8, 2, "pomylki", "F1", "joga"),
+        (7, 3, "pomylki", "F1", "joga"),
         (7, 2, "popyt", "F1", "joga"),
-        (7, 2, "reklamacje", "F2", "joga"),
-        (7, 2, "reklamacje", "F1|joga"),  # klucze nie sklejają się w jeden
-        ("7", 2, "reklamacje", "F1", "joga"),
+        (7, 2, "pomylki", "F2", "joga"),
+        (7, 2, "pomylki", "F1|joga"),  # klucze nie sklejają się w jeden
+        ("7", 2, "pomylki", "F1", "joga"),
     ],
 )
 def test_rozne_strumienie_rozne_liczby(inny):
     assert (
         strumien(*inny).random(3).tolist()
-        != strumien(7, 2, "reklamacje", "F1", "joga").random(3).tolist()
+        != strumien(7, 2, "pomylki", "F1", "joga").random(3).tolist()
     )
 
 

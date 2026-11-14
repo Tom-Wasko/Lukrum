@@ -49,21 +49,21 @@ def _dwa_lokale(gra_bota):
 def test_stary_zapis_utrwal_i_synchronizuj():
     """Pola lokali None: menu i ceny – kopia firmy w każdym lokalu, wyposażenie i partie – w pierwszym lokalu."""
     dane = dane_domyslne()
-    f = Firma(nazwa="A", oferta={"frytki": 10}, ceny={"frytki": Cena(cena=9)}, wyposazenie=["Stojak na rowery"],
+    f = Firma(nazwa="A", oferta={"frytki": 10}, ceny={"frytki": Cena(cena=9)}, wyposazenie=["Wiata rowerowa przy lokalu"],
               lokale=[Lokal(id="politechnika_1", forma="najem", od_rundy=1, dziala_od=2),
                       Lokal(id=DRUGI, forma="najem", od_rundy=1, dziala_od=2)])
     f.partie = [_partia(dane, "Bułka", 3)]
     a, b = f.lokale
-    assert pl.lista(f, a, "wyposazenie") == ["Stojak na rowery"] and pl.lista(f, b, "wyposazenie") == []
+    assert pl.lista(f, a, "wyposazenie") == ["Wiata rowerowa przy lokalu"] and pl.lista(f, b, "wyposazenie") == []
     pl.utrwal(f)
     assert a.menu == b.menu == {"frytki": 10} and b.ceny["frytki"].cena == 9 and b.ceny["frytki"] is not f.ceny["frytki"]
-    assert (a.wyposazenie, b.wyposazenie, b.udogodnienia) == (["Stojak na rowery"], [], [])
+    assert (a.wyposazenie, b.wyposazenie, b.udogodnienia) == (["Wiata rowerowa przy lokalu"], [], [])
     assert f.partie[0].lokal == "politechnika_1"
-    b.menu, b.wyposazenie = {"frytki": 4, "napoj": 6}, ["Stojak na rowery"]
+    b.menu, b.wyposazenie = {"frytki": 4, "napoj": 6}, ["Wiata rowerowa przy lokalu"]
     b.ceny["napoj"] = Cena(cena=5)
     pl.synchronizuj(f)
     assert f.oferta == {"frytki": 14, "napoj": 6} and f.ceny["napoj"].cena == 5
-    assert f.wyposazenie == ["Stojak na rowery", "Stojak na rowery"]   # każdy lokal ma swój stojak (utrzymanie × 2)
+    assert f.wyposazenie == ["Wiata rowerowa przy lokalu", "Wiata rowerowa przy lokalu"]   # każdy lokal ma swój stojak (utrzymanie × 2)
     # lokal dokupiony do podzielonej firmy: dania firmy bez prognozy, bez wyposażenia
     f.lokale.append(Lokal(id="centrum_2", forma="najem", od_rundy=2, dziala_od=3))
     pl.utrwal(f)
@@ -151,7 +151,7 @@ def test_oferty_lokali_ceny_menu_i_wyposazenie(gra_bota):
 def test_decyzje_w_lokalu(gra_bota):
     dane, f, r, pierwszy = _dwa_lokale(gra_bota)
     u, v = list(f.oferta)[:2]
-    ud = "Stojak na rowery"   # udogodnienie bota (w pierwszym lokalu) – drugi lokal kupuje swoje
+    ud = f.lokale[0].udogodnienia[0]   # udogodnienie bota (w pierwszym lokalu) – drugi lokal kupuje swoje
     d = {"oferta": {u: 10, v: 6}, "sprzedaz": {u: {"cena": f.ceny[u].cena}, v: {"cena": f.ceny[v].cena}},
          "w_lokalu": {DRUGI: {"oferta": {u: 4}, "sprzedaz": {u: {"cena": f.ceny[u].cena + 1}},
                               "udogodnienia_kup": [ud]}},

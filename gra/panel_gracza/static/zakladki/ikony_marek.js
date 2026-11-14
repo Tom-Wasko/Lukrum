@@ -30,12 +30,11 @@ const WLASNE = {
   "Zakłady Mięsne „Rożen” z Łęcznej": '<path d="M13.2 4.2c3.8-1.6 7.6 2.2 6 6-1 2.4-3.4 3.4-5.6 3.6l-3.4 3.4"/><path d="M13.2 4.2c-2.4 1-3.4 3.4-3.6 5.6l-3.4 3.4"/>'
     + '<path d="M6.2 13.2 10.8 17.8M6.2 13.2a2 2 0 1 0-2.6 2.4 2 2 0 1 0 2.4 2.6M10.8 17.8l-4.8.2"/>',
   // biura rachunkowe (mapa/biura.yaml)
-  "Biuro Rachunkowe J.K.Ś.": '<rect x="5" y="2.5" width="14" height="19" rx="2"/><rect x="8" y="5.5" width="8" height="3.5" rx=".5"/><path d="M15.5 15v3.5"/>'
+  "J.K.Ś.": '<rect x="5" y="2.5" width="14" height="19" rx="2"/><rect x="8" y="5.5" width="8" height="3.5" rx=".5"/><path d="M15.5 15v3.5"/>'
     + kropki([[8.7, 12], [12, 12], [15.3, 12], [8.7, 15.3], [12, 15.3], [8.7, 18.5], [12, 18.5]], 0.95),
-  "Księgowość Pod Trybunałem": '<path d="M3 21h18M5 21V11h14v10M10 11V6.5L12 3l2 3.5V11"/><circle cx="12" cy="8" r="1"/><path d="M8 14v4M12 14v4M16 14v4"/>',
-  "Pani Halinka – księgowość z sercem": '<path d="M12 20.5S3.5 15.6 3.5 9.6A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 8.5 2.2c0 6-8.5 10.9-8.5 10.9z"/><path d="M8.5 12.5l2.4 2.4 4.6-4.6"/>',
-  "e-Księgi24.pl": '<rect x="4" y="4" width="16" height="11.5" rx="1.5"/><path d="M2 19.5h20"/><path d="M14.6 11.6a3 3 0 1 1 .2-3.3M15 6.3v2.2h-2.2"/>',
-  "Kancelaria Podatkowa Debet & Kredyt": '<path d="M12 3v17M7.5 21h9M5 6.5h14"/><path d="M5 6.5 2.5 13a2.5 2.5 0 0 0 5 0L5 6.5zM19 6.5 16.5 13a2.5 2.5 0 0 0 5 0L19 6.5z"/>',
+  "Józef K.": '<path d="M3 21h18M5 21V11h14v10M10 11V6.5L12 3l2 3.5V11"/><circle cx="12" cy="8" r="1"/><path d="M8 14v4M12 14v4M16 14v4"/>',
+  "Scrooge": '<path d="M12 20.5S3.5 15.6 3.5 9.6A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 8.5 2.2c0 6-8.5 10.9-8.5 10.9z"/><path d="M8.5 12.5l2.4 2.4 4.6-4.6"/>',
+  "Asteroida 328": '<path d="M12 3v17M7.5 21h9M5 6.5h14"/><path d="M5 6.5 2.5 13a2.5 2.5 0 0 0 5 0L5 6.5zM19 6.5 16.5 13a2.5 2.5 0 0 0 5 0L19 6.5z"/>',
   Samodzielnie: '<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4L16.5 3.5z"/><path d="M14.5 5.5l3 3M4 22h16"/>',
   // agencje reklamowe (mapa/reklama.yaml)
   "Drukarnia „Papier Przyjmie”": '<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6.5 14h11v7h-11zM9 17h6"/>' + kropki([[17.6, 11.6]], 0.9),
@@ -86,12 +85,12 @@ const WLASNE = {
   Makro: PALETA,
   Selgros: PALETA,
   Eurocash: PALETA,
-  "Crédit Agricole": BANK,
-  "PKO BP": BANK,
-  Pekao: BANK,
-  ING: BANK,
-  mBank: BANK,
-  Santander: BANK,
+  Kmicic: BANK,
+  "Wokulski i S-ka": BANK,
+  "Ziemia Obiecana": BANK,
+  "Oszczędności Rzeckiego": BANK,
+  Soplicowo: BANK,
+  Solaris: BANK,
   IKEA: DOM,
   OBI: MLOTEK,
   Castorama: MLOTEK,
@@ -125,19 +124,6 @@ const LOGA = {
     return `<circle cx="${(16 + 9.5 * Math.cos(a)).toFixed(2)}" cy="${(16 + 9.5 * Math.sin(a)).toFixed(2)}" r="1.6"/>`;
   }).join("")}</g><rect x="11" y="11" width="10" height="10" rx="1.5" fill="#fff"/><path d="M11 14.5h10M16 11v3.5" stroke="#003a8c" stroke-width="1.3"/>`),
   // banki (mapa/banki.yaml)
-  "Crédit Agricole": t("#00828c", '<path d="M16 6.5 7 25.5h4.8L16 16l4.2 9.5H25L16 6.5z" fill="#fff"/><path d="M4 25.5h24" stroke="#7ec242" stroke-width="2.6"/>'),
-  "PKO BP": t("#003574", '<path d="M8 18.5c0-4.6 3.8-7.5 8.5-7.5 3 0 5.2 1 6.6 2.6l2.6-.6-.8 3c.6.8 1 1.6 1.1 2.5H27.5v3h-1.8c-.7 1.3-1.8 2.3-3.2 3V27h-3v-1.6c-.9.2-1.9.2-3 .2s-2-.1-3-.3V27h-3v-3c-2.2-1.2-3.5-3.2-3.5-5.5z" fill="#fff"/>'
-    + '<path d="M13.5 13.6h5" stroke="#003574" stroke-width="1.3" stroke-linecap="round"/><circle cx="16" cy="7.2" r="3" fill="#e2b33c"/><circle cx="23" cy="16.8" r=".9" fill="#003574"/>'),
-  Pekao: t("#c8102e", '<path d="M3.5 24c0-6 2.6-11.5 8-13 3-.8 6.5-.8 9 .2 1.8-.6 3.8.1 4.8 1.6l2.2 3-1.4 1.6c-.6 1.6-1.6 2.6-3 3.2V27h-2.8v-4c-2 .5-4 .6-6 .3V27h-2.8v-4.2c-1.3-.5-2.3-1.2-3-2L6.5 27H4l-.5-3z" fill="#fff"/>'
-    + '<path d="M21.5 11.4c-.2-1.8.6-3.2 2.2-3.8M25.2 12.4c.8-1.4 2.2-2 3.4-1.6" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/><path d="M24.5 19.5l.6 2.5 1-2.2" fill="#fff"/><circle cx="23.8" cy="14.2" r=".9" fill="#c8102e"/>'),
-  ING: t("#fff", `<g fill="#ff6200">${Array.from({ length: 9 }, (_, i) => {
-    const a = (i * 40) * Math.PI / 180;
-    return `<circle cx="${(10 + 5.2 * Math.cos(a)).toFixed(2)}" cy="${(13 + 5.2 * Math.sin(a)).toFixed(2)}" r="2.6"/>`;
-  }).join("")}<circle cx="10" cy="13" r="5.5"/><path d="M13 11h10.5c1.5 0 2.5 1.2 2.5 2.6V19c0 .8-.6 1.5-1.4 1.5V25h-2.3v-4.5h-6V25H14v-4.5h-1V11z"/></g>`
-    + '<path d="M26 13.5c1.8-.4 2.6-2 2.2-4" fill="none" stroke="#ff6200" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="10.7" r="2.9" fill="#ffb27a"/><circle cx="11.4" cy="10.2" r=".7" fill="#1d1d1b"/>'),
-  mBank: t("#fff", '<rect x="4" y="9" width="7" height="14" rx="3.5" fill="#e2001a"/><rect x="12.5" y="9" width="7" height="14" rx="3.5" fill="#f39200"/><rect x="21" y="9" width="7" height="14" rx="3.5" fill="#e5007e"/>'),
-  Santander: t("#ec0000", '<path d="M16.5 5c1.2 2.8 4.6 5.6 4.6 9.6 0 1.6-.6 3-1.6 4 .3-2-.6-3.8-2-5.4.2 2-.6 3.4-1.8 4.4-1 .8-2.4 1.1-3.4 1-.8-.8-1.4-2.1-1.4-3.4 0-3 2.4-4.6 3.6-6.8.8-1.4 1.8-2.4 2-3.4z" fill="#fff"/>'
-    + '<path d="M6.5 22.5c3-2 6-2.8 9.5-2.8s6.5.8 9.5 2.8c-3 1.5-6 2.2-9.5 2.2s-6.5-.7-9.5-2.2z" fill="#fff"/>'),
   // sklepy z wyposażeniem (katalog.yaml: wyposazenie.sklep)
   IKEA: t("#0058a3", '<ellipse cx="16" cy="16" rx="13" ry="8.2" fill="#ffdb00"/>'),
   OBI: t("#ff7d00", '<path d="M6.5 25.5 17 15" stroke="#fff" stroke-width="3" stroke-linecap="round"/>'
@@ -148,7 +134,7 @@ const LOGA = {
   "Leroy Merlin": t("#78be20", '<path d="M6 25V15L16 6.5 26 15v10z" fill="#fff"/><path d="M11 25v-7h10v7" fill="#78be20"/>'),
 };
 
-const PRZEDROSTKI = /^Konto firmowe: /;   // banki.js: karta konta z nazwą „Konto firmowe: mBank”
+const PRZEDROSTKI = /^Konto firmowe: /;   // banki.js: karta konta z nazwą „Konto firmowe: Soplicowo”
 const klucz = (nazwa) => String(nazwa ?? "").replace(PRZEDROSTKI, "").trim();
 
 // SVG znaku marki albo "" (brak ikony – wtedy litery w znakMarki)

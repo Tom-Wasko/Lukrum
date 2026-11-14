@@ -127,7 +127,7 @@ opinie:
   cena_limit: 0.6        # największy wpływ ceny w jedną stronę (gwiazdki)
   kolejka: 4.0           # × udział klientów, którzy odeszli z kolejki (pracownicy, sprzęt, kasa) × czekanie grup
   brak: 3.0              # × udział klientów odesłanych z braku dania (składniki, stanowisko)
-  reklamacje: 10.0       # × udział reklamacji w sprzedaży
+  pomylki: 2.5           # × udział pomyłek w sprzedaży (słabiej niż kolejka: 10% pomyłek ≈ −0,25★)
   wyposazenie: 2.0       # × (mnożnik wyposażenia − 1)
   udzial_opinii: 0.02    # ułamek obsłużonych klientów, którzy wystawiają opinię
   rozrzut: 0.8           # rozrzut pojedynczej opinii (gwiazdki); średnia tygodnia – rozrzut / √liczby
@@ -164,12 +164,12 @@ komentarze:
     - Chciałam falafel, a usłyszałam „dziś nie ma”. Wczoraj też nie było.
     - Połowa menu wykreślona markerem. Fajne bazgroły.
     - Zamówiłem danie z menu i okazało się, że to była tylko propozycja.
-  reklamacje:
+  pomylki:
     - Oddałem jedzenie do reklamacji. Kucharz wyglądał, jakby to była rutyna.
     - Zamiast frytek dostałam rozczarowanie w papierowej torbie.
     - Było zimne. Gorąca była tylko moja reklamacja.
   wyposazenie:
-    - Klimatyzacja, wygodne krzesła – prawie zostałem tu zamieszkać.
+    - Chłodno w środku, wygodne ławy – prawie zostałem tu zamieszkać.
     - Ładnie tu, nawet kwiatek w doniczce na serio żyje.
   ogolnie_plus:
     - Szybko, smacznie, uprzejmie. Czego chcieć więcej? Może drugiego kebaba.

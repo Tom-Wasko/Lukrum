@@ -9,105 +9,92 @@ znani:
   zawod: Kucharz
   pensja_preferowana: 5700
   koszt_rekrutacji: 600
-  koszt_odprawy: 2850
   zadowolenie_klientow: 0.99
-  ryzyko_reklamacji: 0.02
+  ryzyko_pomylki: 0.003
 - imie_nazwisko: Halina Rożnowska
   gwiazdki: 3
   zawod: Kucharz
   pensja_preferowana: 5500
   koszt_rekrutacji: 500
-  koszt_odprawy: 2750
   zadowolenie_klientow: 0.97
-  ryzyko_reklamacji: 0.02
+  ryzyko_pomylki: 0.003
 - imie_nazwisko: Ołeksandr Kowalenko
   gwiazdki: 2
   zawod: Kucharz
   pensja_preferowana: 5250
   koszt_rekrutacji: 400
-  koszt_odprawy: 2100
   zadowolenie_klientow: 0.93
-  ryzyko_reklamacji: 0.04
+  ryzyko_pomylki: 0.006
 - imie_nazwisko: Ayşe Demir
   gwiazdki: 2
   zawod: Kucharz
   pensja_preferowana: 5150
   koszt_rekrutacji: 350
-  koszt_odprawy: 2060
   zadowolenie_klientow: 0.91
-  ryzyko_reklamacji: 0.05
+  ryzyko_pomylki: 0.0075
 - imie_nazwisko: Tadeusz Sosik
   gwiazdki: 2
   zawod: Kucharz
   pensja_preferowana: 5050
   koszt_rekrutacji: 300
-  koszt_odprawy: 1515
   zadowolenie_klientow: 0.88
-  ryzyko_reklamacji: 0.07
+  ryzyko_pomylki: 0.0105
 - imie_nazwisko: Kamil Frytkowski
   gwiazdki: 1
   zawod: Kucharz
   pensja_preferowana: 4950
   koszt_rekrutacji: 250
-  koszt_odprawy: 1485
   zadowolenie_klientow: 0.79
-  ryzyko_reklamacji: 0.1
+  ryzyko_pomylki: 0.015
 - imie_nazwisko: Bartłomiej Czosnek
   gwiazdki: 1
   zawod: Kucharz
   pensja_preferowana: 4880
   koszt_rekrutacji: 200
-  koszt_odprawy: 1464
   zadowolenie_klientow: 0.75
-  ryzyko_reklamacji: 0.12
+  ryzyko_pomylki: 0.018
 - imie_nazwisko: Iryna Melnyk
   gwiazdki: 1
   zawod: Kucharz
   pensja_preferowana: 4820
   koszt_rekrutacji: 200
-  koszt_odprawy: 1446
   zadowolenie_klientow: 0.77
-  ryzyko_reklamacji: 0.11
+  ryzyko_pomylki: 0.0165
 - imie_nazwisko: Zuzanna Pita
   gwiazdki: 3
   zawod: Kasjer
   pensja_preferowana: 5400
   koszt_rekrutacji: 400
-  koszt_odprawy: 2700
   zadowolenie_klientow: 0.99
-  ryzyko_reklamacji: 0.01
+  ryzyko_pomylki: 0.0015
 - imie_nazwisko: Emre Kaya
   gwiazdki: 2
   zawod: Kasjer
   pensja_preferowana: 5100
   koszt_rekrutacji: 300
-  koszt_odprawy: 1530
   zadowolenie_klientow: 0.88
-  ryzyko_reklamacji: 0.06
+  ryzyko_pomylki: 0.009
 - imie_nazwisko: Natalia Szybka
   gwiazdki: 2
   zawod: Kasjer
   pensja_preferowana: 5000
   koszt_rekrutacji: 250
-  koszt_odprawy: 1500
   zadowolenie_klientow: 0.86
-  ryzyko_reklamacji: 0.07
+  ryzyko_pomylki: 0.0105
 - imie_nazwisko: Wiesław Reszta
   gwiazdki: 1
   zawod: Kasjer
   pensja_preferowana: 4900
   koszt_rekrutacji: 200
-  koszt_odprawy: 1470
   zadowolenie_klientow: 0.78
-  ryzyko_reklamacji: 0.1
+  ryzyko_pomylki: 0.015
 - imie_nazwisko: Daria Bondarenko
   gwiazdki: 1
   zawod: Kasjer
   pensja_preferowana: 4810
   koszt_rekrutacji: 200
-  koszt_odprawy: 1443
   zadowolenie_klientow: 0.74
-  ryzyko_reklamacji: 0.12
+  ryzyko_pomylki: 0.018
 losowanie:
   zrodlo: 'założenie autora: profile pracowników; liczby kandydatów – założenie (typowa drużyna zatrudnia ok. 18 osób
     w 5 miesięcy)'
@@ -131,8 +118,8 @@ losowanie:
       - 0.7
       - 0.82
       ryzyko:
-      - 0.08
-      - 0.15
+      - 0.012
+      - 0.022
     '2':
       pensja:
       - 5005
@@ -141,8 +128,8 @@ losowanie:
       - 0.8
       - 0.89
       ryzyko:
-      - 0.05
-      - 0.1
+      - 0.0075
+      - 0.015
     '3':
       pensja:
       - 5280
@@ -151,23 +138,11 @@ losowanie:
       - 0.95
       - 1.0
       ryzyko:
-      - 0.01
-      - 0.03
-  koszty_rekrutacji:
-  - 200
-  - 250
-  - 300
-  - 350
-  - 400
-  - 500
-  - 600
-  - 700
-  odprawa_czesc_pensji:
-  - 0.3
-  - 0.35
-  - 0.4
-  - 0.5
-  - 0.6
+      - 0.0015
+      - 0.0045
+  koszt_rekrutacji_czesc_pensji:
+  - 0.05
+  - 0.09
 agencja:
   zrodlo: notatki „Elementy mapy” (Agencja pracy, limit 3), „Ustalenia gry” (odblokowanie, okres wypowiedzenia),
     „Prawidła świata” (KP art. 36); opłaty, gwiazdki w kanałach i czas właściciela – założenie F3a.8

@@ -18,9 +18,9 @@ Gra ma działać jak dotąd. Nowy wygląd przyjdzie później.
 Wynik: `raporty/wyglad/plan.md` z kierunkiem wyglądu mapy, kolorami, czcionkami i wersją na telefon.
 
 ## Nowe mechaniki – tor A (w tle, osobna gałąź `mechaniki-a`)
-- [ ] wynik 0–1000 pkt z pięciu działów, ranking jako suma tygodni, „Wielkie otwarcie”
-- [ ] debet z opłatą zamiast automatycznego kredytu, pomyłki w szczycie zamiast reklamacji
-- [ ] biura w pakietach S/M/L, kapitał 50 000 zł, banki ze specjalizacjami (nazwy z lektur)
+- [x] wynik 0–1000 pkt z pięciu działów, ranking jako suma tygodni, „Wielkie otwarcie” (gałąź mechaniki-a)
+- [ ] debet z opłatą zamiast automatycznego kredytu (zrobione), pomyłki w szczycie zamiast reklamacji
+- [x] biura w pakietach S/M/L, kapitał 50 000 zł, banki ze specjalizacjami (nazwy z lektur)
 - [ ] kadry według Kodeksu pracy, nowe katalogi, usunięcie starej reklamy
 - [ ] pomiary botów i raport do zatwierdzenia przez autora
 

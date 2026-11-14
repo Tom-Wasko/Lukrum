@@ -1,9 +1,9 @@
 """Zadowolenie każdej osoby i odejścia z niezadowolenia (U20, decyzja autora 4.11.2026).
 
-Zadowolenie osoby liczy ten sam wzór co wskaźnik karty (karta_wynikow.zadowolenie_pracownikow), tylko dla jednej osoby:
+Zadowolenie osoby liczy własny wzór LUKRUM (zalozenia.yaml: zadowolenie_osoby):
 jej pensja z premią ÷ preferowana, sprzęt jej stanowiska, udogodnienia jej lokalu, szkolenia firmy, umowa zlecenie
-i przepracowanie (próg z kebabu karty). Charakter osoby (dane/kandydaci.yaml: cechy) mnoży składniki albo przesuwa
-wynik; panel pokazuje go jawnie (nazwa i skutki – `charakter`). Wskaźnik karty liczy się jak dotąd (kalibracja karty bez zmian).
+i przepracowanie (powyżej progu obciążenia). Charakter osoby (dane/kandydaci.yaml: cechy) mnoży składniki albo przesuwa
+wynik; panel pokazuje go jawnie (nazwa i skutki – `charakter`).  Średnia z osób to składnik „Zadowolenie zespołu” w dziale Zespół wyniku punktowego.
 
 Poniżej progu (zalozenia.yaml: pracownicy.odejscia) pierwszy tydzień to tylko ostrzeżenie na liście błędów; od kolejnego
 tygodnia z rzędu osoba może złożyć wypowiedzenie – szansa rośnie z niezadowoleniem. Wypowiedzenie działa jak
@@ -49,12 +49,11 @@ def placa_wzgledna(dane: Dane, p: Pracownik) -> float:
 
 
 def skladniki(dane: Dane, f: Firma, p: Pracownik, wykorzystanie: float, szkolenia_procent: float) -> dict[str, float]:
-    w = dane.z["karta_wynikow"]["zadowolenie_pracownikow"]
-    kb = dane.z["karta_wynikow"]["kebab"]["zadowolenie_pracownikow"]
+    w = dane.z["zadowolenie_osoby"]["wspolczynniki"]
     c = wplyw(dane, p)
     st = f.stanowisko(dane.typ_zawodu(p.zawod), p.stanowisko)
     jakosci = list(st.sprzet.values()) if st else []
-    sprzet = float(np.mean(jakosci)) if jakosci else ustawienia(dane)["sprzet_bez_sprzetu"]
+    sprzet = float(np.mean(jakosci)) if jakosci else w["sprzet_bez_sprzetu"]
     lok = pl.lokal(f, st.lokal) if st else None
     poz = dane.pozycje("udogodnienia")
     udog = sum(poz[n]["procent"] / 100 for n in pl.lista(f, lok, "udogodnienia")) if lok else 0.0
@@ -65,16 +64,16 @@ def skladniki(dane: Dane, f: Firma, p: Pracownik, wykorzystanie: float, szkoleni
         "placa": (w["placa_wzgledem_preferowanej"] * (pw - 1) - kara) * c["placa"],
         "sprzet": w["sprzet_na_gwiazdke"] * (sprzet - 3) * c["warunki"],
         "udogodnienia": w["udogodnienia_na_procent"] * udog * c["warunki"],
-        "szkolenia": (w["szkolenia_w_miesiacu_na_procent"] * szkolenia_procent
-                      + w.get("szkolenie_w_miesiacu", 0.0) * (szkolenia_procent > 0)),
-        "umowa": w["udzial_umow_zlecenie"] * bool(fz.forma(dane, p.umowa)["kara_zlecenia"]),
-        "przeciazenie": kb["przepracowanie"] * max(0.0, wykorzystanie - kb["prog_przepracowania"]) * c["przeciazenie"],
+        "szkolenia": (w["szkolenia_w_tygodniu_na_procent"] * szkolenia_procent
+                      + w["szkolenie_w_tygodniu"] * (szkolenia_procent > 0)),
+        "umowa": w["umowa_zlecenie"] * bool(fz.forma(dane, p.umowa)["kara_zlecenia"]),
+        "przeciazenie": w["przepracowanie"] * max(0.0, wykorzystanie - w["prog_przepracowania"]) * c["przeciazenie"],
         "charakter": c["zadowolenie"],
     }
 
 
 def zadowolenie(dane: Dane, skl: dict[str, float]) -> float:
-    return round(dane.z["karta_wynikow"]["zadowolenie_pracownikow"]["stala"] + sum(skl.values()), 3)
+    return round(dane.z["zadowolenie_osoby"]["wspolczynniki"]["stala"] + sum(skl.values()), 3)
 
 
 def zasady_tempa(dane: Dane) -> dict | None:

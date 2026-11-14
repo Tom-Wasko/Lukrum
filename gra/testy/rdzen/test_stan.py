@@ -33,9 +33,8 @@ pracownicy = st.builds(
     gwiazdki=st.integers(1, 3),
     pensja_preferowana_gr=KWOTY,
     koszt_rekrutacji_gr=KWOTY,
-    koszt_odprawy_gr=KWOTY,
     zadowolenie_klientow=st.floats(0, 2),
-    ryzyko_reklamacji=st.floats(0, 1),
+    ryzyko_pomylki=st.floats(0, 1),
     pensja_gr=KWOTY,
     premia_gr=KWOTY,
 )
@@ -59,7 +58,7 @@ firmy = st.builds(
         ),
         max_size=2,
     ),
-    kredyt_odnawialny_gr=KWOTY,
+    debet_gr=KWOTY,
     majatek_gr=KWOTY,
     skumulowany_dochod_netto_gr=KWOTY,
 )

@@ -26,16 +26,16 @@ def test_wariant_bez_zmian_daje_gre_bota():
 
 
 def test_wymuszona_decyzja_tylko_gdy_bot_ja_podejmuje():
-    w = wr.Wariant("x", decyzje=(("bank", "ING"), ("kampanie", [])), zatrudnienie=(("umowa", "zlecenie"),))
-    d = wr._wymus(w, {"bank": "mBank", "zatrudnij": [{"zawod": "kucharz", "umowa": "prace"}]})
-    assert d == {"bank": "ING", "zatrudnij": [{"zawod": "kucharz", "umowa": "zlecenie"}]}
+    w = wr.Wariant("x", decyzje=(("bank", "Oszczędności Rzeckiego"), ("kampanie", [])), zatrudnienie=(("umowa", "zlecenie"),))
+    d = wr._wymus(w, {"bank": "Soplicowo", "zatrudnij": [{"zawod": "kucharz", "umowa": "prace"}]})
+    assert d == {"bank": "Oszczędności Rzeckiego", "zatrudnij": [{"zawod": "kucharz", "umowa": "zlecenie"}]}
 
 
 def test_wariant_zmienia_wynik_badanej_firmy():
     kat = wr.katalog_wariantow(D)
-    assert {"bank:ING", "umowa:zlecenie", "jakosc:3", "lokale:drugi", "menu:3", "promocja:karta"} <= set(kat)
+    assert {"bank:Kmicic", "umowa:zlecenie", "jakosc:3", "lokale:drugi", "menu:3", "promocja:karta"} <= set(kat)
     baza = wr.rozegraj(wr.Zadanie(K, 3))
-    assert wr.rozegraj(wr.Zadanie(K, 3, kat["bank:ING"]))["karta"] != baza["karta"]
+    assert wr.rozegraj(wr.Zadanie(K, 3, kat["bank:Kmicic"]))["karta"] != baza["karta"]
 
 
 def test_nadpisanie_strategii_nie_zmienia_danych_gry():
@@ -62,11 +62,11 @@ def test_wybor_wariantow_po_przedrostku():
 
 def test_pomiar_zapisuje_gry_i_wznawia_sie(tmp_path):
     kat = wr.katalog_wariantow(D)
-    lista = wr.zadania([K], [1, 2], [kat["bank:ING"], kat["kampanie:brak"]])
+    lista = wr.zadania([K], [1, 2], [kat["bank:Kmicic"], kat["kampanie:brak"]])
     assert wr.mierz(tmp_path, lista) == 6
     assert wr.mierz(tmp_path, lista) == 0                       # wznowienie nie powtarza gier
     tekst = wr.raport(tmp_path)
-    assert "bank:ING" in tekst and "kampanie:brak" in tekst and K.klucz() in tekst
+    assert "bank:Kmicic" in tekst and "kampanie:brak" in tekst and K.klucz() in tekst
     assert len(wr.pary(wr._wczytaj_gry(tmp_path / "gry.csv"))) == 4
     assert (tmp_path / "pary.csv").exists()
 
@@ -81,7 +81,7 @@ def test_pomiar_zapisuje_strefe_lokalu_i_wznawia_stary_uklad(tmp_path):
     stary.mkdir()
     (stary / "gry.csv").write_text(",".join(["kontekst", *wr.asdict(k), "ziarno", "wariant", *wr.POLA_GRY]) + "\n",
                                    encoding="utf-8")
-    assert wr.mierz(stary, wr.zadania([k], [1], [kat["bank:ING"]])) == 2
+    assert wr.mierz(stary, wr.zadania([k], [1], [kat["bank:Kmicic"]])) == 2
     gry = wr._wczytaj_gry(stary / "gry.csv")
     assert len(gry) == 2 and "strefy_lokali" not in gry[0] and len(wr.pary(gry)) == 1
 
