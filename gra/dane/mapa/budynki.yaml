@@ -2,7 +2,8 @@
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Budynki na mapie. miejsce – prawdziwe położenie w Lublinie (plan, rozdz. 6); adres i geo dopisuje
   strona mapy z OSM; wnetrze – id wnętrza budynku. Każdy prowadzi do zakładki gry (zakladka – klucz z panel_gracza/static/zakladki/index.js;
-  null = jeszcze bez zakładki). Własny lokal drużyny otwiera okno z zakładkami firmy. mapa: pola siatki.'
+  null = jeszcze bez zakładki). Własny lokal drużyny otwiera okno z zakładkami firmy. mapa: pola siatki.
+  zespol – id budynku zbiorczego z listy zespoly (na nowej mapie rysuje się tylko zespół, w środku wybór firmy).'
 zrodlo: notatka „Elementy mapy” (banki w dwóch rzędach po trzy, dostawcy, sklepy, parki, agencje, urząd); nazwy
   banków z mapa/banki.yaml (F3a.9), biur, dostawców i firm szkoleniowych z katalog.yaml i dostawcy.yaml
 budynki:
@@ -11,6 +12,7 @@ budynki:
   rodzaj: bank
   strefa: centrum
   miejsce: Krakowskie Przedmieście (Śródmieście)
+  zespol: kamienica_bankowa
   opis: Bank – kredyt na start dla firmy bez historii (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
@@ -23,6 +25,7 @@ budynki:
   rodzaj: bank
   strefa: centrum
   miejsce: Krakowskie Przedmieście (Śródmieście)
+  zespol: kamienica_bankowa
   opis: Bank – kredyt inwestycyjny pod zastaw (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
@@ -35,6 +38,7 @@ budynki:
   rodzaj: bank
   strefa: centrum
   miejsce: Krakowskie Przedmieście (Śródmieście)
+  zespol: kamienica_bankowa
   opis: Bank – leasing sprzętu (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
@@ -47,6 +51,7 @@ budynki:
   rodzaj: bank
   strefa: centrum
   miejsce: Krakowskie Przedmieście (Śródmieście)
+  zespol: kamienica_bankowa
   opis: Bank – najlepsze lokaty (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
@@ -59,6 +64,7 @@ budynki:
   rodzaj: bank
   strefa: centrum
   miejsce: Krakowskie Przedmieście (Śródmieście)
+  zespol: kamienica_bankowa
   opis: Bank – najtańsze konto firmowe i terminal (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
@@ -71,6 +77,7 @@ budynki:
   rodzaj: bank
   strefa: centrum
   miejsce: Krakowskie Przedmieście (Śródmieście)
+  zespol: kamienica_bankowa
   opis: Bank – największy debet (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
@@ -83,6 +90,7 @@ budynki:
   rodzaj: biuro
   strefa: stare_miasto
   miejsce: biurowce przy ul. Zana (Rury)
+  zespol: biurowiec_zana
   opis: 'Pięć biur rachunkowych pod jednym dachem (J.K.Ś. Jakuba Klimka-Ślęzaka, Pod Trybunałem, Pani Halinka,
     e-Księgi24.pl, Debet & Kredyt) i pokój z biurkiem dla tych, którzy księgują sami. Na klatce schodowej
     pachnie tonerem i drożdżówkami.'
@@ -337,6 +345,7 @@ budynki:
   rodzaj: reklama
   strefa: akademickie
   miejsce: biurowce przy ul. Zana (Rury)
+  zespol: biurowiec_zana
   opis: Marketing internetowy (od rundy 7) – posty, influencerka, TikTok, wizytówka w mapach, grupa „Lublin Jedzie”
     (dane/mapa/reklama.yaml, sekcja internet).
   zakladka: internet
@@ -470,6 +479,7 @@ budynki:
   rodzaj: reklama
   strefa: centrum
   miejsce: biurowce przy ul. Zana (Rury)
+  zespol: biurowiec_zana
   opis: Spot w radiu na całe miasto i billboardy przy rondach (dane/mapa/reklama.yaml).
   zakladka: agencje
   mapa:
@@ -482,6 +492,7 @@ budynki:
   rodzaj: reklama
   strefa: stare_miasto
   miejsce: biurowce przy ul. Zana (Rury)
+  zespol: biurowiec_zana
   opis: Degustacje na festynach osiedlowych i Noc Kebaba na otrzęsinach (dane/mapa/reklama.yaml).
   zakladka: agencje
   mapa:
@@ -494,6 +505,7 @@ budynki:
   rodzaj: ubezpieczenia
   strefa: centrum
   miejsce: biurowce przy ul. Zana (Rury)
+  zespol: biurowiec_zana
   opis: Polisy na lokal, sprzęt i OC – odszkodowania po wypadkach w lokalu (dane/zdarzenia/losowe.yaml).
   zakladka: ubezpieczenia
   mapa:
@@ -518,6 +530,7 @@ budynki:
   rodzaj: gielda
   strefa: centrum
   miejsce: Krakowskie Przedmieście (Śródmieście)
+  zespol: kamienica_bankowa
   opis: Biuro maklerskie przy Krakowskim Przedmieściu – prawdziwe notowania spółek S&P 500. Właściciel inwestuje
     tu prywatne pieniądze z portfela (G4, decyzja autora 8.11.2026).
   zakladka: gielda
@@ -526,3 +539,13 @@ budynki:
     y: 6
     szer: 1
     gl: 1
+# Budynki zbiorcze nowej mapy (decyzja autora 14.11): jeden budynek na mapie, w środku hol z szyldami
+zespoly:
+- id: kamienica_bankowa
+  nazwa: Kamienica bankowa
+  opis: Kamienica przy deptaku z szyldami sześciu banków i biura maklerskiego. W środku wybiera się bank.
+  miejsce: Krakowskie Przedmieście (Śródmieście)
+- id: biurowiec_zana
+  nazwa: Biurowiec przy Zana
+  opis: Biurowiec z holem i tablicą firm – biura rachunkowe, agencje reklamy, ubezpieczyciel.
+  miejsce: biurowce przy ul. Zana (Rury)

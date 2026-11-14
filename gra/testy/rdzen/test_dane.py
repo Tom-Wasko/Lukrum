@@ -106,3 +106,16 @@ def test_nowe_udogodnienia_nie_zmieniaja_wyboru_botow_uf9():
         assert 5 <= p["od_rundy"] <= 14, p["nazwa"]
         assert p["cena"] / p["procent"] > 37.5, p["nazwa"]
         assert p["od_rundy"] >= 9 or p["cena"] >= 1500, p["nazwa"]
+
+
+def test_budynek_w_zespole_wskazuje_istniejacy_zespol(tmp_path):
+    """Kamienica bankowa i biurowiec przy Zana (decyzja autora 14.11): zespół musi być na liście zespoly."""
+    d = Dane()
+    zespoly = {z["id"] for z in d.mapa["zespoly"]}
+    assert zespoly == {"kamienica_bankowa", "biurowiec_zana"}
+    w_zespole = {b["id"]: b["zespol"] for b in d.mapa["budynki"] if b.get("zespol")}
+    assert w_zespole["bank_1"] == w_zespole["gielda"] == "kamienica_bankowa"
+    assert w_zespole["biura"] == w_zespole["ubezpieczyciel"] == "biurowiec_zana"
+    kat = _kopia(tmp_path)
+    _zmien(kat, "mapa/budynki.yaml", lambda p: p["budynki"][0].update(zespol="nie_ma"))
+    assert any("nie_ma" in b and "zespoly" in b for b in sprawdz(kat))
