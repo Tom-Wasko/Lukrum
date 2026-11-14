@@ -706,10 +706,23 @@ class Budynek(Schemat):
     adres: str | None = None
     geo: Geo | None = None
     wnetrze: str | None = None
+    zespol: str | None = None   # id budynku zbiorczego (kamienica, biurowiec): na nowej mapie rysuje się tylko zespół
+
+
+class Zespol(Schemat):
+    """Budynek zbiorczy na nowej mapie: po kliknięciu hol z szyldami, potem wybór firmy (decyzja autora 14.11)."""
+    id: str = Field(pattern=r"^[a-z0-9_]+$")
+    nazwa: str
+    opis: str
+    miejsce: str
+    adres: str | None = None
+    geo: Geo | None = None
+    wnetrze: str | None = None
 
 
 class PlikBudynkow(Plik):
     budynki: list[Budynek]
+    zespoly: list[Zespol] = []
 
 
 class Rozruch(Schemat):

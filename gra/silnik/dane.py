@@ -74,7 +74,7 @@ def _wczytaj_mape(katalog: Path) -> dict | None:
     st, lo, bu, po, me, ba, ha, bi, re, pm = (_wczytaj(katalog / n) for n in SCHEMATY_MAPY if n != "klienci.yaml")
     kl, mi = katalog / "klienci.yaml", katalog / "miasto.yaml"
     return {"siatka": st["siatka"], "strefy": st["strefy"], "zasady": lo["zasady"], "zestawy": lo["zestawy"],
-            "lokale": lo["lokale"], "budynki": bu["budynki"],
+            "lokale": lo["lokale"], "budynki": bu["budynki"], "zespoly": bu.get("zespoly") or [],
             "popyt": {k: po[k] for k in ("model", "dni_tygodnia", "strefy")},
             "menu": {k: me[k] for k in ("jakosc", "zmiana_dania", "ceny")},
             "banki": PlikBankow.model_validate(ba).model_dump(exclude={"opis", "zrodlo"}),  # z domyślnymi polami
@@ -477,6 +477,12 @@ def _sprawdz_mape(d: Dane, brak) -> list[str]:
         ids.add(b["id"])
         r = b["mapa"]
         poloz(co, b["strefa"], r["x"], r["y"], r["szer"], r["gl"])
+    zespoly = {z["id"] for z in m.get("zespoly", [])}
+    for b in m["budynki"]:
+        if b.get("zespol") and b["zespol"] not in zespoly:
+            brak(b["zespol"], f"mapa/budynki.yaml: {b['id']}", "zespół", "mapa/budynki.yaml: zespoly")
+    for z in zespoly & ids:
+        bledy.append(f"mapa/budynki.yaml: {z}: id zespołu powtarza id budynku albo lokalu")
     budynki = {b["id"]: b for b in m["budynki"]}
     internet = (m["reklama"].get("internet") or {}).get("agencje") or {}
     for a, ag, zakl in [(a, ag, "agencje") for a, ag in m["reklama"]["agencje"].items()] + \
