@@ -74,9 +74,8 @@ class Pracownik(Model):
     gwiazdki: int
     pensja_preferowana_gr: int
     koszt_rekrutacji_gr: int
-    koszt_odprawy_gr: int
     zadowolenie_klientow: float
-    ryzyko_reklamacji: float
+    ryzyko_pomylki: float
     pensja_gr: int = 0
     umowa: str = "prace"          # forma zatrudnienia (UF21, silnik/ludzie/formy.py): "prace", "zlecenie", "pol_etatu", …
     student: bool = False         # UF21: student do 26 lat – bez PIT, mniej godzin, częściej odchodzi
@@ -93,7 +92,6 @@ class Pracownik(Model):
 
     pensja_preferowana = _kwota("pensja_preferowana")
     koszt_rekrutacji = _kwota("koszt_rekrutacji")
-    koszt_odprawy = _kwota("koszt_odprawy")
     pensja = _kwota("pensja")
     premia = _kwota("premia")
 
@@ -109,7 +107,7 @@ class WlascicielNaStanowisku(Model):
     godziny: float
     zawod: str
     zadowolenie_klientow: float
-    ryzyko_reklamacji: float
+    ryzyko_pomylki: float
 
 
 class Stanowisko(Model):
@@ -407,6 +405,9 @@ class Firma(Model):
     internet: dict[str, int] = Field(default_factory=dict)            # narzędzie → runda uruchomienia
     bank: str | None = None
     biuro: str | None = None
+    dokumenty_przeniesione: int = 0   # dokumenty z tygodni, w których biuro było zamknięte (Scrooge w święta)
+    pakiet_biura: str = ""            # S / M / L (silnik/ksiegowosc/biuro.py); pusty – pakiet domyślny z danych
+    pakiet_nastepny: dict | None = None   # zmiana pakietu w biurze „wszystko trwa”: {"pakiet", "od_rundy"}
     lokaty: list[Lokata] = Field(default_factory=list)
     kredyty: list[Kredyt] = Field(default_factory=list)
     leasingi: list[Leasing] = Field(default_factory=list)
@@ -431,23 +432,18 @@ class Firma(Model):
     rozliczenie: RozliczenieJDG = Field(default_factory=RozliczenieJDG)   # JDG – gra z lokalami
     amortyzacja_niskocenna: str = "koszty"   # B6: zakupy poniżej progu – "koszty" (od razu) albo "amortyzacja" (ewidencja)
     deklaracja: dict | None = None    # samodzielna księgowość: dokumenty i poprawne kwoty rundy (silnik/ksiegowosc/biuro.py)
-    kredyt_odnawialny_gr: int = 0
+    debet_gr: int = 0                 # saldo poniżej zera na koniec tygodnia (silnik/pieniadze/banki.py)
+    debet_wlaczony: bool = False      # zgoda na debet w banku konta – włączana decyzją `debet`
     majatek_gr: int = 0               # suma inwestycji (sprzęt, stanowiska, udogodnienia, wyposażenie) – rozwój firmy
     umorzenie_majatku_gr: int = 0     # amortyzacja tej sumy (karta po amortyzacji, Z1)
-    szczyt_majatku_gr: int = 0        # najwyższa suma inwestycji z minionych rund – odkup nie jest inwestycją (Z1)
-    rozwoj_poprzedni: float | None = None
     skumulowany_dochod_netto_gr: int = 0
-    poprzednio_uslug: int = 0         # liczba usług i pracowników w poprzedniej rundzie (przyrost → rozwój firmy)
-    poprzednio_pracownikow: int = 0
-    utracona_poprzednio: float = 0.0  # udział utraconej sprzedaży w poprzedniej rundzie (zadowolenie klientów)
     baza_klientow: float = 1.0        # trwała utrata klientów po utraconej sprzedaży (mnożnik popytu firmy)
     licznik: int = 0                  # do numerowania lokat i kredytów
 
     gotowka = _kwota("gotowka")
-    kredyt_odnawialny = _kwota("kredyt_odnawialny")
+    debet = _kwota("debet")
     majatek = _kwota("majatek")
     umorzenie_majatku = _kwota("umorzenie_majatku")
-    szczyt_majatku = _kwota("szczyt_majatku")
     skumulowany_dochod_netto = _kwota("skumulowany_dochod_netto")
 
     def wartosc_magazynu(self, klucz: str) -> float:
@@ -471,8 +467,8 @@ class Firma(Model):
         if w is None or (w.typ, w.nr) != (s.typ, s.nr):
             return None
         return Pracownik(id=WLASCICIEL, imie_nazwisko="Właściciel", zawod=w.zawod, gwiazdki=1,
-                         pensja_preferowana_gr=0, koszt_rekrutacji_gr=0, koszt_odprawy_gr=0,
-                         zadowolenie_klientow=w.zadowolenie_klientow, ryzyko_reklamacji=w.ryzyko_reklamacji,
+                         pensja_preferowana_gr=0, koszt_rekrutacji_gr=0,
+                         zadowolenie_klientow=w.zadowolenie_klientow, ryzyko_pomylki=w.ryzyko_pomylki,
                          stanowisko=s.nr)
 
     def godziny_stanowiska(self, s: Stanowisko, godziny_pracownika: float, dane: Any = None) -> float:

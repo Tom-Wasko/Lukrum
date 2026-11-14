@@ -148,9 +148,8 @@ class ZnanyKandydat(Schemat):
     zawod: str
     pensja_preferowana: float = Field(gt=0)
     koszt_rekrutacji: float = Field(ge=0)
-    koszt_odprawy: float = Field(ge=0)
     zadowolenie_klientow: float = Field(ge=0, le=1)
-    ryzyko_reklamacji: float = Field(ge=0, le=1)
+    ryzyko_pomylki: float = Field(ge=0, le=1)
 
 
 class Przedzialy(Schemat):
@@ -168,8 +167,7 @@ class Losowanie(Schemat):
     gwiazdki: dict[Jakosc, float]
     krok_pensji: int = Field(gt=0)
     wg_gwiazdek: dict[Jakosc, Przedzialy]
-    koszty_rekrutacji: list[float] = Field(min_length=1)
-    odprawa_czesc_pensji: list[float] = Field(min_length=1)
+    koszt_rekrutacji_czesc_pensji: tuple[float, float]   # koszt rekrutacji kandydata = pensja × wartość z przedziału
 
     @field_validator("gwiazdki")
     @classmethod
@@ -320,40 +318,6 @@ class Udogodnienie(Schemat):
     opis: str | None = None       # UF9: krótki opis w kafelku (panel)
 
 
-class Medium(Schemat):
-    nazwa: str
-    kategoria: str
-    zasieg: float
-    cena: float
-    znizki: list[tuple[int, float]]  # [od emisji, %]
-    od_rundy: int = 1
-
-
-class Narzedzie(Schemat):
-    nazwa: str
-    uruchomienie: float
-    utrzymanie: float
-    od_rundy: int = 1
-    zalozenie: bool = False
-
-
-class Bank(Schemat):
-    nazwa: str
-    konto: float
-    karta: float
-    lokata: float
-    kredyt_odnawialny: float
-    kredyt: float
-    od_rundy: int = 1
-
-
-class Biuro(Schemat):
-    nazwa: str
-    ksiegowanie: float
-    etat: float
-    zlecenie: float
-
-
 class FirmaSzkoleniowa(Schemat):
     nazwa: str
     zadowoleni_klienci: float
@@ -368,24 +332,6 @@ class Szkolenie(Schemat):
 
 class SekcjaUdogodnien(Sekcja):
     pozycje: list[Udogodnienie]
-
-
-class SekcjaMediow(Sekcja):
-    pozycje: list[Medium]
-
-
-class SekcjaNarzedzi(Sekcja):
-    pozycje: list[Narzedzie]
-
-
-class SekcjaBankow(Sekcja):
-    pozycje: list[Bank]
-    kredyt_maks_miesiecy: int = Field(gt=0)
-    lokata_konczy_sie_najpozniej_w_ostatniej_rundzie: bool
-
-
-class SekcjaBiur(Sekcja):
-    pozycje: list[Biuro]
 
 
 class SekcjaSzkolen(Sekcja):
@@ -408,10 +354,6 @@ class PlikKatalogu(Schemat):
     stanowiska: Stanowiska
     udogodnienia: SekcjaUdogodnien
     wyposazenie: SekcjaUdogodnien
-    media_tradycyjne: SekcjaMediow
-    narzedzia_internetowe: SekcjaNarzedzi
-    banki: SekcjaBankow
-    biura_rachunkowe: SekcjaBiur
     szkolenia: SekcjaSzkolen
 
 
@@ -515,14 +457,13 @@ class Strategia(Schemat):
     jakosc_ludzi: int | None = Field(None, ge=1, le=3)
     kanal: str | None = None
     premia: float = Field(0, ge=0)
+    umowa: Literal["prace", "zlecenie"] = "prace"   # forma zatrudnienia nowych osób (zlecenie: bez urlopu i wypowiedzenia)
     wlasciciel_godziny: float = Field(0, ge=0)
     uslugi: int = Field(gt=0)
     dania_specjalne: list[str] = Field(default_factory=list)   # sprawa 4 (Poprawki 3): po odblokowaniu, ponad uslugi
     pokrycie: float = Field(gt=0)
     wyposazenie: int = Field(ge=0)
     udogodnienia: int = Field(ge=0)
-    reklama: dict[str, int]
-    internet: list[str]
     szkolenia: int = Field(ge=0)
     kampanie: list[str] = Field(default_factory=list)   # gra z lokalami: "agencja/kanał" z mapa/reklama.yaml
     # B10: emisje w kampanii i rundy przerwy po kampanii w tym kanale i strefie (bez – ustawienia botów)
@@ -589,6 +530,7 @@ class PoziomBota(Schemat):
     tylko_pomiar: bool = False   # poziom do pomiarów (balans/), bez wyboru w panelu mistrza gry
     dba_o_ludzi: DbaOLudzi | None = None   # U20: podwyżka dla niezadowolonych (łatwy ich ignoruje)
     limit_handlu: float | None = Field(None, gt=0, le=1)   # giełda handlu: najwyższa cena w licytacji × wartość
+    debet: bool = False   # tor A: włącza debet w banku konta (bez – saldo poniżej zera to alarm i odsetki karne)
     podkupuje_ludzi: bool = False   # kalibracja B9: podkupuje niedopłacanych (zalozenia.yaml: pracownicy.podkupywanie_botow)
 
     @model_validator(mode="after")
@@ -655,6 +597,9 @@ class Strefa(Schemat):
     kolor: str = Field(pattern=r"^#[0-9a-fA-F]{6}$")
     mapa: Prostokat
     czynsz_m2: float = Field(gt=0)
+    # nowa mapa Lublina: prawdziwe dzielnice (nazwy z OSM), z których składa się strefa popytu, i jej „serce”
+    dzielnice: list[str] = []
+    serce: str | None = None
 
 
 class PlikStref(Plik):
@@ -743,6 +688,11 @@ class PlikLokali(Plik):
     lokale: list[Lokal] = Field(min_length=1)
 
 
+class Geo(Schemat):
+    lat: float   # stopnie WGS84 z OSM (Lublin ok. 51,2)
+    lon: float   # (Lublin ok. 22,6)
+
+
 class Budynek(Schemat):
     id: str = Field(pattern=r"^[a-z0-9_]+$")
     nazwa: str
@@ -751,6 +701,11 @@ class Budynek(Schemat):
     opis: str
     zakladka: str | None
     mapa: Prostokat
+    # nowa mapa Lublina (OSM, strona [mapa]): prawdziwe miejsce z planu, adres i współrzędne; wnętrze budynku
+    miejsce: str | None = None
+    adres: str | None = None
+    geo: Geo | None = None
+    wnetrze: str | None = None
 
 
 class PlikBudynkow(Plik):
@@ -823,9 +778,10 @@ class Terminal(Schemat):
     prowizja: float = Field(ge=0, lt=1)  # od płatności kartą
 
 
-class Limit(Schemat):
-    kwota: float = Field(ge=0)
-    oprocentowanie: float = Field(ge=0, lt=1)
+class Debet(Schemat):
+    limit: float = Field(ge=0)             # najwyżej tyle może wynieść debet za zgodą banku
+    oplata: float = Field(ge=0)            # za każdy tydzień na minusie (brutto, zł)
+    oprocentowanie: float = Field(ge=0, lt=1)   # roczne, od debetu w limicie
 
 
 class ProduktKredytowy(Schemat):
@@ -854,7 +810,7 @@ class BankMapy(Schemat):
     konto: float = Field(ge=0)           # miesięczna opłata
     terminal: Terminal
     lokaty: dict[int, float] = Field(min_length=1)   # okres w rundach → oprocentowanie roczne
-    limit: Limit
+    debet: Debet
     kredyty: list[ProduktKredytowy] = Field(default_factory=list)
     leasing: OfertaLeasingu | None = None
 
@@ -862,7 +818,11 @@ class BankMapy(Schemat):
 class PlikBankow(Plik):
     udzial_kart: float = Field(ge=0, le=1)
     historia_rund: int = Field(ge=0)
+    stopa_referencyjna_nbp: float | None = Field(default=None, gt=0, lt=1)   # podstawa limitów prawnych (silnik.dane sprawdz)
     stopa_karna: float = Field(gt=0, lt=1)
+    marza_odsetki_maksymalne: float = Field(default=0, ge=0, lt=1)   # art. 359 § 2¹ KC: 2 × (ref. + 3,5 pp)
+    marza_odsetki_opoznienie: float = Field(default=0, ge=0, lt=1)   # art. 481 § 2¹ KC: 2 × (ref. + 5,5 pp)
+    oplata_debet_bez_zgody: float = Field(default=0, ge=0)   # stała opłata za tydzień na minusie bez zgody banku (zł)
     przejecie_po: int = Field(gt=0)
     wycena_zastawu: float = Field(gt=0, le=1)
     czynsz_po_przejeciu: float = Field(gt=0, lt=1)
@@ -919,18 +879,35 @@ class KadryBiura(Schemat):
     zlecenie: float = Field(ge=0)
 
 
+class PakietBiura(Schemat):
+    cena: float = Field(ge=0)            # miesięcznie, brutto
+    dokumenty: int = Field(gt=0)         # limit dokumentów w miesiącu
+    doplata: float = Field(ge=0)         # za każdy dokument ponad limit (brutto)
+
+
+class ZamknieteWSwieta(Schemat):
+    doplata: float = Field(ge=0)         # za każdy dokument przeniesiony na następny tydzień (brutto, zł)
+    zrodlo: str = Zrodlo
+
+
 class BiuroMapy(Schemat):
     id: str
     nazwa: str
     wlasciciel: str | None = None
     opis: str
-    ryczalt: float = Field(ge=0)
-    dokumenty_w_ryczalcie: int | None = Field(default=None, ge=0)   # None – bez limitu
-    za_dokument: float = Field(ge=0)
-    minimum: float = Field(ge=0)
+    cecha: str
+    pakiety: dict[Literal["S", "M", "L"], PakietBiura]
     kadry: KadryBiura
     ryzyko_bledu: float = Field(ge=0, lt=1)
     oc: bool
+    zamkniete_w_swieta: ZamknieteWSwieta | None = None   # w tygodniu ze świętem dokumenty czekają do następnego
+    zmiana_pakietu_po: int = Field(default=0, ge=0)   # rund do wejścia nowego pakietu
+
+    @model_validator(mode="after")
+    def _trzy_pakiety(self):
+        if set(self.pakiety) != {"S", "M", "L"}:
+            raise ValueError("biuro ma pakiety S, M i L")
+        return self
 
 
 class Samodzielna(Schemat):
@@ -941,6 +918,7 @@ class Samodzielna(Schemat):
 
 class PlikBiur(Plik):
     szacunek_dokumentow: int = Field(gt=0)
+    pakiet_domyslny: Literal["S", "M", "L"] = "M"
     biura: list[BiuroMapy] = Field(min_length=1)
     bledy: list[str] = Field(min_length=1)
     samodzielna: Samodzielna
@@ -1100,7 +1078,7 @@ class UstawieniaOpinii(Schemat):
     cena_limit: float = Field(ge=0)
     kolejka: float = Field(ge=0)
     brak: float = Field(ge=0)
-    reklamacje: float = Field(ge=0)
+    pomylki: float = Field(ge=0)
     wyposazenie: float = Field(ge=0)
     udzial_opinii: float = Field(gt=0, le=1)
     rozrzut: float = Field(ge=0)

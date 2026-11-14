@@ -69,6 +69,21 @@ agencje:
           chyba Mruczek”. Twój kebab wygląda na nich apetyczniej niż oba koty razem.'
         - 'Klej do plakatów okazał się tak mocny, że służby miejskie w strefie {strefa} poddały się po trzech próbach.
           Plakat zostanie tam prawdopodobnie do 2031 roku. Agencja nie dolicza za to ani grosza.'
+      gazeta:
+        nazwa: Ogłoszenie w „Gazecie Pana Cogito”
+        od_rundy: 6
+        zasieg: miasto
+        emisja: ogłoszenie ramkowe w gazecie
+        cena_emisji: 90   # ogłoszenie ramkowe w lokalnym dzienniku: ok. 400–800 zł, a w grze 8 emisji ≈ tyle co tydzień kampanii
+        znizki: [[4, 0.1], [9, 0.2]]
+        maks_emisji: 12
+        pula: 0.02
+        przyciaganie: 0.08
+        teksty:
+        - 'Ogłoszenie w „Gazecie Pana Cogito” zajęło pół strony między nekrologiem a rubryką „Dla myślących”. Redaktor
+          dopisał na dole: „Kebab – wersja skrócona zadumy”. Czytelnicy przychodzą z gazetą pod pachą i pytają o sens sosu.'
+        - 'W „Gazecie Pana Cogito” ukazał się felieton o Twoim lokalu pod tytułem „Rożen jako imperatyw moralny”. Nikt
+          nie rozumie, ale wszyscy chcą spróbować.'
   fala_koziolka:
     nazwa: Radio i billboardy „Fala Koziołka”
     budynek: fala_koziolka
@@ -92,7 +107,7 @@ agencje:
         - 'Na billboardzie w strefie {strefa} ktoś domalował kebabowi wąsy. Agencja uważa, że „dodało to charakteru”,
           i wysłała Ci fakturę za „pakiet street-art”. Fakturę grzecznie odrzuciłeś.'
       radio:
-        nazwa: Spot w radiu „Fala Koziołka”
+        nazwa: Spot w „Radiu Tichy” (Fala Koziołka)
         od_rundy: 8
         zasieg: miasto
         emisja: spot w radiu

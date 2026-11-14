@@ -50,13 +50,13 @@ def test_bot_kupuje_lokal_na_kredyt_pod_jego_zastaw():
 def test_bot_kupuje_dzialke_z_budowa_i_doplaca_kredytem_bez_historii():
     """Działka: wejście z budową w ratach ponad kredyt pod zastaw (0,7 × cena z budową) – brakującą kwotę i rezerwę
     bot dopłaca kredytem bez wymogu historii (np. „na start”); bez niej bank przejmował działkę po zaległych ratach.
-    Zastaw (PKO BP) i kredyt bez historii (Crédit Agricole) są w różnych bankach – test bez reguły `tylko_bank_konta`."""
+    Zastaw (Wokulski i S-ka) i kredyt bez historii (Kmicic) są w różnych bankach – test bez reguły `tylko_bank_konta`."""
     g, (d,) = _gra({"lokal": {"typy": ["dzialka"], "forma": "kupno", "rezerwa": 10000}}, tylko_bank_konta=False)
     lok = _lokal(g, d["lokal"]["id"])
     assert lok["typ"] == "dzialka" and d["lokal"]["forma"] == "kupno"
     zastaw, doplata = d["kredyty_wez"]
     assert zastaw["zastaw"] == f"lokal:{lok['id']}" and "zastaw" not in doplata
-    assert 40000 + zastaw["kwota"] + doplata["kwota"] >= lok["cena"] + lok["koszt_budowy"] + 10000
+    assert g.kapital_startowy + zastaw["kwota"] + doplata["kwota"] >= lok["cena"] + lok["koszt_budowy"] + 10000
     f = g.stan().firmy["A"]
     assert [(x.id, x.forma) for x in f.lokale] == [(lok["id"], "kupno")] and len(f.kredyty) == 2
 
@@ -73,7 +73,7 @@ def test_bot_finansuje_sprzet_lokalu_niewyposazonego_leasingiem():
     """Lokal bez zestawu: cały sprzęt 3★ naraz (od tygodnia 2) to więcej, niż bot ma gotówki – najdroższe pozycje
     bierze w leasing (nie liczy się do wskaźnika zadłużenia karty), aż po zakupach i opłatach wstępnych zostanie
     rezerwa (ustawienia.rezerwa_po_sprzecie); bez tego wpadał w debet ponad limit konta."""
-    g, (d1, d2) = _gra({"lokal": {"typy": ["niewyposazony"]}, "jakosc": 3}, rund=2)
+    g, (d1, d2) = _gra({"lokal": {"typy": ["niewyposazony"]}, "jakosc": 3}, rund=2, kapital_startowy=40000)
     assert _lokal(g, d1["lokal"]["id"])["typ"] == "niewyposazony" and not d1.get("kredyty_wez")
     przed = g.stan(1).firmy["A"].gotowka
     cena = lambda x: g.dane.sprzet[x["nazwa"]]["ceny"][str(x["jakosc"])]   # noqa: E731
@@ -119,14 +119,14 @@ def test_bot_z_dwoma_lokalami_zamawia_z_zapasow_kazdego_lokalu(monkeypatch):
     zapasów całej firmy – nadmiar jednego lokalu „pokrywał” braki drugiego; drugi lokal tracił sprzedaż)."""
     g = Gra.nowa("t", [("A", "zrownowazony"), ("B", "tani")], 12, 5, poziomy={"A": "trudny", "B": "sredni"},
                  kapital_startowy=200000)
-    for _ in range(6):
+    for _ in range(7):   # drugi lokal bot otwiera w tygodniu 7 (po części 4 kadr dopiero w 7, wcześniej w 6)
         g.przelicz(wymus=True)
-    f = g.stan(6).firmy["A"]
+    f = g.stan(7).firmy["A"]
     assert len(f.lokale) == 2
     wywolania, oryginal = [], boty.zamowienie_zasobow
     monkeypatch.setattr(boty, "zamowienie_zasobow", lambda dane, firma, *a: (
         wywolania.append((tuple(x.id for x in firma.lokale), dict(firma.magazyn))) or oryginal(dane, firma, *a)))
-    d = boty.decyzje_bota(g.dane, g.stan(6), "A", "zrownowazony", 7, g.konfiguracja)
+    d = boty.decyzje_bota(g.dane, g.stan(7), "A", "zrownowazony", 8, g.konfiguracja)
     assert sorted(lok for lok, _ in wywolania) == sorted((x.id,) for x in f.lokale)
     for (lok,), mag in wywolania:   # zapasy z widoku lokalu, nie całej firmy
         assert mag == boty.pl.widok(f, lok).magazyn

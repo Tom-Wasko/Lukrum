@@ -145,7 +145,7 @@ def test_alarm_debetu_i_inwestor_ratunkowy(client, gra):
     r = _ustaw(client, gra, inwestor={"firma": "Kebab Ali", "kwota": 10000})
     assert r.status_code == 400 and "debetem ponad limit" in r.json()["blad"]
     f = serwisy.wczytaj(gra).stan(1).firmy["Kebab Ali"]   # gra w pamięci: debet ponad limit po rundzie 1
-    f.kredyt_odnawialny, f.gotowka = 50000, 0
+    f.debet, f.gotowka = 50000, 0
     ali = next(x for x in _mg(client, gra)["firmy"] if x["nazwa"] == "Kebab Ali")
     assert ali["alarm"] > 0 and ali["inwestor"] is None and ali["inwestor_przyslany"] is None
     p = _ustaw(client, gra, inwestor={"firma": "Kebab Ali", "kwota": 30000}).json()

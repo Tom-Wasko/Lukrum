@@ -1,8 +1,12 @@
 """Banki gry z lokalami (F3a.9; dane: dane/mapa/banki.yaml).
 
-Sześć banków, każdy z inną najlepszą ofertą. Konto firmowe (`firma.bank`) niesie opłatę za konto, terminal
-(abonament + prowizja od płatności kartą) i limit w koncie (kredyt odnawialny do kwoty limitu; debet ponad limit –
-odsetki karne). Lokaty, kredyty i leasing rozliczają się na koncie firmowym; przy `tylko_bank_konta` (sprawa 21,
+Sześć banków (nazwy z lektur), każdy z inną najlepszą ofertą. Konto firmowe (`firma.bank`) niesie opłatę za konto,
+terminal (abonament + prowizja od płatności kartą) i debet. Debet to saldo poniżej zera na koniec tygodnia (chwilowy minus
+w trakcie tygodnia nic nie kosztuje: debet z wydatków jest spłacany z przychodów tego samego tygodnia): nie ma go
+automatycznie – drużyna włącza go decyzją `debet` w banku konta. Za włączonym debetem stoją limit banku, opłata za
+każdy tydzień na minusie i odsetki; kwota ponad limit płaci odsetki karne, a debet bez zgody – odsetki karne i stałą opłatę
+(zawsze drożej niż za zgodą); firma dostaje
+alarm i blokadę inwestycji (silnik/pieniadze/inwestor.py). Lokaty, kredyty i leasing rozliczają się na koncie firmowym; przy `tylko_bank_konta` (sprawa 21,
 poprawki 2) bank udziela ich tylko firmie z kontem u siebie – wybór banku to wybór oferty (bez – w dowolnym banku).
 
 Kredyty: „na start” bez historii firmy, obrotowe dopiero po `historia_rund` rundach od otwarcia pierwszego lokalu;
@@ -75,7 +79,7 @@ def najlepsze(dane: Dane) -> dict[str, str]:
         "kredyt_inwestycyjny": min(((n, k) for n, k in kredyty if k.get("zastaw")),
                                    key=lambda p: p[1]["oprocentowanie"])[0],
         "leasing": min((x for x in b if x.get("leasing")), key=lambda x: x["leasing"]["oprocentowanie"])["nazwa"],
-        "limit": max(b, key=lambda x: x["limit"]["kwota"])["nazwa"],
+        "debet": max(b, key=lambda x: x["debet"]["limit"])["nazwa"],
     }
 
 
@@ -268,6 +272,15 @@ def poczatek_rundy(dane: Dane, firma: Firma, decyzje: dict, runda: int, ksiega: 
     nowy = nowy_lokal(dane, decyzje, runda, firma)
     if decyzje.get("bank") in banki(dane):
         firma.bank = decyzje["bank"]
+    if "debet" in decyzje:   # zgoda na debet w banku konta (limit, opłata i odsetki – oferta banku)
+        if decyzje["debet"] and firma.bank:
+            firma.debet_wlaczony = True
+        elif decyzje["debet"]:
+            info["odrzucone"].append({"co": "Włączenie debetu", "powod": "najpierw wybierz bank konta"})
+        elif firma.debet > EPS:
+            info["odrzucone"].append({"co": "Wyłączenie debetu", "powod": "najpierw wyjdź na plus"})
+        else:
+            firma.debet_wlaczony = False
     for lid in decyzje.get("lokaty_zerwij", []):
         lokata = next((x for x in firma.lokaty if x.id == lid), None)
         if lokata:
@@ -381,9 +394,14 @@ def leasing_wez(dane: Dane, firma: Firma, decyzje: dict, runda: int, ksiega: Ksi
 
 # --- koniec rundy --------------------------------------------------------------------------------
 
-def wolny_limit(dane: Dane, firma: Firma) -> float:
+def limit_debetu(dane: Dane, firma: Firma) -> float:
+    """Limit debetu: z oferty banku konta, ale tylko gdy firma włączyła debet (bez zgody – 0)."""
     bank = banki(dane).get(firma.bank)
-    return max(0.0, (bank["limit"]["kwota"] if bank else 0.0) - firma.kredyt_odnawialny)
+    return float(bank["debet"]["limit"]) if bank and firma.debet_wlaczony else 0.0
+
+
+def wolny_limit(dane: Dane, firma: Firma) -> float:
+    return max(0.0, limit_debetu(dane, firma) - firma.debet)
 
 
 def _stac(dane: Dane, firma: Firma, kwota: float) -> bool:
@@ -464,12 +482,21 @@ def koniec_rundy(dane: Dane, firma: Firma, runda: int, ksiega: Ksiega, rachunek:
                                       "wycena": 0.0, "dlug": round(lea.rata * lea.pozostalo_rat, 2), "nadwyzka": 0.0})
         info["leasing"].append(wiersz)
 
-    if firma.kredyt_odnawialny > 0 and bank:
-        w_limicie = min(firma.kredyt_odnawialny, bank["limit"]["kwota"])
-        ksieguj(firma, ksiega, rachunek, "Odsetki od limitu w koncie", round(w_limicie * bank["limit"]["oprocentowanie"] / rwr, 2))
-        if firma.kredyt_odnawialny > w_limicie + EPS:
-            ksieguj(firma, ksiega, rachunek, "Odsetki karne od debetu ponad limit",
-                    round((firma.kredyt_odnawialny - w_limicie) * u["stopa_karna"] / rwr, 2))
+    if firma.debet > 0:   # tydzień kończy się na minusie (debet jest liczony po wyrównaniu salda na koniec tygodnia)
+        w_limicie = min(firma.debet, limit_debetu(dane, firma))
+        if w_limicie > 0:   # za zgodą: opłata i odsetki; ponad limit – odsetki karne
+            d = bank["debet"]
+            info["debet"] = {"oplata": d["oplata"], "odsetki": round(w_limicie * d["oprocentowanie"] / rwr, 2)}
+            ksieguj(firma, ksiega, rachunek, f"Opłata za tydzień na minusie ({bank['nazwa']})", d["oplata"])
+            ksieguj(firma, ksiega, rachunek, "Odsetki od debetu", info["debet"]["odsetki"])
+        elif u["oplata_debet_bez_zgody"] > 0:   # bez zgody: stała opłata i odsetki karne – drożej niż za zgodą
+            info["debet"] = {"oplata": u["oplata_debet_bez_zgody"], "bez_zgody": True,
+                             "odsetki": round(firma.debet * u["stopa_karna"] / rwr, 2)}
+            ksieguj(firma, ksiega, rachunek, "Opłata za niedozwolone saldo debetowe (debet bez zgody banku)",
+                    u["oplata_debet_bez_zgody"])
+        if firma.debet > w_limicie + EPS:
+            ksieguj(firma, ksiega, rachunek, "Odsetki karne od debetu ponad limit" if w_limicie
+                    else "Odsetki karne od debetu bez zgody banku", round((firma.debet - w_limicie) * u["stopa_karna"] / rwr, 2))
 
     for lo in list(firma.lokaty):
         if runda >= lo.od_rundy + lo.miesiecy - 1:
@@ -482,9 +509,8 @@ def koniec_rundy(dane: Dane, firma: Firma, runda: int, ksiega: Ksiega, rachunek:
 
 
 def debet_ponad_limit(dane: Dane, firma: Firma) -> float:
-    """Kredyt odnawialny ponad limit konta (po wyrównaniu gotówki na koniec rundy)."""
-    bank = banki(dane).get(firma.bank)
-    return max(0.0, round(firma.kredyt_odnawialny - (bank["limit"]["kwota"] if bank else 0.0), 2))
+    """Debet ponad limit (bez włączonego debetu – cały debet), po wyrównaniu gotówki na koniec rundy."""
+    return max(0.0, round(firma.debet - limit_debetu(dane, firma), 2))
 
 
 def bledy(dane: Dane, firma: Firma, info_poczatek: dict | None, info_koniec: dict | None) -> list[dict]:
@@ -496,6 +522,7 @@ def bledy(dane: Dane, firma: Firma, info_poczatek: dict | None, info_koniec: dic
     debet = debet_ponad_limit(dane, firma)
     if debet > 0:
         kwota = f"{debet:,.2f}".replace(",", " ").replace(".", ",")
-        wynik.append(f"Debet ponad limit w koncie: {kwota} zł – odsetki karne, a w następnej rundzie "
-                     "zablokowane inwestycje, kredyty, leasing i lokaty.")
+        wynik.append(f"Debet ponad limit: {kwota} zł"
+                     + ("" if firma.debet_wlaczony else " (debet nie jest włączony w banku)")
+                     + " – odsetki karne, a w następnej rundzie zablokowane inwestycje, kredyty, leasing i lokaty.")
     return [{"poziom": "czerwony", "zakladka": "finanse_bank", "tekst": t} for t in wynik]

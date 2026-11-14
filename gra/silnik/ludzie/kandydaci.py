@@ -2,7 +2,7 @@
 
 Pula na start = znane osoby (dane/kandydaci.yaml: znani, pensje z rozrzutem) + osoby
 wygenerowane z rozkładów kalibrowanych pomiarami (kandydaci.yaml: losowanie – pensja, zadowolenie klientów i ryzyko
-reklamacji wg gwiazdek, koszt rekrutacji, odprawa). Co rundę dochodzą nowi kandydaci; każda firma widzi całą pulę
+skłonność do pomyłek wg gwiazdek, koszt rekrutacji jako część pensji). Co rundę dochodzą nowi kandydaci; każda firma widzi całą pulę
 bez własnych pracowników (dwie firmy mogą zatrudnić te same osoby).
 """
 from __future__ import annotations
@@ -46,9 +46,8 @@ def _osoba(dane: Dane, rng, zawod: str, gwiazdki: int, id_: str, uzyte: set[str]
     krok = los["krok_pensji"]
     pensja = int(round(rng.uniform(*r["pensja"]) / krok) * krok)
     return {"id": id_, "imie_nazwisko": pelne, "gwiazdki": gwiazdki, "zawod": zawod, "pensja_preferowana": pensja,
-            "koszt_rekrutacji": int(rng.choice(los["koszty_rekrutacji"])),
-            "koszt_odprawy": round(pensja * rng.choice(los["odprawa_czesc_pensji"])),
-            "zadowolenie_klientow": round(rng.uniform(*r["zk"]), 2), "ryzyko_reklamacji": round(rng.uniform(*r["ryzyko"]), 2),
+            "koszt_rekrutacji": round(pensja * rng.uniform(*los["koszt_rekrutacji_czesc_pensji"]), -1),
+            "zadowolenie_klientow": round(rng.uniform(*r["zk"]), 2), "ryzyko_pomylki": round(rng.uniform(*r["ryzyko"]), 2),
             "wiek": int(rng.integers(*los["wiek"]))}
 
 

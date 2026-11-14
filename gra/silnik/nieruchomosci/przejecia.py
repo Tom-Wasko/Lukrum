@@ -18,7 +18,7 @@ wraca, sprzęt wynajmującego staje się sprzętem firmy. Cena budynku – ruch 
 
 Wypowiedzenie: najem trwa jeszcze `wypowiedzenie_rund` rund, licząc rundę wypowiedzenia (KC art. 673). Na
 początku następnej rundy najemca się wyprowadza: kaucja wraca, jego sprzęt w lokalu jest sprzedany (jak
-w zakładce Sprzęt), pracownicy przechodzą na wolne stanowiska w innych lokalach (reszta – zwolnienie z odprawą),
+w zakładce Sprzęt), pracownicy przechodzą na wolne stanowiska w innych lokalach (reszta – zwolnienie, pensja za okres wypowiedzenia),
 a nakłady najemcy (adaptacja, stanowiska) są rozliczone (KC art. 676) wg wyboru właściciela: „zatrzymaj” –
 płaci najemcy `ulepszenia_zwrot` × nakłady i zostają mu stanowiska najemcy; „przywroc” – najemca płaci
 `przywrocenie_koszt` × nakłady za przywrócenie stanu pierwotnego. Budynek staje się lokalem właściciela
@@ -31,7 +31,7 @@ from ..decyzje import cena_sprzedazy_sprzetu
 from ..ksiegowosc import srodki_trwale as st_trwale
 from ..ksiegowosc.finanse import Ksiega, Rachunek, ksieguj
 from ..losowosc import strumien
-from ..ludzie.rynek_pracy import jako_kandydat
+from ..ludzie.rynek_pracy import jako_kandydat, okres_wypowiedzenia
 from ..model import Firma, KupionyBudynek, Lokal, StanGry, Stanowisko
 from ..pieniadze import banki as bk
 from ..pieniadze.zaleglosci import zl as _zl
@@ -258,7 +258,7 @@ def _wyprowadzka(dane: Dane, s: StanGry, nazwa: str, umowa: Lokal, runda: int, z
             st_trwale.zmniejsz_majatek(najemca, poz[n]["cena"])
             info["sprzedane_wyposazenie"].append(n)
         setattr(umowa, rodzaj, [])
-    # pracownicy najemcy: na wolne stanowiska w jego innych działających lokalach, reszta zwolniona z odprawą
+    # pracownicy najemcy: na wolne stanowiska w jego innych działających lokalach, reszta zwolniona (pensja za okres wypowiedzenia, bez odprawy)
     najemca.stanowiska = [st for st in najemca.stanowiska if st.lokal != umowa.id]
     najemca.lokale.remove(umowa)
     cel = pl.glowny(najemca, runda)
@@ -277,7 +277,10 @@ def _wyprowadzka(dane: Dane, s: StanGry, nazwa: str, umowa: Lokal, runda: int, z
             info["przeniesieni"].append(p.imie_nazwisko)
         else:
             del najemca.pracownicy[p.id]
-            ksieguj(najemca, ks_n, rach_n, f"Koszt zwolnienia {p.imie_nazwisko}", p.koszt_odprawy)
+            okres = okres_wypowiedzenia(dane, p, runda)   # pensja za okres wypowiedzenia (art. 36 KP), bez odprawy
+            if okres:
+                ksieguj(najemca, ks_n, rach_n, f"Wynagrodzenie za okres wypowiedzenia {p.imie_nazwisko}",
+                        dane.na_runde(p.pensja) * okres)
             s.kandydaci.append(jako_kandydat(p))
             info["zwolnieni"].append(p.imie_nazwisko)
     # budynek – lokal właściciela

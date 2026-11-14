@@ -265,7 +265,7 @@ def test_ponowne_zakrycie_wyposazenie_udogodnienia_i_szkolenia_przepadaja():
     g.odslon("A", "rozwoj")
     firma_szk = g.dane.katalog_ofert["szkolenia"]["firmy"][0]["nazwa"]
     szkolenie = g.dane.katalog_ofert["szkolenia"]["pozycje"][0]["nazwa"]
-    wyp, udog = ["Stoliki i krzesła dla klientów", "Darmowe WiFi"], ["Klimatyzacja"]
+    wyp, udog = ["Stoły i ławy z jasnego drewna", "WiFi dla gości (światłowód)"], ["Klimatyzatory split w kuchni i na zapleczu"]
     _graj(g, 7, r7={"A": {"wyposazenie_kup": wyp, "udogodnienia_kup": udog,
                           "szkolenia": [{"firma": firma_szk, "szkolenie": szkolenie}]}})
     f7 = g.stan(7).firmy["A"]
@@ -280,11 +280,11 @@ def test_ponowne_zakrycie_wyposazenie_udogodnienia_i_szkolenia_przepadaja():
     f, w = s.firmy["A"], s.wyniki[8]["A"]
     assert all(not lok.wyposazenie and not lok.udogodnienia for lok in f.lokale)
     assert f.wyposazenie == [] and f.udogodnienia == [] and f.szkolenia == []
-    ceny = sum(g.dane.pozycje("wyposazenie")[n]["cena"] for n in wyp) + g.dane.pozycje("udogodnienia")["Klimatyzacja"]["cena"]
+    ceny = sum(g.dane.pozycje("wyposazenie")[n]["cena"] for n in wyp) + g.dane.pozycje("udogodnienia")["Klimatyzatory split w kuchni i na zapleczu"]["cena"]
     assert f.majatek == pytest.approx(f7.majatek - ceny)
     przep = _przepadki(w)
     assert przep == podglad and set(przep) == {"wyposazenie", "rozwoj"}
-    assert all(n in przep["wyposazenie"] for n in wyp) and "Klimatyzacja" in przep["rozwoj"] and szkolenie in przep["rozwoj"]
+    assert all(n in przep["wyposazenie"] for n in wyp) and "Klimatyzatory split w kuchni i na zapleczu" in przep["rozwoj"] and szkolenie in przep["rozwoj"]
     assert not any(p["opis"].startswith(("Sprzedaż wyposażenia", "Sprzedaż udogodnień")) for p in w["kpir"]["pozycje"])
     assert w["uzgodnienie"]["roznica"] == 0 and w["uzgodnienie"]["roznica_kpir"] == 0
     assert w["sprzedaz"] and not any(b.get("funkcja") for b in w["lista_bledow"])

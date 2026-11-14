@@ -70,7 +70,7 @@ export const LEKCJA_BANK = lekcja("Konto, lokata i kredyt – na co patrzeć", [
    nimi dostawcy. Naprawdę od odsetek bank pobiera 19% podatku (tzw. podatek Belki).`,
   `<b>Kredyt:</b> liczy się nie tylko oprocentowanie, ale też prowizja i opłaty – wszystko razem pokazuje <b>RRSO</b>.
    Raty równe są na początku lżejsze, raty malejące – tańsze w sumie.`,
-  `<b>Kredyt odnawialny</b> (limit w rachunku) bank uruchamia sam, gdy zabraknie pieniędzy na koncie. Wygodny, ale zwykle droższy
+  `<b>Debet</b> (zgoda w banku konta) pozwala zejść poniżej zera, gdy zabraknie pieniędzy na koncie. Wygodny, ale zwykle droższy
    od kredytu na konkretny cel – odsetki płacisz od wykorzystanej kwoty.`,
   `<b>Zdolność kredytową</b> bank ocenia po przychodach, historii spłat i zabezpieczeniach. Dlatego nowej firmie trudno
    o duży kredyt – a ktoś, kto pożycza „od ręki, bez pytań” (jak Harpagon), bierze za to znacznie więcej, niż pozwala

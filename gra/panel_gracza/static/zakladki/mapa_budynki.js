@@ -388,7 +388,7 @@ const PRZEPISY = {
     html += witryna(S.P, 0.05, S.P.dl - 0.05) + zegar(S.L, S.L.dl / 2, 22, 3.6);
     return html + walec(g, x + s - 0.12, y + l - 0.12, 0.12, 28, 34, "#e7dcc8") + stozek(g, x + s - 0.12, y + l - 0.12, 0.12, 34, 9, MIEDZ);
   },
-  akademia(g, x, y, s, l) {   // Akademia Gastro: nowoczesna szkoła z czapką kucharską na dachu
+  akademia(g, x, y, s, l) {   // Lubelska Szkoła Kebabu: nowoczesna szkoła z czapką kucharską na dachu
     const S = sciany(g, x, y, s, l);
     let html = blok(g, x, y, s, l, 0, 22, "#f3f4f2", "#d5d8da") + pasy(S.L, 3, 22, { co: 7, wys: 4 }) + pasy(S.P, 3, 22, { co: 7, wys: 4 });
     html += plat(S.L, 0, 0, S.L.dl, 1.2, "#26a69a") + szyld(S.L, 0.1, S.L.dl - 0.1, 15.5, 19.5, "#26a69a", "AKADEMIA GASTRO");

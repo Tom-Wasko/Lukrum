@@ -8,8 +8,8 @@ Runda r = tydzień r gry z lokalami (dane/mapa). Kolejność jak w KPiR i banku 
  4. od rundy 2: popyt strefowy → obsługa klientów w lokalach → przychody,
  5. koszty rundy: pensje + ZUS, utrzymanie, lokale, amortyzacja, wynajęta chłodnia i sanepid (silnik/kuchnia/magazyn.py),
     bank, biuro rachunkowe,
- 6. rozliczenie JDG (składki, zaliczka PIT, VAT), kredyt odnawialny przy braku gotówki,
- 7. karta wyników (od rundy 2; w grze widoczna od rundy 3).
+ 6. rozliczenie JDG (składki, zaliczka PIT, VAT), debet przy braku gotówki,
+ 7. wynik punktowy (tydzień 1 – Wielkie otwarcie, od tygodnia 2 – pięć działów).
 """
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ from .ksiegowosc.finanse import (
     Ksiega,
     Rachunek,
     ksieguj,
-    uruchom_odnawialny,
+    uruchom_debet,
     wyrownaj_gotowke,
     zadluzenie,
 )
@@ -60,7 +60,7 @@ from .rynek import promocje as pm
 from .rynek import reklama as rk
 from .swiat import awarie as aw
 from .swiat import zdarzenia as zd
-from .wyniki import karta as kw
+from .wyniki import punkty as pk
 from .wyniki.majatek import majatek_netto
 
 EPS = 1e-9
@@ -87,10 +87,10 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
     nazwy = sorted(s.firmy)
     kolejnosc = list(strumien(ziarno, r, "kolejnosc").permutation(nazwy))
 
-    rachunki, info, bledy, odnawialny = {}, {}, {}, {}
-    # domyślnie "na_biezaco" (jak w banku); "jednoczesnie" (jak w oficjalnej grze): przychody i wydatki miesiąca rozliczane razem – kredyt odnawialny tylko
-    # na niedobór na koniec miesiąca; "na_biezaco": wydatki z decyzji opłacane przed wpływem przychodów
-    tryb_kredytu = konfiguracja.get("kredyt_odnawialny", "na_biezaco")
+    rachunki, info, bledy = {}, {}, {}
+    # domyślnie "na_biezaco" (jak w banku); "jednoczesnie": przychody i wydatki tygodnia rozliczane razem – debet tylko
+    # na niedobór na koniec tygodnia; "na_biezaco": wydatki z decyzji opłacane przed wpływem przychodów
+    tryb_kredytu = konfiguracja.get("tryb_debetu", "na_biezaco")
     start = {n: {"magazyn": dict(f.magazyn), "gotowka": f.gotowka, "pracownicy": len(f.pracownicy), "uslugi": len(f.oferta)}
              for n, f in s.firmy.items()}
     for nazwa in nazwy:
@@ -176,7 +176,8 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         info[nazwa]["lokal"] = lokal
         if bank_info is not None:
             info[nazwa]["bank"] = bank_info
-        odnawialny[nazwa] = uruchom_odnawialny(f, rachunki[nazwa]) if tryb_kredytu == "na_biezaco" else 0.0
+        if tryb_kredytu == "na_biezaco":   # wydatki z decyzji opłacane przed wpływem przychodów (chwilowy debet)
+            uruchom_debet(f, rachunki[nazwa])
 
     # przejścia pracowników po okresie wypowiedzenia, opłaty headhuntera
     rp.po_decyzjach(dane, s, r, rynek_pracy, ksiegi, rachunki)
@@ -204,7 +205,7 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         for nazwa in nazwy:
             f = s.firmy[nazwa]
             # popyt strefowy: oferty lokali (zadowolenie klientów z karty poprzedniej rundy)
-            zk = ((s.wyniki.get(r - 1) or {}).get(nazwa, {}).get("karta") or {}).get("zadowolenie_klientow")
+            zk = (((s.wyniki.get(r - 1) or {}).get(nazwa, {}).get("karta") or {}).get("wskazniki") or {}).get("zadowolenie_klientow")
             mn_firmy = f.baza_klientow * (1 - info[nazwa]["harpagon_presja"]["odplyw"])   # Harpagon odstrasza gości
             mn_firmy *= zd.mnoznik_popytu(f, r)   # skutki eventów w parkach
             mn_firmy *= bt.przewaga_popytu(dane, konfiguracja, nazwa)   # bot niemożliwy oszukuje
@@ -265,13 +266,14 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         # wynajęta chłodnia i kontrola sanepidu (silnik/kuchnia/magazyn.py)
         info[nazwa]["magazyn"] = mag.koniec_rundy(dane, f, r, ziarno, (strefowy or {}).get("swiezosc", {}).get(nazwa) or {},
                                                   ks, rach, urz.modyfikatory(dane, f, r))
+        wyrownaj_gotowke(f, rach)   # saldo końca tygodnia: przychody spłacają debet z wydatków, opłata tylko od reszty
         bank_koniec = bk.koniec_rundy(dane, f, r, ks, rach, {b.id: n[1] for b in f.budynki if (n := pr.najem(s.firmy, b.id))})
         info[nazwa]["harpagon_odsetki"] = lw.koniec_rundy(dane, f, r)   # doliczone do długu, poza KPiR
         if not podglad:   # zaproszenie do klubu na następną rundę
             info[nazwa]["zaproszenie"] = kas.zaproszenie(dane, f, r, ziarno, konfiguracja["liczba_rund"],
                                                          bool(konfiguracja.get("kasyno_botow")))
         if f.biuro in bo.biura(dane):   # biura z mapy albo samodzielna księgowość (silnik/ksiegowosc/biuro.py)
-            info[nazwa]["biuro"] = bo.nalicz(dane, f, ks, rach, *bo._umowy(dane, f))
+            info[nazwa]["biuro"] = bo.nalicz(dane, f, ks, rach, *bo._umowy(dane, f), r, r >= konfiguracja["liczba_rund"])
         # JDG: składki właściciela, zaliczka PIT i VAT (silnik/ksiegowosc/rozliczenie.py)
         samodzielnie = bo.zamknij_samodzielnie(f, r >= konfiguracja["liczba_rund"])
         stan_przed = bo.stan_rozliczen(f)
@@ -281,8 +283,8 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
             info[nazwa]["biuro"]["blad"] = bo.blad_biura(dane, f, nazwa, r, ziarno, rach)
         # udział inwestora ratunkowego w dochodzie netto – przed wyrównaniem gotówki (silnik/pieniadze/inwestor.py)
         udzial_inwestora = inw.koniec_rundy(f, r, round(ks.dochod - podatek, 2), rach)
-        wyrownaj_gotowke(f, rach, odnawialny[nazwa])
-        if samodzielnie:   # dokumenty rundy – po ostatniej operacji (także kredycie odnawialnym)
+        wyrownaj_gotowke(f, rach)
+        if samodzielnie:   # dokumenty rundy – po ostatniej operacji (także debecie)
             bo.otworz(f, r, ks, rach, info[nazwa]["rozliczenie"], stan_przed)
         bledy[nazwa] += bk.bledy(dane, f, info[nazwa].get("bank"), bank_koniec)
         bledy[nazwa] += lw.bledy(dane, f, info[nazwa].get("harpagon"), r + 1)
@@ -341,9 +343,8 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
             w["swiezosc"] = strefowy["swiezosc"][nazwa]
             mag.dolicz_oddane(strefowy["swiezosc"][nazwa], (info[nazwa].get("zdarzenia") or {}).get("oddane"))
             _straty_w_zasobach(w["zasoby"], strefowy["swiezosc"][nazwa]["straty"])
-        if "karta" in w and f.lokale:   # składniki kebabowe karty – po zebraniu wyników tygodnia
-            w["karta_kebab"] = kw.kebab(dane, f, w, _netto_karty(dane, netto, info[nazwa]), zadluzenie(f))
-            f.rozwoj_poprzedni = w["karta"]["rozwoj_firmy"]
+        # wynik punktowy tygodnia – po zebraniu wyników (potrzebuje kontroli, świeżości, zdarzeń i opinii)
+        w["karta"] = _karta(dane, f, r, w, info[nazwa], _netto_karty(dane, netto, info[nazwa]))
 
     # giełda handlu: nowe ogłoszenia (drużyny i boty) po tygodniu sprzedaży, licytowane w następnej rundzie
     ogloszenia = hd.zamknij(dane, s.firmy, decyzje, r, wyniki, konfiguracja)
@@ -388,7 +389,7 @@ def _wyniki_firmy(dane, f: Firma, r, ks: Ksiega, rach: Rachunek, info, popyt, ob
                   bledy, netto) -> dict:
     z = dane.z
     w = {"runda": r, "miesiac": dane.nazwa_rundy(r), "kpir": ks.do_slownika(),
-         "rachunek": rach.operacje, "gotowka": f.gotowka, "kredyt_odnawialny": f.kredyt_odnawialny,
+         "rachunek": rach.operacje, "gotowka": f.gotowka, "debet": f.debet,
          "zadluzenie": zadluzenie(f), "lokaty": sum(l.kwota for l in f.lokaty), "lista_bledow": bledy,
          "uzgodnienie": uzgodnij(start["gotowka"], f.gotowka, ks, rach)}   # kasa = KPiR ± VAT ± poza KPiR
     # JDG: zaliczka PIT i składka zdrowotna; rejestr VAT
@@ -404,7 +405,7 @@ def _wyniki_firmy(dane, f: Firma, r, ks: Ksiega, rach: Rachunek, info, popyt, ob
                            "utracona": obsluga["utracona"][u], "przyczyna": obsluga["przyczyna"].get(u, ""),
                            "cena": f.ceny[u].cena, "rabat": f.ceny[u].rabat, "cena_po_rabacie": o["cena"],
                            "przychod": round((info.get("przychod_sprzedazy") or {}).get(
-                               u, obsluga["obsluzeni"][u] * o["cena"]), 2), "reklamacje": obsluga["reklamacje"][u],
+                               u, obsluga["obsluzeni"][u] * o["cena"]), 2), "pomylki": obsluga["pomylki"][u],
                            "jakosc": o["jakosc"], "skladniki_popytu": rynek[u][f.nazwa]["skladniki"]}
     w["sprzedaz"] = sprzedaz
 
@@ -464,12 +465,6 @@ def _wyniki_firmy(dane, f: Firma, r, ks: Ksiega, rach: Rachunek, info, popyt, ob
     if "szkolenia_aktywne" in info:   # kalibracja B9: szkolenia działające w tej rundzie (do której rundy)
         w["szkolenia_aktywne"] = info["szkolenia_aktywne"]
 
-    # karta wyników
-    if r >= 2:
-        w["karta"] = _karta(dane, f, r, sprzedaz, info, start, _netto_karty(dane, netto, info))
-    f.szczyt_majatku = max(f.szczyt_majatku, f.majatek)
-    f.poprzednio_uslug = len(f.oferta)
-    f.poprzednio_pracownikow = len(f.pracownicy)
     return w
 
 
@@ -537,9 +532,9 @@ def mandaty_rundy(info: dict) -> float:
 
 def _netto_karty(dane: Dane, netto: float, info: dict) -> float:
     """Dochód netto do karty: odsetki Harpagona (poza KPiR) obniżają wynik jak koszty (Z1), a przy
-    karta_wynikow.mandaty_w_dochodzie także mandaty rundy (B12). KPiR i podatki bez zmian."""
+    wynik.mandaty_w_dochodzie także mandaty rundy (B12). KPiR i podatki bez zmian."""
     odsetki = (info.get("harpagon_odsetki") or {}).get("odsetki") or 0.0
-    mandaty = mandaty_rundy(info) if dane.z["karta_wynikow"].get("mandaty_w_dochodzie") else 0.0
+    mandaty = mandaty_rundy(info) if dane.z["wynik"].get("mandaty_w_dochodzie") else 0.0
     return round(netto - odsetki - mandaty, 2)
 
 
@@ -556,43 +551,37 @@ def _procent_lokali(dane: Dane, f: Firma, rodzaj: str, wagi: bool = False) -> fl
                for lok in f.lokale) / sum(w.values())
 
 
-def _karta(dane: Dane, f: Firma, r: int, sprzedaz: dict, info: dict, start: dict, netto: float) -> dict:
-    sprzedane = {u: v for u, v in sprzedaz.items() if v["sprzedaz"] > 0}
-    klienci = sum(v["sprzedaz"] for v in sprzedane.values())
-    popyt = sum(v["popyt"] for v in sprzedaz.values())
-    utracona = sum(v["utracona"] for v in sprzedaz.values()) / popyt if popyt else 0.0
-    if klienci:
-        r_rynek = kw.cena_wzgledem_strefy(dane, sprzedane)   # cena względem ceny preferowanej strefy lokalu (F4.1)
-        q_sr = sum(v["sprzedaz"] * menu.jakosc_dania(dane, v["jakosc"]) for v in sprzedane.values()) / klienci
-        reklamacje = sum(v["reklamacje"] for v in sprzedane.values()) / klienci
-    else:
-        r_rynek, q_sr, reklamacje = 1.0, 0.0, 0.0
-    wyp = _procent_lokali(dane, f, "wyposazenie")
-    zk = kw.zadowolenie_klientow(dane, len(sprzedane), r_rynek, f.utracona_poprzednio, q_sr, wyp, reklamacje)
-    f.utracona_poprzednio = utracona
-    f.baza_klientow *= 1 - dane.z["popyt"]["utrata_klientow"] * utracona   # klienci nieobsłużeni częściowo nie wracają
-
-    prac = list(f.pracownicy.values())
-    if prac:
-        placa = float(np.mean([zo.placa_wzgledna(dane, p) for p in prac]))
-        zlecenia = sum(bool(fz.forma(dane, p.umowa)["kara_zlecenia"]) for p in prac) / len(prac)
-    else:
-        placa, zlecenia = 1.0, 0.0
-    jakosci = [q for st in f.stanowiska for q in st.sprzet.values()]
-    sprzet_gw = float(np.mean(jakosci)) if jakosci else 2.0
-    udog = _procent_lokali(dane, f, "udogodnienia", wagi=True)
-    zmiany = (len(info["zatrudnieni"]) + len(info["zwolnieni"]) + len(info.get("wypowiedzenia", []))) / max(1, len(prac))
-    zp = kw.zadowolenie_pracownikow(dane, placa, sprzet_gw, udog, info["szkolenia_procent"], zlecenia,
-                                    zmiany if r > 2 else 0.0) if prac else 0.0
-
-    przyrost = max(0, len(f.oferta) - f.poprzednio_uslug) + max(0, len(f.pracownicy) - f.poprzednio_pracownikow)
-    maj = kw.majatek_karty(f)
-    roz = kw.rozwoj_firmy(dane, kw.majatek_karty(f, kw.waga_nieruchomosci(dane)), info["inwestycje"], przyrost, len(f.oferta) + len(f.pracownicy),
-                          f.rozwoj_poprzedni, info.get("sprzedany_majatek", 0.0), info.get("majatek_przed"),
-                          f.szczyt_majatku)
-    f.rozwoj_poprzedni = roz
-    zad = kw.wskaznik_zadluzenia(zadluzenie(f), maj, f.skumulowany_dochod_netto, f.gotowka)
-    return kw.karta(dane, netto, zk, zp, roz, zad)
+def _karta(dane: Dane, f: Firma, r: int, w: dict, info: dict, netto: float) -> dict:
+    """Wynik punktowy tygodnia (silnik/wyniki/punkty.py): tydzień 1 – „Wielkie otwarcie”, od tygodnia 2 – pięć działów."""
+    if r < 2:
+        zapas = sum(f.wartosc_magazynu(k) for k in f.magazyn)
+        return pk.karta_otwarcia(dane, {"lokal": len(f.lokale), "menu": len(f.oferta), "ekipa": len(f.pracownicy),
+                                        "zaopatrzenie": zapas, "rezerwa": max(0.0, f.gotowka)})
+    sprzedaz = w["sprzedaz"]
+    g = pk.miary_gosci(dane, f, w, sprzedaz)
+    zadowolenie_gosci = pk.zadowolenie_gosci(dane, g)
+    prac = w["pracownicy"]
+    zespol = pk.zadowolenie_zespolu(dane, f, prac, info["szkolenia_procent"])
+    u = dane.z["wynik"]
+    koszty = max(u["koszty_tygodniowe_min"], w["kpir"]["koszty"])
+    dlug = zadluzenie(f) + (f.harpagon.dlug if f.harpagon else 0.0) + max(0.0, -f.gotowka)
+    maj = pk.majatek_karty(dane, f)
+    kapital = pk.udzial_kapitalu(dlug, maj, f.skumulowany_dochod_netto, f.gotowka)
+    przychody = w["kpir"]["przychody"]
+    miary = {
+        "finanse": {"dochod": netto, "marza": netto / przychody if przychody > 0 else 0.0},
+        "goscie": {"zadowolenie": zadowolenie_gosci,
+                   "obsluzeni": 1 - (g["popyt"] - g["klienci"]) / g["popyt"] if g["popyt"] else 0.0,
+                   "liczba": g["klienci"]},
+        "zespol": {"nastroj": zespol["nastroj"], "przepracowanie": zespol["przepracowanie"],
+                   "szkolenia": info["szkolenia_procent"] if prac else 0.0,
+                   "udogodnienia": _procent_lokali(dane, f, "udogodnienia", wagi=True) if prac else 0.0},
+        "rozwoj": {"majatek": maj, "lokale": len(f.lokale), "menu": len(f.oferta), "zaloga": len(f.pracownicy)},
+        "bezpieczenstwo": {"zapas": max(0.0, f.gotowka) / koszty, "kapital": kapital, "dlug": dlug / koszty},
+    }
+    wskazniki = {"zadowolenie_gosci": zadowolenie_gosci, "zadowolenie_zespolu": round(zespol["nastroj"], 3),
+                 "zadowolenie_klientow": round(zadowolenie_gosci * u["goscie"]["do_popytu"], 3)}
+    return pk.karta(dane, miary, wskazniki, g["klienci"])
 
 
 def _rynek_publiczny(dane: Dane, s: StanGry, r: int, oferty, wyniki, rynek) -> dict:
@@ -616,5 +605,7 @@ def _rynek_publiczny(dane: Dane, s: StanGry, r: int, oferty, wyniki, rynek) -> d
         pub["udogodnienia"][n] = len(f.udogodnienia)
         pub["wyposazenie"][n] = len(f.wyposazenie)
         if "karta" in w:
-            pub["karta"][n] = w["karta"]
+            k = w["karta"]   # publicznie: punkty tygodnia i działów (składniki widzi tylko sama firma)
+            pub["karta"][n] = {"punkty": k["punkty"], "otwarcie": bool(k.get("otwarcie")),
+                               "dzialy": {d: x["punkty"] for d, x in k["dzialy"].items()}}
     return pub

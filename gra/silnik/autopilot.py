@@ -186,8 +186,8 @@ def _obsadzone_kuchnie(dane: Dane, f: Firma, d: dict, runda: int) -> set[str]:
         st.pracownik = z.get("pracownik") or f"_plan_{z['typ']}_{st.nr}"
         g.pracownicy.setdefault(st.pracownik, Pracownik(
             id=st.pracownik, imie_nazwisko="", zawod=dane.zawody_typu(z["typ"])[0], gwiazdki=1,
-            pensja_preferowana_gr=0, koszt_rekrutacji_gr=0, koszt_odprawy_gr=0, zadowolenie_klientow=0,
-            ryzyko_reklamacji=0))
+            pensja_preferowana_gr=0, koszt_rekrutacji_gr=0, zadowolenie_klientow=0,
+            ryzyko_pomylki=0))
     g.wlasciciel_na = None
     wynik |= {s.lokal for s in g.stanowiska if s.typ == KUCHNIA and g.pracownik_stanowiska(s)}
     if dane.z["operacje"]["czas_wlasciciela"] > 0 and (wolne := cw._pusty_stanowisko_kandydaci(dane, g)):
@@ -262,7 +262,9 @@ def _ksiegowosc(dane: Dane, f: Firma, d: dict, wybrane: dict) -> dict:
     wybor = d.get("biuro") or (bo.SAMODZIELNIE if wybrane.get("biuro") == bo.SAMODZIELNIE else None) or f.biuro
     if not bo.biura(dane) or wybor != bo.SAMODZIELNIE:
         return {}
-    return {"biuro": bo.najtansze(dane, bo.ustawienia(dane)["szacunek_dokumentow"], *bo._umowy(dane, f))}
+    dok, umowy = bo.ustawienia(dane)["szacunek_dokumentow"], bo._umowy(dane, f)
+    biuro = bo.najtansze(dane, dok, *umowy)
+    return {"biuro": biuro, "pakiet": bo.najlepszy_pakiet(dane, bo.biura(dane)[biuro], dok, *umowy)}
 
 
 # --- urzędy: higiena domyślna, bez polis ------------------------------------------------------------------------
@@ -318,7 +320,8 @@ def _marketing(dane: Dane, f: Firma, runda: int, ksiega: Ksiega, wynik: dict) ->
     (`decyzje_firmy` – bez promocji); narzędzia internetowe – wyłączone."""
     trwaja = [k for k in f.kampanie if rk.dziala(dane, k, runda)]
     f.kampanie = [k for k in f.kampanie if k not in trwaja]
-    narzedzia, f.internet = len(f.internet), {}
+    narzedzia = len(f.internet)
+    f.internet = {}
     return (_ile("kampanie reklamowe", len(trwaja)) + _ile("promocje", len(f.promocje))
             + _ile("narzędzia internetowe", narzedzia))
 

@@ -118,8 +118,8 @@ def test_wizyty_szkody_klienci_i_odejscie_pracownika():
     assert w["odplyw"] == 0.3 and "30%" in w["tekst"]
     st = f.stanowisko("kuchnia", 1)
     f.pracownicy["p1"] = Pracownik(id="p1", imie_nazwisko="Kleant Walerski", zawod="kucharz", gwiazdki=2,
-                                   pensja_preferowana=4000, koszt_rekrutacji=0, koszt_odprawy=0,
-                                   zadowolenie_klientow=1.0, ryzyko_reklamacji=0.0, stanowisko=1)
+                                   pensja_preferowana=4000, koszt_rekrutacji=0,
+                                   zadowolenie_klientow=1.0, ryzyko_pomylki=0.0, stanowisko=1)
     st.pracownik = "p1"
     w, odszedl, _ = _wizyta(g, "pracownik", f)
     assert odszedl.id == "p1" and "Kleant Walerski" in w["tekst"]

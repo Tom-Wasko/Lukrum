@@ -170,7 +170,7 @@ def api_gry(request):
             int(d["liczba_rund"]) if d.get("liczba_rund") else None,  # brak – domyślna z danych
             int(ziarno) if str(ziarno or "").strip().isdigit() else None,
             ceny_dostawcow=d.get("ceny_dostawcow", "dane"),
-            kredyt_odnawialny=d.get("kredyt_odnawialny", "na_biezaco"),
+            tryb_debetu=d.get("tryb_debetu", "na_biezaco"),
             auto_zamowienia=bool(d.get("auto_zamowienia")),
             refleksja=d.get("refleksja") or "opcjonalna",
             podpowiedzi=bool(d.get("podpowiedzi")),

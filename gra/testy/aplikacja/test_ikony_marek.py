@@ -70,6 +70,6 @@ def test_nazwy_z_kodu_sa_w_zakladkach():
 
 def test_kazda_marka_ma_ikone():
     nazwy, ikony = _nazwy(), _ikony()
-    assert len(nazwy) > 50 and {"Biedronka", "Kasjer", "Kucharz", "mBank", "IKEA", "Pożar w kuchni"} <= set(nazwy)
+    assert len(nazwy) > 50 and {"Biedronka", "Kasjer", "Kucharz", "Soplicowo", "IKEA", "Pożar w kuchni"} <= set(nazwy)
     brak = sorted(f"{n} ({skad})" for n, skad in nazwy.items() if n not in ikony)
     assert brak == [], "Bez ikony w ikony_marek.js:\n" + "\n".join(brak)

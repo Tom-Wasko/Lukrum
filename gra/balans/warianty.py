@@ -45,6 +45,7 @@ from silnik.dane import KATALOG_GRY, Dane, dane_domyslne
 from silnik.gra import Gra
 from silnik.ksiegowosc import biuro as bo
 from silnik.pieniadze import banki as bk
+from silnik.wyniki import punkty
 from silnik.wyniki.majatek import z_portfelem
 
 BADANA = "Badana"
@@ -411,9 +412,12 @@ def rozegraj(z: Zadanie) -> dict:
 
 
 def miary(s, rund: int) -> dict:
-    # karta skumulowana (plan): średni wynik działalności z rund 2..N, jak ranking mistrza gry
-    karty = {n: sum(s.wyniki[r][n]["karta"]["wynik_dzialalnosci"] for r in range(2, rund + 1))
-             / max(1, rund - 1) for n in s.firmy}
+    # ranking: wynik gry (punkty z tygodni 1..N z wagami), jak ranking mistrza gry
+    dane = dane_domyslne()
+    karty = {}
+    for n in s.firmy:
+        tygodnie = {r: s.wyniki[r][n]["karta"]["punkty"] for r in range(1, rund + 1)}
+        karty[n] = punkty.ranking(dane, tygodnie, rund)["wynik"]
     ws = [s.wyniki[r][BADANA] for r in range(1, rund + 1)]
     plus = next((r for r, w in enumerate(ws, 1) if w["kpir"]["dochod_netto"] > 0), rund + 1)
     # alarm = debet ponad limit konta (plan; po Z3 – pole alarm w wynikach)

@@ -100,331 +100,88 @@ udogodnienia:
   zrodlo: 'założenie autora: HR – udogodnienia odblokowywane w kolejnych rundach; sprzedaż za 50% ceny; od rundy 3 automat z kawą,
     kuchenka, stojak na rowery, od 4 klimatyzacja, fotel do masażu (utrzymanie 10), roślinność'
   pozycje:
-  - nazwa: Automat z kawą fair trade
-    procent: 95
-    cena: 2500
-    utrzymanie: 200
+  - nazwa: Ekspres do kawy ziarnistej dla zespołu
+    procent: 85
+    cena: 3400
+    utrzymanie: 320
     od_rundy: 3
-  - nazwa: Klimatyzacja
-    procent: 80
-    cena: 3000
-    utrzymanie: 100
-    od_rundy: 4
-  - nazwa: Kuchenka mikrofalowa
-    procent: 60
-    cena: 202
-    utrzymanie: 5
-    od_rundy: 3
-  - nazwa: Stojak na rowery
-    procent: 40
-    cena: 1000
-    utrzymanie: 0
-    od_rundy: 3
-  - nazwa: Fotel do masażu
-    procent: 30
-    cena: 2500
-    utrzymanie: 10
-    od_rundy: 4
-  - nazwa: Kwiaty na zapleczu
-    procent: 15
-    cena: 1100
-    utrzymanie: 0
-    od_rundy: 4
-  - nazwa: Głośnik Bluetooth
-    procent: 90
-    cena: 75
-    utrzymanie: 0
-    od_rundy: 8
-  - nazwa: Lodówka z napojami
+  - nazwa: Klimatyzatory split w kuchni i na zapleczu
     procent: 70
-    cena: 1000
+    cena: 4200
+    utrzymanie: 90
+    od_rundy: 4
+  - nazwa: Kącik socjalny z czajnikiem i mikrofalą
+    procent: 55
+    cena: 480
+    utrzymanie: 10
+    od_rundy: 3
+  - nazwa: Wiata rowerowa przy lokalu
+    procent: 35
+    cena: 1400
     utrzymanie: 0
+    od_rundy: 3
+  - nazwa: Maty antyzmęczeniowe i krzesła przy rożnie
+    procent: 40
+    cena: 1900
+    utrzymanie: 0
+    od_rundy: 4
+  - nazwa: Szatnia z szafkami na klucz
+    procent: 60
+    cena: 1300
+    utrzymanie: 0
+    od_rundy: 4
+  - nazwa: Radio w kuchni
+    procent: 75
+    cena: 220
+    utrzymanie: 0
+    od_rundy: 6
+  - nazwa: Szafa chłodnicza z napojami dla zespołu
+    procent: 55
+    cena: 1650
+    utrzymanie: 60
     od_rundy: 8
-  - nazwa: Strefa relaksu
-    procent: 22
-    cena: 4000
-    utrzymanie: 0
+  - nazwa: Pokój socjalny z kanapą i telewizorem
+    procent: 18
+    cena: 3300
+    utrzymanie: 25
     od_rundy: 8
 wyposazenie:
   zrodlo: 'założenie autora: wyposażenie lokalu; cena = 2 × cena sprzedaży; parking i terminal – cena zakupu nieznana (sprzedaż
     0); sklep – notatka „Elementy mapy” (Leroy Merlin, IKEA, OBI, Jula, Castorama), przypisanie – założenie F3a.6'
   pozycje:
-  - nazwa: Darmowe WiFi
-    procent: 95
-    cena: 200
-    utrzymanie: 20
-    od_rundy: 4
-    sklep: OBI
-  - nazwa: Miejsca parkingowe dla klientów
+  - nazwa: WiFi dla gości (światłowód)
     procent: 90
-    cena: 0
-    utrzymanie: 1500
+    cena: 350
+    utrzymanie: 90
     od_rundy: 4
-  - nazwa: Terminal płatniczy
-    procent: 80
+  - nazwa: Miejsca postojowe przy lokalu (dzierżawa)
+    procent: 70
     cena: 0
-    utrzymanie: 100
+    utrzymanie: 900
     od_rundy: 4
-  - nazwa: Dystrybutor wody dla klientów
-    procent: 75
-    cena: 2000
-    utrzymanie: 200
-    od_rundy: 5
-    sklep: Castorama
-  - nazwa: Stoliki i krzesła dla klientów
+  - nazwa: Drugi terminal przy okienku wydawczym
+    procent: 65
+    cena: 0
+    utrzymanie: 70
+    od_rundy: 4
+  - nazwa: Filtrowana woda do dzbanków dla gości
     procent: 60
-    cena: 2500
+    cena: 1750
+    utrzymanie: 90
+    od_rundy: 5
+    sklep: Leroy Merlin
+  - nazwa: Stoły i ławy z jasnego drewna
+    procent: 55
+    cena: 3100
     utrzymanie: 0
     od_rundy: 5
     sklep: IKEA
-  - nazwa: Telewizor z meczami
-    procent: 30
-    cena: 2300
-    utrzymanie: 10
+  - nazwa: Ekran z transmisją meczów Motoru Lublin
+    procent: 35
+    cena: 2900
+    utrzymanie: 120
     od_rundy: 5
-    sklep: Jula
-media_tradycyjne:
-  zrodlo: 'założenie autora: marketing tradycyjny; zniżka: [od emisji, %]; od rundy 5: billboard/ulotki i prasa, od 6: radio,
-    od 7: telewizja (od użytkownika)'
-  pozycje:
-  - nazwa: Ulotki
-    kategoria: billboard_ulotki
-    zasieg: 0.75
-    cena: 220
-    znizki:
-    - - 4
-      - 15
-    - - 11
-      - 30
-    od_rundy: 5
-  - nazwa: Ekrany LED
-    kategoria: billboard_ulotki
-    zasieg: 0.5
-    cena: 700
-    znizki:
-    - - 4
-      - 20
-    - - 11
-      - 30
-    od_rundy: 5
-  - nazwa: Billboard (tradycyjny)
-    kategoria: billboard_ulotki
-    zasieg: 0.45
-    cena: 500
-    znizki:
-    - - 4
-      - 15
-    - - 11
-      - 30
-    od_rundy: 5
-  - nazwa: Smaki Lublina (dziennik)
-    kategoria: prasa
-    zasieg: 0.6
-    cena: 750
-    znizki:
-    - - 6
-      - 20
-    - - 14
-      - 30
-    od_rundy: 5
-  - nazwa: Kurier Staromiejski (dziennik)
-    kategoria: prasa
-    zasieg: 0.55
-    cena: 650
-    znizki:
-    - - 6
-      - 15
-    - - 14
-      - 25
-    od_rundy: 5
-  - nazwa: Dziennik Bystrzycki (dziennik)
-    kategoria: prasa
-    zasieg: 0.5
-    cena: 500
-    znizki:
-    - - 6
-      - 10
-    - - 14
-      - 20
-    od_rundy: 5
-  - nazwa: Radio Czechówka
-    kategoria: radio
-    zasieg: 0.7
-    cena: 400
-    znizki:
-    - - 10
-      - 20
-    - - 21
-      - 30
-    od_rundy: 6
-  - nazwa: Radio Rożen FM
-    kategoria: radio
-    zasieg: 0.65
-    cena: 300
-    znizki:
-    - - 10
-      - 15
-    - - 21
-      - 20
-    od_rundy: 6
-  - nazwa: Radio Wieniawa
-    kategoria: radio
-    zasieg: 0.62
-    cena: 200
-    znizki:
-    - - 10
-      - 10
-    - - 21
-      - 20
-    od_rundy: 6
-  - nazwa: Smakołyk TV
-    kategoria: telewizja
-    zasieg: 0.72
-    cena: 30000
-    znizki:
-    - - 3
-      - 20
-    - - 7
-      - 30
-    od_rundy: 7
-  - nazwa: Kanał Głodomora
-    kategoria: telewizja
-    zasieg: 0.7
-    cena: 25000
-    znizki:
-    - - 3
-      - 10
-    - - 7
-      - 20
-    od_rundy: 7
-  - nazwa: Studencka TV
-    kategoria: telewizja
-    zasieg: 0.35
-    cena: 20000
-    znizki:
-    - - 2
-      - 15
-    - - 5
-      - 25
-    od_rundy: 7
-narzedzia_internetowe:
-  zrodlo: 'cenniki usług (uruchomienie i utrzymanie); Instagram i aplikacja mobilna – założenie; od rundy 6: 5 pierwszych
-    + Facebook, od 7: reszta (od użytkownika)'
-  pozycje:
-  - nazwa: Strona www firmy
-    uruchomienie: 2500
-    utrzymanie: 250
-    od_rundy: 6
-  - nazwa: Informacja na portalu gastronomicznym
-    uruchomienie: 3000
-    utrzymanie: 200
-    od_rundy: 6
-  - nazwa: Informacja na portalu Księga Firm Lubelskich
-    uruchomienie: 3500
-    utrzymanie: 250
-    od_rundy: 6
-  - nazwa: Informacje na forach internetowych
-    uruchomienie: 100
-    utrzymanie: 500
-    od_rundy: 6
-  - nazwa: Informacja na portalu lokalnym miejscowości
-    uruchomienie: 500
-    utrzymanie: 700
-    od_rundy: 6
-  - nazwa: Kanał na YouTube
-    uruchomienie: 500
-    utrzymanie: 750
-    od_rundy: 7
-  - nazwa: Profil na Facebook
-    uruchomienie: 1200
-    utrzymanie: 1000
-    od_rundy: 6
-  - nazwa: Profil na Instagram
-    uruchomienie: 1200
-    utrzymanie: 1000
-    zalozenie: true
-    od_rundy: 7
-  - nazwa: Aplikacja mobilna
-    uruchomienie: 8000
-    utrzymanie: 500
-    zalozenie: true
-    od_rundy: 7
-banki:
-  zrodlo: 'założenie autora: oprocentowanie roczne; od rundy 1: Bank Pod Bramą, Kasa Bystrzyca, Bank Zalew; od rundy 4:
-    Bank Kalinowy, Bank Wieniawski, Bank Lubartowska (od użytkownika)'
-  pozycje:
-  - nazwa: Bank Pod Bramą
-    konto: 10
-    karta: 5
-    lokata: 0.02
-    kredyt_odnawialny: 0.07
-    kredyt: 0.05
-    od_rundy: 1
-  - nazwa: Kasa Bystrzyca
-    konto: 5
-    karta: 5
-    lokata: 0.03
-    kredyt_odnawialny: 0.06
-    kredyt: 0.07
-    od_rundy: 1
-  - nazwa: Bank Zalew
-    konto: 15
-    karta: 0
-    lokata: 0.05
-    kredyt_odnawialny: 0.05
-    kredyt: 0.05
-    od_rundy: 1
-  - nazwa: Bank Kalinowy
-    konto: 20
-    karta: 0
-    lokata: 0.07
-    kredyt_odnawialny: 0.12
-    kredyt: 0.1
-    od_rundy: 4
-  - nazwa: Bank Wieniawski
-    konto: 5
-    karta: 15
-    lokata: 0.01
-    kredyt_odnawialny: 0.12
-    kredyt: 0.12
-    od_rundy: 4
-  - nazwa: Bank Lubartowska
-    konto: 10
-    karta: 2
-    lokata: 0.01
-    kredyt_odnawialny: 0.1
-    kredyt: 0.11
-    od_rundy: 4
-  kredyt_maks_miesiecy: 26  # w rundach (tygodniach) – F2.7
-  lokata_konczy_sie_najpozniej_w_ostatniej_rundzie: true
-biura_rachunkowe:
-  zrodlo: 'założenie autora: 6 biur rachunkowych, ceny dopasowane do rynku; KPiR: dokument = każda pozycja KPiR poza obsługą
-    kadrowo-płacową'
-  pozycje:
-  - nazwa: Biuro Rachunkowe Sumator
-    ksiegowanie: 1.2
-    etat: 33
-    zlecenie: 10
-  - nazwa: Biuro Rachunkowe Abakus
-    ksiegowanie: 1.2
-    etat: 32
-    zlecenie: 11
-  - nazwa: Biuro Rachunkowe Bilans
-    ksiegowanie: 1.1
-    etat: 37
-    zlecenie: 14
-  - nazwa: Biuro Rachunkowe Liczydło
-    ksiegowanie: 1.3
-    etat: 29
-    zlecenie: 9
-  - nazwa: Biuro Rachunkowe Grodzka
-    ksiegowanie: 1.0
-    etat: 32
-    zlecenie: 12
-  - nazwa: Biuro Rachunkowe Saldo
-    ksiegowanie: 1.5
-    etat: 28
-    zlecenie: 5
+    sklep: Leroy Merlin
 szkolenia:
   zrodlo: 'założenie autora: HR – szkolenia, % pracowników oczekujących i ceny; nazwy firm i szkoleń – gastronomia (F2.6)'
   firmy:

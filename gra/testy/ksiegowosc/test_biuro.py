@@ -45,33 +45,85 @@ def _do_deklaracji(g, rund=3):
     return dk
 
 
-def test_oplata_ryczalt_limit_minimum_i_kadry(dane):
+def test_oplata_pakiet_limit_doplata_i_kadry(dane):
     b = bo.biura(dane)
-    jks = bo.oplata(dane, b["jks"], 30, 5, 1)     # limit 80/mies. → 18/rundę; kadry: 4 w cenie (najpierw etat)
-    assert jks["limit"] == 18 and jks["ponad"] == 12
-    assert jks["ksiegowanie"] == pytest.approx(dane.na_runde(690) + 12 * 4.92, abs=0.01)
+    jks = bo.oplata(dane, b["jks"], 30, 5, 1, "S")   # limit S: 60/mies. → 14/rundę; kadry: 4 w cenie (najpierw etat)
+    assert jks["limit"] == 14 and jks["ponad"] == 16 and jks["pakiet"] == "S"
+    assert jks["ksiegowanie"] == pytest.approx(dane.na_runde(390) + 16 * 6.15, abs=0.01)
     assert jks["kadry"] == pytest.approx(dane.na_runde(45 + 25), abs=0.01) and jks["osoby_platne"] == 2
-    e = bo.oplata(dane, b["eksiegi"], 5, 0, 0)    # 5 × 3,69 < minimum 123/mies.
-    assert e["ksiegowanie"] == dane.na_runde(123)
-    dk = bo.oplata(dane, b["debet_kredyt"], 500, 0, 0)   # ryczałt bez limitu
-    assert dk["ponad"] == 0 and dk["ksiegowanie"] == dane.na_runde(984)
+    m = bo.oplata(dane, b["jks"], 30, 0, 0, "M")     # limit M: 120/mies. → 28/rundę, dopłata za 2 dokumenty
+    assert m["limit"] == 28 and m["ponad"] == 2 and m["ksiegowanie"] == pytest.approx(dane.na_runde(690) + 2 * 5.5, abs=0.01)
+    assert bo.oplata(dane, b["jks"], 30, 0, 0, "L")["ponad"] == 0                      # L: 46/rundę – bez dopłaty
+    # im więcej dokumentów, tym większy pakiet się opłaca
+    assert bo.najlepszy_pakiet(dane, b["scrooge"], 5, 0, 0) == "S"
+    assert bo.najlepszy_pakiet(dane, b["scrooge"], 200, 0, 0) == "L"
+
+
+def test_cztery_biura_o_roznych_cechach(dane):
+    b = bo.biura(dane)
+    assert list(b) == ["jks", "jozef_k", "scrooge", "asteroida_328"]
+    assert {x["nazwa"] for x in b.values()} == {"J.K.Ś.", "Józef K.", "Scrooge", "Asteroida 328"}
+    cena = lambda i: b[i]["pakiety"]["M"]["cena"]   # noqa: E731
+    assert cena("scrooge") < cena("jozef_k") < cena("jks") < cena("asteroida_328")   # Asteroida – dokładna i droga
+    assert b["asteroida_328"]["ryzyko_bledu"] == 0 and b["asteroida_328"]["oc"] and not b["scrooge"]["oc"]
+    assert b["scrooge"]["zamkniete_w_swieta"]["doplata"] > 0 and b["jozef_k"]["zmiana_pakietu_po"] == 2
 
 
 def test_biuro_z_mapy_nalicza_koszt_i_rozlicza_od_razu():
     g = _gra()
     for _ in range(3):
-        w = _runda(g, biuro="trybunal")
-    assert w["biuro"]["nazwa"] == "Księgowość Pod Trybunałem" and w["biuro"]["razem"] > 0
+        w = _runda(g, biuro="jozef_k", pakiet="M")
+    assert w["biuro"]["nazwa"] == "Józef K." and w["biuro"]["razem"] > 0 and w["biuro"]["pakiet"] == "M"
     assert any(p["opis"].startswith("Koszt biura rachunkowego") for p in w["kpir"]["pozycje"])
     assert w["rozliczenie"]["zaplacone"] and not w["samodzielnie"] and w["uzgodnienie"]["roznica"] == 0
 
 
+def test_zmiana_pakietu_u_jozefa_k_trwa_dwie_rundy_a_gdzie_indziej_jest_od_razu():
+    g = _gra()
+    _runda(g, biuro="jozef_k", pakiet="S")                    # pierwszy wybór – od razu
+    f = g.stan().firmy["H"]
+    assert f.pakiet_biura == "S"
+    _runda(g, biuro="jozef_k", pakiet="L")                     # zmiana „wszystko trwa”: dopiero za 2 rundy
+    f = g.stan().firmy["H"]
+    assert f.pakiet_biura == "S" and f.pakiet_nastepny == {"pakiet": "L", "od_rundy": g.runda - 1 + 2}
+    _runda(g, biuro="jozef_k", pakiet="L")                     # ponowna decyzja nie przesuwa terminu
+    assert g.stan().firmy["H"].pakiet_nastepny["od_rundy"] == f.pakiet_nastepny["od_rundy"]
+    _runda(g, biuro="jozef_k", pakiet="L")
+    _runda(g, biuro="jozef_k", pakiet="L")
+    f = g.stan().firmy["H"]
+    assert f.pakiet_biura == "L" and f.pakiet_nastepny is None
+    g2 = _gra()
+    _runda(g2, biuro="jks", pakiet="S")
+    _runda(g2, biuro="jks", pakiet="L")
+    assert g2.stan().firmy["H"].pakiet_biura == "L"            # J.K.Ś. – od razu
+
+
+def test_scrooge_w_swieta_zamkniety_dokumenty_czekaja_z_doplata(dane):
+    swieto = [r for r in range(2, 20) if bo.swieto_w_rundzie(dane, r)]
+    assert swieto and [r for r in range(2, 20) if not bo.swieto_w_rundzie(dane, r)]
+    r = swieto[0]
+    g = _gra(rund=r + 3)
+    while g.runda < r:
+        w = _runda(g, biuro="scrooge", pakiet="M")
+    # w tygodniu r-1 zdarzył się ostatni tydzień bez święta; następny przeliczany to r
+    w = _runda(g, biuro="scrooge", pakiet="M")
+    assert g.runda - 1 == r and w["biuro"]["zamkniete"] and w["biuro"]["dokumenty"] == 0 and w["biuro"]["przeniesione"] > 0
+    f = g.stan().firmy["H"]
+    ile = f.dokumenty_przeniesione
+    if not bo.swieto_w_rundzie(dane, r + 1):
+        w2 = _runda(g, biuro="scrooge", pakiet="M")
+        assert not w2["biuro"]["zamkniete"] and w2["biuro"]["przeniesione"] == ile
+        assert w2["biuro"]["za_swieta"] == round(ile * dane_domyslne().mapa["biura"]["biura"][2]["zamkniete_w_swieta"]["doplata"], 2)
+        assert g.stan().firmy["H"].dokumenty_przeniesione == 0
+    assert bo.biura(dane)["jks"].get("zamkniete_w_swieta") is None
+
+
 def test_blad_biura_bez_oc_kosztuje_mandat(dane, monkeypatch):
     oferty = bo.biura(dane)
-    monkeypatch.setitem(oferty["eksiegi"], "ryzyko_bledu", 1.0)
+    monkeypatch.setitem(oferty["scrooge"], "ryzyko_bledu", 1.0)
     monkeypatch.setattr(bo, "biura", lambda _d: oferty)
     g = _gra()
-    w = _runda(g, biuro="eksiegi")
+    w = _runda(g, biuro="scrooge")
     assert w["biuro"]["blad"]["kara"] == 200 and not w["biuro"]["blad"]["oc"]
     assert any(o["opis"].startswith("Mandat karny") for o in w["rachunek"]) and w["uzgodnienie"]["roznica"] == 0
 
@@ -159,6 +211,8 @@ def test_brak_deklaracji_na_liscie_bledow_mowi_co_zrobic_i_ile_kosztuje_biuro():
     b = [x for x in bo.bledy(g.dane, f, {"biuro": "samodzielnie"}) if x["poziom"] == "czerwony"]
     nazwa, zl = bo.najnizsza_oplata(g.dane, f, len(dk["dokumenty"]))
     etat, zlecenie = bo._umowy(g.dane, f)
-    assert zl == min(bo.oplata(g.dane, x, len(dk["dokumenty"]), etat, zlecenie)["razem"] for x in bo.biura(g.dane).values())
+    assert zl == min(bo.oplata(g.dane, x, len(dk["dokumenty"]), etat, zlecenie,
+                               bo.najlepszy_pakiet(g.dane, x, len(dk["dokumenty"]), etat, zlecenie))["razem"]
+                     for x in bo.biura(g.dane).values())
     assert len(b) == 1 and "Księgowość ▸ Biuro rachunkowe" in b[0]["tekst"] and f"({nazwa}) kosztuje ok. {zl:.0f} zł" in b[0]["tekst"]
     assert zl < bo.ustawienia(g.dane)["samodzielna"]["kara_brak"]

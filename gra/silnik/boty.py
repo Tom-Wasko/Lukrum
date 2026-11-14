@@ -57,7 +57,7 @@ from .rynek import promocje as pm
 from .rynek import reklama as rk
 from .swiat import awarie as aw
 from .swiat import zdarzenia as zd
-from .wyniki.karta import KOLEJKI
+from .wyniki.punkty import KOLEJKI
 
 DOMYSLNY_POZIOM = "sredni"
 
@@ -86,7 +86,7 @@ def _podwyzki(dane: Dane, f: Firma, ust: dict) -> dict:
     u = zo.ustawienia(dane)
     if not u:
         return {}
-    waga = dane.z["karta_wynikow"]["zadowolenie_pracownikow"]["placa_wzgledem_preferowanej"]
+    waga = dane.z["zadowolenie_osoby"]["wspolczynniki"]["placa_wzgledem_preferowanej"]
     zmiany = {}
     for p in sorted(f.pracownicy.values(), key=lambda p: p.id):
         if p.odchodzi or not p.niezadowolony or p.zadowolenie is None:
@@ -699,8 +699,15 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
     miejsca = lk.wolne_miejsca(dane, f, runda)
     if not stan.firmy[nazwa].bank:
         d["bank"] = bank_bota
+    if pz.get("debet") and not f.debet_wlaczony:   # zgoda na debet w banku konta (poziom łatwy o niej zapomina)
+        d["debet"] = True
     if not (f.biuro and bo.poprawny_wybor(dane, f.biuro)):   # biura z mapy – najtańsze dla typowej rundy
         d["biuro"] = bo.najtansze(dane, bo.ustawienia(dane)["szacunek_dokumentow"], 4, 0)
+    if (biuro := bo.biura(dane).get(d.get("biuro") or f.biuro or "")):   # pakiet na dokumenty z ostatniej rundy
+        dok = ((stan.wyniki.get(runda - 1) or {}).get(nazwa, {}).get("biuro") or {}).get("dokumenty")             or bo.ustawienia(dane)["szacunek_dokumentow"]
+        pakiet = bo.najlepszy_pakiet(dane, biuro, dok, *bo._umowy(dane, f))
+        if pakiet != (f.pakiet_nastepny or {}).get("pakiet", bo.pakiet_firmy(dane, f)) or not f.pakiet_biura:
+            d["pakiet"] = pakiet
 
     # usługi: start z usługami startowymi, potem po 3 nowe aż do celu
     oferta = list(f.oferta) or list(rundy["uslugi_startowe"])
@@ -834,7 +841,7 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
             k = najlepsi[int(rng.integers(len(najlepsi)))]
             pula.remove(k)
             d["zatrudnij"].append({"kandydat": k["id"], "typ": typ, "nr": nr, "pensja": _pensja(dane, st, k),
-                                   "umowa": "prace", "zastepca": True, "wzor": {"zawod": zawod, "gwiazdki": ql}}
+                                   "umowa": st.get("umowa", "prace"), "zastepca": True, "wzor": {"zawod": zawod, "gwiazdki": ql}}
                                   | ({"kanal": kanal} if kanal else {}))
     else:
         d.pop("_obsada", None)

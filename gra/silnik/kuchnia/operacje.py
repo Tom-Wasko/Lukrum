@@ -11,9 +11,10 @@ Zasady (dokumentacja/OPIS_GRY.md):
 - recepcja (kasa): godziny na klienta z danych, 160 h na kasjera z kompletem sprzętu kasy; liczona po zużyciu
   zasobów
   (klienci utraceni przez brak recepcji zużywają zasoby, wg pomiarów),
-- reklamacje: każdy obsłużony klient z prawdopodobieństwem = ryzyko reklamacji prowadzącego × mnożnik (0,15,
-  skalibrowany pomiarami zużycia zasobów); reklamacja zużywa
-  zasoby jeszcze raz.
+- pomyłki w szczycie (zamiast reklamacji): każdy obsłużony klient z prawdopodobieństwem = skłonność do pomyłek
+  prowadzącego + dodatek za szczyt (obciążenie kuchni ponad próg) + dodatek za zmęczenie obsady (nadgodziny w
+  poprzednim tygodniu) + dodatek, gdy firma nie ma szkoleń (dane: pomylki); pomyłka zużywa zasoby jeszcze raz
+  i obniża zadowolenie gości.
 """
 from __future__ import annotations
 
@@ -24,6 +25,7 @@ from scipy.optimize import linprog
 
 from ..dane import KASA, KUCHNIA, Dane
 from ..losowosc import strumien
+from ..ludzie import szkolenia as szk
 from ..model import Firma, Stanowisko
 from . import swiezosc as sw
 
@@ -31,10 +33,9 @@ EPS = 1e-9
 
 
 def model_puli(dane: Dane) -> bool:
-    """„pula” (oficjalna gra): godziny prowadzących danego zawodu i godziny każdego rodzaju sprzętu są wspólne dla
-    całej firmy – sprzęt nie musi stać na stanowisku prowadzącego (pomiary: danie prowadzone,
-    choć jego sprzęt stał na nieobsadzonym stanowisku; obłożenie sprzętu = godziny / (sztuki × 160 h)).
-    „stanowisko”: usługa tylko na stanowisku, które ma prowadzącego i cały sprzęt (wcześniejsze założenie)."""
+    """„pula”: w małym kebabie z jednym grillem wszyscy stoją przy tym samym ladzie, więc godziny kucharzy i godziny
+    każdego rodzaju sprzętu są wspólne dla całej firmy (obłożenie sprzętu = godziny / (sztuki × 160 h)).
+    „stanowisko”: danie tylko na stanowisku, które ma kucharza i cały sprzęt (surowsze założenie)."""
     return dane.z["operacje"].get("model_stanowisk", "pula") == "pula"
 
 
@@ -122,7 +123,7 @@ def _przydziel_godziny(potrzeby: dict[str, float], mozliwe: dict[str, list[int]]
 def obsluz(dane: Dane, firma: Firma, popyt: dict[str, int], ziarno, runda: int,
            skala_godzin: float = 1.0, klucze: tuple = (), dzien: str | None = None) -> dict:
     """Ilu klientów firma obsłuży. Zmienia magazyn (zużycie). Zwraca szczegóły do wyników.
-    skala_godzin – część godzin rundy (obsługa dzień po dniu w popyt.py), klucze – do strumienia reklamacji,
+    skala_godzin – część godzin rundy (obsługa dzień po dniu w popyt.py), klucze – do strumienia pomyłek,
     dzien – data (ISO) w grze z lokalami: zużycie z partii dostarczonych do tego dnia (swiezosc.py)."""
     pelny_etat = dane.z["operacje"]["godziny_pracownika"]   # właściciel na stanowisku – mniej godzin (P5)
     stanowiska = firma.stanowiska_typu(KUCHNIA)
@@ -189,18 +190,28 @@ def obsluz(dane: Dane, firma: Firma, popyt: dict[str, int], ziarno, runda: int,
                 przyczyna[u] = f"zasoby ({nazwa})"
             obsluzeni[u] = nowe
 
-    # reklamacje (losowo) – ponowne wykonanie usługi zużywa zasoby
-    reklamacje = {}
-    mnoznik = dane.z["losowosc"].get("reklamacje_mnoznik_ryzyka", 1.0)
+    # pomyłki w szczycie (losowo) – ponowne wykonanie dania zużywa zasoby; szansa rośnie z obciążeniem kuchni,
+    # zmęczeniem obsady i brakiem szkoleń (dane/zalozenia.yaml: pomylki)
+    zp = dane.z["pomylki"]["szansa"]
+    dostepne_godz = sum(pojemnosc)
+    obciazenie = sum(potrzeby.values()) / dostepne_godz if dostepne_godz > EPS else 1.0
+    szczyt = zp["za_szczyt"] * min(1.0, max(0.0, (obciazenie - zp["prog_szczytu"]) / (1 - zp["prog_szczytu"])))
+    bez_szkolen = 0.0 if szk.procent(firma, runda) > 0 else zp["bez_szkolen"]
+    pomylki = {}
     for u, k in obsluzeni.items():
-        st = [stanowiska[i] for i in mozliwe[u]]
-        ryzyko = mnoznik * float(np.mean([firma.pracownik_stanowiska(s).ryzyko_reklamacji for s in st])) if st else 0.0
-        reklamacje[u] = int(strumien(ziarno, runda, "reklamacje", firma.nazwa, u, *klucze).binomial(k, ryzyko)) if k else 0
+        osoby = [firma.pracownik_stanowiska(stanowiska[i]) for i in mozliwe[u]]
+        if osoby:
+            zmeczenie = zp["za_zmeczenie"] * float(np.mean(
+                [min(1.0, max(0.0, (x.wykorzystanie - zp["zmeczenie_od"]) / (1 - zp["zmeczenie_od"]))) for x in osoby]))
+            ryzyko = min(zp["maks"], float(np.mean([x.ryzyko_pomylki for x in osoby])) + szczyt + zmeczenie + bez_szkolen)
+        else:
+            ryzyko = 0.0
+        pomylki[u] = int(strumien(ziarno, runda, "pomylki", firma.nazwa, u, *klucze).binomial(k, ryzyko)) if k else 0
 
     zuzycie = {}
     for u in obsluzeni:
         for nazwa, ile in dane.uslugi[u]["zasoby"].items():
-            zuzycie[nazwa] = zuzycie.get(nazwa, 0.0) + (obsluzeni[u] + reklamacje[u]) * ile / dane.zasoby[nazwa]["opakowanie"]
+            zuzycie[nazwa] = zuzycie.get(nazwa, 0.0) + (obsluzeni[u] + pomylki[u]) * ile / dane.zasoby[nazwa]["opakowanie"]
     zuzyte = _zuzyj(dane, firma, zuzycie, dzien)
 
     # recepcja – po zużyciu zasobów: klienci utraceni przez brak recepcji zużyli już zasoby
@@ -243,7 +254,7 @@ def obsluz(dane: Dane, firma: Firma, popyt: dict[str, int], ziarno, runda: int,
         "obsluzeni": obsluzeni,
         "utracona": {u: popyt[u] - obsluzeni[u] for u in popyt},
         "przyczyna": przyczyna,
-        "reklamacje": reklamacje,
+        "pomylki": pomylki,
         "zuzyte_zasoby": zuzyte,
         "godziny_stanowisk": {s.nr: godz_stanowisk[i] for i, s in enumerate(stanowiska)},
         "godziny_kasy": zajete_rec,

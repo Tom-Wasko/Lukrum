@@ -41,7 +41,7 @@ def test_vat_wydzielany_z_brutto_wg_stawek():
     r = rz.rejestr(ks)
     assert [(s["rodzaj"], s["stawka"], s["vat"]) for s in r["stawki"]] == [
         ("nalezny", 0.08, 8), ("nalezny", 0.23, 2.3), ("naliczony", 0.05, 5), ("naliczony", 0.23, 253)]
-    assert ks.stawka_vat("Opłata za konto firmowe (PKO BP)") == 0                 # usługi finansowe – zw
+    assert ks.stawka_vat("Opłata za konto firmowe (Wokulski i S-ka)") == 0                 # usługi finansowe – zw
 
 
 def test_zaokraglenia_do_grosza_i_zlotego():

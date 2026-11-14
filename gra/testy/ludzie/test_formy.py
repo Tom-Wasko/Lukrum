@@ -54,7 +54,7 @@ def test_pol_etatu_polowa_godzin_i_oczekiwanej_pensji():
     d, f = g.dane, s.firmy["A"]
     st = f.stanowisko(KUCHNIA, 1)
     godz = d.z["operacje"]["godziny_pracownika"]
-    assert f.godziny_stanowiska(st, godz, d) == pytest.approx(godz * p.wydajnosc / 2 * zo.tempo(d, p))   # B10
+    assert f.godziny_stanowiska(st, godz, d) == pytest.approx(godz * p.wydajnosc / 2 * 0.9 * zo.tempo(d, p))   # B10, 10% płatnego urlopu
     p.pensja = p.pensja_preferowana / 2
     assert zo.placa_wzgledna(d, p) == pytest.approx(1.0)
     assert bo._umowy(d, f) == (1, 0)

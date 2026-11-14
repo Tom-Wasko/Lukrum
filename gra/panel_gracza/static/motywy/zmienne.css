@@ -1,0 +1,95 @@
+/* LUKRUM – wspólne zmienne wyglądu: mapa ([mapa]) i wnętrza ([mechaniki]) biorą kolory i kroje TYLKO stąd.
+   Umowa: notatki WSPOLPRACA.md („Umowy na granicy”, 14.11). Zmiana nazw zmiennych – najpierw wpis tam.
+
+   Wybór gracza (atrybuty na <html>, ustawia je lukrum.js → lukrum.wyglad.ustaw):
+     data-paleta = "bar" (Bar mleczny, domyślna) | "pewex" | "wysoka" (wysoka widoczność)
+     data-tryb   = "jasny" (domyślny) | "ciemny"
+   Każda paleta ma wersję jasną i ciemną.
+
+   Zmienne wspólne:
+     --papier (tło), --tusz (tekst i kreska), --akcent, --akcent-2, --ramka,
+     --font-tekst (chudy, czytelny), --font-szyld (chudy, wąski: etykiety, menu), --font-gruby (szyld, nagłówki, ceny),
+     --zysk, --strata, --uwaga (stany; zawsze razem ze znakiem z dostepnosc.css, nie sam kolor),
+     --skala-tekstu (mnożnik rozmiaru), --ramka-grubosc, --ognisko (obwódka fokusu), --tekstura (tło papieru albo none).
+   Zmienne --g-* są tylko dla grafik SVG (static/grafiki/): skóra, drewno, metal, ściana, podłoga… */
+
+:root {
+  /* Bar mleczny – jasny */
+  --papier: #e9ede3; --tusz: #1d2721; --akcent: #c2302a; --akcent-2: #2f6f8f; --ramka: #8d978c;
+  --zysk: #2e6b3a; --strata: #b3261e; --uwaga: #8a5a00;
+  --font-tekst: 'PT Sans', 'Segoe UI', sans-serif;
+  --font-szyld: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-gruby: 'Alfa Slab One', 'Rockwell', serif;
+  --skala-tekstu: 1; --ramka-grubosc: 1px; --ognisko: 2px solid var(--akcent-2);
+  --tekstura: none;
+  color-scheme: light;
+
+  --g-karta: color-mix(in srgb, var(--papier) 45%, #fff);
+  --g-czern: #1f2421; --g-biel: #f6f4ea;
+  --g-skora: #efc7a4; --g-skora2: #c48a66; --g-skora3: #cf9d76; --g-siwy: #c9c7bd; --g-rudy: #a4532a;
+  --g-drewno: #6f4a30; --g-drewno2: #b88c5c; --g-metal: #c3c8c4; --g-metal2: #66716c;
+  --g-zielen: #5f8f50; --g-zielen2: #3c6238; --g-mieso: #a8552f; --g-szklo: #a9d3de; --g-niebo: #c4e2ea;
+  --g-sciana: color-mix(in srgb, var(--papier) 88%, var(--akcent-2));
+  --g-sciana2: color-mix(in srgb, var(--papier) 58%, var(--ramka));
+  --g-podloga: color-mix(in srgb, var(--papier) 55%, #a39a84);
+  --g-podloga2: color-mix(in srgb, var(--papier) 25%, #8d8572);
+  --g-tablica: color-mix(in srgb, var(--tusz) 86%, var(--akcent-2));
+}
+
+/* Pewex – jasny (akcent przyciemniony z #d4601b z podglądu 4 do 4,7:1, żeby był czytelny jako tekst) */
+[data-paleta="pewex"] {
+  --papier: #efe7d6; --tusz: #2a2118; --akcent: #a84a0e; --akcent-2: #1f5c4d; --ramka: #a8957a;
+  --zysk: #1f5c4d; --strata: #a8321a; --uwaga: #7f5300;
+}
+
+/* Tryb ciemny (Bar mleczny) */
+[data-tryb="ciemny"] {
+  --papier: #121815; --tusz: #e5ebe2; --akcent: #ff5a4e; --akcent-2: #62c3e6; --ramka: #3d4a43;
+  --zysk: #7fd18b; --strata: #ff7a70; --uwaga: #f2c14e;
+  color-scheme: dark;
+
+  --g-karta: color-mix(in srgb, var(--papier) 86%, #fff);
+  --g-czern: #151917; --g-biel: #e2dfd2;
+  --g-skora: #dcb592; --g-skora2: #b07a58; --g-skora3: #b98b66; --g-siwy: #b3b1a8; --g-rudy: #93492a;
+  --g-drewno: #553826; --g-drewno2: #93704a; --g-metal: #8b9590; --g-metal2: #4d5753;
+  --g-zielen: #4f7a45; --g-zielen2: #33532f; --g-mieso: #96492a; --g-szklo: #5d8ea1; --g-niebo: #1d2e48;
+  --g-sciana: color-mix(in srgb, var(--papier) 74%, var(--ramka));
+  --g-sciana2: color-mix(in srgb, var(--papier) 40%, var(--ramka));
+  --g-podloga: color-mix(in srgb, var(--papier) 62%, #6d6657);
+  --g-podloga2: color-mix(in srgb, var(--papier) 45%, #4c473c);
+  --g-tablica: color-mix(in srgb, var(--papier) 60%, #000);
+}
+
+/* Pewex – ciemny */
+[data-paleta="pewex"][data-tryb="ciemny"] {
+  --papier: #18130e; --tusz: #f2e6d0; --akcent: #ff8a3d; --akcent-2: #52c2a2; --ramka: #4b3f31;
+  --zysk: #6fd1b0; --strata: #ff8a70; --uwaga: #f2c14e;
+}
+
+/* Wysoka widoczność (dla osób słabowidzących i z daltonizmem): kontrast tekstu co najmniej 7:1 (WCAG AAA),
+   większe litery, grube ramki i fokus, czytelny krój Atkinson Hyperlegible, bez tekstur. */
+[data-paleta="wysoka"] {
+  --papier: #ffffff; --tusz: #000000; --akcent: #0b3d91; --akcent-2: #5c1a8c; --ramka: #000000;
+  --zysk: #0b5a1e; --strata: #a3000b; --uwaga: #6b4500;
+  --font-tekst: 'Atkinson Hyperlegible', 'Verdana', sans-serif;
+  --font-szyld: 'Atkinson Hyperlegible', 'Verdana', sans-serif;
+  --font-gruby: 'Atkinson Hyperlegible', 'Verdana', sans-serif;   /* z font-weight: 700 */
+  --skala-tekstu: 1.25; --ramka-grubosc: 3px; --ognisko: 4px solid var(--akcent);
+  --tekstura: none;
+
+  --g-karta: #ffffff;
+  --g-sciana: #f2f2f2; --g-sciana2: #d6d6d6; --g-podloga: #e0e0e0; --g-podloga2: #bdbdbd; --g-tablica: #000000;
+}
+[data-paleta="wysoka"][data-tryb="ciemny"] {
+  --papier: #000000; --tusz: #ffffff; --akcent: #ffd400; --akcent-2: #66e0ff; --ramka: #ffffff;
+  --zysk: #7dff8f; --strata: #ff8c8c; --uwaga: #ffd400;
+  --ognisko: 4px solid var(--akcent);
+
+  --g-karta: #000000;
+  --g-sciana: #1a1a1a; --g-sciana2: #333333; --g-podloga: #262626; --g-podloga2: #404040; --g-tablica: #000000;
+}
+
+/* Bez ruchu dla tych, którzy go wyłączyli w systemie */
+@media (prefers-reduced-motion: reduce) {
+  :root { --ruch: 0; }
+}

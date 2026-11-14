@@ -25,7 +25,7 @@ function raportHtml(v, kat, R) {
       ${R.zadowolenie_klientow != null ? `<span>Zadowolenie klientów: <span class="kwota">${licz(R.zadowolenie_klientow, 2)}</span></span>` : ""}</div>`
     + zwinTabela("Menu rywala", ["Danie", "Cena", "Po rabacie", "Popyt", "Sprzedane", "Przychód", "Reklamacje"],
       R.menu.map((m) => [esc(nazwaOgolna(kat, m.usluga)), zl2(m.cena), zl2(m.cena_po_rabacie), licz(m.popyt), licz(m.sprzedaz),
-        zl2(m.przychod), m.reklamacje]), { klasy: ["l"], otwarte: true })
+        zl2(m.przychod), m.pomylki]), { klasy: ["l"], otwarte: true })
     + zwinTabela("Lokale rywala", ["Lokal", "Strefa", "Forma"], R.lokale.map((l) => [esc(l.nazwa), esc(l.strefa), esc(l.forma)]), { klasy: ["l", "l", "l"] })
     + zwinTabela("Załoga rywala", ["Zawód", "Gwiazdki", "Osób", "Średnia pensja"],
       R.zaloga.map((z) => [esc(z.zawod), gw(z.gwiazdki), z.liczba, zl2(z.pensja)]), { klasy: ["l"] })

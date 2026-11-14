@@ -55,9 +55,10 @@ def stawka_zus(dane: Dane, umowa: str, student: bool = False) -> float:
 
 
 def etat(dane: Dane, p: Pracownik) -> float:
-    """Mnożnik godzin pracy osoby: forma × (student – mniej godzin)."""
+    """Mnożnik godzin pracy osoby: forma × (1 − płatny urlop; zlecenie go nie ma) × (student – mniej godzin)."""
     s = studenci(dane) if p.student else None
-    return forma(dane, p.umowa)["etat"] * (s["godziny"] if s else 1.0)
+    f = forma(dane, p.umowa)
+    return f["etat"] * (1 - f.get("urlop", 0.0)) * (s["godziny"] if s else 1.0)
 
 
 def oczekiwana(dane: Dane, p: Pracownik) -> float | None:

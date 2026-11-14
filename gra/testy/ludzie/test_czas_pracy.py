@@ -63,7 +63,7 @@ def test_wlasciciel_na_stanowisku(gra):
     g, s, *_ = gra
     f = s.firmy["A"].model_copy(deep=True)
     f.wlasciciel_na = WlascicielNaStanowisku(typ="kuchnia", nr=2, godziny=10, zawod="Kucharz", zadowolenie_klientow=0.5,
-                                             ryzyko_reklamacji=0.1)
+                                             ryzyko_pomylki=0.1)
     assert _czas_pracy(g.dane, f, _obsluga({2: 5.0}), 40) == {"godziny_pracy": 5.0, "godziny_dostepne": 10.0, "obciazenie": 0.5}
 
 
@@ -81,4 +81,4 @@ def test_pol_etatu_ma_polowe_godzin():
     k = _kandydat(s, 1)
     s = _runda(g, A={"zatrudnij": [{**_z(k, 1), "umowa": "pol_etatu"}]})
     w = next(x for x in s.wyniki[s.runda]["A"]["pracownicy"] if x["id"] == k["id"])
-    assert w["umowa"] == "pol_etatu" and w["godziny_dostepne"] == 20.0 and 0 <= w["godziny_pracy"] <= 20.0
+    assert w["umowa"] == "pol_etatu" and w["godziny_dostepne"] == 18.0 and 0 <= w["godziny_pracy"] <= 18.0   # pół etatu, 10% urlopu

@@ -230,7 +230,7 @@ $("utworz").onclick = async () => {
   try {
     const r = await fetch("/api/gry", { method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify({
       nazwa: $("nazwa").value, liczba_rund: +$("rundy").value, kapital_startowy: $("kapital").value, ziarno: $("ziarno").value,
-      ceny_dostawcow: "losowe", kredyt_odnawialny: $("kredyt").value, auto_zamowienia: $("auto-zamowienia").checked,
+      ceny_dostawcow: "losowe", tryb_debetu: $("kredyt").value, auto_zamowienia: $("auto-zamowienia").checked,
       refleksja: $("refleksja").value, podpowiedzi: $("podpowiedzi").checked, firmy: firmy(),
       funkcje: FUNKCJE.length ? stany : undefined,
     }) });

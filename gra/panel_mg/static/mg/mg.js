@@ -133,7 +133,7 @@ function decyzje() {
     wsk(f.wynik_skumulowany), f.miejsce ?? "–",   // U12: kto tonie w rankingu – bez przełączania na Wyniki
     `<a class="btn jasny maly" href="${strona(f)}" target="_blank" rel="noopener">Strona firmy</a>`]);
   const ustawienia = [["Kapitał startowy", zl(gra.kapital)], ["Ziarno losowości", esc(gra.ziarno)],
-    ["Kredyt odnawialny", gra.kredyt_odnawialny === "na_biezaco" ? "na bieżąco" : "na niedobór na koniec rundy"],
+    ["Rozliczanie debetu", gra.tryb_debetu === "na_biezaco" ? "na bieżąco" : "na niedobór na koniec rundy"],
     ["Ceny dostawców", gra.ceny_dostawcow === "losowe" ? "wszystkie generowane" : "z danych, dalej generowane"],
     ["Przycisk „Zamów brakujące” w Dostawcach", `${gra.auto_zamowienia ? "włączony" : "wyłączony"}${gra.zakonczona ? ""
       : ` <a data-akcja="auto-zamowienia">${gra.auto_zamowienia ? "wyłącz" : "włącz"}</a>`}`],

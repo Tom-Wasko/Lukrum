@@ -1,113 +1,100 @@
 # Rynek pracy
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Rynek pracy: znane osoby (kucharze i kasjerzy) i parametry losowania nowych kandydatów (wg gwiazdek).'
-zrodlo: znani – założenie F2.6 (osoby fikcyjne, pensje 1★ 4810–4950, 2★ 5000–5300, 3★ 5400–5800); losowanie – założenie autora, kalibrowane
+zrodlo: znani – założenie F2.6 (osoby fikcyjne, pensje 1★ 4806–5100, 2★ 5400–6000, 3★ 6200–6900 – oferty gastronomii w Lublinie 2026 (pracuj.pl – kucharz, kuchnia gorąca, 5 400–6 800 zł brutto; aplikuj.pl – praca w gastronomii w Lublinie; płaca minimalna 2026 – 4 806 zł)); losowanie – założenie autora, kalibrowane
   pomiarami botów (balans/)
 znani:
 - imie_nazwisko: Mehmet Yılmaz
   gwiazdki: 3
   zawod: Kucharz
-  pensja_preferowana: 5700
-  koszt_rekrutacji: 600
-  koszt_odprawy: 2850
+  pensja_preferowana: 6900
+  koszt_rekrutacji: 480
   zadowolenie_klientow: 0.99
-  ryzyko_reklamacji: 0.02
+  ryzyko_pomylki: 0.003
 - imie_nazwisko: Halina Rożnowska
   gwiazdki: 3
   zawod: Kucharz
-  pensja_preferowana: 5500
-  koszt_rekrutacji: 500
-  koszt_odprawy: 2750
+  pensja_preferowana: 6900
+  koszt_rekrutacji: 480
   zadowolenie_klientow: 0.97
-  ryzyko_reklamacji: 0.02
+  ryzyko_pomylki: 0.003
 - imie_nazwisko: Ołeksandr Kowalenko
   gwiazdki: 2
   zawod: Kucharz
-  pensja_preferowana: 5250
-  koszt_rekrutacji: 400
-  koszt_odprawy: 2100
+  pensja_preferowana: 6000
+  koszt_rekrutacji: 420
   zadowolenie_klientow: 0.93
-  ryzyko_reklamacji: 0.04
+  ryzyko_pomylki: 0.006
 - imie_nazwisko: Ayşe Demir
   gwiazdki: 2
   zawod: Kucharz
-  pensja_preferowana: 5150
-  koszt_rekrutacji: 350
-  koszt_odprawy: 2060
+  pensja_preferowana: 5925
+  koszt_rekrutacji: 410
   zadowolenie_klientow: 0.91
-  ryzyko_reklamacji: 0.05
+  ryzyko_pomylki: 0.0075
 - imie_nazwisko: Tadeusz Sosik
   gwiazdki: 2
   zawod: Kucharz
-  pensja_preferowana: 5050
-  koszt_rekrutacji: 300
-  koszt_odprawy: 1515
+  pensja_preferowana: 5565
+  koszt_rekrutacji: 390
   zadowolenie_klientow: 0.88
-  ryzyko_reklamacji: 0.07
+  ryzyko_pomylki: 0.0105
 - imie_nazwisko: Kamil Frytkowski
   gwiazdki: 1
   zawod: Kucharz
-  pensja_preferowana: 4950
-  koszt_rekrutacji: 250
-  koszt_odprawy: 1485
+  pensja_preferowana: 5100
+  koszt_rekrutacji: 360
   zadowolenie_klientow: 0.79
-  ryzyko_reklamacji: 0.1
+  ryzyko_pomylki: 0.015
 - imie_nazwisko: Bartłomiej Czosnek
   gwiazdki: 1
   zawod: Kucharz
-  pensja_preferowana: 4880
-  koszt_rekrutacji: 200
-  koszt_odprawy: 1464
+  pensja_preferowana: 4975
+  koszt_rekrutacji: 350
   zadowolenie_klientow: 0.75
-  ryzyko_reklamacji: 0.12
+  ryzyko_pomylki: 0.018
 - imie_nazwisko: Iryna Melnyk
   gwiazdki: 1
   zawod: Kucharz
-  pensja_preferowana: 4820
-  koszt_rekrutacji: 200
-  koszt_odprawy: 1446
+  pensja_preferowana: 4870
+  koszt_rekrutacji: 340
   zadowolenie_klientow: 0.77
-  ryzyko_reklamacji: 0.11
+  ryzyko_pomylki: 0.0165
 - imie_nazwisko: Zuzanna Pita
   gwiazdki: 3
   zawod: Kasjer
-  pensja_preferowana: 5400
-  koszt_rekrutacji: 400
-  koszt_odprawy: 2700
+  pensja_preferowana: 6580
+  koszt_rekrutacji: 460
   zadowolenie_klientow: 0.99
-  ryzyko_reklamacji: 0.01
+  ryzyko_pomylki: 0.0015
 - imie_nazwisko: Emre Kaya
   gwiazdki: 2
   zawod: Kasjer
-  pensja_preferowana: 5100
-  koszt_rekrutacji: 300
-  koszt_odprawy: 1530
+  pensja_preferowana: 5745
+  koszt_rekrutacji: 400
   zadowolenie_klientow: 0.88
-  ryzyko_reklamacji: 0.06
+  ryzyko_pomylki: 0.009
 - imie_nazwisko: Natalia Szybka
   gwiazdki: 2
   zawod: Kasjer
-  pensja_preferowana: 5000
-  koszt_rekrutacji: 250
-  koszt_odprawy: 1500
+  pensja_preferowana: 5400
+  koszt_rekrutacji: 380
   zadowolenie_klientow: 0.86
-  ryzyko_reklamacji: 0.07
+  ryzyko_pomylki: 0.0105
 - imie_nazwisko: Wiesław Reszta
   gwiazdki: 1
   zawod: Kasjer
-  pensja_preferowana: 4900
-  koszt_rekrutacji: 200
-  koszt_odprawy: 1470
+  pensja_preferowana: 5010
+  koszt_rekrutacji: 350
   zadowolenie_klientow: 0.78
-  ryzyko_reklamacji: 0.1
+  ryzyko_pomylki: 0.015
 - imie_nazwisko: Daria Bondarenko
   gwiazdki: 1
   zawod: Kasjer
-  pensja_preferowana: 4810
-  koszt_rekrutacji: 200
-  koszt_odprawy: 1443
+  pensja_preferowana: 4850
+  koszt_rekrutacji: 340
   zadowolenie_klientow: 0.74
-  ryzyko_reklamacji: 0.12
+  ryzyko_pomylki: 0.018
 losowanie:
   zrodlo: 'założenie autora: profile pracowników; liczby kandydatów – założenie (typowa drużyna zatrudnia ok. 18 osób
     w 5 miesięcy)'
@@ -125,49 +112,37 @@ losowanie:
   wg_gwiazdek:
     '1':
       pensja:
-      - 4785
-      - 4950
+      - 4806
+      - 5100
       zk:
       - 0.7
       - 0.82
       ryzyko:
-      - 0.08
-      - 0.15
+      - 0.012
+      - 0.022
     '2':
       pensja:
-      - 5005
-      - 5170
+      - 5400
+      - 6000
       zk:
       - 0.8
       - 0.89
       ryzyko:
-      - 0.05
-      - 0.1
+      - 0.0075
+      - 0.015
     '3':
       pensja:
-      - 5280
-      - 5500
+      - 6200
+      - 6900
       zk:
       - 0.95
       - 1.0
       ryzyko:
-      - 0.01
-      - 0.03
-  koszty_rekrutacji:
-  - 200
-  - 250
-  - 300
-  - 350
-  - 400
-  - 500
-  - 600
-  - 700
-  odprawa_czesc_pensji:
-  - 0.3
-  - 0.35
-  - 0.4
-  - 0.5
-  - 0.6
+      - 0.0015
+      - 0.0045
+  koszt_rekrutacji_czesc_pensji:   # koszt rekrutacji kandydata (mnożnik kanału) = pensja × wartość z przedziału
+  - 0.05
+  - 0.09
 agencja:
   zrodlo: notatki „Elementy mapy” (Agencja pracy, limit 3), „Ustalenia gry” (odblokowanie, okres wypowiedzenia),
     „Prawidła świata” (KP art. 36); opłaty, gwiazdki w kanałach i czas właściciela – założenie F3a.8
@@ -177,7 +152,7 @@ agencja:
       nazwa: pracuj.pl (ogłoszenie)
       od_rundy: 1
       gwiazdki: [1, 2]
-      oplata: 150
+      oplata: 400
       mnoznik_rekrutacji: 0
       czas_wlasciciela: 2
     agencja:
@@ -195,9 +170,13 @@ agencja:
       mnoznik_rekrutacji: 3
       czas_wlasciciela: 0
       podkupienie_czesc_pensji: 0.5
-  wypowiedzenie:
-  - staz_od: 0       # jedna długość dla wszystkich (P6): 2 rundy, w obie strony (zwolnienie i odejście)
-    rund: 2
+  wypowiedzenie:   # art. 34 i 36 Kodeksu pracy w tygodniach gry (staż u pracodawcy w rundach); w obie strony
+  # art. 34: 3 dni robocze (próbny do 2 tygodni), 1 tydzień (dłuższy niż 2 tygodnie), 2 tygodnie (próbny 3 miesiące). W grze
+  # każdy nowy pracownik ma umowę na okres próbny 3 miesięcy (pierwsze 12 tygodni), więc obowiązuje 2 tygodnie
+  - {staz_od: 0, rund: 2}      # okres próbny 3 miesiące: 2 tygodnie (art. 34 pkt 3)
+  - {staz_od: 13, rund: 2}     # mniej niż 6 miesięcy: 2 tygodnie (art. 36 § 1 pkt 1)
+  - {staz_od: 26, rund: 4}     # co najmniej 6 miesięcy: miesiąc (art. 36 § 1 pkt 2)
+  - {staz_od: 156, rund: 13}   # co najmniej 3 lata: 3 miesiące (art. 36 § 1 pkt 3)
 cechy:   # U20 (decyzja autora 4.11.2026): cecha (charakter) każdej osoby – od 7.11.2026 jawna: pigułka z nazwą i zdanie o skutkach, bez zgadywania z opisu
   zrodlo: 'U20: cechy i opisy – założenie (raporty/projekt_U20_dynamika_pracownikow.md). Mnożniki działają na składniki
     zadowolenia osoby (silnik/ludzie/zadowolenie.py): placa – waga pensji, warunki – sprzęt i udogodnienia, przeciazenie

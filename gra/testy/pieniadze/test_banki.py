@@ -20,16 +20,16 @@ def _bledy(s, r, firma):
 
 def _start():
     g = _gra(("A", None), ("B", None))
-    s = _runda(g, A={**_lokal("centrum_3"), "stanowiska": {"kuchnia": 1}, "bank": "mBank"},
-               B={**_lokal("zygmuntowskie_1", "kupno"), "bank": "PKO BP"})
+    s = _runda(g, A={**_lokal("centrum_3"), "stanowiska": {"kuchnia": 1}, "bank": "Soplicowo"},
+               B={**_lokal("zygmuntowskie_1", "kupno"), "bank": "Wokulski i S-ka"})
     return g, s
 
 
 def test_kazdy_bank_ma_inna_najlepsza_oferte():
     dane = dane_domyslne()
     naj = bk.najlepsze(dane)
-    assert naj == {"konto": "mBank", "lokata": "ING", "kredyt_bez_historii": "Crédit Agricole",
-                   "kredyt_inwestycyjny": "PKO BP", "leasing": "Pekao", "limit": "Santander"}
+    assert naj == {"konto": "Soplicowo", "lokata": "Oszczędności Rzeckiego", "kredyt_bez_historii": "Kmicic",
+                   "kredyt_inwestycyjny": "Wokulski i S-ka", "leasing": "Ziemia Obiecana", "debet": "Solaris"}
     assert set(naj.values()) == set(bk.banki(dane))
 
 
@@ -42,41 +42,41 @@ def test_konto_terminal_i_prowizja_od_kart():
     u = bk.ustawienia(g.dane)
     assert info["oplaty"] == {"konto": 0, "terminal": 0, "prowizja": round(10000 * u["udzial_kart"] * 0.0079, 2)}
     s = _runda(g)
-    assert _kpir(s, 2, "B", "Opłata za konto firmowe (PKO BP)")[0]["pozostale"] == g.dane.na_runde(20)
+    assert _kpir(s, 2, "B", "Opłata za konto firmowe (Wokulski i S-ka)")[0]["pozostale"] == g.dane.na_runde(25)
     assert _kpir(s, 2, "B", "Abonament terminala")[0]["pozostale"] == _netto(g.dane.na_runde(49))
 
 
 def test_kredyt_na_start_bez_historii_a_obrotowy_wymaga_historii():
     g = _gra(("A", None), ("B", None))
-    s = _runda(g, A={**_lokal("centrum_3"), "bank": "mBank",
-                     "kredyty_wez": [{"bank": "Crédit Agricole", "produkt": "start", "kwota": 30000, "rund": 26}]},
-               B={**_lokal("dworzec_1"), "bank": "mBank",
-                  "kredyty_wez": [{"bank": "PKO BP", "produkt": "obrotowy", "kwota": 10000, "rund": 26}]})
+    s = _runda(g, A={**_lokal("centrum_3"), "bank": "Soplicowo",
+                     "kredyty_wez": [{"bank": "Kmicic", "produkt": "start", "kwota": 30000, "rund": 26}]},
+               B={**_lokal("dworzec_1"), "bank": "Soplicowo",
+                  "kredyty_wez": [{"bank": "Wokulski i S-ka", "produkt": "obrotowy", "kwota": 10000, "rund": 26}]})
     k = s.firmy["A"].kredyty[0]
-    assert (k.bank, k.produkt, k.kwota, k.miesiecy) == ("Crédit Agricole", "start", 30000, 26)
-    assert _kpir(s, 1, "A", "Prowizja za udzielenie kredytu")[0]["pozostale"] == 900
+    assert (k.bank, k.produkt, k.kwota, k.miesiecy) == ("Kmicic", "start", 30000, 26)
+    assert _kpir(s, 1, "A", "Prowizja za udzielenie kredytu")[0]["pozostale"] == 300
     assert not s.firmy["B"].kredyty and any("historii" in t for t in _bledy(s, 1, "B"))
-    s = _runda(g)   # pierwsza rata od następnej rundy, oprocentowanie Crédit Agricole
+    s = _runda(g)   # pierwsza rata od następnej rundy, oprocentowanie Kmicic
     assert s.firmy["A"].kredyty[0].pozostalo == round(30000 - 30000 / 26, 2)
-    assert _kpir(s, 2, "A", "Odsetki od kredytu nr")[0]["pozostale"] == round(30000 * 0.119 / 52, 2)
+    assert _kpir(s, 2, "A", "Odsetki od kredytu nr")[0]["pozostale"] == round(30000 * 0.149 / 52, 2)
 
 
 def test_lokata_w_innym_banku_niz_konto():
     g, s = _start()
-    s = _runda(g, A={"lokaty_zaloz": [{"bank": "ING", "kwota": 20000, "rund": 4}],
-                     "kredyty_wez": [{"bank": "ING", "produkt": "obrotowy", "kwota": 1000, "rund": 4}]})
+    s = _runda(g, A={"lokaty_zaloz": [{"bank": "Oszczędności Rzeckiego", "kwota": 20000, "rund": 4}],
+                     "kredyty_wez": [{"bank": "Oszczędności Rzeckiego", "produkt": "obrotowy", "kwota": 1000, "rund": 4}]})
     lo = s.firmy["A"].lokaty[0]
-    assert (lo.bank, lo.oprocentowanie, lo.miesiecy) == ("ING", 0.035, 4)
+    assert (lo.bank, lo.oprocentowanie, lo.miesiecy) == ("Oszczędności Rzeckiego", 0.036, 4)
     assert any("historii" in t for t in _bledy(s, 2, "A"))
     for _ in range(3):
         s = _runda(g)
     assert not s.firmy["A"].lokaty
     odsetki = [p for p in s.wyniki[5]["A"]["kpir"]["pozycje"] if p["opis"].startswith("Odsetki od lokaty")]
-    assert odsetki[0]["przychod_pozostaly"] == round(20000 * 0.035 * 4 / 52, 2)
+    assert odsetki[0]["przychod_pozostaly"] == round(20000 * 0.036 * 4 / 52, 2)
 
 
 def _zalegla_runda(dane, f, runda):
-    f.gotowka, f.kredyt_odnawialny = -1e6, 1e6      # ani gotówki, ani wolnego limitu
+    f.gotowka, f.debet = -1e6, 1e6      # ani gotówki, ani wolnego limitu
     return bk.koniec_rundy(dane, f, runda, Ksiega(), Rachunek())
 
 
@@ -87,14 +87,14 @@ def test_kredyt_inwestycyjny_pod_zastaw_lokalu_i_przejecie():
     assert bk.historia(s.firmy["B"], 6) == 5
     zastaw = bk.zastawy(g.dane, s.firmy["B"])[0]
     assert zastaw["id"] == "lokal:zygmuntowskie_1"
-    za_duzo = {"bank": "PKO BP", "produkt": "inwestycyjny", "kwota": zastaw["wartosc"], "rund": 52, "zastaw": zastaw["id"]}
+    za_duzo = {"bank": "Wokulski i S-ka", "produkt": "inwestycyjny", "kwota": zastaw["wartosc"], "rund": 52, "zastaw": zastaw["id"]}
     s = _runda(g, B={"kredyty_wez": [za_duzo]})
     assert not s.firmy["B"].kredyty and any("pod ten zastaw" in t for t in _bledy(s, 6, "B"))
     kwota = round(0.5 * zastaw["wartosc"], 2)
     s = _runda(g, B={"kredyty_wez": [{**za_duzo, "kwota": kwota}]})
     f = deepcopy(s.firmy["B"])
     k = f.kredyty[0]
-    assert (k.produkt, k.oprocentowanie, k.zastaw) == ("inwestycyjny", 0.079, "lokal:zygmuntowskie_1")
+    assert (k.produkt, k.oprocentowanie, k.zastaw) == ("inwestycyjny", 0.069, "lokal:zygmuntowskie_1")
     assert not bk.zastawy(g.dane, f)                 # lokal już zastawiony
     for r in (8, 9):
         info = _zalegla_runda(g.dane, f, r)
@@ -115,10 +115,10 @@ def test_kredyt_pod_zastaw_kupowanej_dzialki_liczy_budowany_lokal():
     assert nowy["wartosc"] == dz["cena"] + dz["koszt_budowy"]
     kwota = round(0.7 * nowy["wartosc"], 2)   # więcej niż cena działki – na start i budowę
     assert kwota > dz["cena"]
-    s = _runda(g, A={**_lokal("czechow_3", "kupno"), "bank": "PKO BP",
-                     "kredyty_wez": [{"bank": "PKO BP", "produkt": "inwestycyjny", "kwota": kwota, "rund": 104,
+    s = _runda(g, A={**_lokal("czechow_3", "kupno"), "bank": "Wokulski i S-ka",
+                     "kredyty_wez": [{"bank": "Wokulski i S-ka", "produkt": "inwestycyjny", "kwota": kwota, "rund": 104,
                                       "zastaw": nowy["id"]}]},
-               B={**_lokal("centrum_3"), "bank": "mBank"})
+               B={**_lokal("centrum_3"), "bank": "Soplicowo"})
     f = s.firmy["A"]
     assert [(x.id, x.forma) for x in f.lokale] == [("czechow_3", "kupno")]
     assert [(k.kwota, k.zastaw) for k in f.kredyty] == [(kwota, "lokal:czechow_3")]
@@ -126,26 +126,26 @@ def test_kredyt_pod_zastaw_kupowanej_dzialki_liczy_budowany_lokal():
 
 def test_spozniona_rata_splacana_razem_z_biezaca():
     g, s = _start()
-    s = _runda(g, A={"kredyty_wez": [{"bank": "Crédit Agricole", "produkt": "start", "kwota": 26000, "rund": 26}]})
+    s = _runda(g, A={"kredyty_wez": [{"bank": "Kmicic", "produkt": "start", "kwota": 26000, "rund": 26}]})
     f = deepcopy(s.firmy["A"])
     _zalegla_runda(g.dane, f, 3)
     k = f.kredyty[0]
     assert (k.zalegle, k.zaleglosc) == (1, 1000)
-    f.gotowka, f.kredyt_odnawialny = 50000, 0
+    f.gotowka, f.debet = 50000, 0
     info = bk.koniec_rundy(g.dane, f, 4, Ksiega(), Rachunek())
     assert info["raty"][0]["zaplacona"] and (k.zalegle, k.zaleglosc) == (0, 0)
-    assert k.pozostalo == round(26000 + 26000 * 0.119 / 52 - 2000, 2)
+    assert k.pozostalo == round(26000 + 26000 * 0.149 / 52 - 2000, 2)
 
 
 def test_leasing_sprzetu_raty_w_koszty_bez_sprzedazy_i_wykup():
     g, s = _start()
-    leasing = {"bank": "Pekao", "typ": "kuchnia", "nr": 2, "nazwa": "Rożen", "jakosc": 3, "rund": 26}
+    leasing = {"bank": "Ziemia Obiecana", "typ": "kuchnia", "nr": 2, "nazwa": "Rożen", "jakosc": 3, "rund": 26}
     s = _runda(g, A={"leasing_wez": [leasing]})
     f = s.firmy["A"]
     lea = f.leasingi[0]
     assert f.stanowisko("kuchnia", 2).sprzet["Rożen"] == 3 and not f.srodki_trwale
-    assert lea.rata == bk.rata_annuitetowa(7000 * 0.9, 0.075, 26, 52)
-    assert _kpir(s, 2, "A", "Opłata wstępna leasingu")[0]["pozostale"] == _netto(700)
+    assert lea.rata == bk.rata_annuitetowa(7000 * 0.95, 0.075, 26, 52)
+    assert _kpir(s, 2, "A", "Opłata wstępna leasingu")[0]["pozostale"] == _netto(350)
     s = _runda(g, A={"sprzet_sprzedaj": [{"typ": "kuchnia", "nr": 2, "nazwa": "Rożen"}]})
     assert "Rożen" in s.firmy["A"].stanowisko("kuchnia", 2).sprzet
     assert _kpir(s, 3, "A", "Rata leasingowa")[0]["pozostale"] == _netto(lea.rata)
@@ -157,31 +157,58 @@ def test_leasing_sprzetu_raty_w_koszty_bez_sprzedazy_i_wykup():
 
 def test_leasing_zalegly_bank_zabiera_sprzet():
     g, s = _start()
-    s = _runda(g, A={"leasing_wez": [{"bank": "PKO BP", "typ": "kuchnia", "nr": 2, "nazwa": "Rożen", "jakosc": 1, "rund": 52}]})
+    s = _runda(g, A={"leasing_wez": [{"bank": "Ziemia Obiecana", "typ": "kuchnia", "nr": 2, "nazwa": "Rożen", "jakosc": 1, "rund": 52}]})
     f = deepcopy(s.firmy["A"])
     for r in (3, 4, 5):
         info = _zalegla_runda(g.dane, f, r)
     assert info["przejecia"] and not f.leasingi and "Rożen" not in f.stanowisko("kuchnia", 2).sprzet
 
 
-def test_limit_w_koncie_i_debet_ponad_limit():
+def test_debet_za_zgoda_ma_limit_oplate_i_odsetki():
     g, s = _start()
     f = deepcopy(s.firmy["A"])
-    f.bank, f.kredyt_odnawialny, f.gotowka = "Santander", 50000, 0
+    f.bank, f.debet, f.gotowka, f.debet_wlaczony = "Solaris", 50000, 0, True
     ks = Ksiega()
     bk.koniec_rundy(g.dane, f, 2, ks, Rachunek())
     poz = {p["opis"]: p["pozostale"] for p in ks.pozycje}
-    assert poz["Odsetki od limitu w koncie"] == round(40000 * 0.169 / 52, 2)
+    assert poz["Odsetki od debetu"] == round(40000 * 0.17 / 52, 2)
+    assert poz["Opłata za tydzień na minusie (Solaris)"] == 90
     assert poz["Odsetki karne od debetu ponad limit"] == round(10000 * 0.19 / 52, 2)
-    assert bk.debet_ponad_limit(g.dane, f) == 10000
+    assert bk.debet_ponad_limit(g.dane, f) == 10000 and bk.wolny_limit(g.dane, f) == 0
     assert any("ponad limit" in b["tekst"] for b in bk.bledy(g.dane, f, None, None))
 
 
+def test_debet_bez_zgody_to_alarm_i_odsetki_karne():
+    g, s = _start()
+    f = deepcopy(s.firmy["A"])
+    f.bank, f.debet, f.gotowka, f.debet_wlaczony = "Solaris", 5000, 0, False
+    assert bk.limit_debetu(g.dane, f) == 0 and bk.debet_ponad_limit(g.dane, f) == 5000
+    ks = Ksiega()
+    bk.koniec_rundy(g.dane, f, 2, ks, Rachunek())
+    poz = {p["opis"]: p["pozostale"] for p in ks.pozycje}
+    assert poz["Odsetki karne od debetu bez zgody banku"] == round(5000 * 0.19 / 52, 2)
+    assert not any(o.startswith("Opłata za tydzień na minusie") for o in poz)
+    assert any("nie jest włączony" in b["tekst"] for b in bk.bledy(g.dane, f, None, None))
+
+
+def test_decyzja_debet_wlacza_i_wylacza_zgode():
+    g, s = _start()
+    assert s.firmy["A"].debet_wlaczony is False
+    s = _runda(g, A={"debet": True})
+    assert s.firmy["A"].debet_wlaczony is True and bk.limit_debetu(g.dane, s.firmy["A"]) == 6000
+    s = _runda(g, A={"debet": False})
+    assert s.firmy["A"].debet_wlaczony is False
+    f = s.firmy["A"]
+    f.debet, f.debet_wlaczony = 100, True   # na minusie zgody nie można cofnąć
+    info = bk.poczatek_rundy(g.dane, f, {"debet": False}, 5, Ksiega(), Rachunek())
+    assert f.debet_wlaczony and any("Wyłączenie debetu" in o["co"] for o in info["odrzucone"])
+
+
 def test_kredyt_inwestycyjny_od_wziecia_lokalu_bez_historii():
-    inw = {"bank": "PKO BP", "produkt": "inwestycyjny", "kwota": 20000, "rund": 52}
+    inw = {"bank": "Wokulski i S-ka", "produkt": "inwestycyjny", "kwota": 20000, "rund": 52}
     g = _gra(("A", None), ("B", None))
-    s = _runda(g, A={**_lokal("centrum_3"), "bank": "mBank", "kredyty_wez": [{**inw, "zastaw": "lokal:centrum_3"}]},
-               B={"bank": "mBank", "kredyty_wez": [{**inw, "zastaw": "lokal:centrum_3"}]})
+    s = _runda(g, A={**_lokal("centrum_3"), "bank": "Soplicowo", "kredyty_wez": [{**inw, "zastaw": "lokal:centrum_3"}]},
+               B={"bank": "Soplicowo", "kredyty_wez": [{**inw, "zastaw": "lokal:centrum_3"}]})
     assert not s.firmy["B"].kredyty and any("firmie z lokalem" in t for t in _bledy(s, 1, "B"))
     assert not s.firmy["A"].kredyty     # wynajęty lokal nie jest zastawem
     g, s = _start()
@@ -193,11 +220,11 @@ def test_kredyt_inwestycyjny_od_wziecia_lokalu_bez_historii():
 def test_kredyt_inwestycyjny_na_zakup_lokalu_w_tej_samej_rundzie():
     g = _gra(("A", None), ("B", None))
     cena = g.dane.lokale["politechnika_3"]["cena"]       # więcej niż kapitał startowy
-    kred = {"bank": "PKO BP", "produkt": "inwestycyjny", "kwota": 60000, "rund": 104, "zastaw": "lokal:politechnika_3"}
+    kred = {"bank": "Wokulski i S-ka", "produkt": "inwestycyjny", "kwota": 60000, "rund": 104, "zastaw": "lokal:politechnika_3"}
     assert cena > 100000
     oferta_a = {"lokal": {"id": "politechnika_3", "forma": "kupno", "oferta": cena + 5000}}
-    s = _runda(g, A={**oferta_a, "bank": "mBank", "kredyty_wez": [kred]},
-               B={**_lokal("politechnika_3", "kupno"), "bank": "mBank", "kredyty_wez": [kred]})
+    s = _runda(g, A={**oferta_a, "bank": "Soplicowo", "kredyty_wez": [kred]},
+               B={**_lokal("politechnika_3", "kupno"), "bank": "Soplicowo", "kredyty_wez": [kred]})
     a = s.firmy["A"]
     assert [lok.id for lok in a.lokale] == ["politechnika_3"]
     assert [(k.kwota, k.zastaw) for k in a.kredyty] == [(60000, "lokal:politechnika_3")]
@@ -206,7 +233,7 @@ def test_kredyt_inwestycyjny_na_zakup_lokalu_w_tej_samej_rundzie():
     assert not b.lokale and not b.kredyty
     assert any("nie został kupiony" in t for t in _bledy(s, 1, "B"))
     g = _gra(("A", None), ("B", None))
-    s = _runda(g, A={**_lokal("politechnika_3", "kupno"), "bank": "mBank", "kredyty_wez": [{**kred, "kwota": 30000}]})
+    s = _runda(g, A={**_lokal("politechnika_3", "kupno"), "bank": "Soplicowo", "kredyty_wez": [{**kred, "kwota": 30000}]})
     assert not s.firmy["A"].lokale and not s.firmy["A"].kredyty     # za mały kredyt – brak gotówki na zakup
 
 
@@ -219,17 +246,17 @@ def _tylko_bank_konta(g):
 def test_tylko_bank_konta_odrzuca_produkty_innych_bankow():
     g, s = _start()
     _tylko_bank_konta(g)
-    s = _runda(g, A={"lokaty_zaloz": [{"bank": "ING", "kwota": 1000, "rund": 4},
-                                      {"bank": "mBank", "kwota": 1000, "rund": 4}],
-                     "kredyty_wez": [{"bank": "Crédit Agricole", "produkt": "start", "kwota": 5000, "rund": 26}],
-                     "leasing_wez": [{"bank": "Pekao", "typ": "kuchnia", "nr": 1, "nazwa": "Rożen", "jakosc": 1,
+    s = _runda(g, A={"lokaty_zaloz": [{"bank": "Oszczędności Rzeckiego", "kwota": 1000, "rund": 4},
+                                      {"bank": "Soplicowo", "kwota": 1000, "rund": 4}],
+                     "kredyty_wez": [{"bank": "Kmicic", "produkt": "start", "kwota": 5000, "rund": 26}],
+                     "leasing_wez": [{"bank": "Ziemia Obiecana", "typ": "kuchnia", "nr": 1, "nazwa": "Rożen", "jakosc": 1,
                                       "rund": 26}]})
     f = s.firmy["A"]
-    assert [lo.bank for lo in f.lokaty] == ["mBank"] and not f.kredyty and not f.leasingi
+    assert [lo.bank for lo in f.lokaty] == ["Soplicowo"] and not f.kredyty and not f.leasingi
     assert sum("kontem firmowym w tym banku" in t for t in _bledy(s, 2, "A")) >= 2
     # zmiana konta działa od razu – w tej samej rundzie kredyt w nowym banku
-    s = _runda(g, A={"bank": "Crédit Agricole",
-                     "kredyty_wez": [{"bank": "Crédit Agricole", "produkt": "start", "kwota": 5000, "rund": 26}]})
-    assert [k.bank for k in s.firmy["A"].kredyty] == ["Crédit Agricole"]
-    assert [lo.bank for lo in s.firmy["A"].lokaty] == ["mBank"]   # stare produkty biegną dalej
-    assert set(bk.dostepne(g.dane, "PKO BP")) == {"PKO BP"}
+    s = _runda(g, A={"bank": "Kmicic",
+                     "kredyty_wez": [{"bank": "Kmicic", "produkt": "start", "kwota": 5000, "rund": 26}]})
+    assert [k.bank for k in s.firmy["A"].kredyty] == ["Kmicic"]
+    assert [lo.bank for lo in s.firmy["A"].lokaty] == ["Soplicowo"]   # stare produkty biegną dalej
+    assert set(bk.dostepne(g.dane, "Wokulski i S-ka")) == {"Wokulski i S-ka"}

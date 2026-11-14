@@ -9,7 +9,6 @@ from silnik.dane import dane_domyslne
 from silnik.ksiegowosc.finanse import Ksiega
 from silnik.kuchnia.operacje import obsluz
 from silnik.model import Firma, Pracownik, Stanowisko
-from silnik.wyniki.karta import karta, wskaznik_zadluzenia
 
 D = dane_domyslne()
 ETAT = D.z["operacje"]["godziny_pracownika"]
@@ -17,8 +16,8 @@ ETAT = D.z["operacje"]["godziny_pracownika"]
 
 def _pracownik(id_, zawod, nr):
     return Pracownik(id=id_, imie_nazwisko=id_, zawod=zawod, gwiazdki=3, pensja_preferowana=5300,
-                     koszt_rekrutacji=400, koszt_odprawy=2650, zadowolenie_klientow=0.95,
-                     ryzyko_reklamacji=0.0, pensja=5300, stanowisko=nr)
+                     koszt_rekrutacji=400, zadowolenie_klientow=0.95,
+                     ryzyko_pomylki=0.0, pensja=5300, stanowisko=nr)
 
 
 def firma_kebab(*uslugi, kucharzy=1) -> Firma:
@@ -49,9 +48,11 @@ def test_oblozenie_kucharza_i_kasy():
 def test_zuzycie_zasobow_na_klienta():
     f = firma_kebab("kebab_w_bulce")
     w = obsluz(D, f, {"kebab_w_bulce": 400}, ziarno=1, runda=3)
+    # pomyłka w szczycie to danie robione drugi raz, więc zużywa składniki jak obsłużony klient (zamierzone, tor A)
+    porcje = 400 + w["pomylki"]["kebab_w_bulce"]
     for n, ile in D.uslugi["kebab_w_bulce"]["zasoby"].items():
-        assert w["zuzyte_zasoby"][n]["ilosc"] == pytest.approx(400 * ile / D.zasoby[n]["opakowanie"])
-        assert f.magazyn[f"{n}|3"] == pytest.approx(1000 - 400 * ile / D.zasoby[n]["opakowanie"])
+        assert w["zuzyte_zasoby"][n]["ilosc"] == pytest.approx(porcje * ile / D.zasoby[n]["opakowanie"])
+        assert f.magazyn[f"{n}|3"] == pytest.approx(1000 - porcje * ile / D.zasoby[n]["opakowanie"])
 
 
 def test_brak_pojemnosci_ogranicza_sprzedaz():
@@ -84,15 +85,6 @@ def test_kpir_zus_i_podatek():
     assert k.podatek(0.19) == pytest.approx(round(k.dochod * 0.19, 2), abs=0.01)
 
 
-def test_wynik_ekonomiczny():
-    dz = D.z["karta_wynikow"]["wynik_ekonomiczny_dzielnik"]
-    k = karta(D, 10 * dz, 1.2, 0.9, 1.1, 1.0)
-    assert k["wynik_ekonomiczny"] == pytest.approx(10)
-    assert k["wynik_dzialalnosci"] == pytest.approx(10 * 1.2 * 0.9 * 1.1, abs=0.001)
-    waga = D.z["karta_wynikow"]["strata"]["waga"]   # Z1: strata daje ujemny wynik (wcześniej 0)
-    assert karta(D, -10 * dz, 1, 1, 1, 1)["wynik_dzialalnosci"] == pytest.approx(-10 * waga)
-
-
 @pytest.mark.dane_gry
 def test_deterministycznosc_i_zapis(tmp_path):
     def gra():
@@ -106,12 +98,3 @@ def test_deterministycznosc_i_zapis(tmp_path):
     g1.zapisz(plik)
     g3 = Gra.wczytaj(plik)
     assert g3.stan(4).firmy["B"].gotowka == g1.stan(4).firmy["B"].gotowka
-
-
-def test_wskaznik_zadluzenia():
-    # kredyt 199 900, majątek ≈ 115 871, skumulowany dochód netto 1 953 410 → 0,911 (wzór karty)
-    assert wskaznik_zadluzenia(199_900, 115_871, 1_953_410) == pytest.approx(0.911, abs=0.002)
-    # U22: gotówka w mianowniku – kredyt 50 tys. zł leżący na koncie karze mniej niż wydany
-    assert wskaznik_zadluzenia(50_000, 50_000, 0) == pytest.approx(0.5)
-    assert wskaznik_zadluzenia(50_000, 50_000, 0, gotowka=50_000) == pytest.approx(0.667, abs=0.001)
-    assert wskaznik_zadluzenia(50_000, 50_000, 0, gotowka=-5_000) == pytest.approx(0.5)   # debet nie pomaga

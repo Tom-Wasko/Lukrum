@@ -61,7 +61,7 @@ from silnik.rynek import reklama as rk
 from silnik.rynek.popyt import rozruch, widok_popytu
 from silnik.swiat import awarie as aw
 from silnik.swiat import zdarzenia as zd
-from silnik.wyniki import karta as kw
+from silnik.wyniki import punkty as pk
 from silnik.wyniki.wnioski import dlaczego, tydzien, wnioski
 
 
@@ -122,7 +122,7 @@ def stan_po_szkicu(gra: Gra, firma: str):
         info["czas_wlasciciela"] = czas.podsumowanie()
     cw.zastosuj(gra.dane, f, info)   # wolne godziny właściciela – na puste stanowisko
     bledy = alarm + blokady + inw.bledy(f, inwestor) + bledy_funkcji
-    bledy += lista_bledow(gra.dane, f, d, r, poprzednia_oferta, gra.konfiguracja.get("kredyt_odnawialny", "na_biezaco"),
+    bledy += lista_bledow(gra.dane, f, d, r, poprzednia_oferta, gra.konfiguracja.get("tryb_debetu", "na_biezaco"),
                           lokal, info)
     bledy += [{"poziom": "czerwony", "zakladka": "rynek_pracy", "tekst": t} for t in uwagi_rp]
     if rp.podkupywanie(gra.konfiguracja):   # UF18; opcja MG – bez podkupywania nie ma czego ostrzegać
@@ -260,39 +260,46 @@ def katalogi(dane: Dane) -> dict:
 
 
 def karta_skumulowana(gra: Gra, do_rundy: int) -> dict:
-    """Średnia kart wyników z rund 2…do_rundy (dla każdej firmy)."""
-    if do_rundy < 2:
+    """Ranking z tygodni 1…do_rundy (dla każdej firmy): `punkty` = wynik gry 0–1000 (suma punktów z tygodni z wagami,
+    ostatnie tygodnie ważą więcej), `suma_wazona` i średnie punkty działów (z tymi samymi wagami)."""
+    if do_rundy < 1:
         return {}
     stan = gra.stan(do_rundy)
+    dane, liczba_rund = gra.dane, gra.konfiguracja["liczba_rund"]
     wynik = {}
     for f in stan.firmy:
-        karty = [stan.wyniki[r][f]["karta"] for r in range(2, do_rundy + 1)
-                 if r in stan.wyniki and f in stan.wyniki[r] and "karta" in stan.wyniki[r][f]]
-        if karty:
-            wynik[f] = {k: round(sum(c[k] for c in karty) / len(karty), 3) for k in karty[0]}
+        karty = {r: stan.wyniki[r][f]["karta"] for r in range(1, do_rundy + 1)
+                 if r in stan.wyniki and f in stan.wyniki[r] and "karta" in stan.wyniki[r][f]}
+        if not karty:
+            continue
+        rk = pk.ranking(dane, {r: k["punkty"] for r, k in karty.items()}, liczba_rund)
+        wagi = {r: pk.waga_tygodnia(dane, r, liczba_rund) for r in karty if karty[r]["dzialy"]}
+        suma = sum(wagi.values())
+        dzialy = {d: round(sum(wagi[r] * karty[r]["dzialy"][d]["punkty"] for r in wagi) / suma, 1)
+                  for d in dane.z["wynik"]["dzialy"]} if suma else {}
+        wynik[f] = {"punkty": rk["wynik"], "suma_wazona": rk["suma_wazona"], "dzialy": dzialy}
     return wynik
 
 
-def historia_rankingu(dane, stan, do_rundy: int) -> dict:
-    """UF11: miejsca firm po każdej rundzie 2…do_rundy – jak `miejsca(karta_skumulowana(gra, R))`, ale z jednego stanu
-    (średni wynik działalności z rund 2…R, zaokrąglony jak w karcie skumulowanej; remis – kolejność firm w grze)."""
-    rundy = [r for r in range(2, do_rundy + 1) if r in stan.wyniki]
-    sumy: dict[str, list[float]] = {}
+def historia_rankingu(dane, stan, do_rundy: int, liczba_rund: int) -> dict:
+    """UF11: miejsca firm po każdej rundzie 1…do_rundy – jak `miejsca(karta_skumulowana(gra, R))`, ale z jednego stanu
+    (wynik gry z tygodni 1…R; remis – kolejność firm w grze)."""
+    rundy = [r for r in range(1, do_rundy + 1) if r in stan.wyniki]
+    punkty: dict[str, dict[int, float]] = {}
     miejsca_r = {}
     for r in rundy:
         for f in stan.firmy:
             karta = (stan.wyniki[r].get(f) or {}).get("karta")
             if karta:
-                sumy.setdefault(f, []).append(karta["wynik_dzialalnosci"])
-        srednie = {f: round(sum(x) / len(x), 3) for f, x in sumy.items()}
-        miejsca_r[r] = miejsca({f: {"wynik_dzialalnosci": s} for f, s in srednie.items()})
+                punkty.setdefault(f, {})[r] = karta["punkty"]
+        miejsca_r[r] = miejsca({f: {"punkty": pk.ranking(dane, p, liczba_rund)["wynik"]} for f, p in punkty.items()})
     return {"rundy": rundy, "etykiety": [dane.skrot_rundy(r) for r in rundy], "miejsca": miejsca_r,
             "ostatnia": dane.nazwa_rundy(rundy[-1]) if rundy else ""}
 
 
 def miejsca(skum: dict) -> dict[str, int]:
-    """Miejsca firm w rankingu: średni wynik działalności z karty skumulowanej (pulpit drużyny i mistrz gry)."""
-    ranking = sorted(skum, key=lambda n: -skum[n]["wynik_dzialalnosci"])
+    """Miejsca firm w rankingu: wynik gry (punkty z tygodni z wagami) – pulpit drużyny i mistrz gry."""
+    ranking = sorted(skum, key=lambda n: -skum[n]["punkty"])
     return {n: i + 1 for i, n in enumerate(ranking)}
 
 
@@ -342,7 +349,7 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
                  "zakonczona": gra.zakonczona, "firmy": gra.konfiguracja["firmy"], "wyslane": gra.wyslane(),
                  "brakujace": gra.brakujace(), "ziarno": gra.konfiguracja["ziarno"], "runda_startowa": gra.runda_startowa,
                  "konkurenci_stali": gra.konfiguracja.get("konkurenci_stali", []),
-                 "kredyt_odnawialny": gra.konfiguracja.get("kredyt_odnawialny", "na_biezaco"),
+                 "tryb_debetu": gra.konfiguracja.get("tryb_debetu", "na_biezaco"),
                  "auto_zamowienia": bool(gra.konfiguracja.get("auto_zamowienia")),
                  "refleksja": gra.tryb_refleksji,
                  "podpowiedzi": bool(gra.konfiguracja.get("podpowiedzi")),
@@ -403,24 +410,22 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
         # UF23: „Tydzień w liczbach” – liczby rundy z poprzednią (strzałki) i zdania-historie tygodnia
         v["tydzien"] = tydzien(dane, v["wyniki"], poprzedni.wyniki.get(runda - 2, {}).get(firma), f)
         v["rynek"] = poprzedni.rynek.get(runda - 1)
-        v["karta_skumulowana"] = karta_skumulowana(gra, runda - 1) if runda - 1 >= 2 else {}
-        v["dzielnik_karty"] = dane.z["karta_wynikow"]["wynik_ekonomiczny_dzielnik"]
-        # kalibracja 7.11: B12 – mandaty w dochodzie do karty, Z1 – waga nieruchomości w rozwoju (opis w Karcie wyników)
-        v["zasady_karty"] = {"mandaty": bool(dane.z["karta_wynikow"].get("mandaty_w_dochodzie")),
-                             "waga_nieruchomosci": kw.waga_nieruchomosci(dane)}
-        v["skala_karty"] = dane.z["karta_wynikow"].get("skala")   # U10: progi „średni” i „dobry” przy wskaźnikach
+        v["karta_skumulowana"] = karta_skumulowana(gra, runda - 1) if runda - 1 >= 1 else {}
+        v["tabela_punktow"] = pk.tabela(dane)   # jawne progi wyniku punktowego (działy, składniki, otwarcie, wagi rankingu)
+        v["zasady_karty"] = {"mandaty": bool(dane.z["wynik"].get("mandaty_w_dochodzie")),
+                             "waga_nieruchomosci": dane.z["wynik"]["waga_nieruchomosci"]}
         # poprawki 2 (sprawy 17/18): kolory wskaźników czasu pracy w Ludzie ▸ Zespół (wyniki)
         v["progi_czasu_pracy"] = {"niski": dane.z["operacje"].get("niskie_obciazenie"),   # brak w danych zamrożonych testów
-                                  "przepracowanie": dane.z["karta_wynikow"]["kebab"]["zadowolenie_pracownikow"]["prog_przepracowania"]}
+                                  "przepracowanie": dane.z["zadowolenie_osoby"]["wspolczynniki"]["prog_przepracowania"]}
         v["majatek_firm"] = {n: _majatek_netto(x) for n, x in w.items()}   # U13: majątek netto obok wyniku w rankingu
-        v["ranking"] = historia_rankingu(dane, poprzedni, runda - 1)   # UF11: zakładka Wyniki ▸ Ranking
+        v["ranking"] = historia_rankingu(dane, poprzedni, runda - 1, gra.konfiguracja["liczba_rund"])   # UF11: zakładka Wyniki ▸ Ranking
         v["historia"] = [{"runda": r, "miesiac": dane.nazwa_rundy(r), "skrot": dane.skrot_rundy(r), "karta": poprzedni.wyniki[r][firma].get("karta"),
                           "dochod_netto": poprzedni.wyniki[r][firma]["kpir"]["dochod_netto"],
                           "gotowka": poprzedni.wyniki[r][firma]["gotowka"]}
                          for r in range(1, runda) if r in poprzedni.wyniki]
     v["dashboard"] = _dashboard(gra, firma, runda, poprzedni, v.get("karta_skumulowana") or {})
     v["lokale"] = _lokale(gra, firma, runda, f, poprzedni, stan, info if edycja else None)
-    zk = ((poprzedni.wyniki.get(runda - 1) or {}).get(firma, {}).get("karta") or {}).get("zadowolenie_klientow")
+    zk = ((poprzedni.wyniki.get(runda - 1) or {}).get(firma, {}).get("karta") or {}).get("wskazniki", {}).get("zadowolenie_klientow")
     v["popyt"] = widok_popytu(dane, poprzedni, f, runda, zk)
     v["kalendarz_miasta"] = kl.widok(dane, runda, gra.konfiguracja["liczba_rund"])
     v["swiezosc"] = swiezosc.podsumowanie(dane, f, runda)
@@ -575,7 +580,7 @@ def _dashboard(gra: Gra, firma: str, runda: int, poprzedni, skum: dict) -> dict:
     f = poprzedni.firmy[firma]
     d = {"nazwa": f.nazwa_wyswietlana or firma, "saldo": f.gotowka, "dochod_netto": 0.0, "miejsce": None,
          "liczba_firm": len(poprzedni.firmy), "lokaty": sum(l.kwota for l in f.lokaty),
-         "zadluzenie": sum(k.pozostalo for k in f.kredyty) + f.kredyt_odnawialny}
+         "zadluzenie": sum(k.pozostalo for k in f.kredyty) + f.debet}
     if runda - 1 in poprzedni.wyniki:
         d["dochod_netto"] = poprzedni.wyniki[runda - 1][firma]["kpir"]["dochod_netto"]
     d["miejsce"] = miejsca(skum).get(firma)   # Z7: jak ranking mistrza gry (średnia z rund 2…)
@@ -619,12 +624,12 @@ def tabela_wynikow(gra: Gra, co: str = "wyniki") -> tuple[list[str], list[list]]
         karta = stan.rynek.get(r, {}).get("karta", {})
         for n, w in stan.wyniki.get(r, {}).items():
             k = w["kpir"]
-            wynik = karta.get(n, {}).get("wynik_dzialalnosci")
+            wynik = karta.get(n, {}).get("punkty")
             wiersze.append([r, gra.dane.skrot_rundy(r), n, boty.get(n, ""), k["przychody"], k["koszty"], k["dochod_netto"],
                             w["gotowka"], w["zadluzenie"], _pusty(_majatek_netto(w)),
                             float(wynik) if wynik is not None else "", gra.refleksje(r).get(n, "")])
     return (["runda", "tydzień", "firma", "bot", "przychody", "koszty", "dochód netto", "gotówka", "zadłużenie",
-             "majątek netto", "wynik działalności", "refleksja drużyny"], wiersze)
+             "majątek netto", "wynik (pkt)", "refleksja drużyny"], wiersze)
 
 
 def przeglad_mg(gra: Gra) -> dict:
@@ -657,8 +662,8 @@ def przeglad_mg(gra: Gra) -> dict:
             "inwestor_przyslany": inw.przyznany(konf, n, r),
             "pracownicy": len(fs.pracownicy), "stanowiska": len(fs.stanowiska),
             "dochod_ostatni": wyn[-1] if wyn else None, "dochod_suma": round(sum(wyn), 2),
-            "wynik_ostatni": karta_ost.get(n, {}).get("wynik_dzialalnosci"),
-            "wynik_skumulowany": skum.get(n, {}).get("wynik_dzialalnosci"),
+            "wynik_ostatni": karta_ost.get(n, {}).get("punkty"),
+            "wynik_skumulowany": skum.get(n, {}).get("punkty"),
         })
     miejsce = miejsca(skum)
     for f in firmy:
@@ -667,7 +672,7 @@ def przeglad_mg(gra: Gra) -> dict:
     return {
         "gra": {"nazwa": konf["nazwa"], "runda": r, "liczba_rund": konf["liczba_rund"], "zakonczona": gra.zakonczona,
                 "ziarno": konf["ziarno"], "kapital": gra.kapital_startowy,
-                "kredyt_odnawialny": konf.get("kredyt_odnawialny", "na_biezaco"),
+                "tryb_debetu": konf.get("tryb_debetu", "na_biezaco"),
                 "auto_zamowienia": bool(konf.get("auto_zamowienia")),
                 "refleksja": gra.tryb_refleksji,
                 "podpowiedzi": bool(konf.get("podpowiedzi")),

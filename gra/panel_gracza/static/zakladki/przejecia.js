@@ -99,7 +99,7 @@ export const przejecia = {
       Nakłady ${zl(x.naklady)} – ${x.ulepszenia === "zatrzymaj" ? `właściciel zapłacił ${zl(x.rozliczenie)}` : `najemca zapłacił ${zl(-x.rozliczenie)} za przywrócenie stanu`}.
       Sprzedany sprzęt: ${zl(x.sprzedany_sprzet)}, zwrot kaucji ${zl(x.kaucja)}.</p>
       ${x.przeniesieni.length ? `<p>Przeniesieni: ${x.przeniesieni.map(esc).join(", ")}.</p>` : ""}
-      ${x.zwolnieni.length ? `<p>Zwolnieni (z odprawą): ${x.zwolnieni.map(esc).join(", ")}.</p>` : ""}</div></div>`;
+      ${x.zwolnieni.length ? `<p>Zwolnieni (z pensją za okres wypowiedzenia): ${x.zwolnieni.map(esc).join(", ")}.</p>` : ""}</div></div>`;
     html += stanBudynkow(v, kat, W, null, false);
     if (!html) return `<p class="podpowiedz">W tej rundzie nie było przejęć ani wypowiedzeń.</p>`;
     const zdarzenia = [p?.id && (p.przyjety ? `${p.wykup ? "wykupiono lokal" : "kupiono budynek"} ${esc(nazwaLokalu(kat, p.id))}` : "próba zakupu budynku nie powiodła się"),

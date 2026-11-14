@@ -1,5 +1,5 @@
 """Balans poziomów botów (F4.4): gra z lokalami, w której wszystkie strategie z dane/boty.yaml
-grają na jednym poziomie; wypisuje gotówkę, średni wynik działalności, lokale, pracowników,
+grają na jednym poziomie; wypisuje gotówkę, wynik gry w pkt (0–1000), lokale, pracowników,
 przeterminowany towar i sprzedaż/popyt ostatniej rundy.
 
     python -X utf8 -m balans.symuluj [rundy] [poziomy po przecinku] [ziarna po przecinku]
@@ -10,6 +10,7 @@ import time
 
 from silnik.dane import dane_domyslne
 from silnik.gra import Gra
+from silnik.wyniki import punkty as pk
 
 
 def _przeterminowane(wyniki: dict) -> float:
@@ -25,9 +26,11 @@ def rozegraj(rund: int, poziom: str, ziarno: int) -> dict[str, dict]:
         s = g.przelicz(wymus=True)
     wynik = {}
     for n, f in s.firmy.items():
-        wd = [s.wyniki[r][n]["karta"]["wynik_dzialalnosci"] for r in range(2, rund + 1)]
+        dane = dane_domyslne()
+        tygodnie = {r: s.wyniki[r][n]["karta"]["punkty"] for r in range(1, rund + 1)}
+        wd = pk.ranking(dane, tygodnie, rund)["wynik"]
         sp = s.wyniki[rund][n]["sprzedaz"].values()
-        wynik[n] = {"gotowka": f.gotowka, "wynik": sum(wd) / len(wd), "lokale": len(f.lokale),
+        wynik[n] = {"gotowka": f.gotowka, "wynik": wd, "lokale": len(f.lokale),
                     "pracownicy": len(f.pracownicy),
                     "przeterminowane": sum(_przeterminowane(s.wyniki[r][n])
                                            for r in range(1, rund + 1)),
@@ -47,7 +50,7 @@ if __name__ == "__main__":
             w = rozegraj(rund, poz, z)
             print(f"== {poz}, ziarno {z} ({time.time() - t:.1f} s)")
             for n, x in w.items():
-                print(f"  {n:13s} gotówka {x['gotowka']:9.0f}  wynik {x['wynik']:6.3f}"
+                print(f"  {n:13s} gotówka {x['gotowka']:9.0f}  wynik {x['wynik']:6.0f}"
                       f"  lokale {x['lokale']}  prac. {x['pracownicy']}"
                       f"  przeterm. {x['przeterminowane']:7.0f}"
                       f"  sprzedaż/popyt {x['sprzedaz']:.0f}/{x['popyt']:.0f}")
