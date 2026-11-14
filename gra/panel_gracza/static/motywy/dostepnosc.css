@@ -1,0 +1,31 @@
+/* LUKRUM – „nie tylko kolor” (we wszystkich paletach) i dodatki wysokiej widoczności.
+   Zasada (decyzja autora 14.11): stan nigdy nie jest pokazany samym kolorem. Zysk, strata, uwaga i stany
+   mają też znak albo wzór, żeby rozróżnił je daltonista i ktoś z wydrukiem w czerni. Wymaga zmienne.css. */
+
+.znak-zysk { color: var(--zysk); }
+.znak-zysk::before { content: "▲\00a0"; }
+.znak-strata { color: var(--strata); }
+.znak-strata::before { content: "▼\00a0"; }
+.znak-uwaga { color: var(--uwaga); }
+.znak-uwaga::before { content: "!\00a0"; font-weight: 700; }
+.znak-ok::before { content: "✓\00a0"; }
+.znak-brak::before { content: "✕\00a0"; }
+
+/* Wzory do wykresów i pól (np. słupek straty kreskowany, zysku pełny) */
+:root {
+  --wzor-strata: repeating-linear-gradient(135deg, var(--strata) 0 4px, transparent 4px 8px);
+  --wzor-uwaga: repeating-linear-gradient(90deg, var(--uwaga) 0 3px, transparent 3px 6px);
+}
+
+/* Wysoka widoczność: większe litery, grube ramki, wyraźny fokus i podkreślone odnośniki */
+[data-paleta="wysoka"] body { font-size: calc(100% * var(--skala-tekstu)); line-height: 1.6; }
+[data-paleta="wysoka"] :is(h1, h2, h3, .gruby) { font-weight: 700; }
+[data-paleta="wysoka"] a { text-decoration: underline; text-underline-offset: 3px; }
+[data-paleta="wysoka"] :is(button, input, select, textarea, .karta) { border: var(--ramka-grubosc) solid var(--ramka); }
+[data-paleta="wysoka"] :is(button, [role="button"]) { min-height: 44px; }
+[data-paleta="wysoka"] :focus-visible { outline: var(--ognisko); outline-offset: 3px; }
+
+/* Bez ruchu, gdy gracz wyłączył animacje w systemie (animowane części grafik z static/grafiki/) */
+@media (prefers-reduced-motion: reduce) {
+  :is(.para, .neon, .sekundnik, .hak) { animation: none !important; transition: none !important; }
+}

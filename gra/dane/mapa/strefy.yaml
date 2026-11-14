@@ -1,6 +1,8 @@
 # Strefy Lublina (mapa miasta)
 # Sprawdzenie: python -m silnik.dane sprawdz
-opis: 'Dziesięć stref Lublina na wspólnej mapie gry. mapa: prostokąt w polach siatki (x, y – lewy górny róg, szer
+opis: 'Dziesięć stref Lublina na wspólnej mapie gry. dzielnice – prawdziwe dzielnice z OSM, z których składa się
+  strefa na nowej mapie (propozycja [mechaniki]; pusta lista – granice wyznacza [mapa] wokół „serca”); dzielnic spoza
+  stref nie ma w popycie (tło miasta). mapa: prostokąt w polach siatki (x, y – lewy górny róg, szer
   × gl); kolor – barwa strefy na mapie. Popyt stref (klienci, ich preferencje) – krok F3a.4.'
 zrodlo: notatka „Ustalenia gry” (lista stref); położenie stref uproszczone względem prawdziwego Lublina
 siatka:
@@ -18,6 +20,8 @@ strefy:
       szer: 4
       gl: 5
     czynsz_m2: 110
+    dzielnice: [Stare Miasto]
+    serce: Rynek Starego Miasta i Brama Krakowska
   centrum:
     nazwa: Centrum
     opis: Biura, urzędy, banki i deptak na Krakowskim Przedmieściu. W dzień ruch jak w ulu, w niedzielę cisza.
@@ -29,6 +33,8 @@ strefy:
       szer: 5
       gl: 5
     czynsz_m2: 100
+    dzielnice: [Śródmieście]
+    serce: Krakowskie Przedmieście i plac Litewski
   akademickie:
     nazwa: Miasteczko Akademickie
     opis: UMCS, KUL i akademiki. Studenci liczą każdy grosz, ale jedzą o każdej porze, zwłaszcza w sesji.
@@ -40,6 +46,8 @@ strefy:
       szer: 6
       gl: 5
     czynsz_m2: 75
+    dzielnice: [Sławinek, Wieniawa]
+    serce: Miasteczko Akademickie UMCS i KUL (część na granicy z Rurami)
   politechnika:
     nazwa: Politechnika
     opis: Kampus Politechniki przy Nadbystrzyckiej. Inżynierowie wiedzą, ile gramów mięsa powinno być w kebabie.
@@ -51,6 +59,8 @@ strefy:
       szer: 5
       gl: 4
     czynsz_m2: 60
+    dzielnice: []
+    serce: kampus Politechniki Lubelskiej przy ul. Nadbystrzyckiej
   dworzec:
     nazwa: Dworzec
     opis: Dworzec PKP i Dworzec Metropolitalny. Klient się spieszy, wraca rzadko, ale jest go dużo.
@@ -62,6 +72,8 @@ strefy:
       szer: 5
       gl: 4
     czynsz_m2: 70
+    dzielnice: []
+    serce: Dworzec Lublin (PKP) i Dworzec Metropolitalny
   zygmuntowskie:
     nazwa: Zygmuntowskie
     opis: Arena Lublin i hale sportowe. W dzień meczu kolejka do horyzontu, w pozostałe dni spokojnie.
@@ -73,6 +85,8 @@ strefy:
       szer: 6
       gl: 5
     czynsz_m2: 50
+    dzielnice: []
+    serce: Arena Lublin i hale sportowe na Zygmuntowskich
   lsm_czuby:
     nazwa: LSM i Czuby
     opis: Wielkie osiedla z blokami i rodzinami. Klienci wierni, ale wymagający – pamiętają, jaki był sos w zeszłym
@@ -85,6 +99,8 @@ strefy:
       szer: 7
       gl: 6
     czynsz_m2: 55
+    dzielnice: [Rury, Czuby Północne, Czuby Południowe]
+    serce: osiedla LSM i Czuby
   czechow:
     nazwa: Czechów i Kalinowszczyzna
     opis: Osiedla na północy miasta i stoki wąwozów. Dużo mieszkańców, mało konkurencji, sporo spacerowiczów z psami.
@@ -96,6 +112,8 @@ strefy:
       szer: 12
       gl: 5
     czynsz_m2: 45
+    dzielnice: [Czechów Północny, Czechów Południowy, Kalinowszczyzna]
+    serce: osiedla Czechowa i wąwozy
   felin:
     nazwa: Felin
     opis: Hale, hurtownie i zakłady pracy na wschodzie miasta. Kierowcy i pracownicy zmianowi jedzą szybko i konkretnie.
@@ -107,6 +125,8 @@ strefy:
       szer: 6
       gl: 8
     czynsz_m2: 35
+    dzielnice: [Felin]
+    serce: hale i zakłady pracy na Felinie
   zemborzyce:
     nazwa: Zemborzyce
     opis: 'Zalew Zemborzycki: plaża, żaglówki i rowery. Latem tłumy, zimą tylko wędkarze i Tymek.'
@@ -118,3 +138,5 @@ strefy:
       szer: 9
       gl: 5
     czynsz_m2: 40
+    dzielnice: [Zemborzyce]
+    serce: Zalew Zemborzycki

@@ -12,3 +12,4 @@ gra/narzedzia/
 
 # logi (pomiary, serwery) – poza gitem
 *.log
+narzedzia/grafiki/podglad4.html
