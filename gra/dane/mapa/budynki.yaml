@@ -1,6 +1,7 @@
 # Budynki na mapie miasta – kliknięcie otwiera zakładkę gry
 # Sprawdzenie: python -m silnik.dane sprawdz
-opis: 'Budynki na mapie: każdy prowadzi do zakładki gry (zakladka – klucz z panel_gracza/static/zakladki/index.js;
+opis: 'Budynki na mapie. miejsce – prawdziwe położenie w Lublinie (plan, rozdz. 6); adres i geo dopisuje
+  strona mapy z OSM; wnetrze – id wnętrza budynku. Każdy prowadzi do zakładki gry (zakladka – klucz z panel_gracza/static/zakladki/index.js;
   null = jeszcze bez zakładki). Własny lokal drużyny otwiera okno z zakładkami firmy. mapa: pola siatki.'
 zrodlo: notatka „Elementy mapy” (banki w dwóch rzędach po trzy, dostawcy, sklepy, parki, agencje, urząd); nazwy
   banków z mapa/banki.yaml (F3a.9), biur, dostawców i firm szkoleniowych z katalog.yaml i dostawcy.yaml
@@ -9,6 +10,7 @@ budynki:
   nazwa: Kmicic
   rodzaj: bank
   strefa: centrum
+  miejsce: Krakowskie Przedmieście (Śródmieście)
   opis: Bank – kredyt na start dla firmy bez historii (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
@@ -20,6 +22,7 @@ budynki:
   nazwa: Wokulski i S-ka
   rodzaj: bank
   strefa: centrum
+  miejsce: Krakowskie Przedmieście (Śródmieście)
   opis: Bank – kredyt inwestycyjny pod zastaw (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
@@ -31,6 +34,7 @@ budynki:
   nazwa: Ziemia Obiecana
   rodzaj: bank
   strefa: centrum
+  miejsce: Krakowskie Przedmieście (Śródmieście)
   opis: Bank – leasing sprzętu (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
@@ -42,6 +46,7 @@ budynki:
   nazwa: Oszczędności Rzeckiego
   rodzaj: bank
   strefa: centrum
+  miejsce: Krakowskie Przedmieście (Śródmieście)
   opis: Bank – najlepsze lokaty (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
@@ -53,6 +58,7 @@ budynki:
   nazwa: Soplicowo
   rodzaj: bank
   strefa: centrum
+  miejsce: Krakowskie Przedmieście (Śródmieście)
   opis: Bank – najtańsze konto firmowe i terminal (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
@@ -64,6 +70,7 @@ budynki:
   nazwa: Solaris
   rodzaj: bank
   strefa: centrum
+  miejsce: Krakowskie Przedmieście (Śródmieście)
   opis: Bank – największy debet (dane/mapa/banki.yaml).
   zakladka: bank
   mapa:
@@ -75,6 +82,7 @@ budynki:
   nazwa: Kamienica biur rachunkowych
   rodzaj: biuro
   strefa: stare_miasto
+  miejsce: biurowce przy ul. Zana (Rury)
   opis: 'Pięć biur rachunkowych pod jednym dachem (J.K.Ś. Jakuba Klimka-Ślęzaka, Pod Trybunałem, Pani Halinka,
     e-Księgi24.pl, Debet & Kredyt) i pokój z biurkiem dla tych, którzy księgują sami. Na klatce schodowej
     pachnie tonerem i drożdżówkami.'
@@ -85,21 +93,34 @@ budynki:
     szer: 2
     gl: 1
 - id: ratusz
-  nazwa: Ratusz i Sanepid
+  nazwa: Urzędy przy Szeligowskiego
   rodzaj: urzad
   strefa: stare_miasto
-  opis: Rejestracja firmy, odbiór lokalu przez sanepid, higiena i kontrole. Urzędnik sprawdzi też, czego brakuje
-    w twoich decyzjach (Lista błędów).
+  miejsce: urzędy przy ul. Szeligowskiego (Czechów Południowy)
+  opis: Rejestracja firmy, podatki i ZUS. Urzędnik sprawdzi też, czego brakuje w twoich decyzjach (Lista błędów).
   zakladka: urzad
   mapa:
     x: 11
     y: 5
     szer: 2
     gl: 2
+- id: sanepid
+  nazwa: Sanepid
+  rodzaj: urzad
+  strefa: centrum
+  miejsce: okolice ul. Karłowicza (Śródmieście)
+  opis: Odbiór lokalu, higiena i kontrole w kuchni.
+  zakladka: urzad
+  mapa:
+    x: 8
+    y: 5
+    szer: 1
+    gl: 1
 - id: poczta
   nazwa: Poczta Główna
   rodzaj: poczta
   strefa: centrum
+  miejsce: Krakowskie Przedmieście, Poczta Główna (Śródmieście)
   opis: Tu wysyłasz decyzje rundy – list polecony do mistrza gry.
   zakladka: wyslij
   mapa:
@@ -111,6 +132,7 @@ budynki:
   nazwa: Biuro nieruchomości „Klucz”
   rodzaj: nieruchomosci
   strefa: centrum
+  miejsce: Śródmieście, poza deptakiem
   opis: Wszystkie wolne lokale i działki w mieście w jednym katalogu.
   zakladka: lokale
   mapa:
@@ -122,6 +144,7 @@ budynki:
   nazwa: Agencja pracy „Ręce do Rożna”
   rodzaj: praca
   strefa: centrum
+  miejsce: Miasteczko Akademickie, tablica ogłoszeń (Sławinek / Rury)
   opis: Kandydaci do kuchni i na kasę.
   zakladka: rynek_pracy
   mapa:
@@ -133,6 +156,7 @@ budynki:
   nazwa: Piekarnia Koziołek
   rodzaj: dostawca
   strefa: stare_miasto
+  miejsce: Stare Miasto
   opis: Świeże bułki i pita codziennie rano.
   zakladka: dostawcy
   mapa:
@@ -144,6 +168,7 @@ budynki:
   nazwa: Makro
   rodzaj: dostawca
   strefa: felin
+  miejsce: ul. Mełgiewska, hurtownie (Tatary)
   opis: 'Hurtownia: pełny asortyment, dowóz w poniedziałki i czwartki.'
   zakladka: dostawcy
   mapa:
@@ -155,6 +180,7 @@ budynki:
   nazwa: Selgros
   rodzaj: dostawca
   strefa: felin
+  miejsce: ul. Mełgiewska, hurtownie (Tatary)
   opis: 'Hurtownia: mięso i napoje, dowóz we wtorki i piątki.'
   zakladka: dostawcy
   mapa:
@@ -166,6 +192,7 @@ budynki:
   nazwa: Eurocash
   rodzaj: dostawca
   strefa: felin
+  miejsce: ul. Mełgiewska, hurtownie (Tatary)
   opis: 'Hurtownia: tanie warzywa i sosy, dowóz w pn, śr i pt.'
   zakladka: dostawcy
   mapa:
@@ -177,6 +204,7 @@ budynki:
   nazwa: Auchan
   rodzaj: dostawca
   strefa: zygmuntowskie
+  miejsce: osiedle w strefie Zygmuntowskie
   opis: 'Hipermarket: pełny asortyment, drożej niż w hurtowni, odbiór osobisty. Tu kupuje auto-dostawca.'
   zakladka: dostawcy
   mapa:
@@ -188,6 +216,7 @@ budynki:
   nazwa: Biedronka
   rodzaj: dostawca
   strefa: akademickie
+  miejsce: osiedle przy Miasteczku Akademickim
   opis: 'Dyskont – gazetka, odbiór osobisty.'
   zakladka: dostawcy
   mapa:
@@ -199,6 +228,7 @@ budynki:
   nazwa: Lidl
   rodzaj: dostawca
   strefa: lsm_czuby
+  miejsce: osiedle LSM lub Czuby
   opis: 'Dyskont – gazetka, odbiór osobisty.'
   zakladka: dostawcy
   mapa:
@@ -210,6 +240,7 @@ budynki:
   nazwa: Stokrotka
   rodzaj: dostawca
   strefa: czechow
+  miejsce: osiedle na Czechowie
   opis: 'Dyskont – blisko osiedla, odbiór osobisty.'
   zakladka: dostawcy
   mapa:
@@ -221,6 +252,7 @@ budynki:
   nazwa: Zakłady Mięsne „Rożen” z Łęcznej
   rodzaj: dostawca
   strefa: zemborzyce
+  miejsce: poza miastem, droga na Łęczną
   opis: 'Producent stożków kebab – punkt odbioru zamówień (od rundy 3).'
   zakladka: dostawcy
   mapa:
@@ -232,6 +264,7 @@ budynki:
   nazwa: Hurtownia sprzętu gastronomicznego
   rodzaj: sklep
   strefa: felin
+  miejsce: park handlowy na Węglinie (Węglin Południowy), obok sklepu meblowego
   opis: Rożny, frytownice, lodówki i kasy fiskalne.
   zakladka: sprzet
   mapa:
@@ -243,6 +276,7 @@ budynki:
   nazwa: Park handlowy (Leroy Merlin, IKEA, OBI, Jula, Castorama)
   rodzaj: sklep
   strefa: lsm_czuby
+  miejsce: park handlowy na Węglinie (Węglin Południowy), sklep meblowy
   opis: Meble, stoliki, telewizor z meczami i materiały do urządzenia sali – kupione wyposażenie jest od razu w lokalu.
   zakladka: wyposazenie
   mapa:
@@ -254,6 +288,7 @@ budynki:
   nazwa: Stolarnia „Lada i Syn”
   rodzaj: sklep
   strefa: zygmuntowskie
+  miejsce: Zygmuntowskie
   opis: Buduje nowe stanowiska kuchenne i kasowe w twoim lokalu.
   zakladka: stanowiska
   mapa:
@@ -265,6 +300,7 @@ budynki:
   nazwa: Galeria „Pod Zegarem”
   rodzaj: sklep
   strefa: centrum
+  miejsce: Śródmieście, centrum handlowe przy ul. Lipowej
   opis: Ekspresy, fotele do masażu i inne udogodnienia dla załogi.
   zakladka: udogodnienia
   mapa:
@@ -276,6 +312,7 @@ budynki:
   nazwa: Lubelska Szkoła Kebabu
   rodzaj: szkola
   strefa: politechnika
+  miejsce: okolice Politechniki, ul. Nadbystrzycka
   opis: 'Szkolenia: Lubelska Szkoła Kebabu, Rożen i Rozum oraz HACCP w Pięć Minut.'
   zakladka: szkolenia
   mapa:
@@ -287,6 +324,7 @@ budynki:
   nazwa: Drukarnia „Papier Przyjmie”
   rodzaj: reklama
   strefa: akademickie
+  miejsce: Miasteczko Akademickie
   opis: Ulotki za wycieraczki i plakaty na słupach (dane/mapa/reklama.yaml).
   zakladka: agencje
   mapa:
@@ -298,6 +336,7 @@ budynki:
   nazwa: Agencja „Lajk i Spółka”
   rodzaj: reklama
   strefa: akademickie
+  miejsce: biurowce przy ul. Zana (Rury)
   opis: Marketing internetowy (od rundy 7) – posty, influencerka, TikTok, wizytówka w mapach, grupa „Lublin Jedzie”
     (dane/mapa/reklama.yaml, sekcja internet).
   zakladka: internet
@@ -310,6 +349,7 @@ budynki:
   nazwa: Pracownia Analiz UMCS
   rodzaj: uczelnia
   strefa: akademickie
+  miejsce: Miasteczko Akademickie UMCS
   opis: Studenci ekonomii badają rynek – kto ile sprzedaje i po ile (Konkurencja).
   zakladka: konkurencja
   mapa:
@@ -321,6 +361,7 @@ budynki:
   nazwa: Redakcja „Kuriera Kebabowego”
   rodzaj: media
   strefa: centrum
+  miejsce: Śródmieście, poza deptakiem
   opis: Ranking firm miasta – karta wyników.
   zakladka: karta_wynikow
   mapa:
@@ -332,6 +373,7 @@ budynki:
   nazwa: Ogród Saski
   rodzaj: park
   strefa: akademickie
+  miejsce: Ogród Saski
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -343,6 +385,7 @@ budynki:
   nazwa: Park Ludowy
   rodzaj: park
   strefa: zygmuntowskie
+  miejsce: Park Ludowy nad Bystrzycą
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -354,6 +397,7 @@ budynki:
   nazwa: Ogród Botaniczny UMCS
   rodzaj: park
   strefa: akademickie
+  miejsce: Ogród Botaniczny UMCS (Sławinek)
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -365,6 +409,7 @@ budynki:
   nazwa: Park Bronowicki
   rodzaj: park
   strefa: felin
+  miejsce: Park Bronowicki (Bronowice)
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -376,6 +421,7 @@ budynki:
   nazwa: Park Rury
   rodzaj: park
   strefa: lsm_czuby
+  miejsce: park w wąwozie na Rurach
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -387,6 +433,7 @@ budynki:
   nazwa: Błonia pod Zamkiem
   rodzaj: park
   strefa: stare_miasto
+  miejsce: błonia pod Zamkiem (Stare Miasto)
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -398,6 +445,7 @@ budynki:
   nazwa: Zalew Zemborzycki
   rodzaj: woda
   strefa: zemborzyce
+  miejsce: Zalew Zemborzycki
   opis: Plaża, żaglówki, wędkarze i morsy – co jakiś czas wydarzenia nad wodą (kliknij, żeby je zobaczyć).
   zakladka: zdarzenia
   mapa:
@@ -409,6 +457,7 @@ budynki:
   nazwa: Kantor „U Harpagona”
   rodzaj: lichwiarz
   strefa: dworzec
+  miejsce: Stare Miasto, brama kamienicy
   opis: Pożyczki od ręki, bez pytań i bez ksiąg. Pytania zadaje się później – i zadaje je Mistrz Jakub.
   zakladka: harpagon
   mapa:
@@ -420,6 +469,7 @@ budynki:
   nazwa: Radio i billboardy „Fala Koziołka”
   rodzaj: reklama
   strefa: centrum
+  miejsce: biurowce przy ul. Zana (Rury)
   opis: Spot w radiu na całe miasto i billboardy przy rondach (dane/mapa/reklama.yaml).
   zakladka: agencje
   mapa:
@@ -431,6 +481,7 @@ budynki:
   nazwa: Agencja eventowa „Kozi Gród Events”
   rodzaj: reklama
   strefa: stare_miasto
+  miejsce: biurowce przy ul. Zana (Rury)
   opis: Degustacje na festynach osiedlowych i Noc Kebaba na otrzęsinach (dane/mapa/reklama.yaml).
   zakladka: agencje
   mapa:
@@ -442,6 +493,7 @@ budynki:
   nazwa: TUW „Pod Koziołkiem”
   rodzaj: ubezpieczenia
   strefa: centrum
+  miejsce: biurowce przy ul. Zana (Rury)
   opis: Polisy na lokal, sprzęt i OC – odszkodowania po wypadkach w lokalu (dane/zdarzenia/losowe.yaml).
   zakladka: ubezpieczenia
   mapa:
@@ -453,6 +505,7 @@ budynki:
   nazwa: Biuro detektywistyczne „Sokole Oko”
   rodzaj: detektyw
   strefa: dworzec
+  miejsce: okolice dworca PKP
   opis: Nad lombardem przy dworcu. Zenon Lupa śledzi konkurencję za gotówkę – dyskretnie, przynajmniej w teorii.
   zakladka: konkurencja
   mapa:
@@ -464,6 +517,7 @@ budynki:
   nazwa: Parkiet maklerski „Byk i Koziołek”
   rodzaj: gielda
   strefa: centrum
+  miejsce: Krakowskie Przedmieście (Śródmieście)
   opis: Biuro maklerskie przy Krakowskim Przedmieściu – prawdziwe notowania spółek S&P 500. Właściciel inwestuje
     tu prywatne pieniądze z portfela (G4, decyzja autora 8.11.2026).
   zakladka: gielda

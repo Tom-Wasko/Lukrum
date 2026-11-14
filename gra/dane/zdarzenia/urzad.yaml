@@ -13,7 +13,7 @@ zrodlo: 'Plan implementacji F3b.6 i notatka „Elementy mapy” (Urząd / Sanepi
   – rząd wielkości ofert firm sprzątających dla małej gastronomii w 2026 r.; szanse – założenie F3b.6, do
   kalibracji w kroku 5'
 urzad:
-  nazwa: Ratusz i Sanepid
+  nazwa: Urzędy i Sanepid
   budynek: ratusz
   rejestracja:
     pkd: 56.10.A

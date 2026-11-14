@@ -597,6 +597,9 @@ class Strefa(Schemat):
     kolor: str = Field(pattern=r"^#[0-9a-fA-F]{6}$")
     mapa: Prostokat
     czynsz_m2: float = Field(gt=0)
+    # nowa mapa Lublina: prawdziwe dzielnice (nazwy z OSM), z których składa się strefa popytu, i jej „serce”
+    dzielnice: list[str] = []
+    serce: str | None = None
 
 
 class PlikStref(Plik):
@@ -685,6 +688,11 @@ class PlikLokali(Plik):
     lokale: list[Lokal] = Field(min_length=1)
 
 
+class Geo(Schemat):
+    lat: float   # stopnie WGS84 z OSM (Lublin ok. 51,2)
+    lon: float   # (Lublin ok. 22,6)
+
+
 class Budynek(Schemat):
     id: str = Field(pattern=r"^[a-z0-9_]+$")
     nazwa: str
@@ -693,6 +701,11 @@ class Budynek(Schemat):
     opis: str
     zakladka: str | None
     mapa: Prostokat
+    # nowa mapa Lublina (OSM, strona [mapa]): prawdziwe miejsce z planu, adres i współrzędne; wnętrze budynku
+    miejsce: str | None = None
+    adres: str | None = None
+    geo: Geo | None = None
+    wnetrze: str | None = None
 
 
 class PlikBudynkow(Plik):
