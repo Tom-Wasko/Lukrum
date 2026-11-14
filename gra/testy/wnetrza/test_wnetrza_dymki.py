@@ -147,6 +147,17 @@ def test_plotki_potrzebuja_danych_z_miasta(dane_w):
     assert "PARK Ogród Saski: Pan Zbyszek" in tylko_park and not any(x.startswith(("KONK", "KAL")) for x in tylko_park)
 
 
+def test_plotka_o_parku_w_tej_samej_rundzie_co_zdarzenie(dane_w):
+    park = [{"park": "Ogród Saski", "tytul": "Pan Zbyszek"}]
+    for z in range(60):
+        t = teksty(dane_w, ziarno=z, park=park)
+        assert "PARK Ogród Saski: Pan Zbyszek" in t   # zawsze, nie tylko przy szczęśliwym losowaniu
+    assert not any(x.startswith("PARK") for z in range(60) for x in teksty(dane_w, ziarno=z))   # bez zdarzenia – brak plotki
+    # wyłączone plotki (ustawienie mistrza gry) nie wymuszają niczego
+    assert not any(x.startswith("PARK") for z in range(20)
+                   for x in teksty(dane_w, ziarno=z, park=park, wlaczone={"cena_smak", "wos"}))
+
+
 def test_bywalcy_czesciej_mowia_o_swoich_tematach(dane_w):
     # rzecki dba o cenę, nie o ocenę: oba jego dymki spełnione, ale cena wypada ok. 3 razy częściej
     wsk = {"runda": 3, "cena_wzgledem_strefy": 1.3, "cena": 20.0, "cena_strefy": 15.0, "ocena": 4.5}

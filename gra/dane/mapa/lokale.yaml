@@ -63,6 +63,25 @@ zestawy:
         Kasa fiskalna: 2
         Lada z witryną: 2
         Tablica menu: 2
+  # ★★★ (założenie, 14.11): ten sam układ stanowisk co solidny, ale cały sprzęt w jakości 3 (ceny i utrzymanie – sprzet.yaml,
+  # jakość 3 jest droższa w zakupie i tańsza w utrzymaniu). Kupić go można w jednym lokalu (centrum_1); poza tym ★★★ osiąga się
+  # dokupując sprzęt jakości 3 (decyzja sprzet_kup).
+  profesjonalny:
+    nazwa: Zestaw profesjonalny (★★★)
+    opis: 'Sprzęt jak z kuchni dużej sieci: lśniący rożen, szybka frytownica i kasa bez zacięć. Poprzedni najemca zostawił nawet instrukcje obsługi.'
+    stanowiska:
+    - typ: kuchnia
+      sprzet:
+        Rożen: 3
+        Frytownica: 3
+        Lodówka na napoje: 3
+        Szafa chłodnicza: 3
+        Zamrażarka: 3
+    - typ: kasa
+      sprzet:
+        Kasa fiskalna: 3
+        Lada z witryną: 3
+        Tablica menu: 3
   podwojny:
     nazwa: Zestaw podwójny (★★)
     opis: Dwie linie kuchenne i kasa – lokal po dużej sieci, która „zmieniła strategię”.
@@ -179,7 +198,7 @@ lokale:
   miejsca:
     kuchnia: 3
     kasa: 2
-  zestaw: solidny
+  zestaw: profesjonalny
   czynsz: 7500
   utrzymanie: 1800
   mapa:

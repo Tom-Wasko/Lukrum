@@ -29,14 +29,10 @@ def historia_bywalcow(dane: Dane, stan: StanGry, konfiguracja: dict, firma: str,
     return historia
 
 
-def dymki(dane: Dane, stan: StanGry, konfiguracja: dict, firma: str, biezaca: int,
-          filtr_gracza: set[str] | None = None) -> list[dict]:
-    """Dymki rundy: bez rodzajów wyłączonych przez mistrza gry i (opcjonalnie) przez gracza. Wujek zostaje zawsze."""
-    wlaczone = us.wlaczone(dane, konfiguracja)
-    if filtr_gracza is not None:
-        wlaczone &= filtr_gracza
+def dymki(dane: Dane, stan: StanGry, konfiguracja: dict, firma: str, biezaca: int) -> list[dict]:
+    """Dymki rundy: bez rodzajów wyłączonych przez mistrza gry (gracz nie ma własnego filtra). Wujek zostaje zawsze."""
     return dy.dymki_rundy(dane, st.wskazniki(dane, stan, firma, biezaca), _kontekst(dane, stan, konfiguracja, firma, biezaca),
-                          wlaczone, historia_bywalcow(dane, stan, konfiguracja, firma, biezaca))
+                          us.wlaczone(dane, konfiguracja), historia_bywalcow(dane, stan, konfiguracja, firma, biezaca))
 
 
 def propozycja(dane: Dane, stan: StanGry, konfiguracja: dict, firma: str, biezaca: int) -> dict | None:
@@ -48,19 +44,19 @@ def propozycja(dane: Dane, stan: StanGry, konfiguracja: dict, firma: str, biezac
 
 
 def propozycja_dla_gracza(dane: Dane, konfiguracja: dict, p: dict, firma: str, biezaca: int) -> dict:
-    """Propozycja do pokazania: klient, treść, odpowiedzi (bez skutków – te poznaje się po rundzie) i wybór drużyny;
+    """Propozycja do pokazania: klient, treść, odpowiedzi (ze wskazówką kierunku skutków bez liczb; same skutki poznaje się po rundzie) i wybór drużyny;
     po odpowiedzi także reakcja klienta."""
     kto, imie = pr.nadawca(dane, p)
     zapis = pr.wybrana(konfiguracja, firma, biezaca)
     wybrana = zapis["odpowiedz"] if zapis and zapis["propozycja"] == p["id"] else None
     reakcja = next((o["reakcja"] for o in p["odpowiedzi"] if o["id"] == wybrana), None)
     return {"id": p["id"], "kto": kto, "imie": imie, "tekst": p["tekst"],
-            "odpowiedzi": [{"id": o["id"], "tekst": o["tekst"]} for o in p["odpowiedzi"]],
+            "odpowiedzi": [{"id": o["id"], "tekst": o["tekst"], "wskazowka": o["wskazowka"]} for o in p["odpowiedzi"]],
             "wybrana": wybrana, "reakcja": reakcja, "domyslna": pr.zasady(dane)["bez_odpowiedzi"]}
 
 
 def widok(dane: Dane, stan: StanGry, konfiguracja: dict, firma: str, biezaca: int,
-          filtr_gracza: set[str] | None = None, lokal: str | None = None) -> dict | None:
+          lokal: str | None = None) -> dict | None:
     """Wnętrze firmy w rundzie `biezaca` (None – gra bez wnętrz): {runda, rodzaje, wlaczone, stan, wskazniki, dymki,
     propozycja}."""
     if not dane.wnetrza:
@@ -68,9 +64,8 @@ def widok(dane: Dane, stan: StanGry, konfiguracja: dict, firma: str, biezaca: in
     p = propozycja(dane, stan, konfiguracja, firma, biezaca)
     wsk = st.wskazniki(dane, stan, firma, biezaca)
     return {"runda": biezaca, "rodzaje": us.rodzaje(dane), "wlaczone": us.ustawione(dane, konfiguracja),
-            "filtr_gracza": sorted(filtr_gracza) if filtr_gracza is not None else None,
             "stan": st.stan_wnetrza(dane, stan, firma, lokal), "wskazniki": wsk,
-            "dymki": dymki(dane, stan, konfiguracja, firma, biezaca, filtr_gracza),
+            "dymki": dymki(dane, stan, konfiguracja, firma, biezaca),
             "propozycja": propozycja_dla_gracza(dane, konfiguracja, p, firma, biezaca) if p else None}
 
 

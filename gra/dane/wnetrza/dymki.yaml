@@ -2,7 +2,7 @@
 # Klienci i bywalcy (bywalcy.yaml) mówią w dymkach to, co policzył silnik w ostatniej rundzie. Silnik: silnik/wnetrza/.
 # Sprawdzenie: python -m silnik.dane sprawdz
 #
-# Cztery rodzaje dymków. Każdy włącza i wyłącza mistrz gry (ustawienia gry) i gracz u siebie (filtr w panelu).
+# Cztery rodzaje dymków. Każdy włącza i wyłącza mistrz gry (ustawienia gry); gracz nie ma własnego filtra.
 # Pola dymka:
 #   rodzaj: cena_smak | plotki | propozycje | wos
 #   kto: id bywalca, „gosc” (anonimowy klient) albo „kazdy” (bywalec albo gość)
@@ -13,6 +13,7 @@
 #   wyjasnienie, zrodlo_prawne, sprawdzone (wos): krótka odpowiedź pod dymkiem. sprawdzone: false = do sprawdzenia
 #     przez autora przed lekcją
 #   Propozycje (rodzaj „propozycje”) mają osobną listę `propozycje` z odpowiedziami i skutkami, niżej.
+#     Każda odpowiedź ma `wskazowka`: kierunek skutków pokazany graczowi przed wyborem (bez liczb, bez szansy).
 opis: 'Co rundę przy ladzie staje kilku gości. Ich dymki to wyniki silnika powiedziane ludzkim głosem.'
 
 zasady:
@@ -120,32 +121,32 @@ dymki:
   gdy: {nastroj_zespolu: {od: 75}}
   tekst: 'Uśmiechnięta obsługa to rzadki widok. Widać, że tu się dba o ludzi, nie tylko o utarg.'
 
-# ── Cytaty z lektur (decyzja autora 13.11: humor + prawdziwe cytaty; brzmienie sprawdzić w Wolnych Lekturach) ─────
+# ── Cytaty z lektur (decyzja autora 13.11: humor + prawdziwe cytaty; brzmienie sprawdzone w Wolnych Lekturach 14.11) ─────
 # cytat: fragment w cudzysłowie to dosłowny cytat; cytat_zrodlo: skąd i w jakim stanie jest sprawdzenie
 - rodzaj: cena_smak
   kto: dulska
   gdy: {ocena: {do: 3.0}}
-  tekst: 'Smakowało średnio, ale nikomu nie powiem. „Na to mamy cztery ściany i sufit, aby brudy swoje prać w domu”.'
+  tekst: 'Smakowało średnio, ale nikomu nie powiem. „Na to mamy cztery ściany i sufit, aby brudy swoje prać w domu i aby nikt o nich nie wiedział”.'
   cytat: true
-  cytat_zrodlo: 'Zapolska, Moralność pani Dulskiej; brzmienie za zpe.gov.pl i opracowaniami, do porównania z Wolnymi Lekturami'
+  cytat_zrodlo: 'Zapolska, Moralność pani Dulskiej, akt I (wolnelektury.pl/media/book/txt/moralnosc-pani-dulskiej.txt); sprawdzone z Wolnymi Lekturami 14.11'
 - rodzaj: cena_smak
   kto: zagloba
   gdy: {ocena: {od: 4.0}}
-  tekst: '„Mości panowie! gdybym zaczął wszystko szczegółowie opowiadać, tedy i dziesięciu nocy by nie starczyło”. Krótko: dobry kebab!'
+  tekst: '„Moi mości panowie! Gdybym zaczął wszystko szczegółowie opowiadać, tedy i dziesięciu nocy by nie starczyło”. Krótko: dobry kebab!'
   cytat: true
-  cytat_zrodlo: 'Sienkiewicz, Ogniem i mieczem; brzmienie za quizem wprost.pl, do porównania z Wolnymi Lekturami'
+  cytat_zrodlo: 'Sienkiewicz, Ogniem i mieczem, t. I (wolnelektury.pl/media/book/txt/ogniem-i-mieczem-tom-pierwszy.txt); sprawdzone z Wolnymi Lekturami 14.11'
 - rodzaj: cena_smak
   kto: zagloba
   gdy: {kolejka: {od: 0.15}}
   tekst: 'Tyle czekać na jedną porcję? „Zdechnę ja i pchły moje!”'
   cytat: true
-  cytat_zrodlo: 'Sienkiewicz, Trylogia; za artykułem w Folia Linguistica (UŁ), do porównania z Wolnymi Lekturami'
+  cytat_zrodlo: 'Sienkiewicz, Ogniem i mieczem, t. II (wolnelektury.pl/media/book/txt/ogniem-i-mieczem-tom-drugi.txt); sprawdzone z Wolnymi Lekturami 14.11'
 - rodzaj: cena_smak
   kto: papkin
   gdy: {cena_wzgledem_strefy: {od: 1.15}}
-  tekst: 'Za {cena} zł? „Jeśli nie chcesz mojej zguby, krokodyla daj mi, luby”. Albo chociaż rabat.'
+  tekst: 'Za {cena} zł? „Jeśli nie chcesz mojej zguby, krrokodyla daj mi, luby!” Albo chociaż rabat.'
   cytat: true
-  cytat_zrodlo: 'Fredro, Zemsta; w źródłach są dwie wersje („daj mi” / „kup mi”), sprawdzić w Wolnych Lekturach'
+  cytat_zrodlo: 'Fredro, Zemsta, akt II, monolog Papkina (wolnelektury.pl/media/book/txt/zemsta.txt); sprawdzone z Wolnymi Lekturami 14.11, wersja „daj mi”'
 - rodzaj: cena_smak
   kto: rzecki
   gdy: {zmiana_ceny: {od: 10}}
@@ -183,63 +184,63 @@ dymki:
 
 # ── Zaczepki WOS (jedno pytanie i krótka odpowiedź) ─────────────────────────────────────────────────────────────────
 # Sprawdzone przez Claude 14.11.2026 w opracowaniach i tekstach przepisów (pole `sprawdzil`). Do gry wchodzą dopiero
-# po zatwierdzeniu przez autora (`sprawdzone: true`).
+# po zatwierdzeniu przez autora (zatwierdzone wszystkie 8 w dniu 14.11) (`sprawdzone: true`).
 - rodzaj: wos
   kto: jozio
   tekst: 'A paragon będzie? Bo mama mówi, że jak nie ma paragonu, to coś jest nie tak.'
   wyjasnienie: 'Sprzedawca z kasą fiskalną musi przy każdej sprzedaży wydrukować i wydać paragon, nawet gdy klient o niego nie prosi. Za zgodą klienta może to być e-paragon.'
   zrodlo_prawne: 'ustawa o VAT, art. 111 ust. 3a pkt 1'
-  sprawdzil: 'Claude 14.11: obowiązek wydania bez żądania potwierdza orzecznictwo NSA (infor.pl, ifirma.pl); e-paragon za zgodą od 2020'
-  sprawdzone: false
+  sprawdzil: 'Claude 14.11: obowiązek wydania bez żądania potwierdza orzecznictwo NSA (infor.pl, ifirma.pl); e-paragon za zgodą od 2020; zatwierdził autor 14.11'
+  sprawdzone: true
 - rodzaj: wos
   kto: zagloba
   tekst: 'Czy w tym sosie są orzechy? Mam uczulenie, a wolę zginąć w bitwie niż od sosu.'
   wyjasnienie: 'Lokal musi informować o 14 alergenach z unijnej listy (m.in. orzechy, gluten, mleko, sezam) także przy daniach bez opakowania, podawanych na miejscu.'
   zrodlo_prawne: 'rozporządzenie (UE) nr 1169/2011, art. 44 ust. 1 lit. a i załącznik II'
-  sprawdzil: 'Claude 14.11: komunikat Komisji 2017/C 428/01, kary UOKiK/IH za brak informacji w gastronomii. Forma (ustnie czy na piśmie) zależy od przepisów krajowych, dlatego w tekście jej nie podajemy'
-  sprawdzone: false
+  sprawdzil: 'Claude 14.11: komunikat Komisji 2017/C 428/01, kary UOKiK/IH za brak informacji w gastronomii. Forma (ustnie czy na piśmie) zależy od przepisów krajowych, dlatego w tekście jej nie podajemy; zatwierdził autor 14.11'
+  sprawdzone: true
 - rodzaj: wos
   kto: rzecki
   tekst: 'Czy ta cena w menu jest z podatkiem? Bo ja liczę co do grosza.'
   wyjasnienie: 'Cena dla klienta zawsze zawiera VAT (jest brutto). Klient płaci dokładnie tyle, ile widzi w menu.'
   zrodlo_prawne: 'ustawa z 9 maja 2014 r. o informowaniu o cenach towarów i usług, art. 3 ust. 1 pkt 1'
-  sprawdzil: 'Claude 14.11: definicja ceny obejmuje podatek od towarów i usług (z pamięci, numer punktu do potwierdzenia w ISAP)'
-  sprawdzone: false
+  sprawdzil: 'Claude 14.11: definicja ceny obejmuje podatek od towarów i usług (z pamięci, numer punktu do potwierdzenia w ISAP); zatwierdził autor 14.11'
+  sprawdzone: true
 - rodzaj: wos
   kto: gosc
   tekst: 'Kebab był zimny. Mogę to zareklamować, czy już po ptakach?'
   wyjasnienie: 'Można złożyć reklamację. Firma ma 14 dni od jej otrzymania na odpowiedź. Jeśli nie odpowie w terminie, uznaje się, że reklamację przyjęła.'
   zrodlo_prawne: 'ustawa o prawach konsumenta, art. 7a'
-  sprawdzil: 'Claude 14.11: termin skrócony z 30 do 14 dni nowelizacją (Senat, druk 830); skutek milczenia potwierdzają poradniki (ifirma.pl, poradnikprzedsiebiorcy.pl)'
-  sprawdzone: false
+  sprawdzil: 'Claude 14.11: termin skrócony z 30 do 14 dni nowelizacją (Senat, druk 830); skutek milczenia potwierdzają poradniki (ifirma.pl, poradnikprzedsiebiorcy.pl); zatwierdził autor 14.11'
+  sprawdzone: true
 - rodzaj: wos
   kto: jozio
   tekst: 'Mam szesnaście lat. Mogę tu dorobić w wakacje?'
   wyjasnienie: 'Tak, ale tylko przy lekkich pracach i po badaniu lekarskim. W wakacje najwyżej 7 godzin dziennie i 35 w tygodniu, bez nadgodzin i nie w nocy (22–6).'
   zrodlo_prawne: 'Kodeks pracy, art. 200¹, 200², 201 i 203'
-  sprawdzil: 'Claude 14.11: limity wakacyjne 7 h / 35 h (art. 200² § 3), zakaz nadgodzin i pracy nocnej (art. 203), badania (art. 201) – opracowania infor.pl i PIP'
-  sprawdzone: false
+  sprawdzil: 'Claude 14.11: limity wakacyjne 7 h / 35 h (art. 200² § 3), zakaz nadgodzin i pracy nocnej (art. 203), badania (art. 201) – opracowania infor.pl i PIP; zatwierdził autor 14.11'
+  sprawdzone: true
 - rodzaj: wos
   kto: judym
   tekst: 'Widzę kamerę nad kasą. Pracownicy wiedzą, że są nagrywani?'
   wyjasnienie: 'Muszą wiedzieć. Pracodawca informuje o monitoringu najpóźniej 2 tygodnie przed jego uruchomieniem, określa jego cel i oznacza nagrywany teren.'
   zrodlo_prawne: 'Kodeks pracy, art. 22² i RODO (art. 13)'
-  sprawdzil: 'Claude 14.11: termin 2 tygodni i oznaczenie – opracowania (ifirma.pl, poradnikprzedsiebiorcy.pl); numery paragrafów różnią się w źródłach, dlatego podajemy sam artykuł'
-  sprawdzone: false
+  sprawdzil: 'Claude 14.11: termin 2 tygodni i oznaczenie – opracowania (ifirma.pl, poradnikprzedsiebiorcy.pl); numery paragrafów różnią się w źródłach, dlatego podajemy sam artykuł; zatwierdził autor 14.11'
+  sprawdzone: true
 - rodzaj: wos
   kto: gosc
   tekst: 'Płacę kartą, dobrze? Nie mam przy sobie gotówki.'
   wyjasnienie: 'Firma musi dać klientowi możliwość zapłaty bezgotówkowej, np. kartą albo BLIK-iem. Od 2025 r. kasa fiskalna musi być połączona z terminalem płatniczym.'
   zrodlo_prawne: 'Prawo przedsiębiorców, art. 19a (ust. 1 od 2022 r., ust. 3 od 2025 r.)'
-  sprawdzil: 'Claude 14.11: rp.pl, infor.pl, prawnik.cc. Zakres (czy dotyczy wszystkich, czy tylko firm z kasą) do potwierdzenia w ISAP'
-  sprawdzone: false
+  sprawdzil: 'Claude 14.11: rp.pl, infor.pl, prawnik.cc. Zakres (czy dotyczy wszystkich, czy tylko firm z kasą) do potwierdzenia w ISAP; zatwierdził autor 14.11'
+  sprawdzone: true
 - rodzaj: wos
   kto: papkin
   tekst: 'Zapłacę jutro, słowo lwa Północy! Albo zapiszcie mi to na zeszyt.'
   wyjasnienie: '„Na zeszyt” to odroczona płatność, czyli kredyt dla klienta. Ryzyko, że pieniądze nie wrócą, ponosi sprzedawca, a sprzedaż i tak trzeba zarejestrować na kasie w chwili wydania jedzenia.'
   zrodlo_prawne: 'Kodeks cywilny, art. 535 (umowa sprzedaży); ustawa o VAT, art. 111 (ewidencja na kasie)'
-  sprawdzil: 'Claude 14.11: zasada ogólna, bez osobnego źródła. Moment ewidencji na kasie do potwierdzenia w rozporządzeniu w sprawie kas rejestrujących'
-  sprawdzone: false
+  sprawdzil: 'Claude 14.11: zasada ogólna, bez osobnego źródła. Moment ewidencji na kasie do potwierdzenia w rozporządzeniu w sprawie kas rejestrujących; zatwierdził autor 14.11'
+  sprawdzone: true
 
 # ── Wujek (specjalny: tylko w ważnych momentach, rodzaj cena_smak, żeby nie zniknął przy filtrach) ──────────────────
 - rodzaj: cena_smak
@@ -285,14 +286,17 @@ propozycje:
   - id: tak
     tekst: 'Bierzemy, po cenie z menu.'
     reakcja: 'Super! To w piątek o 18:00 pod Chatką Żaka.'
+    wskazowka: 'Więcej gości i zysku, ale cięższa praca kuchni i ryzyko kontroli'
     skutki: {porcje: 120, opinia: 0.05, ryzyko_kontroli: 0.05}
   - id: rabat
     tekst: 'Bierzemy, z rabatem 15% za dużą ilość.'
     reakcja: 'Z rabatem? To biorę od razu i polecę was na grupie roku.'
+    wskazowka: 'Więcej zadowolonych gości, ale mniej zysku na porcji i ryzyko kontroli'
     skutki: {porcje: 120, rabat: 0.15, opinia: 0.1, ryzyko_kontroli: 0.05}
   - id: odmowa
     tekst: 'Nie damy rady, kuchnia jest za mała.'
     reakcja: 'Szkoda. To zamówimy pizzę.'
+    wskazowka: 'Spokój w kuchni, ale bez dodatkowych gości'
     skutki: {}
 
 - id: kapela_papkina
@@ -303,12 +307,14 @@ propozycje:
   - id: tak
     tekst: 'Dobra, pierwsza kolejka od nas.'
     reakcja: 'Lew Północy dotrzymuje słowa! Zazwyczaj.'
+    wskazowka: 'Możliwi nowi goście i lepsza opinia, ale pierwsza kolejka na koszt firmy i niepewny skutek'
     szansa: 0.5
     skutki: {darmowe_porcje: 8, porcje: 40, opinia: 0.05}
     skutki_porazka: {darmowe_porcje: 8}
   - id: odmowa
     tekst: 'Najpierw kapela, potem rozmowa o rabatach.'
     reakcja: 'Ech, bez fantazji. Ale może kiedyś wpadnę.'
+    wskazowka: 'Bez ryzyka, ale i bez nowych gości'
     skutki: {}
 
 - id: skarga_dulskiej
@@ -319,14 +325,17 @@ propozycje:
   - id: pochlaniacz
     tekst: 'Montujemy lepszy pochłaniacz.'
     reakcja: 'No proszę. Kulturalni ludzie jednak.'
+    wskazowka: 'Wydatek teraz, za to spokój z sąsiadką i kontrolą'
     skutki: {koszt: 1800}
   - id: przeprosiny
     tekst: 'Przepraszamy i zapraszamy na obiad.'
     reakcja: 'Obiad przyjmę. Ale ja tu będę wąchać, proszę pamiętać.'
+    wskazowka: 'Tani gest, ale ryzyko kontroli zostaje'
     skutki: {darmowe_porcje: 2, ryzyko_kontroli: 0.1}
   - id: odmowa
     tekst: 'To lokal gastronomiczny, tu pachnie jedzeniem.'
     reakcja: 'Zobaczymy, co na to sanepid!'
+    wskazowka: 'Bez kosztów, ale ryzyko skargi, kontroli i złej opinii'
     skutki: {ryzyko_kontroli: 0.3, opinia: -0.05}
 
 - id: prosba_o_prace
@@ -337,8 +346,10 @@ propozycje:
   - id: tak
     tekst: 'Proszę zostawić CV, odezwiemy się.'
     reakcja: 'Dziękuję! Mogę zacząć choćby od jutra.'
+    wskazowka: 'Nowa osoba do rozważenia w załodze'
     skutki: {kandydat: true}
   - id: odmowa
     tekst: 'Na razie nikogo nie szukamy.'
     reakcja: 'Rozumiem. To powodzenia.'
+    wskazowka: 'Bez zmian w załodze'
     skutki: {}

@@ -136,12 +136,15 @@ class Odpowiedz(Schemat):
     id: str = Field(pattern=r"^[a-z_0-9]+$")
     tekst: str = Field(min_length=1)
     reakcja: str = Field(min_length=1)
+    wskazowka: str = Field(min_length=3)   # kierunek skutków pokazany przed wyborem: bez liczb i bez szansy
     skutki: Skutki
     szansa: float | None = Field(default=None, gt=0, lt=1)
     skutki_porazka: Skutki | None = None
 
     @model_validator(mode="after")
     def _szansa(self):
+        if any(c.isdigit() for c in self.wskazowka) or "%" in self.wskazowka:
+            raise ValueError(f"odpowiedź {self.id}: wskazówka nie może mieć liczb ani „%”")
         if (self.szansa is None) != (self.skutki_porazka is None):
             raise ValueError(f"odpowiedź {self.id}: `szansa` i `skutki_porazka` idą parą")
         return self

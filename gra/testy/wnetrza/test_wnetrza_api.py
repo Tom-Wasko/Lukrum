@@ -51,16 +51,16 @@ def test_widok_wnetrza_i_uprawnienia(dane_wnetrz, client, uczen):
     assert client.get("/api/gry/nie-ma/wnetrza/Ala").status_code == 404
 
 
-def test_filtr_gracza_to_tylko_widok(dane_wnetrz, client, uczen):
+def test_gracz_nie_wylacza_dymkow(dane_wnetrz, client, uczen):
     id_, ala, _ = _gra(client, uczen)
     _runda_2(client, id_)
     pelny = ala.get(f"/api/gry/{id_}/wnetrza/Ala").json()
-    wos = ala.get(f"/api/gry/{id_}/wnetrza/Ala?rodzaje=wos").json()
-    assert {x["rodzaj"] for x in wos["dymki"] if x["kto"] != "wujek"} <= {"wos"} and wos["filtr_gracza"] == ["wos"]
-    assert ala.get(f"/api/gry/{id_}/wnetrza/Ala?rodzaje=").json()["dymki"] == [x for x in pelny["dymki"] if x["kto"] == "wujek"]
-    assert ala.get(f"/api/gry/{id_}/wnetrza/Ala").json()["dymki"] == pelny["dymki"]   # nic nie zapisano
-    assert ala.get(f"/api/gry/{id_}/wnetrza/Ala?rodzaje=kawa").status_code == 400
-    assert pelny["propozycja"] is not None   # filtr dymków nie chowa propozycji
+    assert "filtr_gracza" not in pelny and pelny["dymki"]
+    assert all(o["wskazowka"] for o in pelny["propozycja"]["odpowiedzi"])   # wskazówka kierunku skutków przed wyborem
+    # parametr `rodzaje` (dawny filtr gracza) nic nie zmienia
+    for q in ("?rodzaje=wos", "?rodzaje=", "?rodzaje=kawa"):
+        r = ala.get(f"/api/gry/{id_}/wnetrza/Ala{q}")
+        assert r.status_code == 200 and r.json()["dymki"] == pelny["dymki"]
 
 
 def test_odpowiedz_na_propozycje(dane_wnetrz, client, uczen):

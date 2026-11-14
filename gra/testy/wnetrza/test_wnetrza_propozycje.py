@@ -124,10 +124,7 @@ def test_ustawienia_mistrza_gry(gra):
     for zle in ({"kawa": True}, {"wos": "nie"}):
         with pytest.raises(ValueError):
             us.ustaw(g.dane, g.konfiguracja, zle)
-    assert us.filtr_gracza(g.dane, None) is None and us.filtr_gracza(g.dane, "") == set()
-    assert us.filtr_gracza(g.dane, "wos, plotki") == {"wos", "plotki"}
-    with pytest.raises(ValueError):
-        us.filtr_gracza(g.dane, "kawa")
+    assert not hasattr(us, "filtr_gracza")   # gracz nie wyłącza dymków, robi to tylko mistrz gry
 
 
 def test_zmiana_ustawien_dziala_od_nastepnego_wyliczenia(gra):

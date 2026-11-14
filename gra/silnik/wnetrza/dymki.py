@@ -7,7 +7,10 @@ najwyżej `wos_na_runde` i tylko zatwierdzonych (`sprawdzone: true`). Dymek bywa
 (wskaźniki z `gdy`, bez `gdy` – „runda”) ma większą wagę (`waga_dba_o`). Dymek „kazdy” mówi bywalec z szansą
 `udzial_bywalcow`, inaczej anonimowy gość. Wujek wchodzi dodatkowo, tylko przy swojej okazji (kontekst: `okazje`).
 
-Rodzaje wyłączone przez mistrza gry albo gracza odpadają dopiero po losowaniu (`dymki_rundy`), więc przełączenie filtra
+Gdy w rundzie jest zdarzenie w parku (kontekst `park`), pierwszy dymek jest plotką o nim (o ile jest taka plotka
+i bywalec może ją powiedzieć), więc plotka przychodzi razem ze zdarzeniem na mapie.
+
+Rodzaje wyłączone przez mistrza gry odpadają dopiero po losowaniu (`dymki_rundy`), więc przełączenie rodzaju
 nie zmienia tego, kto i kiedy przychodzi (historia bywalców – `wylosowane`). Wujek nie podlega filtrom rodzajów.
 """
 from __future__ import annotations
@@ -136,12 +139,15 @@ def wylosowane(dane: Dane, wskazniki: dict, kontekst: dict, historia: dict[str, 
         return bool(b and not b["specjalny"] and b["od_rundy"] <= runda and id_ not in mowili
                     and runda - historia.get(id_, runda - zasady["bywalec_co_rund"]) >= zasady["bywalec_co_rund"])
 
-    for _ in range(ile):
+    for n in range(ile):
         mozliwe = [(i, d) for i, d in kandydaci
                    if not (d["rodzaj"] == "wos" and wos >= zasady["wos_na_runde"])
                    and (d["kto"] in KTO_OGOLNIE or moze(d["kto"]))]
         if not mozliwe:
             break
+        if n == 0:   # plotka o parku pada w tej samej rundzie co zdarzenie na mapie, nie dopiero przy innym losowaniu
+            parkowe = [(i, d) for i, d in mozliwe if d["zrodlo"] == "park"]
+            mozliwe = parkowe or mozliwe
         wagi = [ust["waga_dba_o"] if d["kto"] in bywalcy and _tematy(d) & set(bywalcy[d["kto"]]["dba_o"]) else 1.0
                 for _, d in mozliwe]
         i, d = mozliwe[_wazyj(los, wagi)]

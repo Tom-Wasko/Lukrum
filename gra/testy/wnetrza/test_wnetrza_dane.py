@@ -91,3 +91,24 @@ def test_pola_dodatkowe_dymkow_sa_opcjonalne(pliki):
 
 def test_nieznane_pole_w_pliku_jest_bledem(pliki):
     assert "dymki.0.kolor" in _psuj(pliki, 1, lambda d: d["dymki"][0].update(kolor="red"))
+
+
+@pytest.mark.dane_gry
+def test_kazda_odpowiedz_ma_wskazowke_bez_liczb():
+    """Gracz przed wyborem widzi kierunek skutków, ale bez liczb, procentów i szansy powodzenia."""
+    for p in Dane(DANE_GRY).wnetrza["dymki"]["propozycje"]:
+        for o in p["odpowiedzi"]:
+            w = o.get("wskazowka") or ""
+            assert w.strip(), f"{p['id']}/{o['id']}: brak wskazówki"
+            assert not any(c.isdigit() for c in w) and "%" not in w, f"{p['id']}/{o['id']}: liczby we wskazówce"
+
+
+def test_schemat_odrzuca_wskazowke_z_liczba():
+    from silnik.wnetrza.schematy import Odpowiedz
+    ok = {"id": "x", "tekst": "T", "reakcja": "R", "skutki": {}}
+    assert Odpowiedz(**ok, wskazowka="Więcej gości, mniej zysku").wskazowka
+    for zla in ("Zysk spada o 15%", "120 porcji więcej", "Szansa połowa 50"):
+        with pytest.raises(ValueError):
+            Odpowiedz(**ok, wskazowka=zla)
+    with pytest.raises(ValueError):
+        Odpowiedz(**ok)

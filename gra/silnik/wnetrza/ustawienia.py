@@ -2,7 +2,7 @@
 
 Mistrz gry włącza i wyłącza rodzaje dymków (domyślnie wszystkie włączone, brak klucza – tak samo w starych grach)
 i może to zmieniać w trakcie gry: ustawienie czyta się przy każdym wyliczeniu dymków, więc działa od następnego.
-Własny filtr gracza to tylko widok (parametr zapytania API), niczego nie zapisuje.
+Gracz nie ma własnego filtra: dymki wyłącza tylko mistrz gry.
 """
 from __future__ import annotations
 
@@ -37,15 +37,3 @@ def ustaw(dane: Dane, konfiguracja: dict, zmiany: dict) -> dict[str, bool]:
     nowe = ustawione(dane, konfiguracja) | zmiany
     konfiguracja.setdefault("wnetrza", {})["dymki"] = nowe
     return nowe
-
-
-def filtr_gracza(dane: Dane, parametr: str | None) -> set[str] | None:
-    """Własny filtr gracza: lista rodzajów po przecinku („cena_smak,wos”; pusty tekst – żadnych); None – bez filtra.
-    Nieznane rodzaje – ValueError."""
-    if parametr is None:
-        return None
-    wybrane = {x.strip() for x in parametr.split(",") if x.strip()}
-    nieznane = wybrane - set(rodzaje(dane))
-    if nieznane:
-        raise ValueError(f"Nie ma takiego rodzaju dymków: {', '.join(sorted(nieznane))}.")
-    return wybrane

@@ -40,27 +40,27 @@ propozycje:
   od_rundy: 2
   tekst: 'Pierwsza propozycja'
   odpowiedzi:
-  - {id: tak, tekst: 'Tak', reakcja: 'Dzięki', skutki: {porcje: 10, opinia: 0.1}}
-  - {id: odmowa, tekst: 'Nie', reakcja: 'Szkoda', skutki: {}}
+  - {id: tak, tekst: 'Tak', reakcja: 'Dzięki', wskazowka: 'Więcej gości, mniej zysku', skutki: {porcje: 10, opinia: 0.1}}
+  - {id: odmowa, tekst: 'Nie', reakcja: 'Szkoda', wskazowka: 'Więcej gości, mniej zysku', skutki: {}}
 - id: druga
   kto: rzecki
   od_rundy: 2
   tekst: 'Druga propozycja'
   odpowiedzi:
-  - {id: ryzyko, tekst: 'Ryzyko', reakcja: 'Hm', szansa: 0.5, skutki: {porcje: 40}, skutki_porazka: {darmowe_porcje: 8}}
-  - {id: odmowa, tekst: 'Nie', reakcja: 'Szkoda', skutki: {}}
+  - {id: ryzyko, tekst: 'Ryzyko', reakcja: 'Hm', wskazowka: 'Więcej gości, mniej zysku', szansa: 0.5, skutki: {porcje: 40}, skutki_porazka: {darmowe_porcje: 8}}
+  - {id: odmowa, tekst: 'Nie', reakcja: 'Szkoda', wskazowka: 'Więcej gości, mniej zysku', skutki: {}}
 - id: trzecia
   kto: gosc
   od_rundy: 4
   tekst: 'Trzecia propozycja'
   odpowiedzi:
-  - {id: tak, tekst: 'Tak', reakcja: 'Dzięki', skutki: {kandydat: true}}
-  - {id: odmowa, tekst: 'Nie', reakcja: 'Szkoda', skutki: {}}
+  - {id: tak, tekst: 'Tak', reakcja: 'Dzięki', wskazowka: 'Więcej gości, mniej zysku', skutki: {kandydat: true}}
+  - {id: odmowa, tekst: 'Nie', reakcja: 'Szkoda', wskazowka: 'Więcej gości, mniej zysku', skutki: {}}
 - id: warunkowa
   kto: gosc
   od_rundy: 2
   gdy: {ocena: {od: 99}}
   tekst: 'Nigdy'
   odpowiedzi:
-  - {id: tak, tekst: 'Tak', reakcja: 'ok', skutki: {}}
-  - {id: odmowa, tekst: 'Nie', reakcja: 'ok', skutki: {}}
+  - {id: tak, tekst: 'Tak', reakcja: 'ok', wskazowka: 'Więcej gości, mniej zysku', skutki: {}}
+  - {id: odmowa, tekst: 'Nie', reakcja: 'ok', wskazowka: 'Więcej gości, mniej zysku', skutki: {}}

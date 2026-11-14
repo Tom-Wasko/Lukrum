@@ -12,7 +12,7 @@ from ..nieruchomosci import per_lokal as pl
 from ..rynek import kalendarz as kal
 from ..rynek import popyt as pp
 from ..swiat import zdarzenia as zd
-from ..wyniki import karta as kw
+from ..wyniki import punkty as kw
 
 MINA_NEUTRALNA = "neutralna"
 MIEJSCE_LADA, MIEJSCE_KUCHNIA = "lada", "kuchnia"
