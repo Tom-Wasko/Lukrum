@@ -116,7 +116,7 @@ def test_zamowienia_ponad_saldo(gra_botow):
     # brak wynika z czegoś innego niż zamówienia – ogólna uwaga o debecie
     info = {"zakupy_zasobow": {"Hurtownia": [{"wartosc": 100.0}]}}
     lb = lista_bledow(dane, f, {}, r, list(f.oferta), lokal={}, info=info)
-    assert not [b for b in lb if b["zakladka"] == "dostawcy" and b["poziom"] == "pomaranczowy"] and any("powstanie debet" in t for t in _teksty(lb))
+    assert not [b for b in lb if b["zakladka"] == "dostawcy" and b["poziom"] == "pomaranczowy"] and any("skończy się na minusie" in t for t in _teksty(lb))
 
 
 def test_cena_poza_widelkami_rynku_odrzucona():

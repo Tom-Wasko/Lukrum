@@ -13,5 +13,5 @@ def _rachunek(tryb):
 def test_tryby_rozliczania_debetu():
     uruch = lambda rach: [o for o in rach if o["opis"] == "Debet na koncie (saldo poniżej zera)"]
     jedn, biez = _rachunek("jednoczesnie"), _rachunek("na_biezaco")
-    assert len(uruch(jedn)) == 1 and uruch(jedn)[0] is jedn[-1]    # tylko niedobór na koniec rundy
+    assert uruch(jedn)[-1] is jedn[-1]    # tylko niedobór na koniec rundy (saldo końca tygodnia, potem opłaty banku)
     assert uruch(biez) and uruch(biez)[0] is not biez[-1]          # na bieżąco: od razu po wydatkach z decyzji

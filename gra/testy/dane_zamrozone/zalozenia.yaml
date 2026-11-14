@@ -4,102 +4,37 @@ opis: 'Parametry mechanik gry, których nie widać wprost w jej interfejsie. Ka�
   skalibrowane / zalozenie) i zrodlo. Zmiana tu zmienia działanie silnika bez zmian w kodzie. Kalibracje: pomiary botów (balans/),
   opis: dokumentacja/OPIS_GRY.md.'
 popyt:
-  elastycznosc_ceny:
-    wartosc: 1.096
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
-      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
-      popyt × r^(−E1)'
-  elastycznosc_wzgledem_rynku:
-    wartosc: 1.0035
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
-      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
-      popyt × exp(−E2·(r − średnie r firm oferujących usługę)); bez tego członu błąd 9,2%'
-  wykladnik_liczby_firm:
-    wartosc: 0.247
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
-      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
-      popyt × n^(−K)'
-  mnoznik_bazowy:
-    wartosc: 1.498
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
-      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
-      popyt roczny z instrukcji wystarcza (efekty usług nie poprawiają walidacji), brak różnicy poziomu między grami
-      obu serii (różnica 3%, walidacja lepsza bez niej)'
   wspolczynniki_jakosci:
     wartosc:
-      '3': 1.0
-      '2': 0.654
-      '1': 0.616
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
-      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
-      jakość = średnia ważona współczynników gwiazdek sprzętu i zasobów (lepsza od postaci liniowej w gwiazdkach);
-      boty: sprzęt 2★, zasoby 1,35–1,96★ co miesiąc'
+      '3': 0.83
+      '2': 0.65
+      '1': 0.52
+    pewnosc: zalozenie
+    zrodlo: 'własna kalibracja LUKRUM (14.11.2026, decyzja autora): jakość dania = średnia ważona współczynników gwiazdek
+      sprzętu i zasobów; współczynnik 2★ = 0,65 jest punktem odniesienia (na nim stoją pule stref popytu z mapy), 1★ i 3★
+      leżą po obu jego stronach tak, żeby każdy krok o gwiazdkę dawał ok. +20–25% popytu na to samo danie
+      (pomiary botów b7_jakosc i b7_jakosc2 z 6.11.2026 pokazały, że przy płaskim 1★–2★ gra nie premiowała dobrego
+      sprzętu). Liczby okrągłe do setnych – to ustawienie projektanta, nie dopasowanie do cudzych obserwacji'
   wagi_jakosci:
     wartosc:
       pracownicy: 0.0
-      sprzet: 0.407
-      zasoby: 0.593
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
-      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
-      gwiazdki prowadzących (2,5 → 1,33 → 1,67) bez wpływu (współczynnik ≈ 0)'
+      sprzet: 0.4
+      zasoby: 0.6
+    pewnosc: zalozenie
+    zrodlo: 'własne ustawienie LUKRUM (14.11.2026, decyzja autora): na smak kebaba bardziej wpływa mięso, warzywa i sos
+      (zasoby: 60%) niż rożen czy kuchnia (sprzęt: 40%); umiejętność prowadzącego działa osobno – przez pomyłki w szczycie
+      i opinie (silnik/kuchnia/operacje.py), dlatego w tej średniej ma wagę 0'
   wyposazenie_na_procent_klientow:
-    wartosc: 0.073
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
-      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
-      popyt × (1 + κ · Σ % klientów oczekujących wyposażenia / 100); wyposażenie botów (0 → 340%) odczytane z tabel
-      „posiadane wyposażenie”'
-  utrata_klientow:
-    wartosc: 0.0
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja: utrata klientów po brakach w poprzednim miesiącu pogarsza walidację krzyżową (8,1%
-      wobec 7,6%) – mechanizmu nie ma; spadek efektu firmy tłumaczy wyposażenie botów i sezonowość XI–XII'
-  recepcja_1gw_mnoznik:
-    wartosc: 1.0
+    wartosc: 0.07
     pewnosc: zalozenie
-    zrodlo: 'wyłączone (1,0). W pomiarach: cały sprzęt kasy 1★ od października – efekt firmy spadł o ok. 15%, ale zbiega
-      się z innym niewyjaśnionym spadkiem; liniowo dla 2★ psuje drugą serię pomiarów (dwie firmy z kasą 2★: błąd 1,7% →
-      9,4%). Możliwy efekt tylko dla 1★ – do potwierdzenia'
-  korekta_miesiaca:
-    wartosc:
-      styczen: 1.0
-      luty: 1.0
-      marzec: 0.972
-      kwiecien: 0.997
-      maj: 0.924
-      czerwiec: 0.903
-      lipiec: 0.97
-      sierpien: 1.001
-      wrzesien: 0.989
-      pazdziernik: 0.961
-      listopad: 0.808
-      grudzien: 0.796
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja z 2026-10-18: panel 361 obserwacji (3 firmy z botami, 11 miesięcy) +
-      druga seria pomiarów (2 miesiące); wariant wybrany walidacją krzyżową (10 grup firma-miesiąc), błąd 5,4%, walidacja 6,3%;
-      mnożnik ponad sezonowość z instrukcji (luty = 1). Luty–październik w granicach ±10% (sezonowość z instrukcji
-      działa, inne przesunięcia miesięcy wypadają gorzej), listopad–grudzień ok. −20% u wszystkich firm. Styczeń
-      bez danych'
-  szum_proc:
-    wartosc: 0.03
-    pewnosc: zalozenie
-    zrodlo: reszta modelu 4,5% zawiera błędy odczytu; losowe odchylenie popytu firmy na usługę (rozkład log-normalny,
-      ziarno gry); 0 = wyłączone
+    zrodlo: 'własne ustawienie LUKRUM (14.11.2026, decyzja autora): każde 100% gości, którym odpowiada dane wyposażenie
+      (dane/katalog.yaml, pole procent), podnosi popyt o 7%; popyt × (1 + κ · Σ procent / 100), z nasyceniem poniżej.
+      Wartość sprawdzana pomiarem botów (balans.pomiar_punktow): komplet 6 pozycji ma się zwracać słabiej niż
+      pierwsze trzy'
   zaokraglenie:
     wartosc: do_calych_klientow
     pewnosc: zalozenie
     zrodlo: 'założenie autora: klientów zaokrągla się do całych osób'
-  postac_ceny:
-    wartosc: potega
-    pewnosc: skalibrowane
-    zrodlo: 'kalibracja: popyt ∝ r^(−E1) (walidacja 6,3%) lepsze niż e^(−E1·(r−1)) (8,8%); r = cena po rabacie
-      / cena preferowana'
 operacje:
   godziny_pracownika:
     wartosc: 40

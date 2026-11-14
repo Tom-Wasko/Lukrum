@@ -21,9 +21,9 @@ def _osoba(umowa="prace", od_rundy=1):
 
 def test_okres_wypowiedzenia_zalezy_od_stazu():
     d = dane_domyslne()
-    # art. 34 (okres próbny do 3 mies. – tydzień), art. 36 §1: <6 mies. – 2 tyg., ≥6 mies. – miesiąc, ≥3 lat – 3 mies.
+    # art. 34 pkt 3 (okres próbny 3 mies. – 2 tygodnie), art. 36 §1: <6 mies. – 2 tyg., ≥6 mies. – miesiąc, ≥3 lat – 3 mies.
     wynik = {staz: rp.okres_wypowiedzenia(d, _osoba(od_rundy=1), 1 + staz) for staz in (0, 12, 13, 25, 26, 155, 156)}
-    assert wynik == {0: 1, 12: 1, 13: 2, 25: 2, 26: 4, 155: 4, 156: 13}
+    assert wynik == {0: 2, 12: 2, 13: 2, 25: 2, 26: 4, 155: 4, 156: 13}
     for umowa in ("zlecenie", "student", "b2b", "staz"):
         assert rp.okres_wypowiedzenia(d, _osoba(umowa), 30) == 0   # bez wypowiedzenia
 
@@ -37,7 +37,7 @@ def test_zwolnienie_bez_odprawy_pracuje_do_konca_wypowiedzenia():
     s = _runda(g, A={"zwolnij": [k["id"]]})
     assert not [p for p in s.wyniki[r]["A"]["kpir"]["pozycje"] if p["opis"].startswith("Koszt zwolnienia")]
     o = s.firmy["A"].pracownicy[k["id"]].odchodzi
-    assert o and o.runda == r + 1   # okres próbny: tydzień wypowiedzenia
+    assert o and o.runda == r + 2   # okres próbny 3 miesiące: 2 tygodnie wypowiedzenia (art. 34)
 
 
 def test_kandydat_nie_ma_odprawy_a_koszt_rekrutacji_to_czesc_pensji():

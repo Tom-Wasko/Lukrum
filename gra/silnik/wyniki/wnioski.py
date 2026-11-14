@@ -175,7 +175,7 @@ def wnioski(dane: Dane, w: dict | None, wp: dict | None = None, runda: int | Non
                              "jest normalna – dopiero inwestujecie.", _KOSZTY[najwiekszy], "kpir"))
     if w.get("debet", 0) > 0:
         poprawa.append(_rada("Na koncie zabrakło pieniędzy",
-                             f"Firma korzysta z kredytu odnawialnego: {zl(w['debet'])}.",
+                             f"Tydzień zakończył się na minusie: debet {zl(w['debet'])} (opłata i odsetki banku).",
                              "Zostawcie zapas gotówki na pensje i dostawy albo weźcie w banku kredyt z lepszym "
                              "oprocentowaniem, zanim zabraknie.", "bank"))
 

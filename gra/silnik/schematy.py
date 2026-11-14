@@ -805,7 +805,11 @@ class BankMapy(Schemat):
 class PlikBankow(Plik):
     udzial_kart: float = Field(ge=0, le=1)
     historia_rund: int = Field(ge=0)
+    stopa_referencyjna_nbp: float | None = Field(default=None, gt=0, lt=1)   # podstawa limitów prawnych (silnik.dane sprawdz)
     stopa_karna: float = Field(gt=0, lt=1)
+    marza_odsetki_maksymalne: float = Field(default=0, ge=0, lt=1)   # art. 359 § 2¹ KC: 2 × (ref. + 3,5 pp)
+    marza_odsetki_opoznienie: float = Field(default=0, ge=0, lt=1)   # art. 481 § 2¹ KC: 2 × (ref. + 5,5 pp)
+    oplata_debet_bez_zgody: float = Field(default=0, ge=0)   # stała opłata za tydzień na minusie bez zgody banku (zł)
     przejecie_po: int = Field(gt=0)
     wycena_zastawu: float = Field(gt=0, le=1)
     czynsz_po_przejeciu: float = Field(gt=0, lt=1)

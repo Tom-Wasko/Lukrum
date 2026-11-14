@@ -23,7 +23,7 @@ export const sprzedaz = {
     const ceny = uslugi.map((u) => [esc(nazwaUslugi(kat, u)), ...firmy.map((f) => r.ceny[u]?.[f] != null ? zl2(r.ceny[u][f]) : "")]);
     const sp = v.wyniki?.sprzedaz || {};
     const own = Object.entries(sp).map(([u, s]) => [esc(nazwaUslugi(kat, u)), licz(s.popyt), licz(s.sprzedaz),
-      s.utracona ? `<span class="minus">${licz(s.utracona)}</span>` : "0", esc(s.przyczyna), licz(s.reklamacje), zl2(s.przychod)]);
+      s.utracona ? `<span class="minus">${licz(s.utracona)}</span>` : "0", esc(s.przyczyna), licz(s.pomylki), zl2(s.przychod)]);
     const nag = firmy.map((f) => `${f === v.firma ? "<u>" : ""}${esc(r.firmy[f])}${f === v.firma ? "</u>" : ""}`);
     // UF23: podsumowanie i kafelki na górze, tabele szczegółów zwijane
     const S = Object.values(sp), suma = (k) => S.reduce((a, s) => a + (s[k] || 0), 0);
@@ -36,12 +36,12 @@ export const sprzedaz = {
     const kafle = S.length ? kafelkiLiczb([
       { etykieta: "Chętni", wartosc: licz(chetni) }, { etykieta: "Obsłużeni", wartosc: licz(obsl), opis: proc(chetni ? obsl / chetni : 0, 0) + " chętnych" },
       { etykieta: "Odeszli bez kebaba", wartosc: licz(utr), ton: utr >= 1 ? "minus" : "plus" },
-      { etykieta: "Przychód ze sprzedaży", wartosc: zl(suma("przychod")) }, { etykieta: "Pomyłki w szczycie", wartosc: licz(suma("reklamacje")), ton: suma("reklamacje") ? "minus" : "" }]) : "";
+      { etykieta: "Przychód ze sprzedaży", wartosc: zl(suma("przychod")) }, { etykieta: "Pomyłki w szczycie", wartosc: licz(suma("pomylki")), ton: suma("pomylki") ? "minus" : "" }]) : "";
     return lead + kafle
       + `<div class="wykres"><canvas id="w-sprzedaz"></canvas></div>`
       + zwinTabela("Sprzedaż vs utracona sprzedaż", ["Danie", "Popyt", "Sprzedaż", "Utracona sprzedaż", "Przyczyna", "Reklamacje", "Przychód"], own,
         { klasy: ["l"], stopka: ["Razem", licz(Object.values(sp).reduce((a, s) => a + s.popyt, 0)), licz(Object.values(sp).reduce((a, s) => a + s.sprzedaz, 0)),
-          licz(Object.values(sp).reduce((a, s) => a + s.utracona, 0)), "", licz(Object.values(sp).reduce((a, s) => a + s.reklamacje, 0)),
+          licz(Object.values(sp).reduce((a, s) => a + s.utracona, 0)), "", licz(Object.values(sp).reduce((a, s) => a + s.pomylki, 0)),
           zl2(Object.values(sp).reduce((a, s) => a + s.przychod, 0))], otwarte: true })
       + `<div class="wykres"><canvas id="w-popyt"></canvas></div>`
       + zwinTabela("Zestawienie popytu na dania", ["Danie", ...nag], popyt, { klasy: ["l"] })

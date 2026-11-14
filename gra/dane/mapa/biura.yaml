@@ -52,7 +52,7 @@ biura:
   opis: 'Najtańsze biuro w mieście. Pan Scrooge uważa święta za wymysł kasjerów: w święta biuro jest zamknięte, a deklaracje
     składa praktykant, który właśnie liczy, ile kosztują światełka na choince. Poza tym działa jak w zegarku, o ile
     nie trzeba nic dopłacać do herbaty.'
-  cecha: najtańsze, ale w tygodniach ze świętem zamknięte (dokumenty czekają tydzień z dopłatą)
+  cecha: najtańsze, ale w tygodniach ze świętem zamknięte – dokumenty czekają tydzień i wchodzą do następnego tygodnia z dopłatą 3 zł za każdy oraz z limitem pakietu liczonym od nowa, więc dokumenty ponad limit tygodnia kosztują dodatkowo (w ostatniej rundzie biuro rozlicza wszystko przy zamknięciu gry)
   zamkniete_w_swieta:
     doplata: 3.0
     zrodlo: 'Własna liczba LUKRUM (14.11.2026): w tygodniu ze świętem biuro jest zamknięte, dokumenty przechodzą na następny tydzień, a biuro dolicza 3 zł brutto za każdy dokument (ok. połowa zwykłej dopłaty za dokument ponad limit w pakiecie S).'

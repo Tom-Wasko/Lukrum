@@ -142,12 +142,13 @@ function debet(v, kat, b, edycja) {
   const u = ustawienia(kat), wl = debetWlaczony(v);
   return tabela("Debet", ["", "Wartość"], [["Zgoda na debet", wl ? "włączona" : "wyłączona"], ["Limit", zl2(b.debet.limit)],
     ["Obecny debet", zl2(v.stan_przed.debet)], ["Wolny limit", zl2(v.banki.wolny_limit)],
-    ["Opłata za każdy tydzień na minusie", zl2(b.debet.oplata)], ["Oprocentowanie debetu w limicie", proc(b.debet.oprocentowanie, 1)],
-    ["Debet ponad limit albo bez zgody – odsetki karne", proc(u.stopa_karna, 0)]], { klasy: ["l", "r"] })
+    ["Opłata za tydzień, który kończy się na minusie", zl2(b.debet.oplata)], ["Oprocentowanie debetu w limicie (odsetki maksymalne)", proc(b.debet.oprocentowanie, 1)],
+    ["Debet ponad limit albo bez zgody – odsetki karne (maksymalne za opóźnienie)", proc(u.stopa_karna, 0)],
+    ["Debet bez zgody banku – dodatkowa stała opłata", zl2(u.oplata_debet_bez_zgody)]], { klasy: ["l", "r"] })
     + `<p><button class="btn ${wl ? "pom" : "zielony"}" data-akcja="bk-debet" ${edycja ? "" : "disabled"}>${wl ? "Wyłącz debet" : "Włącz debet"}</button></p>
-    <p class="podpowiedz">Debet nie włącza się sam. Z włączonym, gdy na koniec ${OKRES.dopelniacz} zabraknie gotówki, saldo spada poniżej zera
-      do limitu banku: płacisz opłatę za tydzień na minusie i odsetki, a nadwyżka z kolejnych rund go spłaca. Bez zgody (albo ponad limit)
-      brak gotówki to alarm: odsetki karne i blokada inwestycji, kredytów, leasingu i lokat w następnej rundzie.
+    <p class="podpowiedz">Debet nie włącza się sam. Liczy się saldo na koniec ${OKRES.dopelniacz}: chwilowy minus w trakcie nic nie kosztuje. Z włączonym debetem, gdy ${OKRES.mianownik} kończy się
+      na minusie, płacisz opłatę i odsetki (w granicach limitu banku), a nadwyżka z kolejnych rund go spłaca. Bez zgody (albo ponad limit)
+      to alarm, odsetki karne (bez zgody także stała opłata, więc zawsze drożej niż za zgodą) i blokada inwestycji, kredytów, leasingu i lokat w następnej rundzie.
       Wolny limit liczy się też przy ratach kredytów i leasingu.</p>`;
 }
 

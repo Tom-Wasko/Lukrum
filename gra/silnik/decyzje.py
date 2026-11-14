@@ -39,8 +39,8 @@ Format (słownik; brak klucza = bez zmian względem poprzedniej rundy):
     szkolenia:         [{"firma", "szkolenie"}]
     bank, biuro:       nazwa (z lokalami biuro: id z dane/mapa/biura.yaml albo "samodzielnie")
     pakiet:            "S" | "M" | "L" – pakiet w wybranym biurze (limit dokumentów i dopłata ponad limit)
-    debet:             true | false – zgoda na debet w banku konta (limit, opłata za tydzień na minusie, odsetki;
-                       bez zgody saldo poniżej zera to alarm i odsetki karne; silnik/pieniadze/banki.py)
+    debet:             true | false – zgoda na debet w banku konta (limit, opłata i odsetki, gdy tydzień kończy się
+                       na minusie; bez zgody – stała opłata, odsetki karne, alarm; silnik/pieniadze/banki.py)
     ksiegowosc:        {"zapisy": {id dokumentu: {"kolumna", "stawka"}}, "deklaracja": {"vat", "pit", "zdrowotna"}}
                                                               – samodzielna księgowość za poprzednią rundę (biuro.py)
     lokaty_zaloz:      [{"kwota", "miesiecy"}];  lokaty_zerwij: [id]
@@ -773,18 +773,18 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
     if puste and runda >= 2:
         dodaj("niebieski", "hr_zatrudnienie", f"Puste stanowiska: {len(puste)} (nie generują kosztów).")
     zakupy = sum(z["wartosc"] for zz in (info or {}).get("zakupy_zasobow", {}).values() for z in zz)
+    koniec = ("Chwilowy minus w trakcie tygodnia nic nie kosztuje; liczy się saldo na koniec tygodnia: "
+              + ("z włączonym debetem – opłata i odsetki." if firma.debet_wlaczony else
+                 "bez włączonego debetu – opłata za niedozwolone saldo, odsetki karne, alarm i blokada inwestycji."))
     if firma.gotowka < 0 and lokal is not None and zakupy > -firma.gotowka:
         dodaj("pomaranczowy", "dostawcy", f"Na koncie brakuje ok. {-firma.gotowka:,.0f} zł, a same zamówienia u dostawców "
-              f"to {zakupy:,.0f} zł – jeśli sprzedaż tego nie pokryje, zapłaci za nie debet (z opłatą i odsetkami). "
-              "Zamów mniej albo zadbaj o finansowanie.".replace(",", " "))
+              f"to {zakupy:,.0f} zł – jeśli sprzedaż do końca tygodnia tego nie pokryje, tydzień skończy się na minusie. "
+              f"{koniec} Zamów mniej albo zadbaj o finansowanie.".replace(",", " "))
     elif firma.gotowka < 0:
         if tryb_kredytu == "na_biezaco":
-            dodaj("pomaranczowy", "finanse_bank", "Wydatki przekraczają saldo konta – powstanie debet "
-                  f"(ok. {-firma.gotowka:,.0f} zł)".replace(",", " ")
-                  + (" z opłatą i odsetkami." if firma.debet_wlaczony else
-                     ", a debet nie jest włączony w banku: alarm, odsetki karne i blokada inwestycji."))
+            dodaj("pomaranczowy", "finanse_bank", f"Wydatki przekraczają saldo konta (ok. {-firma.gotowka:,.0f} zł). "
+                  "Jeśli przychody tego tygodnia ich nie pokryją, tydzień skończy się na minusie. ".replace(",", " ") + koniec)
         else:
             dodaj("niebieski", "finanse_bank", "Wydatki przekraczają saldo konta. Jeśli przychody z tej rundy ich nie pokryją, "
-                  "powstanie debet na brakującą kwotę" + ("." if firma.debet_wlaczony
-                                                          else " (bez włączonego debetu – z odsetkami karnymi)."))
+                  "tydzień skończy się na minusie. " + koniec)
     return wynik

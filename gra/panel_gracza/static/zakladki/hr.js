@@ -308,7 +308,7 @@ function kolumnyKandydatow(v, kat, lista, edycja) {
   const zawody = [...new Set(lista.map((k) => k.zawod))];
   const wiersz = (k) => `<div class="oferta-wiersz kandydat"><div><b>${esc(k.imie_nazwisko)}</b> ${gw(k.gwiazdki)}${pigulkaStudenta(k, kat)}
       ${zajety(v, k.id) ? pigulkaZajety(zajety(v, k.id)) : pigulkaOfert(v, "kandydaci", k.id)}${opisOsoby(k)}
-      <span class="podpowiedz zostaw" title="Zadowolenie klientów · skłonność do pomyłek · bazowy koszt rekrutacji">zadowolenie ${proc(k.zadowolenie_klientow, 0)} · reklamacje ${proc(k.ryzyko_pomylki, 0)}
+      <span class="podpowiedz zostaw" title="Zadowolenie klientów · skłonność do pomyłek · bazowy koszt rekrutacji">zadowolenie ${proc(k.zadowolenie_klientow, 0)} · pomyłki ${proc(k.ryzyko_pomylki, 1)}
         · rekrutacja ${zl(k.koszt_rekrutacji)}</span></div>
     <b class="cena" title="Preferowane wynagrodzenie (miesięcznie)">${zl(k.pensja_preferowana)}</b>${przyciskZatrudnij(v, k, edycja)}</div>`;
   return `<div class="banki-siatka">${zawody.map((z, i) => {

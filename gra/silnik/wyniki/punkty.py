@@ -73,12 +73,25 @@ def ocena(dane: Dane, punkty_dzialu: float) -> str:
     return "dobry" if punkty_dzialu >= dobry * ustawienia(dane)["maks_dzialu"] else "sredni" if punkty_dzialu >= sredni * ustawienia(dane)["maks_dzialu"] else "niski"
 
 
-def karta(dane: Dane, miary: dict[str, dict[str, float]], wskazniki: dict) -> dict:
+def aktywnosc(dane: Dane, klienci: float) -> float:
+    """Udział realnej działalności 0–1: obsłużeni goście ÷ `wynik.aktywnosc.pelna_od_klientow`. Firma, która nic nie
+    sprzedaje, nie dostaje punktów za zadowolenie gości, zespół i bezpieczeństwo (nie ma czego oceniać)."""
+    u = ustawienia(dane).get("aktywnosc")
+    return min(1.0, klienci / u["pelna_od_klientow"]) if u else 1.0
+
+
+def karta(dane: Dane, miary: dict[str, dict[str, float]], wskazniki: dict, klienci: float | None = None) -> dict:
     """Karta tygodnia z miar (`{dział: {składnik: wartość}}`): punkty działów i suma.
-    `wskazniki` (zadowolenie gości i zespołu, mnożnik dla popytu) dochodzi do karty bez zmian."""
+    `wskazniki` (zadowolenie gości i zespołu, mnożnik dla popytu) dochodzi do karty bez zmian.
+    `klienci` – obsłużeni goście tygodnia: punkty działów z `wynik.aktywnosc.dzialy` rosną proporcjonalnie do nich."""
     dzialy = {}
+    u = ustawienia(dane).get("aktywnosc")
+    a = 1.0 if klienci is None else aktywnosc(dane, klienci)
     for d, opis in ustawienia(dane)["dzialy"].items():
         sk = _licz(opis["skladniki"], miary[d])
+        if u and d in u["dzialy"] and a < 1.0:
+            for x in sk.values():
+                x["punkty"] = round(x["punkty"] * a, 1)
         suma = round(sum(x["punkty"] for x in sk.values()), 1)
         dzialy[d] = {"nazwa": opis["nazwa"], "punkty": suma, "ocena": ocena(dane, suma), "skladniki": sk}
     return {"punkty": round(sum(x["punkty"] for x in dzialy.values()), 1), "dzialy": dzialy, "wskazniki": wskazniki}

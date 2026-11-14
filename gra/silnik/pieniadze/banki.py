@@ -1,9 +1,11 @@
 """Banki gry z lokalami (F3a.9; dane: dane/mapa/banki.yaml).
 
 Sześć banków (nazwy z lektur), każdy z inną najlepszą ofertą. Konto firmowe (`firma.bank`) niesie opłatę za konto,
-terminal (abonament + prowizja od płatności kartą) i debet. Debet to saldo poniżej zera na koniec tygodnia: nie ma go
+terminal (abonament + prowizja od płatności kartą) i debet. Debet to saldo poniżej zera na koniec tygodnia (chwilowy minus
+w trakcie tygodnia nic nie kosztuje: debet z wydatków jest spłacany z przychodów tego samego tygodnia): nie ma go
 automatycznie – drużyna włącza go decyzją `debet` w banku konta. Za włączonym debetem stoją limit banku, opłata za
-każdy tydzień na minusie i odsetki; kwota ponad limit (albo każdy debet bez zgody) płaci odsetki karne, a firma dostaje
+każdy tydzień na minusie i odsetki; kwota ponad limit płaci odsetki karne, a debet bez zgody – odsetki karne i stałą opłatę
+(zawsze drożej niż za zgodą); firma dostaje
 alarm i blokadę inwestycji (silnik/pieniadze/inwestor.py). Lokaty, kredyty i leasing rozliczają się na koncie firmowym; przy `tylko_bank_konta` (sprawa 21,
 poprawki 2) bank udziela ich tylko firmie z kontem u siebie – wybór banku to wybór oferty (bez – w dowolnym banku).
 
@@ -480,13 +482,18 @@ def koniec_rundy(dane: Dane, firma: Firma, runda: int, ksiega: Ksiega, rachunek:
                                       "wycena": 0.0, "dlug": round(lea.rata * lea.pozostalo_rat, 2), "nadwyzka": 0.0})
         info["leasing"].append(wiersz)
 
-    if firma.debet > 0:   # tydzień na minusie: opłata i odsetki za zgodą, odsetki karne ponad limit albo bez zgody
+    if firma.debet > 0:   # tydzień kończy się na minusie (debet jest liczony po wyrównaniu salda na koniec tygodnia)
         w_limicie = min(firma.debet, limit_debetu(dane, firma))
-        if w_limicie > 0:
+        if w_limicie > 0:   # za zgodą: opłata i odsetki; ponad limit – odsetki karne
             d = bank["debet"]
             info["debet"] = {"oplata": d["oplata"], "odsetki": round(w_limicie * d["oprocentowanie"] / rwr, 2)}
             ksieguj(firma, ksiega, rachunek, f"Opłata za tydzień na minusie ({bank['nazwa']})", d["oplata"])
             ksieguj(firma, ksiega, rachunek, "Odsetki od debetu", info["debet"]["odsetki"])
+        elif u["oplata_debet_bez_zgody"] > 0:   # bez zgody: stała opłata i odsetki karne – drożej niż za zgodą
+            info["debet"] = {"oplata": u["oplata_debet_bez_zgody"], "bez_zgody": True,
+                             "odsetki": round(firma.debet * u["stopa_karna"] / rwr, 2)}
+            ksieguj(firma, ksiega, rachunek, "Opłata za niedozwolone saldo debetowe (debet bez zgody banku)",
+                    u["oplata_debet_bez_zgody"])
         if firma.debet > w_limicie + EPS:
             ksieguj(firma, ksiega, rachunek, "Odsetki karne od debetu ponad limit" if w_limicie
                     else "Odsetki karne od debetu bez zgody banku", round((firma.debet - w_limicie) * u["stopa_karna"] / rwr, 2))

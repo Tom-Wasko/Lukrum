@@ -74,7 +74,7 @@ def test_najpierw_ostrzezenie_potem_wypowiedzenie(monkeypatch):
     s = _runda(g)
     p = s.firmy["A"].pracownicy[p.id]
     assert p.odchodzi and p.odchodzi.powod == zo.NIEZADOWOLENIE and p.odchodzi.do == ""
-    assert p.odchodzi.runda == r + 1 + 1   # umowa o pracę w okresie próbnym: wypowiedzenie 1 tydzień (art. 34 KP)
+    assert p.odchodzi.runda == r + 1 + 2   # okres próbny 3 miesiące: wypowiedzenie 2 tygodnie (art. 34 KP)
     assert s.wyniki[r]["A"]["odejscia_pracownikow"][0]["pracownik"] == p.id
     assert any("składa wypowiedzenie" in t for _, t in zo.ostrzezenia(g.dane, s.firmy["A"], {}, r + 1))
 

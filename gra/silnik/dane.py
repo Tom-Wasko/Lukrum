@@ -505,6 +505,7 @@ def _sprawdz_mape(d: Dane, brak) -> list[str]:
     po = m["popyt"]
     for s in sorted(set(m["strefy"]) ^ set(po["strefy"])):
         bledy.append(f"mapa/popyt.yaml: strefa {s} " + ("bez popytu" if s in m["strefy"] else "nie ma jej w mapa/strefy.yaml"))
+    _sprawdz_banki(m, bledy)
     _sprawdz_klientow(d, bledy, brak)
     _sprawdz_kalendarz(d, bledy, brak)
     _sprawdz_zdarzenia(d, bledy, brak)
@@ -529,6 +530,28 @@ def _sprawdz_klientow(d: Dane, bledy: list[str], brak):
     for g, x in k["grupy"].items():
         for u in sorted(set(d.uslugi) ^ set(x["koszyk"])):
             bledy.append(f"{co}: grupy.{g}.koszyk: " + (f"brak dania {u}" if u in d.uslugi else f"nieznane danie {u}"))
+
+
+def _sprawdz_banki(m: dict, bledy: list[str]):
+    """Stopy debetu nie przekraczają limitów prawnych liczonych ze stopy referencyjnej NBP (banki.yaml)."""
+    b = m["banki"]
+    ref = b.get("stopa_referencyjna_nbp")
+    if ref is None:
+        return
+    maks_zgoda = 2 * (ref + b["marza_odsetki_maksymalne"])       # odsetki maksymalne, art. 359 § 2¹ KC
+    maks_opoznienie = 2 * (ref + b["marza_odsetki_opoznienie"])  # maksymalne odsetki za opóźnienie, art. 481 § 2¹ KC
+    for bank in b["banki"]:
+        if bank["debet"]["oprocentowanie"] > maks_zgoda + 1e-9:
+            bledy.append(f"mapa/banki.yaml: {bank['nazwa']}: debet za zgodą {bank['debet']['oprocentowanie']:.2%} "
+                         f"przekracza odsetki maksymalne {maks_zgoda:.2%} (art. 359 § 2¹ KC)")
+    if b["stopa_karna"] > maks_opoznienie + 1e-9:
+        bledy.append(f"mapa/banki.yaml: stopa_karna {b['stopa_karna']:.2%} przekracza maksymalne odsetki za opóźnienie "
+                     f"{maks_opoznienie:.2%} (art. 481 § 2¹ KC)")
+    najdrozszy = max(bank["debet"]["oprocentowanie"] for bank in b["banki"])
+    if b["stopa_karna"] < najdrozszy:
+        bledy.append("mapa/banki.yaml: stopa_karna niższa niż debet za zgodą – bez zgody miałoby być drożej")
+    if b["oplata_debet_bez_zgody"] <= max(bank["debet"]["oplata"] for bank in b["banki"]):
+        bledy.append("mapa/banki.yaml: oplata_debet_bez_zgody nie jest wyższa niż opłata za debet za zgodą w żadnym banku")
 
 
 def _sprawdz_kalendarz(d: Dane, bledy: list[str], brak):

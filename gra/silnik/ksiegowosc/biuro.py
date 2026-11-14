@@ -156,12 +156,14 @@ def _umowy(dane: Dane, firma: Firma) -> tuple[int, int]:
 
 
 def nalicz(dane: Dane, firma: Firma, ksiega: Ksiega, rachunek: Rachunek, etat: int, zlecenie: int,
-           runda: int) -> dict:
-    """Faktura biura za rundę – koszt w KPiR (dokumenty rundy + ta faktura)."""
+           runda: int, ostatnia: bool = False) -> dict:
+    """Faktura biura za rundę – koszt w KPiR (dokumenty rundy + ta faktura). W ostatniej rundzie biuro zamknięte w święta
+    rozlicza przy zamknięciu gry wszystko naraz (przeniesione i bieżące dokumenty, z dopłatą za każdy) – nic nie przepada."""
     b = biura(dane)[firma.biuro]
     wejscie_pakietu(firma, runda)
     n = len(dokumenty(ksiega, rachunek)) + 1
-    zamkniete = b.get("zamkniete_w_swieta") and swieto_w_rundzie(dane, runda)
+    swieto = bool(b.get("zamkniete_w_swieta")) and swieto_w_rundzie(dane, runda)
+    zamkniete = swieto and not ostatnia
     przeniesione = firma.dokumenty_przeniesione
     if zamkniete:   # biuro zamknięte w święta: dokumenty tygodnia czekają na następny tydzień, pakiet płatny jak zawsze
         o = oplata(dane, b, 0, etat, zlecenie, pakiet_firmy(dane, firma))
@@ -169,7 +171,7 @@ def nalicz(dane: Dane, firma: Firma, ksiega: Ksiega, rachunek: Rachunek, etat: i
         o.update(dokumenty=0, zamkniete=True, przeniesione=firma.dokumenty_przeniesione, za_swieta=0.0)
     else:   # dokumenty z zamkniętego tygodnia wchodzą do tego tygodnia z dopłatą za każdy
         o = oplata(dane, b, n + przeniesione, etat, zlecenie, pakiet_firmy(dane, firma))
-        za = round(przeniesione * (b.get("zamkniete_w_swieta") or {}).get("doplata", 0.0), 2)
+        za = round((przeniesione + (n if swieto else 0)) * (b.get("zamkniete_w_swieta") or {}).get("doplata", 0.0), 2)
         firma.dokumenty_przeniesione = 0
         o.update(zamkniete=False, przeniesione=przeniesione, za_swieta=za, ksiegowanie=round(o["ksiegowanie"] + za, 2),
                  razem=round(o["razem"] + za, 2))

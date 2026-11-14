@@ -171,7 +171,9 @@ agencja:
       czas_wlasciciela: 0
       podkupienie_czesc_pensji: 0.5
   wypowiedzenie:   # art. 34 i 36 Kodeksu pracy w tygodniach gry (staż u pracodawcy w rundach); w obie strony
-  - {staz_od: 0, rund: 1}      # okres próbny do 3 miesięcy: 1 tydzień (art. 34)
+  # art. 34: 3 dni robocze (próbny do 2 tygodni), 1 tydzień (dłuższy niż 2 tygodnie), 2 tygodnie (próbny 3 miesiące). W grze
+  # każdy nowy pracownik ma umowę na okres próbny 3 miesięcy (pierwsze 12 tygodni), więc obowiązuje 2 tygodnie
+  - {staz_od: 0, rund: 2}      # okres próbny 3 miesiące: 2 tygodnie (art. 34 pkt 3)
   - {staz_od: 13, rund: 2}     # mniej niż 6 miesięcy: 2 tygodnie (art. 36 § 1 pkt 1)
   - {staz_od: 26, rund: 4}     # co najmniej 6 miesięcy: miesiąc (art. 36 § 1 pkt 2)
   - {staz_od: 156, rund: 13}   # co najmniej 3 lata: 3 miesiące (art. 36 § 1 pkt 3)

@@ -154,14 +154,13 @@ def uruchom_debet(firma: Firma, rachunek: Rachunek) -> float:
     return kwota
 
 
-def wyrownaj_gotowke(firma: Firma, rachunek: Rachunek, pobrany_w_miesiacu: float = 0.0) -> float:
-    """Koniec tygodnia: brak gotówki → debet; nadwyżka → spłata debetu z poprzednich tygodni
-    (debetu z tego tygodnia nie spłaca się od razu – dopiero w kolejnych rundach)."""
+def wyrownaj_gotowke(firma: Firma, rachunek: Rachunek) -> float:
+    """Koniec tygodnia: nadwyżka gotówki spłaca cały debet (także powstały w tym tygodniu – chwilowy minus w trakcie
+    tygodnia nic nie kosztuje); brak gotówki → debet na brakującą kwotę. Opłatę i alarm liczy się od salda końcowego."""
     if firma.gotowka < 0:
         return uruchom_debet(firma, rachunek)
-    do_splaty = max(0.0, firma.debet - pobrany_w_miesiacu)
-    if do_splaty > 0 and firma.gotowka > 0:
-        splata = round(min(do_splaty, firma.gotowka), 2)
+    if firma.debet > 0 and firma.gotowka > 0:
+        splata = round(min(firma.debet, firma.gotowka), 2)
         firma.debet = round(firma.debet - splata, 2)
         rachunek.zapisz(firma, "Spłata debetu", -splata, "kredyty")
     return 0.0

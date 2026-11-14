@@ -100,89 +100,88 @@ udogodnienia:
   zrodlo: 'założenie autora: HR – udogodnienia odblokowywane w kolejnych rundach; sprzedaż za 50% ceny; od rundy 3 automat z kawą,
     kuchenka, stojak na rowery, od 4 klimatyzacja, fotel do masażu (utrzymanie 10), roślinność'
   pozycje:
-  - nazwa: Automat z kawą fair trade
-    procent: 95
-    cena: 2500
-    utrzymanie: 200
+  - nazwa: Ekspres do kawy ziarnistej dla zespołu
+    procent: 85
+    cena: 3400
+    utrzymanie: 320
     od_rundy: 3
-  - nazwa: Klimatyzacja
-    procent: 80
-    cena: 3000
-    utrzymanie: 100
-    od_rundy: 4
-  - nazwa: Kuchenka mikrofalowa
-    procent: 60
-    cena: 202
-    utrzymanie: 5
-    od_rundy: 3
-  - nazwa: Stojak na rowery
-    procent: 40
-    cena: 1000
-    utrzymanie: 0
-    od_rundy: 3
-  - nazwa: Fotel do masażu
-    procent: 30
-    cena: 2500
-    utrzymanie: 10
-    od_rundy: 4
-  - nazwa: Kwiaty na zapleczu
-    procent: 15
-    cena: 1100
-    utrzymanie: 0
-    od_rundy: 4
-  - nazwa: Głośnik Bluetooth
-    procent: 90
-    cena: 75
-    utrzymanie: 0
-    od_rundy: 8
-  - nazwa: Lodówka z napojami
+  - nazwa: Klimatyzatory split w kuchni i na zapleczu
     procent: 70
-    cena: 1000
+    cena: 4200
+    utrzymanie: 90
+    od_rundy: 4
+  - nazwa: Kącik socjalny z czajnikiem i mikrofalą
+    procent: 55
+    cena: 480
+    utrzymanie: 10
+    od_rundy: 3
+  - nazwa: Wiata rowerowa przy lokalu
+    procent: 35
+    cena: 1400
     utrzymanie: 0
+    od_rundy: 3
+  - nazwa: Maty antyzmęczeniowe i krzesła przy rożnie
+    procent: 40
+    cena: 1900
+    utrzymanie: 0
+    od_rundy: 4
+  - nazwa: Szatnia z szafkami na klucz
+    procent: 60
+    cena: 1300
+    utrzymanie: 0
+    od_rundy: 4
+  - nazwa: Radio w kuchni
+    procent: 75
+    cena: 220
+    utrzymanie: 0
+    od_rundy: 6
+  - nazwa: Szafa chłodnicza z napojami dla zespołu
+    procent: 55
+    cena: 1650
+    utrzymanie: 60
     od_rundy: 8
-  - nazwa: Strefa relaksu
-    procent: 22
-    cena: 4000
-    utrzymanie: 0
+  - nazwa: Pokój socjalny z kanapą i telewizorem
+    procent: 18
+    cena: 3300
+    utrzymanie: 25
     od_rundy: 8
 wyposazenie:
   zrodlo: 'założenie autora: wyposażenie lokalu; cena = 2 × cena sprzedaży; parking i terminal – cena zakupu nieznana (sprzedaż
     0); sklep – notatka „Elementy mapy” (Leroy Merlin, IKEA, OBI, Jula, Castorama), przypisanie – założenie F3a.6'
   pozycje:
-  - nazwa: Darmowe WiFi
-    procent: 95
-    cena: 200
-    utrzymanie: 20
-    od_rundy: 4
-    sklep: OBI
-  - nazwa: Miejsca parkingowe dla klientów
+  - nazwa: WiFi dla gości (światłowód)
     procent: 90
-    cena: 0
-    utrzymanie: 1500
+    cena: 350
+    utrzymanie: 90
     od_rundy: 4
-  - nazwa: Terminal płatniczy
-    procent: 80
+  - nazwa: Miejsca postojowe przy lokalu (dzierżawa)
+    procent: 70
     cena: 0
-    utrzymanie: 100
+    utrzymanie: 900
     od_rundy: 4
-  - nazwa: Dystrybutor wody dla klientów
-    procent: 75
-    cena: 2000
-    utrzymanie: 200
-    od_rundy: 5
-    sklep: Castorama
-  - nazwa: Stoliki i krzesła dla klientów
+  - nazwa: Drugi terminal przy okienku wydawczym
+    procent: 65
+    cena: 0
+    utrzymanie: 70
+    od_rundy: 4
+  - nazwa: Filtrowana woda do dzbanków dla gości
     procent: 60
-    cena: 2500
+    cena: 1750
+    utrzymanie: 90
+    od_rundy: 5
+    sklep: Leroy Merlin
+  - nazwa: Stoły i ławy z jasnego drewna
+    procent: 55
+    cena: 3100
     utrzymanie: 0
     od_rundy: 5
     sklep: IKEA
-  - nazwa: Telewizor z meczami
-    procent: 30
-    cena: 2300
-    utrzymanie: 10
+  - nazwa: Ekran z transmisją meczów Motoru Lublin
+    procent: 35
+    cena: 2900
+    utrzymanie: 120
     od_rundy: 5
-    sklep: Jula
+    sklep: Leroy Merlin
 szkolenia:
   zrodlo: 'założenie autora: HR – szkolenia, % pracowników oczekujących i ceny; nazwy firm i szkoleń – gastronomia (F2.6)'
   firmy:
