@@ -15,7 +15,7 @@ const maWynikiCzesci = (v, z) => !!(z.wyniki && v.wyniki && (!z.wynikiOd || v.ru
 
 // Podzakładka złożona z części {klucz: zakładka}; odRundy(v, klucz) – od której rundy część będzie dostępna.
 export function zlozona({ tytul, tytulPelny, info, czesci, odRundy, bezLokali = false }) {
-  const gora = (v) => (bezLokali ? "" : kafelkiLokali(v));   // bezLokali: zakładka całej firmy (Ludzie ▸ Szkolenia i udogodnienia)
+  const gora = (v) => (bezLokali ? "" : kafelkiLokali(v));   // bezLokali: zakładka całej firmy (Mój kebab ▸ Szkolenia i udogodnienia)
   const widoczne = (v) => Object.entries(czesci).filter(([, z]) => !z.ukryta?.(v));
   const sekcja = (c, k, z, tryb, tresc) => {
     const opis = typeof z.info === "function" ? z.info(c, tryb) : z.info;
@@ -132,7 +132,7 @@ function umowa(v, kat, id) {
     ${o.wlasciciel ? w("Wynajmujący", esc(o.wlasciciel)) : ""}
     ${o.najem_do ? w("Najem do rundy", licz(o.najem_do)) : ""}
     ${w("Od rundy", licz(o.od_rundy))}${w("Działa od rundy", licz(o.dziala_od))}</div>
-    <div class="kd"><a class="podpowiedz" data-zakladka-k="lokale">Najem, kupno i nowe lokale – Nowe lokale → Do wynajęcia</a></div></div>`;
+    <div class="kd"><a class="podpowiedz" data-zakladka-k="lokale">Najem, kupno i nowe lokale – Stare Miasto → Do wynajęcia</a></div></div>`;
 }
 
 function sanepid(v) {
@@ -155,7 +155,7 @@ export const stan_lokalu = {
     Przy kilku lokalach na górze jest też porównanie lokali.`,
   decyzje({ v, kat }) {
     const lok = lokalWybrany(v);
-    if (!lok) return `<div class="komunikat">Nie masz jeszcze lokalu – wynajmij albo kup go w zakładce <a data-zakladka-k="lokale">Nowe lokale → Do wynajęcia</a>.</div>`;
+    if (!lok) return `<div class="komunikat">Nie masz jeszcze lokalu – wynajmij albo kup go w zakładce <a data-zakladka-k="lokale">Stare Miasto → Do wynajęcia</a>.</div>`;
     const id = idWybranego(v);
     return porownanie(v, kat)
       + `<div class="tabela-tytul">${esc(nazwaLokalu(v, lok.id))} – liczby</div>` + liczby(v, kat, lok.id)

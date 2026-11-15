@@ -13,7 +13,7 @@ agencja × kanał × strefa (`dane/mapa/reklama.yaml`) z liczbą emisji w rundzi
   co rundę.
 - Sufit (P10): suma kampanii firmy w strefie nasyca się do `maks_przyciagania` (x → maks · (1 − e^(−x/maks))),
   poszerzenie puli strefy – do `maks_puli`; kilka kampanii razem daje kebabowi ok. +10% … +30% popytu, nie więcej.
-- Marketing internetowy (UF19, sekcja `internet` – zakładka Marketing → Internet): kampanie zamawia się tak samo,
+- Marketing internetowy (UF19, sekcja `internet` – zakładka Biurowiec przy Zana → Internet): kampanie zamawia się tak samo,
   ale efekt w rundzie emisji to dopiero część pełnego (`narastanie` – posty się udostępnia, opinie przybywają), pełny
   przychodzi po kilku rundach, a potem gaśnie co rundę × `trwalosc` (wolniej niż reklama tradycyjna). Efekt liczy
   się z historii kampanii firmy (`Firma.kampanie` – pamięć efektu), więc nie trzeba osobnego stanu.

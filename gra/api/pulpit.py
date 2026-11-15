@@ -24,11 +24,11 @@ from .prezentacja import karta_skumulowana, miejsca
 PIERWSZE_KROKI = (
     (
         "Wybierz lokal na mapie",
-        "Nowe lokale → Lokale: porównaj ruch i konkurencję w strefach, zanim podpiszesz najem.",
+        "Stare Miasto → Lokale: porównaj ruch i konkurencję w strefach, zanim podpiszesz najem.",
     ),
-    ("Nazwij firmę i ustaw menu", "Mój lokal i Kuchnia: nazwa, kolor, slogan i dania na start."),
-    ("Zatrudnij ludzi", "Ludzie → Rynek pracy: kucharze i kasjerzy na stanowiska w lokalu."),
-    ("Wybierz biuro rachunkowe", "Księgowość → Biuro: kto rozlicza podatki firmy."),
+    ("Nazwij firmę i ustaw menu", "Mój kebab: nazwa, kolor, slogan i dania na start."),
+    ("Zatrudnij ludzi", "Miasteczko akademickie → Rynek pracy: kucharze i kasjerzy do lokalu."),
+    ("Wybierz biuro rachunkowe", "Biurowiec przy Zana → Biuro: kto rozlicza podatki firmy."),
     (
         "Wyślij decyzje",
         "Lista błędów pokaże, czego brakuje. Runda zamknie się, gdy wszystkie drużyny wyślą.",

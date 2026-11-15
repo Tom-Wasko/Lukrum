@@ -27,11 +27,12 @@ import { konkurencja } from "./konkurencja.js";
 import { stan_lokalu, zlozona } from "./lokal.js";
 import { gielda } from "./gielda.js";
 import { ustawAliasy } from "./funkcje.js";
+import { miejsce, ustawEkranyMiejsc } from "../swiat/swiat.js";
 
 const ZAKLADKI = { dashboard, mapa, karta_wynikow, wnioski, ranking, lokale, licytacje, przejecia, urzad, sanepid, klienci, kalendarz, konkurencja, oferta,
   stanowiska, sprzet, wyposazenie, zatrudnienie, zespol, rynek_pracy, udogodnienia, szkolenia, dostawcy, swiezosc, przewozy,
   czas_wlasciciela, sprawy, agencje, internet, promocje, sprzedaz, handel, raport, kpir, vat, podatki, bank, harpagon, biuro, ubezpieczenia,
-  wlasciciel, gielda, kasyno, lista_bledow, wyslij };
+  wlasciciel, gielda, kasyno, lista_bledow, wyslij, miejsce };
 
 // nazwa ikony (zakladki/ikony.js) dla każdej zakładki
 export const IKONY = { hr_rozwoj: "szkolenia", lokal_przeglad: "lokale", lokal_menu: "oferta", zaop_dostawy: "dostawcy", zaop_magazyn: "swiezosc", zaop_przewozy: "dostawcy",
@@ -42,7 +43,7 @@ export const IKONY = { hr_rozwoj: "szkolenia", lokal_przeglad: "lokale", lokal_m
   udogodnienia: "udogodnienia", szkolenia: "szkolenia", dostawcy: "dostawcy", swiezosc: "swiezosc", przewozy: "dostawcy", czas_wlasciciela: "zegar",
   sprawy: "zdarzenia", agencje: "tradycyjny", internet: "marketing", promocje: "procent", sprzedaz: "sprzedaz", handel: "handel", raport: "raport", kpir: "kpir",
   vat: "procent", podatki: "podatki", bank: "bank", harpagon: "harpagon", biuro: "biuro", ubezpieczenia: "tarcza", wlasciciel: "portfel",
-  gielda: "wykres", kasyno: "klucz", lista_bledow: "bledy", wyslij: "wyslij" };
+  gielda: "wykres", kasyno: "klucz", lista_bledow: "bledy", wyslij: "wyslij", miejsce: "lokale" };
 
 // od której rundy zakładka jest dostępna (w menu: szara pozycja z kłódką i „od rundy N”)
 export const OD_RUNDY = { karta_wynikow: 3, ranking: 3, agencje: 5, internet: 7, promocje: 3, udogodnienia: 3, wyposazenie: 4, szkolenia: 7,
@@ -57,7 +58,7 @@ export const ELEMENT = { karta_wynikow: "karta_wynikow", ranking: "karta_wynikow
 
 // Twój lokal: zakładki złożone z dawnych zakładek (części działają na wybranym lokalu – lokal_wybor.js; wybór lokalu tylko tu)
 const odRundyCzesci = (v, k) => v.harmonogram?.[ELEMENT[k]] ?? OD_RUNDY[k];
-// w Moim lokalu zatrudnienie to sama obsada stanowisk (wyniki rynku pracy są w Ludzie → Zespół)
+// w Moim lokalu zatrudnienie to sama obsada stanowisk (wyniki rynku pracy są w Mój kebab → Zespół)
 const obsada = { ...zatrudnienie, tytul: "Obsada stanowisk", tytulPelny: null, wynikiGdy: () => false };
 Object.assign(ZAKLADKI, {
   lokal_przeglad: zlozona({ tytul: "Mój lokal", tytulPelny: "Mój lokal – stan, sprzedaż i obsada", odRundy: odRundyCzesci,
@@ -77,7 +78,7 @@ Object.assign(ZAKLADKI, {
   wnetrze_sprzet: zlozona({ tytul: "Stanowiska i sprzęt", tytulPelny: "Wnętrze – stanowiska i sprzęt", odRundy: odRundyCzesci,
     info: "Stanowiska kuchni i kasy oraz sprzęt wybranego lokalu – kupno, wynajem i sprzedaż.",
     czesci: { stanowiska, sprzet } }),
-  // Poprawki 2 (sprawa 17): Ludzie ▸ Szkolenia i udogodnienia – jedna podzakładka całej firmy (bez kafelków lokali;
+  // Poprawki 2 (sprawa 17): Mój kebab ▸ Szkolenia i udogodnienia – jedna podzakładka całej firmy (bez kafelków lokali;
   // udogodnienia mają swój krótki wybór lokalu)
   hr_rozwoj: zlozona({ tytul: "Szkolenia i udogodnienia", tytulPelny: "Ludzie – szkolenia i udogodnienia", odRundy: odRundyCzesci, bezLokali: true,
     info: "Wszystko, co podnosi zadowolenie pracowników poza pensją: szkolenia dla całego zespołu i udogodnienia w lokalu.",
@@ -99,31 +100,29 @@ export const ALIAS = { oferta: "lokal_menu", sprzedaz: "lokal_przeglad", zatrudn
   zdarzenia: "mapa", sprawy: "lokal_przeglad", szkolenia: "hr_rozwoj", udogodnienia: "hr_rozwoj" };   // UF13: parki tylko z mapy, sprawy w lokalu – w Moim lokalu
 ustawAliasy(ALIAS);   // funkcje gry: dawny klucz (np. „dostawcy” z budynku mapy) należy do funkcji zakładki złożonej
 
-// Układ menu (UF15, raporty/ufajnianie/plan.md). { sekcja } – nagłówek sekcji (w menu poziomym kreska), { sekcja: "" } – sama kreska.
-// Bez pozycji w menu: Kasyno (ukryte). Parki – klik w park na mapie (UF13).
+// Układ paska (fable-swiat, 15.11.2026): miejsca zamiast działów. Pozycja z `miejsce` to budynek z wnętrzem (swiat/miejsca.js):
+// kliknięcie otwiera scenę, a `pod` to ekrany, które są w tym budynku (pasek nad treścią). { sekcja } – nagłówek grupy.
+// Bez pozycji w pasku: parki – klik w park na mapie (UF13). „Nocna 13” jest ukryta w bramie na Starym Mieście.
 export const MENU = [
-  { klucz: "wyniki", tytul: "Wyniki", ikona: "karta", pod: ["karta_wynikow", "wnioski", "ranking"] },
+  { klucz: "dashboard", tytul: "Plan tygodnia", ikona: "dashboard" },
   { klucz: "mapa", tytul: "Mapa miasta", ikona: "mapa", klasa: "mapa" },
+  { sekcja: "Twoja firma" },
+  { klucz: "kebab", tytul: "Mój kebab", ikona: "lokale", miejsce: "kebab",
+    pod: ["lokal_przeglad", "lokal_menu", "promocje", "zespol", "hr_rozwoj", "zaop_magazyn", "raport", "czas_wlasciciela", "wlasciciel"] },
   { sekcja: "Miasto" },
-  { klucz: "nowe_lokale", tytul: "Nowe lokale", ikona: "lokale", pod: ["lokale", "licytacje", "przejecia"] },
-  { klucz: "rynek", tytul: "Klienci", ikona: "klienci", pod: ["klienci", "konkurencja", "kalendarz"] },
-  { sekcja: "Twój lokal" },
-  { klucz: "lokal_przeglad", tytul: "Mój lokal", ikona: "lokale" },
-  { klucz: "ludzie", tytul: "Ludzie", ikona: "zatrudnienie", pod: ["rynek_pracy", "zespol", "hr_rozwoj"] },
-  { klucz: "lokal_menu", tytul: "Kuchnia", ikona: "oferta" },
-  { klucz: "zaopatrzenie", tytul: "Zaopatrzenie", ikona: "dostawcy", pod: ["zaop_dostawy", "zaop_magazyn", "zaop_przewozy"] },
-  { klucz: "wnetrze", tytul: "Wnętrze", ikona: "sprzet", pod: ["wnetrze_sprzet", "wnetrze_wyposazenie"] },
-  { sekcja: "Firma" },
-  { klucz: "marketing", tytul: "Marketing", ikona: "marketing", pod: ["promocje", "agencje", "internet"] },
-  { klucz: "handel", tytul: "Handel", ikona: "handel" },
-  { klucz: "finanse", tytul: "Pieniądze", ikona: "finanse", pod: ["raport", "bank", "harpagon"] },
-  { klucz: "ksiegowosc", tytul: "Księgowość", ikona: "kpir", pod: ["biuro", "kpir", "vat", "podatki"] },
-  { klucz: "urzedy", tytul: "Urzędy", ikona: "urzad", pod: ["urzad", "sanepid", "ubezpieczenia"] },
-  { klucz: "szef", tytul: "Właściciel", ikona: "portfel", pod: ["czas_wlasciciela", "wlasciciel", "gielda"] },
-  { klucz: "kasyno", tytul: "Nocna 13", ikona: "klucz" },   // ukryta: widoczna z zaproszeniem albo po haśle (UF2)
-  { sekcja: "" },
+  { klucz: "stare_miasto", tytul: "Stare Miasto", ikona: "klucz", miejsce: "stare_miasto", pod: ["lokale", "licytacje", "przejecia", "harpagon", "kasyno"] },
+  { klucz: "hurtownie", tytul: "Hurtownie", ikona: "dostawcy", miejsce: "hurtownie", pod: ["zaop_dostawy", "zaop_przewozy"] },
+  { klucz: "park_handlowy", tytul: "Park handlowy", ikona: "sprzedaz", miejsce: "park_handlowy", pod: ["wnetrze_sprzet", "wnetrze_wyposazenie"] },
+  { klucz: "miasteczko", tytul: "Miasteczko akademickie", ikona: "rynek_pracy", miejsce: "miasteczko", pod: ["rynek_pracy", "klienci", "konkurencja", "kalendarz"] },
+  { klucz: "kamienica_bankowa", tytul: "Kamienica bankowa", ikona: "bank", miejsce: "kamienica_bankowa", pod: ["bank", "gielda"] },
+  { klucz: "biurowiec_zana", tytul: "Biurowiec przy Zana", ikona: "biuro", miejsce: "biurowiec_zana", pod: ["biuro", "kpir", "ubezpieczenia", "agencje", "internet"] },
+  { klucz: "urzedy", tytul: "Urzędy", ikona: "urzad", miejsce: "urzedy", pod: ["urzad", "sanepid", "vat", "podatki"] },
+  { klucz: "handel", tytul: "Bazar", ikona: "handel" },
+  { sekcja: "Tydzień" },
+  { klucz: "redakcja", tytul: "Kurier rankingowy", ikona: "karta", miejsce: "redakcja", pod: ["karta_wynikow", "wnioski", "ranking"] },
   { klucz: "lista_bledow", tytul: "Lista błędów", ikona: "bledy" },
   { klucz: "wyslij", tytul: "Wyślij decyzje", ikona: "wyslij", klasa: "wyslij" },
 ];
+ustawEkranyMiejsc(Object.fromEntries(MENU.filter((p) => p.miejsce).map((p) => [p.miejsce, p.pod])));
 
 export default ZAKLADKI;

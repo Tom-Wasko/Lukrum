@@ -68,14 +68,14 @@ function zaNiskaOferta(kat, pensja, umowa, k) {
 
 export const zatrudnienie = {
   tytul: "Zatrudnienie", tytulPelny: "HR - zatrudnienie", ikona: "☺", odblokowanie: "hr_zatrudnienie",
-  info: "Zatrudnij pracowników potrzebnych do przygotowania i sprzedaży wybranych dań. Pracownik potrzebuje stanowiska (Wnętrze ▸ Stanowiska i sprzęt).",
+  info: "Zatrudnij pracowników potrzebnych do przygotowania i sprzedaży wybranych dań. Pracownik potrzebuje stanowiska (Park handlowy ▸ Stanowiska i sprzęt).",
   decyzje({ v, kat, edycja }) {
     let html = `<div class="pasek ciemny"><span>Koszty wynagrodzeń: <span class="kwota">${zl(kosztWynagrodzen(v, kat))}</span>${naOkres()} brutto (z ZUS pracodawcy; pensje w umowach – miesięczne)</span></div>`;
     if (v.nieudane_zatrudnienia?.length) html += `<div class="komunikat zly">Część kandydatów zatrudniła już inna firma – wybierz innych.</div>`;
     for (const typ of TYPY) {
       const st = stanowiskaLokalu(v, v.stan.stanowiska).filter((s) => s.typ === typ);
       html += `<div class="pasek">${esc(kat.oferty.stanowiska.typy[typ].nazwa)}${idWybranego(v) ? ` – ${esc(nazwaLokalu(v, idWybranego(v)))}` : ""}</div>`;
-      if (!st.length) { html += `<p class="podpowiedz">Brak stanowisk – uruchom je w zakładce Wnętrze ▸ Stanowiska i sprzęt.</p>`; continue; }
+      if (!st.length) { html += `<p class="podpowiedz">Brak stanowisk – uruchom je w zakładce Park handlowy ▸ Stanowiska i sprzęt.</p>`; continue; }
       html += `<div class="siatka waska">${st.map((s) => {
         const p = v.stan.pracownicy.find((x) => x.id === s.pracownik);
         const wl = v.wlasciciel_stanowisko;   // właściciel staje sam na pustym stanowisku (silnik/ludzie/czas_wlasciciela.py)
@@ -275,7 +275,7 @@ function wolneStanowiska(v, kat, zawod) {
 function wyborMiejsca(v, kat, zawod) {
   const wolne = wolneStanowiska(v, kat, zawod), T = kat.oferty.stanowiska.typy;
   if (!wolne.length) return `<div class="komunikat zly">Nie masz wolnego stanowiska dla zawodu „${esc(zawod)}”. Uruchom nowe w zakładce
-    Wnętrze ▸ Stanowiska i sprzęt albo zwolnij miejsce.</div><input type="hidden" id="z-miejsce" value="">`;
+    Park handlowy ▸ Stanowiska i sprzęt albo zwolnij miejsce.</div><input type="hidden" id="z-miejsce" value="">`;
   const opcja = (s) => `<option value="${s.typ}:${s.nr}">${esc(T[s.typ].nazwa)} nr ${s.nr}</option>`;
   const lokale = [...new Set(wolne.map((s) => s.lokal))];
   const opcje = v.lokale && lokale.length > 1
@@ -379,7 +379,7 @@ function oknoPrzypisania({ v, kat }, typ, nr) {
   okno(`Obsada: ${esc(T[typ]?.nazwa ?? typ)} nr ${nr}${cel?.lokal && v.lokale ? ` – ${esc(nazwaLokalu(v, cel.lokal))}` : ""}`,
     (w.length ? tabela(null, ["Osoba", "Zawód", "Pracuje teraz", "Zadowolenie", "Zgoda", ""], w, { klasy: ["l", "l", "l"] })
       : `<div class="komunikat">Nie masz jeszcze nikogo do tej pracy. Zatrudnij kogoś w
-        <a data-zakladka-k="rynek_pracy">Ludzie ▸ Rynek pracy</a>.</div>`)
+        <a data-zakladka-k="rynek_pracy">Miasteczko akademickie ▸ Rynek pracy</a>.</div>`)
     + `<p class="podpowiedz">Osoba z tego lokalu zmieni stanowisko od razu. Osoba z innego lokalu musi się zgodzić: chętniej, gdy jest zadowolona,
       lokale są blisko na mapie i dostanie jednorazowy dodatek. Odpowiedź poznasz po przeliczeniu rundy (Rynek pracy ▸ wyniki).
       Nowa osoba: <a data-zakladka-k="rynek_pracy">Rynek pracy</a>.</p>`, { srednie: true });
@@ -498,7 +498,7 @@ function oknoPrzeniesienia({ v, kat }, id) {
   okno(`Przenieś: ${esc(p.imie_nazwisko)}`, `<p>Pracuje teraz: <b>${miejsceOsoby(v, kat, teraz)}</b> · zadowolenie ${zadowolenieOsoby(p)}</p>`
     + (w.length ? tabela(null, ["Wolne stanowisko", "Zgoda", ""], w, { klasy: ["l", "l"] })
       : `<div class="komunikat">Nie ma wolnego stanowiska typu ${typy.map((t) => esc(T[t]?.nazwa ?? t)).join(" / ")}. Uruchom nowe w zakładce
-        <a data-zakladka-k="stanowiska">Wnętrze ▸ Stanowiska i sprzęt</a>.</div>`)
+        <a data-zakladka-k="stanowiska">Park handlowy ▸ Stanowiska i sprzęt</a>.</div>`)
     + `<p class="podpowiedz">W tym samym lokalu osoba zmienia stanowisko od razu. Do innego lokalu musi się zgodzić – chętniej, gdy jest zadowolona,
       lokale są blisko i dostanie dodatek za przejście (odpowiedź po przeliczeniu rundy).</p>`, { srednie: true });
 }
@@ -579,7 +579,7 @@ function narzedziaZespolu(w) {
   return `<div class="zespol-narzedzia"><label>Grupuj: ${wybor("grupy", GRUPY_ZESPOLU)}</label><label>Sortuj: ${wybor("sort", SORT_ZESPOLU)}</label></div>`;
 }
 
-// UF15: Ludzie → Zespół – wszyscy pracownicy firmy; Poprawki 2 (sprawa 18): kafelki osób, w wynikach wskaźniki czasu pracy
+// UF15: Mój kebab → Zespół – wszyscy pracownicy firmy; Poprawki 2 (sprawa 18): kafelki osób, w wynikach wskaźniki czasu pracy
 export const zespol = {
   tytul: "Zespół", tytulPelny: "Ludzie – zespół", ikona: "zatrudnienie", odblokowanie: "hr_zatrudnienie",
   info: "Wszyscy Twoi pracownicy: gdzie pracują, na jakiej umowie, za ile i czy są zadowoleni. Profil – pensja, premia, forma albo zwolnienie; Przenieś – inne wolne stanowisko.",

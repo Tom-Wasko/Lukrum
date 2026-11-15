@@ -6,6 +6,7 @@ import { esc, licz } from "./wspolne.js";
 
 let wybrany = null;   // id lokalu wybranego kafelkiem (null – pierwszy)
 
+export const ustawWybrany = (id) => { wybrany = id; };   // wejście do własnego lokalu z mapy
 export const mojeLokale = (v) => v.stan?.lokale || [];
 export const wieleLokali = (v) => mojeLokale(v).length > 1;
 export function lokalWybrany(v) {

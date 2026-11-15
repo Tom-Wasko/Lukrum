@@ -184,7 +184,7 @@ export const dashboard = {
         ${rynek ? `<div class="podpowiedz">${rynek}</div>` : ""}</div>`)}
       ${kafel("Dochód netto", "wykres", d.dochod_netto == null && v.ksiegowosc?.ukryte   // U7: ukryty do złożenia deklaracji
         ? `<div class="maly-tekst">Księgujesz samodzielnie – dochód tej rundy poznasz po złożeniu deklaracji albo wybierz biuro.</div>
-           <button class="btn jasny maly" data-akcja="popraw" data-z="biuro">Księgowość ▸ Biuro rachunkowe</button>`
+           <button class="btn jasny maly" data-akcja="popraw" data-z="biuro">Biurowiec przy Zana ▸ Biuro rachunkowe</button>`
         : `<span class="${d.dochod_netto < 0 ? "minus" : ""}">${zl(d.dochod_netto)}</span>`)}
       ${kafel("Saldo konta", "portfel", zl(d.saldo))}
       ${kafel("Minimalne wynagrodzenie brutto", "zatrudnienie", `${zl(kat.placa_minimalna)} / miesiąc`

@@ -1,4 +1,4 @@
-// Nowe lokale → Licytacje (wyniki licytacji lokali) i Przejęcia (kupno budynku z najemcą, wypowiedzenia najmu)
+// Stare Miasto → Licytacje (wyniki licytacji lokali) i Przejęcia (kupno budynku z najemcą, wypowiedzenia najmu)
 // – silnik/nieruchomosci/przejecia.py.
 import { esc, nazwaFirmy, naOkres, naRunde, podsumowanie, proc, tabela, zl, zwinTabela, zl2 } from "./wspolne.js";
 import { infoLicytacji, jawna, minOferty, nazwaStrefy } from "./lokale.js";
@@ -55,7 +55,7 @@ function licytacjaHtml(v, kat, p, zwijane = false) {
 }
 
 export const przejecia = {
-  tytul: "Przejęcia", tytulPelny: "Nowe lokale – przejęcia budynków", ikona: "lokale",
+  tytul: "Przejęcia", tytulPelny: "Notariusz – przejęcia budynków", ikona: "lokale",
   odblokowanie: (v) => !!v.przejecia && v.runda >= v.przejecia.od_rundy, ukryta: (v) => !v.przejecia,
   info: (c) => {
     const P = c.v.przejecia;
@@ -74,7 +74,7 @@ export const przejecia = {
       Jeśli w tej rundzie chce go też inna drużyna, wygrywa wyższa oferta (najwyżej ${P.oferta_max} × cena), przy remisie – losowanie.
       Licytacja jest jawna: oferta musi przebić najwyższą ofertę innej drużyny o co najmniej ${proc(v.licytacja_jawna?.krok ?? 0, 0)}.
       Boty składają oferty dopiero przy zamknięciu rundy – ich ofert nie widać.${kat.mapa.banki?.zastaw_przejecia ? `
-      Brakującą część ceny może pokryć kredyt inwestycyjny pod zastaw tego budynku (Pieniądze ▸ Bank) – wchodzi
+      Brakującą część ceny może pokryć kredyt inwestycyjny pod zastaw tego budynku (Kamienica bankowa ▸ Bank) – wchodzi
       w tej samej rundzie, a gdy zakup się nie uda, przepada.` : ""}</div>`;
     html += stanBudynkow(v, kat, P, d, edycja);
     html += P.do_kupienia.length ? tabela("Budynki z najemcami na sprzedaż", ["Budynek", "Strefa", "Najemca", `Czynsz${naOkres()}`, "Cena / Twoja oferta", ""],
@@ -125,7 +125,7 @@ export const przejecia = {
   },
 };
 
-// UF15: licytacje lokali osobno – kto, ile i za ile licytował w mieście (oferty wpisuje się w Nowe lokale → Do wynajęcia)
+// UF15: licytacje lokali osobno – kto, ile i za ile licytował w mieście (oferty wpisuje się w Stare Miasto → Do wynajęcia)
 function licytacjeMiasta(v, kat, zwijane = false) {
   const przetargi = v.rynek?.przejecia?.przetargi || [];
   const moje = przetargi.filter((x) => x.oferty.some((o) => o.firma === v.firma)), wygrane = moje.filter((x) => x.zwyciezca === v.firma).length;
@@ -136,7 +136,7 @@ function licytacjeMiasta(v, kat, zwijane = false) {
 }
 
 export const licytacje = {
-  tytul: "Licytacje", tytulPelny: "Nowe lokale – licytacje", ikona: "lokale",
+  tytul: "Licytacje", tytulPelny: "Sala licytacji – licytacje lokali", ikona: "lokale",
   odblokowanie: (v) => !!v.przejecia && v.runda >= (v.przejecia.licytacje_od_rundy ?? 1), ukryta: (v) => !v.przejecia,
   info: (c) => `Gdy kilka drużyn chce w jednej rundzie ten sam lokal, wygrywa najwyższa oferta względem ceny wywoławczej
     (od rundy ${c.v.przejecia.licytacje_od_rundy} – wpisz ją przy lokalu w zakładce Do wynajęcia), remis rozstrzyga losowanie.`,

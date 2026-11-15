@@ -419,7 +419,7 @@ def bledy(dane: Dane, firma: Firma, d: dict) -> list[dict]:
         wynik.append({"poziom": "czerwony", "zakladka": "finanse_biuro",
                       "tekst": f"Nie złożono deklaracji za rundę {dk['runda']} – urząd rozliczy z urzędu i wystawi "
                                f"mandat {u['kara_brak']:.0f} zł. Zaksięguj dokumenty w tabeli w "
-                               f"Księgowość ▸ Biuro rachunkowe i złóż deklaracje albo wybierz biuro – najtańsze "
+                               f"Biurowiec przy Zana ▸ Biuro rachunkowe i złóż deklaracje albo wybierz biuro – najtańsze "
                                f"({nazwa}) kosztuje ok. {zl:.0f} zł za rundę."})
     zapisy = k.get("zapisy") if isinstance(k.get("zapisy"), dict) else {}
     brak = sum(1 for x in dk["dokumenty"] if not (zapisy.get(x["id"]) or {}).get("kolumna"))

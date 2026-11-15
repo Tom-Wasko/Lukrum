@@ -219,7 +219,7 @@ export function wynikiBanku({ v }) {
 
 // lokal kupowany w tej rundzie (zakładka Lokale) – zastaw kredytu inwestycyjnego, wartość = cena z oferty
 // (działka – razem z kosztem budowy, silnik/pieniadze/banki.py: nowy_lokal); bez kupna lokalu – budynek z najemcą
-// kupowany w tej rundzie (Nowe lokale ▸ Przejęcia, B6; przy wykupie bez sprzętu wynajmującego)
+// kupowany w tej rundzie (Stare Miasto ▸ Przejęcia, B6; przy wykupie bez sprzętu wynajmującego)
 function kupowanyLokal(c) {
   const wyb = c.d.lokal, lok = wyb?.forma === "kupno" ? (c.v.lokale?.oferta || []).find((l) => l.id === wyb.id) : null;
   if (lok?.cena) return [{ id: `lokal:${lok.id}`, nazwa: `${lok.typ === "dzialka" ? "Działka" : "Lokal"}: ${lok.adres} (kupowany w tej rundzie)`, wartosc: (+wyb.oferta || lok.cena) + (lok.koszt_budowy || 0) }];
@@ -266,7 +266,7 @@ export const akcjeBanku = {
       <p class="podpowiedz">Pod zastaw można dać kupiony lokal${ustawienia(c.kat).zastaw_przejecia ? ", budynek z najemcą" : ""} albo kupiony sprzęt (wartość netto po amortyzacji), a także lokal
         kupowany w tej rundzie – kredyt wchodzi przed zakupem, więc pokrywa część ceny (przy działce zastawem jest
         budowany lokal: wartość = cena + koszt budowy).${ustawienia(c.kat).zastaw_przejecia ? ` Tak samo budynek z najemcą
-        kupowany w tej rundzie (Nowe lokale ▸ Przejęcia), gdy w tej rundzie nie kupujesz lokalu.` : ""}</p>`,
+        kupowany w tej rundzie (Stare Miasto ▸ Przejęcia), gdy w tej rundzie nie kupujesz lokalu.` : ""}</p>`,
     { male: true, przyciski: przyciski("bk-wez-kredyt", "Weź kredyt") });
   },
   "bk-wez-kredyt": async (el, c) => {

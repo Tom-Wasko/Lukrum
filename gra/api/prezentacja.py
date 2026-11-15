@@ -414,11 +414,11 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
         v["tabela_punktow"] = pk.tabela(dane)   # jawne progi wyniku punktowego (działy, składniki, otwarcie, wagi rankingu)
         v["zasady_karty"] = {"mandaty": bool(dane.z["wynik"].get("mandaty_w_dochodzie")),
                              "waga_nieruchomosci": dane.z["wynik"]["waga_nieruchomosci"]}
-        # poprawki 2 (sprawy 17/18): kolory wskaźników czasu pracy w Ludzie ▸ Zespół (wyniki)
+        # poprawki 2 (sprawy 17/18): kolory wskaźników czasu pracy w Mój kebab ▸ Zespół (wyniki)
         v["progi_czasu_pracy"] = {"niski": dane.z["operacje"].get("niskie_obciazenie"),   # brak w danych zamrożonych testów
                                   "przepracowanie": dane.z["zadowolenie_osoby"]["wspolczynniki"]["prog_przepracowania"]}
         v["majatek_firm"] = {n: _majatek_netto(x) for n, x in w.items()}   # U13: majątek netto obok wyniku w rankingu
-        v["ranking"] = historia_rankingu(dane, poprzedni, runda - 1, gra.konfiguracja["liczba_rund"])   # UF11: zakładka Wyniki ▸ Ranking
+        v["ranking"] = historia_rankingu(dane, poprzedni, runda - 1, gra.konfiguracja["liczba_rund"])   # UF11: zakładka Kurier rankingowy ▸ Ranking
         v["historia"] = [{"runda": r, "miesiac": dane.nazwa_rundy(r), "skrot": dane.skrot_rundy(r), "karta": poprzedni.wyniki[r][firma].get("karta"),
                           "dochod_netto": poprzedni.wyniki[r][firma]["kpir"]["dochod_netto"],
                           "gotowka": poprzedni.wyniki[r][firma]["gotowka"]}
