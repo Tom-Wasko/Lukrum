@@ -22,9 +22,8 @@ Gałąź `mapa-osm`. Nowa mapa jest domyślna w zakładce „Mapa miasta”; prz
 2. **Położenia lokali.** `Lokal` w `schematy.py` nie ma `geo`, więc 38 położeń leży w `lublin.json` (klucz `lokale`).
    Propozycja: pole `geo` w `lokale.yaml`, wtedy mapa czyta je z danych gry. Dwa lokale nad Zalewem
    (`zemborzyce_1`, `zemborzyce_3`) mają położenie wpisane z ręki – ul. Żeglarska wypada w OSM poza miastem.
-3. **Strefy bez dzielnic** (pytanie autora z 14.11): zamiast kół mają kształt wycięty z prawdziwej dzielnicy.
-   Politechnika to pas Rur do 400 m od ul. Nadbystrzyckiej (124 ha). Dzielnicę Za Cukrownią dzielą Zygmuntowskie
-   (202 ha) i Dworzec (39 ha): każdy punkt należy do strefy, której ulica, „serce” albo lokal jest bliżej.
+3. **Strefy bez dzielnic** (pytanie autora z 14.11): nieaktualne – każda strefa jest teraz jedną dzielnicą
+   (zob. „Poprawki kolegi z 15.11 wieczorem”).
 4. **`miejsce` sklepów sieciowych** poprawione na prawdziwe położenia z OSM (Makro – Chemiczna, Eurocash –
    Łęczyńska, Selgros – Jana Pawła II, Auchan – Witosa, Biedronka – Nałęczowska, Lidl – Romantyczna, Stokrotka –
    Braci Wieniawskich, Rożen – Turystyczna, stolarnia – Krochmalna). `strefa` bez zmian. Do sprawdzenia przez autora:
@@ -54,6 +53,30 @@ Gałąź `mapa-osm`. Nowa mapa jest domyślna w zakładce „Mapa miasta”; prz
   wybierają pierwsze (Twój lokal, strefy, zespoły, budynki, lokale, punkty orientacyjne, nazwy dzielnic).
   Tabliczka, która się nie mieści, znika do czasu przybliżenia; po najechaniu pokazuje się zawsze.
 - Progi poziomów: 0,09 i 0,3 px na metr.
+
+## Poprawki kolegi z 15.11 wieczorem – **odwracają dwie decyzje autora z 14.11, do przeglądu**
+1. **Strefa = jedna prawdziwa dzielnica** (`strefy.yaml: dzielnice`): Stare Miasto, Śródmieście (Centrum), Wieniawa
+   (Miasteczko Akademickie), Rury (Politechnika), Czuby Północne (LSM i Czuby), Za Cukrownią (Zygmuntowskie),
+   Dziesiąta (Dworzec), Czechów Południowy (Czechów i Kalinowszczyzna), Felin, Zemborzyce. Mapa podpisuje pole
+   prawdziwą nazwą dzielnicy, a pod nią drobniej nazwą strefy z gry; nazwy stref w danych i zakładkach bez zmian.
+   Pozostałe 17 dzielnic jest wyszarzone. Wycinane kształty trzech stref zniknęły ze skryptu i z `lublin.json`.
+2. **Siedem lokali ma nowe adresy i nazwy** (`lokale.yaml`), żeby stały w dzielnicy swojej strefy; opisy bez zmian:
+   - `dworzec_1` Kiosk przy Placu Dworcowym, pl. Dworcowy 1 → Kiosk za torami przy dworcu, ul. Nowy Świat 20
+   - `dworzec_2` Lokal przy Dworcu Metropolitalnym, ul. Gazowa 4 → Lokal przy Wyścigowej, ul. Wyścigowa 31
+   - `dworzec_3` Hala na Młyńskiej, ul. Młyńska 15 → Hala na Nowym Świecie, ul. Nowy Świat 34
+   - `czechow_2` Pawilon na Paderewskiego, ul. Paderewskiego 2 → Pawilon na Lipińskiego, ul. Lipińskiego 3
+   - `czechow_4` Budka na Kalinowszczyźnie, ul. Kalinowszczyzna 70 → Budka na Elsnera, ul. Elsnera 5
+   - `felin_2` Pawilon na Witosa: ul. Witosa 12 → al. Witosa 30
+   - `felin_3` Działka przy Mełgiewskiej, ul. Mełgiewska 80 → Działka przy Vetterów, ul. Vetterów 1
+   Trzy lokale zostały w sąsiedniej kolorowej dzielnicy: `akademickie_4` (Głęboka 11, Śródmieście), `lsm_czuby_1`
+   i `lsm_czuby_3` (Wileńska 3 i Filaretów 18, Rury). Dworzec w Dziesiątej to kompromis: sam dworzec stoi w Za Cukrownią.
+3. **Budynki zbiorcze** (`budynki.yaml`): w biurowcu przy Zana zostały trzy firmy od reklamy; biura rachunkowe
+   („Biurowiec biur rachunkowych”, ul. Tomasza Zana 38), ubezpieczyciel (ul. Hipoteczna 4) i parkiet maklerski
+   (Krakowskie Przedmieście 59) są osobnymi budynkami. W kamienicy bankowej zostało sześć banków.
+4. **Kolory**: strefy mają cztery odcienie bez zieleni; zielone są tylko parki, lasy i łąki.
+5. **Oddalanie**: żetony bledną między 0,085 a 0,05 px/m; na pełnym oddaleniu widać nazwy dzielnic i własny lokal.
+6. **Ikona lokalu**: sześć wariantów na stronie `/static/mapa/podglad_lokali.html` (`ikony.js: WARIANTY_LOKALU`);
+   mapa rysuje `IKONA_LOKALU`, na razie budkę z markizą.
 
 ## Czego nie ma
 - wnętrz (strona mechanik), botów i billboardów na mapie, ruchu ulicznego i pory dnia ze starej mapy;

@@ -86,11 +86,12 @@ budynki:
     szer: 1
     gl: 1
 - id: biura
-  nazwa: Kamienica biur rachunkowych
+  nazwa: Biurowiec biur rachunkowych
   rodzaj: biuro
   strefa: stare_miasto
-  miejsce: biurowce przy ul. Zana (Rury)
-  zespol: biurowiec_zana
+  miejsce: osobny biurowiec przy ul. Zana (Rury)
+  adres: ul. Tomasza Zana 38
+  geo: {lat: 51.23892, lon: 22.52848}
   opis: 'Pięć biur rachunkowych pod jednym dachem (J.K.Ś. Jakuba Klimka-Ślęzaka, Pod Trybunałem, Pani Halinka,
     e-Księgi24.pl, Debet & Kredyt) i pokój z biurkiem dla tych, którzy księgują sami. Na klatce schodowej
     pachnie tonerem i drożdżówkami.'
@@ -561,8 +562,9 @@ budynki:
   nazwa: TUW „Pod Koziołkiem”
   rodzaj: ubezpieczenia
   strefa: centrum
-  miejsce: biurowce przy ul. Zana (Rury)
-  zespol: biurowiec_zana
+  miejsce: ul. Hipoteczna (Śródmieście), poza deptakiem
+  adres: ul. Hipoteczna 4
+  geo: {lat: 51.24667, lon: 22.55332}
   opis: Polisy na lokal, sprzęt i OC – odszkodowania po wypadkach w lokalu (dane/zdarzenia/losowe.yaml).
   zakladka: ubezpieczenia
   mapa:
@@ -588,8 +590,9 @@ budynki:
   nazwa: Parkiet maklerski „Byk i Koziołek”
   rodzaj: gielda
   strefa: centrum
-  miejsce: Krakowskie Przedmieście (Śródmieście)
-  zespol: kamienica_bankowa
+  miejsce: Krakowskie Przedmieście (Śródmieście), osobno od kamienicy bankowej
+  adres: Krakowskie Przedmieście 59
+  geo: {lat: 51.24786, lon: 22.55154}
   opis: Biuro maklerskie przy Krakowskim Przedmieściu – prawdziwe notowania spółek S&P 500. Właściciel inwestuje
     tu prywatne pieniądze z portfela (G4, decyzja autora 8.11.2026).
   zakladka: gielda
@@ -602,13 +605,13 @@ budynki:
 zespoly:
 - id: kamienica_bankowa
   nazwa: Kamienica bankowa
-  opis: Kamienica przy deptaku z szyldami sześciu banków i biura maklerskiego. W środku wybiera się bank.
+  opis: Kamienica przy deptaku z szyldami sześciu banków. W środku wybiera się bank.
   miejsce: Krakowskie Przedmieście (Śródmieście)
   adres: Krakowskie Przedmieście 37
   geo: {lat: 51.24825, lon: 22.55783}
 - id: biurowiec_zana
   nazwa: Biurowiec przy Zana
-  opis: Biurowiec z holem i tablicą firm – biura rachunkowe, agencje reklamy, ubezpieczyciel.
+  opis: Biurowiec z holem i tablicą firm od reklamy – internet, radio i billboardy, festyny i degustacje.
   miejsce: biurowce przy ul. Zana (Rury)
   adres: ul. Tomasza Zana 39
   geo: {lat: 51.23807, lon: 22.52733}

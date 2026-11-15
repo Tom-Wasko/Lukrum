@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUKRUM – ikona lokalu, warianty</title>
+  <link rel="stylesheet" href="../fonty/fonty.css">
+  <link rel="stylesheet" href="../motywy/zmienne.css">
+  <link rel="stylesheet" href="mapa.css">
+  <style>
+    /* Strona robocza: sześć wariantów żetonu lokalu do wyboru. Wybrany wpisuje się w ikony.js: IKONA_LOKALU. */
+    body { margin: 0; font-family: var(--font-tekst); background: var(--papier); color: var(--tusz); }
+    header { padding: 20px 24px 4px; }
+    h1 { margin: 0 0 6px; font: 28px var(--font-gruby); }
+    header p { margin: 0; max-width: 70ch; }
+    .tryb { padding: 18px 24px 26px; background: var(--papier); color: var(--tusz); }
+    .tryb h2 { margin: 0 0 12px; font: 16px var(--font-szyld); letter-spacing: .08em; text-transform: uppercase; }
+    .siatka { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 14px; }
+    .wariant { padding: 14px; background: color-mix(in srgb, var(--akcent-2) 30%, var(--papier)); border: 2px solid var(--tusz); border-radius: 6px; }
+    .wariant h3 { margin: 0 0 2px; font: 17px var(--font-szyld); letter-spacing: .04em; text-transform: uppercase; }
+    .wariant code { font-size: 12px; opacity: .75; }
+    .rzad { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px; margin-top: 12px; }
+    .rzad figure { margin: 0; text-align: center; font-size: 11px; }
+    .rzad .lm-pionek { display: block; margin: 0 auto 4px; }
+    .male { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 14px; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ikona lokalu – sześć wariantów</h1>
+    <p>Każdy wariant w trzech stanach (wolny, Twój, innej firmy) i w trzech wielkościach, w jakich pojawia się na mapie.
+      Wybrany wariant wpisuje się w <code>static/mapa/ikony.js</code> jako <code>IKONA_LOKALU</code>.</p>
+  </header>
+  <div id="podglad"></div>
+  <script type="module">
+    import { WARIANTY_LOKALU, zeton } from "./ikony.js";
+    const pionek = (klucz, klasa, px, znak = "", firma = "") =>
+      `<i class="lm-pionek ${klasa}" style="width:${px}px;height:${px}px${firma ? `;--firma:${firma}` : ""}">${zeton(klucz, null, "kolo")}${znak ? `<b>${znak}</b>` : ""}</i>`;
+    const wariant = ([klucz, nazwa], i) => `<section class="wariant"><h3>${i + 1}. ${nazwa}</h3><code>${klucz}</code>
+      <div class="rzad"><figure>${pionek(klucz, "lm-wolny", 64)}wolny</figure><figure>${pionek(klucz, "lm-moj", 78, "★")}Twój</figure>
+        <figure>${pionek(klucz, "lm-zajety", 64, "", "#2d73d6")}innej firmy</figure><figure>${pionek(klucz, "lm-zajety", 64, "", "#f2b705")}innej firmy</figure></div>
+      <div class="male">na mapie: ${pionek(klucz, "lm-wolny", 24)}${pionek(klucz, "lm-moj", 31, "★")}${pionek(klucz, "lm-zajety", 24, "", "#2d73d6")}
+        ${pionek(klucz, "lm-wolny", 36)}${pionek(klucz, "lm-moj", 47, "★")}${pionek(klucz, "lm-zajety", 36, "", "#9b51e0")}</div></section>`;
+    const TRYBY = [["bar", "jasny", "Bar mleczny – jasny"], ["bar", "ciemny", "Bar mleczny – ciemny"], ["pewex", "jasny", "Pewex – jasny"], ["wysoka", "jasny", "Wysoka widoczność"]];
+    document.getElementById("podglad").innerHTML = TRYBY.map(([paleta, tryb, nazwa]) =>
+      `<div class="tryb" data-paleta="${paleta}" data-tryb="${tryb}"><h2>${nazwa}</h2><div class="siatka">${Object.entries(WARIANTY_LOKALU).map(wariant).join("")}</div></div>`).join("");
+  </script>
+</body>
+</html>

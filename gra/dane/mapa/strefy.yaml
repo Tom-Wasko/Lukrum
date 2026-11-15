@@ -1,8 +1,8 @@
 # Strefy Lublina (mapa miasta)
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Dziesięć stref Lublina na wspólnej mapie gry. dzielnice – prawdziwe dzielnice z OSM, z których składa się
-  strefa na nowej mapie (propozycja [mechaniki]; pusta lista – granice wyznacza [mapa] wokół „serca”); dzielnic spoza
-  stref nie ma w popycie (tło miasta). mapa: prostokąt w polach siatki (x, y – lewy górny róg, szer
+  strefa na nowej mapie (15.11 [mapa]: każda strefa to jedna prawdziwa dzielnica; pozostałe 17 dzielnic jest na mapie
+  wyszarzone – tło miasta, bez popytu). mapa: prostokąt w polach siatki (x, y – lewy górny róg, szer
   × gl); kolor – barwa strefy na mapie. Popyt stref (klienci, ich preferencje) – krok F3a.4.'
 zrodlo: notatka „Ustalenia gry” (lista stref); położenie stref uproszczone względem prawdziwego Lublina
 siatka:
@@ -46,7 +46,7 @@ strefy:
       szer: 6
       gl: 5
     czynsz_m2: 75
-    dzielnice: [Sławinek, Wieniawa]
+    dzielnice: [Wieniawa]
     serce: Miasteczko Akademickie UMCS i KUL (część na granicy z Rurami)
   politechnika:
     nazwa: Politechnika
@@ -59,7 +59,7 @@ strefy:
       szer: 5
       gl: 4
     czynsz_m2: 60
-    dzielnice: []
+    dzielnice: [Rury]
     serce: kampus Politechniki Lubelskiej przy ul. Nadbystrzyckiej
   dworzec:
     nazwa: Dworzec
@@ -72,7 +72,7 @@ strefy:
       szer: 5
       gl: 4
     czynsz_m2: 70
-    dzielnice: []
+    dzielnice: [Dziesiąta]
     serce: Dworzec Lublin (PKP) i Dworzec Metropolitalny
   zygmuntowskie:
     nazwa: Zygmuntowskie
@@ -85,7 +85,7 @@ strefy:
       szer: 6
       gl: 5
     czynsz_m2: 50
-    dzielnice: []
+    dzielnice: [Za Cukrownią]
     serce: Arena Lublin i hale sportowe na Zygmuntowskich
   lsm_czuby:
     nazwa: LSM i Czuby
@@ -99,7 +99,7 @@ strefy:
       szer: 7
       gl: 6
     czynsz_m2: 55
-    dzielnice: [Rury, Czuby Północne, Czuby Południowe]
+    dzielnice: [Czuby Północne]
     serce: osiedla LSM i Czuby
   czechow:
     nazwa: Czechów i Kalinowszczyzna
@@ -112,7 +112,7 @@ strefy:
       szer: 12
       gl: 5
     czynsz_m2: 45
-    dzielnice: [Czechów Północny, Czechów Południowy, Kalinowszczyzna]
+    dzielnice: [Czechów Południowy]
     serce: osiedla Czechowa i wąwozy
   felin:
     nazwa: Felin

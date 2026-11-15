@@ -391,10 +391,10 @@ lokale:
     y: 11
 - id: dworzec_1
   od_firm: 6
-  nazwa: Kiosk przy Placu Dworcowym
+  nazwa: Kiosk za torami przy dworcu
   strefa: dworzec
   typ: gotowy
-  adres: pl. Dworcowy 1
+  adres: ul. Nowy Świat 20
   opis: Ludzie biegną na pociąg z kebabem w ręku. Rozkład jazdy wisi nad kasą – ważniejszy niż menu.
   metraz: 30
   miejsca:
@@ -407,10 +407,10 @@ lokale:
     x: 10
     y: 10
 - id: dworzec_2
-  nazwa: Lokal przy Dworcu Metropolitalnym
+  nazwa: Lokal przy Wyścigowej
   strefa: dworzec
   typ: gotowy
-  adres: ul. Gazowa 4
+  adres: ul. Wyścigowa 31
   opis: Nowoczesne szkło i stal. Głos z megafonu zapowiada opóźnienia w rytm skwierczącej frytownicy.
   metraz: 60
   miejsca:
@@ -424,10 +424,10 @@ lokale:
     y: 11
 - id: dworzec_3
   od_firm: 6
-  nazwa: Hala na Młyńskiej
+  nazwa: Hala na Nowym Świecie
   strefa: dworzec
   typ: niewyposazony
-  adres: ul. Młyńska 15
+  adres: ul. Nowy Świat 34
   opis: Dawny magazyn mąki. Mąka jest wszędzie, nawet w miejscach, które dopiero odkryjesz.
   metraz: 90
   miejsca:
@@ -597,10 +597,10 @@ lokale:
     x: 4
     y: 0
 - id: czechow_2
-  nazwa: Pawilon na Paderewskiego
+  nazwa: Pawilon na Lipińskiego
   strefa: czechow
   typ: niewyposazony
-  adres: ul. Paderewskiego 2
+  adres: ul. Lipińskiego 3
   opis: Pawilon przy szkole. Rodzice są czujni, dzieci jeszcze bardziej głodne.
   metraz: 60
   miejsca:
@@ -631,10 +631,10 @@ lokale:
     x: 8
     y: 0
 - id: czechow_4
-  nazwa: Budka na Kalinowszczyźnie
+  nazwa: Budka na Elsnera
   strefa: czechow
   typ: gotowy
-  adres: ul. Kalinowszczyzna 70
+  adres: ul. Elsnera 5
   opis: Przy pętli autobusowej. Kierowcy jedzą tu od lat i znają historię każdego sosu.
   metraz: 30
   miejsca:
@@ -669,7 +669,7 @@ lokale:
   nazwa: Pawilon na Witosa
   strefa: felin
   typ: niewyposazony
-  adres: ul. Witosa 12
+  adres: al. Witosa 30
   opis: Przy obwodnicy. Ciężarówki zatrzymują się tylko wtedy, gdy szyld widać z kilometra.
   metraz: 70
   miejsca:
@@ -684,10 +684,10 @@ lokale:
     y: 2
 - id: felin_3
   od_firm: 8
-  nazwa: Działka przy Mełgiewskiej
+  nazwa: Działka przy Vetterów
   strefa: felin
   typ: dzialka
-  adres: ul. Mełgiewska 80
+  adres: ul. Vetterów 1
   opis: Duża i tania działka w strefie przemysłowej. Sąsiad – zakład produkcji kartonów – obiecał zniżkę na pudełka.
   metraz: 130
   miejsca:

@@ -44,6 +44,8 @@ const Z = {
   praca: D("M8 35V10M32 35V10") + R(5, 8, 30, 19, "k") + R(8, 11, 7, 8, "j") + R(17, 10.5, 6, 6, "u") + R(25, 12, 7, 9, "j") + R(17, 19, 6, 6, "j") + P("3,8 20,3 37,8", "d"),
   lichwiarz: R(6, 10, 28, 25, "b") + P("4,10 20,4 36,10", "d") + LUK(12, 16, 14) + C(20, 27, 3.5, "u") + D("M20 25.3v3.4"),
   detektyw: R(11, 12, 18, 23, "m") + P("9,12 20,3 31,12", "c") + R(15, 16, 10, 7, "u") + C(19, 27, 3.2, "w") + D("M21.300 29.300l3.200 3.200"),
+  ubezpieczenia: R(6, 14, 28, 21, "m") + P("4,14 20,6 36,14", "n") + D("M20 16.500l6 2v4.500c0 4-2.700 6.300-6 7.500c-3.300-1.200-6-3.500-6-7.500v-4.500z", "u") + D("M17.300 23l2 2l3.500-4"),
+  gielda: R(5, 15, 30, 20, "m") + P("3,15 20,7 37,15", "d") + R(9, 18, 22, 12, "j") + D("M11 27l5-4l4 2.500l7-6M24.500 19.500H27V22") + R(17, 31, 6, 4, "c"),
   // zaopatrzenie i sklepy
   hurt: R(4, 17, 32, 18, "m") + P("4,17 4,11 12,17 12,11 20,17 20,11 28,17 28,11 36,17", "n") + R(8, 23, 13, 12, "c") + R(25, 27, 8, 8, "k") + D("M25 31h8M29 27v8"),
   dyskont: R(5, 16, 30, 19, "m") + P("3,16 6,9 34,9 37,16", "d") + D("M11 9l-1.500 7M17 9l-.800 7M23 9l.800 7M29 9l1.500 7") + R(8, 20, 10, 8, "w") + R(22, 20, 8, 15, "c"),
@@ -64,6 +66,13 @@ const Z = {
   woda: D("M9 26h22l-4 5H13z", "k") + D("M20 26V6") + P("21.5,8 21.5,23 32,23", "j") + P("18.5,11 18.5,23 11,23", "d") + D("M4 34.500c2.700-2 5.300-2 8 0s5.300 2 8 0s5.300-2 8 0s5.300 2 8 0"),
   // lokale drużyn
   lokal: R(7, 18, 26, 17, "m") + P("4,18 8,10 32,10 36,18", "f") + D("M13 10l-2 8M20 10v8M27 10l2 8") + R(10, 21, 13, 8, "w") + D("M16.500 21.500v7") + P("14,23 19,23 17.6,28 15.4,28", "k") + R(25, 22, 6, 13, "c"),
+  // warianty ikony lokalu do wyboru (podgląd: static/mapa/podglad_lokali.html); na mapie używany jest IKONA_LOKALU
+  lokal_pita: D("M5 20a15 15 0 0 0 30 0z", "u") + D("M7 20c1.500-5 5-6.500 8-3c2-5.500 6.500-5.500 8.500-1c3-4 7.500-2 9.500 4z", "z") + C(13.5, 17.5, 3, "d") + C(27, 17, 3, "d")
+    + P("17,20 18.500,10 23,11 22,20", "b") + D("M9 25c3 2.500 7 4 11 4M5 20h30"),
+  lokal_rozen: R(30, 9, 4, 20, "n") + D("M32 12v14") + R(9, 31, 22, 4, "c") + D("M20 3.500V31") + P("12.5,9 27.5,9 24,29 16,29", "b") + D("M13.500 14h13M14.500 19h11M15.300 24h9.400") + C(20, 4.5, 1.6, "c"),
+  lokal_okienko: R(5, 9, 30, 26, "m") + P("3,15 6,8 34,8 37,15", "f") + D("M12 8l-1.500 7M20 8v7M28 8l1.500 7") + R(9, 18, 22, 9, "c") + P("18,19 22,19 21.300,26 18.700,26", "b") + R(7, 27, 26, 3, "k") + D("M11 33h18"),
+  lokal_neon: R(6, 17, 28, 18, "m") + R(3, 5, 34, 12, "c", 2) + `<text x="20" y="14" class="t">KEBAB</text>` + R(9, 22, 6, 6, "w") + R(25, 22, 6, 6, "w") + R(16.5, 25, 7, 10, "c"),
+  lokal_rolka: D("M10 30L24.500 8a5 5 0 0 1 8.500 5.500L18.500 35.500z", "u") + C(27, 9.5, 2.3, "z") + C(30.8, 12.3, 2, "d") + D("M10 30l5.500-8.300l8.500 5.500l-5.500 8.300z", "j") + D("M14 26.500l8.500 5.500M21 15l8 5.200"),
   dzialka: D("M3 34h34M7 34V24M13 34V24M19 34V24M25 34V24M5 27h22M5 31h22M33 34V15") + R(24, 9, 14, 8, "j") + D("M27 13h8"),
   // punkty charakterystyczne Lublina
   zamek: P("4,35 4,17 8,17 8,20 12,20 12,17 16,17 16,20 24,20 24,17 28,17 28,20 32,20 32,17 36,17 36,35", "m")
@@ -97,10 +106,16 @@ const WG_ID = { kamienica_bankowa: "kamienica", biurowiec_zana: "biurowiec", san
   zamek: "zamek", brama_krakowska: "brama_krakowska", wieza_trynitarska: "wieza", plac_po_farze: "ruiny", plac_litewski: "fontanna", csk: "csk", umcs: "uczelnia",
   kul: "uczelnia", politechnika_lubelska: "uczelnia", dworzec_metropolitalny: "dworzec_bus", arena: "stadion", lotnisko: "lotnisko", gorki_czechowskie: "gorki",
   trybunal: "trybunal", katedra: "katedra", brama_grodzka: "brama_grodzka", nowy_ratusz: "ratusz", teatr: "teatr", centrum_kultury: "klasztor", skansen: "wiatrak",
-  dworzec_glowny: "dworzec_pkp", most: "most", kosciol_czwartek: "kosciol", cmentarz_lipowa: "cmentarz" };
+  dworzec_glowny: "dworzec_pkp", most: "most", kosciol_czwartek: "kosciol", cmentarz_lipowa: "cmentarz", ubezpieczyciel: "ubezpieczenia" };
 const WG_RODZAJU = { bank: "bank", urzad: "urzad", poczta: "poczta", biuro: "biurowiec", nieruchomosci: "nieruchomosci", praca: "praca", dostawca: "dyskont", sklep: "sprzet",
-  szkola: "szkola", reklama: "reklama", uczelnia: "uczelnia", media: "media", lichwiarz: "lichwiarz", ubezpieczenia: "biurowiec", detektyw: "detektyw", gielda: "bank",
-  park: "park", woda: "woda", lokal: "lokal", dzialka: "dzialka" };
+  szkola: "szkola", reklama: "reklama", uczelnia: "uczelnia", media: "media", lichwiarz: "lichwiarz", ubezpieczenia: "ubezpieczenia", detektyw: "detektyw", gielda: "gielda",
+  park: "park", woda: "woda", dzialka: "dzialka" };
+
+// ikona lokalu: sześć wariantów do wyboru; IKONA_LOKALU to ten, który rysuje mapa
+export const WARIANTY_LOKALU = { lokal: "Budka z markizą", lokal_pita: "Kebab w bułce", lokal_rozen: "Rożen z mięsem", lokal_okienko: "Okienko z ladą",
+  lokal_neon: "Neon nad wejściem", lokal_rolka: "Kebab zawijany" };
+export const IKONA_LOKALU = "lokal";
+WG_RODZAJU.lokal = IKONA_LOKALU;
 
 // kształt tektury: kwadrat (budynki), koło (lokale drużyn), brak (punkty orientacyjne nadrukowane na planszy)
 const TEKTURA = {

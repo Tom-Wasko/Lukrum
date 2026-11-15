@@ -60,8 +60,10 @@ dlatego wybór lokalu jest w grupie „Twój lokal”. Wybrany lokal zostaje wyb
 Wspólne dla całej firmy są: reklama, promocje, bank, podatki, czas właściciela, ubezpieczenia i handel.
 
 > **Wskazówka.** Mapa miasta działa jak drugie menu: kliknij hurtownię, urząd albo park, a gra otworzy właściwą
-> zakładkę. Banki i giełda są w jednej kamienicy przy Krakowskim Przedmieściu, a biura rachunkowe, agencje reklamowe
-> i ubezpieczyciel w biurowcu przy Zana – kliknij budynek i wybierz firmę. Kliknięty lokal pokaże czynsz, cenę i strefę.
+> zakładkę. Sześć banków jest w jednej kamienicy przy Krakowskim Przedmieściu, a agencje reklamowe w biurowcu przy Zana –
+> kliknij budynek i wybierz firmę. Biura rachunkowe, ubezpieczyciel i parkiet maklerski mają osobne budynki. Kliknięty
+> lokal pokaże czynsz, cenę i strefę. Strefy gry to dziesięć kolorowych dzielnic; szare dzielnice są tylko tłem. Z daleka
+> widać same nazwy dzielnic i Twój lokal, a żetony budynków pojawiają się przy przybliżaniu.
 > Mapę przybliżasz kółkiem myszy, dwoma palcami, dwuklikiem albo przyciskami + i −, a przesuwasz, przeciągając.
 > Pasek skrótów na mapie prowadzi do Twojego lokalu, banków, hurtowni, raportu rundy i wysłania decyzji. Gra otwiera się na Dashboardzie
 > (podsumowanie firmy); wrócisz do niego, klikając logo LUKRUM w lewym górnym rogu.

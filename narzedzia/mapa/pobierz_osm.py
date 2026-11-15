@@ -2,7 +2,7 @@
 
 Pobiera (Overpass) granice dzielnic, wodę, zieleń, drogi i kolej, upraszcza je i zapisuje jako ścieżki SVG
 w metrach (rzut lokalny wokół środka miasta). Do tego geokoduje (Nominatim) lokale z lokale.yaml, miejsca
-z miasto.yaml i „serca” stref bez dzielnic. Dane © autorzy OpenStreetMap, licencja ODbL.
+z miasto.yaml i dodatkowe punkty charakterystyczne Lublina. Dane © autorzy OpenStreetMap, licencja ODbL.
 
 Uruchomienie z głównego folderu repo (wymaga PyYAML, czyli środowiska gry):
     gra/.venv/Scripts/python -X utf8 narzedzia/mapa/pobierz_osm.py [--bez-pamieci]
@@ -54,15 +54,6 @@ MIEJSCA = {
     "politechnika_lubelska": "Nadbystrzycka 38D, Lublin", "dworzec_metropolitalny": "Dworzec Lublin, Lublin",
     "arena": "Arena Lublin, Lublin", "lotnisko": "Port Lotniczy Lublin", "gorki_czechowskie": "Górki Czechowskie, Lublin",
 }
-# Strefy bez własnych dzielnic wycinamy z prawdziwej dzielnicy: Politechnika to pas Rur wzdłuż ul. Nadbystrzyckiej,
-# a dzielnicę Za Cukrownią dzielą między siebie Zygmuntowskie i Dworzec (każdy punkt idzie do bliższej strefy).
-SERCA = {"politechnika": "Nadbystrzycka 38, Lublin", "dworzec": "Plac Dworcowy, Lublin",
-         "zygmuntowskie": "Arena Lublin, Lublin"}
-OBSZARY = {
-    "politechnika": {"dzielnica": "Rury", "ulice": ["Nadbystrzycka"], "pas": 400},
-    "zygmuntowskie": {"dzielnica": "Za Cukrownią", "ulice": ["Aleje Zygmuntowskie"], "rywal": "dworzec"},
-    "dworzec": {"dzielnica": "Za Cukrownią", "ulice": [], "rywal": "zygmuntowskie"},
-}
 # punkty charakterystyczne Lublina poza danymi gry (tylko mapa): id, nazwa, zapytania do geokodera, opis
 DODATKOWE = [
     ("trybunal", "Trybunał Koronny", ["Trybunał Koronny, Lublin", "Rynek 1, Lublin"],
@@ -95,7 +86,6 @@ POPRAWKI = {"zemborzyce_1": (51.1915, 22.5290), "zemborzyce_3": (51.1830, 22.516
 # punkty charakterystyczne, które geokoder myli z innym miejscem albo stawia na lokalu z danych gry
 POPRAWKI_MIEJSC = {"nowy_ratusz": (51.2478, 22.5657), "dworzec_glowny": (51.2307, 22.5693)}
 POZA_MIASTEM = {"Świdnik Duży-Leśniczówka"}   # dzielnica sąsiedniej gminy w ramce pobierania
-SUROWE: dict[str, list] = {}   # nieuproszczone obrysy dzielnic (do wycinania stref)
 
 
 # --- sieć z pamięcią -------------------------------------------------------------------------------------------------
@@ -260,59 +250,6 @@ def sklej(linie: list[list[tuple[float, float]]]) -> list[list[tuple[float, floa
     return wynik
 
 
-def wygladz(p: list[tuple[float, float]], razy=2) -> list[tuple[float, float]]:
-    """Ścina rogi zamkniętego obrysu (Chaikin) – schodki siatki stają się łagodną linią."""
-    for _ in range(razy):
-        p = [q for a, b in zip(p, p[1:] + p[:1])
-             for q in ((0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]), (0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]))]
-    return p
-
-
-def odleglosc(x: float, y: float, odcinki: list, pkty: list) -> float:
-    naj = min((math.hypot(x - a, y - b) for a, b in pkty), default=1e9)
-    for (x1, y1), (x2, y2) in odcinki:
-        dx, dy = x2 - x1, y2 - y1
-        t = max(0.0, min(1.0, ((x - x1) * dx + (y - y1) * dy) / ((dx * dx + dy * dy) or 1e-9)))
-        naj = min(naj, math.hypot(x - x1 - t * dx, y - y1 - t * dy))
-    return naj
-
-
-def wytnij(obrys: list[tuple[float, float]], warunek, krok=15) -> list[tuple[float, float]]:
-    """Część wielokąta spełniająca warunek(x, y): siatka co `krok` m, obrys największego kawałka, wygładzony."""
-    x0, y0 = min(p[0] for p in obrys), min(p[1] for p in obrys)
-    ny = int((max(p[1] for p in obrys) - y0) / krok) + 1
-    pelne = set()
-    for j in range(ny):
-        y = y0 + (j + 0.5) * krok
-        przec = sorted(xa + (y - ya) * (xb - xa) / (yb - ya) for (xa, ya), (xb, yb) in zip(obrys, obrys[1:]) if (ya > y) != (yb > y))
-        for a, b in zip(przec[::2], przec[1::2]):
-            for i in range(int((a - x0) / krok), int((b - x0) / krok) + 1):
-                x = x0 + (i + 0.5) * krok
-                if a <= x <= b and warunek(x, y):
-                    pelne.add((i, j))
-    nast: dict[tuple, list] = {}
-    for i, j in pelne:   # krawędzie na granicy z pustym polem, zgodnie z ruchem wskazówek zegara
-        for (di, dj), a, b in (((0, -1), (i, j), (i + 1, j)), ((1, 0), (i + 1, j), (i + 1, j + 1)),
-                               ((0, 1), (i + 1, j + 1), (i, j + 1)), ((-1, 0), (i, j + 1), (i, j))):
-            if (i + di, j + dj) not in pelne:
-                nast.setdefault(a, []).append(b)
-    petle = []
-    while nast:
-        start = next(iter(nast))
-        petla, teraz = [start], start
-        while True:
-            dalej = nast[teraz].pop()
-            if not nast[teraz]:
-                del nast[teraz]
-            teraz = dalej
-            if teraz == start or teraz not in nast:
-                break
-            petla.append(teraz)
-        petle.append([(x0 + i * krok, y0 + j * krok) for i, j in petla])
-    naj = max(petle, key=pole)
-    return wygladz(uprosc(naj + naj[:1], krok * 0.8)[:-1])
-
-
 def dlugosc(p) -> float:
     return sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(p, p[1:]))
 
@@ -330,7 +267,6 @@ def dzielnice(pam) -> tuple[list[dict], list[float]]:
         obrysy = sorted(pierscienie(e), key=pole, reverse=True)
         if not obrysy or e["tags"].get("name") in POZA_MIASTEM:
             continue
-        SUROWE[e["tags"]["name"]] = obrysy[0]
         p = uprosc(obrysy[0], TOL["dzielnice"])
         for x, y in p:
             zasieg = [min(zasieg[0], x), min(zasieg[1], y), max(zasieg[2], x), max(zasieg[3], y)]
@@ -377,30 +313,6 @@ def glowne_drogi(pam) -> list[dict]:
     return overpass(f'[out:json][timeout:180];way["highway"~"^({wzor})$"]({ramka()});out geom;', pam)
 
 
-def obszary(pkt: dict, pam) -> dict:
-    """Kształty stref bez własnych dzielnic (OBSZARY): wycinek prawdziwej dzielnicy wokół ulic i lokali strefy."""
-    drogi_el = glowne_drogi(pam)
-    cechy = {}
-    for strefa, op in OBSZARY.items():
-        linie = [punkty(e) for e in drogi_el if e["tags"].get("name") in op["ulice"]]
-        pkty = [tuple(pkt["serca"][strefa])] + [tuple(p) for ident, p in pkt["lokale"].items()
-                                                if ident.startswith(strefa + "_") and math.dist(p, pkt["serca"][strefa]) < 1500]
-        cechy[strefa] = ([o for lin in linie for o in zip(lin, lin[1:])], pkty)
-    wynik = {}
-    for strefa, op in OBSZARY.items():
-        swoje = cechy[strefa]
-        if "pas" in op:
-            def warunek(x, y, swoje=swoje, pas=op["pas"]):
-                return odleglosc(x, y, *swoje) < pas
-        else:
-            def warunek(x, y, swoje=swoje, obce=cechy[op["rywal"]], pierwsza=strefa < op["rywal"]):
-                a, b = odleglosc(x, y, *swoje), odleglosc(x, y, *obce)
-                return a < b or (a == b and pierwsza)
-        p = wytnij(SUROWE[op["dzielnica"]], warunek)
-        wynik[strefa] = {"d": sciezka(p, True), "srodek": srodek(p), "pole": round(pole(p))}
-    return wynik
-
-
 def drogi(pam) -> tuple[list[dict], dict[str, str]]:
     el = glowne_drogi(pam)
     grupy: dict[tuple[str, str], list] = {}
@@ -434,7 +346,7 @@ def kolej(pam) -> str:
 
 def punkty_gry(pam) -> dict:
     lokale = yaml.safe_load((DANE / "lokale.yaml").read_text(encoding="utf-8"))["lokale"]
-    wynik = {"lokale": {}, "miejsca": {}, "serca": {}, "przyblizone": []}
+    wynik = {"lokale": {}, "miejsca": {}, "przyblizone": []}
 
     def xy(wsp):
         x, y = rzut(*wsp)
@@ -457,8 +369,6 @@ def punkty_gry(pam) -> dict:
             wynik["miejsca"][ident] = xy(wsp)
         else:
             print(f"  brak miejsca: {ident}", file=sys.stderr)
-    for strefa, pytanie in SERCA.items():
-        wynik["serca"][strefa] = xy(geokoduj(pytanie, pam))
     wynik["dodatkowe"] = []
     for ident, nazwa, pytania, opis in DODATKOWE:
         wsp = POPRAWKI_MIEJSC.get(ident) or next((w for w in (geokoduj(q, pam) for q in pytania) if w), None)
@@ -491,9 +401,6 @@ def main():
     tory = kolej(pam)
     print("lokale i miejsca…")
     pkt = punkty_gry(pam)
-    print("kształty stref…")
-    pkt["obszary"] = obszary(pkt, pam)
-    del pkt["serca"]
     wynik = {
         "zrodlo": "© autorzy OpenStreetMap, licencja ODbL (openstreetmap.org/copyright)",
         "pobrano": date.today().isoformat(),
@@ -505,8 +412,7 @@ def main():
     WYNIK.write_text(json.dumps(wynik, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"{WYNIK.relative_to(REPO)}: {WYNIK.stat().st_size // 1024} kB; dzielnic {len(dz)}, wód {len(zbiorniki)}, "
           f"zieleni {len(ziel)}, dróg {len(glowne)}, kafli ulic {len(ulice)}, lokali {len(pkt['lokale'])} "
-          f"(przybliżonych {len(pkt['przyblizone'])}), miejsc {len(pkt['miejsca'])} + {len(pkt['dodatkowe'])}; "
-          + ", ".join(f"{k} {v['pole'] // 10000} ha" for k, v in pkt["obszary"].items()))
+          f"(przybliżonych {len(pkt['przyblizone'])}), miejsc {len(pkt['miejsca'])} + {len(pkt['dodatkowe'])}")
 
 
 if __name__ == "__main__":
