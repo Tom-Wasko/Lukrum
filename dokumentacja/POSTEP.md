@@ -31,6 +31,14 @@ Wynik: `raporty/wyglad/plan.md` z kierunkiem wyglądu mapy, kolorami, czcionkami
 ## Etap 2 – prototyp mapy Lublina (cel: 16.11.2026)
 Mapa z danych OpenStreetMap (podpis „© autorzy OpenStreetMap”) z płynnym przybliżaniem. Wnętrze kebaba
 (lada, kuchnia, sala, zaplecze, biuro), pasek skrótów i obsługa telefonu.
+- [x] adresy i współrzędne budynków i zespołów z OSM (`gra/dane/mapa/budynki.yaml`: `adres`, `geo`)
+- [x] dane mapy z OSM: granice dzielnic, woda, zieleń, drogi, kolej (`narzedzia/mapa/pobierz_osm.py` →
+  `gra/panel_gracza/static/mapa/lublin.json`)
+- [x] silnik mapy z płynnym przybliżaniem i trzema poziomami szczegółów (`gra/panel_gracza/static/mapa/`)
+- [x] budynki-ikony, zespoły (kamienica bankowa, biurowiec przy Zana), lokale, parki ze zdarzeniami, warstwy
+- [x] pasek skrótów (na telefonie na dole), trzy palety × jasny/ciemny ze wspólnych zmiennych
+- [ ] wnętrza po kliknięciu budynku (strona mechanik; do tego czasu otwiera się dotychczasowa zakładka)
+- [ ] położenia lokali w danych gry (dziś w `lublin.json`), boty i billboardy na mapie, przegląd autora
 
 ## Etap 3 – wszystkie miejsca na mapie
 Banki, urzędy, hurtownie, giełda i pozostałe strefy zamiast zakładek. Nawiązania literackie. Boty na mapie.

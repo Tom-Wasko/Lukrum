@@ -13,7 +13,7 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 |---|---|---|
 | 1 | Gra pod nową nazwą, nowa dokumentacja | zrobione, przegląd autora |
 | 1½ | Planowanie nowego wyglądu | do zrobienia |
-| 2 | Prototyp mapy Lublina z przybliżaniem | do zrobienia |
+| 2 | Prototyp mapy Lublina z przybliżaniem | w toku: nowa mapa na granicach dzielnic z OpenStreetMap, budynki-ikony, pasek skrótów |
 | 3 | Wszystkie miejsca w grze na mapie | do zrobienia |
 | 4 | Scenariusze lekcji dla nauczyciela | do zrobienia |
 
@@ -52,6 +52,10 @@ szkolnym Microsoft jest opisane w [`gra/LOGOWANIE_MICROSOFT.md`](gra/LOGOWANIE_M
 
 LUKRUM to gra edukacyjna. Nazwy prawdziwych firm i miejsc służą tylko do oddania realiów Lublina. Oferty, ceny,
 oprocentowania i zdarzenia w grze są fikcyjne. Gra nie jest związana z tymi firmami ani przez nie wspierana.
+
+Mapa Lublina w grze korzysta z danych © autorzy [OpenStreetMap](https://www.openstreetmap.org/copyright) (licencja ODbL):
+granice dzielnic, woda, zieleń, drogi i kolej. Przetworzone dane są w `gra/panel_gracza/static/mapa/lublin.json`,
+a skrypt, który je pobiera, to `narzedzia/mapa/pobierz_osm.py`.
 
 ## Autor
 

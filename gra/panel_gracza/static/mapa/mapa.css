@@ -1,0 +1,198 @@
+/* Nowa mapa Lublina (static/mapa/lublin.js). Kolory i kroje TYLKO ze zmiennych static/motywy/zmienne.css
+   (--papier, --tusz, --akcent, --akcent-2, --zysk, --strata, --uwaga, --g-*, --font-*), we wszystkich trzech paletach
+   × jasny/ciemny. Stan nigdy samym kolorem: lokale różnią się ramką i znakiem (★ ✓), uwaga ma „!”.
+   --ramka pomijamy celowo: stary układ panelu (motywy/grafik.css) używa tej samej nazwy. */
+
+.lmapa {
+  --k: 0.06;                       /* px na metr – ustawia lublin.js */
+  --rozm: 30px;                    /* bok znacznika */
+  --kreska: color-mix(in srgb, var(--tusz) 55%, var(--papier));
+  --blady: color-mix(in srgb, var(--tusz) 22%, var(--papier));
+  --lad: color-mix(in srgb, var(--papier) 94%, var(--g-drewno2));
+  position: relative; overflow: hidden; height: clamp(440px, calc(100vh - 300px), 920px);
+  background: color-mix(in srgb, var(--papier) 82%, var(--tusz)); color: var(--tusz);
+  border: max(2px, var(--ramka-grubosc)) solid var(--tusz); border-radius: 6px;
+  font-family: var(--font-tekst); touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab;
+}
+.lmapa.przesuwana { cursor: grabbing; }
+.lmapa.przesuwana .lm-znak { pointer-events: none; }
+.lmapa:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+.lmapa-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.lmapa-svg path, .lmapa-svg circle { vector-effect: non-scaling-stroke; }
+
+/* --- teren --- */
+.lm-miasto { fill: var(--lad); stroke: var(--tusz); stroke-width: 5; stroke-linejoin: round; }
+.lm-tlo { fill: var(--lad); stroke: none; }
+.lm-strefa { stroke: none; }
+.lm-t1 { fill: color-mix(in srgb, var(--akcent) 34%, var(--papier)); }
+.lm-t2 { fill: color-mix(in srgb, var(--akcent-2) 36%, var(--papier)); }
+.lm-t3 { fill: color-mix(in srgb, var(--uwaga) 36%, var(--papier)); }
+.lm-t4 { fill: color-mix(in srgb, var(--zysk) 34%, var(--papier)); }
+.lm-serce { stroke: var(--tusz); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.warstwa .lm-strefa { fill: color-mix(in srgb, var(--akcent) calc(12% + var(--w, 0) * 62%), var(--papier)); }
+.lm-granice { fill: none; stroke: var(--kreska); stroke-width: 1.2; stroke-dasharray: 2 3; }
+.lm-zielen { stroke: none; }
+.lm-las { fill: color-mix(in srgb, var(--g-zielen2) 26%, var(--papier)); }
+.lm-laka { fill: color-mix(in srgb, var(--g-zielen) 16%, var(--papier)); }
+.lm-park { fill: color-mix(in srgb, var(--g-zielen) 58%, var(--papier)); }
+.lm-woda { fill: var(--g-szklo); stroke: color-mix(in srgb, var(--g-szklo) 60%, var(--tusz)); stroke-width: 1; }
+.lm-rzeka { fill: none; stroke: var(--g-szklo); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* --- drogi i kolej: jasny pas z ciemnym obrysem, szerokość w pikselach ekranu --- */
+.lm-droga, .lm-droga-obrys, .lm-uliczka, .lm-kolej, .lm-kolej-obrys { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.lm-droga { stroke: var(--g-karta); }
+.lm-droga-obrys { stroke: var(--kreska); }
+.lm-ekspresowa.lm-droga { stroke: color-mix(in srgb, var(--uwaga) 30%, var(--g-karta)); stroke-width: 3; }
+.lm-ekspresowa.lm-droga-obrys { stroke-width: 5; }
+.lm-glowna.lm-droga { stroke-width: 2.2; }
+.lm-glowna.lm-droga-obrys { stroke-width: 4; }
+.lm-zbiorcza, .lm-lokalna, .lm-uliczka { display: none; }
+.lm-kolej-obrys { stroke: var(--tusz); stroke-width: 2.4; }
+.lm-kolej { stroke: var(--papier); stroke-width: 1.2; stroke-dasharray: 7 7; stroke-linecap: butt; }
+.lm-ulice-napisy { display: none; }
+.lm-ulica-napis { font: calc(11px * var(--skala-tekstu, 1) / var(--k)) var(--font-szyld); letter-spacing: .04em; text-anchor: middle;
+  fill: var(--tusz); stroke: var(--g-karta); stroke-width: 3px; paint-order: stroke; stroke-linejoin: round; }
+
+[data-poziom="2"] .lm-zbiorcza, [data-poziom="3"] .lm-zbiorcza { display: inline; }
+[data-poziom="2"] .lm-zbiorcza.lm-droga { stroke-width: 1.6; }
+[data-poziom="2"] .lm-zbiorcza.lm-droga-obrys { stroke-width: 3; }
+[data-poziom="2"] .lm-glowna.lm-droga { stroke-width: 3.4; }
+[data-poziom="2"] .lm-glowna.lm-droga-obrys { stroke-width: 5.4; }
+[data-poziom="2"] .lm-ekspresowa.lm-droga { stroke-width: 4.5; }
+[data-poziom="2"] .lm-ekspresowa.lm-droga-obrys { stroke-width: 6.5; }
+[data-poziom="2"] .lm-ulice-napisy { display: inline; }
+[data-poziom="2"] .lm-ulica-napis.lm-krotka { display: none; }
+
+[data-poziom="3"] .lm-lokalna, [data-poziom="3"] .lm-uliczka, [data-poziom="3"] .lm-ulice-napisy { display: inline; }
+[data-poziom="3"] .lm-uliczka { stroke: var(--g-karta); stroke-width: 4; }
+[data-poziom="3"] .lm-lokalna.lm-droga { stroke-width: 6; }
+[data-poziom="3"] .lm-lokalna.lm-droga-obrys { stroke-width: 8; }
+[data-poziom="3"] .lm-zbiorcza.lm-droga { stroke-width: 8; }
+[data-poziom="3"] .lm-zbiorcza.lm-droga-obrys { stroke-width: 10; }
+[data-poziom="3"] .lm-glowna.lm-droga { stroke-width: 11; }
+[data-poziom="3"] .lm-glowna.lm-droga-obrys { stroke-width: 13; }
+[data-poziom="3"] .lm-ekspresowa.lm-droga { stroke-width: 13; }
+[data-poziom="3"] .lm-ekspresowa.lm-droga-obrys { stroke-width: 15; }
+[data-poziom="3"] .lm-granice { stroke-width: 2; }
+[data-poziom="3"] .lm-strefa { fill-opacity: .5; }
+
+/* --- napisy na mapie --- */
+.lmapa-nakladka { position: absolute; inset: 0; pointer-events: none; }
+.lm-napis { position: absolute; left: 0; top: 0; pointer-events: none; white-space: nowrap; text-align: center; }
+.lm-napis::before { content: ""; }
+.lm-strefa-napis { margin: -0.7em 0 0; translate: -50% 0; font: calc(15px * var(--skala-tekstu, 1))/1.1 var(--font-gruby); letter-spacing: .03em;
+  text-transform: uppercase; color: var(--tusz);
+  text-shadow: 0 0 3px var(--papier), 0 0 3px var(--papier), 1px 1px 0 var(--papier), -1px -1px 0 var(--papier), 1px -1px 0 var(--papier), -1px 1px 0 var(--papier); }
+.lm-strefa-napis.lm-mala { font-size: calc(11px * var(--skala-tekstu, 1)); }
+.lm-strefa-napis small { display: block; width: max-content; margin: 4px auto 0; padding: 2px 8px; font: 700 calc(12px * var(--skala-tekstu, 1))/1.3 var(--font-tekst);
+  text-transform: none; letter-spacing: 0; text-shadow: none; color: var(--tusz); background: var(--g-karta); border: 1px solid var(--tusz); border-radius: 10px; }
+.lm-tlo-napis, .lm-woda-napis { translate: -50% -50%; font: calc(11px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--kreska); display: none; }
+.lm-woda-napis { font-style: italic; color: color-mix(in srgb, var(--g-szklo) 35%, var(--tusz)); display: block; }
+[data-poziom="2"] .lm-tlo-napis { display: block; }
+[data-poziom="2"] .lm-strefa-napis { font-size: calc(20px * var(--skala-tekstu, 1)); opacity: .8; }
+[data-poziom="2"] .lm-strefa-napis.lm-mala { font-size: calc(15px * var(--skala-tekstu, 1)); }
+[data-poziom="3"] .lm-strefa-napis { font-size: calc(26px * var(--skala-tekstu, 1)); opacity: .32; }
+
+/* --- znaczniki: przycisk o zerowym rozmiarze w punkcie mapy, kafel wyśrodkowany na nim --- */
+.lm-znak { position: absolute; left: 0; top: 0; width: 0; height: 0; margin: 0; padding: 0; border: 0; background: none; color: var(--tusz);
+  font: inherit; cursor: pointer; pointer-events: auto; overflow: visible; min-height: 0 !important; }
+.lm-kafel { position: absolute; left: 0; top: 0; translate: -50% -50%; display: grid; place-items: center; box-sizing: border-box;
+  width: var(--rozm); height: var(--rozm); border: 2px solid var(--tusz); border-radius: 22%; background: var(--g-karta); color: var(--tusz);
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent); transition: scale .12s; }
+.lm-kafel svg { width: 66%; height: 66%; }
+.lm-znak:hover { z-index: 20 !important; }
+.lm-znak:focus-visible { outline: none; z-index: 21 !important; }
+.lm-znak:hover .lm-kafel { scale: 1.15; }
+.lm-znak:focus-visible .lm-kafel { outline: var(--ognisko); outline-offset: 3px; scale: 1.15; }
+.lm-podpis { position: absolute; left: 0; top: calc(var(--rozm) / 2 + 5px); translate: -50% 0; display: none; white-space: nowrap; max-width: 260px; overflow: hidden;
+  text-overflow: ellipsis; padding: 1px 7px; font: calc(12px * var(--skala-tekstu, 1))/1.4 var(--font-szyld); letter-spacing: .03em; color: var(--tusz);
+  background: var(--g-karta); border: 1px solid var(--tusz); border-radius: 3px; }
+.lm-znak:hover .lm-podpis, .lm-znak:focus-visible .lm-podpis { display: block; }
+.lm-plakietka, .lm-ile { position: absolute; right: -8px; top: -8px; display: grid; place-items: center; min-width: 16px; height: 16px; padding: 0 3px; box-sizing: border-box;
+  font: 700 11px/1 var(--font-tekst); font-style: normal; color: var(--papier); background: var(--tusz); border: 1px solid var(--papier); border-radius: 8px; }
+.lm-plakietka.lm-uwaga { background: var(--strata); }
+.lm-ocena { position: absolute; left: 0; top: calc(var(--rozm) / -2 - 17px); translate: -50% 0; padding: 0 5px; white-space: nowrap; display: none;
+  font: 700 11px/1.4 var(--font-tekst); color: var(--tusz); background: var(--g-karta); border: 1px solid var(--tusz); border-radius: 8px; }
+
+/* rodzaje: budynek – kafel; zespół – większy kafel z liczbą firm; lokal – koło; park i woda – zielony romb; miejsce – mały znak */
+.lm-zespol .lm-kafel { width: calc(var(--rozm) * 1.3); height: calc(var(--rozm) * 1.3); background: var(--akcent-2); color: var(--papier); }
+.lm-zespol .lm-podpis { top: calc(var(--rozm) * 0.65 + 5px); }
+.lm-zielony .lm-kafel { border-radius: 50% 50% 50% 8%; background: color-mix(in srgb, var(--g-zielen) 45%, var(--g-karta)); }
+.lm-miejsce .lm-kafel { width: calc(var(--rozm) * 0.72); height: calc(var(--rozm) * 0.72); border-width: 1px; border-radius: 3px; box-shadow: none;
+  background: color-mix(in srgb, var(--g-karta) 80%, transparent); color: var(--kreska); }
+.lm-miejsce .lm-podpis { top: calc(var(--rozm) * 0.36 + 4px); }
+.lm-lokal .lm-kafel { border-radius: 50%; }
+.lm-wolny .lm-kafel { border-style: dashed; background: var(--papier); box-shadow: none; }
+.lm-zajety .lm-kafel { background: var(--firma, var(--blady)); color: var(--g-biel); border-color: var(--tusz); }
+.lm-zajety .lm-kafel svg { filter: drop-shadow(0 0 1px var(--g-czern)) drop-shadow(0 0 1px var(--g-czern)); }
+.lm-moj .lm-kafel, .lm-wybrany .lm-kafel { width: calc(var(--rozm) * 1.25); height: calc(var(--rozm) * 1.25); background: var(--akcent); color: var(--papier);
+  border-width: 3px; box-shadow: 0 0 0 3px var(--papier), 0 0 0 5px var(--tusz); }
+.lm-moj .lm-podpis, .lm-wybrany .lm-podpis { top: calc(var(--rozm) * 0.63 + 8px); }
+
+/* poziomy: z daleka małe znaki bez miejsc orientacyjnych, z bliska duże i podpisane */
+[data-poziom="1"] { --rozm: 15px; }
+[data-poziom="1"] .lm-miejsce, [data-poziom="1"] .lm-strefa-napis.lm-mala { display: none; }
+[data-poziom="1"] :is(.lm-budynek, .lm-zielony, .lm-lokal):not(.lm-zespol, .lm-moj, .lm-wybrany) .lm-kafel svg { display: none; }
+[data-poziom="1"] .lm-zespol .lm-kafel { width: 24px; height: 24px; }
+[data-poziom="1"] :is(.lm-moj, .lm-wybrany) .lm-kafel { width: 24px; height: 24px; }
+[data-poziom="1"] .lm-strefa-napis { font-size: calc(12px * var(--skala-tekstu, 1)); z-index: 10; }
+[data-poziom="1"] .lm-kafel { border-width: 1.5px; box-shadow: none; }
+[data-poziom="1"] .lm-moj .lm-kafel, [data-poziom="1"] .lm-wybrany .lm-kafel { box-shadow: 0 0 0 2px var(--papier), 0 0 0 3.5px var(--tusz); border-width: 2px; }
+[data-poziom="1"] .lm-plakietka, [data-poziom="1"] .lm-ile { min-width: 13px; height: 13px; font-size: 9px; right: -7px; top: -7px; }
+[data-poziom="2"] { --rozm: 32px; }
+[data-poziom="2"] :is(.lm-zespol, .lm-moj, .lm-wybrany) .lm-podpis, [data-poziom="2"] .lm-ocena { display: block; }
+[data-poziom="3"] { --rozm: 44px; }
+[data-poziom="3"] .lm-podpis, [data-poziom="3"] .lm-ocena { display: block; }
+[data-paleta="wysoka"] .lmapa[data-poziom="2"] { --rozm: 44px; }
+[data-paleta="wysoka"] .lmapa[data-poziom="3"] { --rozm: 52px; }
+[data-paleta="wysoka"] .lm-kafel { border-width: 3px; }
+
+/* --- pasek skrótów (same ikony, rozwija się do nazw), przybliżanie, podpis OSM --- */
+.lm-pasek { position: absolute; left: 10px; top: 10px; z-index: 30; display: flex; flex-direction: column; gap: 6px; }
+.lm-skrot, .lm-zoom button { display: flex; align-items: center; gap: 8px; height: 44px; min-width: 44px; padding: 0 10px; box-sizing: border-box; cursor: pointer;
+  color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent);
+  font: calc(14px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .04em; text-transform: uppercase; }
+.lm-skrot svg, .lm-zoom svg { flex: none; }
+.lm-skrot span { max-width: 0; overflow: hidden; white-space: nowrap; transition: max-width .18s; }
+.lm-pasek:hover .lm-skrot span, .lm-pasek:focus-within .lm-skrot span { max-width: 220px; }
+.lm-skrot:hover, .lm-zoom button:hover { background: var(--akcent); color: var(--papier); }
+.lm-skrot:focus-visible, .lm-zoom button:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+.lm-zoom { position: absolute; right: 10px; top: 10px; z-index: 30; display: flex; flex-direction: column; gap: 6px; }
+.lm-zoom button { justify-content: center; padding: 0; width: 44px; }
+.lm-osm { position: absolute; right: 0; bottom: 0; z-index: 30; padding: 2px 8px; font: 11px/1.5 var(--font-tekst); color: var(--tusz);
+  background: color-mix(in srgb, var(--papier) 85%, transparent); text-decoration: none; border-top-left-radius: 6px; }
+.lm-osm:hover { text-decoration: underline; }
+
+/* --- pod mapą i w oknach (elementy dotychczasowego panelu, więc tylko układ) --- */
+.lm-ustawienia .lm-stara { margin-left: auto; }
+.lm-legenda { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-top: 12px; font-size: 12px; }
+.lm-legenda span { display: inline-flex; align-items: center; gap: 6px; }
+.lm-wz { display: inline-grid; place-items: center; width: 16px; height: 16px; box-sizing: border-box; font: 700 10px/1 var(--font-tekst); font-style: normal;
+  color: var(--papier); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 22%; }
+.lm-wz-moj, .lm-wz-wybrany { background: var(--akcent); border-radius: 50%; }
+.lm-wz-wolny { background: var(--papier); border-style: dashed; border-radius: 50%; }
+.lm-wz-zajety { background: var(--blady, color-mix(in srgb, var(--tusz) 30%, var(--papier))); border-radius: 50%; }
+.lm-wz-zielony { background: color-mix(in srgb, var(--g-zielen) 45%, var(--g-karta)); border-radius: 50% 50% 50% 8%; }
+.lm-wz-miejsce { border-width: 1px; border-radius: 3px; width: 12px; height: 12px; }
+.lm-hol { display: grid; gap: 8px; margin-top: 10px; }
+.lm-szyld { display: flex; align-items: center; gap: 12px; padding: 10px 12px; text-align: left; cursor: pointer; font: inherit; color: inherit;
+  background: transparent; border: 2px solid currentColor; border-radius: 6px; }
+.lm-szyld:hover, .lm-szyld:focus-visible { background: color-mix(in srgb, currentColor 10%, transparent); }
+.lm-szyld svg { flex: none; }
+.lm-szyld b { display: block; }
+.lm-szyld small { display: block; opacity: .75; }
+
+/* --- telefon: pasek skrótów na dole, mapa na prawie cały ekran --- */
+@media (max-width: 700px) {
+  .lmapa { height: calc(100dvh - 190px); min-height: 380px; }
+  .lm-pasek { left: 0; right: 0; top: auto; bottom: 22px; flex-direction: row; justify-content: center; gap: 4px; padding: 0 6px; }
+  .lm-skrot { flex: 1 1 0; justify-content: center; max-width: 72px; padding: 0; }
+  .lm-skrot span { display: none; }
+  .lm-zoom button[data-z="1.6"], .lm-zoom button[data-z="0.625"] { display: none; }   /* na telefonie szczypanie */
+  [data-poziom="1"] .lm-strefa-napis { font-size: calc(9px * var(--skala-tekstu, 1)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lm-kafel, .lm-skrot span { transition: none; }
+}
