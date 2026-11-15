@@ -22,8 +22,9 @@ Gałąź `mapa-osm`. Nowa mapa jest domyślna w zakładce „Mapa miasta”; prz
 2. **Położenia lokali.** `Lokal` w `schematy.py` nie ma `geo`, więc 38 położeń leży w `lublin.json` (klucz `lokale`).
    Propozycja: pole `geo` w `lokale.yaml`, wtedy mapa czyta je z danych gry. Dwa lokale nad Zalewem
    (`zemborzyce_1`, `zemborzyce_3`) mają położenie wpisane z ręki – ul. Żeglarska wypada w OSM poza miastem.
-3. **Strefy bez dzielnic** (pytanie autora z 14.11): Politechnika, Dworzec i Zygmuntowskie rysujemy jako koła
-   o promieniu 300–330 m wokół „serca”. Większe koła nachodziły na siebie.
+3. **Strefy bez dzielnic** (pytanie autora z 14.11): zamiast kół mają kształt wycięty z prawdziwej dzielnicy.
+   Politechnika to pas Rur do 400 m od ul. Nadbystrzyckiej (124 ha). Dzielnicę Za Cukrownią dzielą Zygmuntowskie
+   (202 ha) i Dworzec (39 ha): każdy punkt należy do strefy, której ulica, „serce” albo lokal jest bliżej.
 4. **`miejsce` sklepów sieciowych** poprawione na prawdziwe położenia z OSM (Makro – Chemiczna, Eurocash –
    Łęczyńska, Selgros – Jana Pawła II, Auchan – Witosa, Biedronka – Nałęczowska, Lidl – Romantyczna, Stokrotka –
    Braci Wieniawskich, Rożen – Turystyczna, stolarnia – Krochmalna). `strefa` bez zmian. Do sprawdzenia przez autora:
@@ -33,6 +34,26 @@ Gałąź `mapa-osm`. Nowa mapa jest domyślna w zakładce „Mapa miasta”; prz
    W palecie wysokiej widoczności `dostepnosc.css` pogrubia ramki także w starym panelu.
 6. **Opisy budynków** w `budynki.yaml` kończą się odsyłaczami dla twórców („(dane/mapa/banki.yaml)”). Mapa je wycina
    przy wyświetlaniu; lepiej usunąć je z danych.
+
+## Pionki i punkty charakterystyczne (15.11 wieczorem)
+- Znaczniki to ilustrowane pionki na podstawkach (`ikony.js: zeton`), 45 rysunków: osobne dla banku, kamienicy,
+  biurowca, urzędu, sanepidu, poczty, hurtowni, dyskontu, piekarni, zakładów mięsnych, sklepów, parku, szklarni,
+  żaglówki na Zalewie, lokalu i działki oraz dla każdego zabytku.
+- 11 nowych punktów Lublina poza danymi gry (`lublin.json: dodatkowe`, lista w `pobierz_osm.py: DODATKOWE`):
+  Trybunał Koronny, Archikatedra, Brama Grodzka, Nowy Ratusz, Teatr im. Osterwy, Centrum Kultury, Muzeum Wsi
+  Lubelskiej, Dworzec Lublin Główny, most Lutosławskiego, kościół na Czwartku, cmentarz przy Lipowej.
+  Opisy są moje i **wymagają sprawdzenia przez autora** (daty i fakty pisałem z pamięci). Majdanka nie ma,
+  zgodnie z decyzją z 8.11. Nowy Ratusz i Dworzec Główny mają współrzędne wpisane z ręki.
+
+## Styl PRL i napisy (15.11, po uwagach kolegi)
+- Znaczniki to tekturowe żetony: kwadratowe dla budynków, okrągłe dla lokali, parków i wody. Piktogram jest
+  w płaskim druku w kilku kolorach palety, z grubym konturem i lekko przesuniętym kolorem. Punkty orientacyjne
+  nie mają tektury, są narysowane tuszem wprost na planszy.
+- Nazwy są na emaliowanych tabliczkach. Miejsce każdej wybiera `lublin.js: uloz`: pod, nad albo z boku żetonu,
+  tak żeby nie zasłaniała żetonu, innej tabliczki, przycisków mapy ani nie wychodziła za ramkę. Ważniejsze
+  wybierają pierwsze (Twój lokal, strefy, zespoły, budynki, lokale, punkty orientacyjne, nazwy dzielnic).
+  Tabliczka, która się nie mieści, znika do czasu przybliżenia; po najechaniu pokazuje się zawsze.
+- Progi poziomów: 0,09 i 0,3 px na metr.
 
 ## Czego nie ma
 - wnętrz (strona mechanik), botów i billboardów na mapie, ruchu ulicznego i pory dnia ze starej mapy;

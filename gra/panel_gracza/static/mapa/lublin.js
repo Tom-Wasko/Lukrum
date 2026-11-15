@@ -10,7 +10,7 @@ import { ikona, zeton } from "./ikony.js";
 import { utworzWidok } from "./widok.js";
 
 const ADRES = (plik) => new URL(plik, import.meta.url).href;
-const POZIOMY = [0.12, 0.4];   // px na metr: poniżej – całe miasto, pomiędzy – dzielnica, powyżej – ulica i budynek
+const POZIOMY = [0.09, 0.3];   // px na metr: poniżej – całe miasto, pomiędzy – dzielnica, powyżej – ulica i budynek
 const PALETY = { bar: "Bar mleczny", pewex: "Pewex", wysoka: "Wysoka widoczność" };
 // odcień strefy (4 odcienie z palety; sąsiednie strefy mają różne) – strefę i tak podpisuje nazwa, nie sam kolor
 const ODCIEN = { stare_miasto: 1, centrum: 2, akademickie: 3, politechnika: 1, dworzec: 3, zygmuntowskie: 2, lsm_czuby: 4,
@@ -22,6 +22,7 @@ const SKROTY = [["lokal", "lokal", "Mój lokal"], ["bank", "bank", "Banki"], ["h
 const DALEKO = new Set(["zamek", "arena", "lotnisko", "gorki_czechowskie", "skansen", "dworzec_glowny", "plac_litewski"]);
 
 let DANE = null, BLAD = null, WIDOK = null, widok = null, C = null, P = null, ZNAKI = [], poziom = 0, ulice = false;
+let ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0;
 
 // --- style i dane (raz) ---
 (function podlaczStyle() {
@@ -82,7 +83,7 @@ function rysunek(M, wart, zakres) {
   const klasa = (kl) => D.drogi.filter((x) => x.klasa === kl).map((x) => x.d).join("");
   const drogi = ["lokalna", "zbiorcza", "glowna", "ekspresowa"].map((kl) => { const d = klasa(kl); return `<path class="lm-droga-obrys lm-${kl}" d="${d}"/><path class="lm-droga lm-${kl}" d="${d}"/>`; }).join("");
   const napisy = D.drogi.filter((x) => x.napis).map((x, i) =>
-    `<path id="lm-ul-${i}" d="${x.napis}" fill="none"/><text class="lm-ulica-napis${x.dl < 900 ? " lm-krotka" : ""}" dy=".35em"><textPath href="#lm-ul-${i}" startOffset="50%">${esc(x.nazwa)}</textPath></text>`).join("");
+    `<path id="lm-ul-${i}" d="${x.napis}" fill="none"/><text class="lm-ulica-napis${x.dl < 1600 ? " lm-krotka" : ""}" dy=".35em"><textPath href="#lm-ul-${i}" startOffset="50%">${esc(x.nazwa)}</textPath></text>`).join("");
   return `<g id="lmapa-swiat"><path class="lm-miasto" d="${D.dzielnice.map((dz) => dz.d).join("")}"/>${dzielnice}${serca}
     <path class="lm-zielen lm-las" d="${zielen("las")}"/><path class="lm-zielen lm-laka" d="${zielen("laka")}${zielen("cmentarz")}"/><path class="lm-zielen lm-park" d="${zielen("park")}"/>
     <path class="lm-woda" d="${D.woda.map((w) => w.d).join("")}"/><path class="lm-rzeka" d="${D.rzeki.map((r) => r.d).join("")}"/>
@@ -91,8 +92,13 @@ function rysunek(M, wart, zakres) {
 }
 
 // --- znaczniki (HTML nad rysunkiem – prawdziwe przyciski, stały rozmiar na ekranie) ---
+// szyld: nazwa bez dopisków w nawiasach; długa łamie się na dwa równe wiersze (tabliczka nie szersza niż napis)
+function szyld(nazwa) {
+  const n = String(nazwa).replace(/\s*\([^)]*\)\s*$/, "");
+  return `<span class="lm-podpis lm-schowany"${n.length > 20 ? ` style="max-width:${(Math.ceil(n.length / 2) * 0.6 + 2.5).toFixed(1)}em"` : ""}>${esc(n)}</span>`;
+}
 const znak = (x, y, klasa, akcja, id, nazwa, opis, tresc, kolej = 1) =>
-  `<button type="button" class="lm-znak ${klasa}" data-akcja="${akcja}" data-id="${esc(id)}" data-x="${x}" data-y="${y}" style="z-index:${kolej}" aria-label="${esc(nazwa)}. ${esc(opis)}" title="${esc(opis)}">${tresc}<span class="lm-podpis">${esc(nazwa)}</span></button>`;
+  `<button type="button" class="lm-znak ${klasa}" data-akcja="${akcja}" data-id="${esc(id)}" data-x="${x}" data-y="${y}" style="z-index:${kolej}" aria-label="${esc(nazwa)}. ${esc(opis)}" title="${esc(opis)}">${tresc}${szyld(nazwa)}</button>`;
 
 function znakiBudynkow(c) {
   const M = c.kat.mapa, widoczne = P.budynkiGry(c.v, M.budynki), sprawy = P.parkiZeSprawa(c.v), html = [];
@@ -107,7 +113,7 @@ function znakiBudynkow(c) {
     const zielony = b.rodzaj === "park" || b.rodzaj === "woda", sprawa = sprawy.has(b.id);
     const rada = b.zakladka === "zdarzenia" ? (sprawa ? "W tej rundzie coś się tu dzieje – kliknij." : "Kliknij, żeby zobaczyć, co dzieje się w parku.") : "Kliknij, żeby wejść.";
     html.push(znak(...xy(b.geo), zielony ? "lm-zielony" : "lm-budynek", "lmapa-wejdz", b.id, b.nazwa, `${opisDla(b.opis)} ${rada}`,
-      `<span class="lm-kafel">${zeton(b.id, b.rodzaj)}${sprawa ? `<i class="lm-plakietka lm-uwaga" aria-hidden="true">!</i>` : ""}</span>`, sprawa ? 5 : zielony ? 2 : 3));
+      `<span class="lm-kafel">${zeton(b.id, b.rodzaj, zielony ? "kolo" : "kwadrat")}${sprawa ? `<i class="lm-plakietka lm-uwaga" aria-hidden="true">!</i>` : ""}</span>`, sprawa ? 5 : zielony ? 2 : 3));
   }
   return html.join("");
 }
@@ -127,14 +133,14 @@ function znakiLokali(c) {
     const plakietka = stan === "moj" ? "★" : stan === "wybrany" ? "✓" : "";
     const ocena = op && P.UST.opinie ? `<span class="lm-ocena" aria-hidden="true">★ ${op.ocena.toFixed(1).replace(".", ",")}</span>` : "";
     return znak(...DANE.lokale[l.id], `lm-lokal lm-${stan}`, moje ? "lmapa-wejdz" : "lmapa-lokal", l.id, l.nazwa, opis,
-      `<span class="lm-kafel"${kolor ? ` style="--firma:${esc(kolor)}"` : ""}>${zeton(null, dzialka ? "dzialka" : "lokal")}${plakietka ? `<i class="lm-plakietka" aria-hidden="true">${plakietka}</i>` : ""}</span>${ocena}`,
+      `<span class="lm-kafel"${kolor ? ` style="--firma:${esc(kolor)}"` : ""}>${zeton(null, dzialka ? "dzialka" : "lokal", "kolo")}${plakietka ? `<i class="lm-plakietka" aria-hidden="true">${plakietka}</i>` : ""}</span>${ocena}`,
       moje ? 8 : stan === "wolny" ? 6 : 5);
   }).join("");
 }
 
 // punkty orientacyjne: miejsca z miasto.yaml i dodatkowe punkty Lublina z danych mapy (lublin.json: dodatkowe)
 const miejsce = (xyM, akcja, m) => znak(...xyM, `lm-miejsce${DALEKO.has(m.id) ? " lm-daleko" : ""}`, akcja, m.id, m.nazwa,
-  `${m.opis} Punkt orientacyjny – nie wpływa na grę.`, `<span class="lm-kafel">${zeton(m.id)}</span>`, 1);
+  `${m.opis} Punkt orientacyjny – nie wpływa na grę.`, `<span class="lm-kafel">${zeton(m.id, null, "")}</span>`, 1);
 const znakiMiejsc = (M) => (M.miasto?.miejsca || []).filter((m) => DANE.miejsca[m.id]).map((m) => miejsce(DANE.miejsca[m.id], "lmapa-miejsce", m)).join("")
   + (DANE.dodatkowe || []).map((m) => miejsce(m.xy, "lmapa-punkt", m)).join("");
 
@@ -146,11 +152,11 @@ function napisy(M, wart) {
     const p = D.obszary?.[k]?.srodek || (srodki[k] && [0, 1].map((i) => srodki[k].reduce((a, q) => a + q[i], 0) / srodki[k].length));
     if (!p) continue;
     const wartosc = wart ? `<small>${esc(wart[k] ? wart[k][1] : "brak danych")}</small>` : "";
-    html += `<div class="lm-napis lm-strefa-napis${D.obszary?.[k] ? " lm-mala" : ""}" data-x="${p[0]}" data-y="${p[1]}">${esc(s.nazwa)}${wartosc}</div>`;
+    html += `<div class="lm-napis lm-schowany lm-strefa-napis${D.obszary?.[k] ? " lm-mala" : ""}" data-x="${p[0]}" data-y="${p[1]}">${esc(s.nazwa)}${wartosc}</div>`;
   }
-  for (const dz of D.dzielnice) if (!czyja[dz.nazwa]) html += `<div class="lm-napis lm-tlo-napis" data-x="${dz.srodek[0]}" data-y="${dz.srodek[1]}">${esc(dz.nazwa)}</div>`;
+  for (const dz of D.dzielnice) if (!czyja[dz.nazwa]) html += `<div class="lm-napis lm-schowany lm-tlo-napis" data-x="${dz.srodek[0]}" data-y="${dz.srodek[1]}">${esc(dz.nazwa)}</div>`;
   const rzeka = D.woda.find((w) => w.nazwa && /Zalew/.test(w.nazwa));
-  if (rzeka) html += `<div class="lm-napis lm-woda-napis" data-x="${rzeka.srodek[0]}" data-y="${rzeka.srodek[1] + 500}">${esc(rzeka.nazwa)}</div>`;
+  if (rzeka) html += `<div class="lm-napis lm-schowany lm-woda-napis" data-x="${rzeka.srodek[0]}" data-y="${rzeka.srodek[1] + 500}">${esc(rzeka.nazwa)}</div>`;
   return html;
 }
 
@@ -169,13 +175,13 @@ function pasekUstawien(c) {
 const pasekSkrotow = () => `<nav class="lm-pasek" aria-label="Skróty">${SKROTY.map(([k, ik, n]) =>
   `<button type="button" class="lm-skrot" data-akcja="lmapa-skrot" data-s="${k}" aria-label="${n}" title="${n}">${ikona(ik, 22)}<span>${n}</span></button>`).join("")}</nav>`;
 
-const wzor = (klasa, id, rodzaj, znakStanu = "") => `<i class="lm-pionek ${klasa}">${zeton(id, rodzaj)}${znakStanu ? `<b>${znakStanu}</b>` : ""}</i>`;
+const wzor = (klasa, id, rodzaj, znakStanu = "") => `<i class="lm-pionek ${klasa}">${zeton(id, rodzaj, /lm-(budynek|zespol)/.test(klasa) ? "kwadrat" : klasa === "lm-miejsce" ? "" : "kolo")}${znakStanu ? `<b>${znakStanu}</b>` : ""}</i>`;
 const legenda = (c) => `<div class="lm-legenda">
   ${c.v.lokale ? `<span>${wzor("lm-moj", null, "lokal", "★")}Twój lokal</span><span>${wzor("lm-wybrany", null, "lokal", "✓")}wybrany w tej rundzie</span>
   <span>${wzor("lm-wolny", null, "lokal")}wolny lokal</span><span>${wzor("lm-wolny", null, "dzialka")}wolna działka</span>
-  <span>${wzor("lm-zajety", null, "lokal")}lokal innej firmy (markiza w jej kolorze)</span>` : ""}
+  <span>${wzor("lm-zajety", null, "lokal")}lokal innej firmy (żeton w jej kolorze)</span>` : ""}
   <span>${wzor("lm-budynek", "kamienica_bankowa")}budynek – kliknij, żeby wejść</span><span>${wzor("lm-zielony", null, "park")}park albo woda</span>
-  <span>${wzor("lm-miejsce", "zamek")}punkt orientacyjny (bez podstawki)</span>
+  <span>${wzor("lm-miejsce", "zamek")}punkt orientacyjny (nadrukowany na planszy)</span>
   <span class="podpowiedz">Przybliżanie: kółko myszy, dwa palce, dwuklik albo + i −. Przesuwanie: przeciągnij albo strzałki.</span></div>`;
 
 // --- zakładka ---
@@ -190,16 +196,76 @@ function naZmiane(s) {
   if (!ramka) return;
   ramka.querySelector("#lmapa-swiat")?.setAttribute("transform", `matrix(${s.k} 0 0 ${s.k} ${s.x} ${s.y})`);
   ramka.style.setProperty("--k", s.k);
-  for (const z of ZNAKI) z.el.style.transform = `translate(${(z.x * s.k + s.x).toFixed(1)}px, ${(z.y * s.k + s.y).toFixed(1)}px)`;
+  for (const z of ZNAKI) z.el.style.transform = `translate(${(z.x * s.k + s.x + z.dx).toFixed(1)}px, ${(z.y * s.k + s.y + z.dy).toFixed(1)}px)`;
   const p = s.k < POZIOMY[0] ? 1 : s.k < POZIOMY[1] ? 2 : 3;
   if (p !== poziom) {
     poziom = p;
     ramka.dataset.poziom = p;
+    zmierz(ramka);
     if (p === 3 && !ulice) {   // ulice osiedlowe dorysowujemy dopiero z bliska
       ulice = true;
       const g = ramka.querySelector("#lmapa-ulice");
       if (g) g.innerHTML = `<path class="lm-uliczka" d="${Object.values(DANE.ulice).join("")}"/>`;
     }
+  }
+  // napisy układamy najwyżej co 90 ms i jeszcze raz po zatrzymaniu mapy
+  const teraz = performance.now();
+  clearTimeout(czekaUlozenie);
+  if (teraz - ostatnieUlozenie > 90) { ostatnieUlozenie = teraz; uloz(s, ramka); } else czekaUlozenie = setTimeout(() => { ostatnieUlozenie = performance.now(); uloz(WIDOK, ramka); }, 100);
+}
+
+// --- układanie napisów: żaden szyld nie zasłania żetonu ani innego szyldu; ważniejsze wybierają miejsce pierwsze ---
+// ważność: 1 Twój lokal, 2 nazwy stref, 3 zespoły, 4 małe strefy, 5 budynki i parki, 6 lokale innych firm, 7 wolne lokale,
+// 8 punkty orientacyjne, 9 nazwy dzielnic tła i wody. Na widoku całego miasta biorą udział tylko 1–4.
+function waznosc(el) {
+  const k = el.classList;
+  return k.contains("lm-moj") || k.contains("lm-wybrany") ? 1 : k.contains("lm-strefa-napis") ? (k.contains("lm-mala") ? 4 : 2) : k.contains("lm-zespol") ? 3
+    : k.contains("lm-budynek") || k.contains("lm-zielony") ? 5 : k.contains("lm-zajety") ? 6 : k.contains("lm-wolny") ? 7 : k.contains("lm-miejsce") ? 8 : 9;
+}
+
+function zmierz(ramka) {
+  ROZM = parseFloat(getComputedStyle(ramka).getPropertyValue("--rozm")) || 30;
+  for (const z of ZNAKI) {
+    z.widac = getComputedStyle(z.el).display !== "none";
+    const kafel = z.el.querySelector(".lm-kafel");
+    z.bok = kafel ? kafel.offsetWidth : 0;
+    const n = z.napis || z.el;
+    z.w = n.offsetWidth; z.h = n.offsetHeight;
+  }
+}
+
+const nachodzi = (a, b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
+
+function uloz(s, ramka) {
+  if (!s || !ramka.isConnected) return;
+  const W = ramka.clientWidth, H = ramka.clientHeight, zajete = [];
+  const ekran = (z) => [z.x * s.k + s.x, z.y * s.k + s.y];
+  const r0 = ramka.getBoundingClientRect();
+  for (const el of ramka.querySelectorAll(".lm-pasek, .lm-zoom, .lm-osm")) {   // napisy nie wchodzą pod przyciski mapy
+    const r = el.getBoundingClientRect();
+    zajete.push({ pr: [r.left - r0.left - 4, r.top - r0.top - 4, r.right - r0.left + 4, r.bottom - r0.top + 4], czyj: null });
+  }
+  for (const z of ZNAKI) {   // żetony zajmują miejsce pierwsze
+    if (!z.bok || !z.widac) continue;
+    const [ax, ay] = ekran(z);
+    zajete.push({ pr: [ax - z.bok / 2, ay - z.bok * 0.86, ax + z.bok / 2, ay + z.bok * 0.14], czyj: z, zeton: true });
+  }
+  for (const z of ZNAKI.filter((q) => q.w).sort((a, b) => a.waznosc - b.waznosc)) {
+    const n = z.napis || z.el, [ax, ay] = ekran(z);
+    let gdzie = null;
+    if (z.widac && (poziom > 1 || z.waznosc <= 4) && ax > -40 && ax < W + 40 && ay > -40 && ay < H + 40) {
+      const b = z.bok, w = z.w, h = z.h;
+      // szyld żetonu: pod, nad, z prawej, z lewej; napis na planszy: na środku, wyżej, niżej
+      const miejsca = z.napis ? [[-w / 2, b * 0.14 + 4], [-w / 2, -b * 0.86 - 4 - h], [b / 2 + 4, -b * 0.36 - h / 2], [-b / 2 - 4 - w, -b * 0.36 - h / 2]]
+        : [[-w / 2, -h / 2], [-w / 2, -h * 1.7], [-w / 2, h * 0.7], [-w / 2, -h * 2.9], [-w / 2, h * 1.9]];
+      const wolne = (p, tylkoNapisy) => { const pr = [ax + p[0] - 2, ay + p[1] - 1, ax + p[0] + w + 2, ay + p[1] + h + 1]; return pr[0] >= 0 && pr[1] >= 0 && pr[2] <= W && pr[3] <= H && !zajete.some((o) => o.czyj !== z && (!tylkoNapisy || !o.zeton) && nachodzi(pr, o.pr)); };
+      gdzie = miejsca.find((p) => wolne(p, false)) || (z.waznosc <= 2 ? miejsca.find((p) => wolne(p, true)) : null);   // strefa i Twój lokal mogą leżeć na żetonach
+      if (gdzie) zajete.push({ pr: [ax + gdzie[0], ay + gdzie[1], ax + gdzie[0] + w, ay + gdzie[1] + h], czyj: z });
+    }
+    n.classList.toggle("lm-schowany", !gdzie);
+    if (!gdzie) continue;
+    if (z.napis) n.style.transform = `translate(${gdzie[0].toFixed(1)}px, ${gdzie[1].toFixed(1)}px)`;
+    else { z.dx = gdzie[0]; z.dy = gdzie[1]; z.el.style.transform = `translate(${(ax + z.dx).toFixed(1)}px, ${(ay + z.dy).toFixed(1)}px)`; }
   }
 }
 
@@ -234,7 +300,9 @@ export const nowaMapa = {
     if (!ramka || !DANE) return;
     widok?.zniszcz();
     poziom = 0; ulice = false;
-    ZNAKI = [...ramka.querySelectorAll(".lmapa-nakladka > [data-x]")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y }));
+    ZNAKI = [...ramka.querySelectorAll(".lmapa-nakladka > [data-x]")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, dx: 0, dy: 0,
+      napis: el.querySelector(".lm-podpis"), waznosc: waznosc(el) }));
+    ostatnieUlozenie = 0;
     // na początku widać strefy gry (od Czechowa po Zalew), a nie całe granice miasta
     const p = [...ramka.querySelectorAll(".lm-strefa-napis")].map((el) => [+el.dataset.x, +el.dataset.y]);
     const start = p.length ? [Math.min(...p.map((q) => q[0])) - 3200, Math.min(...p.map((q) => q[1])) - 2600, Math.max(...p.map((q) => q[0])) + 3200, Math.max(...p.map((q) => q[1])) + 1800] : null;

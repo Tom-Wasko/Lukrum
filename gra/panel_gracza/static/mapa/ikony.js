@@ -1,8 +1,10 @@
 // Grafiki nowej mapy. Dwa zestawy, oba własne (żadna nie odtwarza cudzego logo – marki rozróżnia podpis):
 //   ikona(nazwa)  – kreskowe ikony interfejsu 24×24 w `currentColor` (pasek skrótów, przyciski), jak static/grafiki/ikony/;
-//   zeton(nazwa)  – ilustrowane pionki 40×40 jak z gry planszowej: budynek na podstawce, wypełnienia z klas
-//                   (kolory w mapa.css ze zmiennych palety): m mur, j jasny, d dach, n dach 2, b cegła, k drewno,
-//                   w szyba, z zieleń, u żółty, c ciemny, f kolor firmy, x sama kreska, p podstawka.
+//   zeton(nazwa)  – żetony 40×40 jak z planszówki z PRL-u: tekturowy krążek albo kwadrat z grubym brzegiem,
+//                   na nim piktogram budynku w płaskim druku w kilku kolorach (kolory w mapa.css ze zmiennych
+//                   palety): m mur, j jasny, d dach, n dach 2, b cegła, k ochra, w szyba, z zieleń, u żółty,
+//                   c czarny, f kolor firmy, x sama kreska; tektura: zb bok, zf lico, zr ramka druku.
+//                   Punkty orientacyjne nie mają tektury – są „nadrukowane” wprost na planszy.
 
 // --- ikony interfejsu ---
 const K = {
@@ -100,8 +102,15 @@ const WG_RODZAJU = { bank: "bank", urzad: "urzad", poczta: "poczta", biuro: "biu
   szkola: "szkola", reklama: "reklama", uczelnia: "uczelnia", media: "media", lichwiarz: "lichwiarz", ubezpieczenia: "biurowiec", detektyw: "detektyw", gielda: "bank",
   park: "park", woda: "woda", lokal: "lokal", dzialka: "dzialka" };
 
-/** Pionek dla budynku, zespołu, lokalu albo miejsca: `id` z danych, `rodzaj` jako zapas. */
-export function zeton(id, rodzaj) {
+// kształt tektury: kwadrat (budynki), koło (lokale drużyn), brak (punkty orientacyjne nadrukowane na planszy)
+const TEKTURA = {
+  kwadrat: `<rect class="zb" x="1.5" y="5" width="37" height="34" rx="5"/><rect class="zf" x="1.5" y="1.500" width="37" height="34" rx="5"/><rect class="zr" x="4" y="4" width="32" height="29" rx="3"/>`,
+  kolo: `<circle class="zb" cx="20" cy="21.500" r="17.500"/><circle class="zf" cx="20" cy="18.500" r="17.500"/><circle class="zr" cx="20" cy="18.500" r="15"/>`,
+};
+const MIESCI = { kwadrat: "translate(5.200 4.500) scale(.74)", kolo: "translate(7 5.500) scale(.65)" };
+
+/** Żeton budynku, zespołu, lokalu albo miejsca: `id` z danych, `rodzaj` jako zapas; ksztalt: "kwadrat" | "kolo" | "" (bez tektury). */
+export function zeton(id, rodzaj, ksztalt = "kwadrat") {
   const rys = Z[WG_ID[id]] || Z[WG_RODZAJU[rodzaj]] || Z[id] || Z.nieruchomosci;
-  return `<svg class="zt" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><ellipse cx="20" cy="35" rx="17.5" ry="4.300" class="p"/>${rys}</svg>`;
+  return `<svg class="zt" viewBox="0 0 40 40" aria-hidden="true" focusable="false">${TEKTURA[ksztalt] || ""}<g class="zd"${MIESCI[ksztalt] ? ` transform="${MIESCI[ksztalt]}"` : ""}>${rys}</g></svg>`;
 }
