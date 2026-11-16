@@ -65,34 +65,71 @@ Object.assign(ZAKLADKI, {
   lokal_przeglad: zlozona({ tytul: "Mój lokal", tytulPelny: "Mój lokal – stan, sprzedaż i obsada", odRundy: odRundyCzesci,
     info: "Wszystko o wybranym lokalu: liczby z poprzedniej rundy, braki, umowa, sprawy w lokalu (bank żywności, wypadki), kto stoi na którym stanowisku i jak szła sprzedaż.",
     czesci: { stan_lokalu, sprawy, zatrudnienie: obsada, sprzedaz } }),
-  lokal_menu: zlozona({ tytul: "Kuchnia", tytulPelny: "Kuchnia – menu i ceny", odRundy: odRundyCzesci,
+  lokal_menu: zlozona({ tytul: "Menu i ceny", tytulPelny: "Tablica – menu i ceny", odRundy: odRundyCzesci,
     info: "Dania w menu wybranego lokalu, prognoza sprzedaży i ceny. Każdy lokal może mieć inne menu i inne ceny.",
     czesci: { oferta } }),
-  zaop_dostawy: zlozona({ tytul: "Dostawy", tytulPelny: "Zaopatrzenie – dostawy", odRundy: odRundyCzesci,
+  zaop_dostawy: zlozona({ tytul: "Zamówienia", tytulPelny: "Hurtownie – zamówienia składników", odRundy: odRundyCzesci,
     info: "Zamówienia składników z dostawą do wybranego lokalu: dostawca, jakość, ilość i dzień dostawy.",
     czesci: { dostawcy } }),
-  zaop_magazyn: zlozona({ tytul: "Magazyn i świeżość", tytulPelny: "Zaopatrzenie – magazyn i świeżość", odRundy: odRundyCzesci,
+  zaop_magazyn: zlozona({ tytul: "Magazyn i świeżość", tytulPelny: "Chłodnia – magazyn i świeżość", odRundy: odRundyCzesci,
     info: "Co leży w chłodni i zamrażarce wybranego lokalu, co się kończy i ile kosztuje wynajęta chłodnia.",
     czesci: { swiezosc } }),
-  zaop_przewozy: zlozona({ tytul: "Przewozy", tytulPelny: "Zaopatrzenie – przewozy między lokalami", odRundy: odRundyCzesci,
+  zaop_przewozy: zlozona({ tytul: "Przewozy", tytulPelny: "Rampa – przewozy między lokalami", odRundy: odRundyCzesci,
     info: "Przewóz towaru z wybranego lokalu do innego Twojego lokalu.", czesci: { przewozy } }),
-  wnetrze_sprzet: zlozona({ tytul: "Stanowiska i sprzęt", tytulPelny: "Wnętrze – stanowiska i sprzęt", odRundy: odRundyCzesci,
+  wnetrze_sprzet: zlozona({ tytul: "Stanowiska i sprzęt", tytulPelny: "Sprzęt gastronomiczny – stanowiska i sprzęt", odRundy: odRundyCzesci,
     info: "Stanowiska kuchni i kasy oraz sprzęt wybranego lokalu – kupno, wynajem i sprzedaż.",
     czesci: { stanowiska, sprzet } }),
   // Poprawki 2 (sprawa 17): Mój kebab ▸ Szkolenia i udogodnienia – jedna podzakładka całej firmy (bez kafelków lokali;
   // udogodnienia mają swój krótki wybór lokalu)
-  hr_rozwoj: zlozona({ tytul: "Szkolenia i udogodnienia", tytulPelny: "Ludzie – szkolenia i udogodnienia", odRundy: odRundyCzesci, bezLokali: true,
+  hr_rozwoj: zlozona({ tytul: "Szkolenia i udogodnienia", tytulPelny: "Pokój socjalny – szkolenia i udogodnienia", odRundy: odRundyCzesci, bezLokali: true,
     info: "Wszystko, co podnosi zadowolenie pracowników poza pensją: szkolenia dla całego zespołu i udogodnienia w lokalu.",
     czesci: { udogodnienia, szkolenia } }),   // udogodnienia wcześniej dostępne (harmonogram) – na górze
-  wnetrze_wyposazenie: zlozona({ tytul: "Wyposażenie", tytulPelny: "Wnętrze – wyposażenie dla klientów", odRundy: odRundyCzesci,
+  wnetrze_wyposazenie: zlozona({ tytul: "Wyposażenie", tytulPelny: "Park handlowy – wyposażenie i wystrój", odRundy: odRundyCzesci,
     info: "Stoliki, telewizor, klimatyzacja i inne rzeczy dla klientów wybranego lokalu, a w sklepie meblowym wystrój: ściany, szyld, dodatki i meble.",
     czesci: { wyposazenie, dekor } }),
 });
-// nazwy w nowych grupach menu (plan.md, UF15); pliki zakładek mają swoje tytuły pełne
-Object.assign(raport, { tytul: "Wyniki finansowe" });
-Object.assign(agencje, { tytul: "Ulotki i radio" });
-Object.assign(wlasciciel, { tytul: "Portfel" });
-Object.assign(klienci, { tytul: "Strefy" });
+// Nazwy ekranów w duchu mapy (fable-nazwy, 16.11.2026; decyzja autora 14.11: „bez zgadywania”): pełny tytuł mówi, GDZIE
+// w mieście jest ekran i CO się tam załatwia, zamiast dawnych działów firmy („HR -”, „Finanse -”, „Inwestycje -”).
+const NAZWY = {
+  raport: ["Wyniki finansowe", "Kasa – wyniki finansowe tygodnia"],
+  kpir: ["Księga firmy", "Księga przychodów i rozchodów (KPiR)"],
+  bank: ["Banki", "Kamienica bankowa – konto, kredyty i lokaty"],
+  biuro: ["Biura rachunkowe", "Biurowiec przy Zana – biura rachunkowe"],
+  gielda: ["Parkiet", "Byk i Koziołek – parkiet maklerski"],
+  handel: ["Bazar", "Bazar – handel między drużynami"],
+  harpagon: ["Kantor Harpagona", "Kantor „U Harpagona” – pożyczka od ręki"],
+  zatrudnienie: ["Zatrudnienie", "Lada – obsada stanowisk"],
+  zespol: ["Zespół", "Zaplecze – zespół, umowy i grafik"],
+  udogodnienia: ["Udogodnienia", "Pokój socjalny – udogodnienia dla zespołu"],
+  szkolenia: ["Szkolenia", "Pokój socjalny – szkolenia"],
+  stanowiska: ["Stanowiska", "Rożen – stanowiska kuchni i kasy"],
+  sprzet: ["Sprzęt", "Sprzęt gastronomiczny – kupno, wynajem i sprzedaż"],
+  wyposazenie: ["Wyposażenie", "Instalacje i wyposażenie dla gości"],
+  klienci: ["Goście w strefach", "Pracownia Analiz – goście w strefach miasta"],
+  konkurencja: ["Konkurencja", "„Sokole Oko” – co robi konkurencja"],
+  agencje: ["Ulotki i radio", "Fala Koziołka – ulotki, radio i eventy"],
+  internet: ["Internet", "Lajk i Spółka – reklama w internecie"],
+  promocje: ["Promocje", "Szyld – promocje i rabaty"],
+  karta_wynikow: ["Punkty tygodnia", "Kurier rankingowy – punkty tygodnia"],
+  wnioski: ["Porady", "Kurier rankingowy – dział porad"],
+  ranking: ["Tabela ligowa", "Kurier rankingowy – tabela ligowa"],
+  lista_bledow: ["Lista błędów", "Notes księgowej – lista błędów przed wysłaniem"],
+  wyslij: ["Wyślij decyzje", "Poczta – wyślij decyzje tygodnia"],
+  vat: ["VAT", "Urząd skarbowy – VAT"],
+  podatki: ["Podatek dochodowy", "Urząd skarbowy – PIT i ZUS"],
+  urzad: ["Urząd miasta", "Urząd miasta – sprawy lokalu"],
+  sanepid: ["Sanepid", "Sanepid – higiena i kontrole"],
+  rynek_pracy: ["Tablica ogłoszeń", "Tablica ogłoszeń – rynek pracy"],
+  swiezosc: ["Świeżość", "Chłodnia – magazyn i świeżość"],
+  przewozy: ["Przewozy", "Rampa – przewozy między lokalami"],
+  dostawcy: ["Dostawcy", "Hurtownie – zamówienia składników"],
+  ubezpieczenia: ["Ubezpieczenia", "TUW „Pod Koziołkiem” – ubezpieczenia lokalu"],
+  wlasciciel: ["Portfel", "Szuflada – portfel właściciela"],
+  czas_wlasciciela: ["Czas właściciela", "Biurko – czas właściciela"],
+  kalendarz: ["Kalendarz miasta", "Kalendarz miasta – wydarzenia i święta"],
+};
+for (const [k, [tytul, tytulPelny]] of Object.entries(NAZWY)) Object.assign(ZAKLADKI[k], { tytul, tytulPelny });
+
 
 // dawny klucz zakładki → zakładka, w której jest teraz (linki, „Popraw” z listy błędów, adres #…, budynki mapy)
 export const ALIAS = { oferta: "lokal_menu", sprzedaz: "lokal_przeglad", zatrudnienie: "lokal_przeglad", stan_lokalu: "lokal_przeglad",
