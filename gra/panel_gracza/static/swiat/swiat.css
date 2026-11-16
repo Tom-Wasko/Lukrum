@@ -288,3 +288,5 @@
 .kg-gw { letter-spacing: 2px; }
 .kg-stopka { font-size: 13px; color: color-mix(in srgb, var(--tusz) 75%, var(--papier)); }
 @media (max-width: 800px) { .kg-uklad { grid-template-columns: 1fr; } .kg-pasek { display: none; } }
+.kr-liczby .delta { font-weight: 400; font-size: 12px; margin-left: 4px; }
+[data-tryb="ciemny"] .kr .delta.plus { color: #2e6b3a; } [data-tryb="ciemny"] .kr .delta.minus { color: #b3261e; }
