@@ -199,7 +199,7 @@ function wierszTerminu(t = { dzien: 0, godzina: "08:00" }) {
 
 function edytujHarmonogram() {
   okno("Zamykanie rund o stałej porze", `<p>Runda zamknie się w pierwszym terminie po zamknięciu poprzedniej – tak, jakbyś kliknął(-ęła)
-      „Zamknij rundę”. Np. lekcje we wtorki i czwartki: terminy <b>wtorek 8:00</b> i <b>czwartek 8:00</b>. Brak terminów – rundy zamykasz sam(a).</p>
+      „Zamknij rundę”. Np. lekcje we wtorki i czwartki: terminy <b>wtorek 8:00</b> i <b>czwartek 8:00</b>. Brak terminów – rundy zamyka mistrz gry.</p>
     <p class="podpowiedz">Terminy działają, gdy na serwerze co kilka minut uruchamia się <code>python manage.py zamykaj_rundy</code> (README).</p>
     <div id="terminy">${S.p.prowadzenie.harmonogram.map(wierszTerminu).join("")}</div>
     <p><a data-akcja="dodaj-termin">+ termin</a></p>`,
@@ -210,7 +210,7 @@ function edytujHarmonogram() {
 function edytujLekcje() {
   const L = S.p.prowadzenie.lekcje, Z = S.p.prowadzenie.zakresy_lekcji;
   okno("Sposób prowadzenia", `<label class="pole">Sposób prowadzenia<select id="tryb-mg">
-      <option value="na_zywo"${L ? "" : " selected"}>Na żywo – rundy zamykasz sam(a)</option>
+      <option value="na_zywo"${L ? "" : " selected"}>Na żywo – rundy zamyka mistrz gry</option>
       <option value="lekcyjny"${L ? " selected" : ""}>Tryb lekcyjny – rundy na lekcji, potem między lekcjami</option></select></label>
     <label class="pole">Rundy na żywo na start<input type="number" id="rundy-na-zywo" step="1" min="${Z.rundy_na_zywo.min}" max="${Z.rundy_na_zywo.max}"
       value="${L ? L.rundy_na_zywo : Z.rundy_na_zywo.domyslnie}"></label>
@@ -371,7 +371,7 @@ async function wykonaj(akcja, el) {
       ({ dzien: +w.querySelector("select").value, godzina: w.querySelector("input").value }));
     await api(`${URL_GRY}/prowadzenie`, "POST", { harmonogram });
     zamknijOkno();
-    toast(harmonogram.length ? "Harmonogram zapisany." : "Harmonogram usunięty – rundy zamykasz sam(a).");
+    toast(harmonogram.length ? "Harmonogram zapisany." : "Harmonogram usunięty – rundy zamyka mistrz gry.");
     return wczytaj();
   }
   if (akcja === "lekcje") return edytujLekcje();
