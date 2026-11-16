@@ -6,7 +6,7 @@ body.pulpit { min-height: 100vh; }
 .pulpit h1 { font-size: 22px; margin: 0 0 4px; color: var(--czarny); }
 .pulpit .pod-tytul { margin: 0; color: var(--szary); font-size: 14px; }
 .pulpit .glowa-p { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end; justify-content: space-between; margin-bottom: 18px; }
-.pulpit .pusto { background: #fff; border: 1px dashed var(--linia); border-radius: 14px; padding: 34px 24px; text-align: center;
+.pulpit .pusto { background: var(--biel); border: 1px dashed var(--linia); border-radius: 14px; padding: 34px 24px; text-align: center;
   color: var(--szary); font-size: 14px; }
 .pulpit .pusto b { display: block; color: var(--czarny); font-size: 16px; margin-bottom: 6px; }
 .pulpit .baner { display: flex; gap: 12px; align-items: center; background: var(--pom-jasny); border: 1px solid var(--pom-mgla);
@@ -27,15 +27,15 @@ body.pulpit { min-height: 100vh; }
 .status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; font-weight: 700; font-size: 12.5px; }
 .status .ikona { width: 16px; height: 16px; }
 .status.wyslane { background: var(--zielony-jasny); color: var(--zielony); }
-.status.zapisane { background: #fff4dc; color: #8a5a00; }
+.status.zapisane { background: var(--zolty-jasny); color: var(--zolty-ciemny); }
 .status.brak { background: var(--czerwony-jasny); color: var(--czerwony); }
 .status.koniec { background: var(--szary-jasny); color: var(--szary); }
 
 /* --- pulpit ucznia: karta gry -------------------------------------------------------------------- */
-.karta-gry { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); background: #fff; border-radius: 16px;
+.karta-gry { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); background: var(--biel); border-radius: 16px;
   box-shadow: var(--cien); overflow: hidden; margin-bottom: 22px; }
 .karta-gry .kg-l { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 16px; }
-.karta-gry .kg-p { padding: 20px 22px; background: #f8fbf9; border-left: 1px solid var(--linia); display: flex; flex-direction: column; gap: 18px; }
+.karta-gry .kg-p { padding: 20px 22px; background: var(--szary-jasny); border-left: 1px solid var(--linia); display: flex; flex-direction: column; gap: 18px; }
 .karta-gry .nazwa-gry { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--pom); }
 .karta-gry .tydzien { font-size: 24px; font-weight: 800; color: var(--czarny); margin: 2px 0 0; }
 .karta-gry .wiersz-st { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
@@ -48,25 +48,25 @@ body.pulpit { min-height: 100vh; }
 .druzyna-p { display: flex; flex-direction: column; gap: 8px; }
 .druzyna-p .firma-p { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; color: var(--czarny); }
 .druzyna-p .osoby { display: flex; flex-wrap: wrap; gap: 6px; }
-.druzyna-p .osoby span { background: #fff; border: 1px solid var(--linia); border-radius: 999px; padding: 3px 10px; font-size: 12.5px; }
+.druzyna-p .osoby span { background: var(--biel); border: 1px solid var(--linia); border-radius: 999px; padding: 3px 10px; font-size: 12.5px; }
 .druzyna-p .miejsce { font-size: 13px; color: var(--szary); }
 .druzyna-p .miejsce b { color: var(--czarny); font-size: 15px; }
 .lista-nowe { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .lista-nowe li { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; }
-.lista-nowe li .nr { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--pom); color: #fff; font-weight: 800;
+.lista-nowe li .nr { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--pom); color: var(--na-kolorze); font-weight: 800;
   font-size: 11.5px; display: grid; place-items: center; }
 .lista-nowe li .nr.nowe { background: var(--pom-jasny); color: var(--pom-ciemny); }
 .lista-nowe li small { display: block; color: var(--szary); font-size: 12px; }
 .lista-nowe li .grupa { color: var(--szary); font-size: 11.5px; }
 .druzyny-mg { display: flex; flex-direction: column; gap: 6px; }
-.druzyny-mg a { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: #fff; border: 1px solid var(--linia);
+.druzyny-mg a { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: var(--biel); border: 1px solid var(--linia);
   border-radius: 9px; color: var(--tekst); text-decoration: none; font-weight: 600; }
 .druzyny-mg a:hover { border-color: var(--pom); }
 .druzyny-mg a .status { margin-left: auto; padding: 3px 9px; font-size: 11.5px; }
 
 /* --- pulpit mistrza gry: menu z boku ------------------------------------------------------------- */
 .pm { display: grid; grid-template-columns: 230px minmax(0, 1fr); min-height: calc(100vh - 62px); }
-.pm-bok { background: #fff; border-right: 1px solid var(--linia); padding: 16px 12px; display: flex; flex-direction: column; gap: 2px;
+.pm-bok { background: var(--biel); border-right: 1px solid var(--linia); padding: 16px 12px; display: flex; flex-direction: column; gap: 2px;
   position: sticky; top: 0; height: calc(100vh - 62px); overflow-y: auto; }
 .pm-bok a { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; border-left: 3px solid transparent;
   color: var(--tekst); text-decoration: none; font-weight: 700; font-size: 13px; cursor: pointer; }
@@ -75,28 +75,28 @@ body.pulpit { min-height: 100vh; }
 .pm-bok a.aktywna { background: var(--pom-jasny); border-left-color: var(--pom); color: var(--pom-ciemny); }
 .pm-bok a.aktywna .ikona { color: var(--pom); }
 .pm-bok .sekcja-bok { margin: 14px 12px 4px; font-size: 11px; font-weight: 800; color: var(--szary); }
-.pm-bok .nowa { margin-top: 10px; background: var(--pom); color: #fff; justify-content: center; }
-.pm-bok .nowa .ikona { color: #fff; }
-.pm-bok .nowa:hover, .pm-bok .nowa.aktywna { background: var(--pom-ciemny); color: #fff; border-left-color: transparent; }
-.pm-bok .nowa.aktywna .ikona { color: #fff; }
+.pm-bok .nowa { margin-top: 10px; background: var(--pom); color: var(--na-kolorze); justify-content: center; }
+.pm-bok .nowa .ikona { color: var(--na-kolorze); }
+.pm-bok .nowa:hover, .pm-bok .nowa.aktywna { background: var(--pom-ciemny); color: var(--na-kolorze); border-left-color: transparent; }
+.pm-bok .nowa.aktywna .ikona { color: var(--na-kolorze); }
 .pm-tresc { padding: 26px 28px 64px; min-width: 0; }
 .pm-tresc > section { max-width: 1100px; }
 .pm-tresc > section[hidden] { display: none; }
 
 .liczniki { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-.licznik { background: #fff; border-radius: 12px; box-shadow: var(--cien); padding: 12px 18px; min-width: 150px; }
+.licznik { background: var(--biel); border-radius: 12px; box-shadow: var(--cien); padding: 12px 18px; min-width: 150px; }
 .licznik b { display: block; font-size: 22px; color: var(--czarny); }
 .licznik span { color: var(--szary); font-size: 12.5px; }
 
 .siatka-gier { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-.gra-mg { background: #fff; border-radius: 14px; box-shadow: var(--cien); padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+.gra-mg { background: var(--biel); border-radius: 14px; box-shadow: var(--cien); padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
 .gra-mg .gora { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
 .gra-mg .gora b { font-size: 16px; color: var(--czarny); }
 .gra-mg .gora small { display: block; color: var(--szary); font-size: 12px; margin-top: 2px; }
 .gra-mg .kropki { display: flex; flex-wrap: wrap; gap: 6px; }
 .gra-mg .kropki span { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px 3px 7px; border-radius: 999px; font-size: 12px;
   background: var(--szary-jasny); }
-.gra-mg .kropki span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #c9cdd2; }
+.gra-mg .kropki span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--linia); }
 .gra-mg .kropki span.wyslane::before { background: var(--zielony); }
 .gra-mg .kropki span.zapisane::before { background: var(--zolty); }
 .gra-mg .opis-dec { font-size: 12.5px; color: var(--szary); }
@@ -113,21 +113,21 @@ body.pulpit { min-height: 100vh; }
 
 /* --- kreator nowej gry --------------------------------------------------------------------------- */
 .kroki { display: flex; gap: 6px; margin: 4px 0 18px; padding: 0; list-style: none; counter-reset: krok; flex-wrap: wrap; }
-.kroki li { flex: 1 1 160px; display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #fff; border-radius: 10px;
+.kroki li { flex: 1 1 160px; display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--biel); border-radius: 10px;
   border: 1px solid var(--linia); color: var(--szary); font-weight: 700; font-size: 13px; cursor: pointer; }
 .kroki li::before { counter-increment: krok; content: counter(krok); width: 24px; height: 24px; border-radius: 50%; display: grid;
   place-items: center; background: var(--szary-jasny); color: var(--szary); font-size: 12px; flex: none; }
 .kroki li.aktywny { border-color: var(--pom); color: var(--czarny); box-shadow: 0 0 0 1px var(--pom) inset; }
-.kroki li.aktywny::before { background: var(--pom); color: #fff; }
+.kroki li.aktywny::before { background: var(--pom); color: var(--na-kolorze); }
 .kroki li.zrobiony::before { content: "✓"; background: var(--pom-jasny); color: var(--pom-ciemny); }
-.panel-kroku { background: #fff; border-radius: 14px; box-shadow: var(--cien); padding: 22px 24px; }
+.panel-kroku { background: var(--biel); border-radius: 14px; box-shadow: var(--cien); padding: 22px 24px; }
 .panel-kroku[hidden] { display: none; }
 .panel-kroku h2 { font-size: 17px; margin: 0 0 4px; color: var(--czarny); }
 .panel-kroku .opis-kroku { margin: 0 0 18px; color: var(--szary); font-size: 13.5px; max-width: 760px; }
 .panel-kroku .pola { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
 .pulpit label.pole { text-transform: none; font-size: 12.5px; letter-spacing: 0; }
 .pulpit label.pole input, .pulpit label.pole select { font: inherit; font-size: 14px; padding: 8px 10px; border: 1px solid var(--linia);
-  border-radius: 8px; color: var(--tekst); background: #fff; }
+  border-radius: 8px; color: var(--tekst); background: var(--biel); }
 .pulpit label.pole small { color: var(--szary); font-weight: 500; }
 .pulpit details.wiecej { margin-top: 16px; }
 .pulpit details.wiecej summary { cursor: pointer; font-weight: 700; color: var(--pom-ciemny); margin-bottom: 12px; }
@@ -140,7 +140,7 @@ body.pulpit { min-height: 100vh; }
 .lista-druzyn .wiersz-d .nr { width: 22px; color: var(--szary); font-weight: 700; text-align: right; }
 .boty-p { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; margin-top: 10px; }
 .boty-p label { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--linia); border-radius: 10px;
-  background: #fff; font-weight: 600; cursor: pointer; }
+  background: var(--biel); font-weight: 600; cursor: pointer; }
 .boty-p label:has(input:checked) { border-color: var(--pom); background: var(--pom-jasny); }
 .boty-p .nazwa-bota { flex: 1; min-width: 0; }
 .boty-p select { flex: none; width: 110px; font: inherit; font-size: 12.5px; padding: 4px 6px; border: 1px solid var(--linia); border-radius: 6px; }
@@ -154,12 +154,12 @@ body.pulpit { min-height: 100vh; }
 .tabela-funkcji td:first-child { width: 34px; color: var(--pom); }
 .tabela-funkcji b { display: block; color: var(--czarny); font-size: 13.5px; }
 .tabela-funkcji small { color: var(--szary); font-size: 12px; }
-.tabela-funkcji tr.podstawa td { background: #f8fbf9; }
+.tabela-funkcji tr.podstawa td { background: var(--szary-jasny); }
 .trzy-stany { display: inline-flex; border: 1px solid var(--linia); border-radius: 8px; overflow: hidden; white-space: nowrap; }
-.trzy-stany button { font: inherit; font-size: 12px; font-weight: 700; padding: 6px 10px; border: 0; background: #fff; color: var(--szary); cursor: pointer; }
+.trzy-stany button { font: inherit; font-size: 12px; font-weight: 700; padding: 6px 10px; border: 0; background: var(--biel); color: var(--szary); cursor: pointer; }
 .trzy-stany button + button { border-left: 1px solid var(--linia); }
-.trzy-stany button.wybrany { background: var(--pom); color: #fff; }
-.trzy-stany button.wybrany.zakryta { background: #6b7280; }
+.trzy-stany button.wybrany { background: var(--pom); color: var(--na-kolorze); }
+.trzy-stany button.wybrany.zakryta { background: var(--szary); }
 .trzy-stany button.wybrany.wylaczona { background: var(--czerwony); }
 .trzy-stany button:disabled { cursor: not-allowed; }
 .tabela-funkcji small.gdy-zakryta { display: block; margin-top: 2px; font-style: italic; }
@@ -177,7 +177,7 @@ body.pulpit { min-height: 100vh; }
 
 /* --- wybór firmy ---------------------------------------------------------------------------------- */
 .siatka-firm { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
-.siatka-firm a { display: flex; flex-direction: column; gap: 10px; background: #fff; border-radius: 14px; box-shadow: var(--cien);
+.siatka-firm a { display: flex; flex-direction: column; gap: 10px; background: var(--biel); border-radius: 14px; box-shadow: var(--cien);
   padding: 18px 20px; text-decoration: none; color: var(--czarny); font-weight: 800; font-size: 16px; border: 2px solid transparent; }
 .siatka-firm a:hover { border-color: var(--pom); }
 .siatka-firm a small { color: var(--pom-ciemny); font-size: 12.5px; font-weight: 700; }
@@ -201,8 +201,8 @@ body.pulpit { min-height: 100vh; }
 .fn-wiersze { display: flex; flex-wrap: wrap; gap: 5px 6px; }
 .fn-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font-size: 12px; font-weight: 600;
   background: var(--pom-jasny); color: var(--pom-ciemny); }
-.fn-chip.zakryta { background: #eceef1; color: #4b5563; }
+.fn-chip.zakryta { background: var(--szary-jasny); color: var(--szary); }
 .fn-chip.zakryta.odslonieta { background: var(--pom-jasny); color: var(--pom-ciemny); }
-.fn-chip.wylaczona { background: #fdecec; color: var(--czerwony); text-decoration: line-through; }
+.fn-chip.wylaczona { background: var(--czerwony-jasny); color: var(--czerwony); text-decoration: line-through; }
 .fn-nota { margin: 0; color: var(--szary); font-size: 12px; }
 .pulpit .stopka { text-align: center; color: var(--szary); font-size: 12px; padding: 0 20px 28px; }

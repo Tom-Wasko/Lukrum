@@ -1,0 +1,110 @@
+/* LUKRUM – cały panel w paletach z motywy/zmienne.css (Bar mleczny, Pewex, wysoka widoczność × jasny, ciemny).
+   Dawne zmienne panelu (--pom, --tlo, --karta…) dostają tu wartości z palety, więc każdy ekran zmienia kolory razem
+   z wnętrzami i mapą. Ładowany PO styl.css i zmienne.css. Kształty z nutką PRL: papier, tusz, grube kreski, szyldy. */
+
+:root:root {
+  --pom: var(--akcent);
+  --pom-ciemny: color-mix(in srgb, var(--akcent) 82%, var(--tusz));
+  --pom-jasny: color-mix(in srgb, var(--akcent) 11%, var(--g-karta));
+  --pom-mgla: color-mix(in srgb, var(--akcent) 26%, var(--g-karta));
+  --czarny: var(--tusz);
+  --tekst: var(--tusz);
+  --szary: color-mix(in srgb, var(--tusz) 74%, var(--papier));
+  --szary-jasny: color-mix(in srgb, var(--tusz) 7%, var(--g-karta));
+  --linia: color-mix(in srgb, var(--ramka) 62%, var(--g-karta));
+  --zielony: var(--zysk);
+  --zielony-jasny: color-mix(in srgb, var(--zysk) 13%, var(--g-karta));
+  --czerwony: var(--strata);
+  --czerwony-jasny: color-mix(in srgb, var(--strata) 12%, var(--g-karta));
+  --niebieski: var(--akcent-2);
+  --zolty: var(--uwaga);
+  --zolty-ciemny: var(--uwaga);
+  --zolty-jasny: color-mix(in srgb, var(--uwaga) 14%, var(--g-karta));
+  --tlo: var(--papier);
+  --karta: var(--g-karta);
+  --biel: var(--g-karta);
+  --na-kolorze: var(--papier);
+  --cien: 0 0 0 var(--ramka-grubosc) var(--linia);
+  --cien-mocny: 0 0 0 2px var(--tusz), 6px 6px 0 color-mix(in srgb, var(--tusz) 25%, transparent);
+  --r: 6px;
+  --wykres-paleta: var(--akcent), var(--akcent-2), #b8860b, #7b4ccf, #17a2b8, #795548, #5f8f50, #d4601b;
+  --wykres-linia: var(--tusz);
+  --wykres-utracona: color-mix(in srgb, var(--strata) 40%, var(--g-karta));
+  --wykres-tekst: color-mix(in srgb, var(--tusz) 74%, var(--papier));
+  --wykres-siatka: color-mix(in srgb, var(--tusz) 14%, transparent);
+  --font: var(--font-tekst);
+  font-family: var(--font-tekst);
+}
+[data-paleta="wysoka"]:root { --linia: var(--ramka); --szary: var(--tusz); --wykres-tekst: var(--tusz); --pom-ciemny: var(--akcent); }
+
+body { font-family: var(--font-tekst); font-size: calc(14px * var(--skala-tekstu)); color: var(--tusz); background: var(--papier); }
+h1, h2, h3 { font-family: var(--font-szyld); font-weight: 600; letter-spacing: .02em; }
+:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+a { color: var(--akcent-2); }
+
+/* Nagłówek: ciemna listwa z szyldem */
+.naglowek { background: var(--tusz); color: var(--papier); border-bottom: 4px solid var(--akcent); height: 58px; }
+.naglowek::before { content: none; }
+.logo { color: var(--papier); font-family: var(--font-gruby); font-weight: 400; font-size: 20px; letter-spacing: .04em; }
+.logo .serce { border-color: var(--papier); background: var(--akcent); width: 34px; height: 34px; }
+.logo .serce svg { stroke: var(--papier); }
+.logo .firma { font-family: var(--font-szyld); font-size: 15px; letter-spacing: .06em; border-left-color: color-mix(in srgb, var(--papier) 50%, transparent); }
+.konto { font-family: var(--font-szyld); font-size: 13px; font-weight: 400; letter-spacing: .05em; }
+.konto > a, .konto > span > a { color: var(--papier); }
+.konto > a:hover { background: color-mix(in srgb, var(--papier) 18%, transparent); }
+.naglowek .chip { background: color-mix(in srgb, var(--papier) 14%, transparent); color: var(--papier); font-family: var(--font-szyld); font-size: 13px;
+  font-weight: 400; letter-spacing: .04em; border-radius: 4px; }
+.naglowek .chip.pom, .naglowek .chip.ok { background: var(--papier); color: var(--tusz); }
+.naglowek .ustawienia-przycisk { color: var(--papier); }
+.ustawienia-lista { background: var(--g-karta); color: var(--tusz); border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 5px 5px 0 color-mix(in srgb, var(--tusz) 25%, transparent); }
+.ustawienia-lista a { color: var(--tusz); }
+.wybor-motywu { color: var(--tusz); font-size: 12px; justify-content: space-between; }
+.wybor-motywu select { font-size: 13px; }
+
+/* Menu z miejscami */
+.menu { background: var(--g-karta); font-family: var(--font-szyld); }
+.menu .poz > a { font-family: var(--font-szyld); font-size: 13.5px; font-weight: 400; letter-spacing: .05em; color: var(--tusz); }
+:root[data-motyw="bok"] .menu { background: var(--g-karta); border-right: 2px solid var(--tusz); }
+:root[data-motyw="bok"] .menu .poz > a { font-size: 13.5px; border-radius: 4px; }
+:root[data-motyw="bok"] .menu .poz > a.aktywna { background: var(--tusz); color: var(--papier); border-left-color: var(--akcent); }
+:root[data-motyw="bok"] .menu .poz > a.aktywna .ikona { color: var(--papier); }
+:root[data-motyw="bok"] .menu .sekcja { font-size: 11.5px; font-weight: 400; letter-spacing: .12em; }
+:root[data-motyw="bok"] .menu .wyslij > a, :root[data-motyw="bok"] .menu .wyslij > a.aktywna { background: var(--akcent); color: var(--papier);
+  border: 2px solid var(--tusz); border-radius: 5px; box-shadow: 3px 3px 0 var(--tusz); font-size: 15px; justify-content: center; }
+
+/* Karty, paski, tabele */
+.scena { background: none; }
+.karta { background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 8px; box-shadow: 6px 6px 0 color-mix(in srgb, var(--tusz) 18%, transparent); }
+.pasek, .tabela-tytul { font-family: var(--font-szyld); font-weight: 400; letter-spacing: .08em; background: var(--tusz); color: var(--papier); }
+.kafel { border: var(--ramka-grubosc) solid var(--ramka); border-radius: 6px; box-shadow: none; }
+.kafel .kw, .licznik b { font-family: var(--font-gruby); font-weight: 400; }
+table.t th { font-family: var(--font-szyld); font-weight: 400; letter-spacing: .05em; font-size: 13px; background: var(--szary-jasny); color: var(--tusz); }
+.podzakladki { background: var(--szary-jasny); }
+.podzakladki a { font-family: var(--font-szyld); font-size: 13px; font-weight: 400; letter-spacing: .05em; border: 2px solid var(--tusz); border-radius: 5px; }
+.podzakladki a.aktywna { background: var(--tusz); border-color: var(--tusz); color: var(--papier); }
+.btn { font-family: var(--font-szyld); font-weight: 400; letter-spacing: .06em; border-radius: 5px; font-size: 14px; }
+.btn.pom, .btn.zielony, .btn.czarny { border: 2px solid var(--tusz); box-shadow: 3px 3px 0 color-mix(in srgb, var(--tusz) 30%, transparent); }
+.btn.pom:hover, .btn.zielony:hover, .btn.czarny:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 30%, transparent); }
+.btn.czarny { background: var(--tusz); color: var(--papier); }
+.btn.szary { background: var(--szary-jasny); color: var(--szary); }
+input[type=number], input[type=text], input[type=password], select, textarea { border: var(--ramka-grubosc) solid var(--ramka); border-radius: 4px;
+  background: var(--g-karta); color: var(--tusz); font-size: 13.5px; }
+.stopka { color: var(--szary); }
+.gp-kafel { background: var(--tusz); color: var(--papier); }
+.gp-kafel .etykieta, .gp-kafel small { color: color-mix(in srgb, var(--papier) 70%, var(--tusz)); }
+.mapa-dymek small { color: var(--papier); }
+
+/* Pulpit (lista gier, panel mistrza gry, konto) */
+.pulpit h1 { font-family: var(--font-gruby); font-weight: 400; font-size: 24px; }
+.karta-gry, .gra-mg, .panel-kroku, .licznik, .siatka-firm a { border: 2px solid var(--tusz); border-radius: 8px; box-shadow: 5px 5px 0 color-mix(in srgb, var(--tusz) 16%, transparent); }
+.pm-bok { border-right: 2px solid var(--tusz); font-family: var(--font-szyld); }
+.pm-bok a { font-family: var(--font-szyld); font-weight: 400; font-size: 14px; letter-spacing: .04em; }
+.pm-bok a.aktywna { background: var(--tusz); color: var(--papier); border-left-color: var(--akcent); }
+.pm-bok a.aktywna .ikona { color: var(--papier); }
+
+/* Tryb ciemny: jasne plakietki kalendarza i ostrzeżeń zostają jasne, więc tekst na nich ciemny */
+[data-tryb="ciemny"] .kal-etykieta, [data-tryb="ciemny"] .w-budowie .napis, [data-tryb="ciemny"] .w-budowie .napis b { color: #1f1f1f; }
+[data-tryb="ciemny"] .w-budowie { background: #f2d675; }
+
+/* Wysoka widoczność: małe kółka „i” zostają okrągłe mimo minimalnej wysokości przycisków */
+[data-paleta="wysoka"] .kolko-i { min-height: 0; border-width: 2px; }
