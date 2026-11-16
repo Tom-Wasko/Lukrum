@@ -45,6 +45,17 @@ function pigulkaPodkupienia(v, p) {
 
 // U20: charakter osoby podany jawnie (decyzja autora 7.11.2026) – pigułka z nazwą i dymek ze skutkami (dane: cechy)
 const zdanieCharakteru = (o) => `Charakter: ${o.charakter.nazwa}. Wpływ: ${o.charakter.skutek}.`;
+// kontrola PIP (silnik/ludzie/kontrola_pip.py): zlecenie w pełnym wymiarze godzin jak etat; liczby – v.pip z widoku
+const osobaPip = (v, p) => v.pip?.osoby?.[p.id];
+const pigulkaPip = (v, p) => osobaPip(v, p) ? `<span class="pigulka znak-uwaga" title="${esc(opisPip(v, p))}">${osobaPip(v, p).ryzyko ? "ryzyko kontroli PIP" : "zlecenie jak etat"}</span>` : "";
+function opisPip(v, p) {
+  const o = osobaPip(v, p), z = v.pip;
+  if (!o) return "";
+  const kara = `szansa kontroli PIP co tydzień: ${proc(z.szansa, 0)}, kara ${zl(z.kara)}`;
+  return `Zlecenie jak etat: ${licz(o.godziny, 0)} h w tygodniu (od ${licz(z.prog_godzin, 0)} h), ${licz(o.tygodnie)} z ${licz(z.tygodni_z_rzedu)} tygodni z rzędu. `
+    + (o.ryzyko ? `Kontrola jest już możliwa: ${kara}. ` : `Po ${licz(z.tygodni_z_rzedu)} tygodniach z rzędu grozi kontrola (${kara}). `)
+    + `Pomaga umowa o pracę albo mniej godzin (poniżej ${licz(z.prog_godzin, 0)} h w tygodniu).`;
+}
 const opisOsoby = (o) => o.charakter ? ` <span class="pigulka">${esc(o.charakter.nazwa)}</span>${kolko(esc(zdanieCharakteru(o)))}` : "";
 const zadowolenieOsoby = (p) => p.zadowolenie == null ? "–"
   : `<span class="${p.niezadowolony ? "minus" : ""}">${licz(p.zadowolenie, 2)}</span>`;
@@ -71,6 +82,9 @@ export const zatrudnienie = {
   info: "Zatrudnij pracowników potrzebnych do przygotowania i sprzedaży wybranych dań. Pracownik potrzebuje stanowiska (Park handlowy ▸ Stanowiska i sprzęt).",
   decyzje({ v, kat, edycja }) {
     let html = `<div class="pasek ciemny"><span>Koszty wynagrodzeń: <span class="kwota">${zl(kosztWynagrodzen(v, kat))}</span>${naOkres()} brutto (z ZUS pracodawcy; pensje w umowach – miesięczne)</span></div>`;
+    const zagrozeni = v.stan.pracownicy.filter((p) => osobaPip(v, p));
+    if (zagrozeni.length) html += `<div class="komunikat"><p class="znak-uwaga"><b>Zlecenie jak etat (${zagrozeni.map((p) => esc(p.imie_nazwisko)).join(", ")}).</b></p>
+      <p>${esc(opisPip(v, zagrozeni[0]))}</p></div>`;
     if (v.nieudane_zatrudnienia?.length) html += `<div class="komunikat zly">Część kandydatów zatrudniła już inna firma – wybierz innych.</div>`;
     for (const typ of TYPY) {
       const st = stanowiskaLokalu(v, v.stan.stanowiska).filter((s) => s.typ === typ);
@@ -89,7 +103,7 @@ export const zatrudnienie = {
         const ruch = prz ? `<span class="pigulka inf">${przenosinyMiedzyLokalami(v, prz) ? "czeka na zgodę" : "przeniesiony"}</span>` : "";
         const wyp = p.odchodzi ? `<span class="pigulka${p.odchodzi.powod === NIEZADOWOLENIE ? " nie" : ""}">wypowiedzenie do r. ${p.odchodzi.runda}</span>`
           : p.niezadowolony ? '<span class="pigulka nie">niezadowolony</span>' : "";
-        return `<div class="kafel"><div class="kg">Stanowisko nr ${s.nr}${nowy ? '<span class="pigulka inf">nowy</span>' : ""}${ruch}${wyp}${opisOsoby(p)}</div>
+        return `<div class="kafel"><div class="kg">Stanowisko nr ${s.nr}${nowy ? '<span class="pigulka inf">nowy</span>' : ""}${ruch}${wyp}${pigulkaPip(v, p)}${opisOsoby(p)}</div>
           <div class="kt srodek" data-akcja="profil" data-id="${esc(p.id)}" style="cursor:pointer"><div class="awatar">${inicjaly(p.imie_nazwisko)}</div>
           <b>${esc(p.imie_nazwisko)}</b>${pigulkaStudenta(p, kat)}<br><span class="podpowiedz">${esc(p.zawod)} · ${nazwaFormy(kat, p.umowa)}</span><br>${gw(p.gwiazdki)}<br>
           <b class="akcent">${zl(p.pensja)}</b>${p.premia ? `<br><span class="podpowiedz">premia ${zl(p.premia)}</span>` : ""}</div>
@@ -120,13 +134,18 @@ export const zatrudnienie = {
     const odejscia = (v.wyniki?.odejscia_pracownikow || []).map((o) => [esc(o.imie_nazwisko), licz(o.zadowolenie, 2), o.powody.map(esc).join(", "),
       `runda ${o.runda_odejscia}`]);
     const L = v.wyniki?.pracownicy || [], nzad = L.filter((p) => p.niezadowolony).length, sr = L.length ? L.reduce((a, p) => a + (p.wykorzystanie || 0), 0) / L.length : 0;
+    const pip = v.wyniki?.pip;
+    const kontrolaPip = pip?.kontrola ? `<div class="komunikat zly"><p class="znak-strata"><b>Kontrola PIP: kara ${zl(pip.kara)}</b></p><p>${esc(pip.tekst || "")}</p>
+      <p>Osoby na zleceniu pracowały jak na etacie (${pip.osoby.map(esc).join(", ")}): pomaga umowa o pracę albo mniej godzin.</p></div>`
+      : pip ? `<div class="komunikat"><p class="znak-uwaga"><b>Zlecenie jak etat: kontroli PIP nie było (${pip.osoby.map(esc).join(", ")}).</b></p>
+      <p>Co tydzień jest na to szansa ${proc(pip.szansa, 0)}. Pomaga umowa o pracę albo mniej godzin.</p></div>` : "";
     const lead = !L.length ? podsumowanie("Nie masz jeszcze zatrudnionych pracowników.") : podsumowanie([
       `W zespole pracuje <b>${licz(L.length)}</b> ${L.length === 1 ? "osoba" : "osób"}, średnie wykorzystanie czasu to <b>${proc(sr, 0)}</b>.`,
       nzad ? `Niezadowolonych jest ${licz(nzad)} – bez zmian mogą złożyć wypowiedzenie.` : "Nikt nie jest niezadowolony.",
       odejscia.length ? `Z niezadowolenia odchodzi ${licz(odejscia.length)} ${odejscia.length === 1 ? "osoba" : "osób"}.` : ""], nzad || odejscia.length ? "uwaga" : "ok");
     const kafle = L.length ? kafelkiLiczb([{ etykieta: "Pracownicy", wartosc: licz(L.length) }, { etykieta: "Średnie wykorzystanie czasu", wartosc: proc(sr, 0) },
       { etykieta: "Niezadowoleni", wartosc: licz(nzad), ton: nzad ? "minus" : "plus" }, { etykieta: "Wypowiedzenia", wartosc: licz(odejscia.length), ton: odejscia.length ? "minus" : "" }]) : "";
-    return lead + kafle + zwinTabela("Twoi pracownicy", ["Pracownik", "Zawód", "Doświadczenie", "Stanowisko", "Wykorzystanie czasu", "Wynagrodzenie", "Zadowolenie"], moi, { klasy: ["l"], otwarte: true })
+    return lead + kontrolaPip + kafle + zwinTabela("Twoi pracownicy", ["Pracownik", "Zawód", "Doświadczenie", "Stanowisko", "Wykorzystanie czasu", "Wynagrodzenie", "Zadowolenie"], moi, { klasy: ["l"], otwarte: true })
       + (odejscia.length ? zwinTabela("Wypowiedzenia z niezadowolenia", ["Pracownik", "Zadowolenie", "Powody", "Odchodzi"], odejscia, { klasy: ["l"], otwarte: true }) : "")
       + zwinTabela("Liczba pracowników", ["Zespół", ...ZAWODY], liczba, { klasy: ["l"] })
       + zwinTabela("Wykorzystanie czasu pracowników", ["Zespół", ...ZAWODY], wyk, { klasy: ["l"] })
@@ -413,6 +432,7 @@ function oknoProfilu({ v, kat, edycja }, id) {
       <div class="wiersz"><span>Skłonność do pomyłek</span><span>${proc(p.ryzyko_pomylki, 0)}</span></div>
       <div class="wiersz"><span>Zadowolenie klientów</span><span>${proc(p.zadowolenie_klientow, 0)}</span></div>
       <div class="wiersz"><span>Zadowolenie z pracy (ostatni tydzień)</span><span>${zadowolenieOsoby(p)}</span></div></div>
+      ${osobaPip(v, p) ? `<p class="znak-uwaga" style="text-align:left">${esc(opisPip(v, p))}</p>` : ""}
       ${p.niezadowolony && !p.odchodzi ? `<p class="minus" style="text-align:left">Niezadowolony od ${p.niezadowolony} tyg. – szczegóły na liście błędów.
         Pomaga podwyżka, lepszy sprzęt albo odciążenie.</p>` : ""}</div>
     <div style="display:flex;flex-direction:column;gap:12px">

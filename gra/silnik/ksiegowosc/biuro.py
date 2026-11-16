@@ -453,6 +453,7 @@ def widok(dane: Dane, firma_przed: Firma, firma: Firma, d: dict, wyniki: dict | 
     dok = len(dokumenty_ostatnie := (firma_przed.deklaracja or {}).get("dokumenty") or []) or u["szacunek_dokumentow"]
     oferty = [{**b, "szacunki": {p: oplata(dane, b, dok, etat, zlecenie, p) for p in PAKIETY},
                "limity_rundy": {p: limit_rundy(b, p) for p in PAKIETY},
+               "oplata_zmiany": {p: oplata_zmiany(dane, firma_przed, b, p) for p in PAKIETY},   # przejście do tego biura
                "najlepszy_pakiet": najlepszy_pakiet(dane, b, dok, etat, zlecenie)} for b in u["biura"]]
     dk = firma_przed.deklaracja
     podpowiedzi = {}
@@ -464,4 +465,4 @@ def widok(dane: Dane, firma_przed: Firma, firma: Firma, d: dict, wyniki: dict | 
             "deklaracja": None if not dk else {"runda": dk["runda"], "dokumenty": publiczne(dk["dokumenty"]),
                                                "stan_przed": dk["stan_przed"], "ulga_na_start": dk["ulga_na_start"]},
             "podpowiedzi": podpowiedzi, "liczba_dokumentow": len(dokumenty_ostatnie),
-            "pakiet": pakiet_firmy(dane, firma), "pakiet_nastepny": firma.pakiet_nastepny}
+            "ostatnie_biuro": firma_przed.ostatnie_biuro, "pakiet": pakiet_firmy(dane, firma), "pakiet_nastepny": firma.pakiet_nastepny}
