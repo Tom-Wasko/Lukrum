@@ -264,3 +264,25 @@
 .lm-slonce output { min-width: 3.2em; text-align: center; font-variant-numeric: tabular-nums; }
 .lm-slonce button { min-height: 0; padding: 2px 8px; cursor: pointer; font: inherit; }
 .lm-slonce button[hidden] { display: none; }
+
+/* poświata latarni: ciepłe, szerokie pasy pod drogami; widoczne tylko nocą (--lampy z lublin.js), szerokość rośnie z przybliżeniem */
+.lm-svg-lampy { pointer-events: none; display: none; }
+.lm-lampy .lm-svg-lampy { display: block; }
+.lm-poswiata { display: none; opacity: var(--lampy, 0); pointer-events: none; }
+.lm-lampy .lm-poswiata { display: inline; }
+.lm-p { fill: none; stroke: #ffc864; stroke-linecap: round; stroke-linejoin: round; }
+.lm-p2 { stroke-opacity: .08; }
+.lm-p1 { stroke-opacity: .17; }
+.lm-glowna.lm-p2 { stroke-width: 10.5; } .lm-glowna.lm-p1 { stroke-width: 6; }
+.lm-ekspresowa.lm-p2 { stroke-width: 12; } .lm-ekspresowa.lm-p1 { stroke-width: 7.5; }
+.lm-zbiorcza.lm-p2 { stroke-width: 9; } .lm-zbiorcza.lm-p1 { stroke-width: 4.875; }
+.lm-lokalna.lm-p2 { stroke-width: 7.5; } .lm-lokalna.lm-p1 { stroke-width: 4.125; }
+[data-poziom="3"] .lm-lokalna.lm-p2 { stroke-width: 15; } [data-poziom="3"] .lm-lokalna.lm-p1 { stroke-width: 9; }
+[data-poziom="3"] .lm-zbiorcza.lm-p2 { stroke-width: 16.5; } [data-poziom="3"] .lm-zbiorcza.lm-p1 { stroke-width: 10.5; }
+[data-poziom="3"] .lm-glowna.lm-p2 { stroke-width: 19.5; } [data-poziom="3"] .lm-glowna.lm-p1 { stroke-width: 12.75; }
+[data-poziom="3"] .lm-ekspresowa.lm-p2 { stroke-width: 21; } [data-poziom="3"] .lm-ekspresowa.lm-p1 { stroke-width: 14.25; }
+
+/* tabliczki z nazwami żetonów (lokale, budynki, zespoły, miejsca) pokazują się dopiero po najechaniu albo ustawieniu fokusu */
+.lm-znak .lm-podpis { translate: -50% calc(var(--rozm) * .14 + 4px); }
+.lm-znak:hover .lm-podpis.lm-schowany, .lm-znak:focus-visible .lm-podpis.lm-schowany { visibility: visible; }
+.lm-czysta .lm-znak:not(.lm-moj, .lm-wybrany):hover .lm-podpis { visibility: hidden; }
