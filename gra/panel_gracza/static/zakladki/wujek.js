@@ -36,7 +36,20 @@ function kroki(v) {
   return K.filter(([k]) => !ukryta(v, k));
 }
 
-export function listWujka(v) {
+// co otwiera się w tym tygodniu, a co za tydzień (harmonogram gry: c.odRundy) – zamiast szukania kłódek w menu
+const NOWOSCI = ["sprzet", "dostawcy", "sprzedaz", "raport", "karta_wynikow", "promocje", "udogodnienia", "wyposazenie", "dekor", "ubezpieczenia",
+  "przejecia", "agencje", "handel", "internet"];
+function nowosci(v, c) {
+  if (!c?.odRundy) return "";
+  const w = (r) => NOWOSCI.filter((k) => c.jestZakladka(k) && !c.wylaczona(k) && !c.ukryta(k) && c.odRundy(k) === r);
+  const teraz = v.runda > (v.gra.runda_startowa || 1) ? w(v.runda) : [], potem = w(v.runda + 1);
+  if (!teraz.length && !potem.length) return "";
+  const link = (k) => `<a data-zakladka-k="${k}" href="#${k}">${esc(c.tytulZakladki(k))}</a>`;
+  return `<div class="lw-nowe">${teraz.length ? `<span><b>Nowe w tym tygodniu:</b> ${teraz.map(link).join(", ")}</span>` : ""}
+    ${potem.length ? `<span><b>Za tydzień otworzy się:</b> ${potem.map((k) => esc(c.tytulZakladki(k))).join(", ")}</span>` : ""}</div>`;
+}
+
+export function listWujka(v, c) {
   const nr = v.runda - (v.gra.runda_startowa || 1), list = LISTY[nr];
   const K = kroki(v), pierwszy = K.findIndex((k) => !k[3]);
   const wszystko = pierwszy < 0;
@@ -52,5 +65,5 @@ export function listWujka(v) {
   return `<section class="lw-list ${list ? "" : "bez-listu"}" aria-label="Plan tygodnia krok po kroku">
     ${list ? `<div class="lw-kartka"><svg class="lw-portret" viewBox="0 0 64 80" aria-hidden="true"><use href="#g-wnetrze-portret-wujka" width="64" height="80"/></svg>
       <div><p class="lw-naglowek">List od wujka · tydzień ${v.runda}</p><h2>${esc(list[0])}</h2><p>${esc(list[1])}</p><p class="lw-podpis">Wasz wujek</p></div></div>` : ""}
-    <div class="lw-kroki"><div class="lw-tytul"><span>Do zrobienia w tym tygodniu</span><span>${zrobione} z ${K.length + 1}</span></div><ol>${html}${wyslij}</ol></div></section>`;
+    <div class="lw-kroki"><div class="lw-tytul"><span>Do zrobienia w tym tygodniu</span><span>${zrobione} z ${K.length + 1}</span></div><ol>${html}${wyslij}</ol>${nowosci(v, c)}</div></section>`;
 }

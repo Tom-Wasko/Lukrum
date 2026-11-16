@@ -162,7 +162,8 @@ function rozruchHtml(v) {
 
 export const dashboard = {
   tytul: "Plan tygodnia", ikona: "▦",
-  decyzje({ v, kat, d: szkic }) {
+  decyzje(c) {
+    const { v, kat, d: szkic } = c;
     const d = v.dashboard, p = kat.parametry, m = mojaMarka(v, szkic);
     const rundaMarki = v.edycja && v.runda === v.gra.runda_startowa && !v.tylko_odczyt;
     const kafel = (t, ik, tresc) => `<div class="kafel"><div class="kg"><span>${t}</span>${ikona(ik, 18)}</div><div class="kt">${tresc}</div></div>`;
@@ -179,7 +180,7 @@ export const dashboard = {
     const pasek = alarm ? `<div class="komunikat zly">${esc(alarm.tekst)}
       <button class="btn jasny maly" data-akcja="popraw" data-z="bank">Przejdź do banku</button></div>` : "";
     const inwestor = v.inwestor && v.runda <= v.inwestor.do_rundy + 1 ? inwestorHtml(v) : "";   // U11: potem tylko w Banku
-    return `${pasek}${inwestor}${status}${klub}${v.edycja ? listWujka(v) : ""}${rundaMarki ? formularzMarki(v, szkic) : ""}${podpowiedziHtml(v)}${rozruchHtml(v)}${dlaczegoHtml(v)}<div class="sekcja-tytul">Twoja firma</div><div class="dash">
+    return `${pasek}${inwestor}${status}${klub}${v.edycja ? listWujka(v, c) : ""}${rundaMarki ? formularzMarki(v, szkic) : ""}${podpowiedziHtml(v)}${rozruchHtml(v)}${dlaczegoHtml(v)}<div class="sekcja-tytul">Twoja firma</div><div class="dash">
       ${kafel("Nazwa i logo firmy", "osoba", `<div class="srodek">${znakFirmy(m)}<b>${esc(m.nazwa)}</b>${m.slogan ? `<div class="maly-tekst">„${esc(m.slogan)}”</div>` : ""}</div>`)}
       ${kafel("Miejsce", "karta", d.miejsce ? `${d.miejsce} / ${d.liczba_firm}` : `<span class="maly-tekst">Ranking dostępny od rundy 3</span>`)}
       ${kafel(`Liczba rund w grze`, "zegar", `<div>${Math.min(v.gra.runda, v.gra.liczba_rund)} / ${v.gra.liczba_rund}
