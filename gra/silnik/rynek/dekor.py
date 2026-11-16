@@ -111,6 +111,7 @@ def widok(dane: Dane, firma: Firma) -> dict:
     if not z:
         return {}
     katalog = {"prog": z["prog"], "prog_czesciowy": z["prog_czesciowy"], "domyslny_styl": z["domyslny_styl"],
+               "klienci": {g: x["nazwa"] for g, x in dane.mapa["klienci"]["grupy"].items()},
                "grupy": {g: {"nazwa": x["nazwa"], "cena": x["cena"]["wartosc"], "opis": x["opis"]}
                          for g, x in z["grupy"].items()},
                "style": {s: {"nazwa": x["nazwa"], "opis": x["opis"], "klienci": list(x["klienci"])}
