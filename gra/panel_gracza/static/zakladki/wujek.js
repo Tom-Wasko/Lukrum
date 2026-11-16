@@ -55,6 +55,9 @@ function nowosci(v, c) {
 // [mapa]) nie jest zmieniana: wystarcza reguła CSS po atrybucie data-id znacznika, więc działa też po przerysowaniu mapy.
 const BUDYNEK_KROKU = { lokale: "agencja_nieruchomosci", bank: "kamienica_bankowa", biuro: "biurowiec_zana", rynek_pracy: "agencja_pracy",
   dostawcy: "makro", sprzet: "sprzet_gastro", wyslij: "poczta" };
+// krok → punkt wnętrza (data-k klikalnego miejsca sceny i pozycji listy „Co tu zrobisz”, swiat/miejsca.js: cel)
+const PUNKT_KROKU = { lokale: "lokale", bank: "bank", biuro: "biuro", oferta: "lokal_menu", sprzedaz: "lokal_menu", stanowiska: "wnetrze_sprzet",
+  sprzet: "wnetrze_sprzet", zatrudnienie: "lokal_przeglad", rynek_pracy: "rynek_pracy", dostawcy: "zaop_dostawy" };
 function celNaMapie(v, klucz) {
   const id = klucz ? BUDYNEK_KROKU[klucz] || v.stan.lokale?.[0]?.id : null;
   let styl = document.getElementById("lw-cel-styl");
@@ -66,6 +69,11 @@ function celNaMapie(v, klucz) {
       font: 400 12px/1.5 var(--font-szyld); letter-spacing: .06em; text-transform: uppercase; padding: 0 6px; border-radius: 3px; white-space: nowrap; }
     @media (prefers-reduced-motion: no-preference) { ${z} .lm-kafel { animation: lw-puls 1.6s ease-in-out infinite; } }
     @keyframes lw-puls { 50% { outline-offset: 8px; } }`;
+  const k = PUNKT_KROKU[klucz];   // to samo we wnętrzu: klikalne miejsce sceny i pozycja listy
+  if (k) styl.textContent += `.sw-scena .hot[data-k="${k}"] { border: .22em solid var(--akcent); background: color-mix(in srgb, var(--akcent) 14%, transparent); }
+    .sw-scena .hot[data-k="${k}"]::before { background: var(--akcent); } .sw-scena .hot[data-k="${k}"] .podpis { opacity: 1; background: var(--akcent); }
+    .sw-lista button[data-k="${k}"] { box-shadow: inset 5px 0 0 var(--akcent); border-color: var(--akcent); }
+    .sw-lista button[data-k="${k}"] b::after { content: " – teraz"; color: var(--akcent); font-family: var(--font-szyld); letter-spacing: .05em; text-transform: uppercase; font-size: .8em; }`;
 }
 
 export function listWujka(v, c) {
