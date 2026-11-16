@@ -18,7 +18,7 @@ krokiem „świata” i katalogami) powstało 16.11 od 06:49. `main` jest nietkn
 ## Tematy od najbardziej wartych wzięcia (szczegóły i „jak wziąć”: `ZMIANY.md`)
 1. **`fable-swiat`** – miejsca z wnętrzami zamiast działów menu. Fundament reszty.
 2. **`fable-wyglad`** – cały panel w paletach PRL, wybór w ⚙, fonty lokalne, favicon.
-3. **`fable-wujek`** – Plan tygodnia jako lista kroków z listem od wujka i nowościami tygodnia.
+3. **`fable-wujek`** – Plan tygodnia jako lista kroków z listem od wujka i nowościami tygodnia; krok „teraz” zaznaczony też na mapie i we wnętrzu.
 4. **Mapa z `maciex`** – działa z wnętrzami bez zmian w plikach kolegi.
 5. **`fable-instrukcja`** – instrukcja pod obecną grę.
 6. **`fable-dekor` + `fable-sklep`** – wystrój lokalu dopasowany do gości okolicy; sklep „Meblościanka” z wózkiem
@@ -30,6 +30,8 @@ krokiem „świata” i katalogami) powstało 16.11 od 06:49. `main` jest nietkn
 10. **`fable-dymki-mg`** – przełącznik rodzajów dymków w panelu mistrza gry (brakujący kawałek decyzji z 14.11).
 11. **`fable-nazwy`** – tytuły ekranów w duchu mapy; kwestia gustu, jedna tabela do poprawek.
 12. **`fable-katalogi`** – ceny od zera; zmienia balans (strategia premium traci), do oceny w grze testowej.
+
+13. **`fable-scenariusze`** – projekt pięciu scenariuszy lekcji (sam dokument).
 
 ## Niedokończone (dla Opusa)
 - Telefon sprawdzony tylko na 2 ekranach (Plan tygodnia, wnętrze); wysoka widoczność tylko na 3 ekranach.

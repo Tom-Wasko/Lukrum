@@ -66,6 +66,8 @@ Wszystko razem jest na gałęzi `fable`. Hashe: `git log main..fable-<temat> --n
   Kamienica bankowa, Mój kebab · tablica…) i co zrobić; pierwszy niezrobiony ma znacznik „teraz →”, zrobione się
   odhaczają. W tygodniach 1–4 obok leży krótki list od wujka. Pod listą: „Nowe w tym tygodniu” i „Za tydzień otworzy się”.
   Ściana tekstu o rozruchu lokalu nie pokazuje się w 1. tygodniu. Ekran nazywa się „Plan tygodnia” (był „Dashboard”).
+  Od 12:45: krok „teraz” jest zaznaczony także **na mapie** (obwódka i plakietka na budynku) i **we wnętrzu**
+  (podświetlone klikalne miejsce i pozycja listy „Co tu zrobisz”); kafle ze stawkami i opis rozruchu lokalu są zwinięte.
 - **Zasady:** bez zmian. **Pliki:** `zakladki/wujek.js` (nowy), `zakladki/ogolne.js`, `swiat/swiat.css`.
 - **Zależności:** temat 1 (nazwy miejsc, `wczytajGrafiki`) i 2 (zmienne palet). **Ocena:** pewne (zrzuty 52, 53).
 - **Jak wziąć:** `git merge fable-wujek` po tematach 1–2 (gałąź wyszła z `fable`, więc zawiera też 3–6 i mapę) albo
@@ -140,3 +142,13 @@ Wszystko razem jest na gałęzi `fable`. Hashe: `git log main..fable-<temat> --n
 - commit „Teksty neutralne płciowo…”: 6 zdań w `reklama.yaml`, `parki.yaml`, `kasyno.yaml`, instrukcji i `hr.js`.
 - commit „Instrukcja PDF przegenerowana”.
 - **Jak wziąć:** `git cherry-pick` po temacie 6 (instrukcja); poprawki danych i kasyna stosują się też do samego `main`.
+
+## 17. Scenariusze lekcji (projekt) – `fable-scenariusze`
+- **Co to:** `dokumentacja/SCENARIUSZE_LEKCJI.md` – pięć lekcji po 45 minut (zakładamy firmę; pierwsze rachunki; klient
+  i opinia; praca i prawo; bilans sezonu) z celami, przebiegiem, pytaniami i zadaniami, oparte na notatkach „Czego uczy”.
+- **Ocena:** projekt do przejrzenia przez nauczyciela; bez numerów z podstawy programowej i bez próby w klasie.
+- **Jak wziąć:** `git cherry-pick` jedynego commitu tematu (sam dokument i wpis w POSTEP.md).
+
+## 18. Klucz do nawiązań literackich – commit na `fable` („Instrukcja dla mistrza gry: klucz…”)
+- W części „Dla mistrza gry” tabela: postać albo nazwa w grze → utwór → autor (13 pozycji) oraz źródła mapy i fontów.
+  Gracze dalej zgadują sami (gra nie podpisuje postaci), klucz ma prowadzący.

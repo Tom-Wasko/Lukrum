@@ -52,3 +52,9 @@ Format: godzina · gałąź/commit · co i dlaczego · „decyzja Fable” albo 
 - 12:40 · – · **przejście ucznia od zera**: w grze „Runda 1” kroki z listu od wujka po kolei (lokal → bank → biuro → menu →
   ludzie → wyślij), runda zamknęła się sama, w tygodniu 2 list „Otwieramy!” i kolejny krok „Zamów składniki”. Bez błędów.
 - 12:45 · `fable` · teksty neutralne płciowo z listy przeglądu prawnego.
+- 12:41 · `fable-kurier` · w gazecie przy liczbach tygodnia kierunek i wielkość zmiany (jak w „Tygodniu w liczbach”).
+- 12:42 · `fable` · klucz do nawiązań literackich w instrukcji MG (**decyzja Fable:** tylko dla prowadzących, bo grafiki
+  celowo nie podpisują postaci). Telefon: mapa, sklep, gazeta, zespół bez przewijania w bok (zrzuty 130–133).
+- 12:43 · `fable-wujek` · Plan tygodnia: stawki i opis rozruchu zwinięte.
+- 12:45 · `fable-scenariusze` · projekt pięciu scenariuszy lekcji (etap 4 planu przebudowy).
+- 12:46 · `fable-wujek` · krok „teraz” na mapie i we wnętrzu. Mapa kolegi bez zmian (reguła CSS po `data-id`), wpis w WSPOLPRACA.
