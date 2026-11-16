@@ -308,7 +308,7 @@ wyposazenie:
     utrzymanie: 300
     od_rundy: 8
 szkolenia:
-  zrodlo: 'Tor A (14.11.2026): własne firmy szkoleniowe i ceny – kursy branżowe w Lublinie 2026 (HACCP i higiena ok. 250–400 zł od osoby, szkolenia zespołowe 800–2 000 zł); założenie autora: HR – szkolenia, % pracowników oczekujących; oceny firm szkoleniowych (zadowoleni_klienci 87 / 79 / 74) – własne wartości fikcyjnych firm: wyższa dla szkoły o węższej, kebabowej specjalizacji; nazwy firm i szkoleń – gastronomia (F2.6); poprawki 3 (sprawa 8, 8.11.2026): 12 → 8 szkoleń – podobne połączone, cena połączonego ≈ 80% sumy cen (zaokr. do 50 zł), procent – zaokrąglony maks. łączonych; `dawne` – dawne nazwy (stare zapisy gier)'
+  zrodlo: 'Tor A (14.11.2026): własne firmy szkoleniowe i ceny – kursy branżowe w Lublinie 2026 (HACCP i higiena ok. 250–400 zł od osoby, szkolenia zespołowe 800–2 000 zł); założenie autora: HR – szkolenia, % pracowników oczekujących; oceny firm szkoleniowych (zadowoleni_klienci 87 / 79 / 74) – własne wartości fikcyjnych firm: wyższa dla szkoły o węższej, kebabowej specjalizacji; nazwy firm i szkoleń – gastronomia (F2.6); ceny przeliczone od zera 15.11.2026 (decyzja autora 14.11: priorytet ma rozgrywka): firma o najwyższej ocenie (Lubelska Szkoła Kebabu) jest zawsze o ok. 20% droższa niż Rożen i Rozum, a HACCP w Pięć Minut o ok. 10% tańsza – wcześniej trzecia firma bywała droższa od drugiej przy niższej ocenie (pozycja zdominowana), wybór firmy to teraz cena kontra ocena „zadowolonych klientów”; poprawki 3 (sprawa 8, 8.11.2026): 12 → 8 szkoleń – podobne połączone, cena połączonego ≈ 80% sumy cen (zaokr. do 50 zł), procent – zaokrąglony maks. łączonych; `dawne` – dawne nazwy (stare zapisy gier)'
   firmy:
   - nazwa: Lubelska Szkoła Kebabu
     zadowoleni_klienci: 87
@@ -323,57 +323,57 @@ szkolenia:
     - HACCP w praktyce
     - Higiena i BHP w kuchni
     ceny:
-    - 1400
+    - 1500
     - 1250
-    - 1300
+    - 1100
   - nazwa: Krojenie mięsa z rożna
     procent: 90
     ceny:
-    - 1500
+    - 1450
     - 1200
-    - 1300
+    - 1100
   - nazwa: 'Kasa: szybka obsługa i „a może z serem?”'
     procent: 85
     dawne:
     - Szybka obsługa przy kasie
     - 'Sprzedaż dodatkowa: „a może z serem?”'
     ceny:
-    - 2000
+    - 2300
     - 1900
-    - 1950
+    - 1700
   - nazwa: Sosy firmowe od podstaw
     procent: 70
     ceny:
     - 800
     - 650
-    - 700
+    - 600
   - nazwa: Kultura obsługi i trudny klient o 3 w nocy
     procent: 75
     dawne:
     - Obsługa trudnego klienta o 3 w nocy
     - Kultura obsługi klienta
     ceny:
-    - 1700
+    - 1800
     - 1500
-    - 1600
+    - 1350
   - nazwa: Frytki i falafel bez wpadek
     procent: 65
     dawne:
     - Frytki idealnie chrupiące
     - Falafel bez rozpadania
     ceny:
-    - 1800
+    - 2050
     - 1700
-    - 1650
+    - 1550
   - nazwa: Organizacja pracy w godzinach szczytu
     procent: 90
     ceny:
-    - 1100
+    - 1200
     - 1000
-    - 1150
+    - 900
   - nazwa: Pierwsza pomoc w kuchni
     procent: 80
     ceny:
-    - 1600
+    - 1750
     - 1450
-    - 1400
+    - 1300
