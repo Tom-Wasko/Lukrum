@@ -231,3 +231,33 @@
 [data-tryb="ciemny"] .kr .znak-zysk { color: #2e6b3a; } [data-tryb="ciemny"] .kr .znak-strata { color: #b3261e; }
 @media (max-width: 700px) { .kr-winieta { grid-template-columns: 1fr; text-align: center; } .kr-winieta span:last-child { text-align: center; }
   .kr-szpalty section + section { border-left: 0; padding-left: 0; margin-left: 0; border-top: 1px solid currentColor; padding-top: 8px; } }
+
+
+/* Finał sezonu (zakladki/final.js): podium ligi i ostatni list od wujka */
+.fn { border: 2px solid var(--tusz); border-radius: 8px; background: var(--g-karta); margin-bottom: 20px; overflow: hidden; font-family: var(--font-tekst); color: var(--tusz); }
+.fn-glowa { background: var(--tusz); color: var(--papier); padding: 12px 18px; border-bottom: 4px solid var(--akcent); }
+.fn-glowa p { margin: 0; font-family: var(--font-szyld); letter-spacing: .1em; text-transform: uppercase; font-size: 13px; opacity: .85; }
+.fn-glowa h2 { margin: 2px 0 0; font-family: var(--font-gruby); font-weight: 400; font-size: clamp(22px, 3.4vw, 36px); line-height: 1.1; }
+.fn-uklad { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr); gap: 20px; padding: 18px; align-items: end; }
+.fn-podium { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-items: end; text-align: center; }
+.fn-podium li { display: grid; gap: 3px; }
+.fn-nazwa { font-weight: 700; font-size: 14.5px; overflow-wrap: anywhere; }
+.fn-pkt { font-family: var(--font-szyld); letter-spacing: .04em; font-size: 14px; }
+.fn-blok { display: grid; place-items: center; border: 2px solid var(--tusz); border-bottom: 0; border-radius: 5px 5px 0 0; font-family: var(--font-gruby); font-size: 34px;
+  background: color-mix(in srgb, var(--akcent-2) 22%, var(--g-karta)); height: 84px; }
+.fn-m1 .fn-blok { height: 140px; background: var(--akcent); color: var(--papier); font-size: 48px; }
+.fn-m3 .fn-blok { height: 58px; background: color-mix(in srgb, var(--uwaga) 24%, var(--g-karta)); }
+.fn-podium li.ja .fn-nazwa { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 4px; text-decoration-color: var(--akcent); }
+.fn-bok { display: grid; gap: 14px; }
+.fn-liczby { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.fn-liczby div { border: var(--ramka-grubosc) solid var(--ramka); border-radius: 6px; padding: 6px 10px; }
+.fn-liczby dt { font-family: var(--font-szyld); letter-spacing: .06em; text-transform: uppercase; font-size: 12px; }
+.fn-liczby dd { margin: 0; font-family: var(--font-gruby); font-size: 18px; }
+.fn .lw-kartka { transform: rotate(.5deg); }
+.fn .btn { text-decoration: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .fn-blok { animation: fn-rosnij .7s ease-out both; transform-origin: bottom; }
+  .fn-m1 .fn-blok { animation-delay: .5s; } .fn-m2 .fn-blok { animation-delay: .25s; }
+}
+@keyframes fn-rosnij { from { transform: scaleY(.05); opacity: .2; } to { transform: none; opacity: 1; } }
+@media (max-width: 800px) { .fn-uklad { grid-template-columns: 1fr; } }

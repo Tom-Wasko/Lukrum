@@ -14,6 +14,8 @@ const LISTY = [
   ["Czas pomyśleć o gościach.", "Lokal już chodzi, teraz niech będzie przyjemny. W Parku handlowym kupicie wyposażenie i wystrój. Wybierzcie taki, jaki lubią ludzie z Waszej okolicy, a nie taki, jaki podoba się Wam."],
 ];
 
+const OSTATNI = ["Ostatni tydzień.", "Po tym tygodniu zamykamy rachunki sezonu. Nie zostawiajcie towaru, który się zepsuje, ani długów, które można spłacić. W tabeli ostatnie tygodnie ważą najwięcej, więc jeszcze wszystko może się zmienić."];
+
 function kroki(v) {
   const r = v.runda, st = v.stan, braki = Object.values(st.gotowe_uslugi || {}).flat();
   const ile = (typ) => (st.stanowiska || []).filter((s) => s.typ === typ).length;
@@ -50,7 +52,8 @@ function nowosci(v, c) {
 }
 
 export function listWujka(v, c) {
-  const nr = v.runda - (v.gra.runda_startowa || 1), list = LISTY[nr];
+  const nr = v.runda - (v.gra.runda_startowa || 1);
+  const list = v.runda === v.gra.liczba_rund && nr >= LISTY.length ? OSTATNI : LISTY[nr];
   const K = kroki(v), pierwszy = K.findIndex((k) => !k[3]);
   const wszystko = pierwszy < 0;
   if (list) wczytajGrafiki();   // portret wujka z zestawu grafik (pojawia się sam, gdy zestaw się wczyta)
