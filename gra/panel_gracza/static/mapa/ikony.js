@@ -124,8 +124,21 @@ const TEKTURA = {
 };
 const MIESCI = { kwadrat: "translate(5.200 4.500) scale(.74)", kolo: "translate(7 5.500) scale(.65)" };
 
+// kolor tektury wg rodzaju miejsca (barwa lica w mapa.css: .zt[data-k=…] .zf) – żetony różnią się od razu, jeszcze przed rozpoznaniem piktogramu
+const KATEGORIA = {};
+[["pieniadze", "bank kamienica ubezpieczenia gielda lichwiarz detektyw"],
+  ["urzedy", "urzad sanepid poczta trybunal ratusz"],
+  ["handel", "hurt dyskont piekarnia mieso sprzet meble stolarnia galeria"],
+  ["praca", "biurowiec praca nieruchomosci dzialka media reklama"],
+  ["nauka", "szkola uczelnia"],
+  ["zielen", "park szklarnia woda gorki cmentarz"],
+  ["kultura", "teatr klasztor katedra kosciol zamek brama_krakowska brama_grodzka wieza ruiny fontanna wiatrak most"],
+  ["transport", "dworzec_bus dworzec_pkp lotnisko stadion csk"]]
+  .forEach(([k, lista]) => lista.split(" ").forEach((n) => { KATEGORIA[n] = k; }));
+
 /** Żeton budynku, zespołu, lokalu albo miejsca: `id` z danych, `rodzaj` jako zapas; ksztalt: "kwadrat" | "kolo" | "" (bez tektury). */
 export function zeton(id, rodzaj, ksztalt = "kwadrat") {
-  const rys = Z[WG_ID[id]] || Z[WG_RODZAJU[rodzaj]] || Z[id] || Z.nieruchomosci;
-  return `<svg class="zt" viewBox="0 0 40 40" aria-hidden="true" focusable="false">${TEKTURA[ksztalt] || ""}<g class="zd"${MIESCI[ksztalt] ? ` transform="${MIESCI[ksztalt]}"` : ""}>${rys}</g></svg>`;
+  const klucz = Z[WG_ID[id]] ? WG_ID[id] : Z[WG_RODZAJU[rodzaj]] ? WG_RODZAJU[rodzaj] : Z[id] ? id : "nieruchomosci";
+  const rys = Z[klucz], kat = KATEGORIA[klucz];
+  return `<svg class="zt"${kat ? ` data-k="${kat}"` : ""} viewBox="0 0 40 40" aria-hidden="true" focusable="false">${TEKTURA[ksztalt] || ""}<g class="zd"${MIESCI[ksztalt] ? ` transform="${MIESCI[ksztalt]}"` : ""}>${rys}</g></svg>`;
 }

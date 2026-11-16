@@ -128,6 +128,15 @@
 .zt .f { fill: var(--firma, var(--akcent)); }
 .zt .x { fill: none; }
 .zt .t { fill: var(--firma, var(--akcent)); stroke: none; font: 7.5px var(--font-gruby); text-anchor: middle; letter-spacing: .3px; }
+/* barwa tektury wg rodzaju miejsca; stany (mój, wybrany, zielony) nadpisują ją niżej */
+.zt[data-k="pieniadze"] .zf { fill: color-mix(in srgb, #3f6fb5 38%, var(--g-biel)); }
+.zt[data-k="urzedy"] .zf { fill: color-mix(in srgb, #8a8f98 42%, var(--g-biel)); }
+.zt[data-k="handel"] .zf { fill: color-mix(in srgb, #e08a2c 42%, var(--g-biel)); }
+.zt[data-k="praca"] .zf { fill: color-mix(in srgb, #8b5fb0 34%, var(--g-biel)); }
+.zt[data-k="nauka"] .zf { fill: color-mix(in srgb, #d6b21f 48%, var(--g-biel)); }
+.zt[data-k="zielen"] .zf { fill: color-mix(in srgb, #4f9a4a 42%, var(--g-biel)); }
+.zt[data-k="kultura"] .zf { fill: color-mix(in srgb, #b8503f 36%, var(--g-biel)); }
+.zt[data-k="transport"] .zf { fill: color-mix(in srgb, #2f9aa8 40%, var(--g-biel)); }
 .zt .s { fill: none; stroke: var(--akcent-2); stroke-width: 2; }
 
 .lm-znak { position: absolute; left: 0; top: 0; width: 0; height: 0; margin: 0; padding: 0; border: 0; background: none; color: var(--tusz);
