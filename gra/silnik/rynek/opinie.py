@@ -19,6 +19,7 @@ import numpy as np
 from ..dane import Dane
 from ..losowosc import Strumien, strumien
 from ..model import Firma, Lokal
+from . import dekor as dk
 from . import klienci as kl
 
 KOLEJKA = ("pracownicy/sprzęt", "kasa")   # przyczyny utraty z operacje.obsluz – klient nie doczekał się obsługi
@@ -67,6 +68,7 @@ def ocena_tygodnia(dane: Dane, lokal: str, wynik: dict, oferty: dict[str, dict])
     gw = sum(k * gwiazdki_jakosci(dane, oferty[d]["jakosc"]) for d, k in sprzedane.items()) / n
     r = sum(k * oferty[d]["cena"] / (dane.uslugi[d]["cena_preferowana"] * cena_strefy) for d, k in sprzedane.items()) / n
     wyp = sum(k * oferty[d].get("wyposazenie", 1.0) for d, k in sprzedane.items()) / n
+    dekor = sum(k * oferty[d].get("dekor_punkty", 0.0) for d, k in sprzedane.items()) / n
     popyt = max(wynik["popyt"], n)
     wagi = kl.wagi_oceny(dane, wynik.get("grupy") or {})
     powody = {"jakosc": u["jakosc"] * wagi["jakosc"] * (gw - 2),
@@ -74,7 +76,7 @@ def ocena_tygodnia(dane: Dane, lokal: str, wynik: dict, oferty: dict[str, dict])
               "kolejka": -u["kolejka"] * wagi["czekanie"] * ob["kolejka"] / popyt,
               "brak": -u["brak"] * ob["brak"] / popyt,
               "pomylki": -u["pomylki"] * ob["pomylki"] / n,
-              "wyposazenie": u["wyposazenie"] * (wyp - 1)}
+              "wyposazenie": u["wyposazenie"] * (wyp - 1) + (dk.gwiazdki_oceny(dane, dekor) if dekor else 0.0)}
     return max(1.0, min(u["skala"], u["start"] + sum(powody.values()))), powody
 
 

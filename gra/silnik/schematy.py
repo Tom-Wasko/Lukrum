@@ -1153,6 +1153,49 @@ class PlikKlientow(Plik):
         return self
 
 
+class ParametrDekoru(Schemat):
+    wartosc: float = Field(ge=0)
+    pewnosc: Literal["potwierdzone", "skalibrowane", "zalozenie"]
+    zrodlo: str = Zrodlo
+
+
+class GrupaDekoru(Schemat):
+    nazwa: str
+    cena: ParametrDekoru
+    opis: str
+
+
+class StylDekoru(Schemat):
+    nazwa: str
+    opis: str
+    klienci: list[str]   # id grup klientów z mapa/klienci.yaml, do których trafia styl
+
+
+class EfektyDekoru(Schemat):
+    popyt: ParametrDekoru
+    ocena: ParametrDekoru
+
+
+class PlikDekoru(Plik):
+    """dane/mapa/dekor.yaml: dekor lokalu kupowany w sklepie meblowym (silnik/rynek/dekor.py)."""
+    wlaczony: bool
+    prog: float = Field(gt=0, le=1)
+    prog_czesciowy: float = Field(ge=0, le=1)
+    czesc_efektu: float = Field(ge=0, le=1)
+    efekty: EfektyDekoru
+    domyslny_styl: str
+    grupy: dict[str, GrupaDekoru] = Field(min_length=1)
+    style: dict[str, StylDekoru] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def _spojnosc(self):
+        if self.prog_czesciowy > self.prog:
+            raise ValueError("prog_czesciowy nie może być wyższy niż prog")
+        if self.domyslny_styl not in self.style or self.style[self.domyslny_styl].klienci:
+            raise ValueError("domyslny_styl: styl bez klientów (bez efektu) z listy style")
+        return self
+
+
 SCHEMATY_MAPY: dict[str, type[BaseModel]] = {
     "strefy.yaml": PlikStref,
     "lokale.yaml": PlikLokali,
@@ -1165,6 +1208,7 @@ SCHEMATY_MAPY: dict[str, type[BaseModel]] = {
     "reklama.yaml": PlikReklamy,
     "promocje.yaml": PlikPromocji,
     "klienci.yaml": PlikKlientow,   # U24 – opcjonalny w danych gry (bez niego: bez grup i opinii)
+    "dekor.yaml": PlikDekoru,       # dekor lokalu – opcjonalny (bez niego: mechanika nie istnieje)
 }
 
 # --- podatki_2026.yaml (gra z lokalami, F3a.11) ---

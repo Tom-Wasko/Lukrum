@@ -30,6 +30,10 @@ Format (słownik; brak klucza = bez zmian względem poprzedniej rundy):
     zamowienia:        [{"dostawca", "zasob", "jakosc", "ilosc", "dzien"}]   ilość w opakowaniach; dzien – dzień
                                                               dostawy w rundzie (0 = poniedziałek)
     udogodnienia_kup / udogodnienia_sprzedaj / wyposazenie_kup / wyposazenie_sprzedaj: [nazwa]
+    dekor_kup:         [[grupa elementów, styl]]            – dekor lokalu ze sklepu meblowego (silnik/rynek/dekor.py,
+                       dane/mapa/dekor.yaml): płatne od razu, kupiony styl od razu aktywny; raz, na zawsze
+    dekor_ustaw:       {grupa elementów: styl}              – aktywny styl: kupiony albo domyślny (za darmo);
+                       oba klucze także w "w_lokalu" (inaczej – lokal główny)
     kampanie:          [{"agencja", "kanal", "strefa", "emisje"}] – agencje reklamowe (silnik/rynek/reklama.py,
                                                               dane/mapa/reklama.yaml)
     promocje:          [{"typ", "nazwa", "danie"}]          – pełna lista włączonych promocji, nazwa
@@ -90,6 +94,7 @@ from .model import Cena, Firma, Odejscie, Pracownik, Stanowisko, do_slownika, gr
 from .nieruchomosci import per_lokal as pl
 from .nieruchomosci.lokale import bledy as bledy_lokali
 from .nieruchomosci.lokale import wolne_miejsca
+from .rynek import dekor as dk
 from .rynek import promocje as pm
 from .rynek import reklama as rk
 from .swiat import awarie as aw
@@ -529,6 +534,12 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
                                     "sprzet" if rodzaj == "udogodnienia" else "wyposazenie", pozycje[n]["cena"], runda)
                     firma.majatek += pozycje[n]["cena"]
                     info["inwestycje"] += pozycje[n]["cena"]
+    if "inwestycje_wyposazenie" in odbl and dk.zasady(dane) and firma.lokale:
+        # dekor lokalu: decyzja główna – lokal główny, w_lokalu[lokal] – ten lokal (zakupy, potem ustawienia)
+        glowny_dk = pl.glowny(firma, runda)
+        for lok, kup, ustaw in [(glowny_dk, d.get("dekor_kup"), d.get("dekor_ustaw"))] + [
+                (pl.lokal(firma, k), v.get("dekor_kup"), v.get("dekor_ustaw")) for k, v in w_lokalu.items()]:
+            dk.zastosuj(dane, firma, lok, kup, ustaw, runda, ksiega, rachunek, info)
     pl.synchronizuj(firma)
 
     # marketing: kampanie agencji reklamowych i promocje
@@ -712,6 +723,8 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
         # lokalu za wcześnie to błąd zapisu (limity.naruszenia)
         for tekst in (info or {}).get("odrzucone_ceny", []):
             dodaj("czerwony", "oferta", tekst)
+        for tekst in (info or {}).get("uwagi_dekoru", []):
+            dodaj("czerwony", "wnetrze_wyposazenie", tekst)
         for typ, n in (info or {}).get("odrzucone_stanowiska", {}).items():
             dodaj("czerwony", "stanowiska", f"Brak miejsca w lokalach na {n} {dane.typy_stanowisk[typ]['nazwa'].lower()} "
                   "– nie zostały uruchomione. Weź większy lub kolejny lokal.")
