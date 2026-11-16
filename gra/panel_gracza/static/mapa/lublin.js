@@ -10,8 +10,11 @@ import { ikona, zeton } from "./ikony.js";
 import { utworzWidok } from "./widok.js";
 
 const ADRES = (plik) => new URL(plik, import.meta.url).href;
-const POZIOMY = [0.09, 0.3];
-const ZANIK = [0.062, 0.1];   // px na metr: poniżej pierwszej żetony są niewidoczne (same nazwy dzielnic), powyżej drugiej pełne   // px na metr: poniżej – całe miasto, pomiędzy – dzielnica, powyżej – ulica i budynek
+const POZIOMY = [0.14, 0.45];
+const PROG_GESTOSCI = 0.6;   // żeton bliżej niż tyle szerokości od ważniejszego znika
+// ulice wyłaniają się stopniowo: krycie rośnie od 0 do 1 na tym przedziale skali (px na metr), po poziomie, od którego są rysowane
+const KRYCIE = { 2: [0.14, 0.3], 3: [0.45, 0.8] };
+const ZANIK = [0.1, 0.17];   // px na metr: poniżej pierwszej żetony są niewidoczne (same nazwy dzielnic), powyżej drugiej pełne   // px na metr: poniżej – całe miasto, pomiędzy – dzielnica, powyżej – ulica i budynek
 const PALETY = { bar: "Bar mleczny", pewex: "Pewex", wysoka: "Wysoka widoczność" };
 // odcień strefy (4 odcienie z palety; sąsiednie strefy mają różne) – strefę i tak podpisuje nazwa, nie sam kolor
 const ODCIEN = { stare_miasto: 1, centrum: 2, akademickie: 3, politechnika: 1, dworzec: 2, zygmuntowskie: 3, lsm_czuby: 4,
@@ -23,7 +26,8 @@ const SKROTY = [["lokal", "lokal", "Mój lokal"], ["bank", "bank", "Banki"], ["h
 const DALEKO = new Set(["zamek", "arena", "lotnisko", "gorki_czechowskie", "skansen", "dworzec_glowny", "plac_litewski"]);
 
 let DANE = null, BLAD = null, WIDOK = null, widok = null, C = null, P = null, ZNAKI = [], poziom = 0, ulice = false;
-let ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0, czysta = false, ULICE = [];
+const krycie = {};
+let ostatniZanik = "", ostatnieK = 0, ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0, czysta = false, ULICE = [];
 
 // --- style i dane (raz) ---
 (function podlaczStyle() {
@@ -123,7 +127,6 @@ function znakiLokali(c) {
   return M.lokale.filter((l) => (l.od_rundy || 1) <= v.runda && (!v.lokale.na_mapie || v.lokale.na_mapie.includes(l.id)) && l.geo).map((l) => {
     const moje = (v.lokale.moje || []).find((x) => x.id === l.id), kto = v.lokale.zajete[l.id];
     const stan = moje ? (wybrany === l.id ? "wybrany" : "moj") : kto ? "zajety" : "wolny";
-    const pilny = stan === "wolny" && !(v.lokale.moje || []).length;   // drużyna bez lokalu: wolne lokale widać nawet z daleka
     const op = (v.lokale.opinie || {})[l.id], dzialka = l.typ === "dzialka" && (stan === "wolny" || (moje && !moje.dziala));
     const opis = stan === "wolny" ? `Wolny ${l.typ === "dzialka" ? "teren pod budowę" : "lokal"} (${l.adres}). Kliknij, żeby wynająć albo kupić.`
       : moje ? `${stan === "wybrany" ? "Lokal wybrany przez Ciebie w tej rundzie" : "Twój lokal"} (${l.adres}). Kliknij, żeby wejść.`
@@ -131,7 +134,7 @@ function znakiLokali(c) {
     const kolor = stan === "zajety" ? marka(v, kto).kolor : moje ? kolorFirmy(v, v.firma) : null;
     const plakietka = stan === "moj" ? "★" : stan === "wybrany" ? "✓" : "";
     const ocena = op && P.UST.opinie ? `<span class="lm-ocena" aria-hidden="true">★ ${op.ocena.toFixed(1).replace(".", ",")}</span>` : "";
-    return znak(...xy(l.geo), `lm-lokal lm-${stan}${pilny ? " lm-pilny" : ""}`, moje ? "lmapa-wejdz" : "lmapa-lokal", l.id, l.nazwa, opis,
+    return znak(...xy(l.geo), `lm-lokal lm-${stan}`, moje ? "lmapa-wejdz" : "lmapa-lokal", l.id, l.nazwa, opis,
       `<span class="lm-kafel"${kolor ? ` style="--firma:${esc(kolor)}"` : ""}>${zeton(null, dzialka ? "dzialka" : "lokal", "kolo")}${plakietka ? `<i class="lm-plakietka" aria-hidden="true">${plakietka}</i>` : ""}</span>${ocena}`,
       moje ? 8 : stan === "wolny" ? 6 : 5);
   }).join("");
@@ -199,11 +202,16 @@ function naZmiane(s) {
   const ramka = document.getElementById("lmapa");
   if (!ramka) return;
   ramka.querySelector("#lmapa-swiat")?.setAttribute("transform", `matrix(${s.k} 0 0 ${s.k} ${s.x} ${s.y})`);
-  ramka.style.setProperty("--k", s.k);
+  if (poziom > 1 || s.k >= POZIOMY[0]) ramka.style.setProperty("--k", s.k);   // używają go tylko napisy ulic (od poziomu 2)
   for (const z of ZNAKI) z.el.style.transform = `translate(${(z.x * s.k + s.x + z.dx + z.ox).toFixed(1)}px, ${(z.y * s.k + s.y + z.dy + z.oy).toFixed(1)}px)`;
   // przy oddalaniu żetony bledną; na pełnym oddaleniu zostają nazwy dzielnic i własny lokal
   const zanik = Math.min(1, Math.max(0, (s.k - ZANIK[0]) / (ZANIK[1] - ZANIK[0])));
-  ramka.style.setProperty("--zanik", zanik.toFixed(2));
+  for (const [n, [a, b]] of Object.entries(KRYCIE)) {   // zmienne na grupie SVG, żeby nie przeliczać stylów żetonów
+    const kr = Math.min(1, Math.max(0, (s.k - a) / (b - a))).toFixed(2);
+    if (kr !== krycie[n]) { krycie[n] = kr; ramka.querySelector("#lmapa-swiat")?.style.setProperty(`--kr-${n}`, kr); }
+  }
+  const zn = zanik.toFixed(2);
+  if (zn !== ostatniZanik) { ostatniZanik = zn; ramka.style.setProperty("--zanik", zn); }   // zmiana zmiennej przelicza style wszystkich żetonów
   czysta = zanik < 0.3;
   ramka.classList.toggle("lm-czysta", czysta);
   const p = s.k < POZIOMY[0] ? 1 : s.k < POZIOMY[1] ? 2 : 3;
@@ -217,10 +225,14 @@ function naZmiane(s) {
       if (g) g.innerHTML = `<path class="lm-uliczka" d="${Object.values(DANE.ulice).join("")}"/>`;
     }
   }
-  // napisy układamy najwyżej co 90 ms i jeszcze raz po zatrzymaniu mapy
+  // Układanie (czytanie rozmiarów z DOM + rozsuwanie) jest drogie, więc przy samym przesuwaniu robimy je dopiero po
+  // zatrzymaniu mapy, a przy przybliżaniu najwyżej co 160 ms i jeszcze raz po zatrzymaniu.
+  const przesuniecie = ostatnieK && Math.abs(s.k / ostatnieK - 1) < 0.001;
+  ostatnieK = s.k;
   const teraz = performance.now();
   clearTimeout(czekaUlozenie);
-  if (teraz - ostatnieUlozenie > 90) { ostatnieUlozenie = teraz; uloz(s, ramka); } else czekaUlozenie = setTimeout(() => { ostatnieUlozenie = performance.now(); uloz(WIDOK, ramka); }, 100);
+  if (!przesuniecie && teraz - ostatnieUlozenie > 160) { ostatnieUlozenie = teraz; uloz(s, ramka); }
+  else czekaUlozenie = setTimeout(() => { ostatnieUlozenie = performance.now(); uloz(WIDOK, ramka); }, 110);
 }
 
 // --- układanie napisów: żaden szyld nie zasłania żetonu ani innego szyldu; ważniejsze wybierają miejsce pierwsze ---
@@ -232,8 +244,8 @@ function waznosc(el) {
     : k.contains("lm-budynek") || k.contains("lm-zielony") ? 5 : k.contains("lm-zajety") ? 6 : k.contains("lm-wolny") ? 7 : k.contains("lm-miejsce") ? 8 : 9;
 }
 
-// na pełnym oddaleniu zostają: Twój lokal i (gdy go nie masz) wolne lokale
-const zostaje = (z) => z.waznosc === 1 || z.el.classList.contains("lm-pilny");
+// na pełnym oddaleniu zostaje tylko Twój lokal
+const zostaje = (z) => z.waznosc === 1;
 
 function zmierz(ramka) {
   ROZM = parseFloat(getComputedStyle(ramka).getPropertyValue("--rozm")) || 30;
@@ -250,8 +262,24 @@ const nachodzi = (a, b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a
 
 // Żetony, które na ekranie leżą na sobie, rozsuwają się na boki (jak pionki postawione obok siebie na jednym polu).
 // Własny lokal i budynki zbiorcze stoją prawie w miejscu, reszta ustępuje; nikt nie odjeżdża dalej niż o własną szerokość.
+// Przerzedzanie: żeton, który stoi prawie na ważniejszym, znika (wraca po przybliżeniu), żeby nie było zbyt gęsto.
+function przerzedz(s) {
+  const kandydaci = ZNAKI.filter((z) => z.bok && z.widac && !(czysta && !zostaje(z)));
+  const klucz = (z) => z.waznosc;
+  const trzymane = [];
+  for (const z of kandydaci.sort((a, b) => klucz(a) - klucz(b))) {
+    const x = z.x * s.k + s.x, y = z.y * s.k + s.y;
+    const zaslania = trzymane.some((t) => Math.hypot(t[0] - x, t[1] - y) < (t[2] + z.bok) / 2 * PROG_GESTOSCI);
+    z.ukryty = zaslania && klucz(z) > 1;
+    z.el.classList.toggle("lm-przerzedzony", z.ukryty);
+    if (!z.ukryty) trzymane.push([x, y, z.bok]);
+  }
+  for (const z of ZNAKI) if (!kandydaci.includes(z) && z.ukryty) { z.ukryty = false; z.el.classList.remove("lm-przerzedzony"); }
+}
+
 function rozsun(s) {
-  const zywe = ZNAKI.filter((z) => z.bok && z.widac && !(czysta && !zostaje(z)));
+  przerzedz(s);
+  const zywe = ZNAKI.filter((z) => z.bok && z.widac && !z.ukryty && !(czysta && !zostaje(z)));
   for (const z of ZNAKI) if (!zywe.includes(z)) { z.ox = 0; z.oy = 0; }
   const p = zywe.map((z) => [z.x * s.k + s.x, z.y * s.k + s.y - z.bok * 0.36]);
   const start = p.map((q) => [...q]), waga = zywe.map((z) => z.waznosc === 1 || z.waznosc === 3 ? 0.15 : z.waznosc === 8 ? 1.4 : 1);
@@ -299,14 +327,14 @@ function uloz(s, ramka) {
     zajete.push({ pr: [r.left - r0.left - 4, r.top - r0.top - 4, r.right - r0.left + 4, r.bottom - r0.top + 4], czyj: null });
   }
   for (const z of ZNAKI) {   // żetony zajmują miejsce pierwsze
-    if (!z.bok || !z.widac || (czysta && !zostaje(z))) continue;
+    if (!z.bok || !z.widac || z.ukryty || (czysta && !zostaje(z))) continue;
     const [ax, ay] = ekran(z);
     zajete.push({ pr: [ax - z.bok / 2, ay - z.bok * 0.86, ax + z.bok / 2, ay + z.bok * 0.14], czyj: z, zeton: true });
   }
   for (const z of ZNAKI.filter((q) => q.w).sort((a, b) => a.waznosc - b.waznosc)) {
     const n = z.napis || z.el, [ax, ay] = ekran(z);
     let gdzie = null;
-    if (z.widac && (poziom > 1 || z.waznosc <= 4 || z.waznosc === 9) && !(czysta && z.napis && !zostaje(z)) && ax > -40 && ax < W + 40 && ay > -40 && ay < H + 40) {
+    if (z.widac && !z.ukryty && (poziom > 1 || z.waznosc <= 4 || z.waznosc === 9) && !(czysta && z.napis && !zostaje(z)) && ax > -40 && ax < W + 40 && ay > -40 && ay < H + 40) {
       const b = z.bok, w = z.w, h = z.h;
       // szyld żetonu: pod, nad, z prawej, z lewej; napis na planszy: na środku, wyżej, niżej
       const miejsca = z.napis ? [[-w / 2, b * 0.14 + 4], [-w / 2, -b * 0.86 - 4 - h], [b / 2 + 4, -b * 0.36 - h / 2], [-b / 2 - 4 - w, -b * 0.36 - h / 2]]
@@ -337,7 +365,7 @@ export const nowaMapa = {
     if (!DANE) { wczytane.then(() => { if (C === c) c.rysuj(); }); return `<div class="ladowanie">Wczytywanie mapy…</div>`; }
     const M = c.kat.mapa, wart = P.wartosciWarstwy(c), zakres = wart ? zakresWartosci(wart) : null;
     const brak = c.v.lokale && !c.v.lokale.moje.length
-      ? `<div class="komunikat">Nie masz jeszcze lokalu – kliknij wolny lokal albo działkę (żeton z przerywaną ramką).</div>` : "";
+      ? `<div class="komunikat">Nie masz jeszcze lokalu – przybliż mapę i kliknij wolny lokal albo działkę (żeton z przerywaną ramką).</div>` : "";
     return `${brak}${P.parkiNaMapie(c.v, c.kat, c.edycja)}${pasekUstawien(c)}
       <div class="lmapa${wart ? " warstwa" : ""}${P.UST.legenda ? " lm-z-legenda" : ""}" id="lmapa" tabindex="0" role="application" aria-label="Mapa Lublina – strzałki przesuwają, plus i minus przybliżają">
         <svg class="lmapa-svg" aria-hidden="true">${rysunek(M, wart, zakres)}</svg>
@@ -355,7 +383,7 @@ export const nowaMapa = {
     const ramka = document.getElementById("lmapa");
     if (!ramka || !DANE) return;
     widok?.zniszcz();
-    poziom = 0; ulice = false;
+    poziom = 0; ulice = false; for (const n in krycie) delete krycie[n];
     ULICE = [...ramka.querySelectorAll(".lm-ulica-napis")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, kx: +el.dataset.kx, ky: +el.dataset.ky, n: +el.dataset.n }));
     ZNAKI = [...ramka.querySelectorAll(".lmapa-nakladka > [data-x]")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, dx: 0, dy: 0, ox: 0, oy: 0,
       napis: el.querySelector(".lm-podpis"), waznosc: waznosc(el) }));
@@ -389,7 +417,7 @@ export const nowaMapa = {
       if (s === "raport" || s === "wyslij") return c.dostepna(s) ? c.idz(s) : toast("Ta część gry nie jest jeszcze dostępna w tej rundzie.");
       if (s === "lokal") {
         const moj = (c.v.lokale?.moje || []).map((l) => M.lokale.find((x) => x.id === l.id)?.geo).filter(Boolean).map(xy)[0];
-        if (!moj) return toast("Nie masz jeszcze lokalu – wybierz wolny lokal albo działkę (żeton z przerywaną ramką).");
+        if (!moj) return toast("Nie masz jeszcze lokalu – przybliż mapę i wybierz wolny lokal albo działkę (żeton z przerywaną ramką).");
         return widok?.lecDo(moj[0], moj[1], 0.9);
       }
       if (s === "bank") { const z = (M.zespoly || []).find((x) => x.id === "kamienica_bankowa"); if (z?.geo) widok?.lecDo(...xy(z.geo), 0.9); return; }

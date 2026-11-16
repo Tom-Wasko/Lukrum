@@ -47,9 +47,13 @@
 .lm-glowna.lm-droga { stroke-width: 2.2; }
 .lm-glowna.lm-droga-obrys { stroke-width: 4; }
 .lm-zbiorcza, .lm-lokalna, .lm-uliczka { display: none; }
+/* ulice wyłaniają się stopniowo (krycie ustawia lublin.js: KRYCIE) */
+.lm-zbiorcza { opacity: var(--kr-2, 1); }
+.lm-lokalna, .lm-uliczka { opacity: var(--kr-3, 1); }
 .lm-kolej-obrys { stroke: var(--tusz); stroke-width: 2.4; }
 .lm-kolej { stroke: var(--papier); stroke-width: 1.2; stroke-dasharray: 7 7; stroke-linecap: butt; }
-.lm-ulice-napisy { display: none; }
+.lm-ulice-napisy { display: none; opacity: var(--kr-2, 1); }
+.lm-ulice-napisy .lm-krotka { opacity: var(--kr-3, 1); }
 .lm-ulica-napis { font: calc(11px * var(--skala-tekstu, 1) / var(--k)) var(--font-szyld); letter-spacing: .04em; text-anchor: middle;
   fill: var(--tusz); stroke: var(--g-karta); stroke-width: 3px; paint-order: stroke; stroke-linejoin: round; }
 
@@ -80,6 +84,7 @@
 /* --- napisy na mapie: miejsce i widoczność ustala lublin.js (uloz) – tu tylko wygląd --- */
 .lmapa-nakladka { position: absolute; inset: 0; pointer-events: none; }
 .lm-schowany { visibility: hidden; }
+.lm-przerzedzony { visibility: hidden; pointer-events: none; }
 .lm-napis { position: absolute; left: 0; top: 0; z-index: 9; pointer-events: none; white-space: nowrap; text-align: center; }
 .lm-strefa-napis { font: calc(10px * var(--skala-tekstu, 1))/1.1 var(--font-gruby); letter-spacing: .03em; text-transform: uppercase; color: var(--tusz);
   text-shadow: 0 0 3px var(--papier), 0 0 3px var(--papier), 1px 1px 0 var(--papier), -1px -1px 0 var(--papier), 1px -1px 0 var(--papier), -1px 1px 0 var(--papier); }
@@ -122,8 +127,8 @@
 .lm-kafel { position: absolute; left: 0; top: 0; translate: -50% -86%; display: block; width: var(--rozm); height: var(--rozm);
   filter: drop-shadow(1px 2px 0 color-mix(in srgb, var(--g-czern) 35%, transparent)); transform-origin: 50% 86%; transition: scale .12s; }
 /* przy oddalaniu żetony bledną (--zanik ustawia lublin.js); własny lokal zostaje zawsze */
-.lm-znak:not(.lm-moj, .lm-wybrany, .lm-pilny) { opacity: var(--zanik, 1); }
-.lm-czysta .lm-znak:not(.lm-moj, .lm-wybrany, .lm-pilny) { pointer-events: none; }
+.lm-znak:not(.lm-moj, .lm-wybrany) { opacity: var(--zanik, 1); }
+.lm-czysta .lm-znak:not(.lm-moj, .lm-wybrany) { pointer-events: none; }
 .lm-znak:hover { z-index: 20 !important; }
 .lm-znak:focus-visible { outline: none; z-index: 21 !important; }
 .lm-znak:hover .lm-kafel { scale: 1.18; }
