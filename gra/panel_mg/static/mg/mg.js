@@ -141,7 +141,7 @@ function decyzje() {
     ["Ceny dostawców", gra.ceny_dostawcow === "losowe" ? "wszystkie generowane" : "z danych, dalej generowane"],
     ["Przycisk „Zamów brakujące” w Dostawcach", `${gra.auto_zamowienia ? "włączony" : "wyłączony"}${gra.zakonczona ? ""
       : ` <a data-akcja="auto-zamowienia">${gra.auto_zamowienia ? "wyłącz" : "włącz"}</a>`}`],
-    ["Podpowiedzi na Dashboardzie (3 pierwsze rundy)", `${gra.podpowiedzi ? "włączone" : "wyłączone"}${gra.zakonczona ? ""
+    ["Podpowiedzi na Planie tygodnia (3 pierwsze rundy)", `${gra.podpowiedzi ? "włączone" : "wyłączone"}${gra.zakonczona ? ""
       : ` <a data-akcja="podpowiedzi">${gra.podpowiedzi ? "wyłącz" : "włącz"}</a>`}`],
     // poprawki 2 (sprawa 6): headhunter – oferty dla pracowników innych drużyn i kontroferty
     ["Podkupywanie pracowników innych drużyn", `${gra.podkupywanie !== false ? "dozwolone" : "wyłączone"}${gra.zakonczona ? ""
@@ -410,7 +410,7 @@ async function wykonaj(akcja, el) {
   if (akcja === "podpowiedzi") {
     const wlacz = !S.p.gra.podpowiedzi;
     await api(`${URL_GRY}/prowadzenie`, "POST", { podpowiedzi: wlacz });
-    toast(wlacz ? "Drużyny widzą na Dashboardzie 3 rzeczy do sprawdzenia (pierwsze 3 rundy)." : "Podpowiedzi wyłączone.");
+    toast(wlacz ? "Drużyny widzą na Planie tygodnia 3 rzeczy do sprawdzenia (pierwsze 3 rundy)." : "Podpowiedzi wyłączone.");
     return wczytaj();
   }
   if (akcja === "podkupywanie") {
