@@ -8,6 +8,7 @@
 import { esc, kolorFirmy, marka, nazwaFirmy, okno, toast, zamknijOkno } from "../zakladki/wspolne.js";
 import { ikona, zeton } from "./ikony.js";
 import { utworzWidok } from "./widok.js";
+import { nakladkaPory, naGodzine, terazMinuty, wysokoscSlonca } from "./slonce.js";
 
 const ADRES = (plik) => new URL(plik, import.meta.url).href;
 const POZIOMY = [0.14, 0.45];
@@ -25,6 +26,8 @@ const SKROTY = [["lokal", "lokal", "Mój lokal"], ["bank", "bank", "Banki"], ["h
 // punkty orientacyjne widoczne już na widoku całego miasta (reszta pojawia się po przybliżeniu)
 const DALEKO = new Set(["zamek", "arena", "lotnisko", "gorki_czechowskie", "skansen", "dworzec_glowny", "plac_litewski"]);
 
+// pora dnia na mapie: null = czas rzeczywisty, liczba = godzina z tymczasowego suwaka (minuty od północy)
+let CZAS = null, zegar = 0;
 let DANE = null, BLAD = null, WIDOK = null, widok = null, C = null, P = null, ZNAKI = [], poziom = 0, ulice = false;
 const krycie = {};
 let ostatniZanik = "", ostatnieK = 0, ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0, czysta = false, ULICE = [];
@@ -325,7 +328,7 @@ function uloz(s, ramka) {
   rozsun(s);
   const ekran = (z) => [z.x * s.k + s.x + z.ox, z.y * s.k + s.y + z.oy];
   const r0 = ramka.getBoundingClientRect();
-  for (const el of ramka.querySelectorAll(".lm-pasek, .lm-zoom, .lm-osm, .lm-leg-przycisk, .lm-z-legenda .lm-legenda")) {   // napisy nie wchodzą pod przyciski mapy
+  for (const el of ramka.querySelectorAll(".lm-pasek, .lm-zoom, .lm-slonce, .lm-osm, .lm-leg-przycisk, .lm-z-legenda .lm-legenda")) {   // napisy nie wchodzą pod przyciski mapy
     const r = el.getBoundingClientRect();
     zajete.push({ pr: [r.left - r0.left - 4, r.top - r0.top - 4, r.right - r0.left + 4, r.bottom - r0.top + 4], czyj: null });
   }
@@ -354,6 +357,23 @@ function uloz(s, ramka) {
   if (ramka.dataset.ul !== "1") for (const u of ULICE) u.el.classList.toggle("lm-schowany", ulicaZaslonieta(u, s, zajete));   // nazwa ulicy nie wchodzi pod żeton ani tabliczkę
 }
 
+// --- pora dnia: oświetlenie mapy jak Słońce nad Lublinem; suwak jest tymczasowy (do prób) ---
+function suwakSlonca() {
+  const m = CZAS ?? terazMinuty();
+  return `<div class="lm-slonce"><span aria-hidden="true">☀</span>
+    <input type="range" min="0" max="1439" step="5" value="${m}" aria-label="Pora dnia na mapie (tymczasowy suwak)">
+    <output>${naGodzine(m)}</output><button type="button" class="lm-pora-teraz" data-akcja="lmapa-pora-teraz"${CZAS == null ? " hidden" : ""}>Teraz</button></div>`;
+}
+
+function ustawPore(ramka) {
+  const noc = ramka.querySelector(".lm-noc");
+  if (!noc) return;
+  const { kolor, krycie } = nakladkaPory(wysokoscSlonca(CZAS));
+  const ciemny = document.documentElement.dataset.tryb === "ciemny";   // w trybie ciemnym mapa i tak jest ciemna
+  noc.style.background = kolor;
+  noc.style.opacity = (krycie * (ciemny ? 0.6 : 1)).toFixed(3);
+}
+
 export const nowaMapa = {
   info: "Mapa Lublina na prawdziwych granicach dzielnic. Dziesięć kolorowych dzielnic to strefy gry – w każdej są inni klienci i inne czynsze; "
     + "szare dzielnice są tłem. Z daleka widać same nazwy dzielnic i Twój lokal, a żetony budynków pojawiają się przy przybliżaniu. "
@@ -372,11 +392,13 @@ export const nowaMapa = {
     return `${brak}${P.parkiNaMapie(c.v, c.kat, c.edycja)}${pasekUstawien(c)}
       <div class="lmapa${wart ? " warstwa" : ""}${P.UST.legenda ? " lm-z-legenda" : ""}" id="lmapa" tabindex="0" role="application" aria-label="Mapa Lublina – strzałki przesuwają, plus i minus przybliżają">
         <svg class="lmapa-svg" aria-hidden="true">${rysunek(M, wart, zakres)}</svg>
+        <div class="lm-noc" aria-hidden="true"></div>
         <div class="lmapa-nakladka">${napisy(M, wart)}${znakiMiejsc(M)}${znakiBudynkow(c)}${znakiLokali(c)}</div>
         ${pasekSkrotow()}
         <div class="lm-zoom"><button type="button" data-akcja="lmapa-zoom" data-z="1.6" aria-label="Przybliż" title="Przybliż">${ikona("plus", 20)}</button>
           <button type="button" data-akcja="lmapa-zoom" data-z="0.625" aria-label="Oddal" title="Oddal">${ikona("minus", 20)}</button>
           <button type="button" data-akcja="lmapa-zoom" data-z="0" aria-label="Całe miasto" title="Całe miasto">${ikona("calosc", 20)}</button></div>
+        ${suwakSlonca()}
         ${legenda(c)}
         <a class="lm-osm" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© autorzy OpenStreetMap</a>
       </div>`;
@@ -394,11 +416,23 @@ export const nowaMapa = {
     // na początku widać strefy gry (od Czechowa po Zalew), a nie całe granice miasta
     const p = [...ramka.querySelectorAll(".lm-strefa-napis")].map((el) => [+el.dataset.x, +el.dataset.y]);
     const start = p.length ? [Math.min(...p.map((q) => q[0])) - 3200, Math.min(...p.map((q) => q[1])) - 2600, Math.max(...p.map((q) => q[0])) + 3200, Math.max(...p.map((q) => q[1])) + 1800] : null;
+    ustawPore(ramka);
+    clearInterval(zegar);
+    zegar = setInterval(() => { if (!ramka.isConnected) return clearInterval(zegar); if (CZAS == null) { ustawPore(ramka); const w = ramka.querySelector(".lm-slonce input"); if (w) { w.value = terazMinuty(); w.nextElementSibling.textContent = naGodzine(+w.value); } } }, 60000);
+    ramka.querySelector(".lm-slonce input")?.addEventListener("input", (e) => {
+      CZAS = +e.target.value; e.target.nextElementSibling.textContent = naGodzine(CZAS);
+      ramka.querySelector(".lm-pora-teraz")?.removeAttribute("hidden"); ustawPore(ramka);
+    });
     widok = utworzWidok(ramka, { zasieg: DANE.zasieg, start, stan: WIDOK, naZmiane });
   },
 
   akcje: {
     "lmapa-zoom": (el) => { const z = +el.dataset.z; if (z) widok?.przybliz(z); else widok?.calosc(); },
+    "lmapa-pora-teraz": (el) => {
+      CZAS = null; const ramka = document.getElementById("lmapa"), w = ramka?.querySelector(".lm-slonce input");
+      if (w) { w.value = terazMinuty(); w.nextElementSibling.textContent = naGodzine(+w.value); }
+      el.hidden = true; if (ramka) ustawPore(ramka);
+    },
     "lmapa-wejdz": (el) => window.lukrum.otworzWnetrze(el.dataset.id),
     "lmapa-lokal": (el, c) => P.akcje["mapa-lokal"](el, c),
     "lmapa-miejsce": (el, c) => P.akcje["mapa-miejsce"](el, c),

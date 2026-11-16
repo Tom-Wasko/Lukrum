@@ -80,6 +80,7 @@ export function utworzWidok(ramka, op) {
   }
   function wcisniecie(e) {
     if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (e.target.closest?.(".lm-slonce")) return;   // suwak pory dnia nie przesuwa mapy
     palce.set(e.pointerId, miejsce(e));
     if (palce.size === 1) { ciagnie = { od: miejsce(e), stan: { ...baza() }, id: e.pointerId }; przeciagnieto = false; }
     if (palce.size === 2) {

@@ -254,3 +254,13 @@
   .lm-kafel, .lm-skrot span { transition: none; }
   .lm-znak:hover .lm-kafel, .lm-znak:focus-visible .lm-kafel { scale: 1; }
 }
+
+/* pora dnia: nakładka (kolor i krycie ustawia lublin.js z wysokości Słońca) leży nad rysunkiem, pod żetonami */
+.lm-noc { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1.2s linear, background-color 1.2s linear; }
+.lm-slonce { position: absolute; left: 50%; bottom: 10px; z-index: 31; translate: -50% 0; display: flex; align-items: center; gap: 8px;
+  height: 36px; padding: 0 12px; background: var(--g-karta, var(--papier)); color: var(--tusz); border: 2px solid var(--g-czern, var(--tusz));
+  border-radius: 4px; box-shadow: 2px 2px 0 var(--g-czern, var(--tusz)); font: calc(13px * var(--skala-tekstu, 1)) var(--font-szyld); }
+.lm-slonce input { width: clamp(90px, 22vw, 200px); accent-color: var(--akcent); }
+.lm-slonce output { min-width: 3.2em; text-align: center; font-variant-numeric: tabular-nums; }
+.lm-slonce button { min-height: 0; padding: 2px 8px; cursor: pointer; font: inherit; }
+.lm-slonce button[hidden] { display: none; }
