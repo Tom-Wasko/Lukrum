@@ -105,6 +105,8 @@ budynki:
   rodzaj: urzad
   strefa: stare_miasto
   miejsce: urzędy przy ul. Szeligowskiego (Czechów Południowy)
+  adres: ul. Szeligowskiego 24
+  geo: {lat: 51.26365, lon: 22.55635}
   opis: Rejestracja firmy, podatki i ZUS. Urzędnik sprawdzi też, czego brakuje w twoich decyzjach (Lista błędów).
   zakladka: urzad
   mapa:
@@ -116,7 +118,9 @@ budynki:
   nazwa: Sanepid
   rodzaj: urzad
   strefa: centrum
-  miejsce: okolice ul. Karłowicza (Śródmieście)
+  miejsce: ul. Uniwersytecka, róg Karłowicza (Śródmieście)
+  adres: ul. Uniwersytecka 12
+  geo: {lat: 51.24517, lon: 22.54678}
   opis: Odbiór lokalu, higiena i kontrole w kuchni.
   zakladka: urzad
   mapa:
@@ -129,6 +133,8 @@ budynki:
   rodzaj: poczta
   strefa: centrum
   miejsce: Krakowskie Przedmieście, Poczta Główna (Śródmieście)
+  adres: Krakowskie Przedmieście 50
+  geo: {lat: 51.24767, lon: 22.55921}
   opis: Tu wysyłasz decyzje rundy – list polecony do mistrza gry.
   zakladka: wyslij
   mapa:
@@ -141,6 +147,8 @@ budynki:
   rodzaj: nieruchomosci
   strefa: centrum
   miejsce: Śródmieście, poza deptakiem
+  adres: ul. Narutowicza 30
+  geo: {lat: 51.24437, lon: 22.55835}
   opis: Wszystkie wolne lokale i działki w mieście w jednym katalogu.
   zakladka: lokale
   mapa:
@@ -153,6 +161,8 @@ budynki:
   rodzaj: praca
   strefa: centrum
   miejsce: Miasteczko Akademickie, tablica ogłoszeń (Sławinek / Rury)
+  adres: ul. Radziszewskiego 11
+  geo: {lat: 51.24658, lon: 22.54114}
   opis: Kandydaci do kuchni i na kasę.
   zakladka: rynek_pracy
   mapa:
@@ -165,6 +175,8 @@ budynki:
   rodzaj: dostawca
   strefa: stare_miasto
   miejsce: Stare Miasto
+  adres: ul. Grodzka 5
+  geo: {lat: 51.24842, lon: 22.5686}
   opis: Świeże bułki i pita codziennie rano.
   zakladka: dostawcy
   mapa:
@@ -176,7 +188,9 @@ budynki:
   nazwa: Makro
   rodzaj: dostawca
   strefa: felin
-  miejsce: ul. Mełgiewska, hurtownie (Tatary)
+  miejsce: ul. Chemiczna, hurtownie (Bronowice)
+  adres: ul. Chemiczna 5
+  geo: {lat: 51.23598, lon: 22.59995}
   opis: 'Hurtownia: pełny asortyment, dowóz w poniedziałki i czwartki.'
   zakladka: dostawcy
   mapa:
@@ -188,7 +202,9 @@ budynki:
   nazwa: Selgros
   rodzaj: dostawca
   strefa: felin
-  miejsce: ul. Mełgiewska, hurtownie (Tatary)
+  miejsce: al. Jana Pawła II (Węglin Południowy)
+  adres: al. Jana Pawła II 59
+  geo: {lat: 51.22762, lon: 22.47839}
   opis: 'Hurtownia: mięso i napoje, dowóz we wtorki i piątki.'
   zakladka: dostawcy
   mapa:
@@ -200,7 +216,9 @@ budynki:
   nazwa: Eurocash
   rodzaj: dostawca
   strefa: felin
-  miejsce: ul. Mełgiewska, hurtownie (Tatary)
+  miejsce: ul. Łęczyńska, hurtownie (Bronowice)
+  adres: ul. Łęczyńska 9d
+  geo: {lat: 51.23811, lon: 22.58245}
   opis: 'Hurtownia: tanie warzywa i sosy, dowóz w pn, śr i pt.'
   zakladka: dostawcy
   mapa:
@@ -212,7 +230,9 @@ budynki:
   nazwa: Auchan
   rodzaj: dostawca
   strefa: zygmuntowskie
-  miejsce: osiedle w strefie Zygmuntowskie
+  miejsce: al. Witosa (Felin)
+  adres: al. Witosa 32
+  geo: {lat: 51.23232, lon: 22.61182}
   opis: 'Hipermarket: pełny asortyment, drożej niż w hurtowni, odbiór osobisty. Tu kupuje auto-dostawca.'
   zakladka: dostawcy
   mapa:
@@ -224,7 +244,9 @@ budynki:
   nazwa: Biedronka
   rodzaj: dostawca
   strefa: akademickie
-  miejsce: osiedle przy Miasteczku Akademickim
+  miejsce: ul. Nałęczowska (Konstantynów), za Miasteczkiem Akademickim
+  adres: ul. Nałęczowska 24
+  geo: {lat: 51.2494, lon: 22.51324}
   opis: 'Dyskont – gazetka, odbiór osobisty.'
   zakladka: dostawcy
   mapa:
@@ -236,7 +258,9 @@ budynki:
   nazwa: Lidl
   rodzaj: dostawca
   strefa: lsm_czuby
-  miejsce: osiedle LSM lub Czuby
+  miejsce: ul. Romantyczna (Czuby)
+  adres: ul. Romantyczna 2
+  geo: {lat: 51.22924, lon: 22.53677}
   opis: 'Dyskont – gazetka, odbiór osobisty.'
   zakladka: dostawcy
   mapa:
@@ -248,7 +272,9 @@ budynki:
   nazwa: Stokrotka
   rodzaj: dostawca
   strefa: czechow
-  miejsce: osiedle na Czechowie
+  miejsce: ul. Braci Wieniawskich (Czechów Południowy)
+  adres: ul. Braci Wieniawskich 12
+  geo: {lat: 51.26243, lon: 22.5452}
   opis: 'Dyskont – blisko osiedla, odbiór osobisty.'
   zakladka: dostawcy
   mapa:
@@ -260,7 +286,9 @@ budynki:
   nazwa: Zakłady Mięsne „Rożen” z Łęcznej
   rodzaj: dostawca
   strefa: zemborzyce
-  miejsce: poza miastem, droga na Łęczną
+  miejsce: ul. Turystyczna, wylot na Łęczną (Hajdów-Zadębie)
+  adres: ul. Turystyczna 120
+  geo: {lat: 51.26309, lon: 22.62849}
   opis: 'Producent stożków kebab – punkt odbioru zamówień (od rundy 3).'
   zakladka: dostawcy
   mapa:
@@ -273,6 +301,8 @@ budynki:
   rodzaj: sklep
   strefa: felin
   miejsce: park handlowy na Węglinie (Węglin Południowy), obok sklepu meblowego
+  adres: al. Kraśnicka 152
+  geo: {lat: 51.22635, lon: 22.47342}
   opis: Rożny, frytownice, lodówki i kasy fiskalne.
   zakladka: sprzet
   mapa:
@@ -285,6 +315,8 @@ budynki:
   rodzaj: sklep
   strefa: lsm_czuby
   miejsce: park handlowy na Węglinie (Węglin Południowy), sklep meblowy
+  adres: al. Kraśnicka 150
+  geo: {lat: 51.2265, lon: 22.47371}
   opis: Meble, stoliki, telewizor z meczami i materiały do urządzenia sali – kupione wyposażenie jest od razu w lokalu.
   zakladka: wyposazenie
   mapa:
@@ -296,7 +328,9 @@ budynki:
   nazwa: Stolarnia „Lada i Syn”
   rodzaj: sklep
   strefa: zygmuntowskie
-  miejsce: Zygmuntowskie
+  miejsce: ul. Krochmalna (Za Cukrownią)
+  adres: ul. Krochmalna 13
+  geo: {lat: 51.22746, lon: 22.55534}
   opis: Buduje nowe stanowiska kuchenne i kasowe w twoim lokalu.
   zakladka: stanowiska
   mapa:
@@ -309,6 +343,8 @@ budynki:
   rodzaj: sklep
   strefa: centrum
   miejsce: Śródmieście, centrum handlowe przy ul. Lipowej
+  adres: ul. Lipowa 13
+  geo: {lat: 51.24501, lon: 22.55037}
   opis: Ekspresy, fotele do masażu i inne udogodnienia dla załogi.
   zakladka: udogodnienia
   mapa:
@@ -321,6 +357,8 @@ budynki:
   rodzaj: szkola
   strefa: politechnika
   miejsce: okolice Politechniki, ul. Nadbystrzycka
+  adres: ul. Nadbystrzycka 36
+  geo: {lat: 51.23616, lon: 22.55114}
   opis: 'Szkolenia: Lubelska Szkoła Kebabu, Rożen i Rozum oraz HACCP w Pięć Minut.'
   zakladka: szkolenia
   mapa:
@@ -333,6 +371,8 @@ budynki:
   rodzaj: reklama
   strefa: akademickie
   miejsce: Miasteczko Akademickie
+  adres: ul. Akademicka 15
+  geo: {lat: 51.24396, lon: 22.54238}
   opis: Ulotki za wycieraczki i plakaty na słupach (dane/mapa/reklama.yaml).
   zakladka: agencje
   mapa:
@@ -359,6 +399,8 @@ budynki:
   rodzaj: uczelnia
   strefa: akademickie
   miejsce: Miasteczko Akademickie UMCS
+  adres: pl. Marii Curie-Skłodowskiej 5
+  geo: {lat: 51.24531, lon: 22.54018}
   opis: Studenci ekonomii badają rynek – kto ile sprzedaje i po ile (Konkurencja).
   zakladka: konkurencja
   mapa:
@@ -371,6 +413,8 @@ budynki:
   rodzaj: media
   strefa: centrum
   miejsce: Śródmieście, poza deptakiem
+  adres: ul. Chopina 11
+  geo: {lat: 51.24601, lon: 22.55372}
   opis: Ranking firm miasta – karta wyników.
   zakladka: karta_wynikow
   mapa:
@@ -383,6 +427,8 @@ budynki:
   rodzaj: park
   strefa: akademickie
   miejsce: Ogród Saski
+  adres: Al. Racławickie
+  geo: {lat: 51.24909, lon: 22.54676}
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -395,6 +441,8 @@ budynki:
   rodzaj: park
   strefa: zygmuntowskie
   miejsce: Park Ludowy nad Bystrzycą
+  adres: al. Piłsudskiego
+  geo: {lat: 51.23595, lon: 22.56086}
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -407,6 +455,8 @@ budynki:
   rodzaj: park
   strefa: akademickie
   miejsce: Ogród Botaniczny UMCS (Sławinek)
+  adres: ul. Sławinkowska 3
+  geo: {lat: 51.26243, lon: 22.51496}
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -419,6 +469,8 @@ budynki:
   rodzaj: park
   strefa: felin
   miejsce: Park Bronowicki (Bronowice)
+  adres: ul. Bronowicka
+  geo: {lat: 51.23786, lon: 22.57621}
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -430,7 +482,8 @@ budynki:
   nazwa: Park Rury
   rodzaj: park
   strefa: lsm_czuby
-  miejsce: park w wąwozie na Rurach
+  miejsce: Park Rury w wąwozie między LSM a Czubami
+  geo: {lat: 51.23363, lon: 22.52333}
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -443,6 +496,7 @@ budynki:
   rodzaj: park
   strefa: stare_miasto
   miejsce: błonia pod Zamkiem (Stare Miasto)
+  geo: {lat: 51.2503, lon: 22.5758}
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -455,6 +509,7 @@ budynki:
   rodzaj: woda
   strefa: zemborzyce
   miejsce: Zalew Zemborzycki
+  geo: {lat: 51.17893, lon: 22.52865}
   opis: Plaża, żaglówki, wędkarze i morsy – co jakiś czas wydarzenia nad wodą (kliknij, żeby je zobaczyć).
   zakladka: zdarzenia
   mapa:
@@ -467,6 +522,8 @@ budynki:
   rodzaj: lichwiarz
   strefa: dworzec
   miejsce: Stare Miasto, brama kamienicy
+  adres: ul. Rybna 4
+  geo: {lat: 51.24866, lon: 22.56738}
   opis: Pożyczki od ręki, bez pytań i bez ksiąg. Pytania zadaje się później – i zadaje je Mistrz Jakub.
   zakladka: harpagon
   mapa:
@@ -518,6 +575,8 @@ budynki:
   rodzaj: detektyw
   strefa: dworzec
   miejsce: okolice dworca PKP
+  adres: ul. 1 Maja 20
+  geo: {lat: 51.23411, lon: 22.57034}
   opis: Nad lombardem przy dworcu. Zenon Lupa śledzi konkurencję za gotówkę – dyskretnie, przynajmniej w teorii.
   zakladka: konkurencja
   mapa:
@@ -545,7 +604,11 @@ zespoly:
   nazwa: Kamienica bankowa
   opis: Kamienica przy deptaku z szyldami sześciu banków i biura maklerskiego. W środku wybiera się bank.
   miejsce: Krakowskie Przedmieście (Śródmieście)
+  adres: Krakowskie Przedmieście 37
+  geo: {lat: 51.24825, lon: 22.55783}
 - id: biurowiec_zana
   nazwa: Biurowiec przy Zana
   opis: Biurowiec z holem i tablicą firm – biura rachunkowe, agencje reklamy, ubezpieczyciel.
   miejsce: biurowce przy ul. Zana (Rury)
+  adres: ul. Tomasza Zana 39
+  geo: {lat: 51.23807, lon: 22.52733}

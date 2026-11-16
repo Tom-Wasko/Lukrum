@@ -9,6 +9,7 @@ import { budynekProsty, lokalBudynek, rysujBudynek, trasyMiasta, zabudowa, zbior
 import { uruchomPojazdy } from "./mapa_pojazdy.js";
 import { zastosujUklad } from "./mapa_uklad.js";
 import { wylaczona } from "./funkcje.js";
+import { nowaMapa } from "../mapa/lublin.js";
 
 const BUDYNKI = {  // rodzaj → kolor w legendzie (wygląd budynków: mapa_budynki.js)
   bank: ["#2d73d6", 30], urzad: ["#9b51e0", 40], poczta: ["#f2b705", 22], biuro: ["#17a2b8", 26], nieruchomosci: ["#e5333f", 24],
@@ -27,7 +28,7 @@ const KLUCZ = "lukrum-mapa";
 const WARSTWY = { "": "Strefy", czynsze: "Czynsze", popyt: "Popyt", konkurencja: "Konkurencja" };
 const bezRuchu = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 const UST = (() => {
-  const u = { warstwa: "", opinie: true, ruch: !bezRuchu(), plaska: false };   // plaska – widok 2D z góry
+  const u = { warstwa: "", opinie: true, ruch: !bezRuchu(), plaska: false, nowa: true };   // plaska – widok 2D z góry; nowa – mapa z OSM (static/mapa/)
   try { Object.assign(u, JSON.parse(localStorage.getItem(KLUCZ) || "{}")); } catch { /* prywatne okno – domyślne */ }
   if (!(u.warstwa in WARSTWY)) u.warstwa = "";
   return u;
@@ -285,6 +286,7 @@ function pasek(c) {
     <div class="mapa-grupa" role="group" aria-label="Warstwa mapy">${Object.entries(WARSTWY).map(([w, n]) =>
       `<button class="btn maly ${UST.warstwa === w ? "" : "jasny"}" data-akcja="mapa-warstwa" data-w="${w}" aria-pressed="${UST.warstwa === w}">${n}</button>`).join("")}</div>
     <div class="mapa-grupa">${wl("mapa-opinie", UST.opinie, "★ Opinie", "Oceny klientów nad lokalami")}${wl("mapa-ruch", UST.ruch, "Ruch", "Auta, pociągi i przechodnie – im więcej klientów w strefie i ruchliwsza pora, tym gęściej")}${wl("mapa-2d", UST.plaska, "2D", "Płaski plan miasta z góry zamiast widoku 3D")}</div>
+    <button class="btn maly jasny" data-akcja="mapa-wersja" title="Mapa na prawdziwych granicach dzielnic Lublina">Nowa mapa</button>
     <span class="mapa-pora" id="mapa-pora" title="${ZAWSZE_DZIEN ? "Godzina w Lublinie – ruch na ulicach zależy od pory dnia" : "Pora dnia w Lublinie według zegara Twojego komputera – po zachodzie słońca mapa ciemnieje"}">${pora.ikona} ${esc(pora.zegar)} · ${pora.nazwa}</span>
   </div>`;
 }
@@ -443,13 +445,18 @@ function podepnijZegar(c) {
   }, 60000);
 }
 
+// nowa mapa (static/mapa/lublin.js) bierze stąd warstwy, ustawienia i dotychczasowe okna budynków i lokali
+const POMOC = { UST, WARSTWY, wartosciWarstwy, budynkiGry, parkiZeSprawa, parkiNaMapie, wybranyLokal, get akcje() { return mapa.akcje; } };
+
 export const mapa = {
   tytul: "Mapa miasta", ikona: "mapa",
-  info: "Mapa Lublina: najedź myszą na budynek, żeby zobaczyć, co to; kliknij budynek, żeby przejść do jego zakładki (bank, ratusz, dostawcy, agencje…), albo lokal, żeby go obejrzeć i wynająć lub kupić. "
+  get info() { return UST.nowa ? nowaMapa.info : this.infoStarej; },
+  infoStarej: "Mapa Lublina: najedź myszą na budynek, żeby zobaczyć, co to; kliknij budynek, żeby przejść do jego zakładki (bank, ratusz, dostawcy, agencje…), albo lokal, żeby go obejrzeć i wynająć lub kupić. "
     + "Gwiazdki przy lokalach to ocena z opinii klientów. Przyciski nad mapą pokazują warstwy: czynsze, popyt i konkurencję w strefach. "
     + "Mapę przybliżysz przyciskami +/−, kółkiem myszy z Ctrl, dwuklikiem albo dwoma palcami, a przesuniesz przeciągając. "
     + "Po zachodzie słońca w Lublinie (według zegara Twojego komputera) mapa ciemnieje. Menu po lewej działa jak dotąd.",
   decyzje(c) {
+    if (UST.nowa) return nowaMapa.decyzje(c, POMOC);
     const brak = c.v.lokale && !c.v.lokale.moje.length
       ? `<div class="komunikat">Nie masz jeszcze lokalu – kliknij wolny lokal (biały) albo działkę na mapie.</div>` : "";
     return brak + parkiNaMapie(c.v, c.kat, c.edycja) + pasek(c)
@@ -464,6 +471,7 @@ export const mapa = {
         <div class="mapa-podpowiedz">Przybliżanie: Ctrl + kółko myszy</div>${rysujMape(c)}</div>${legenda(c)}`;
   },
   po(c) {
+    if (UST.nowa) return nowaMapa.po(c);
     const svg = document.getElementById("mapa-svg");
     if (!svg) return;
     podepnijPrzyblizanie(svg);
@@ -506,6 +514,8 @@ export const mapa = {
     "mapa-opinie": (el, c) => { UST.opinie = !UST.opinie; zapiszUst(); c.rysuj(); },
     "mapa-ruch": (el, c) => { UST.ruch = !UST.ruch; zapiszUst(); c.rysuj(); },
     "mapa-2d": (el, c) => { UST.plaska = !UST.plaska; zapiszUst(); c.rysuj(); },
+    "mapa-wersja": (el, c) => { UST.nowa = !UST.nowa; zapiszUst(); c.rysuj(); },
+    ...nowaMapa.akcje,
     "mapa-zoom": (el) => {
       const svg = document.getElementById("mapa-svg"), z = +el.dataset.z;
       if (!svg) return;

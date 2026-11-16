@@ -34,7 +34,7 @@ mecze Motoru).
 
 | Grupa | Co w niej jest |
 |---|---|
-| Mapa miasta | Lublin z lokalami, bankiem, dostawcami, agencjami i parkami – kliknij budynek, żeby przejść do jego zakładki, a park, żeby zobaczyć, co się w nim dzieje |
+| Mapa miasta | Lublin na prawdziwych granicach dzielnic, z płynnym przybliżaniem: lokale, kamienica bankowa, hurtownie, biurowiec z agencjami i parki – kliknij budynek, żeby wejść, a park, żeby zobaczyć, co się w nim dzieje |
 | **Miasto** | |
 | Nowe lokale | Do wynajęcia (najem i kupno), Licytacje, Przejęcia |
 | Klienci | Strefy, Konkurencja, Kalendarz |
@@ -59,8 +59,11 @@ Zakładki, które otwierają się później, są w menu szare, z kłódką i nap
 dlatego wybór lokalu jest w grupie „Twój lokal”. Wybrany lokal zostaje wybrany, gdy przechodzisz między zakładkami.
 Wspólne dla całej firmy są: reklama, promocje, bank, podatki, czas właściciela, ubezpieczenia i handel.
 
-> **Wskazówka.** Mapa miasta działa jak drugie menu: kliknij bank, ratusz, hurtownię albo agencję reklamową, a gra
-> otworzy właściwą zakładkę. Kliknięty lokal pokaże czynsz, cenę i strefę. Gra otwiera się na Dashboardzie
+> **Wskazówka.** Mapa miasta działa jak drugie menu: kliknij hurtownię, urząd albo park, a gra otworzy właściwą
+> zakładkę. Banki i giełda są w jednej kamienicy przy Krakowskim Przedmieściu, a biura rachunkowe, agencje reklamowe
+> i ubezpieczyciel w biurowcu przy Zana – kliknij budynek i wybierz firmę. Kliknięty lokal pokaże czynsz, cenę i strefę.
+> Mapę przybliżasz kółkiem myszy, dwoma palcami, dwuklikiem albo przyciskami + i −, a przesuwasz, przeciągając.
+> Pasek skrótów na mapie prowadzi do Twojego lokalu, banków, hurtowni, raportu rundy i wysłania decyzji. Gra otwiera się na Dashboardzie
 > (podsumowanie firmy); wrócisz do niego, klikając logo LUKRUM w lewym górnym rogu.
 
 ### Funkcje gry: zakryte i wyłączone
@@ -443,7 +446,7 @@ jedzenia cebularzy, pan Zbyszek z ławki, profesor przy szachownicy, wiewiórka 
 czas właściciela (zwykle 2–5 h), gotówkę albo porcje jedzenia, a skutki (pieniądze, klienci, nowy pracownik) bywają
 odłożone w czasie. **Na wszystko nie starczy czasu** – właściciel ma 20 h w tygodniu, więc wybierz to, co się opłaca.
 Jeśli kilka drużyn wybierze to samo, każda dostaje tę samą nagrodę. Bez wyboru gra wybiera reakcję domyślną
-(bez czasu właściciela). Parki są **tylko na mapie**: park, w którym coś się dzieje, ma pomarańczowy znak „!”, a nad
+(bez czasu właściciela). Parki są **tylko na mapie**: park, w którym coś się dzieje, ma znak „!”, a nad
 mapą jest lista spraw tygodnia (✓ – reakcja wybrana, ○ – zostaje domyślna, ! – na wybraną reakcję brakuje czasu).
 Kliknij park albo sprawę z listy – otworzy się okno parku z opisem i reakcjami jako kafelki A, B, C (czas, koszt),
 z tym, co stało się tam w poprzedniej rundzie, i z historią parku. Pasek w oknie pokazuje, ile z 20 h zajmują sprawy
