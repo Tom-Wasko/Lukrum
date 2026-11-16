@@ -57,18 +57,26 @@
 .lm-ulica-napis { font: calc(11px * var(--skala-tekstu, 1) / var(--k)) var(--font-szyld); letter-spacing: .04em; text-anchor: middle;
   fill: var(--tusz); stroke: var(--g-karta); stroke-width: 3px; paint-order: stroke; stroke-linejoin: round; }
 
-[data-poziom="2"] .lm-zbiorcza, [data-poziom="3"] .lm-zbiorcza { display: inline; }
+/* ulice zaczynają się wcześniej niż żetony: data-ul ustawia lublin.js (KRYCIE), szerokości po poziomach niżej */
+[data-ul="2"] .lm-zbiorcza, [data-ul="3"] .lm-zbiorcza { display: inline; }
+[data-ul="2"] .lm-zbiorcza.lm-droga { stroke-width: 1.6; }
+[data-ul="2"] .lm-zbiorcza.lm-droga-obrys { stroke-width: 3; }
+[data-ul="3"] .lm-lokalna, [data-ul="3"] .lm-uliczka { display: inline; }
+[data-ul="3"] .lm-uliczka { stroke: var(--g-karta); stroke-width: 2.5; }
+[data-ul="3"] .lm-lokalna.lm-droga { stroke-width: 3.5; }
+[data-ul="3"] .lm-lokalna.lm-droga-obrys { stroke-width: 5.5; }
+[data-ul="3"] .lm-zbiorcza.lm-droga { stroke-width: 3; }
+[data-ul="3"] .lm-zbiorcza.lm-droga-obrys { stroke-width: 5; }
 [data-poziom="2"] .lm-zbiorcza.lm-droga { stroke-width: 1.6; }
 [data-poziom="2"] .lm-zbiorcza.lm-droga-obrys { stroke-width: 3; }
 [data-poziom="2"] .lm-glowna.lm-droga { stroke-width: 3.4; }
 [data-poziom="2"] .lm-glowna.lm-droga-obrys { stroke-width: 5.4; }
 [data-poziom="2"] .lm-ekspresowa.lm-droga { stroke-width: 4.5; }
 [data-poziom="2"] .lm-ekspresowa.lm-droga-obrys { stroke-width: 6.5; }
-[data-poziom="2"] .lm-ulice-napisy { display: inline; }
-[data-poziom="2"] .lm-ulica-napis.lm-krotka { display: none; }
+[data-ul="2"] .lm-ulice-napisy, [data-ul="3"] .lm-ulice-napisy { display: inline; }
+[data-ul="2"] .lm-ulica-napis.lm-krotka { display: none; }
 .lm-ulica-napis { opacity: .8; }
 
-[data-poziom="3"] .lm-lokalna, [data-poziom="3"] .lm-uliczka, [data-poziom="3"] .lm-ulice-napisy { display: inline; }
 [data-poziom="3"] .lm-uliczka { stroke: var(--g-karta); stroke-width: 4; }
 [data-poziom="3"] .lm-lokalna.lm-droga { stroke-width: 6; }
 [data-poziom="3"] .lm-lokalna.lm-droga-obrys { stroke-width: 8; }

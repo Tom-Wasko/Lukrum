@@ -13,7 +13,7 @@ const ADRES = (plik) => new URL(plik, import.meta.url).href;
 const POZIOMY = [0.14, 0.45];
 const PROG_GESTOSCI = 0.6;   // żeton bliżej niż tyle szerokości od ważniejszego znika
 // ulice wyłaniają się stopniowo: krycie rośnie od 0 do 1 na tym przedziale skali (px na metr), po poziomie, od którego są rysowane
-const KRYCIE = { 2: [0.14, 0.3], 3: [0.45, 0.8] };
+const KRYCIE = { 2: [0.07, 0.14], 3: [0.1, 0.3] };
 const ZANIK = [0.1, 0.17];   // px na metr: poniżej pierwszej żetony są niewidoczne (same nazwy dzielnic), powyżej drugiej pełne   // px na metr: poniżej – całe miasto, pomiędzy – dzielnica, powyżej – ulica i budynek
 const PALETY = { bar: "Bar mleczny", pewex: "Pewex", wysoka: "Wysoka widoczność" };
 // odcień strefy (4 odcienie z palety; sąsiednie strefy mają różne) – strefę i tak podpisuje nazwa, nie sam kolor
@@ -202,7 +202,7 @@ function naZmiane(s) {
   const ramka = document.getElementById("lmapa");
   if (!ramka) return;
   ramka.querySelector("#lmapa-swiat")?.setAttribute("transform", `matrix(${s.k} 0 0 ${s.k} ${s.x} ${s.y})`);
-  if (poziom > 1 || s.k >= POZIOMY[0]) ramka.style.setProperty("--k", s.k);   // używają go tylko napisy ulic (od poziomu 2)
+  if (s.k >= KRYCIE[2][0]) ramka.style.setProperty("--k", s.k);   // używają go tylko napisy ulic (od poziomu 2)
   for (const z of ZNAKI) z.el.style.transform = `translate(${(z.x * s.k + s.x + z.dx + z.ox).toFixed(1)}px, ${(z.y * s.k + s.y + z.dy + z.oy).toFixed(1)}px)`;
   // przy oddalaniu żetony bledną; na pełnym oddaleniu zostają nazwy dzielnic i własny lokal
   const zanik = Math.min(1, Math.max(0, (s.k - ZANIK[0]) / (ZANIK[1] - ZANIK[0])));
@@ -210,6 +210,14 @@ function naZmiane(s) {
     const kr = Math.min(1, Math.max(0, (s.k - a) / (b - a))).toFixed(2);
     if (kr !== krycie[n]) { krycie[n] = kr; ramka.querySelector("#lmapa-swiat")?.style.setProperty(`--kr-${n}`, kr); }
   }
+  const ul3 = s.k >= KRYCIE[3][0];
+  if (ul3 && !ulice) {   // ulice osiedlowe dorysowujemy dopiero z bliska
+    ulice = true;
+    const g = ramka.querySelector("#lmapa-ulice");
+    if (g) g.innerHTML = `<path class="lm-uliczka" d="${Object.values(DANE.ulice).join("")}"/>`;
+  }
+  const ul = s.k >= KRYCIE[3][0] ? 3 : s.k >= KRYCIE[2][0] ? 2 : 1;
+  if (ramka.dataset.ul !== String(ul)) ramka.dataset.ul = ul;
   const zn = zanik.toFixed(2);
   if (zn !== ostatniZanik) { ostatniZanik = zn; ramka.style.setProperty("--zanik", zn); }   // zmiana zmiennej przelicza style wszystkich żetonów
   czysta = zanik < 0.3;
@@ -219,11 +227,6 @@ function naZmiane(s) {
     poziom = p;
     ramka.dataset.poziom = p;
     zmierz(ramka);
-    if (p === 3 && !ulice) {   // ulice osiedlowe dorysowujemy dopiero z bliska
-      ulice = true;
-      const g = ramka.querySelector("#lmapa-ulice");
-      if (g) g.innerHTML = `<path class="lm-uliczka" d="${Object.values(DANE.ulice).join("")}"/>`;
-    }
   }
   // Układanie (czytanie rozmiarów z DOM + rozsuwanie) jest drogie, więc przy samym przesuwaniu robimy je dopiero po
   // zatrzymaniu mapy, a przy przybliżaniu najwyżej co 160 ms i jeszcze raz po zatrzymaniu.
@@ -348,7 +351,7 @@ function uloz(s, ramka) {
     if (z.napis) n.style.transform = `translate(${gdzie[0].toFixed(1)}px, ${gdzie[1].toFixed(1)}px)`;
     else { z.dx = gdzie[0]; z.dy = gdzie[1]; z.el.style.transform = `translate(${(ax + z.dx).toFixed(1)}px, ${(ay + z.dy).toFixed(1)}px)`; }
   }
-  if (poziom > 1) for (const u of ULICE) u.el.classList.toggle("lm-schowany", ulicaZaslonieta(u, s, zajete));   // nazwa ulicy nie wchodzi pod żeton ani tabliczkę
+  if (ramka.dataset.ul !== "1") for (const u of ULICE) u.el.classList.toggle("lm-schowany", ulicaZaslonieta(u, s, zajete));   // nazwa ulicy nie wchodzi pod żeton ani tabliczkę
 }
 
 export const nowaMapa = {
@@ -383,7 +386,7 @@ export const nowaMapa = {
     const ramka = document.getElementById("lmapa");
     if (!ramka || !DANE) return;
     widok?.zniszcz();
-    poziom = 0; ulice = false; for (const n in krycie) delete krycie[n];
+    poziom = 0; ulice = false; delete ramka.dataset.ul; for (const n in krycie) delete krycie[n];
     ULICE = [...ramka.querySelectorAll(".lm-ulica-napis")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, kx: +el.dataset.kx, ky: +el.dataset.ky, n: +el.dataset.n }));
     ZNAKI = [...ramka.querySelectorAll(".lmapa-nakladka > [data-x]")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, dx: 0, dy: 0, ox: 0, oy: 0,
       napis: el.querySelector(".lm-podpis"), waznosc: waznosc(el) }));
