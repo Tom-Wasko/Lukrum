@@ -55,7 +55,7 @@ POLA_GRY = ["karta", "dochod", "gotowka", "majatek", "pierwszy_plus", "alarmy", 
 POLA_OPISU = ["strefy_lokali"]   # B6: strefy lokali badanej na koniec (strefa bywa zajęta)
 ROZNICE = ("karta", "majatek", "dochod")   # różnice w parach
 DOMINACJA = 0.7   # plan: opcja wygrywa ≥ 70% par przy istotnej różnicy
-POMIARY = KATALOG_GRY.parent / "raporty" / "kalibracja" / "pomiary"
+POMIARY = KATALOG_GRY.parent / "_robocze" / "pomiary" / "kalibracja"
 
 
 @dataclass(frozen=True)

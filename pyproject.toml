@@ -13,6 +13,8 @@ markers = ["dane_gry: test zasad na danych dane/ zamiast zamrożonej kopii test�
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+# Generatory i skrypty pomocnicze (dawniej poza zasięgiem lintera); kod gry jest sprawdzany w całości.
+extend-exclude = ["narzedzia"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP"]
@@ -20,6 +22,7 @@ select = ["E", "F", "W", "I", "B", "UP"]
 [tool.ruff.lint.per-file-ignores]
 # Starszy kod (długie linie, krótkie nazwy). Plik wypada z listy, gdy zostanie przepisany.
 "silnik/**/*.py" = ["E501", "E741", "B023", "B905", "E731"]
+"balans/dekor_pomiar.py" = ["E501", "E741", "B023", "B905", "E731"]
 "api/prezentacja.py" = ["E501", "E741", "B023", "B905", "E731"]
 "testy/**/*.py" = ["E501", "E741", "B023", "B905", "E731"]
 "*/migrations/*.py" = ["E501"]

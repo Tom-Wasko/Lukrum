@@ -1,6 +1,6 @@
 # LUKRUM – scenariusze lekcji (projekt)
 
-**Stan:** projekt Fable z 16.11.2026, do przejrzenia przez autora i nauczyciela. Odwołania do podstawy programowej
+**Stan:** projekt z 16.11.2026, do przejrzenia przez autora i nauczyciela. Odwołania do podstawy programowej
 (WOS, biznes i zarządzanie) trzeba dopisać z aktualnego rozporządzenia: tu są tylko tematy, bez numerów punktów.
 Nie był jeszcze sprawdzony w klasie.
 

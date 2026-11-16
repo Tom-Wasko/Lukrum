@@ -1,11 +1,11 @@
 # LUKRUM – opis gry
 
-Mechaniki i budowa gry dla programistów. Ścieżki plików liczą się od folderu `gra/`.
-Instrukcja dla graczy jest w `gra/INSTRUKCJA.md`.
+Mechaniki i budowa gry dla programistów. Ścieżki plików liczą się od korzenia repozytorium.
+Instrukcja dla graczy jest w `INSTRUKCJA.md`.
 
 ## Jak się gra
 
-Instrukcja dla graczy: [`INSTRUKCJA.md`](../gra/INSTRUKCJA.md), w grze strona **/jak-grac** (link „Jak grać”
+Instrukcja dla graczy: [`INSTRUKCJA.md`](../INSTRUKCJA.md), w grze strona **/jak-grac** (link „Jak grać”
 w nagłówku, dostępna bez logowania) i `INSTRUKCJA.pdf`. Po zmianie instrukcji PDF
 odświeża `.venv\Scripts\python manage.py instrukcja_pdf` (drukuje Edge albo Chrome).
 
@@ -109,7 +109,7 @@ włącza):
 .venv\Scripts\python manage.py konto ala --imie "Ala Nowak"                  # uczeń
 ```
 
-**Konto Microsoft (szkolne)** – krok po kroku w [`LOGOWANIE_MICROSOFT.md`](../gra/LOGOWANIE_MICROSOFT.md):
+**Konto Microsoft (szkolne)** – krok po kroku w [`LOGOWANIE_MICROSOFT.md`](LOGOWANIE_MICROSOFT.md):
 aplikacja w Microsoft Entra ID (adres przekierowania `http(s)://<serwer>/konta/microsoft/login/callback/`),
 dane w `lokalne.json` (`"microsoft": {"client_id", "tenant", "secret"}`) albo w zmiennych `LUKRUM_MS_CLIENT_ID`,
 `LUKRUM_MS_TENANT`, `LUKRUM_MS_SECRET`. Bez nich przycisk Microsoft się nie pokazuje. Pierwsze logowanie zakłada
@@ -153,7 +153,7 @@ do następnego startu). Na hostingu nie trzeba Pythona. Wyłączenie: `staly_lin
 ### Kalendarz rund
 
 `katalog.yaml` → `rundy.kalendarz`: okres (`tydzien` / `miesiac`), rund w roku, data startu. Kebab: runda = tydzień,
-18 rund od poniedziałku 1.09.2025 (do 4.01.2026), 40 000 zł. Kwoty w danych są **miesięczne** (pensje, czynsz,
+18 rund od poniedziałku 1.09.2025 (do 4.01.2026), 50 000 zł. Kwoty w danych są **miesięczne** (pensje, czynsz,
 utrzymanie) – silnik księguje je na rundę przez `Dane.na_runde` (× 12 / rund w roku); oprocentowanie roczne dzieli
 się przez rundy w roku, okresy lokat i kredytów liczą się w rundach, sezonowość – według miesiąca rundy
 (`Dane.miesiac_rundy`, tydzień należy do miesiąca swojego czwartku). Koszty jednorazowe (zakupy, rekrutacja,

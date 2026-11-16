@@ -1,11 +1,11 @@
-"""Dane nowej mapy Lublina z OpenStreetMap → gra/panel_gracza/static/mapa/lublin.json.
+"""Dane nowej mapy Lublina z OpenStreetMap → panel_gracza/static/mapa/lublin.json.
 
 Pobiera (Overpass) granice dzielnic, wodę, zieleń, drogi i kolej, upraszcza je i zapisuje jako ścieżki SVG
 w metrach (rzut lokalny wokół środka miasta). Do tego geokoduje (Nominatim) miejsca z miasto.yaml i dodatkowe
 punkty charakterystyczne Lublina oraz dopisuje `geo` lokalom w lokale.yaml, które go jeszcze nie mają. Dane © autorzy OpenStreetMap, licencja ODbL.
 
 Uruchomienie z głównego folderu repo (wymaga PyYAML, czyli środowiska gry):
-    gra/.venv/Scripts/python -X utf8 narzedzia/mapa/pobierz_osm.py [--bez-pamieci]
+    .venv/Scripts/python -X utf8 narzedzia/mapa/pobierz_osm.py [--bez-pamieci]
 
 Odpowiedzi serwerów zostają w folderze tymczasowym systemu (ponowne uruchomienie nie pyta sieci drugi raz).
 """
@@ -25,8 +25,8 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[2]
-DANE = REPO / "gra" / "dane" / "mapa"
-WYNIK = REPO / "gra" / "panel_gracza" / "static" / "mapa" / "lublin.json"
+DANE = REPO / "dane" / "mapa"
+WYNIK = REPO / "panel_gracza" / "static" / "mapa" / "lublin.json"
 PAMIEC = Path(tempfile.gettempdir()) / "osm-pamiec"
 NAGLOWKI = {"User-Agent": "geokoder-skrypt/1.0", "Accept-Language": "pl"}
 OVERPASS = ["https://overpass-api.de/api/interpreter", "https://overpass-api.de/api/interpreter",

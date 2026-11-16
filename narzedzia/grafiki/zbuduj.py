@@ -1,4 +1,4 @@
-"""Zapisuje pliki SVG i README.md do gra/panel_gracza/static/grafiki/ oraz składa podglad4.html
+"""Zapisuje pliki SVG i README.md do panel_gracza/static/grafiki/ oraz składa podglad4.html
 (w tym folderze, poza gitem) z szablon4.html i static/motywy/zmienne.css.
 Uruchomienie z głównego folderu repo: python narzedzia/grafiki/zbuduj.py narzedzia/grafiki/dane.json"""
 import json
@@ -13,7 +13,7 @@ import wnetrza  # noqa: F401
 
 TU = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(TU))
-STATIC = os.path.join(REPO, 'gra', 'panel_gracza', 'static')
+STATIC = os.path.join(REPO, 'panel_gracza', 'static')
 GRAF = os.path.join(STATIC, 'grafiki')
 WYGLAD = TU   # podglad4.html powstaje obok szablonu
 

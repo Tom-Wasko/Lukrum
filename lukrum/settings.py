@@ -36,8 +36,8 @@ if os.environ.get("LUKRUM_HTTPS") == "1" or LOKALNE.get("https"):
     CSRF_TRUSTED_ORIGINS = [f"https://{h}" for h in ALLOWED_HOSTS[3:]]
     SESSION_COOKIE_SECURE = CSRF_COOKIE_SECURE = True
 
-# Logowanie kontem Microsoft (szkolnym), krok po kroku: LOGOWANIE_MICROSOFT.md. Aplikacja
-# zarejestrowana w Microsoft Entra ID, adres przekierowania
+# Logowanie kontem Microsoft (szkolnym), krok po kroku: dokumentacja/LOGOWANIE_MICROSOFT.md.
+# Aplikacja zarejestrowana w Microsoft Entra ID, adres przekierowania
 # http(s)://<serwer>/konta/microsoft/login/callback/. Dane z LUKRUM_MS_CLIENT_ID /
 # LUKRUM_MS_SECRET / LUKRUM_MS_TENANT albo z "microsoft" w lokalne.json. Bez identyfikatora
 # klienta – tylko własny login i hasło. Dzierżawa (tenant) szkoły: logują się tylko jej konta.

@@ -49,6 +49,6 @@ def test_budynki_mapy_trafiaja_do_miejsc():
 
 
 def test_zestaw_grafik_jest_aktualny():
-    skrypt = GRA.parent / "narzedzia" / "grafiki" / "zestaw.py"
+    skrypt = GRA / "narzedzia" / "grafiki" / "zestaw.py"
     wynik = subprocess.run([sys.executable, str(skrypt), "--sprawdz"], capture_output=True, text=True)
     assert wynik.returncode == 0, wynik.stderr or wynik.stdout

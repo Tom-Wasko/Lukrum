@@ -13,13 +13,13 @@ Stan na 13.11.2026.
 | Dane gry | YAML (PyYAML), walidowane schematami pydantic | PyYAML 6.0 |
 | Aplikacja webowa | Django: API JSON i szablony stron | 5.2 |
 | Logowanie | konta Django + django-allauth (opcjonalnie Microsoft / Entra ID szkoły) | allauth 65 |
-| Baza danych | SQLite (`gra/db.sqlite3`, poza gitem) | wbudowana |
+| Baza danych | SQLite (`db.sqlite3`, poza gitem) | wbudowana |
 | Frontend | czysty JavaScript (moduły ES, bez bundlera), CSS, Chart.js w `static/vendor/` | – |
 | Testy | pytest, pytest-django, hypothesis | pytest 9.1, hypothesis 6.170 |
 | Jakość kodu | ruff (lint, linia ≤ 100) | 0.17 |
 | Udostępnianie | `cloudflared` (darmowy tunel Cloudflare, `hostuj.bat`) | pobierany do `narzedzia/` |
 
-Zależności są w `gra/requirements.txt` (instalacja do `gra/.venv`), konfiguracja narzędzi w `gra/pyproject.toml`.
+Zależności są w `requirements.txt` (instalacja do `.venv`), konfiguracja narzędzi w `pyproject.toml`.
 Projekt nie używa Dockera, npm ani frameworków JS i nie potrzebuje usług zewnętrznych poza opcjonalnym logowaniem
 Microsoft i tunelem.
 
@@ -33,7 +33,7 @@ przeglądarka ── HTML (szablony) ──▶ panel_gracza / panel_mg / konta
                 (widok `v` zakładek)     Decyzja, Druzyna
 ```
 
-### Silnik (`gra/silnik/`)
+### Silnik (`silnik/`)
 - **Nie importuje Django**, więc boty, symulator balansu i testy działają bez serwera.
 - **Rdzeń:**
   - `gra.py` – klasa `Gra`: konfiguracja, decyzje w rundach, stany po rundach i przeliczanie;
@@ -57,7 +57,7 @@ przeglądarka ── HTML (szablony) ──▶ panel_gracza / panel_mg / konta
   rundy. Wczytana gra zostaje w pamięci serwera (`gry/serwisy.py`) z policzonymi stanami, dopóki nie zmieni się
   `Gra.zmieniono`. Gry można eksportować i importować jako `.json`.
 
-### Dane gry (`gra/dane/`)
+### Dane gry (`dane/`)
 - Pliki główne: `zalozenia.yaml` (każdy parametr ma postać `{wartosc, pewnosc, zrodlo}`), `uslugi.yaml` (dania),
   `zasoby.yaml`, `sprzet.yaml`, `dostawcy.yaml`, `kandydaci.yaml`, `katalog.yaml`, `boty.yaml` i `podatki_2026.yaml`.
 - Katalogi: `mapa/` (strefy, budynki, lokale, popyt, menu, banki, biura, Harpagon, promocje, reklama),
@@ -65,7 +65,7 @@ przeglądarka ── HTML (szablony) ──▶ panel_gracza / panel_mg / konta
 - **Żadnych liczb gry w kodzie silnika.** Pilnuje tego test `test_w_kodzie_silnika_nie_ma_liczb_gry`.
 - Testy wzorów czytają zamrożoną kopię danych `testy/dane_zamrozone/`.
 
-### Warstwa Django (`gra/`)
+### Warstwa Django (korzeń repozytorium)
 - `lukrum/` – ustawienia i URL-e. Ustawienia lokalne komputera trzyma `lokalne.json` (poza gitem). Zmienne
   środowiskowe: `LUKRUM_DEBUG`, `LUKRUM_HOSTY`, `LUKRUM_HTTPS`, `LUKRUM_SECRET_KEY` i ustawienia Microsoft
   (`LOGOWANIE_MICROSOFT.md`).
@@ -89,12 +89,12 @@ przeglądarka ── HTML (szablony) ──▶ panel_gracza / panel_mg / konta
 ### Narzędzia poboczne
 - `balans/symuluj.py` – gry samych botów do pomiaru balansu (`python -X utf8 -m balans.symuluj 12 sredni 7`).
 - `balans/warianty.py` – pary gier (badana firma różni się jedną decyzją) do kalibracji: `szybki` (≤ 10 min),
-  `pelny` (w tle, wznawiany z `gry.csv`), `raport`, `lista`; wyniki w `raporty/kalibracja/pomiary/`.
+  `pelny` (w tle, wznawiany z `gry.csv`), `raport`, `lista`; wyniki w `_robocze/pomiary/kalibracja/` (poza repozytorium, w folderze `lukrum/`).
 - `balans/odcisk.py` – odcisk stanów gier botów przed i po zmianie kodu bez zmiany zasad (`zapisz` / `porownaj`).
 - `narzedzia/cloudflared.exe` – pobierany raz przez `hostuj`.
 
 ## Testy i jakość
-- `gra/testy/`: około 440 testów pytest w podfolderach odpowiadających podpakietom silnika (`rdzen/`, `kuchnia/`,
+- `testy/`: 740 testów pytest w podfolderach odpowiadających podpakietom silnika (`rdzen/`, `kuchnia/`,
   `rynek/`…) i `aplikacja/` (API, panele, konta). Wspólne funkcje są w `pomocnicze.py`.
 - Testy własności używają hypothesis (np. uzgodnienie kasy). Testy pilnują też determinizmu i scenariuszy co do
   grosza.

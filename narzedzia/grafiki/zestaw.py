@@ -1,4 +1,4 @@
-"""Składa grafiki z `gra/panel_gracza/static/grafiki/` w jeden plik symboli dla wnętrz (static/swiat/).
+"""Składa grafiki z `panel_gracza/static/grafiki/` w jeden plik symboli dla wnętrz (static/swiat/).
 
     python narzedzia/grafiki/zestaw.py          zapisuje static/grafiki/zestaw.svg i zestaw.json
     python narzedzia/grafiki/zestaw.py --sprawdz  kończy się błędem, gdy zapisane pliki są nieaktualne
@@ -12,7 +12,7 @@ import re
 import sys
 from pathlib import Path
 
-KATALOG = Path(__file__).resolve().parents[2] / "gra" / "panel_gracza" / "static" / "grafiki"
+KATALOG = Path(__file__).resolve().parents[2] / "panel_gracza" / "static" / "grafiki"
 JEDNA_MINA = re.compile(r"obsluga-\w+-(dobra|zwykla|zmeczona)$")
 
 

@@ -1,6 +1,6 @@
 """Pomiar dekoru lokalu: ta sama gra botów (poziom średni) bez dekoru i z pełnym, najlepiej dopasowanym kompletem
 (4 grupy elementów, 8 300 zł) kupionym przez jedną firmę w rundzie R_ZAKUP (wstrzyknięta decyzja bota).
-Uruchomienie z katalogu gra/ (worktree): python -X utf8 dekor_pomiar.py [rundy] [ziarna] [strategie]
+Uruchomienie z korzenia repo: python -X utf8 -m balans.dekor_pomiar [rundy] [ziarna] [strategie]
 Zwrot = pierwszy tydzień po zakupie, w którym gotówka firmy z dekorem dogania gotówkę bez dekoru (różnica ≥ 0)."""
 import copy
 import statistics
