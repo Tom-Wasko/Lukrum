@@ -508,6 +508,12 @@ Przy każdej drużynie jest odnośnik **Strona firmy**, który otwiera jej panel
   **przysłać inwestora ratunkowego** (kwota do ustalonego maksimum, wpłacana na początku rundy);
 - konta uczniów, hasła i skład drużyn są w zakładce **Drużyny**.
 
+### Dymki gości
+
+We wnętrzu kebaba goście i bywalcy mówią w dymkach: opinie o cenie i smaku, plotki z miasta, propozycje i zaczepki
+z WOS. W panelu gry (wiersz „Dymki gości we wnętrzu kebaba”) mistrz gry włącza i wyłącza każdy rodzaj osobno. Zmiana
+działa od następnego wejścia drużyny do lokalu. Gracze nie mają własnego wyłącznika.
+
 ### Tryb lekcyjny
 
 W kreatorze gry (krok „Funkcje gry”) i w panelu gry jest pole **Sposób prowadzenia**. „Na żywo” oznacza, że rundy
