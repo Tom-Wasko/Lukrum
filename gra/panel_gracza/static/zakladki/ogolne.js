@@ -155,10 +155,11 @@ function rozruchHtml(v) {
   const lokale = R.lokale.map((l) => `<li><b>${esc(l.nazwa)}</b>: ${l.poprzednia != null
     ? `w poprzednim tygodniu przyszło ${pr(l.poprzednia)} pełnej liczby klientów, a w tym tygodniu ${l.teraz < 1 ? `przyjdzie ${pr(l.teraz)}` : "popyt jest już pełny"}`
     : `pierwszy tydzień sprzedaży – przyjdzie ${pr(l.teraz)} pełnej liczby klientów`}.</li>`).join("");
-  return `<div class="komunikat"><b>Rozruch nowego lokalu.</b> Nowy lokal dopiero zdobywa klientów: w pierwszym tygodniu
+  return `<details class="lw-stawki"><summary>Rozruch nowego lokalu: na początku przychodzi mniej gości, strata na starcie jest normalna</summary>
+    <div>Nowy lokal dopiero zdobywa klientów: w pierwszym tygodniu
     sprzedaży przychodzi ${pr(R.start)} pełnej liczby klientów, potem co tydzień o ${Math.round(R.przyrost * 100)} punktów procentowych więcej,
     aż do pełnego popytu. Czynsz i pensje są od razu pełne, więc strata na starcie jest normalna – pilnuj, żeby była mała:
-    zamówienia i grafik dopasuj do mniejszego ruchu.${lokale ? `<ul>${lokale}</ul>` : ""}</div>`;
+    zamówienia i grafik dopasuj do mniejszego ruchu.${lokale ? `<ul>${lokale}</ul>` : ""}</div></details>`;
 }
 
 export const dashboard = {
@@ -192,6 +193,7 @@ export const dashboard = {
            <button class="btn jasny maly" data-akcja="popraw" data-z="biuro">Biurowiec przy Zana ▸ Biuro rachunkowe</button>`
         : `<span class="${d.dochod_netto < 0 ? "minus" : ""}">${zl(d.dochod_netto)}</span>`)}
       ${kafel("Saldo konta", "portfel", zl(d.saldo))}
+    </div><details class="lw-stawki"><summary>Stawki i przepisy: płaca minimalna, czas pracy, amortyzacja, podatki</summary><div class="dash">
       ${kafel("Minimalne wynagrodzenie brutto", "zatrudnienie", `${zl(kat.placa_minimalna)} / miesiąc`
         + (OKRES.rund_w_roku === 12 ? "" : `<div class="maly-tekst">≈ ${zl(naRunde(kat.placa_minimalna))}${naOkres()}</div>`))}
       ${kafel("Czas pracy pracownika i sprzętów", "zegar", `<div>${p.godziny}H / ${OKRES.mianownik.toUpperCase()}<div class="maly-tekst">Otwarte: 9:00–17:00</div></div>`)}
@@ -201,7 +203,7 @@ export const dashboard = {
       ${kafel("Pozostałe informacje", "finanse", `<div class="maly-tekst">PIT liniowy ${proc(v.podatki?.parametry?.pit ?? 0, 0)}<br>Składki ZUS pracodawcy ${proc(p.zus, 0)}
         <br>Rozliczanie debetu: ${v.gra.tryb_debetu === "na_biezaco" ? "na bieżąco" : "jak w grze (jednocześnie)"}
         ${d.lokaty ? `<br>Lokaty: ${zl(d.lokaty)}` : ""}${d.zadluzenie ? `<br>Zadłużenie: ${zl(d.zadluzenie)}` : ""}</div>`)}
-    </div>${(v.historia || []).length > 1 ? `<div class="wykres"><canvas id="w-dash"></canvas></div>` : ""}`;
+    </div></details>${(v.historia || []).length > 1 ? `<div class="wykres"><canvas id="w-dash"></canvas></div>` : ""}`;
   },
   zmiany: {
     "marka-nazwa": (el, c) => c.zmien((d) => { d.nazwa = el.value.trim().slice(0, 40); }),

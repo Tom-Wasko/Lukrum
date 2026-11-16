@@ -290,3 +290,6 @@
 @media (max-width: 800px) { .kg-uklad { grid-template-columns: 1fr; } .kg-pasek { display: none; } }
 .kr-liczby .delta { font-weight: 400; font-size: 12px; margin-left: 4px; }
 [data-tryb="ciemny"] .kr .delta.plus { color: #2e6b3a; } [data-tryb="ciemny"] .kr .delta.minus { color: #b3261e; }
+.lw-stawki { margin: 4px 0 16px; border: var(--ramka-grubosc) solid var(--ramka); border-radius: 6px; padding: 0 12px; background: var(--g-karta); }
+.lw-stawki summary { cursor: pointer; padding: 9px 0; font-family: var(--font-szyld); letter-spacing: .05em; font-size: 14px; }
+.lw-stawki[open] { padding-bottom: 12px; }
