@@ -45,6 +45,7 @@ Banki, urzędy, hurtownie, giełda i pozostałe strefy zamiast zakładek. Nawią
 
 ## Etap 4 – lekcje
 Scenariusze lekcji WOS dla nauczyciela i gotowe zestawy odsłoniętych funkcji.
+Projekt pięciu scenariuszy (gałąź `fable`, 16.11.2026): [`SCENARIUSZE_LEKCJI.md`](SCENARIUSZE_LEKCJI.md) – do przejrzenia, bez odwołań do podstawy programowej i bez próby w klasie.
 
 ## Etap 5 – audyt i publikacja
 Przegląd całości, sprawdzenie znaków towarowych i publikacja.
