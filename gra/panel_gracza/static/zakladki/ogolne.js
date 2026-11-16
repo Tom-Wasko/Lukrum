@@ -3,6 +3,7 @@ import { esc, godzina, nazwaRundy, kafelkiLiczb, podsumowanie, strzalka, zwinTab
 import { ikona } from "./ikony.js";
 import { ikonaMarki } from "./ikony_marek.js";
 import { ukryta, wylaczona } from "./funkcje.js";
+import { listWujka } from "./wujek.js";
 
 const DZIALY = ["finanse", "goscie", "zespol", "rozwoj", "bezpieczenstwo"];
 const NAZWY_DZIALOW = { finanse: "Finanse", goscie: "Goście", zespol: "Zespół", rozwoj: "Rozwój", bezpieczenstwo: "Bezpieczeństwo finansowe" };
@@ -113,6 +114,8 @@ const wyslijLogo = async (c, logo) => {
   toast(logo ? "Logo zapisane." : "Logo usunięte.");
 };
 
+// dawny plan rundy w kafelkach; od fable-wujek Plan tygodnia rysuje listWujka (wujek.js) – zostaje do porównania
+// eslint-disable-next-line no-unused-vars
 function planRundy(v, kat) {
   // lista kontrolna decyzji bieżącej rundy (na podstawie stanu po roboczych decyzjach)
   const r = v.runda, st = v.stan, braki = Object.values(st.gotowe_uslugi || {}).flat();
@@ -146,7 +149,7 @@ function podpowiedziHtml(v) {
 // U9: rozruch nowego lokalu (dane/mapa/popyt.yaml: model.rozruch) – strata w pierwszych tygodniach sprzedaży jest normalna
 function rozruchHtml(v) {
   const R = v.dashboard?.rozruch;
-  if (!R || !(R.lokale.length || v.runda === v.gra.runda_startowa)) return "";
+  if (!R || !R.lokale.length) return "";   // w 1. tygodniu o rozruchu pisze wujek (wujek.js), bez ściany tekstu
   const pr = (m) => `ok. ${Math.round(m * 100)}%`;
   const lokale = R.lokale.map((l) => `<li><b>${esc(l.nazwa)}</b>: ${l.poprzednia != null
     ? `w poprzednim tygodniu przyszło ${pr(l.poprzednia)} pełnej liczby klientów, a w tym tygodniu ${l.teraz < 1 ? `przyjdzie ${pr(l.teraz)}` : "popyt jest już pełny"}`
@@ -158,7 +161,7 @@ function rozruchHtml(v) {
 }
 
 export const dashboard = {
-  tytul: "Dashboard", ikona: "▦",
+  tytul: "Plan tygodnia", ikona: "▦",
   decyzje({ v, kat, d: szkic }) {
     const d = v.dashboard, p = kat.parametry, m = mojaMarka(v, szkic);
     const rundaMarki = v.edycja && v.runda === v.gra.runda_startowa && !v.tylko_odczyt;
@@ -176,7 +179,7 @@ export const dashboard = {
     const pasek = alarm ? `<div class="komunikat zly">${esc(alarm.tekst)}
       <button class="btn jasny maly" data-akcja="popraw" data-z="bank">Przejdź do banku</button></div>` : "";
     const inwestor = v.inwestor && v.runda <= v.inwestor.do_rundy + 1 ? inwestorHtml(v) : "";   // U11: potem tylko w Banku
-    return `${pasek}${inwestor}${status}${klub}${rundaMarki ? formularzMarki(v, szkic) : ""}${v.edycja ? planRundy(v, kat) : ""}${podpowiedziHtml(v)}${rozruchHtml(v)}${dlaczegoHtml(v)}<div class="sekcja-tytul">Twoja firma</div><div class="dash">
+    return `${pasek}${inwestor}${status}${klub}${v.edycja ? listWujka(v) : ""}${rundaMarki ? formularzMarki(v, szkic) : ""}${podpowiedziHtml(v)}${rozruchHtml(v)}${dlaczegoHtml(v)}<div class="sekcja-tytul">Twoja firma</div><div class="dash">
       ${kafel("Nazwa i logo firmy", "osoba", `<div class="srodek">${znakFirmy(m)}<b>${esc(m.nazwa)}</b>${m.slogan ? `<div class="maly-tekst">„${esc(m.slogan)}”</div>` : ""}</div>`)}
       ${kafel("Miejsce", "karta", d.miejsce ? `${d.miejsce} / ${d.liczba_firm}` : `<span class="maly-tekst">Ranking dostępny od rundy 3</span>`)}
       ${kafel(`Liczba rund w grze`, "zegar", `<div>${Math.min(v.gra.runda, v.gra.liczba_rund)} / ${v.gra.liczba_rund}
@@ -285,7 +288,7 @@ export const karta_wynikow = {
 // UF11: ranking drużyn – miejsca jak u mistrza gry (wynik gry w punktach z tygodni 1…), zmiana miejsca i wykres miejsc
 export const ranking = {
   tytul: "Ranking", tytulPelny: "Ranking drużyn", ikona: "karta", wynikiOd: 3, odblokowanie: "karta_wynikow",
-  info: () => "Kto prowadzi? Miejsce liczy się z punktów z kolejnych tygodni (ostatnie ważą więcej) – tak samo jak w panelu mistrza gry i na Dashboardzie.",
+  info: () => "Kto prowadzi? Miejsce liczy się z punktów z kolejnych tygodni (ostatnie ważą więcej) – tak samo jak w panelu mistrza gry i na Planie tygodnia.",
   wyniki({ v }) {
     const R = v.ranking, skum = v.karta_skumulowana || {}, teraz = v.rynek?.karta || {};
     if (!R?.rundy?.length) return `<p class="podpowiedz">Ranking pojawi się, gdy przeliczy się runda 2.</p>`;
