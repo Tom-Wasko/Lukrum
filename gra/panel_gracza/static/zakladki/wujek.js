@@ -51,11 +51,29 @@ function nowosci(v, c) {
     ${potem.length ? `<span><b>Za tydzień otworzy się:</b> ${potem.map((k) => esc(c.tytulZakladki(k))).join(", ")}</span>` : ""}</div>`;
 }
 
+// Krok „teraz” na mapie miasta: budynek, do którego trzeba pójść, dostaje obwódkę i plakietkę „teraz”. Mapa (strona
+// [mapa]) nie jest zmieniana: wystarcza reguła CSS po atrybucie data-id znacznika, więc działa też po przerysowaniu mapy.
+const BUDYNEK_KROKU = { lokale: "agencja_nieruchomosci", bank: "kamienica_bankowa", biuro: "biurowiec_zana", rynek_pracy: "agencja_pracy",
+  dostawcy: "makro", sprzet: "sprzet_gastro", wyslij: "poczta" };
+function celNaMapie(v, klucz) {
+  const id = klucz ? BUDYNEK_KROKU[klucz] || v.stan.lokale?.[0]?.id : null;
+  let styl = document.getElementById("lw-cel-styl");
+  if (!id || !/^[\w-]+$/.test(id)) { styl?.remove(); return; }
+  if (!styl) { styl = document.createElement("style"); styl.id = "lw-cel-styl"; document.head.appendChild(styl); }
+  const z = `.lm-znak[data-id="${id}"]`;
+  styl.textContent = `${z} { z-index: 19 !important; } ${z} .lm-kafel { outline: 3px solid var(--akcent); outline-offset: 3px; }
+    ${z} .lm-kafel::after { content: "teraz"; position: absolute; left: 50%; bottom: calc(100% + 6px); translate: -50% 0; background: var(--akcent); color: var(--papier);
+      font: 400 12px/1.5 var(--font-szyld); letter-spacing: .06em; text-transform: uppercase; padding: 0 6px; border-radius: 3px; white-space: nowrap; }
+    @media (prefers-reduced-motion: no-preference) { ${z} .lm-kafel { animation: lw-puls 1.6s ease-in-out infinite; } }
+    @keyframes lw-puls { 50% { outline-offset: 8px; } }`;
+}
+
 export function listWujka(v, c) {
   const nr = v.runda - (v.gra.runda_startowa || 1);
   const list = v.runda === v.gra.liczba_rund && nr >= LISTY.length ? OSTATNI : LISTY[nr];
   const K = kroki(v), pierwszy = K.findIndex((k) => !k[3]);
   const wszystko = pierwszy < 0;
+  celNaMapie(v, v.wyslane ? null : wszystko ? "wyslij" : K[pierwszy][0]);
   if (list) wczytajGrafiki();   // portret wujka z zestawu grafik (pojawia się sam, gdy zestaw się wczyta)
   const html = K.map(([k, gdzie, co, ok, opis], i) => `<li class="${ok ? "zrobione" : i === pierwszy ? "teraz" : ""}"><a data-zakladka-k="${k}" href="#${k}">
     <span class="lw-nr" aria-hidden="true">${ok ? "✓" : i + 1}</span><span class="lw-co"><small>${esc(gdzie)}</small><b>${esc(co)}</b><span>${esc(opis)}</span></span>
