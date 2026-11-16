@@ -42,7 +42,7 @@ function jakPrognoza(v, kat, u, m, nazwaDania = u.nazwa) {
   return `<b>Prognoza na ${OKRES.mianownik} ≈</b><br>popyt roczny ÷ ${OKRES.rund_w_roku} × sezonowość × wielkość strefy × Twój udział × rozruch
     <br>1. <b>Popyt roczny ÷ ${OKRES.rund_w_roku}</b> – ten kafel: ${licz(u.popyt_roczny)} ÷ ${OKRES.rund_w_roku} ≈ ${licz(Math.round(tyg))}.
     <br>2. <b>Sezonowość</b> – słupki przy daniu (ciemny = miesiąc sprzedaży, ${MIESIACE[m]}: × ${licz(sez, 2)}).
-    <br>3. <b>Wielkość strefy</b> – ${A("klienci")}Klienci ▸ Strefy</a> (kolumna „Wielkość strefy”; dochodzą wydarzenia w mieście i upodobania grup klientów).
+    <br>3. <b>Wielkość strefy</b> – ${A("klienci")}Miasteczko akademickie ▸ Goście w strefach</a> (kolumna „Wielkość strefy”; dochodzą wydarzenia w mieście i upodobania grup klientów).
     <br>4. <b>Twój udział</b> – klienci wybierają między lokalami z tym daniem a „obiadem gdzie indziej” (liczy się jak jeden lokal):
     sam w strefie ≈ ½, 1 rywal ≈ ${licz(UDZIAL.rywal1, 1)}, 2 rywali ≈ ${licz(UDZIAL.rywal2, 1)}. Niższa cena, lepsza jakość i opinie – więcej.
     <details><summary>Więcej o udziale</summary>Udział = atrakcyjność Twojego lokalu ÷ (obiad gdzie indziej + suma atrakcyjności wszystkich lokali z daniem); „obiad gdzie indziej” ma atrakcyjność ${licz(v.popyt.opcja_zewnetrzna, 1)}, lokal o przeciętnej cenie i jakości – około 1.
@@ -51,7 +51,7 @@ function jakPrognoza(v, kat, u, m, nazwaDania = u.nazwa) {
     Lokal przyciąga też klientów z sąsiednich stref – to dodatkowy plus, którego wzór nie liczy.</details>
     <br>5. <b>Rozruch</b> – nowy lokal: ${licz(Math.round(start * 100))}% w 1. tygodniu sprzedaży, +${licz(Math.round(przyrost * 100))} p.p. co tydzień.
     <br><br><i>Przykład (${esc(nazwaDania)}, ${esc(nazwa)}, 1. tydzień sprzedaży):</i> ${licz(u.popyt_roczny)} ÷ ${OKRES.rund_w_roku} × ${licz(sez, 2)} × ${licz(strefa.wielkosc, 2)} × ½ × ${licz(start, 1)} ≈ <b>${licz(wynik)}</b>.
-    <br>Wynik wpisz w pole „Prognozowany popyt”. Z prognozy wychodzą zakupy składników (Zaopatrzenie ▸ ${A("dostawcy")}Dostawy</a>: „Wpisz wg prognozy”) i potrzebna obsada – za mała to utracona sprzedaż, za duża to zmarnowany towar.`;
+    <br>Wynik wpisz w pole „Prognozowany popyt”. Z prognozy wychodzą zakupy składników (Mój kebab ▸ ${A("dostawcy")}Dostawy</a>: „Wpisz wg prognozy”) i potrzebna obsada – za mała to utracona sprzedaż, za duża to zmarnowany towar.`;
 }
 
 // cena, rabat i podpowiedzi przy wybranym daniu (dawniej osobna część „Sprzedaż”)

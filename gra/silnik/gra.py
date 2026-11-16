@@ -54,6 +54,8 @@ class Gra:
                 "podpowiedzi": bool(opcje.get("podpowiedzi", False)),   # U19: rady na pierwsze rundy (MG)
                 "wersja_silnika": WERSJA_SILNIKA, "wersja_danych": dane.wersja,
                 "lokale": True}   # lokale z mapy miasta (dane/mapa); zapisy bez tego klucza – bez lokali
+        if opcje.get("lekcje"):   # tryb lekcyjny prowadzenia (gry/lekcje.py) – poza mechaniką, tylko zapis ustawienia
+            konf["lekcje"] = dict(opcje["lekcje"])
         if opcje.get("kapital_startowy") is not None:  # mistrz gry może zmienić kapitał z danych
             konf["kapital_startowy"] = float(opcje["kapital_startowy"])
         # funkcje gry (raporty/funkcje/plan.md): pełna lista stanów; bez pola (testy, pomiary, stare gry) – odkryte

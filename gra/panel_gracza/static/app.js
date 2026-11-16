@@ -9,6 +9,8 @@ import { AKCJE_ZADAN, podepnijZadania, rysujZadania } from "./zakladki/zadania.j
 import { HASLO, HASLO_SZPERACZ, jestSzperaczem, zapamietajHaslo, zapamietajSzperacza } from "./zakladki/kasyno.js";
 import { funkcjaZakladki, funkcjeZakladek, oknoFunkcji, oknoUstawienFunkcji, oknoZakryciaFunkcji, saZakryte, ukryta as ukrytaF, wylaczona as wylaczonaF,
   zakryta as zakrytaF, zakrytaFunkcja, znaczekFunkcji } from "./zakladki/funkcje.js";
+import { aktualneMiejsce, idzDoMiejsca, okruszek, otworzBudynek, ustawMiejsce } from "./swiat/swiat.js";
+import { ustawWybrany } from "./zakladki/lokal_wybor.js";
 
 const start = () => "dashboard";   // N2 (poprawki 3): ekran startowy – plan rundy (pulpit); mapa jest w menu
 const S = { v: null, kat: null, zakladka: null, tryb: "decyzje", runda: null, d: {}, zapis: Promise.resolve(),
@@ -177,6 +179,9 @@ const ctx = () => ({ get v() { return S.v; }, kat: S.kat, get d() { return S.d; 
   get edycja() { return S.v.edycja && !S.v.wyslane && !blokada(S.v); }, zmien, api, wczytaj, ustaw, rysuj,
   dostepna: (k) => !!ZAKLADKI[k] && dostepna(ZAKLADKI[k]) && !wylaczonaF(S.v, k), tytulZakladki: (k) => ZAKLADKI[k]?.tytul ?? k,
   zakryta: (k) => zakrytaF(S.v, k), wylaczona: (k) => wylaczonaF(S.v, k),
+  // świat gry (swiat/swiat.js): stan ekranu, do którego prowadzi klikalne miejsce sceny
+  jestZakladka: (k) => !!ZAKLADKI[docelowa(k)], ukryta: (k) => !!ZAKLADKI[docelowa(k)]?.ukryta?.(S.v) || ukrytaF(S.v, k), docelowa,
+  odRundy: (k) => odRundy(docelowa(k)), wybierzLokal: ustawWybrany,
   idz: (k, tryb) => {
     if (przechwycFunkcje(k)) return;
     const cel = docelowa(k);
@@ -210,7 +215,7 @@ function rysujMenu() {
     if (poz.sekcja !== undefined) return `<div class="sekcja ${poz.sekcja ? "" : "linia"}" data-nazwa="${esc(poz.sekcja)}"></div>`;
     const z = ZAKLADKI[poz.klucz] || {};
     const pod = poz.pod ? `<div class="pod">${poz.pod.map((k) => pozycjaPod(k, 18)).join("")}</div>` : "";
-    const aktywna = poz.klucz === S.zakladka || (poz.pod || []).includes(S.zakladka);
+    const aktywna = poz.klucz === S.zakladka || (poz.pod || []).includes(S.zakladka) || (S.zakladka === "miejsce" && poz.miejsce === aktualneMiejsce());
     // funkcje gry: grupa szara z okiem dopiero, gdy wszystkie jej podzakładki są zakryte (okno – wszystkie jej funkcje)
     const wszystkie = poz.pod || [poz.klucz], zakryta = wszystkie.every((k) => zakrytaF(S.v, k));
     const funkcje = funkcjeZakladek(S.v, wszystkie.filter((k) => zakrytaF(S.v, k)));
@@ -226,7 +231,8 @@ function rysujMenu() {
     const od = zablokowana || (zakryta && nieodbl) ? (poz.pod ? najwczesniej(poz.pod.map(odRundy)) : odRundy(poz.klucz)) : null;
     const tytulOd = zakryta ? ` title="${TYTUL_ZAKRYTEJ}" data-funkcje="${funkcje.join(",")}"`
       : zablokowana ? ` title="${od ? `Dostępne od rundy ${od}` : "Jeszcze niedostępne"}"` : "";
-    return `<div class="poz ${poz.klasa || ""}" data-dzial="${poz.klucz}"><a data-zakladka="${cel}" class="${aktywna ? "aktywna" : ""} ${zablokowana ? "zablokowana" : ""} ${zakryta ? "zakryta" : ""}"${tytulOd}>
+    const dokad = poz.miejsce && !zakryta ? `data-miejsce="${poz.miejsce}"` : `data-zakladka="${cel}"`;
+    return `<div class="poz ${poz.klasa || ""}" data-dzial="${poz.klucz}"><a ${dokad} class="${aktywna ? "aktywna" : ""} ${zablokowana ? "zablokowana" : ""} ${zakryta ? "zakryta" : ""}"${tytulOd}>
       ${ikona(zakryta ? "oko" : zablokowana ? "klodka" : poz.ikona)}${poz.tytul}${znaczek}${od ? `<span class="od-gora">od rundy ${od}</span>` : ""}</a>${pod}</div>${zadania}`;
   }).join("");
 }
@@ -234,7 +240,7 @@ function rysujMenu() {
 function podzakladki() {
   const grupa = MENU.find((p) => (p.pod || []).includes(S.zakladka));
   if (!grupa) return "";
-  return `<div class="podzakladki">${widocznePod(grupa.pod).map((k) => pozycjaPod(k, 16, ' data-pod="1"')).join("")}</div>`;
+  return `<div class="podzakladki">${grupa.miejsce ? okruszek(S.zakladka) : ""}${widocznePod(grupa.pod).map((k) => pozycjaPod(k, 16, ' data-pod="1"')).join("")}</div>`;
 }
 
 // drużyna kilku osób: kto ostatnio zapisał decyzje
@@ -311,8 +317,10 @@ function rysuj() {
   S.zadania = rysujZadania(ctx());   // UF22: przeliczane po każdej zmianie decyzji, jak lista błędów
   rysujMenu();
   const v = S.v, z = ZAKLADKI[S.zakladka];
-  const grupa = MENU.find((p) => p.pod ? p.pod.includes(S.zakladka) : p.klucz === S.zakladka);
+  const grupa = S.zakladka === "miejsce" ? MENU.find((p) => p.miejsce === aktualneMiejsce())
+    : MENU.find((p) => p.pod ? p.pod.includes(S.zakladka) : p.klucz === S.zakladka);
   document.body.dataset.dzial = grupa ? grupa.klucz : "dashboard";
+  document.body.classList.toggle("we-wnetrzu", S.zakladka === "miejsce");
   document.getElementById("nazwa-firmy").textContent = v.dashboard.nazwa;
   odznakaSzperacza();
   const st = document.getElementById("status-gry");
@@ -320,7 +328,10 @@ function rysuj() {
     + (v.gra.zakonczona ? `<span class="chip">Gra zakończona</span>` : v.wyslane && v.edycja
       ? `<span class="chip ok">Czekamy na: ${esc(v.gra.brakujace.join(", ") || "–")}</span>` : "")
     + (!v.gra.zakonczona && v.prowadzenie?.pauza ? `<span class="chip pom">Gra wstrzymana</span>`
-      : !v.gra.zakonczona && v.prowadzenie?.termin ? `<span class="chip" title="Runda zamknie się sama o tej porze">Zamknięcie: ${esc(terminKrotko(v.prowadzenie.termin))}</span>` : "");
+      : !v.gra.zakonczona && v.prowadzenie?.lekcje?.etap === "na_zywo" ? `<span class="chip" title="Rundę zamyka nauczyciel, gdy drużyny skończą">Na żywo, na lekcji</span>`
+      : !v.gra.zakonczona && v.prowadzenie?.termin ? (v.prowadzenie.lekcje && v.prowadzenie.termin_minal
+        ? `<span class="chip pom" title="Nauczyciel zamknie rundę">Termin minął</span>`
+        : `<span class="chip" title="${v.prowadzenie.lekcje ? "Termin rundy" : "Runda zamknie się sama o tej porze"}">${v.prowadzenie.lekcje ? "Do" : "Zamknięcie"}: ${esc(terminKrotko(v.prowadzenie.termin))}</span>`) : "");
   const c = ctx();
   const wyniki = maWyniki(z), decyzje = !!z.decyzje && !(v.koniec && wyniki);   // po końcu gry – same wyniki
   const tryb = (S.tryb === "wyniki" || v.koniec) && wyniki ? "wyniki" : decyzje ? "decyzje" : "wyniki";
@@ -334,14 +345,15 @@ function rysuj() {
     ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji w zakładce „Wyślij decyzje”.</div>` : "";
   const opis = typeof z.info === "function" ? z.info(c, tryb) : z.info;
   const karta = document.getElementById("karta");
-  karta.innerHTML = glowa(v, z, tryb, decyzje, wyniki, v.runda, opis) + podzakladki()
-    + `<div class="tresc">${podglad}${zablokowane}${wyslane}${tresc}</div>`;
+  // wnętrze budynku (swiat/swiat.js) ma własny nagłówek – bez tytułu zakładki i przełącznika Decyzje / Wyniki
+  karta.innerHTML = z.bezGlowy ? `<div class="tresc bez-glowy">${podglad}${tresc}</div>`
+    : glowa(v, z, tryb, decyzje, wyniki, v.runda, opis) + podzakladki() + `<div class="tresc">${podglad}${zablokowane}${wyslane}${tresc}</div>`;
   // linki do wyłączonych funkcji znikają (plan rundy, „Przejdź: …”); zakryte zostają – otwierają okno „Odsłoń”
   for (const a of karta.querySelectorAll("[data-zakladka-k]")) if (wylaczonaF(v, a.dataset.zakladkaK)) a.remove();
   menuUstawien();
   twardeSpacje(karta);
   zwinPodpowiedzi(karta);
-  history.replaceState(null, "", `#${S.zakladka}${tryb === "wyniki" ? "/wyniki" : ""}`);
+  history.replaceState(null, "", `#${z.hash ? z.hash() : S.zakladka}${tryb === "wyniki" ? "/wyniki" : ""}`);
   if (z.po) z.po(c, tryb);
   const pole = znajdzPole(fokus);
   if (pole) pole.focus({ preventScroll: true });
@@ -371,6 +383,8 @@ function idzDoRundy(r) {
 
 // --- zdarzenia (delegacja) -----------------------------------------------------------------------
 document.addEventListener("click", async (e) => {
+  const doMiejsca = e.target.closest("#menu [data-miejsce]");
+  if (doMiejsca) { zamknijOkno(); return idzDoMiejsca(ctx(), doMiejsca.dataset.miejsce); }
   const zak = e.target.closest("[data-zakladka], [data-zakladka-k]");
   if (zak && (zak.closest("#menu") || zak.dataset.pod || zak.dataset.zakladkaK)) {
     const stary = zak.dataset.zakladka || zak.dataset.zakladkaK, k = docelowa(stary);
@@ -465,6 +479,7 @@ document.addEventListener("keydown", (e) => {
     S.kat = await api("/api/katalogi");
     const [h, tryb] = location.hash.slice(1).split("/");
     if (ZAKLADKI[h]) S.zakladka = docelowa(h);
+    if (h === "miejsce") ustawMiejsce(tryb);   // adres #miejsce/<id> – wnętrze budynku
     if (tryb === "wyniki") S.tryb = "wyniki";
     podepnijZadania(ctx);
     await wczytaj();
@@ -481,17 +496,26 @@ document.addEventListener("toggle", (e) => zapamietajZwiniecie(e.target), true);
 
 window.addEventListener("hashchange", () => {
   const [h, tryb] = location.hash.slice(1).split("/");
+  if (h === "miejsce") { if (S.v && (S.zakladka !== "miejsce" || tryb !== aktualneMiejsce())) idzDoMiejsca(ctx(), tryb); return; }
   if (ZAKLADKI[h] && docelowa(h) !== S.zakladka && S.v && przechwycFunkcje(h)) return history.replaceState(null, "", `#${S.zakladka}`);
   if (ZAKLADKI[h] && docelowa(h) !== S.zakladka) { S.zakladka = docelowa(h); S.tryb = tryb === "wyniki" ? "wyniki" : "decyzje"; rysuj(); pokazCzesc(h); }
 });
 export { S, okno, kluczZakladki };
+
+// --- mapa ↔ wnętrza (umowa z [mapa]: static/lukrum.js, notatki WSPOLPRACA.md) ---------------------------------------
+// mapa woła lukrum.otworzWnetrze(id); gdy budynek ma wnętrze albo ekran, zaznaczamy `obsluzone` i mapa nie otwiera
+// swojego zastępczego okna. „Wróć na mapę” z wnętrza otwiera zakładkę mapy.
+document.addEventListener("lukrum:wnetrze", (e) => {
+  if (S.v && otworzBudynek(ctx(), e.detail?.id)) e.detail.obsluzone = true;
+});
+document.addEventListener("lukrum:mapa", () => { if (S.v && S.zakladka !== "mapa") ctx().idz("mapa"); });
 
 // --- drużyna: zmiany innych osób i przeliczenie rundy pojawiają się same -------------------------
 const ODSWIEZANIE_MS = 20000, ODSWIEZANIE_HANDLU_MS = 5000;   // zakładki ze sprawami na żywo – co 5 s
 // poprawki 2: zakładki ze sprawami na żywo (licytacje lokali, rynek pracy, handel) – odpytywane co 5 s i przeładowane,
 // gdy inna drużyna przebije ofertę (lokal, licytacja na giełdzie handlu), zatrudni kandydata albo zapowie ogłoszenie
 // (silnik/na_zywo.py)
-const ZAKLADKI_NA_ZYWO = new Set(["handel", "nowe_lokale", "ludzie"]);
+const ZAKLADKI_NA_ZYWO = new Set(["handel", "stare_miasto", "miasteczko"]);
 // klucz zakładki (np. handel) albo grupy w menu (ludzie – S.zakladka to wtedy podzakładka, np. rynek_pracy)
 const naZywo = () => ZAKLADKI_NA_ZYWO.has(S.zakladka) || ZAKLADKI_NA_ZYWO.has(document.body.dataset.dzial);
 async function sprawdzZmiany() {

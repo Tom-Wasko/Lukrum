@@ -17,7 +17,7 @@ from django.utils.http import content_disposition_header
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
 from gry import harmonogram as hg
-from gry import serwisy
+from gry import lekcje, serwisy
 from gry.models import Gra
 from konta import druzyny
 from konta.role import firmy_ucznia, gry_ucznia, jest_mg, moze_firme
@@ -174,6 +174,7 @@ def api_gry(request):
             auto_zamowienia=bool(d.get("auto_zamowienia")),
             refleksja=d.get("refleksja") or "opcjonalna",
             podpowiedzi=bool(d.get("podpowiedzi")),
+            lekcje=lekcje.popraw(d.get("lekcje")),   # tryb lekcyjny (gry/lekcje.py); brak – na żywo
             kapital_startowy=kapital,
             poziomy=poziomy,
             odblokowanie=d.get("odblokowanie") or None,   # {element: tydzień} – zmiany harmonogramu
@@ -204,6 +205,7 @@ def _przeglad(id_: str) -> dict:
     p["ostrzezenia"] = druzyny.ostrzezenia(g)
     p["prowadzenie"] = hg.prowadzenie(id_)
     p["prowadzenie"]["dni"] = hg.DNI
+    p["prowadzenie"]["zakresy_lekcji"] = lekcje.zakresy()   # tryb lekcyjny: zakresy z ustawień
     poziomy = g.dane.boty.get("poziomy") or {}
     # Z5: bez poziomów do pomiarów – poza poziomem bota starej gry (np. „jak człowiek”)
     uzywane = {f.get("poziom") for f in p["firmy"] if f["bot"]}
@@ -223,7 +225,8 @@ def api_prowadzenie(request, id_):
     (harmonogram odblokowań gry z lokalami), {"auto_zamowienia": bool} (przycisk „Zamów brakujące”
     w Dostawcach), {"refleksja": "wylaczona" | "opcjonalna" | "wymagana"} (U17),
     {"podpowiedzi": bool} (U19: rady na Dashboardzie w pierwszych rundach),
-    {"podkupywanie": bool} (czy wolno podkupywać pracowników innych drużyn)
+    {"podkupywanie": bool} (czy wolno podkupywać pracowników innych drużyn),
+    {"lekcje": {"rundy_na_zywo", "termin_dni"} | null} (tryb lekcyjny; null – na żywo)
     albo {"inwestor": {"firma", "kwota"}} (inwestor ratunkowy, kwota 0 odwołuje)."""
     d = cialo(request)
     if "refleksja" in d:
@@ -245,6 +248,17 @@ def api_prowadzenie(request, id_):
     if "podpowiedzi" in d:
         with serwisy.zmiana(id_) as g:
             g.konfiguracja["podpowiedzi"] = bool(d["podpowiedzi"])
+    if "lekcje" in d:
+        try:
+            u = lekcje.popraw(d["lekcje"])
+        except ValueError as e:
+            raise BladZapytania(str(e)) from e
+        with serwisy.zmiana(id_) as g:
+            if u:
+                g.konfiguracja["lekcje"] = u
+            else:
+                g.konfiguracja.pop("lekcje", None)
+        Gra.objects.filter(pk=id_).update(termin_od=timezone.now())   # termin liczony od teraz
     if "podkupywanie" in d:   # poprawki 2 (sprawa 6): headhunter, podkupienia i kontroferty
         with serwisy.zmiana(id_) as g:
             g.konfiguracja["podkupywanie"] = bool(d["podkupywanie"])

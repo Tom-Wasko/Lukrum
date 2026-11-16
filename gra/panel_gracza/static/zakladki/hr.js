@@ -45,6 +45,17 @@ function pigulkaPodkupienia(v, p) {
 
 // U20: charakter osoby podany jawnie (decyzja autora 7.11.2026) – pigułka z nazwą i dymek ze skutkami (dane: cechy)
 const zdanieCharakteru = (o) => `Charakter: ${o.charakter.nazwa}. Wpływ: ${o.charakter.skutek}.`;
+// kontrola PIP (silnik/ludzie/kontrola_pip.py): zlecenie w pełnym wymiarze godzin jak etat; liczby – v.pip z widoku
+const osobaPip = (v, p) => v.pip?.osoby?.[p.id];
+const pigulkaPip = (v, p) => osobaPip(v, p) ? `<span class="pigulka znak-uwaga" title="${esc(opisPip(v, p))}">${osobaPip(v, p).ryzyko ? "ryzyko kontroli PIP" : "zlecenie jak etat"}</span>` : "";
+function opisPip(v, p) {
+  const o = osobaPip(v, p), z = v.pip;
+  if (!o) return "";
+  const kara = `szansa kontroli PIP co tydzień: ${proc(z.szansa, 0)}, kara ${zl(z.kara)}`;
+  return `Zlecenie jak etat: ${licz(o.godziny, 0)} h w tygodniu (od ${licz(z.prog_godzin, 0)} h), ${licz(o.tygodnie)} z ${licz(z.tygodni_z_rzedu)} tygodni z rzędu. `
+    + (o.ryzyko ? `Kontrola jest już możliwa: ${kara}. ` : `Po ${licz(z.tygodni_z_rzedu)} tygodniach z rzędu grozi kontrola (${kara}). `)
+    + `Pomaga umowa o pracę albo mniej godzin (poniżej ${licz(z.prog_godzin, 0)} h w tygodniu).`;
+}
 const opisOsoby = (o) => o.charakter ? ` <span class="pigulka">${esc(o.charakter.nazwa)}</span>${kolko(esc(zdanieCharakteru(o)))}` : "";
 const zadowolenieOsoby = (p) => p.zadowolenie == null ? "–"
   : `<span class="${p.niezadowolony ? "minus" : ""}">${licz(p.zadowolenie, 2)}</span>`;
@@ -68,14 +79,17 @@ function zaNiskaOferta(kat, pensja, umowa, k) {
 
 export const zatrudnienie = {
   tytul: "Zatrudnienie", tytulPelny: "HR - zatrudnienie", ikona: "☺", odblokowanie: "hr_zatrudnienie",
-  info: "Zatrudnij pracowników potrzebnych do przygotowania i sprzedaży wybranych dań. Pracownik potrzebuje stanowiska (Wnętrze ▸ Stanowiska i sprzęt).",
+  info: "Zatrudnij pracowników potrzebnych do przygotowania i sprzedaży wybranych dań. Pracownik potrzebuje stanowiska (Park handlowy ▸ Stanowiska i sprzęt).",
   decyzje({ v, kat, edycja }) {
     let html = `<div class="pasek ciemny"><span>Koszty wynagrodzeń: <span class="kwota">${zl(kosztWynagrodzen(v, kat))}</span>${naOkres()} brutto (z ZUS pracodawcy; pensje w umowach – miesięczne)</span></div>`;
+    const zagrozeni = v.stan.pracownicy.filter((p) => osobaPip(v, p));
+    if (zagrozeni.length) html += `<div class="komunikat"><p class="znak-uwaga"><b>Zlecenie jak etat (${zagrozeni.map((p) => esc(p.imie_nazwisko)).join(", ")}).</b></p>
+      <p>${esc(opisPip(v, zagrozeni[0]))}</p></div>`;
     if (v.nieudane_zatrudnienia?.length) html += `<div class="komunikat zly">Część kandydatów zatrudniła już inna firma – wybierz innych.</div>`;
     for (const typ of TYPY) {
       const st = stanowiskaLokalu(v, v.stan.stanowiska).filter((s) => s.typ === typ);
       html += `<div class="pasek">${esc(kat.oferty.stanowiska.typy[typ].nazwa)}${idWybranego(v) ? ` – ${esc(nazwaLokalu(v, idWybranego(v)))}` : ""}</div>`;
-      if (!st.length) { html += `<p class="podpowiedz">Brak stanowisk – uruchom je w zakładce Wnętrze ▸ Stanowiska i sprzęt.</p>`; continue; }
+      if (!st.length) { html += `<p class="podpowiedz">Brak stanowisk – uruchom je w zakładce Park handlowy ▸ Stanowiska i sprzęt.</p>`; continue; }
       html += `<div class="siatka waska">${st.map((s) => {
         const p = v.stan.pracownicy.find((x) => x.id === s.pracownik);
         const wl = v.wlasciciel_stanowisko;   // właściciel staje sam na pustym stanowisku (silnik/ludzie/czas_wlasciciela.py)
@@ -89,7 +103,7 @@ export const zatrudnienie = {
         const ruch = prz ? `<span class="pigulka inf">${przenosinyMiedzyLokalami(v, prz) ? "czeka na zgodę" : "przeniesiony"}</span>` : "";
         const wyp = p.odchodzi ? `<span class="pigulka${p.odchodzi.powod === NIEZADOWOLENIE ? " nie" : ""}">wypowiedzenie do r. ${p.odchodzi.runda}</span>`
           : p.niezadowolony ? '<span class="pigulka nie">niezadowolony</span>' : "";
-        return `<div class="kafel"><div class="kg">Stanowisko nr ${s.nr}${nowy ? '<span class="pigulka inf">nowy</span>' : ""}${ruch}${wyp}${opisOsoby(p)}</div>
+        return `<div class="kafel"><div class="kg">Stanowisko nr ${s.nr}${nowy ? '<span class="pigulka inf">nowy</span>' : ""}${ruch}${wyp}${pigulkaPip(v, p)}${opisOsoby(p)}</div>
           <div class="kt srodek" data-akcja="profil" data-id="${esc(p.id)}" style="cursor:pointer"><div class="awatar">${inicjaly(p.imie_nazwisko)}</div>
           <b>${esc(p.imie_nazwisko)}</b>${pigulkaStudenta(p, kat)}<br><span class="podpowiedz">${esc(p.zawod)} · ${nazwaFormy(kat, p.umowa)}</span><br>${gw(p.gwiazdki)}<br>
           <b class="akcent">${zl(p.pensja)}</b>${p.premia ? `<br><span class="podpowiedz">premia ${zl(p.premia)}</span>` : ""}</div>
@@ -99,7 +113,7 @@ export const zatrudnienie = {
     if (v.lokale) html += `<p class="podpowiedz">Na wolne stanowisko przypiszesz osobę z tego lokalu (od razu) albo z innego Twojego lokalu –
       wtedy pracownik musi się zgodzić (zależy to od jego zadowolenia, odległości i dodatku za przejście; odpowiedź po przeliczeniu rundy).
       Nowych ludzi zatrudniasz w zakładce <a data-zakladka-k="rynek_pracy">Rynek pracy</a>.</p>
-      <p class="podpowiedz">Puste stanowisko nie stoi bezczynnie: właściciel sam na nim staje (jak pracownik 1★, bez pensji) – ale tylko
+      <p class="podpowiedz">Puste stanowisko nie stoi bezczynnie: właściciel staje na nim osobiście (jak pracownik 1★, bez pensji) – ale tylko
       w godzinach, które zostają mu po sprawach poza lokalem (<a data-zakladka-k="czas_wlasciciela">Czas właściciela</a>).</p>`;
     return html;
   },
@@ -120,13 +134,18 @@ export const zatrudnienie = {
     const odejscia = (v.wyniki?.odejscia_pracownikow || []).map((o) => [esc(o.imie_nazwisko), licz(o.zadowolenie, 2), o.powody.map(esc).join(", "),
       `runda ${o.runda_odejscia}`]);
     const L = v.wyniki?.pracownicy || [], nzad = L.filter((p) => p.niezadowolony).length, sr = L.length ? L.reduce((a, p) => a + (p.wykorzystanie || 0), 0) / L.length : 0;
+    const pip = v.wyniki?.pip;
+    const kontrolaPip = pip?.kontrola ? `<div class="komunikat zly"><p class="znak-strata"><b>Kontrola PIP: kara ${zl(pip.kara)}</b></p><p>${esc(pip.tekst || "")}</p>
+      <p>Osoby na zleceniu pracowały jak na etacie (${pip.osoby.map(esc).join(", ")}): pomaga umowa o pracę albo mniej godzin.</p></div>`
+      : pip ? `<div class="komunikat"><p class="znak-uwaga"><b>Zlecenie jak etat: kontroli PIP nie było (${pip.osoby.map(esc).join(", ")}).</b></p>
+      <p>Co tydzień jest na to szansa ${proc(pip.szansa, 0)}. Pomaga umowa o pracę albo mniej godzin.</p></div>` : "";
     const lead = !L.length ? podsumowanie("Nie masz jeszcze zatrudnionych pracowników.") : podsumowanie([
       `W zespole pracuje <b>${licz(L.length)}</b> ${L.length === 1 ? "osoba" : "osób"}, średnie wykorzystanie czasu to <b>${proc(sr, 0)}</b>.`,
       nzad ? `Niezadowolonych jest ${licz(nzad)} – bez zmian mogą złożyć wypowiedzenie.` : "Nikt nie jest niezadowolony.",
       odejscia.length ? `Z niezadowolenia odchodzi ${licz(odejscia.length)} ${odejscia.length === 1 ? "osoba" : "osób"}.` : ""], nzad || odejscia.length ? "uwaga" : "ok");
     const kafle = L.length ? kafelkiLiczb([{ etykieta: "Pracownicy", wartosc: licz(L.length) }, { etykieta: "Średnie wykorzystanie czasu", wartosc: proc(sr, 0) },
       { etykieta: "Niezadowoleni", wartosc: licz(nzad), ton: nzad ? "minus" : "plus" }, { etykieta: "Wypowiedzenia", wartosc: licz(odejscia.length), ton: odejscia.length ? "minus" : "" }]) : "";
-    return lead + kafle + zwinTabela("Twoi pracownicy", ["Pracownik", "Zawód", "Doświadczenie", "Stanowisko", "Wykorzystanie czasu", "Wynagrodzenie", "Zadowolenie"], moi, { klasy: ["l"], otwarte: true })
+    return lead + kontrolaPip + kafle + zwinTabela("Twoi pracownicy", ["Pracownik", "Zawód", "Doświadczenie", "Stanowisko", "Wykorzystanie czasu", "Wynagrodzenie", "Zadowolenie"], moi, { klasy: ["l"], otwarte: true })
       + (odejscia.length ? zwinTabela("Wypowiedzenia z niezadowolenia", ["Pracownik", "Zadowolenie", "Powody", "Odchodzi"], odejscia, { klasy: ["l"], otwarte: true }) : "")
       + zwinTabela("Liczba pracowników", ["Zespół", ...ZAWODY], liczba, { klasy: ["l"] })
       + zwinTabela("Wykorzystanie czasu pracowników", ["Zespół", ...ZAWODY], wyk, { klasy: ["l"] })
@@ -275,7 +294,7 @@ function wolneStanowiska(v, kat, zawod) {
 function wyborMiejsca(v, kat, zawod) {
   const wolne = wolneStanowiska(v, kat, zawod), T = kat.oferty.stanowiska.typy;
   if (!wolne.length) return `<div class="komunikat zly">Nie masz wolnego stanowiska dla zawodu „${esc(zawod)}”. Uruchom nowe w zakładce
-    Wnętrze ▸ Stanowiska i sprzęt albo zwolnij miejsce.</div><input type="hidden" id="z-miejsce" value="">`;
+    Park handlowy ▸ Stanowiska i sprzęt albo zwolnij miejsce.</div><input type="hidden" id="z-miejsce" value="">`;
   const opcja = (s) => `<option value="${s.typ}:${s.nr}">${esc(T[s.typ].nazwa)} nr ${s.nr}</option>`;
   const lokale = [...new Set(wolne.map((s) => s.lokal))];
   const opcje = v.lokale && lokale.length > 1
@@ -379,7 +398,7 @@ function oknoPrzypisania({ v, kat }, typ, nr) {
   okno(`Obsada: ${esc(T[typ]?.nazwa ?? typ)} nr ${nr}${cel?.lokal && v.lokale ? ` – ${esc(nazwaLokalu(v, cel.lokal))}` : ""}`,
     (w.length ? tabela(null, ["Osoba", "Zawód", "Pracuje teraz", "Zadowolenie", "Zgoda", ""], w, { klasy: ["l", "l", "l"] })
       : `<div class="komunikat">Nie masz jeszcze nikogo do tej pracy. Zatrudnij kogoś w
-        <a data-zakladka-k="rynek_pracy">Ludzie ▸ Rynek pracy</a>.</div>`)
+        <a data-zakladka-k="rynek_pracy">Miasteczko akademickie ▸ Rynek pracy</a>.</div>`)
     + `<p class="podpowiedz">Osoba z tego lokalu zmieni stanowisko od razu. Osoba z innego lokalu musi się zgodzić: chętniej, gdy jest zadowolona,
       lokale są blisko na mapie i dostanie jednorazowy dodatek. Odpowiedź poznasz po przeliczeniu rundy (Rynek pracy ▸ wyniki).
       Nowa osoba: <a data-zakladka-k="rynek_pracy">Rynek pracy</a>.</p>`, { srednie: true });
@@ -413,6 +432,7 @@ function oknoProfilu({ v, kat, edycja }, id) {
       <div class="wiersz"><span>Skłonność do pomyłek</span><span>${proc(p.ryzyko_pomylki, 0)}</span></div>
       <div class="wiersz"><span>Zadowolenie klientów</span><span>${proc(p.zadowolenie_klientow, 0)}</span></div>
       <div class="wiersz"><span>Zadowolenie z pracy (ostatni tydzień)</span><span>${zadowolenieOsoby(p)}</span></div></div>
+      ${osobaPip(v, p) ? `<p class="znak-uwaga" style="text-align:left">${esc(opisPip(v, p))}</p>` : ""}
       ${p.niezadowolony && !p.odchodzi ? `<p class="minus" style="text-align:left">Niezadowolony od ${p.niezadowolony} tyg. – szczegóły na liście błędów.
         Pomaga podwyżka, lepszy sprzęt albo odciążenie.</p>` : ""}</div>
     <div style="display:flex;flex-direction:column;gap:12px">
@@ -498,7 +518,7 @@ function oknoPrzeniesienia({ v, kat }, id) {
   okno(`Przenieś: ${esc(p.imie_nazwisko)}`, `<p>Pracuje teraz: <b>${miejsceOsoby(v, kat, teraz)}</b> · zadowolenie ${zadowolenieOsoby(p)}</p>`
     + (w.length ? tabela(null, ["Wolne stanowisko", "Zgoda", ""], w, { klasy: ["l", "l"] })
       : `<div class="komunikat">Nie ma wolnego stanowiska typu ${typy.map((t) => esc(T[t]?.nazwa ?? t)).join(" / ")}. Uruchom nowe w zakładce
-        <a data-zakladka-k="stanowiska">Wnętrze ▸ Stanowiska i sprzęt</a>.</div>`)
+        <a data-zakladka-k="stanowiska">Park handlowy ▸ Stanowiska i sprzęt</a>.</div>`)
     + `<p class="podpowiedz">W tym samym lokalu osoba zmienia stanowisko od razu. Do innego lokalu musi się zgodzić – chętniej, gdy jest zadowolona,
       lokale są blisko i dostanie dodatek za przejście (odpowiedź po przeliczeniu rundy).</p>`, { srednie: true });
 }
@@ -579,7 +599,7 @@ function narzedziaZespolu(w) {
   return `<div class="zespol-narzedzia"><label>Grupuj: ${wybor("grupy", GRUPY_ZESPOLU)}</label><label>Sortuj: ${wybor("sort", SORT_ZESPOLU)}</label></div>`;
 }
 
-// UF15: Ludzie → Zespół – wszyscy pracownicy firmy; Poprawki 2 (sprawa 18): kafelki osób, w wynikach wskaźniki czasu pracy
+// UF15: Mój kebab → Zespół – wszyscy pracownicy firmy; Poprawki 2 (sprawa 18): kafelki osób, w wynikach wskaźniki czasu pracy
 export const zespol = {
   tytul: "Zespół", tytulPelny: "Ludzie – zespół", ikona: "zatrudnienie", odblokowanie: "hr_zatrudnienie",
   info: "Wszyscy Twoi pracownicy: gdzie pracują, na jakiej umowie, za ile i czy są zadowoleni. Profil – pensja, premia, forma albo zwolnienie; Przenieś – inne wolne stanowisko.",

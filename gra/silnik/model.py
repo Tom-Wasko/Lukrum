@@ -170,6 +170,10 @@ class Lokal(Model):
     ceny: dict[str, Cena] | None = None         # usługa → cena i rabat w lokalu
     wyposazenie: list[str] | None = None
     udogodnienia: list[str] | None = None
+    # dekor lokalu (silnik/rynek/dekor.py): kupione style grup elementów {grupa: [styl]} i aktywny styl {grupa: styl};
+    # brak grupy w `dekor` – styl podstawowy (stare zapisy wczytują się z pustymi słownikami)
+    dekor_kupiony: dict[str, list[str]] = Field(default_factory=dict)
+    dekor: dict[str, str] = Field(default_factory=dict)
     # U24: opinie klientów (silnik/rynek/opinie.py) – ocena 1–5 (średnia krocząca), liczba wszystkich opinii,
     # waga opinii w średniej (po zaniku) i ostatnie komentarze {tekst, gwiazdki, podpis, powod}
     ocena: float | None = None

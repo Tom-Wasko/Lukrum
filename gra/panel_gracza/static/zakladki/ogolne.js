@@ -3,6 +3,8 @@ import { esc, godzina, nazwaRundy, kafelkiLiczb, podsumowanie, strzalka, zwinTab
 import { ikona } from "./ikony.js";
 import { ikonaMarki } from "./ikony_marek.js";
 import { ukryta, wylaczona } from "./funkcje.js";
+import { listWujka } from "./wujek.js";
+import { finalHtml } from "./final.js";
 
 const DZIALY = ["finanse", "goscie", "zespol", "rozwoj", "bezpieczenstwo"];
 const NAZWY_DZIALOW = { finanse: "Finanse", goscie: "Goście", zespol: "Zespół", rozwoj: "Rozwój", bezpieczenstwo: "Bezpieczeństwo finansowe" };
@@ -113,6 +115,8 @@ const wyslijLogo = async (c, logo) => {
   toast(logo ? "Logo zapisane." : "Logo usunięte.");
 };
 
+// dawny plan rundy w kafelkach; od fable-wujek Plan tygodnia rysuje listWujka (wujek.js) – zostaje do porównania
+// eslint-disable-next-line no-unused-vars
 function planRundy(v, kat) {
   // lista kontrolna decyzji bieżącej rundy (na podstawie stanu po roboczych decyzjach)
   const r = v.runda, st = v.stan, braki = Object.values(st.gotowe_uslugi || {}).flat();
@@ -146,20 +150,22 @@ function podpowiedziHtml(v) {
 // U9: rozruch nowego lokalu (dane/mapa/popyt.yaml: model.rozruch) – strata w pierwszych tygodniach sprzedaży jest normalna
 function rozruchHtml(v) {
   const R = v.dashboard?.rozruch;
-  if (!R || !(R.lokale.length || v.runda === v.gra.runda_startowa)) return "";
+  if (!R || !R.lokale.length || v.gra.zakonczona) return "";   // w 1. tygodniu o rozruchu pisze wujek (wujek.js), bez ściany tekstu
   const pr = (m) => `ok. ${Math.round(m * 100)}%`;
   const lokale = R.lokale.map((l) => `<li><b>${esc(l.nazwa)}</b>: ${l.poprzednia != null
     ? `w poprzednim tygodniu przyszło ${pr(l.poprzednia)} pełnej liczby klientów, a w tym tygodniu ${l.teraz < 1 ? `przyjdzie ${pr(l.teraz)}` : "popyt jest już pełny"}`
     : `pierwszy tydzień sprzedaży – przyjdzie ${pr(l.teraz)} pełnej liczby klientów`}.</li>`).join("");
-  return `<div class="komunikat"><b>Rozruch nowego lokalu.</b> Nowy lokal dopiero zdobywa klientów: w pierwszym tygodniu
+  return `<details class="lw-stawki"><summary>Rozruch nowego lokalu: na początku przychodzi mniej gości, strata na starcie jest normalna</summary>
+    <div>Nowy lokal dopiero zdobywa klientów: w pierwszym tygodniu
     sprzedaży przychodzi ${pr(R.start)} pełnej liczby klientów, potem co tydzień o ${Math.round(R.przyrost * 100)} punktów procentowych więcej,
     aż do pełnego popytu. Czynsz i pensje są od razu pełne, więc strata na starcie jest normalna – pilnuj, żeby była mała:
-    zamówienia i grafik dopasuj do mniejszego ruchu.${lokale ? `<ul>${lokale}</ul>` : ""}</div>`;
+    zamówienia i grafik dopasuj do mniejszego ruchu.${lokale ? `<ul>${lokale}</ul>` : ""}</div></details>`;
 }
 
 export const dashboard = {
-  tytul: "Dashboard", ikona: "▦",
-  decyzje({ v, kat, d: szkic }) {
+  tytul: "Plan tygodnia", ikona: "▦",
+  decyzje(c) {
+    const { v, kat, d: szkic } = c;
     const d = v.dashboard, p = kat.parametry, m = mojaMarka(v, szkic);
     const rundaMarki = v.edycja && v.runda === v.gra.runda_startowa && !v.tylko_odczyt;
     const kafel = (t, ik, tresc) => `<div class="kafel"><div class="kg"><span>${t}</span>${ikona(ik, 18)}</div><div class="kt">${tresc}</div></div>`;
@@ -176,7 +182,7 @@ export const dashboard = {
     const pasek = alarm ? `<div class="komunikat zly">${esc(alarm.tekst)}
       <button class="btn jasny maly" data-akcja="popraw" data-z="bank">Przejdź do banku</button></div>` : "";
     const inwestor = v.inwestor && v.runda <= v.inwestor.do_rundy + 1 ? inwestorHtml(v) : "";   // U11: potem tylko w Banku
-    return `${pasek}${inwestor}${status}${klub}${rundaMarki ? formularzMarki(v, szkic) : ""}${v.edycja ? planRundy(v, kat) : ""}${podpowiedziHtml(v)}${rozruchHtml(v)}${dlaczegoHtml(v)}<div class="sekcja-tytul">Twoja firma</div><div class="dash">
+    return `${finalHtml(v)}${pasek}${inwestor}${status}${klub}${v.edycja ? listWujka(v, c) : ""}${rundaMarki ? formularzMarki(v, szkic) : ""}${podpowiedziHtml(v)}${rozruchHtml(v)}${dlaczegoHtml(v)}<div class="sekcja-tytul">Twoja firma</div><div class="dash">
       ${kafel("Nazwa i logo firmy", "osoba", `<div class="srodek">${znakFirmy(m)}<b>${esc(m.nazwa)}</b>${m.slogan ? `<div class="maly-tekst">„${esc(m.slogan)}”</div>` : ""}</div>`)}
       ${kafel("Miejsce", "karta", d.miejsce ? `${d.miejsce} / ${d.liczba_firm}` : `<span class="maly-tekst">Ranking dostępny od rundy 3</span>`)}
       ${kafel(`Liczba rund w grze`, "zegar", `<div>${Math.min(v.gra.runda, v.gra.liczba_rund)} / ${v.gra.liczba_rund}
@@ -184,9 +190,10 @@ export const dashboard = {
         ${rynek ? `<div class="podpowiedz">${rynek}</div>` : ""}</div>`)}
       ${kafel("Dochód netto", "wykres", d.dochod_netto == null && v.ksiegowosc?.ukryte   // U7: ukryty do złożenia deklaracji
         ? `<div class="maly-tekst">Księgujesz samodzielnie – dochód tej rundy poznasz po złożeniu deklaracji albo wybierz biuro.</div>
-           <button class="btn jasny maly" data-akcja="popraw" data-z="biuro">Księgowość ▸ Biuro rachunkowe</button>`
+           <button class="btn jasny maly" data-akcja="popraw" data-z="biuro">Biurowiec przy Zana ▸ Biuro rachunkowe</button>`
         : `<span class="${d.dochod_netto < 0 ? "minus" : ""}">${zl(d.dochod_netto)}</span>`)}
       ${kafel("Saldo konta", "portfel", zl(d.saldo))}
+    </div><details class="lw-stawki"><summary>Stawki i przepisy: płaca minimalna, czas pracy, amortyzacja, podatki</summary><div class="dash">
       ${kafel("Minimalne wynagrodzenie brutto", "zatrudnienie", `${zl(kat.placa_minimalna)} / miesiąc`
         + (OKRES.rund_w_roku === 12 ? "" : `<div class="maly-tekst">≈ ${zl(naRunde(kat.placa_minimalna))}${naOkres()}</div>`))}
       ${kafel("Czas pracy pracownika i sprzętów", "zegar", `<div>${p.godziny}H / ${OKRES.mianownik.toUpperCase()}<div class="maly-tekst">Otwarte: 9:00–17:00</div></div>`)}
@@ -196,7 +203,7 @@ export const dashboard = {
       ${kafel("Pozostałe informacje", "finanse", `<div class="maly-tekst">PIT liniowy ${proc(v.podatki?.parametry?.pit ?? 0, 0)}<br>Składki ZUS pracodawcy ${proc(p.zus, 0)}
         <br>Rozliczanie debetu: ${v.gra.tryb_debetu === "na_biezaco" ? "na bieżąco" : "jak w grze (jednocześnie)"}
         ${d.lokaty ? `<br>Lokaty: ${zl(d.lokaty)}` : ""}${d.zadluzenie ? `<br>Zadłużenie: ${zl(d.zadluzenie)}` : ""}</div>`)}
-    </div>${(v.historia || []).length > 1 ? `<div class="wykres"><canvas id="w-dash"></canvas></div>` : ""}`;
+    </div></details>${(v.historia || []).length > 1 ? `<div class="wykres"><canvas id="w-dash"></canvas></div>` : ""}`;
   },
   zmiany: {
     "marka-nazwa": (el, c) => c.zmien((d) => { d.nazwa = el.value.trim().slice(0, 40); }),
@@ -285,7 +292,7 @@ export const karta_wynikow = {
 // UF11: ranking drużyn – miejsca jak u mistrza gry (wynik gry w punktach z tygodni 1…), zmiana miejsca i wykres miejsc
 export const ranking = {
   tytul: "Ranking", tytulPelny: "Ranking drużyn", ikona: "karta", wynikiOd: 3, odblokowanie: "karta_wynikow",
-  info: () => "Kto prowadzi? Miejsce liczy się z punktów z kolejnych tygodni (ostatnie ważą więcej) – tak samo jak w panelu mistrza gry i na Dashboardzie.",
+  info: () => "Kto prowadzi? Miejsce liczy się z punktów z kolejnych tygodni (ostatnie ważą więcej) – tak samo jak w panelu mistrza gry i na Planie tygodnia.",
   wyniki({ v }) {
     const R = v.ranking, skum = v.karta_skumulowana || {}, teraz = v.rynek?.karta || {};
     if (!R?.rundy?.length) return `<p class="podpowiedz">Ranking pojawi się, gdy przeliczy się runda 2.</p>`;

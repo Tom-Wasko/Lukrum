@@ -5,7 +5,7 @@ Czytaj na początku sesji. Autor pisze po polsku, więc **odpowiadaj po polsku**
 ## Co to jest
 LUKRUM to edukacyjna symulacja biznesowa dla szkół średnich (lekcje WOS, konkurs „Zwolnieni z Teorii”).
 - Drużyny (1–4 osoby) prowadzą kebaby na wspólnej mapie Lublina. Do tego dochodzą boty o 5 strategiach i 4 poziomach.
-- Runda to tydzień gry (domyślnie 18 rund, 40 000 zł na start). Mistrz gry (nauczyciel) zamyka rundę, a silnik liczy
+- Runda to tydzień gry (domyślnie 18 rund, 50 000 zł na start). Mistrz gry (nauczyciel) zamyka rundę, a silnik liczy
   tydzień dzień po dniu.
 - Funkcje gry (zaopatrzenie, marketing, księgowość…) mistrz gry może zakryć. Wtedy robi je autopilot, a drużyny
   odsłaniają je same (`dane/funkcje.yaml`).

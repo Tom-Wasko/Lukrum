@@ -29,6 +29,7 @@ from silnik.kuchnia.dostawcy import ceny_rundy, oferta_rundy
 from silnik.kuchnia.dostawcy import info as info_dostawcy
 from silnik.ludzie import czas_wlasciciela as cw
 from silnik.ludzie import formy as fz
+from silnik.ludzie import kontrola_pip as kpip
 from silnik.ludzie import przenosiny as przen
 from silnik.ludzie import rynek_pracy as rp
 from silnik.ludzie import szkolenia as szk
@@ -52,6 +53,7 @@ from silnik.pieniadze import inwestor as inw
 from silnik.pieniadze import kasyno as kas
 from silnik.pieniadze import lichwiarz as lw
 from silnik.pieniadze import wlasciciel as wl
+from silnik.rynek import dekor as dk
 from silnik.rynek import handel as hd
 from silnik.rynek import kalendarz as kl
 from silnik.rynek import konkurencja as kn
@@ -63,6 +65,22 @@ from silnik.swiat import awarie as aw
 from silnik.swiat import zdarzenia as zd
 from silnik.wyniki import punkty as pk
 from silnik.wyniki.wnioski import dlaczego, tydzien, wnioski
+
+
+def _pip(dane: Dane, f: Firma) -> dict | None:
+    """Kontrola PIP (silnik/ludzie/kontrola_pip.py): zasady z danych i osoby na zleceniu, które pracują jak etatowcy –
+    ile tygodni z rzędu (po tej rundzie) i czy kontrola jest już możliwa. None – dane bez kontroli PIP."""
+    z = kpip.zasady(dane)
+    if not z:
+        return None
+    osoby = {}
+    for p in f.pracownicy.values():
+        if kpip.jak_etat(dane, f, p):
+            tygodnie = p.tygodnie_jak_etat + 1   # licznik rośnie na koniec rundy, a wtedy losuje się kontrola
+            osoby[p.id] = {"tygodnie": tygodnie, "ryzyko": tygodnie >= z["tygodni_z_rzedu"],
+                           "godziny": round(dane.z["operacje"]["godziny_pracownika"] * fz.etat(dane, p), 1)}
+    return {"prog_godzin": z["prog_godzin"], "tygodni_z_rzedu": z["tygodni_z_rzedu"], "szansa": z["szansa"],
+            "kara": z["kara"], "osoby": osoby}
 
 
 def _firma_slownik(f: Firma) -> dict:
@@ -414,11 +432,11 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
         v["tabela_punktow"] = pk.tabela(dane)   # jawne progi wyniku punktowego (działy, składniki, otwarcie, wagi rankingu)
         v["zasady_karty"] = {"mandaty": bool(dane.z["wynik"].get("mandaty_w_dochodzie")),
                              "waga_nieruchomosci": dane.z["wynik"]["waga_nieruchomosci"]}
-        # poprawki 2 (sprawy 17/18): kolory wskaźników czasu pracy w Ludzie ▸ Zespół (wyniki)
+        # poprawki 2 (sprawy 17/18): kolory wskaźników czasu pracy w Mój kebab ▸ Zespół (wyniki)
         v["progi_czasu_pracy"] = {"niski": dane.z["operacje"].get("niskie_obciazenie"),   # brak w danych zamrożonych testów
                                   "przepracowanie": dane.z["zadowolenie_osoby"]["wspolczynniki"]["prog_przepracowania"]}
         v["majatek_firm"] = {n: _majatek_netto(x) for n, x in w.items()}   # U13: majątek netto obok wyniku w rankingu
-        v["ranking"] = historia_rankingu(dane, poprzedni, runda - 1, gra.konfiguracja["liczba_rund"])   # UF11: zakładka Wyniki ▸ Ranking
+        v["ranking"] = historia_rankingu(dane, poprzedni, runda - 1, gra.konfiguracja["liczba_rund"])   # UF11: zakładka Kurier rankingowy ▸ Ranking
         v["historia"] = [{"runda": r, "miesiac": dane.nazwa_rundy(r), "skrot": dane.skrot_rundy(r), "karta": poprzedni.wyniki[r][firma].get("karta"),
                           "dochod_netto": poprzedni.wyniki[r][firma]["kpir"]["dochod_netto"],
                           "gotowka": poprzedni.wyniki[r][firma]["gotowka"]}
@@ -446,6 +464,7 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
     if len(f.lokale) > 1:   # Z3: przewozy towaru między lokalami (zakładka Lokale → Dostawy i magazyn)
         v["przewozy"] = {"zasady": pl.zasady_przewozu(dane), "przyjete": (info or {}).get("przewozy", []) if edycja else [],
                          "uwagi": (info or {}).get("uwagi_przewozow", []) if edycja else []}
+    v["dekor"] = dk.widok(dane, f)   # sklep meblowy: katalog i dekor lokali (pusty, gdy mechaniki nie ma)
     v["agencja"] = _agencja(gra, firma, runda, f, stan, edycja)
     zam = ((info.get("kampanie") or {}) if edycja else (wr.get("reklama_agencje") or {}))
     v["reklama"] = rk.widok(dane, f, runda, poprzedni.rynek.get(runda - 1), zam.get("zamowione"))
@@ -466,7 +485,10 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
     fp = poprzedni.firmy[firma]   # zastawy i limit – stan na początku rundy (przed decyzjami)
     v["inwestor"] = inw.raport(f, None, 0.0)   # U11: inwestor ratunkowy (z wpłatą w tej rundzie – w podglądzie)
     v["banki"] = {"najlepsze": bk.najlepsze(dane), "historia": bk.historia(fp, runda), "zastawy": bk.zastawy(dane, fp),
-                  "wolny_limit": bk.wolny_limit(dane, fp), "decyzja": {"bank": info.get("bank"), "leasing": info.get("leasing")}}
+                  "wolny_limit": bk.wolny_limit(dane, fp), "decyzja": {"bank": info.get("bank"), "leasing": info.get("leasing")},
+                  # zmiana banku przy debecie: spłata z gotówki albo przejęcie za opłatą (silnik/pieniadze/banki.py)
+                  "przejecie_debetu": ({"debet": round(fp.debet, 2), "gotowka": round(fp.gotowka, 2),
+                                        "oplata": bk.oplata_przejecia_debetu(dane, fp.debet)} if fp.debet > bk.EPS else None)}
     v["kandydaci"] = rp.widoczni(dane, v["kandydaci"], runda)
     if wl.dane_portfela(dane):
         v["wlasciciel"] = wl.widok(dane, fp, f, info.get("wlasciciel") if edycja
@@ -495,6 +517,7 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
     v["amortyzacja"] = {"prog": dane.z["finanse"]["amortyzacja_prog"], "stawki": dane.z["finanse"]["amortyzacja_roczna"],
                         "niskocenne": wybor_niskocennych(dane)}   # B6: None – zakupy poniżej progu zawsze w koszty
     v["ksiegowosc"] = bo.widok(dane, fp, f, v["decyzje"], v.get("wyniki"))
+    v["pip"] = _pip(dane, f)
     if edycja and fp.deklaracja:   # samodzielna księgowość: wynik podatkowy dopiero po deklaracji drużyny
         v["wyniki"] = bo.ukryj(v.get("wyniki"))
         v["ksiegowosc"]["ukryte"] = True

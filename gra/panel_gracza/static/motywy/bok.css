@@ -6,7 +6,7 @@
   & body:has(> .menu) > .naglowek { grid-column: 1 / -1; }
   & body:has(> .menu) > .menu { grid-column: 1; grid-row: 2 / 4; }
   & body:has(> .menu) > .scena, & body:has(> .menu) > .stopka { grid-column: 2; }
-  & .menu { flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; gap: 1px; padding: 12px 10px; background: #fff;
+  & .menu { flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; gap: 1px; padding: 12px 10px; background: var(--biel);
     border-right: 1px solid var(--linia); border-bottom: 0; box-shadow: none; position: sticky; top: 0; height: 100vh;
     overflow-y: auto; align-self: start; }
   & .menu .poz > a { flex-direction: row; gap: 10px; padding: 8px 10px; border-radius: 6px; border-bottom: 0;
@@ -15,7 +15,7 @@
   & .menu .poz > a:hover { background: var(--pom-jasny); }
   & .menu .poz > a.aktywna { background: var(--pom-jasny); border-left-color: var(--pom); }
   & .menu .wyslij { margin-top: 8px; }
-  & .menu .wyslij > a, & .menu .wyslij > a.aktywna { background: var(--pom); color: #fff; border-left-color: var(--pom-ciemny); }
+  & .menu .wyslij > a, & .menu .wyslij > a.aktywna { background: var(--pom); color: var(--biel); border-left-color: var(--pom-ciemny); }
   & .menu .znaczek { position: static; margin-left: auto; }
   /* podzakładki tylko w pasku nad treścią – bez rozwijanego okienka */
   & .menu .pod, & .menu .poz:hover .pod { display: none; }

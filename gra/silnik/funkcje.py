@@ -154,7 +154,7 @@ def elementy_funkcji(dane, konfiguracja: dict, elementy: dict) -> dict[str, str]
 DECYZJE: dict[str, tuple[str, ...]] = {
     "zaopatrzenie": ("zamowienia", "auto_dostawy"),
     "marketing": ("kampanie", "promocje"),
-    "wyposazenie": ("wyposazenie_kup", "wyposazenie_sprzedaj"),
+    "wyposazenie": ("wyposazenie_kup", "wyposazenie_sprzedaj", "dekor_kup", "dekor_ustaw"),
     "rozwoj": ("szkolenia", "udogodnienia_kup", "udogodnienia_sprzedaj"),
     "analiza": ("detektyw",),
     "siec": ("przejecie", "wypowiedz", "przewozy"),
@@ -165,8 +165,8 @@ DECYZJE: dict[str, tuple[str, ...]] = {
     "wlasciciel": ("wyplata_wlasna", "wplata_wlasna"),
     "gielda": (),   # giełdy nie ma jeszcze w silniku – brak decyzji
 }
-KLUCZE_W_LOKALU = frozenset({"auto_dostawy", "wyposazenie_kup", "wyposazenie_sprzedaj", "udogodnienia_kup",
-                             "udogodnienia_sprzedaj"})
+KLUCZE_W_LOKALU = frozenset({"auto_dostawy", "wyposazenie_kup", "wyposazenie_sprzedaj", "dekor_kup", "dekor_ustaw",
+                             "udogodnienia_kup", "udogodnienia_sprzedaj"})
 # zakładki listy błędów (także dawne klucze – ALIAS w panelu), których nie pokazuje się drużynie, gdy funkcji sama
 # nie prowadzi (autopilot albo funkcja wyłączona): gra robi to za nią, więc „brak dostaw” czy uwagi o higienie
 # nie są jej sprawą (błąd „funkcja wyłączona” z `filtruj` – z polem "funkcja" – zostaje)

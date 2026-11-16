@@ -1,0 +1,64 @@
+# Dekor lokalu: sklep meblowy – styl wnętrza kupowany osobno dla czterech grup elementów
+# Sprawdzenie: python -m silnik.dane sprawdz
+opis: 'Dekor lokalu (silnik/rynek/dekor.py). Cztery grupy elementów (ściany, szyld, dodatki, meble) kupuje się w sklepie
+  meblowym, raz, w wybranym stylu; kupione zostaje w lokalu na zawsze (nie starzeje się, bez kosztu tygodniowego),
+  a między kupionymi stylami przełącza się za darmo. Styl „podstawowy” jest domyślny, darmowy i bez efektu.
+  Dopasowanie grupy elementów = suma udziałów w strefie lokalu (mapa/klienci.yaml: strefy) tych grup klientów, do których
+  trafia aktywny styl. Dopasowanie ≥ prog – pełny efekt, od prog_czesciowy do prog – połowa, niżej – nic. Efekty czterech
+  grup elementów sumują się: popyt – dodatek do mnożnika popytu lokalu, ocena – gwiazdki dodawane do oceny tygodnia
+  (a przez nią do opinii i zaufania klientów). Dekor nie jest ewidencjonowany jako wyposażenie i nie da się go sprzedać.
+  wlaczony: false – mechanika nie istnieje (decyzje ignorowane, widok pusty).'
+zrodlo: 'założenia LUKRUM (pewność: założenie): ceny 900–3 200 zł i rozmiar efektu dobrane tak, żeby komplet 4 elementów
+  w dobrze dopasowanym stylu zwracał się w 8–12 tygodni przy lokalu bota średniego (pomiar: _robocze/fable/pomiary/dekor.md)'
+wlaczony: true
+prog: 0.40              # dopasowanie, od którego efekt jest pełny
+prog_czesciowy: 0.20    # od tego dopasowania do prog – część efektu
+czesc_efektu: 0.5       # jaka część efektu przy dopasowaniu częściowym
+efekty:
+  popyt:
+    wartosc: 0.008      # dodatek do mnożnika popytu lokalu za jedną grupę elementów w pełni dopasowaną
+    pewnosc: zalozenie
+    zrodlo: 'pomiar 24 rund, 3 ziarna × 5 botów średnich: komplet 8 300 zł zwraca się średnio w 9,8 tyg. przy pełnej konwersji popytu (cel 8–12), _robocze/fable/pomiary/dekor.md'
+  ocena:
+    wartosc: 0.07       # gwiazdki oceny tygodnia za jedną grupę elementów w pełni dopasowaną
+    pewnosc: zalozenie
+    zrodlo: 'pomiar 24 rund, 3 ziarna × 5 botów średnich: komplet 8 300 zł zwraca się średnio w 9,8 tyg. przy pełnej konwersji popytu (cel 8–12), _robocze/fable/pomiary/dekor.md'
+domyslny_styl: podstawowy
+grupy:
+  sciany:
+    nazwa: Ściany i podłoga
+    cena: {wartosc: 2400, pewnosc: zalozenie, zrodlo: 'założenie autora (zakres 900–3 200 zł)'}
+    opis: 'W zestawie: farba albo tapeta, podłoga, listwy i sufit.'
+  szyld:
+    nazwa: Szyld i neon
+    cena: {wartosc: 1800, pewnosc: zalozenie, zrodlo: 'założenie autora (zakres 900–3 200 zł)'}
+    opis: 'W zestawie: szyld nad wejściem, neon w oknie i tablica z menu.'
+  dodatki:
+    nazwa: Dodatki
+    cena: {wartosc: 900, pewnosc: zalozenie, zrodlo: 'założenie autora (zakres 900–3 200 zł)'}
+    opis: 'W zestawie: plakaty, obrazy, rośliny i drobiazgi na półkach.'
+  meble:
+    nazwa: Meble i oświetlenie
+    cena: {wartosc: 3200, pewnosc: zalozenie, zrodlo: 'założenie autora (zakres 900–3 200 zł)'}
+    opis: 'W zestawie: stoły, krzesła albo hokery, lampy i oświetlenie sali.'
+style:
+  podstawowy:
+    nazwa: Podstawowy
+    opis: Białe ściany i zwykłe stoły. Domyślny wygląd lokalu.
+    klienci: []
+  prl:
+    nazwa: PRL
+    opis: Lamperia, lastryko, neon i kula z mlecznego szkła. Jak u wujka.
+    klienci: [turysci, imprezowicze]
+  nowoczesny:
+    nazwa: Nowoczesny
+    opis: Gładkie płyty, czerń i hokery. Szybko i czysto.
+    klienci: [biurowi, podrozni]
+  studencki:
+    nazwa: Studencki
+    opis: Cegła, palety, lampki i pufa. Tanio, ale z klimatem.
+    klienci: [studenci, uczniowie, imprezowicze]
+  rodzinny:
+    nazwa: Rodzinny
+    opis: Boazeria, tapeta w listki, obrus w kratę i kwiatek na stole.
+    klienci: [rodziny, uczniowie]

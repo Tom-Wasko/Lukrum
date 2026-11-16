@@ -21,7 +21,9 @@ async function api(url, metoda = "GET", dane = undefined) {
 }
 
 async function wczytaj() {
-  [S.p, S.druzyny] = await Promise.all([api(`${URL_GRY}/mg`), api(`${URL_GRY}/druzyny`)]);
+  // ustawienia wnętrz (dymki przy ladzie): gra bez wnętrz odpowiada 404 – wtedy wiersza po prostu nie ma
+  [S.p, S.druzyny, S.wnetrza] = await Promise.all([api(`${URL_GRY}/mg`), api(`${URL_GRY}/druzyny`),
+    api(`${URL_GRY}/wnetrza-ustawienia`).catch(() => null)]);
   ustawKalendarz(S.p.gra.kalendarz);
   if (!S.p.historia.length) S.tryb = "decyzje";
   rysuj();
@@ -121,7 +123,9 @@ function decyzje() {
   const { gra, firmy, prowadzenie: P } = S.p;
   const druzyny = firmy.filter((f) => !f.bot);
   const wyslaly = druzyny.filter((f) => f.wyslane).length;
-  const kiedy = P.termin ? ` Termin z harmonogramu: <b>${esc(termin(P.termin))}</b>.` : "";
+  const L = P.lekcje;
+  const kiedy = P.termin ? ` ${L ? "Termin rundy" : "Termin z harmonogramu"}: <b>${esc(termin(P.termin))}</b>.${L && P.termin_minal
+    ? " <b>Termin minął – zamknij rundę.</b>" : ""}` : "";
   const opis = gra.zakonczona ? "Gra zakończona – wyniki w zakładce „Wyniki”."
     : P.pauza ? "<b>Gra wstrzymana.</b> Drużyny widzą decyzje, ale nie mogą ich zmieniać ani wysyłać, runda się nie zamyka. Wznów grę przyciskiem poniżej."
     : `Decyzje wysłało ${wyslaly} z ${druzyny.length} ${druzyny.length === 1 ? "drużyny" : "drużyn"}. Runda zamyka się sama, gdy wyślą wszystkie.${kiedy}
@@ -137,7 +141,7 @@ function decyzje() {
     ["Ceny dostawców", gra.ceny_dostawcow === "losowe" ? "wszystkie generowane" : "z danych, dalej generowane"],
     ["Przycisk „Zamów brakujące” w Dostawcach", `${gra.auto_zamowienia ? "włączony" : "wyłączony"}${gra.zakonczona ? ""
       : ` <a data-akcja="auto-zamowienia">${gra.auto_zamowienia ? "wyłącz" : "włącz"}</a>`}`],
-    ["Podpowiedzi na Dashboardzie (3 pierwsze rundy)", `${gra.podpowiedzi ? "włączone" : "wyłączone"}${gra.zakonczona ? ""
+    ["Podpowiedzi na Planie tygodnia (3 pierwsze rundy)", `${gra.podpowiedzi ? "włączone" : "wyłączone"}${gra.zakonczona ? ""
       : ` <a data-akcja="podpowiedzi">${gra.podpowiedzi ? "wyłącz" : "włącz"}</a>`}`],
     // poprawki 2 (sprawa 6): headhunter – oferty dla pracowników innych drużyn i kontroferty
     ["Podkupywanie pracowników innych drużyn", `${gra.podkupywanie !== false ? "dozwolone" : "wyłączone"}${gra.zakonczona ? ""
@@ -147,6 +151,11 @@ function decyzje() {
       const wl = gra.formy_zatrudnienia.includes(u);
       return u === "prace" || gra.zakonczona ? `${esc(n)}${wl ? "" : " (wył.)"}`
         : `<a data-akcja="forma-zatrudnienia" data-u="${esc(u)}" title="${wl ? "wyłącz" : "włącz"}">${wl ? "☑" : "☐"} ${esc(n)}</a>`;
+    }).join(" · ")]] : []),
+    // dymki przy ladzie (decyzja autora 14.11: wyłącza je tylko mistrz gry; działa od następnego wyliczenia dymków)
+    ...(S.wnetrza?.rodzaje ? [["Dymki gości we wnętrzu kebaba", Object.entries(S.wnetrza.rodzaje).map(([r, n]) => {
+      const wl = S.wnetrza.dymki[r] !== false;
+      return `<a data-akcja="dymki" data-r="${esc(r)}" title="${wl ? "wyłącz" : "włącz"}">${wl ? "☑" : "☐"} ${esc(n)}</a>`;
     }).join(" · ")]] : []),
     ["Refleksja drużyn przy wysyłaniu decyzji", `${TRYB_REFLEKSJI[gra.refleksja] || gra.refleksja}${gra.zakonczona ? ""
       : ` <a data-akcja="refleksja">zmień</a>`}`]];
@@ -164,6 +173,8 @@ function decyzje() {
       <button class="btn jasny" data-akcja="odswiez">Odśwież</button></div>
     ${tabela("Prowadzenie gry", ["", ""], [["Zamykanie rund o stałej porze", `${harm}
         ${gra.zakonczona ? "" : ` <a data-akcja="harmonogram">zmień</a>`}`], ["Najbliższy termin", P.pauza ? "– (gra wstrzymana)" : P.termin ? esc(termin(P.termin)) : "–"],
+      ["Sposób prowadzenia", `${L ? `tryb lekcyjny – ${esc(L.tekst)}${L.etap === "na_zywo" ? ` (potem ${L.termin_dni} dni na rundę)` : ""}` : "na żywo"}${gra.zakonczona ? ""
+        : ` <a data-akcja="lekcje">zmień</a>`}`],
       ...(P.odblokowanie.length ? [["Odblokowania (tygodnie)", `${opisOdblokowan(P.odblokowanie)}${gra.zakonczona ? "" : ` <a data-akcja="odblokowanie">zmień</a>`}`]] : [])],
     { klasy: ["l", "l"] })}
     ${tabela("Ustawienia gry", ["", ""], ustawienia, { klasy: ["l", "l"] })}`;
@@ -195,11 +206,26 @@ function wierszTerminu(t = { dzien: 0, godzina: "08:00" }) {
 
 function edytujHarmonogram() {
   okno("Zamykanie rund o stałej porze", `<p>Runda zamknie się w pierwszym terminie po zamknięciu poprzedniej – tak, jakbyś kliknął(-ęła)
-      „Zamknij rundę”. Np. lekcje we wtorki i czwartki: terminy <b>wtorek 8:00</b> i <b>czwartek 8:00</b>. Brak terminów – rundy zamykasz sam(a).</p>
+      „Zamknij rundę”. Np. lekcje we wtorki i czwartki: terminy <b>wtorek 8:00</b> i <b>czwartek 8:00</b>. Brak terminów – rundy zamyka mistrz gry.</p>
     <p class="podpowiedz">Terminy działają, gdy na serwerze co kilka minut uruchamia się <code>python manage.py zamykaj_rundy</code> (README).</p>
     <div id="terminy">${S.p.prowadzenie.harmonogram.map(wierszTerminu).join("")}</div>
     <p><a data-akcja="dodaj-termin">+ termin</a></p>`,
   { przyciski: `<button class="btn jasny" data-akcja="zamknij-okno">Anuluj</button><button class="btn pom" data-akcja="zapisz-harmonogram">Zapisz</button>` });
+}
+
+// tryb lekcyjny (gry/lekcje.py): rundy na żywo na lekcji, potem rundy z terminem w dniach
+function edytujLekcje() {
+  const L = S.p.prowadzenie.lekcje, Z = S.p.prowadzenie.zakresy_lekcji;
+  okno("Sposób prowadzenia", `<label class="pole">Sposób prowadzenia<select id="tryb-mg">
+      <option value="na_zywo"${L ? "" : " selected"}>Na żywo – rundy zamyka mistrz gry</option>
+      <option value="lekcyjny"${L ? " selected" : ""}>Tryb lekcyjny – rundy na lekcji, potem między lekcjami</option></select></label>
+    <label class="pole">Rundy na żywo na start<input type="number" id="rundy-na-zywo" step="1" min="${Z.rundy_na_zywo.min}" max="${Z.rundy_na_zywo.max}"
+      value="${L ? L.rundy_na_zywo : Z.rundy_na_zywo.domyslnie}"></label>
+    <label class="pole">Termin kolejnych rund (dni)<input type="number" id="termin-dni" step="1" min="${Z.termin_dni.min}" max="${Z.termin_dni.max}"
+      value="${L ? L.termin_dni : Z.termin_dni.domyslnie}"></label>
+    <p class="podpowiedz">Termin liczy się od otwarcia rundy (po zmianie – od teraz). Runda zamyka się sama, gdy na serwerze działa
+      <code>zamykaj_rundy</code>; inaczej zobaczysz „termin minął – zamknij rundę”.</p>`,
+  { przyciski: `<button class="btn jasny" data-akcja="zamknij-okno">Anuluj</button><button class="btn pom" data-akcja="zapisz-lekcje">Zapisz</button>` });
 }
 
 // harmonogram odblokowań (gra z lokalami, silnik/harmonogram.py): tydzień każdego elementu, zmiany tylko przyszłych
@@ -352,7 +378,16 @@ async function wykonaj(akcja, el) {
       ({ dzien: +w.querySelector("select").value, godzina: w.querySelector("input").value }));
     await api(`${URL_GRY}/prowadzenie`, "POST", { harmonogram });
     zamknijOkno();
-    toast(harmonogram.length ? "Harmonogram zapisany." : "Harmonogram usunięty – rundy zamykasz sam(a).");
+    toast(harmonogram.length ? "Harmonogram zapisany." : "Harmonogram usunięty – rundy zamyka mistrz gry.");
+    return wczytaj();
+  }
+  if (akcja === "lekcje") return edytujLekcje();
+  if (akcja === "zapisz-lekcje") {
+    const lekcje = document.getElementById("tryb-mg").value === "lekcyjny"
+      ? { rundy_na_zywo: +document.getElementById("rundy-na-zywo").value, termin_dni: +document.getElementById("termin-dni").value } : null;
+    await api(`${URL_GRY}/prowadzenie`, "POST", { lekcje });
+    zamknijOkno();
+    toast(lekcje ? "Tryb lekcyjny zapisany." : "Gra prowadzona na żywo.");
     return wczytaj();
   }
   if (akcja === "odblokowanie") return edytujOdblokowanie();
@@ -375,7 +410,7 @@ async function wykonaj(akcja, el) {
   if (akcja === "podpowiedzi") {
     const wlacz = !S.p.gra.podpowiedzi;
     await api(`${URL_GRY}/prowadzenie`, "POST", { podpowiedzi: wlacz });
-    toast(wlacz ? "Drużyny widzą na Dashboardzie 3 rzeczy do sprawdzenia (pierwsze 3 rundy)." : "Podpowiedzi wyłączone.");
+    toast(wlacz ? "Drużyny widzą na Planie tygodnia 3 rzeczy do sprawdzenia (pierwsze 3 rundy)." : "Podpowiedzi wyłączone.");
     return wczytaj();
   }
   if (akcja === "podkupywanie") {
@@ -384,6 +419,12 @@ async function wykonaj(akcja, el) {
     toast(wolno ? "Drużyny mogą podkupywać pracowników innych drużyn (headhunter)."
       : "Podkupywanie wyłączone – oferty dla pracowników innych drużyn będą odrzucane.");
     return wczytaj();
+  }
+  if (akcja === "dymki") {
+    const r = el.dataset.r, wl = S.wnetrza.dymki[r] !== false;
+    S.wnetrza = await api(`${URL_GRY}/wnetrza-ustawienia`, "POST", { dymki: { [r]: !wl } });
+    toast(`${S.wnetrza.rodzaje[r]}: ${wl ? "wyłączone" : "włączone"}.`);
+    return rysuj();
   }
   if (akcja === "forma-zatrudnienia") {   // UF21 – TYMCZASOWE, usunąć przed oficjalną wersją
     const u = el.dataset.u, teraz = S.p.gra.formy_zatrudnienia;

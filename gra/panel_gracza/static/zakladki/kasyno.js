@@ -5,11 +5,11 @@
 import { esc, kafelkiLiczb, podsumowanie, tabela, toast, zl2, zwinTabela, zl } from "./wspolne.js";
 
 const ZASADA_MILCZENIA = `<div class="karta"><h3>Zasada milczenia</h3><p>Nad barem wisi oprawiona w złotą ramkę
-  tabliczka: „Pierwsza zasada Nocnej 13: księgowa nie musi wiedzieć wszystkiego. Druga zasada: mistrz gry tym bardziej”.
+  tabliczka: „Pierwsza zasada Nocnej 13: księgowa nie musi wiedzieć wszystkiego”.
   Pan Waldemar poleruje kieliszek i dodaje półgłosem, że ostatni gość, który opowiadał o klubie na mieście, prowadzi
   teraz stoisko z watą cukrową na dworcu PKS – „bardzo uczciwa praca, tylko trochę klejąca”.</p>
-  <p class="podpowiedz">Klub to tajemnica drużyny. Kto mówi o nim mistrzowi gry, ten sam rozumie, że kebab
-  i hazard to dwa różne fartuchy.</p></div>`;
+  <p class="podpowiedz">To fikcja w grze i lekcja o ryzyku: w kasynie na dłuższą metę wygrywa kasyno.
+  W prawdziwym życiu hazard jest dozwolony od 18 lat.</p></div>`;
 
 function przelewHtml(W, d, edycja) {
   if (!W) return "";
@@ -67,7 +67,7 @@ export const kasyno = {
     const K = v.kasyno;
     if (!K) return `<p class="podpowiedz">Brak danych.</p>`;
     if (!K.otwarte) return `<div class="karta"><p>Pod adresem ${esc(K.adres)} drzwi są zamknięte. Na dzwonek nikt nie odpowiada,
-      a kot z parteru patrzy na ciebie z wyższością. Wyniki ostatniej wizyty są w zakładce Wyniki.</p></div>`;
+      a kot z parteru patrzy na ciebie z wyższością. Wyniki ostatniej wizyty zobaczysz pod przyciskiem „Wyniki”.</p></div>`;
     const L = K.limity, D = K.decyzja, W = v.wlasciciel;
     const ile = (d.kasyno || []).length;
     return `<div class="karta"><p>${esc(K.zaproszenie || `Pukasz trzy razy. Wizjer się odsuwa, ktoś mierzy cię wzrokiem od butów po czubek głowy. Mówisz hasło. Wizjer się zasuwa, zgrzyta zamek i drzwi przy ${K.adres} się otwierają.`)}</p></div>

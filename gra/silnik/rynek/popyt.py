@@ -40,6 +40,7 @@ from ..kuchnia.operacje import jakosc_uslugi, kasjerzy, obsluz
 from ..losowosc import strumien
 from ..model import Firma, Lokal
 from ..nieruchomosci import per_lokal as pl
+from . import dekor as dk
 from . import kalendarz as kal
 from . import klienci as kl
 from . import opinie as op
@@ -153,7 +154,7 @@ def _skladniki(dane: Dane, strefa_klienta: str, usluga: str, o: dict, jakosc: fl
     q = menu.jakosc_dania(dane, o["jakosc"]) if jakosc is None else jakosc
     return (q * math.exp(-odleglosc(dane, strefa_klienta, o["strefa"]) / p["model"]["zasieg"])
             / p["strefy"][o["strefa"]].get("konkurencja", 1.0)   # B6: lokal ginie wśród innych lokali swojej strefy
-            * o.get("zadowolenie", 1.0) * o.get("wyposazenie", 1.0) * o.get("mnoznik_firmy", 1.0) * o.get("rozruch", 1.0)
+            * o.get("zadowolenie", 1.0) * o.get("wyposazenie", 1.0) * o.get("dekor", 1.0) * o.get("mnoznik_firmy", 1.0) * o.get("rozruch", 1.0)
             * (1 + o.get("reklama", 0.0) + (o.get("reklama_strefy") or {}).get(strefa_klienta, 0.0)),
             p["model"]["elastycznosc_ceny"] * ps["wrazliwosc_ceny"] * (r - 1))
 
@@ -262,6 +263,8 @@ def oferty_lokali(dane: Dane, firma: Firma, runda: int, wspolne: dict) -> dict[s
             q = jakosc_uslugi(dane, v, u)
             if q is not None:
                 wynik.setdefault(lok.id, {})[u] = {"strefa": strefa, "cena": cena, "jakosc": q, "wyposazenie": wyp,
+                                                   "dekor": dk.mnoznik_popytu(dane, dk.punkty(dane, lok)),   # sklep meblowy
+                                                   "dekor_punkty": dk.punkty(dane, lok),
                                                    **wspolne, "rozruch": rozruch(dane, lok, runda),
                                                    "zadowolenie": zadowolenie_lokalu(dane, lok, wspolne.get("zadowolenie", 1.0))}
     return wynik
@@ -553,8 +556,8 @@ def oferty_konkurencji(dane: Dane, stan, runda: int, firma: str) -> dict[str, di
 
 
 def widok_popytu(dane: Dane, stan, firma: Firma, runda: int, zadowolenie: float | None = None) -> dict:
-    """Zakładka Klienci ▸ Strefy (decyzje): dni rundy sprzedaży z wydarzeniami, pule stref i potencjał nowego lokalu
-    (zakładka Nowe lokale; własne lokale – jakość ze stanowisk, bez nich zakładane 2★). Bez gotowej prognozy dla lokali
+    """Zakładka Miasteczko akademickie ▸ Goście w strefach (decyzje): dni rundy sprzedaży z wydarzeniami, pule stref i potencjał nowego lokalu
+    (zakładka Do wynajęcia; własne lokale – jakość ze stanowisk, bez nich zakładane 2★). Bez gotowej prognozy dla lokali
     firmy – popyt drużyna liczy sama (test gry 28.10). stan – stan na początku rundy (konkurencja)."""
     r = max(runda, 2)
     dni = dni_rundy(dane, r)
