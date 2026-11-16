@@ -109,6 +109,7 @@ lokale:
   strefa: stare_miasto
   typ: gotowy
   adres: ul. Grodzka 14
+  geo: {lat: 51.24876, lon: 22.56841}
   opis: Sklepione piwnice, w których podobno straszy. Duch jest wegetarianinem i krytykuje każdy kebab.
   metraz: 45
   miejsca:
@@ -125,6 +126,7 @@ lokale:
   strefa: stare_miasto
   typ: gotowy
   adres: Rynek 8
+  geo: {lat: 51.24805, lon: 22.56854}
   opis: Widok na Trybunał Koronny i ceny jak w Trybunale. Turyści robią zdjęcia witryny, czasem coś kupią.
   metraz: 85
   miejsca:
@@ -142,6 +144,7 @@ lokale:
   strefa: stare_miasto
   typ: niewyposazony
   adres: ul. Bramowa 3
+  geo: {lat: 51.24772, lon: 22.56689}
   opis: Surowe mury i 14 schodów w dół. Dostawca mięsa już zapowiedział, że chce dodatek za schody.
   metraz: 55
   miejsca:
@@ -159,6 +162,7 @@ lokale:
   strefa: stare_miasto
   typ: gotowy
   adres: ul. Złota 2
+  geo: {lat: 51.24805, lon: 22.56870}
   opis: 'Najmniejszy lokal w mieście: kucharz i kasjer muszą się mijać bokiem, ale kolejka sama się ustawia.'
   metraz: 30
   miejsca:
@@ -175,6 +179,7 @@ lokale:
   strefa: stare_miasto
   typ: niewyposazony
   adres: ul. Kowalska 6
+  geo: {lat: 51.24981, lon: 22.56778}
   opis: Pod Bramą Krakowską, z oknami na deptak. Konserwator zabytków chce zatwierdzić kolor szyldu.
   metraz: 70
   miejsca:
@@ -193,6 +198,7 @@ lokale:
   strefa: centrum
   typ: gotowy
   adres: Krakowskie Przedmieście 21
+  geo: {lat: 51.24793, lon: 22.56308}
   opis: Najbardziej uczęszczany chodnik w Lublinie. Gołębie też to wiedzą.
   metraz: 60
   miejsca:
@@ -209,6 +215,7 @@ lokale:
   strefa: centrum
   typ: niewyposazony
   adres: ul. Peowiaków 9
+  geo: {lat: 51.24678, lon: 22.55954}
   opis: Po kwiaciarni – przez pierwszy miesiąc wszystko będzie pachnieć różami, nawet czosnkowy sos.
   metraz: 50
   miejsca:
@@ -225,6 +232,7 @@ lokale:
   strefa: centrum
   typ: gotowy
   adres: ul. Chmielna 4
+  geo: {lat: 51.25090, lon: 22.55703}
   opis: Narożnik z dwiema witrynami. Poprzedni najemca wyjechał nagle, zostawił sprzęt i kota.
   metraz: 40
   miejsca:
@@ -242,6 +250,7 @@ lokale:
   strefa: centrum
   typ: niewyposazony
   adres: ul. 3 Maja 12
+  geo: {lat: 51.24979, lon: 22.55777}
   opis: Duża sala po banku. Sejf został, szyfru nikt nie zna.
   metraz: 75
   miejsca:
@@ -258,6 +267,7 @@ lokale:
   strefa: centrum
   typ: gotowy
   adres: ul. Okopowa 7
+  geo: {lat: 51.24556, lon: 22.55434}
   opis: Przy przystanku, na którym zatrzymuje się pół miasta. Kierowcy trolejbusów dostają tu kawę gratis od zawsze.
   metraz: 50
   miejsca:
@@ -275,6 +285,7 @@ lokale:
   strefa: akademickie
   typ: gotowy
   adres: ul. Radziszewskiego 16
+  geo: {lat: 51.24510, lon: 22.53784}
   opis: Okno wychodzi na akademik. O 2 w nocy studenci składają zamówienia, opuszczając koszyk na sznurku.
   metraz: 45
   miejsca:
@@ -292,6 +303,7 @@ lokale:
   strefa: akademickie
   typ: gotowy
   adres: ul. Sowińskiego 10
+  geo: {lat: 51.24748, lon: 22.53912}
   opis: Kultowa budka, w której jadło trzy pokolenia studentów. Każde twierdzi, że kiedyś było lepiej.
   metraz: 30
   miejsca:
@@ -309,6 +321,7 @@ lokale:
   strefa: akademickie
   typ: niewyposazony
   adres: ul. Langiewicza 20
+  geo: {lat: 51.24611, lon: 22.53370}
   opis: Po punkcie ksero. Na ścianie wciąż wisi cennik „Notatki z mikro – 5 zł”.
   metraz: 60
   miejsca:
@@ -325,6 +338,7 @@ lokale:
   strefa: akademickie
   typ: niewyposazony
   adres: ul. Głęboka 11
+  geo: {lat: 51.24023, lon: 22.54926}
   opis: Nowy budynek z mieszkaniami dla studentów, gotowy w połowie semestru.
   metraz: 80
   miejsca:
@@ -342,6 +356,7 @@ lokale:
   strefa: politechnika
   typ: gotowy
   adres: ul. Nadbystrzycka 38
+  geo: {lat: 51.23522, lon: 22.54924}
   opis: Między wydziałami. Studenci mechaniki już zaproponowali ulepszenie rożna z silnikiem krokowym.
   metraz: 45
   miejsca:
@@ -359,6 +374,7 @@ lokale:
   strefa: politechnika
   typ: niewyposazony
   adres: ul. Zana 32
+  geo: {lat: 51.23941, lon: 22.52579}
   opis: Przy dużym skrzyżowaniu. Parking jest, ale ktoś go zawsze zajmuje.
   metraz: 65
   miejsca:
@@ -377,6 +393,7 @@ lokale:
   strefa: politechnika
   typ: gotowy
   adres: ul. Nadbystrzycka 42
+  geo: {lat: 51.23526, lon: 22.54630}
   opis: Duży bar z poprzednim właścicielem, który chętnie doradzi – czy tego chcesz, czy nie.
   metraz: 55
   miejsca:
@@ -395,6 +412,7 @@ lokale:
   strefa: dworzec
   typ: gotowy
   adres: ul. Nowy Świat 20
+  geo: {lat: 51.22722, lon: 22.56995}
   opis: Ludzie biegną na pociąg z kebabem w ręku. Rozkład jazdy wisi nad kasą – ważniejszy niż menu.
   metraz: 30
   miejsca:
@@ -411,6 +429,7 @@ lokale:
   strefa: dworzec
   typ: gotowy
   adres: ul. Wyścigowa 31
+  geo: {lat: 51.22378, lon: 22.56739}
   opis: Nowoczesne szkło i stal. Głos z megafonu zapowiada opóźnienia w rytm skwierczącej frytownicy.
   metraz: 60
   miejsca:
@@ -428,6 +447,7 @@ lokale:
   strefa: dworzec
   typ: niewyposazony
   adres: ul. Nowy Świat 34
+  geo: {lat: 51.22559, lon: 22.56584}
   opis: Dawny magazyn mąki. Mąka jest wszędzie, nawet w miejscach, które dopiero odkryjesz.
   metraz: 90
   miejsca:
@@ -445,6 +465,7 @@ lokale:
   strefa: dworzec
   typ: niewyposazony
   adres: ul. Kunickiego 40
+  geo: {lat: 51.22992, lon: 22.57270}
   opis: Długa ulica, dużo bloków i nikt nie sprzedaje tu kebaba. Na razie.
   metraz: 50
   miejsca:
@@ -461,6 +482,7 @@ lokale:
   strefa: zygmuntowskie
   typ: gotowy
   adres: ul. Stadionowa 1
+  geo: {lat: 51.23231, lon: 22.55657}
   opis: W dniu meczu sprzedaje się tu więcej niż przez cały tydzień. Kibice śpiewają zamówienia.
   metraz: 35
   miejsca:
@@ -479,6 +501,7 @@ lokale:
   strefa: zygmuntowskie
   typ: niewyposazony
   adres: al. Zygmuntowskie 5
+  geo: {lat: 51.23884, lon: 22.56483}
   opis: Przestronny parter przy parku Ludowym. Wiewiórki zaglądają przez okno, licząc na frytki.
   metraz: 70
   miejsca:
@@ -496,6 +519,7 @@ lokale:
   strefa: zygmuntowskie
   typ: dzialka
   adres: ul. Krochmalna 30
+  geo: {lat: 51.22569, lon: 22.55191}
   opis: Pusty plac po starej krochmalni. Można postawić własny pawilon z ogródkiem na mecze.
   metraz: 110
   miejsca:
@@ -513,6 +537,7 @@ lokale:
   strefa: lsm_czuby
   typ: gotowy
   adres: ul. Wileńska 3
+  geo: {lat: 51.24418, lon: 22.52338}
   opis: Pawilon handlowy z lat 70. Pani z warzywniaka obok będzie sprawdzać świeżość twojej sałaty.
   metraz: 45
   miejsca:
@@ -531,6 +556,7 @@ lokale:
   strefa: lsm_czuby
   typ: gotowy
   adres: al. Jana Pawła II 13
+  geo: {lat: 51.22815, lon: 22.51850}
   opis: Duży lokal przy głównej alei Czubów. Kiedyś pizzeria, której nazwę wszyscy pamiętają, a nikt jej nie lubił.
   metraz: 90
   miejsca:
@@ -549,6 +575,7 @@ lokale:
   strefa: lsm_czuby
   typ: niewyposazony
   adres: ul. Filaretów 18
+  geo: {lat: 51.24212, lon: 22.53343}
   opis: W samym środku LSM. Spółdzielnia wymaga, by szyld był „stonowany i niekrzykliwy”.
   metraz: 55
   miejsca:
@@ -566,6 +593,7 @@ lokale:
   strefa: lsm_czuby
   typ: dzialka
   adres: ul. Armii Krajowej 60
+  geo: {lat: 51.23174, lon: 22.51243}
   opis: Narożna działka przy drodze wylotowej. Idealna pod lokal z oknem dla kierowców.
   metraz: 120
   miejsca:
@@ -584,6 +612,7 @@ lokale:
   strefa: czechow
   typ: gotowy
   adres: ul. Kompozytorów Polskich 8
+  geo: {lat: 51.26137, lon: 22.55125}
   opis: Między blokami nazwanymi od kompozytorów. Okap gra trochę jak Chopin – w tonacji h-moll.
   metraz: 50
   miejsca:
@@ -601,6 +630,7 @@ lokale:
   strefa: czechow
   typ: niewyposazony
   adres: ul. Lipińskiego 3
+  geo: {lat: 51.25794, lon: 22.54938}
   opis: Pawilon przy szkole. Rodzice są czujni, dzieci jeszcze bardziej głodne.
   metraz: 60
   miejsca:
@@ -618,6 +648,7 @@ lokale:
   strefa: czechow
   typ: dzialka
   adres: ul. Szeligowskiego 25
+  geo: {lat: 51.26618, lon: 22.55817}
   opis: Działka przy wąwozie. Spacerowicze z psami to gotowi klienci, a psy – gotowi krytycy.
   metraz: 110
   miejsca:
@@ -635,6 +666,7 @@ lokale:
   strefa: czechow
   typ: gotowy
   adres: ul. Elsnera 5
+  geo: {lat: 51.26717, lon: 22.55231}
   opis: Przy pętli autobusowej. Kierowcy jedzą tu od lat i znają historię każdego sosu.
   metraz: 30
   miejsca:
@@ -653,6 +685,7 @@ lokale:
   strefa: felin
   typ: gotowy
   adres: ul. Doświadczalna 30
+  geo: {lat: 51.22106, lon: 22.62884}
   opis: Bar dla pracowników hal. Obiad ma być szybko, dużo i z dodatkowym sosem – reszta to szczegóły.
   metraz: 55
   miejsca:
@@ -670,6 +703,7 @@ lokale:
   strefa: felin
   typ: niewyposazony
   adres: al. Witosa 30
+  geo: {lat: 51.23313, lon: 22.61134}
   opis: Przy obwodnicy. Ciężarówki zatrzymują się tylko wtedy, gdy szyld widać z kilometra.
   metraz: 70
   miejsca:
@@ -688,6 +722,7 @@ lokale:
   strefa: felin
   typ: dzialka
   adres: ul. Vetterów 1
+  geo: {lat: 51.22433, lon: 22.63505}
   opis: Duża i tania działka w strefie przemysłowej. Sąsiad – zakład produkcji kartonów – obiecał zniżkę na pudełka.
   metraz: 130
   miejsca:
@@ -705,6 +740,7 @@ lokale:
   strefa: zemborzyce
   typ: gotowy
   adres: ul. Żeglarska 1
+  geo: {lat: 51.19150, lon: 22.52900}
   opis: Lokal Tymka. Tymek rzuca gastronomię, bo zostaje influencerem jogi dla kotów. Sprzedaje budkę ze sprzętem,
     zapasem serwetek i jednym kotem, który nie chciał ćwiczyć.
   metraz: 35
@@ -725,6 +761,7 @@ lokale:
   strefa: zemborzyce
   typ: niewyposazony
   adres: ul. Krężnicka 10
+  geo: {lat: 51.18779, lon: 22.52455}
   opis: Pawilon przy plaży miejskiej. Latem złota żyła, zimą bardzo dobre miejsce na przemyślenia.
   metraz: 50
   miejsca:
@@ -743,6 +780,7 @@ lokale:
   strefa: zemborzyce
   typ: dzialka
   adres: ul. Żeglarska 20
+  geo: {lat: 51.18300, lon: 22.51650}
   opis: Działka z widokiem na żaglówki. Można zbudować lokal z tarasem – o ile mewy pozwolą.
   metraz: 110
   miejsca:

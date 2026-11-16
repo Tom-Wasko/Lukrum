@@ -70,13 +70,12 @@ Gałąź `mapa-osm`. Nowa mapa jest domyślna w zakładce „Mapa miasta”; prz
    - `felin_3` Działka przy Mełgiewskiej, ul. Mełgiewska 80 → Działka przy Vetterów, ul. Vetterów 1
    Trzy lokale zostały w sąsiedniej kolorowej dzielnicy: `akademickie_4` (Głęboka 11, Śródmieście), `lsm_czuby_1`
    i `lsm_czuby_3` (Wileńska 3 i Filaretów 18, Rury). Dworzec w Dziesiątej to kompromis: sam dworzec stoi w Za Cukrownią.
-3. **Budynki zbiorcze** (`budynki.yaml`): w biurowcu przy Zana zostały trzy firmy od reklamy; biura rachunkowe
-   („Biurowiec biur rachunkowych”, ul. Tomasza Zana 38), ubezpieczyciel (ul. Hipoteczna 4) i parkiet maklerski
-   (Krakowskie Przedmieście 59) są osobnymi budynkami. W kamienicy bankowej zostało sześć banków.
+3. **Budynki zbiorcze** (`budynki.yaml`): w biurowcu przy Zana są biura rachunkowe i trzy firmy od reklamy;
+   ubezpieczyciel (ul. Hipoteczna 4) i parkiet maklerski (Krakowskie Przedmieście 59) są osobnymi budynkami. W kamienicy bankowej zostało sześć banków.
 4. **Kolory**: strefy mają cztery odcienie bez zieleni; zielone są tylko parki, lasy i łąki.
-5. **Oddalanie**: żetony bledną między 0,085 a 0,05 px/m; na pełnym oddaleniu widać nazwy dzielnic i własny lokal.
+5. **Oddalanie**: żetony bledną między 0,1 a 0,062 px/m; na pełnym oddaleniu widać nazwy dzielnic i własny lokal.
 6. **Ikona lokalu**: sześć wariantów na stronie `/static/mapa/podglad_lokali.html` (`ikony.js: WARIANTY_LOKALU`);
-   mapa rysuje `IKONA_LOKALU`, na razie budkę z markizą.
+   mapa rysuje `IKONA_LOKALU`: na ten moment wariant 3, rożen z mięsem.
 
 ## Czego nie ma
 - wnętrz (strona mechanik), botów i billboardów na mapie, ruchu ulicznego i pory dnia ze starej mapy;

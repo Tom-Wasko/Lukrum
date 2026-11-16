@@ -642,12 +642,18 @@ class Pole(Schemat):
     y: int = Field(ge=0)
 
 
+class Geo(Schemat):
+    lat: float   # stopnie WGS84 z OSM (Lublin ok. 51,2)
+    lon: float   # (Lublin ok. 22,6)
+
+
 class Lokal(Schemat):
     id: str = Field(pattern=r"^[a-z0-9_]+$")
     nazwa: str
     strefa: str
     typ: Literal["gotowy", "niewyposazony", "dzialka"]
     adres: str
+    geo: Geo | None = None   # położenie na nowej mapie (strona [mapa], z adresu: narzedzia/mapa/pobierz_osm.py)
     opis: str
     metraz: int = Field(gt=0)
     miejsca: Miejsca
@@ -686,11 +692,6 @@ class PlikLokali(Plik):
     zasady: ZasadyLokali
     zestawy: dict[str, Zestaw]
     lokale: list[Lokal] = Field(min_length=1)
-
-
-class Geo(Schemat):
-    lat: float   # stopnie WGS84 z OSM (Lublin ok. 51,2)
-    lon: float   # (Lublin ok. 22,6)
 
 
 class Budynek(Schemat):

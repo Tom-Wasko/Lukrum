@@ -114,7 +114,7 @@ const WG_RODZAJU = { bank: "bank", urzad: "urzad", poczta: "poczta", biuro: "biu
 // ikona lokalu: sześć wariantów do wyboru; IKONA_LOKALU to ten, który rysuje mapa
 export const WARIANTY_LOKALU = { lokal: "Budka z markizą", lokal_pita: "Kebab w bułce", lokal_rozen: "Rożen z mięsem", lokal_okienko: "Okienko z ladą",
   lokal_neon: "Neon nad wejściem", lokal_rolka: "Kebab zawijany" };
-export const IKONA_LOKALU = "lokal";
+export const IKONA_LOKALU = "lokal_rozen";   // wybór z 15.11 (na ten moment): wariant 3, rożen z mięsem
 WG_RODZAJU.lokal = IKONA_LOKALU;
 
 // kształt tektury: kwadrat (budynki), koło (lokale drużyn), brak (punkty orientacyjne nadrukowane na planszy)

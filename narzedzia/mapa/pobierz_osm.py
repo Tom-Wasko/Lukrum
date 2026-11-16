@@ -1,8 +1,8 @@
 """Dane nowej mapy Lublina z OpenStreetMap → gra/panel_gracza/static/mapa/lublin.json.
 
 Pobiera (Overpass) granice dzielnic, wodę, zieleń, drogi i kolej, upraszcza je i zapisuje jako ścieżki SVG
-w metrach (rzut lokalny wokół środka miasta). Do tego geokoduje (Nominatim) lokale z lokale.yaml, miejsca
-z miasto.yaml i dodatkowe punkty charakterystyczne Lublina. Dane © autorzy OpenStreetMap, licencja ODbL.
+w metrach (rzut lokalny wokół środka miasta). Do tego geokoduje (Nominatim) miejsca z miasto.yaml i dodatkowe
+punkty charakterystyczne Lublina oraz dopisuje `geo` lokalom w lokale.yaml, które go jeszcze nie mają. Dane © autorzy OpenStreetMap, licencja ODbL.
 
 Uruchomienie z głównego folderu repo (wymaga PyYAML, czyli środowiska gry):
     gra/.venv/Scripts/python -X utf8 narzedzia/mapa/pobierz_osm.py [--bez-pamieci]
@@ -250,6 +250,18 @@ def sklej(linie: list[list[tuple[float, float]]]) -> list[list[tuple[float, floa
     return wynik
 
 
+def w_polowie(p) -> tuple[tuple[float, float], tuple[float, float]]:
+    """Punkt w połowie długości linii i jednostkowy kierunek linii w tym miejscu."""
+    pol, przeszlo = dlugosc(p) / 2, 0.0
+    for a, b in zip(p, p[1:]):
+        odc = math.hypot(b[0] - a[0], b[1] - a[1])
+        if odc and przeszlo + odc >= pol:
+            t = (pol - przeszlo) / odc
+            return (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t), ((b[0] - a[0]) / odc, (b[1] - a[1]) / odc)
+        przeszlo += odc
+    return p[0], (1.0, 0.0)
+
+
 def dlugosc(p) -> float:
     return sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(p, p[1:]))
 
@@ -323,10 +335,13 @@ def drogi(pam) -> tuple[list[dict], dict[str, str]]:
     for (klasa, nazwa), odc in sorted(grupy.items()):
         linie = [uprosc(x, TOL["glowne"]) for x in sklej(odc)]
         naj = max(linie, key=dlugosc)
-        if naj[0][0] > naj[-1][0]:
-            naj = naj[::-1]   # napis ulicy czytany od lewej
-        glowne.append({"klasa": klasa, "nazwa": nazwa or None, "d": "".join(sciezka(x) for x in linie),
-                       "napis": sciezka(naj) if nazwa and dlugosc(naj) > 350 else None, "dl": round(dlugosc(naj))})
+        sr, kier = w_polowie(naj)
+        if kier[0] < 0 or (abs(kier[0]) < 0.15 and kier[1] > 0):   # napis stoi w połowie ulicy: tam ma iść od lewej (pionowy – z dołu do góry)
+            naj, kier = naj[::-1], (-kier[0], -kier[1])
+        wpis = {"klasa": klasa, "nazwa": nazwa or None, "d": "".join(sciezka(x) for x in linie), "napis": None, "dl": round(dlugosc(naj))}
+        if nazwa and dlugosc(naj) > 350:   # sr i kier: środek i kierunek napisu – mapa chowa napis, który wchodzi pod żeton
+            wpis.update(napis=sciezka(naj), sr=[round(sr[0]), round(sr[1])], kier=[round(kier[0], 2), round(kier[1], 2)])
+        glowne.append(wpis)
     # ulice osiedlowe: tylko rysunek, pokazywany z bliska; jedna ścieżka na kafel 2×2 km (przeglądarka nie rysuje całości)
     el = overpass(f'[out:json][timeout:180];way["highway"~"^(residential|unclassified|living_street|pedestrian)$"]'
                   f'["area"!="yes"]({ramka()});out geom;', pam)
@@ -344,25 +359,43 @@ def kolej(pam) -> str:
     return "".join(sciezka(uprosc(x, TOL["kolej"])) for x in sklej([punkty(e) for e in el]) if dlugosc(x) > 150)
 
 
+def uzupelnij_geo_lokali(pam) -> list[str]:
+    """Dopisuje `geo` do lokali w lokale.yaml, które go nie mają (z adresu; POPRAWKI – położenia wpisane z ręki).
+    Zmienia tylko te wpisy: nowa linia pod `adres:`. Żeby przeliczyć lokal po zmianie adresu, usuń jego `geo`."""
+    plik = DANE / "lokale.yaml"
+    surowy = plik.read_bytes()
+    nl = "\r\n" if b"\r\n" in surowy else "\n"
+    tekst = surowy.decode("utf-8").replace("\r\n", "\n")
+    nowe = {}
+    for lok in yaml.safe_load(tekst)["lokale"]:
+        if lok.get("geo"):
+            continue
+        adres = lok["adres"].removeprefix("ul. ").removeprefix("al. ").replace("pl. ", "Plac ")
+        wsp = POPRAWKI.get(lok["id"]) or geokoduj(f"{adres}, Lublin", pam) or geokoduj(f"{adres.rsplit(' ', 1)[0]}, Lublin", pam)
+        if not wsp:
+            raise RuntimeError(f"brak położenia lokalu {lok['id']} ({lok['adres']})")
+        nowe[lok["id"]] = wsp
+    if not nowe:
+        return []
+    linie, biezacy = [], None
+    for linia in tekst.split("\n"):
+        linie.append(linia)
+        if linia.startswith("- id: "):
+            biezacy = linia[6:].strip()
+        elif linia.startswith("  adres:") and biezacy in nowe:
+            lat, lon = nowe.pop(biezacy)
+            linie.append(f"  geo: {{lat: {lat:.5f}, lon: {lon:.5f}}}")
+    plik.write_bytes("\n".join(linie).replace("\n", nl).encode("utf-8"))
+    return sorted(set(n["id"] for n in yaml.safe_load(tekst)["lokale"] if not n.get("geo")))
+
+
 def punkty_gry(pam) -> dict:
-    lokale = yaml.safe_load((DANE / "lokale.yaml").read_text(encoding="utf-8"))["lokale"]
-    wynik = {"lokale": {}, "miejsca": {}, "przyblizone": []}
+    wynik = {"miejsca": {}}
 
     def xy(wsp):
         x, y = rzut(*wsp)
         return [round(x), round(y)]
 
-    for lok in lokale:
-        adres = lok["adres"].removeprefix("ul. ").removeprefix("al. ").replace("pl. ", "Plac ")
-        wsp = POPRAWKI.get(lok["id"]) or geokoduj(f"{adres}, Lublin", pam)
-        if lok["id"] in POPRAWKI:
-            wynik["przyblizone"].append(lok["id"])
-        if not wsp:   # numeru nie ma w OSM – sama ulica, lekko rozsunięte, żeby lokale nie leżały na sobie
-            wsp = geokoduj(f"{adres.rsplit(' ', 1)[0]}, Lublin", pam)
-            wynik["przyblizone"].append(lok["id"])
-        if not wsp:
-            raise RuntimeError(f"brak położenia lokalu {lok['id']} ({lok['adres']})")
-        wynik["lokale"][lok["id"]] = xy(wsp)
     for ident, pytanie in MIEJSCA.items():
         wsp = geokoduj(pytanie, pam)
         if wsp:
@@ -376,14 +409,6 @@ def punkty_gry(pam) -> dict:
             wynik["dodatkowe"].append({"id": ident, "nazwa": nazwa, "opis": opis, "xy": xy(wsp)})
         else:
             print(f"  brak miejsca: {ident}", file=sys.stderr)
-    # dwa lokale w tym samym punkcie (ta sama ulica bez numeru): rozsuń o 60 m
-    widziane: dict[tuple, int] = {}
-    for ident, p in wynik["lokale"].items():
-        n = widziane.get(tuple(p), 0)
-        widziane[tuple(p)] = n + 1
-        if n:
-            p[0] += 60 * n
-            p[1] += 35 * n
     return wynik
 
 
@@ -400,6 +425,7 @@ def main():
     print("kolej…")
     tory = kolej(pam)
     print("lokale i miejsca…")
+    dopisane = uzupelnij_geo_lokali(pam)
     pkt = punkty_gry(pam)
     wynik = {
         "zrodlo": "© autorzy OpenStreetMap, licencja ODbL (openstreetmap.org/copyright)",
@@ -411,8 +437,8 @@ def main():
     WYNIK.parent.mkdir(parents=True, exist_ok=True)
     WYNIK.write_text(json.dumps(wynik, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"{WYNIK.relative_to(REPO)}: {WYNIK.stat().st_size // 1024} kB; dzielnic {len(dz)}, wód {len(zbiorniki)}, "
-          f"zieleni {len(ziel)}, dróg {len(glowne)}, kafli ulic {len(ulice)}, lokali {len(pkt['lokale'])} "
-          f"(przybliżonych {len(pkt['przyblizone'])}), miejsc {len(pkt['miejsca'])} + {len(pkt['dodatkowe'])}")
+          f"zieleni {len(ziel)}, dróg {len(glowne)}, kafli ulic {len(ulice)}, miejsc {len(pkt['miejsca'])} + {len(pkt['dodatkowe'])}; "
+          f"geo dopisane do lokali: {len(dopisane)}")
 
 
 if __name__ == "__main__":

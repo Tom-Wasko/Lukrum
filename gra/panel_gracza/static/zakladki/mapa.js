@@ -446,7 +446,7 @@ function podepnijZegar(c) {
 }
 
 // nowa mapa (static/mapa/lublin.js) bierze stąd warstwy, ustawienia i dotychczasowe okna budynków i lokali
-const POMOC = { UST, WARSTWY, wartosciWarstwy, budynkiGry, parkiZeSprawa, parkiNaMapie, wybranyLokal, get akcje() { return mapa.akcje; } };
+const POMOC = { UST, zapiszUst, WARSTWY, wartosciWarstwy, budynkiGry, parkiZeSprawa, parkiNaMapie, wybranyLokal, get akcje() { return mapa.akcje; } };
 
 export const mapa = {
   tytul: "Mapa miasta", ikona: "mapa",

@@ -122,8 +122,8 @@
 .lm-kafel { position: absolute; left: 0; top: 0; translate: -50% -86%; display: block; width: var(--rozm); height: var(--rozm);
   filter: drop-shadow(1px 2px 0 color-mix(in srgb, var(--g-czern) 35%, transparent)); transform-origin: 50% 86%; transition: scale .12s; }
 /* przy oddalaniu żetony bledną (--zanik ustawia lublin.js); własny lokal zostaje zawsze */
-.lm-znak:not(.lm-moj, .lm-wybrany) { opacity: var(--zanik, 1); }
-.lm-czysta .lm-znak:not(.lm-moj, .lm-wybrany) { pointer-events: none; }
+.lm-znak:not(.lm-moj, .lm-wybrany, .lm-pilny) { opacity: var(--zanik, 1); }
+.lm-czysta .lm-znak:not(.lm-moj, .lm-wybrany, .lm-pilny) { pointer-events: none; }
 .lm-znak:hover { z-index: 20 !important; }
 .lm-znak:focus-visible { outline: none; z-index: 21 !important; }
 .lm-znak:hover .lm-kafel { scale: 1.18; }
@@ -199,8 +199,19 @@
 
 /* --- pod mapą i w oknach (elementy dotychczasowego panelu, więc tylko układ) --- */
 .lm-ustawienia .lm-stara { margin-left: auto; }
-.lm-legenda { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-top: 12px; font-size: 12px; }
-.lm-legenda span { display: inline-flex; align-items: center; gap: 6px; }
+/* legenda: karta na mapie, schowana pod przyciskiem „? Legenda” w lewym dolnym rogu */
+.lm-leg-przycisk { position: absolute; left: 10px; bottom: 10px; z-index: 31; display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; cursor: pointer;
+  color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent);
+  font: 700 calc(15px * var(--skala-tekstu, 1)) var(--font-tekst); }
+.lm-leg-przycisk span { font: calc(13px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .04em; text-transform: uppercase; }
+.lm-leg-przycisk:hover, .lm-leg-przycisk[aria-expanded="true"] { background: var(--akcent); color: var(--papier); }
+.lm-leg-przycisk:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+.lm-legenda { position: absolute; left: 10px; bottom: 54px; z-index: 31; display: none; flex-direction: column; gap: 7px; max-width: min(330px, calc(100% - 20px)); padding: 12px 14px;
+  font-size: calc(12px * var(--skala-tekstu, 1)); color: var(--g-czern); background: var(--g-biel); border: 2px solid var(--g-czern); border-radius: 4px;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--g-czern) 45%, transparent); cursor: default; }
+.lm-z-legenda .lm-legenda { display: flex; }
+.lm-legenda span { display: flex; align-items: center; gap: 8px; }
+.lm-legenda .podpowiedz { margin-top: 4px; padding-top: 8px; border-top: 1px dashed var(--g-czern); color: var(--g-czern); }
 .lm-pionek { position: relative; display: inline-block; flex: none; width: 26px; height: 26px; font-style: normal; }
 .lm-pionek b { position: absolute; right: -5px; top: -4px; display: grid; place-items: center; width: 13px; height: 13px; font: 700 9px/1 var(--font-tekst);
   color: var(--papier); background: var(--tusz); border-radius: 50%; }
@@ -219,6 +230,9 @@
   .lm-skrot { flex: 1 1 0; justify-content: center; max-width: 72px; padding: 0; }
   .lm-skrot span { display: none; }
   .lm-zoom button[data-z="1.6"], .lm-zoom button[data-z="0.625"] { display: none; }   /* na telefonie szczypanie */
+  .lm-leg-przycisk { left: 6px; bottom: 76px; }
+  .lm-leg-przycisk span { display: none; }
+  .lm-legenda { left: 6px; bottom: 118px; }
   [data-poziom="1"] .lm-strefa-napis { font-size: calc(9px * var(--skala-tekstu, 1)); }
   .lm-podpis { max-width: 120px; }
 }

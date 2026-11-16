@@ -108,17 +108,25 @@ def test_nowe_udogodnienia_nie_zmieniaja_wyboru_botow_uf9():
         assert p["od_rundy"] >= 9 or p["cena"] >= 1500, p["nazwa"]
 
 
+def test_kazdy_lokal_ma_polozenie_w_lublinie():
+    """Nowa mapa rysuje lokal w miejscu z pola geo (lokale.yaml), a nie z siatki – bez geo lokalu nie widać."""
+    for lok in Dane().mapa["lokale"]:
+        geo = lok.get("geo")
+        assert geo, lok["id"]
+        assert 51.10 < geo["lat"] < 51.35 and 22.40 < geo["lon"] < 22.75, lok["id"]
+
+
 def test_budynek_w_zespole_wskazuje_istniejacy_zespol(tmp_path):
-    """Kamienica bankowa (sześć banków) i biurowiec przy Zana (trzy firmy od reklamy): zespół musi być na liście zespoly.
-    Biura rachunkowe, ubezpieczyciel i parkiet maklerski są osobnymi budynkami (zmiana strony [mapa] 15.11)."""
+    """Kamienica bankowa (sześć banków) i biurowiec przy Zana (biura rachunkowe i trzy firmy od reklamy): zespół musi być na liście zespoly.
+    Ubezpieczyciel i parkiet maklerski są osobnymi budynkami (zmiana strony [mapa] 15.11)."""
     d = Dane()
     zespoly = {z["id"] for z in d.mapa["zespoly"]}
     assert zespoly == {"kamienica_bankowa", "biurowiec_zana"}
     w_zespole = {b["id"]: b["zespol"] for b in d.mapa["budynki"] if b.get("zespol")}
     assert {b for b, z in w_zespole.items() if z == "kamienica_bankowa"} == {f"bank_{i}" for i in range(1, 7)}
-    assert {b for b, z in w_zespole.items() if z == "biurowiec_zana"} == {"agencja_lajk", "fala_koziolka", "kozi_grod_events"}
-    osobne = {b["id"]: b for b in d.mapa["budynki"] if b["id"] in ("biura", "ubezpieczyciel", "gielda")}
-    assert len(osobne) == 3 and all(b.get("geo") and b.get("adres") for b in osobne.values())
+    assert {b for b, z in w_zespole.items() if z == "biurowiec_zana"} == {"biura", "agencja_lajk", "fala_koziolka", "kozi_grod_events"}
+    osobne = {b["id"]: b for b in d.mapa["budynki"] if b["id"] in ("ubezpieczyciel", "gielda")}
+    assert len(osobne) == 2 and all(b.get("geo") and b.get("adres") for b in osobne.values())
     kat = _kopia(tmp_path)
     _zmien(kat, "mapa/budynki.yaml", lambda p: p["budynki"][0].update(zespol="nie_ma"))
     assert any("nie_ma" in b and "zespoly" in b for b in sprawdz(kat))
