@@ -52,6 +52,7 @@ from silnik.pieniadze import inwestor as inw
 from silnik.pieniadze import kasyno as kas
 from silnik.pieniadze import lichwiarz as lw
 from silnik.pieniadze import wlasciciel as wl
+from silnik.rynek import dekor as dk
 from silnik.rynek import handel as hd
 from silnik.rynek import kalendarz as kl
 from silnik.rynek import konkurencja as kn
@@ -446,6 +447,7 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
     if len(f.lokale) > 1:   # Z3: przewozy towaru między lokalami (zakładka Lokale → Dostawy i magazyn)
         v["przewozy"] = {"zasady": pl.zasady_przewozu(dane), "przyjete": (info or {}).get("przewozy", []) if edycja else [],
                          "uwagi": (info or {}).get("uwagi_przewozow", []) if edycja else []}
+    v["dekor"] = dk.widok(dane, f)   # sklep meblowy: katalog i dekor lokali (pusty, gdy mechaniki nie ma)
     v["agencja"] = _agencja(gra, firma, runda, f, stan, edycja)
     zam = ((info.get("kampanie") or {}) if edycja else (wr.get("reklama_agencje") or {}))
     v["reklama"] = rk.widok(dane, f, runda, poprzedni.rynek.get(runda - 1), zam.get("zamowione"))

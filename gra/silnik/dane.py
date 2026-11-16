@@ -25,6 +25,7 @@ from .schematy import (
     ZDARZENIA_OPCJONALNE,
     PlikBankow,
     PlikBiur,
+    PlikDekoru,
     PlikHarpagona,
     PlikKlientow,
     PlikPromocji,
@@ -32,6 +33,7 @@ from .schematy import (
     sprawdz_zalozenia,
 )
 
+OPCJONALNE_MAPY = ("klienci.yaml", "dekor.yaml")   # bez nich: bez grup i opinii (U24) / bez dekoru lokalu
 KATALOG_GRY = Path(__file__).resolve().parents[1]
 KATALOG_DANYCH = KATALOG_GRY / "dane"   # testy mechanik: zamrożona kopia (testy/conftest.py)
 
@@ -71,8 +73,8 @@ def _wczytaj_mape(katalog: Path) -> dict | None:
     """Mapa miasta (`dane/mapa/`): strefy, lokale z zasadami i zestawami sprzętu, budynki. Brak katalogu = gra bez lokali."""
     if not (katalog / "strefy.yaml").exists():
         return None
-    st, lo, bu, po, me, ba, ha, bi, re, pm = (_wczytaj(katalog / n) for n in SCHEMATY_MAPY if n != "klienci.yaml")
-    kl, mi = katalog / "klienci.yaml", katalog / "miasto.yaml"
+    st, lo, bu, po, me, ba, ha, bi, re, pm = (_wczytaj(katalog / n) for n in SCHEMATY_MAPY if n not in OPCJONALNE_MAPY)
+    kl, mi, de = katalog / "klienci.yaml", katalog / "miasto.yaml", katalog / "dekor.yaml"
     return {"siatka": st["siatka"], "strefy": st["strefy"], "zasady": lo["zasady"], "zestawy": lo["zestawy"],
             "lokale": lo["lokale"], "budynki": bu["budynki"], "zespoly": bu.get("zespoly") or [],
             "popyt": {k: po[k] for k in ("model", "dni_tygodnia", "strefy")},
@@ -84,6 +86,8 @@ def _wczytaj_mape(katalog: Path) -> dict | None:
             "promocje": PlikPromocji.model_validate(pm).model_dump(exclude={"opis", "zrodlo"}),
             # U24: grupy klientów i opinie (brak pliku – mechanika wyłączona, np. dane zamrożone testów)
             "klienci": PlikKlientow.model_validate(_wczytaj(kl)).model_dump(exclude={"opis", "zrodlo"}) if kl.exists() else None,
+            # dekor lokalu (sklep meblowy): brak pliku – mechanika nie istnieje
+            "dekor": PlikDekoru.model_validate(_wczytaj(de)).model_dump(exclude={"opis", "zrodlo"}) if de.exists() else None,
             # M11: wygląd mapy Lublina (drogi, rzeka, układ dzielnic, ruch) – tylko do rysowania, silnik go nie czyta;
             # brak pliku (np. dane zamrożone testów) – mapa rysowana prościej
             "miasto": _wczytaj_miasto(mi) if mi.exists() else None}
@@ -284,7 +288,7 @@ def sprawdz(katalog: Path | None = None) -> list[str]:
     if mapa.exists():
         for nazwa, schemat in SCHEMATY_MAPY.items():
             if not (mapa / nazwa).exists():
-                if nazwa == "klienci.yaml":   # U24: plik opcjonalny – bez niego grupy i opinie wyłączone
+                if nazwa in OPCJONALNE_MAPY:   # klienci (U24): bez niego grupy i opinie wyłączone; dekor: bez dekoru
                     continue
                 bledy.append(f"brak pliku dane/mapa/{nazwa}")
                 continue
@@ -530,6 +534,7 @@ def _sprawdz_mape(d: Dane, brak) -> list[str]:
         bledy.append(f"mapa/popyt.yaml: strefa {s} " + ("bez popytu" if s in m["strefy"] else "nie ma jej w mapa/strefy.yaml"))
     _sprawdz_banki(m, bledy)
     _sprawdz_klientow(d, bledy, brak)
+    _sprawdz_dekor(d, bledy)
     _sprawdz_kalendarz(d, bledy, brak)
     _sprawdz_zdarzenia(d, bledy, brak)
     return bledy
@@ -553,6 +558,20 @@ def _sprawdz_klientow(d: Dane, bledy: list[str], brak):
     for g, x in k["grupy"].items():
         for u in sorted(set(d.uslugi) ^ set(x["koszyk"])):
             bledy.append(f"{co}: grupy.{g}.koszyk: " + (f"brak dania {u}" if u in d.uslugi else f"nieznane danie {u}"))
+
+
+def _sprawdz_dekor(d: Dane, bledy: list[str]):
+    """Dekor lokalu – mapa/dekor.yaml: style trafiają do istniejących grup klientów (mapa/klienci.yaml)."""
+    dk = d.mapa.get("dekor")
+    if not dk:
+        return
+    grupy = set((d.mapa.get("klienci") or {}).get("grupy", {}))
+    if not grupy:
+        bledy.append("mapa/dekor.yaml: dekor działa na grupach klientów – brak mapa/klienci.yaml")
+    for s, x in dk["style"].items():
+        for g in x["klienci"]:
+            if g not in grupy:
+                bledy.append(f"mapa/dekor.yaml: style.{s}.klienci: nieznana grupa klientów {g} (mapa/klienci.yaml)")
 
 
 def _sprawdz_banki(m: dict, bledy: list[str]):

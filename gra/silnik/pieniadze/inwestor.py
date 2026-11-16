@@ -19,7 +19,7 @@ from . import zaleglosci as zg
 
 BLOKOWANE = {"lokal": "Nowy lokal", "przejecie": "Kupno budynku", "stanowiska": "Nowe stanowiska",
              "sprzet_kup": "Zakup sprzętu", "udogodnienia_kup": "Zakup udogodnień",
-             "wyposazenie_kup": "Zakup wyposażenia", "kredyty_wez": "Nowy kredyt", "leasing_wez": "Nowy leasing",
+             "wyposazenie_kup": "Zakup wyposażenia", "dekor_kup": "Zakup dekoru", "kredyty_wez": "Nowy kredyt", "leasing_wez": "Nowy leasing",
              "lokaty_zaloz": "Nowa lokata"}
 
 
