@@ -54,7 +54,7 @@ operacje:
   niskie_obciazenie:
     wartosc: 0.5
     pewnosc: zalozenie
-    zrodlo: 'Poprawki 2 (sprawy 17/18, 7.11.2026): wskaźnik czasu pracy osoby w Ludzie ▸ Zespół (wyniki) – poniżej tej
+    zrodlo: 'Poprawki 2 (sprawy 17/18, 7.11.2026): wskaźnik czasu pracy osoby w Mój kebab ▸ Zespół (wyniki) – poniżej tej
       części dostępnych godzin osoba ma dużo wolnego czasu (łuk niebieski); od progu przepracowania karty wyników
       (zadowolenie_osoby.wspolczynniki.prog_przepracowania) – pomarańczowy, pomiędzy – zielony'
   czas_wlasciciela:
@@ -102,7 +102,7 @@ finanse:
       wybor: true    # false – gracz nie wybiera, zakupy poniżej progu zawsze w koszty
       stawka: 0.2    # roczna stawka amortyzacji zakupów poniżej progu, gdy firma je amortyzuje
     pewnosc: zalozenie
-    zrodlo: 'B6 (decyzja autora 7.11.2026, propozycja 1): gracz wybiera (Księgowość ▸ Biuro rachunkowe), czy zakupy
+    zrodlo: 'B6 (decyzja autora 7.11.2026, propozycja 1): gracz wybiera (Biurowiec przy Zana ▸ Biuro rachunkowe), czy zakupy
       poniżej amortyzacja_prog (sprzęt, wyposażenie, stanowiska, sprzęt w cenie lokalu) idą od razu w koszty (domyślnie,
       boty), czy do ewidencji z amortyzacją `stawka` rocznie (art. 22d ust. 1 ustawy o PIT – niskocenne środki trwałe
       do 10 000 zł: jednorazowo w koszty albo amortyzacja; 20% – stawka sprzętu gastronomicznego jak amortyzacja_roczna.sprzet).

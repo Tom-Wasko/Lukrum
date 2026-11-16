@@ -67,7 +67,9 @@ def _prefiks_jest(slowa: list[str], tytuly: set[str]) -> bool:
 
 def test_nazwy_zakladek_w_tekstach_istnieja_w_menu():
     menu, wszystkie = _tytuly()
-    assert {"Nowe lokale", "Mój lokal", "Zaopatrzenie", "Wnętrze", "Ludzie", "Pieniądze", "Księgowość", "Urzędy"} <= menu \
+    # fable-swiat (15.11.2026): pasek to miejsca (budynki), nie działy
+    assert {"Mój kebab", "Stare Miasto", "Hurtownie", "Park handlowy", "Kamienica bankowa", "Biurowiec przy Zana",
+            "Urzędy"} <= menu \
         and {"Stanowiska i sprzęt", "Rynek pracy", "Biuro rachunkowe", "Do wynajęcia"} <= wszystkie
     zle = []
     for gdzie, t in _wszystkie_teksty():

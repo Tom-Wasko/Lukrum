@@ -464,7 +464,7 @@ def _wyniki_firmy(dane, f: Firma, r, ks: Ksiega, rach: Rachunek, info, popyt, ob
                        "wartosc": f.wartosc_magazynu(k)})
     w["zasoby"] = zasoby
     w["zuzyte_zasoby"] = zuzyte
-    w["szkolenia"] = info.get("szkolenia", [])   # zakładka Ludzie ▸ Szkolenia (wyniki)
+    w["szkolenia"] = info.get("szkolenia", [])   # zakładka Mój kebab ▸ Szkolenia (wyniki)
     if "szkolenia_aktywne" in info:   # kalibracja B9: szkolenia działające w tej rundzie (do której rundy)
         w["szkolenia_aktywne"] = info["szkolenia_aktywne"]
 
@@ -472,7 +472,7 @@ def _wyniki_firmy(dane, f: Firma, r, ks: Ksiega, rach: Rachunek, info, popyt, ob
 
 
 def _czas_pracy(dane: Dane, f: Firma, obsluga: dict | None, godz: float, p=None) -> dict:
-    """Ludzie ▸ Zespół (wyniki, poprawki 2): godziny pracy osoby w rundzie – przepracowane z dostępnych.
+    """Mój kebab ▸ Zespół (wyniki, poprawki 2): godziny pracy osoby w rundzie – przepracowane z dostępnych.
     Dostępne: pełny etat × mnożnik formy zatrudnienia i studenta (formy.etat); właściciel (p=None) – jego godziny
     na stanowisku. Przepracowane: ta część pojemności stanowiska (godziny × wydajność × etat), którą zajęła obsługa
     klientów – kuchnia: godziny tego stanowiska; kasa: godziny kas lokalu dzielone wg pojemności kasjerów.

@@ -57,7 +57,7 @@ def dostepne(dane: Dane, bank_konta: str) -> dict[str, dict]:
 def poza_kontem(dane: Dane, firma: Firma, bank: str) -> str | None:
     """Powód odmowy, gdy produkt jest w innym banku niż konto firmowe (przy `tylko_bank_konta`)."""
     if tylko_bank_konta(dane) and bank != firma.bank:
-        return f"{bank} obsługuje tylko firmy z kontem firmowym w tym banku (zmiana banku: Pieniądze ▸ Bank, przycisk „Zmień bank konta”)"
+        return f"{bank} obsługuje tylko firmy z kontem firmowym w tym banku (zmiana banku: Kamienica bankowa ▸ Bank, przycisk „Zmień bank konta”)"
     return None
 
 
@@ -250,7 +250,7 @@ def powod_kredytu(dane: Dane, firma: Firma, d: dict, runda: int, nowy: dict | No
         return f"bank wymaga {u['historia_rund']} rund historii firmy (od otwarcia pierwszego lokalu)"
     budynek = u.get("zastaw_przejecia") and d.get("zastaw") in {f"lokal:{b.id}" for b in firma.budynki}   # B6
     if produkt.get("od_lokalu") and not firma.lokale and not (nowy and d.get("zastaw") == nowy["id"]) and not budynek:
-        return ("bank udziela go firmie z lokalem – najpierw wynajmij albo kup lokal (Nowe lokale ▸ Do wynajęcia); "
+        return ("bank udziela go firmie z lokalem – najpierw wynajmij albo kup lokal (Stare Miasto ▸ Do wynajęcia); "
                 "kupowany lokal może być zastawem już w tej rundzie")
     if any(k.bank == bank["nazwa"] and k.produkt == produkt["produkt"] for k in firma.kredyty):
         return "ten kredyt jest już w spłacie – najpierw spłać poprzedni"
@@ -375,8 +375,8 @@ def kredyty_na_lokal(dane: Dane, firma: Firma, info: dict, runda: int, ksiega: K
     for d in odlozone if przejecie else [d for d in odlozone if not d.get("przejecie")]:
         powod = powod_kredytu(dane, firma, d, runda)
         if powod and not any(x["id"] == d["zastaw"] for x in zastawy(dane, firma)):
-            powod = ("budynek pod zastaw nie został kupiony (Nowe lokale ▸ Przejęcia)" if d.get("przejecie")
-                     else "lokal pod zastaw nie został kupiony (Nowe lokale ▸ Do wynajęcia)")
+            powod = ("budynek pod zastaw nie został kupiony (Stare Miasto ▸ Przejęcia)" if d.get("przejecie")
+                     else "lokal pod zastaw nie został kupiony (Stare Miasto ▸ Do wynajęcia)")
         if powod:
             info["odrzucone"].append({"co": f"Kredyt {d.get('produkt', '')} – {d.get('bank', '')}", "powod": powod})
         else:

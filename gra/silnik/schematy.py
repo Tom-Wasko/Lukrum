@@ -1028,7 +1028,7 @@ class ReklamaInternetowa(Schemat):
 class PlikReklamy(Plik):
     model: ModelReklamy
     agencje: dict[str, AgencjaReklamowa] = Field(min_length=1)
-    internet: ReklamaInternetowa | None = None   # UF19: marketing internetowy (zakładka Marketing → Internet)
+    internet: ReklamaInternetowa | None = None   # UF19: marketing internetowy (zakładka Biurowiec przy Zana → Internet)
 
     @model_validator(mode="after")
     def _rozne_agencje(self):

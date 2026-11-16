@@ -27,7 +27,7 @@ function kartaStanowisk(v, kat, typ, pakiety, nowe, edycja) {
   }).join("");
   return kartaMarki({ kolor: typ === "kuchnia" ? KOLORY[2] : KOLORY[1], nazwa: kat.oferty.stanowiska.typy[typ].nazwa, rodzaj: `masz ${maja}`,
     znak: typ === "kuchnia" ? "K" : "zł",
-    suma: m ? `miejsca zajęte <b>${m.zajete} z ${m.wszystkie}</b>${m.wszystkie ? "" : "<br>najpierw wybierz lokal (Nowe lokale)"}` : "",
+    suma: m ? `miejsca zajęte <b>${m.zajete} z ${m.wszystkie}</b>${m.wszystkie ? "" : "<br>najpierw wybierz lokal (Stare Miasto, biuro „Klucz”)"}` : "",
     tresc: `<div class="oferty-wiersze">${wiersze}</div>` });
 }
 
@@ -83,7 +83,7 @@ function sprzetStanowiska(v, typ, nr) {
   return { teraz: teraz.sprzet, przed: przed.sprzet, st: teraz };
 }
 
-// Poprawki 3 (sprawa 11): obłożenie sprzętu na stanowiskach wybranego lokalu – ten sam wykres co czas pracy w Ludzie ▸ Zespół
+// Poprawki 3 (sprawa 11): obłożenie sprzętu na stanowiskach wybranego lokalu – ten sam wykres co czas pracy w Mój kebab ▸ Zespół
 // (obciazenie.js). Szafy i zamrażarki tylko przechowują towar (kat.sprzet[n].przechowywanie) – bez obłożenia; sprzęt kasy
 // pracuje razem (to samo obłożenie) – jeden wiersz na stanowisko kasowe.
 const godzinySprzetu = (kat) => kat.parametry?.godziny_sprzetu ?? kat.parametry?.godziny ?? 40;
@@ -211,7 +211,7 @@ function oknoSprzedazy(c, typ, nr) {
   const przychod = Object.entries(przed).filter(([n]) => sprzedawane.includes(n)).reduce((s, [n, q]) => s + v.ceny_sprzedazy_sprzetu[n][q], 0);
   okno(`Sprzedaż sprzętu ze stanowiska „Stanowisko nr ${nr}”`, tabela(null, ["Nazwa", "Jakość", "Przychody ze sprzedaży", `Koszt utrzymania${naOkres()}`, ""], w, { klasy: ["l"] })
     + `<p><b>Przychody ze sprzedaży: ${zl(przychod)}</b></p>`
-    + `<p class="podpowiedz">Sprzęt kupiony od progu amortyzacji to środek trwały: przy sprzedaży jego niezamortyzowana wartość idzie w koszty (Księgowość ▸ KPiR).</p>`, { przyciski: `<button class="btn pom" data-akcja="zamknij-okno">OK</button>` });
+    + `<p class="podpowiedz">Sprzęt kupiony od progu amortyzacji to środek trwały: przy sprzedaży jego niezamortyzowana wartość idzie w koszty (Biurowiec przy Zana ▸ KPiR).</p>`, { przyciski: `<button class="btn pom" data-akcja="zamknij-okno">OK</button>` });
 }
 
 export const wyposazenie = {
@@ -229,7 +229,7 @@ export const wyposazenie = {
 
 export const RODZAJ_ST = { lokal: "lokal", budynek: "budynek", grunt: "grunt (bez amortyzacji)", sprzet: "sprzęt", wyposazenie: "wyposażenie" };
 
-// UF12: ewidencja środków trwałych jest w Księgowość ▸ KPiR (zakładka Środki trwałe usunięta)
+// UF12: ewidencja środków trwałych jest w Biurowiec przy Zana ▸ KPiR (zakładka Środki trwałe usunięta)
 export function ewidencja(lista, tytul) {
   const w = (lista || []).map((s) => [esc(s.nazwa), esc(RODZAJ_ST[s.rodzaj] || s.rodzaj), licz(s.od_rundy), proc(s.stawka),
     zl2(s.wartosc), zl2(s.umorzenie), zl2(s.netto)]);

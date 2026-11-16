@@ -67,7 +67,7 @@ export const kasyno = {
     const K = v.kasyno;
     if (!K) return `<p class="podpowiedz">Brak danych.</p>`;
     if (!K.otwarte) return `<div class="karta"><p>Pod adresem ${esc(K.adres)} drzwi są zamknięte. Na dzwonek nikt nie odpowiada,
-      a kot z parteru patrzy na ciebie z wyższością. Wyniki ostatniej wizyty są w zakładce Wyniki.</p></div>`;
+      a kot z parteru patrzy na ciebie z wyższością. Wyniki ostatniej wizyty zobaczysz pod przyciskiem „Wyniki”.</p></div>`;
     const L = K.limity, D = K.decyzja, W = v.wlasciciel;
     const ile = (d.kasyno || []).length;
     return `<div class="karta"><p>${esc(K.zaproszenie || `Pukasz trzy razy. Wizjer się odsuwa, ktoś mierzy cię wzrokiem od butów po czubek głowy. Mówisz hasło. Wizjer się zasuwa, zgrzyta zamek i drzwi przy ${K.adres} się otwierają.`)}</p></div>

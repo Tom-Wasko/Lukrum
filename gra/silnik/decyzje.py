@@ -702,13 +702,13 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
                   f"w koszty: ten zakup obniży dochód tej rundy o ok. {zl} zł (bez VAT), a tym samym punkty działu "
                   "Finanse. Wartość zakupu zostaje w majątku firmy i liczy się do jej rozwoju."
                   + (" Zamiast tego możesz je amortyzować (koszt rozłożony na lata) – wybór w "
-                     "Księgowość ▸ Biuro rachunkowe." if st_trwale.wybor_niskocennych(dane) else ""))
+                     "Biurowiec przy Zana ▸ Biuro rachunkowe." if st_trwale.wybor_niskocennych(dane) else ""))
         # przekroczenia odrzuca zapis decyzji (API), a przeliczenie przycina – tu czerwone są w uwagach rynku pracy i lokali
         lim = lm.stan_limitow(dane, firma, d, runda)
         if lim["pracownicy"]["nowi"] == lim["pracownicy"]["limit"]:
             dodaj("niebieski", "zatrudnienie", f"Wykorzystany limit nowych pracowników w tej rundzie "
                   f"({lim['pracownicy']['limit']}) – kolejnych przyjmiesz w następnej rundzie.")
-        # U3: „odpoczynek” po lokalu nie trafia na listę – jest w Nowe lokale ▸ Do wynajęcia, a próba wzięcia kolejnego
+        # U3: „odpoczynek” po lokalu nie trafia na listę – jest w Stare Miasto ▸ Do wynajęcia, a próba wzięcia kolejnego
         # lokalu za wcześnie to błąd zapisu (limity.naruszenia)
         for tekst in (info or {}).get("odrzucone_ceny", []):
             dodaj("czerwony", "oferta", tekst)
@@ -765,7 +765,7 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
                     if not ((lok_id, u) in konkretne and b.startswith("brak stanowiska")):
                         sklad = b.startswith(BRAK_SKLADNIKA)   # UF4: składniki zamawia się w Dostawach, nie w Menu
                         dodaj("czerwony", "dostawcy" if sklad else "oferta", _w_lokalu(
-                            dane, lok_id, f"{mn.nazwa_dania(dane, u, firma=v)}: {b}" + (" – zamów w Zaopatrzenie → Dostawy." if sklad else ".")))
+                            dane, lok_id, f"{mn.nazwa_dania(dane, u, firma=v)}: {b}" + (" – zamów w Hurtownie → Dostawy." if sklad else ".")))
         for u in firma.oferta:
             if not firma.oferta.get(u):
                 dodaj("niebieski", "oferta", f"{mn.nazwa_dania(dane, u, firma=firma)}: nie podano prognozy popytu.")

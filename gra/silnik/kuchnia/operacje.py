@@ -276,7 +276,7 @@ def obsluz(dane: Dane, firma: Firma, popyt: dict[str, int], ziarno, runda: int,
         "liczba_kasjerow": len(rec),
         "godziny_sprzetu": sprzet_godz,
         # P6: godziny potrzebne na obsłużenie klientów, którzy doszli do stanowiska (zajęte + utracone przez brak
-        # godzin tego etapu) i pojemność – Ludzie ▸ Zespół (wyniki), obciążenie w dni tygodnia
+        # godzin tego etapu) i pojemność – Mój kebab ▸ Zespół (wyniki), obciążenie w dni tygodnia
         "potrzebne_stanowisk": {s.nr: godz_stanowisk[i] + brak_godzin[i] for i, s in enumerate(stanowiska)},
         "pojemnosc_stanowisk": {s.nr: pojemnosc[i] for i, s in enumerate(stanowiska)},
         "potrzebne_kasy": potrzebne_rec,

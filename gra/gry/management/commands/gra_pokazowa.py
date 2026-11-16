@@ -34,7 +34,7 @@ def konfiguracja_bota(konf: dict, firma: str, poziom: str) -> dict:
 
 
 def zaloz(rund: int, ziarno: int | None, strategia: str = STRATEGIA, poziom: str = POZIOM,
-          rywale: str = POZIOM_RYWALI) -> GraSilnika:
+          rywale: str = POZIOM_RYWALI, nazwa: str = NAZWA) -> GraSilnika:
     dane = dane_domyslne()
     st = dane.boty["strategie"]
     if strategia not in st:
@@ -43,7 +43,7 @@ def zaloz(rund: int, ziarno: int | None, strategia: str = STRATEGIA, poziom: str
         if p not in (dane.boty.get("poziomy") or {}):
             raise CommandError(f"Nie ma poziomu botów {p}.")
     boty = [(st[k]["nazwa"], k) for k in RYWALE]
-    return GraSilnika.nowa(NAZWA, [(NAZWA, None), *boty], rund, ziarno,
+    return GraSilnika.nowa(nazwa, [(NAZWA, None), *boty], rund, ziarno,
                            poziomy={n: rywale for n, _ in boty})
 
 
@@ -57,11 +57,14 @@ def runda_bota(g: GraSilnika, strategia: str = STRATEGIA, poziom: str = POZIOM) 
     return r
 
 
-def rozegraj(id_: str, strategia: str, poziom: str, wypisz=lambda t: None) -> None:
-    """Rundy po kolei, każda w osobnej zmianie gry – jak przy zamykaniu rundy."""
+def rozegraj(id_: str, strategia: str, poziom: str, wypisz=lambda t: None,
+             do_rundy: int | None = None) -> None:
+    """Rundy po kolei, każda w osobnej zmianie gry – jak przy zamykaniu rundy.
+
+    `do_rundy` – gra zatrzymuje się na początku tej rundy (do dalszej gry ręcznie)."""
     while True:
         with serwisy.zmiana(id_) as g:
-            if g.zakonczona:
+            if g.zakonczona or (do_rundy and g.runda >= do_rundy):
                 return
             r = runda_bota(g, strategia, poziom)
         wypisz(f"runda {r} rozegrana")
@@ -78,10 +81,14 @@ class Command(BaseCommand):
         dodaj("--strategia", default=STRATEGIA, help="strategia drużyny Pokazowa")
         dodaj("--poziom", default=POZIOM, help="poziom bota drużyny Pokazowa")
         dodaj("--rywale", default=POZIOM_RYWALI, help="poziom pozostałych botów")
+        dodaj("--do-rundy", type=int, default=None,
+              help="zatrzymaj grę na początku tej rundy (dalej gra człowiek); 1 – bez rozgrywania")
+        dodaj("--nazwa", default=NAZWA, help="nazwa gry (inna niż Pokazowa nie kasuje poprzedniej)")
         dodaj("--konto", action="append", metavar="LOGIN",
               help="konto w drużynie Pokazowa (można kilka; domyślnie wszyscy mistrzowie gry)")
 
-    def handle(self, *args, rund, ziarno, strategia, poziom, rywale, konto, **opcje):
+    def handle(self, *args, rund, ziarno, strategia, poziom, rywale, konto, do_rundy, nazwa,
+               **opcje):
         Uzytkownik = get_user_model()
         if konto:
             konta = list(Uzytkownik.objects.filter(username__in=konto))
@@ -91,8 +98,8 @@ class Command(BaseCommand):
         else:
             mg = Q(groups__name=MISTRZ_GRY) | Q(is_superuser=True)
             konta = list(Uzytkownik.objects.filter(mg).distinct())
-        g = zaloz(rund, ziarno, strategia, poziom, rywale)
-        for stara in Gra.objects.filter(nazwa=NAZWA).values_list("pk", flat=True):
+        g = zaloz(rund, ziarno, strategia, poziom, rywale, nazwa)
+        for stara in Gra.objects.filter(nazwa=nazwa).values_list("pk", flat=True):
             serwisy.usun(stara)
             self.stdout.write(f"usunięta stara gra {stara}")
         id_ = serwisy.utworz(g)
@@ -100,5 +107,5 @@ class Command(BaseCommand):
         loginy = ", ".join(u.username for u in konta) or "brak"
         self.stdout.write(f"gra {id_}: {rund} rund, ziarno {g.konfiguracja['ziarno']}, "
                           f"drużyna {NAZWA} ({strategia}, {poziom}) – konta: {loginy}")
-        rozegraj(id_, strategia, poziom, self.stdout.write)
+        rozegraj(id_, strategia, poziom, self.stdout.write, do_rundy)
         self.stdout.write(self.style.SUCCESS(f"Gra pokazowa gotowa: {id_}"))

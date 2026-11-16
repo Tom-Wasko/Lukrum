@@ -1,9 +1,8 @@
 // Wybór wyglądu gry. Ładowany w <head> (bez defer), żeby motyw był ustawiony przed pierwszym rysowaniem strony.
 (function () {
   var MOTYWY = [
-    ["bok", "Klasyczny – menu z boku"],
-    ["klasyczny", "Klasyczny – menu u góry"],
-    ["grafik", "Grafik zmian"],
+    ["bok", "Menu z boku"],
+    ["klasyczny", "Menu u góry"],
   ];
   // domyślnie menu z boku; zapisany motyw spoza listy (np. dawny „stary”) wraca do domyślnego
   var DOMYSLNY = "bok";
@@ -31,12 +30,13 @@
     if (!konto) return;
     var pole = document.createElement("label");
     pole.className = "wybor-motywu";
-    pole.innerHTML = "<span>Wygląd</span><select aria-label=\"Wygląd gry\">" + MOTYWY.map(function (x) {
+    pole.innerHTML = "<span>Układ</span><select aria-label=\"Układ menu\">" + MOTYWY.map(function (x) {
       return "<option value=\"" + x[0] + "\"" + (x[0] === motyw ? " selected" : "") + ">" + x[1] + "</option>";
     }).join("") + "</select>";
     pole.querySelector("select").addEventListener("change", function (e) { ustaw(e.target.value); });
     konto.appendChild(pole);
-    schowajUstawienia(konto, pole);   // N1: to samo menu ⚙ na każdej stronie (gra, lista gier, panel MG, konto)
+    schowajUstawienia(konto, pole);
+    wyborPalety(pole);   // N1: to samo menu ⚙ na każdej stronie (gra, lista gier, panel MG, konto)
   });
 
   // N1 (poprawki 3): w nagłówku zostają firma, saldo i „Jak grać”; reszta (lista gier, konto, panel MG, wygląd)
@@ -80,6 +80,25 @@
     obudowa.addEventListener("focusout", function (e) {
       if (!lista.hidden && e.relatedTarget && !obudowa.contains(e.relatedTarget)) otworz(false);
     });
+  }
+
+  // Paleta i tryb (lukrum.js → lukrum.wyglad): trzy palety × jasny / ciemny, zapamiętane w przeglądarce
+  function wyborPalety(przed) {
+    if (!window.lukrum) return;
+    var PALETY = [["bar", "Bar mleczny"], ["pewex", "Pewex"], ["wysoka", "Wysoka widoczność"]];
+    var TRYBY = [["jasny", "Jasny"], ["ciemny", "Ciemny"]];
+    var teraz = window.lukrum.wyglad.odczytaj();
+    function pole(etykieta, opis, lista, wybrany, zmiana) {
+      var el = document.createElement("label");
+      el.className = "wybor-motywu";
+      el.innerHTML = "<span>" + etykieta + "</span><select aria-label=\"" + opis + "\">" + lista.map(function (x) {
+        return "<option value=\"" + x[0] + "\"" + (x[0] === wybrany ? " selected" : "") + ">" + x[1] + "</option>";
+      }).join("") + "</select>";
+      el.querySelector("select").addEventListener("change", function (e) { zmiana(e.target.value); });
+      przed.parentNode.insertBefore(el, przed);
+    }
+    pole("Kolory", "Paleta kolorów", PALETY, teraz.paleta, function (w) { window.lukrum.wyglad.ustaw({ paleta: w }); });
+    pole("Tryb", "Tryb jasny albo ciemny", TRYBY, teraz.tryb, function (w) { window.lukrum.wyglad.ustaw({ tryb: w }); });
   }
 
   window.ustawMotyw = ustaw;

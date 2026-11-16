@@ -22,7 +22,7 @@ const GRUPY = [
 
 // Samodzielna księgowość (silnik/ksiegowosc/biuro.py): wynik podatkowy rundy – dopiero po deklaracjach drużyny.
 export const UKRYTE = `<div class="komunikat">Księgujesz samodzielnie: dochód, KPiR, VAT i podatki za tę rundę zobaczysz po złożeniu deklaracji
-  (<a data-zakladka-k="biuro">Księgowość ▸ Biuro rachunkowe</a>) i przeliczeniu rundy – albo wybierz tam biuro, które rozliczy rundę od razu.</div>`;
+  (<a data-zakladka-k="biuro">Biurowiec przy Zana ▸ Biuro rachunkowe</a>) i przeliczeniu rundy – albo wybierz tam biuro, które rozliczy rundę od razu.</div>`;
 
 function koszty(k) {
   const wynik = GRUPY.map(([n, f]) => [n, k.pozycje.reduce((s, p) => s + f(p), 0)]);
@@ -111,7 +111,7 @@ export const kpir = {
       + tabela(null, ["", "Kwota"], [["Dochód do opodatkowania", zl2(k.dochod)], ...(R
         ? [["Zaliczka na PIT", zl2(R.zaliczka)], ["Składka zdrowotna", zl2(R.zdrowotna)]]   // JDG – zakładka Podatki
         : [["Podatek", zl2(k.podatek)]]), ["Dochód netto", zl2(k.dochod_netto)]], { klasy: ["l", "r"] })
-      + (R ? `<p class="podpowiedz">Kwoty w KPiR są netto – VAT jest w zakładce Księgowość ▸ VAT.</p>` : "")
+      + (R ? `<p class="podpowiedz">Kwoty w KPiR są netto – VAT jest w zakładce Urzędy ▸ VAT.</p>` : "")
       + (v.gra.lokale ? amortyzacja(v) : "") + LEKCJA_KPIR;
   },
 };
@@ -127,8 +127,8 @@ function amortyzacja(v) {
     + tabela("Odpisy w KPiR", ["Pozycja", "Kwota"], odpisy.length ? odpisy : [["W tej rundzie bez odpisów.", ""]], { klasy: ["l"] })
     + `<p class="podpowiedz">Kupiony lokal, wybudowany budynek i zakupy od ${zl(a.prog)} netto to środki trwałe: płacisz od razu,
        ale w KPiR koszt rozkłada się na lata – odpis liniowo od rundy po zakupie (${stawki}; grunt się nie amortyzuje).
-       ${a.niskocenne && v.stan?.amortyzacja_niskocenna === "amortyzacja" ? `Tańsze zakupy też amortyzujesz (${proc(a.niskocenne.stawka, 0)} rocznie) – wybór w Księgowość ▸ Biuro rachunkowe.`
-         : `Tańsze zakupy idą od razu w koszty${a.niskocenne ? " (możesz je amortyzować – wybór w Księgowość ▸ Biuro rachunkowe)" : ""}.`} Przy sprzedaży niezamortyzowana wartość idzie w koszty. Amortyzacja zmniejsza dochód
+       ${a.niskocenne && v.stan?.amortyzacja_niskocenna === "amortyzacja" ? `Tańsze zakupy też amortyzujesz (${proc(a.niskocenne.stawka, 0)} rocznie) – wybór w Biurowiec przy Zana ▸ Biuro rachunkowe.`
+         : `Tańsze zakupy idą od razu w koszty${a.niskocenne ? " (możesz je amortyzować – wybór w Biurowiec przy Zana ▸ Biuro rachunkowe)" : ""}.`} Przy sprzedaży niezamortyzowana wartość idzie w koszty. Amortyzacja zmniejsza dochód
        i podatek, ale nie gotówkę.</p>`;
 }
 

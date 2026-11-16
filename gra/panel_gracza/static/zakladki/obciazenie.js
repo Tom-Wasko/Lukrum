@@ -1,5 +1,5 @@
-// Poprawki 3 (sprawy 10–11): wspólny wykres obciążenia – czas pracy osób (Ludzie ▸ Zespół, wyniki) i obłożenie sprzętu
-// (Wnętrze ▸ Stanowiska i sprzęt, wyniki). Wykres półkolisty (gauge): osobny miernik na osobę / sprzęt.
+// Poprawki 3 (sprawy 10–11): wspólny wykres obciążenia – czas pracy osób (Mój kebab ▸ Zespół, wyniki) i obłożenie sprzętu
+// (Park handlowy ▸ Stanowiska i sprzęt, wyniki). Wykres półkolisty (gauge): osobny miernik na osobę / sprzęt.
 // Dane: obciążenie 0–1 (silnik/runda.py: _czas_pracy, sprzęt – oblozenie) i godziny; progi z danych
 // (v.progi_czasu_pracy: niski, przepracowanie). Kolory stanów: zmienne --obc-* (styl.css).
 import { esc, licz, proc } from "./wspolne.js";
