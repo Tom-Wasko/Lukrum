@@ -6,6 +6,7 @@ import { esc } from "../zakladki/wspolne.js";
 
 let ROZM = {};
 export const ustawRozmiary = (r) => { ROZM = r || {}; };
+export const rozmiarGrafiki = (n) => ROZM[n] || [0, 0];
 
 // --- cegiełki -----------------------------------------------------------------------------------------------------
 const u = (n, x, y, s = 1, extra = "") => {

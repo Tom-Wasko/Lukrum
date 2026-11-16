@@ -71,7 +71,8 @@ export const MIEJSCA = {
     budynki: ["sprzet_gastro", "market_budowlany", "stolarnia", "galeria"],
     punkty: [
       { cel: "wnetrze_sprzet", nazwa: "Sprzęt gastronomiczny", podpis: "rożny, frytownice, kasy", opis: "Stanowiska i sprzęt: kupno, wynajem, sprzedaż." },
-      { cel: "wnetrze_wyposazenie", nazwa: "Sklep meblowy", podpis: "wyposażenie dla gości", opis: "Stoliki, ogródek, kiosk do zamówień." },
+      { cel: "wyposazenie", nazwa: "Instalacje i wyposażenie", podpis: "stoliki, ogródek, kiosk", opis: "Stoliki, ogródek, kiosk do zamówień." },
+      { cel: "dekor", nazwa: "„Meblościanka”", podpis: "sklep meblowy: wystrój", opis: "Ściany, szyld, dodatki i meble w stylu, który lubią Twoi goście." },
     ],
   },
   miasteczko: {

@@ -13,7 +13,7 @@ export function ustawMiejsce(id) { if (MIEJSCA[id]) { M.id = id; M.karta = null;
 export { MIEJSCA, miejsceEkranu, ustawEkranyMiejsc };
 
 // --- grafiki: jeden plik symboli wklejony do dokumentu (grafiki widzą wtedy zmienne palety) ---------------------------
-function wczytajGrafiki() {
+export function wczytajGrafiki() {
   M.grafiki ??= (async () => {
     const baza = new URL("../grafiki/", import.meta.url);
     const [svg, rozm] = await Promise.all([fetch(new URL("zestaw.svg", baza)).then((r) => r.text()), fetch(new URL("zestaw.json", baza)).then((r) => r.json())]);

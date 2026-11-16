@@ -26,11 +26,12 @@ import { kalendarz } from "./kalendarz.js";
 import { konkurencja } from "./konkurencja.js";
 import { stan_lokalu, zlozona } from "./lokal.js";
 import { gielda } from "./gielda.js";
+import { dekor } from "./dekor.js";
 import { ustawAliasy } from "./funkcje.js";
 import { miejsce, ustawEkranyMiejsc } from "../swiat/swiat.js";
 
 const ZAKLADKI = { dashboard, mapa, karta_wynikow, wnioski, ranking, lokale, licytacje, przejecia, urzad, sanepid, klienci, kalendarz, konkurencja, oferta,
-  stanowiska, sprzet, wyposazenie, zatrudnienie, zespol, rynek_pracy, udogodnienia, szkolenia, dostawcy, swiezosc, przewozy,
+  stanowiska, sprzet, wyposazenie, dekor, zatrudnienie, zespol, rynek_pracy, udogodnienia, szkolenia, dostawcy, swiezosc, przewozy,
   czas_wlasciciela, sprawy, agencje, internet, promocje, sprzedaz, handel, raport, kpir, vat, podatki, bank, harpagon, biuro, ubezpieczenia,
   wlasciciel, gielda, kasyno, lista_bledow, wyslij, miejsce };
 
@@ -39,20 +40,20 @@ export const IKONY = { hr_rozwoj: "szkolenia", lokal_przeglad: "lokale", lokal_m
   wnetrze_sprzet: "sprzet", wnetrze_wyposazenie: "wyposazenie", stan_lokalu: "lokale",
   dashboard: "dashboard", mapa: "mapa", wnioski: "ok", lokale: "lokale", licytacje: "lokale", przejecia: "lokale", urzad: "urzad", sanepid: "swiezosc",
   klienci: "klienci", kalendarz: "kalendarz", konkurencja: "analiza", karta_wynikow: "karta", ranking: "wykres", oferta: "oferta", stanowiska: "stanowiska", sprzet: "sprzet",
-  wyposazenie: "wyposazenie", zatrudnienie: "zatrudnienie", zespol: "zatrudnienie", rynek_pracy: "rynek_pracy",
+  wyposazenie: "wyposazenie", dekor: "wyposazenie", zatrudnienie: "zatrudnienie", zespol: "zatrudnienie", rynek_pracy: "rynek_pracy",
   udogodnienia: "udogodnienia", szkolenia: "szkolenia", dostawcy: "dostawcy", swiezosc: "swiezosc", przewozy: "dostawcy", czas_wlasciciela: "zegar",
   sprawy: "zdarzenia", agencje: "tradycyjny", internet: "marketing", promocje: "procent", sprzedaz: "sprzedaz", handel: "handel", raport: "raport", kpir: "kpir",
   vat: "procent", podatki: "podatki", bank: "bank", harpagon: "harpagon", biuro: "biuro", ubezpieczenia: "tarcza", wlasciciel: "portfel",
   gielda: "wykres", kasyno: "klucz", lista_bledow: "bledy", wyslij: "wyslij", miejsce: "lokale" };
 
 // od której rundy zakładka jest dostępna (w menu: szara pozycja z kłódką i „od rundy N”)
-export const OD_RUNDY = { karta_wynikow: 3, ranking: 3, agencje: 5, internet: 7, promocje: 3, udogodnienia: 3, wyposazenie: 4, szkolenia: 7,
+export const OD_RUNDY = { karta_wynikow: 3, ranking: 3, agencje: 5, internet: 7, promocje: 3, udogodnienia: 3, wyposazenie: 4, dekor: 4, szkolenia: 7,
   przejecia: 4, sprzet: 2, zatrudnienie: 1, zespol: 1, rynek_pracy: 1, dostawcy: 2, swiezosc: 2, sprzedaz: 2, raport: 2, kpir: 2, vat: 2,
   sprawy: 2, ubezpieczenia: 4, handel: 6 };
 
 // zakładka → element harmonogramu gry z lokalami (silnik/harmonogram.py); tydzień z widoku zastępuje OD_RUNDY
 export const ELEMENT = { karta_wynikow: "karta_wynikow", ranking: "karta_wynikow", agencje: "reklama", internet: "internet", promocje: "promocje", udogodnienia: "hr_udogodnienia",
-  wyposazenie: "inwestycje_wyposazenie", szkolenia: "hr_szkolenia", przejecia: "przejecia", sprzet: "inwestycje_sprzet",
+  wyposazenie: "inwestycje_wyposazenie", dekor: "inwestycje_wyposazenie", szkolenia: "hr_szkolenia", przejecia: "przejecia", sprzet: "inwestycje_sprzet",
   zatrudnienie: "hr_zatrudnienie", zespol: "hr_zatrudnienie", dostawcy: "dostawcy", sprzedaz: "sprzedaz", sprawy: "parki", handel: "handel",
   ubezpieczenia: "ubezpieczenia" };
 
@@ -84,7 +85,8 @@ Object.assign(ZAKLADKI, {
     info: "Wszystko, co podnosi zadowolenie pracowników poza pensją: szkolenia dla całego zespołu i udogodnienia w lokalu.",
     czesci: { udogodnienia, szkolenia } }),   // udogodnienia wcześniej dostępne (harmonogram) – na górze
   wnetrze_wyposazenie: zlozona({ tytul: "Wyposażenie", tytulPelny: "Wnętrze – wyposażenie dla klientów", odRundy: odRundyCzesci,
-    info: "Stoliki, telewizor, klimatyzacja i inne rzeczy dla klientów wybranego lokalu.", czesci: { wyposazenie } }),
+    info: "Stoliki, telewizor, klimatyzacja i inne rzeczy dla klientów wybranego lokalu, a w sklepie meblowym wystrój: ściany, szyld, dodatki i meble.",
+    czesci: { wyposazenie, dekor } }),
 });
 // nazwy w nowych grupach menu (plan.md, UF15); pliki zakładek mają swoje tytuły pełne
 Object.assign(raport, { tytul: "Wyniki finansowe" });
@@ -95,7 +97,7 @@ Object.assign(klienci, { tytul: "Strefy" });
 // dawny klucz zakładki → zakładka, w której jest teraz (linki, „Popraw” z listy błędów, adres #…, budynki mapy)
 export const ALIAS = { oferta: "lokal_menu", sprzedaz: "lokal_przeglad", zatrudnienie: "lokal_przeglad", stan_lokalu: "lokal_przeglad",
   dostawcy: "zaop_dostawy", swiezosc: "zaop_magazyn", przewozy: "zaop_przewozy",
-  stanowiska: "wnetrze_sprzet", sprzet: "wnetrze_sprzet", wyposazenie: "wnetrze_wyposazenie",
+  stanowiska: "wnetrze_sprzet", sprzet: "wnetrze_sprzet", wyposazenie: "wnetrze_wyposazenie", dekor: "wnetrze_wyposazenie",
   lokal_dostawy: "zaop_dostawy", lokal_sprzet: "wnetrze_sprzet", lokal_ludzie: "zespol", srodki_trwale: "kpir",
   zdarzenia: "mapa", sprawy: "lokal_przeglad", szkolenia: "hr_rozwoj", udogodnienia: "hr_rozwoj" };   // UF13: parki tylko z mapy, sprawy w lokalu – w Moim lokalu
 ustawAliasy(ALIAS);   // funkcje gry: dawny klucz (np. „dostawcy” z budynku mapy) należy do funkcji zakładki złożonej
