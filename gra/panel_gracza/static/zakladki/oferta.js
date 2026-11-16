@@ -42,7 +42,7 @@ function jakPrognoza(v, kat, u, m, nazwaDania = u.nazwa) {
   return `<b>Prognoza na ${OKRES.mianownik} ≈</b><br>popyt roczny ÷ ${OKRES.rund_w_roku} × sezonowość × wielkość strefy × Twój udział × rozruch
     <br>1. <b>Popyt roczny ÷ ${OKRES.rund_w_roku}</b> – ten kafel: ${licz(u.popyt_roczny)} ÷ ${OKRES.rund_w_roku} ≈ ${licz(Math.round(tyg))}.
     <br>2. <b>Sezonowość</b> – słupki przy daniu (ciemny = miesiąc sprzedaży, ${MIESIACE[m]}: × ${licz(sez, 2)}).
-    <br>3. <b>Wielkość strefy</b> – ${A("klienci")}Miasteczko akademickie ▸ Strefy</a> (kolumna „Wielkość strefy”; dochodzą wydarzenia w mieście i upodobania grup klientów).
+    <br>3. <b>Wielkość strefy</b> – ${A("klienci")}Miasteczko akademickie ▸ Goście w strefach</a> (kolumna „Wielkość strefy”; dochodzą wydarzenia w mieście i upodobania grup klientów).
     <br>4. <b>Twój udział</b> – klienci wybierają między lokalami z tym daniem a „obiadem gdzie indziej” (liczy się jak jeden lokal):
     sam w strefie ≈ ½, 1 rywal ≈ ${licz(UDZIAL.rywal1, 1)}, 2 rywali ≈ ${licz(UDZIAL.rywal2, 1)}. Niższa cena, lepsza jakość i opinie – więcej.
     <details><summary>Więcej o udziale</summary>Udział = atrakcyjność Twojego lokalu ÷ (obiad gdzie indziej + suma atrakcyjności wszystkich lokali z daniem); „obiad gdzie indziej” ma atrakcyjność ${licz(v.popyt.opcja_zewnetrzna, 1)}, lokal o przeciętnej cenie i jakości – około 1.

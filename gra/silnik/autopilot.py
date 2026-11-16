@@ -200,7 +200,7 @@ def _prognoza(dane: Dane, stan: StanGry, f: Firma, d: dict, runda: int, dzial: l
     """Oczekiwany popyt lokali firmy ({lokal: {danie: porcje}}, silnik/rynek/popyt.py: prognoza): menu i ceny
     z decyzji rundy (bez nich – z lokalu, nowe danie po cenie preferowanej), jakość ze stanowisk (bez obsady – 2★),
     konkurencja z danych publicznych poprzedniej rundy. K4: z kampaniami (trwającymi i zamówionymi w tej rundzie –
-    także konkurencji, jak zakładka Miasteczko akademickie ▸ Strefy) i promocjami drużyny (silnik/rynek/reklama.py,
+    także konkurencji, jak zakładka Miasteczko akademickie ▸ Goście w strefach) i promocjami drużyny (silnik/rynek/reklama.py,
     promocje.py)."""
     w_lokalu = d.get("w_lokalu") if isinstance(d.get("w_lokalu"), dict) else {}
     moje: dict = {}

@@ -556,7 +556,7 @@ def oferty_konkurencji(dane: Dane, stan, runda: int, firma: str) -> dict[str, di
 
 
 def widok_popytu(dane: Dane, stan, firma: Firma, runda: int, zadowolenie: float | None = None) -> dict:
-    """Zakładka Miasteczko akademickie ▸ Strefy (decyzje): dni rundy sprzedaży z wydarzeniami, pule stref i potencjał nowego lokalu
+    """Zakładka Miasteczko akademickie ▸ Goście w strefach (decyzje): dni rundy sprzedaży z wydarzeniami, pule stref i potencjał nowego lokalu
     (zakładka Do wynajęcia; własne lokale – jakość ze stanowisk, bez nich zakładane 2★). Bez gotowej prognozy dla lokali
     firmy – popyt drużyna liczy sama (test gry 28.10). stan – stan na początku rundy (konkurencja)."""
     r = max(runda, 2)
