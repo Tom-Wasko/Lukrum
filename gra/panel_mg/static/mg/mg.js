@@ -21,7 +21,9 @@ async function api(url, metoda = "GET", dane = undefined) {
 }
 
 async function wczytaj() {
-  [S.p, S.druzyny] = await Promise.all([api(`${URL_GRY}/mg`), api(`${URL_GRY}/druzyny`)]);
+  // ustawienia wnętrz (dymki przy ladzie): gra bez wnętrz odpowiada 404 – wtedy wiersza po prostu nie ma
+  [S.p, S.druzyny, S.wnetrza] = await Promise.all([api(`${URL_GRY}/mg`), api(`${URL_GRY}/druzyny`),
+    api(`${URL_GRY}/wnetrza-ustawienia`).catch(() => null)]);
   ustawKalendarz(S.p.gra.kalendarz);
   if (!S.p.historia.length) S.tryb = "decyzje";
   rysuj();
@@ -149,6 +151,11 @@ function decyzje() {
       const wl = gra.formy_zatrudnienia.includes(u);
       return u === "prace" || gra.zakonczona ? `${esc(n)}${wl ? "" : " (wył.)"}`
         : `<a data-akcja="forma-zatrudnienia" data-u="${esc(u)}" title="${wl ? "wyłącz" : "włącz"}">${wl ? "☑" : "☐"} ${esc(n)}</a>`;
+    }).join(" · ")]] : []),
+    // dymki przy ladzie (decyzja autora 14.11: wyłącza je tylko mistrz gry; działa od następnego wyliczenia dymków)
+    ...(S.wnetrza?.rodzaje ? [["Dymki gości we wnętrzu kebaba", Object.entries(S.wnetrza.rodzaje).map(([r, n]) => {
+      const wl = S.wnetrza.dymki[r] !== false;
+      return `<a data-akcja="dymki" data-r="${esc(r)}" title="${wl ? "wyłącz" : "włącz"}">${wl ? "☑" : "☐"} ${esc(n)}</a>`;
     }).join(" · ")]] : []),
     ["Refleksja drużyn przy wysyłaniu decyzji", `${TRYB_REFLEKSJI[gra.refleksja] || gra.refleksja}${gra.zakonczona ? ""
       : ` <a data-akcja="refleksja">zmień</a>`}`]];
@@ -412,6 +419,12 @@ async function wykonaj(akcja, el) {
     toast(wolno ? "Drużyny mogą podkupywać pracowników innych drużyn (headhunter)."
       : "Podkupywanie wyłączone – oferty dla pracowników innych drużyn będą odrzucane.");
     return wczytaj();
+  }
+  if (akcja === "dymki") {
+    const r = el.dataset.r, wl = S.wnetrza.dymki[r] !== false;
+    S.wnetrza = await api(`${URL_GRY}/wnetrza-ustawienia`, "POST", { dymki: { [r]: !wl } });
+    toast(`${S.wnetrza.rodzaje[r]}: ${wl ? "wyłączone" : "włączone"}.`);
+    return rysuj();
   }
   if (akcja === "forma-zatrudnienia") {   // UF21 – TYMCZASOWE, usunąć przed oficjalną wersją
     const u = el.dataset.u, teraz = S.p.gra.formy_zatrudnienia;
