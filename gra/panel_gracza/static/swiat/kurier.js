@@ -1,7 +1,7 @@
 // „Kurier rankingowy” – pierwsza strona gazety w redakcji (fable-kurier, 16.11.2026). Co tydzień nowe wydanie złożone
 // z danych, które gra już liczy: ranking (v.ranking, v.karta_skumulowana), tydzień w liczbach (v.tydzien), wnioski
 // (v.wnioski). Niczego nie zmienia w zasadach: to inny sposób pokazania wyników, zanim gracz wejdzie w tabele.
-import { esc, licz, nazwaFirmy, nazwaRundy, zl } from "../zakladki/wspolne.js";
+import { esc, licz, nazwaFirmy, nazwaRundy, strzalka, zl } from "../zakladki/wspolne.js";
 
 const pkt = (x) => (x == null ? "–" : licz(Math.round(x)));
 const odmiana = (n, a, b, c) => (n === 1 ? a : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? b : c);
@@ -49,13 +49,10 @@ function zOstatniejChwili(v, L) {
 function waszTydzien(v) {
   const T = v.tydzien;
   if (!T) return "";
-  const f = (x) => (x.format === "zl" ? zl(x.wartosc) : licz(x.wartosc));
-  const znak = (x) => {
-    if (x.poprzednia == null || x.wartosc === x.poprzednia) return "";
-    const lepiej = (x.wartosc - x.poprzednia) * (x.lepiej ?? 1) > 0;
-    return `<span class="${lepiej ? "znak-zysk" : "znak-strata"}" title="tydzień wcześniej: ${esc(x.format === "zl" ? zl(x.poprzednia) : licz(x.poprzednia))}"></span>`;
-  };
-  return `<dl class="kr-liczby">${T.liczby.slice(0, 5).map((x) => `<div><dt>${esc(x.etykieta)}</dt><dd>${znak(x)}${f(x)}</dd></div>`).join("")}</dl>
+  const fmt = (x) => (x.format === "zl" ? zl : licz);
+  // zmiana jak w „Tygodniu w liczbach”: strzałka pokazuje kierunek (▲ więcej, ▼ mniej), kolor – czy to dobrze
+  const zmiana = (x) => strzalka(x.wartosc, x.poprzednia, { lepiej: x.lepiej, format: fmt(x), prog: x.format === "zl" ? 1 : 0.5 });
+  return `<dl class="kr-liczby">${T.liczby.slice(0, 5).map((x) => `<div><dt>${esc(x.etykieta)}</dt><dd>${fmt(x)(x.wartosc)} ${zmiana(x)}</dd></div>`).join("")}</dl>
     ${(T.zdania || []).slice(0, 3).map((z) => `<p>${esc(z)}</p>`).join("")}`;
 }
 
