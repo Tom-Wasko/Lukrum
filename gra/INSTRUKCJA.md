@@ -5,7 +5,7 @@ gdzie stanie lokal, co jest w menu, ile kosztuje kebab, kogo zatrudnić, u kogo 
 złotówki na plakat przy dworcu. Drużyny rywalizują ze sobą i z botami – o tych samych klientów, tych samych
 pracowników i te same lokale.
 
-> **W pięciu zdaniach.** Jedna runda to jeden tydzień, gra ma zwykle 18 rund (1.09.2025 – 4.01.2026). W każdej
+> **W pięciu zdaniach.** Jedna runda to jeden tydzień, gra ma zwykle 18 rund (od września do początku stycznia). W każdej
 > rundzie ogląda się wyniki poprzedniego tygodnia, podejmuje decyzje na następny i klika **Wyślij decyzje**.
 > Mistrz gry zamyka rundę, a gra liczy tydzień dzień po dniu: klientów, sprzedaż, koszty i podatki. Wygrywa
 > drużyna z najwyższym **wynikiem gry** (0–1000 pkt). Kapitał na start: **50 000 zł** i nic więcej, więc liczy się
@@ -89,7 +89,7 @@ ma łącznie ok. 0–100 pkt (pełne punkty dopiero od 100 obsłużonych gości 
 
 Kilka zasad, które warto znać:
 
-- **Mandaty i odsetki od pożyczek** (skarbowe, sanepidu, PIP, odsetki Harpagona) nie obniżają podatku, ale obniżają
+- **Mandaty i kary** (skarbowe, sanepidu, PIP), a w grze także odsetki Harpagona, nie obniżają podatku, ale obniżają
   wynik tak jak koszty.
 - **Majątek traci na wartości.** Sprzęt i wyposażenie liczą się w rozwoju po amortyzacji.
 - **Tani sprzęt to koszt tego tygodnia.** Zakupy tańsze niż 10 000 zł od razu idą w koszty, więc w tygodniu zakupu
@@ -250,7 +250,8 @@ powodzenia.
 
 - *umowa o pracę* – pełne godziny, ZUS pracodawcy, wypowiedzenie, płatny urlop; pracownicy ją lubią;
 - *pół etatu* – połowa godzin za połowę pensji, poza tym jak umowa o pracę;
-- *umowa zlecenie* – bez ZUS pracodawcy i bez wypowiedzenia, ale obniża zadowolenie (o 0,04) i grozi **kontrolą PIP** (zob. niżej);
+- *umowa zlecenie* – w grze bez składek pracodawcy (to uproszczenie: naprawdę od zlecenia też płaci się składki ZUS,
+  wyjątkiem jest uczeń albo student do 26 lat) i bez wypowiedzenia, ale obniża zadowolenie (o 0,04) i grozi **kontrolą PIP** (zob. niżej);
 - *zlecenie ze studentem* – dla kandydatów-studentów (do 26 lat, plakietka „student”): bez ZUS i PIT, więc zgodzą się
   na niższą pensję, ale pracują ok. 60% zwykłych godzin i częściej odchodzą;
 - *staż z urzędu pracy* – tylko osoba bez doświadczenia (1★), jedna naraz: przez 6 tygodni nie płaci się pensji, potem
@@ -259,10 +260,10 @@ powodzenia.
 
 **Kodeks pracy w grze:**
 
-- **Urlop.** Na umowie o pracę 10% czasu to płatny urlop (26 dni w roku, art. 154 KP), więc pracownik daje mniej godzin
+- **Urlop.** Na umowie o pracę 10% czasu to płatny urlop (naprawdę 20 albo 26 dni w roku, zależnie od stażu, art. 154 KP), więc pracownik daje mniej godzin
   za tę samą pensję. Zlecenie, B2B i staż urlopu nie mają.
 - **Wypowiedzenie** (umowa o pracę, w obie strony) zależy od stażu u pracodawcy: 2 tygodnie przy krótkim stażu,
-  miesiąc od pół roku pracy, 3 miesiące od 3 lat (art. 34 i 36 KP). Pracownik przez ten czas pracuje i dostaje
+  miesiąc od pół roku pracy, 3 miesiące od 3 lat (art. 36 KP). Pracownik przez ten czas pracuje i dostaje
   pensję, a odpraw w tak małej firmie nie ma. Na zleceniu, stażu i B2B odchodzi się od razu.
 - **Kontrola PIP.** Umowa zlecenie nie jest sposobem na etat bez składek (art. 22 § 1 KP): o rodzaju umowy decyduje
   sposób pracy, a nie nazwa na papierze. Jeśli osoba na zleceniu stoi przy stanowisku w pełnym wymiarze (co najmniej
@@ -311,7 +312,7 @@ W **Kamienicy bankowej** działa sześć banków o różnych specjalizacjach: Km
 Wokulski i S-ka (kredyt inwestycyjny), Ziemia Obiecana (leasing sprzętu), Oszczędności Rzeckiego (najlepsze lokaty),
 Soplicowo (najtańsze konto i terminal) i Solaris (największy debet). Konto firmowe jest w jednym banku i tylko tam
 można brać lokaty, kredyty i leasing, więc wybór banku to wybór oferty. Kredyty obrotowe wymagają kilku tygodni
-historii firmy. Kredyt inwestycyjny spłaca się w ratach, a zastawem może być kupiony lokal, budynek albo sprzęt;
+historii firmy. Kredyt inwestycyjny spłaca się w ratach, a zabezpieczeniem może być kupiony lokal albo budynek (hipoteka) albo sprzęt (zastaw);
 gdy raty zalegają kilka tygodni, bank zabiera zastaw.
 
 **Debet** to zgoda banku na to, żeby konto zeszło poniżej zera. Nie działa sam – włącza się go w banku konta, a limit
@@ -326,7 +327,8 @@ dochodu.
 **Zmiana banku z otwartym debetem.** Pierwszy wybór banku i zmiana bez debetu nic nie kosztują. Gdy konto ma debet:
 
 - jeśli gotówki wystarcza, debet jest najpierw spłacany w starym banku;
-- jeśli nie wystarcza, **nowy bank przejmuje dług** i pobiera jednorazową opłatę: 2% kwoty debetu, nie mniej niż
+- jeśli nie wystarcza, **nowy bank przejmuje dług** (uproszczenie gry: naprawdę debet trzeba spłacić przed zamknięciem konta
+  albo wziąć kredyt na jego spłatę) i pobiera jednorazową opłatę: 2% kwoty debetu, nie mniej niż
   najmniejsza opłata za debet w ofercie banków (40 zł). Opłata jest kosztem firmy. Dług dalej podlega zasadom nowego
   banku (jego limitowi i oprocentowaniu).
 
