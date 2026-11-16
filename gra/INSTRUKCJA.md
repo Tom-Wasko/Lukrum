@@ -19,8 +19,9 @@ Pierwsza runda to przygotowanie: nic jeszcze się nie sprzedaje, a każda decyzj
 działa:
 
 1. **Zaloguj się** i otwórz grę drużyny z listy „Moje gry” (login i hasło daje mistrz gry).
-2. Gra otwiera się na **Planie tygodnia**: lista rzeczy do zrobienia w tej rundzie. Zajrzyj też na pasek **Zadania**
-   przy prawej krawędzi – odhacza się sam, gdy decyzja jest podjęta.
+2. Gra otwiera się na **Planie tygodnia**. Leży tam **list od wujka** (kiedyś prowadził w tym miejscu bar mleczny)
+   i lista kroków po kolei: każdy mówi, dokąd w mieście pójść i co załatwić. Krok „teraz” jest wyróżniony, a zrobione
+   odhaczają się same. Pod listą widać, co nowego otwiera się w tym tygodniu i za tydzień.
 3. Wejdź w **Mapę miasta** i kliknij biuro **Klucz** na Starym Mieście (menu: Stare Miasto). **Wynajmij lub kup lokal**.
    Wybór strefy to połowa sukcesu: Miasteczko akademickie to studenci, Stare Miasto – turyści i wieczory,
    okolice dworca – podróżni.
@@ -129,6 +130,10 @@ Miejsca, które odblokowują się później, są w menu szare, z kłódką i num
 ustawienia: **paleta kolorów** (Bar mleczny, Pewex albo Wysoka widoczność), **tryb jasny lub ciemny** i **układ menu**
 (z boku lub u góry). Paleta „Wysoka widoczność” ma mocny kontrast, większe litery, grube ramki i bardzo czytelny krój
 pisma; w każdej palecie zysk jest oznaczony znakiem ▲, a strata ▼.
+
+**Kurier rankingowy** co tydzień wydaje nowy numer: na pierwszej stronie jest lider ligi, tabela ze zmianami miejsc,
+liczby Twojego tygodnia i jedna rada redakcji. Po ostatnim tygodniu gry Plan tygodnia pokazuje podium i ostatni list
+od wujka.
 
 **Każdy lokal ma swoje** menu i ceny, zamówienia i magazyn, pracowników, stanowiska i wyposażenie. Przy kilku lokalach
 wybiera się je kafelkami u góry. Wspólne dla całej firmy są: reklama, promocje, bank, podatki, czas właściciela,
@@ -362,6 +367,18 @@ ostatnie – już tak. Przed zmianą warto policzyć, czy oszczędność na doku
 - **Internet** (od tygodnia 7, „Lajk i Spółka”) – zamawia się tak samo, ale efekt rośnie przez kilka rund i gaśnie
   wolniej niż ulotki. Opłaca się zacząć wcześnie.
 
+### Księga gości i wystrój lokalu
+
+Pod wnętrzem kebaba leży **księga gości**: ocena lokalu w gwiazdkach i pięć rzeczy, z których się bierze – smak,
+czekanie, cena, obsługa i wnętrze. Przy każdej widać, ile gwiazdek dodała albo zabrała w ostatnim tygodniu (▲ albo ▼),
+i dokąd pójść, żeby to poprawić. Lepsza ocena to więcej nowych gości.
+
+W Parku handlowym działa sklep meblowy **„Meblościanka”**. Wystrój kupuje się w czterech grupach (ściany, szyld,
+dodatki, meble) i w jednym z kilku stylów. Styl działa tylko wtedy, gdy lubi go wystarczająco dużo gości z okolicy
+lokalu: pokazuje to pieczęć na regale („trafia”, „trafia częściowo”, „nie trafia”). Dopasowany wystrój przyciąga
+trochę więcej klientów i podnosi ocenę. Rzeczy z wózka są płatne przy zamknięciu tygodnia, zostają w lokalu na
+zawsze, a między kupionymi stylami przełącza się za darmo.
+
 ## 11. Zdarzenia, wypadki i rozwój
 
 **Parki.** Od tygodnia 2 w parkach Lublina co tydzień dzieje się 3–4 rzeczy naraz – te same dla wszystkich drużyn.
@@ -491,7 +508,10 @@ Przy każdej drużynie jest odnośnik **Strona firmy**, który otwiera jej panel
 
 ### Tryb lekcyjny
 
-Gra nie ma osobnego przełącznika „tryb lekcji”, ale sprawdza się takie ustawienie:
+W kreatorze gry (krok „Funkcje gry”) i w panelu gry jest pole **Sposób prowadzenia**. „Na żywo” oznacza, że rundy
+zamyka mistrz gry. „Tryb lekcyjny” ustawia, ile pierwszych rund idzie na żywo na lekcji i ile dni drużyny mają na każdą
+następną. Panel pokazuje etap („na żywo: runda 2 z 3”, „między lekcjami: termin…”) i komunikat, gdy termin minął,
+a drużyna widzi plakietkę „Na żywo, na lekcji” albo „Do: data”. Sprawdza się taki układ:
 
 - **Pierwsze 2–3 rundy na żywo na lekcji.** Mistrz gry zamyka rundę ręcznie, gdy większość drużyn wyśle decyzje,
   a potem krótko omawia wyniki (Kurier rankingowy, wnioski z rundy). To czas na pierwsze kroki: lokal, bank, biuro,
