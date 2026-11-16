@@ -557,6 +557,31 @@ Kilka wskazówek do omówienia:
 - Wynik zależy też od rozruchu: pierwsze tygodnie mają niższe wagi, a ostatnie liczą się podwójnie.
 - Drużyny porównuje się z botami, ale warto pamiętać, że boty też podkupują pracowników i licytują lokale.
 
+### Klucz do nawiązań literackich
+
+Gra nie podpisuje postaci i nazw: zgadywanie, skąd się wzięły, jest częścią zabawy (i dobrym pytaniem na lekcję
+polskiego). Dla prowadzących:
+
+| W grze | Skąd | Autor |
+|---|---|---|
+| Pan Ignacy Rzecki (bywalec), bank Oszczędności Rzeckiego, bank Wokulski i S-ka | „Lalka” | Bolesław Prus |
+| Pan Zagłoba (bywalec), bank Kmicic | Trylogia: „Ogniem i mieczem”, „Potop” | Henryk Sienkiewicz |
+| Pani Aniela Dulska (bywalczyni) | „Moralność pani Dulskiej” | Gabriela Zapolska |
+| Doktor Tomasz Judym (bywalec) | „Ludzie bezdomni” | Stefan Żeromski |
+| Papkin (bywalec) | „Zemsta” | Aleksander Fredro |
+| Józio (bywalec) | „Ferdydurke” | Witold Gombrowicz |
+| bank Ziemia Obiecana | „Ziemia obiecana” | Władysław Reymont |
+| bank Soplicowo | „Pan Tadeusz” | Adam Mickiewicz |
+| bank Solaris | „Solaris” | Stanisław Lem |
+| biuro Józef K. | „Proces” | Franz Kafka |
+| biuro Scrooge | „Opowieść wigilijna” | Charles Dickens |
+| biuro Asteroida 328 | „Mały Książę” | Antoine de Saint-Exupéry |
+| Kantor „U Harpagona” | „Skąpiec” | Molier |
+
+Postacie są własnymi interpretacjami: mówią dzisiejszym językiem o cenach kebaba, a nie cytatami z książek.
+Mapa miasta korzysta z danych OpenStreetMap (© autorzy OpenStreetMap, licencja ODbL), a kroje pisma są na licencji
+SIL Open Font License.
+
 ---
 
 *Pytania o zasady – do mistrza gry. Dokładne liczby i źródła mechanik są w plikach `dane/*.yaml`.*
