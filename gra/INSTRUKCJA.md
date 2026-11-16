@@ -1,530 +1,533 @@
 # LUKRUM – jak grać
 
-Prowadzicie z drużyną **lokal z kebabem w Lublinie**. Od pierwszego tygodnia września do Nowego Roku
-decydujecie o wszystkim: gdzie stanie lokal, co jest w menu, ile kosztuje kebab, kogo zatrudnić, u kogo kupić
-mięso i czy wydać ostatnie złotówki na plakat przy dworcu. Rywalizujecie z innymi drużynami i z botami – o tych
-samych klientów, tych samych pracowników i te same lokale.
+Drużyna prowadzi **lokal z kebabem w Lublinie**. Od pierwszego tygodnia września do Nowego Roku decyduje o wszystkim:
+gdzie stanie lokal, co jest w menu, ile kosztuje kebab, kogo zatrudnić, u kogo kupić mięso i czy wydać ostatnie
+złotówki na plakat przy dworcu. Drużyny rywalizują ze sobą i z botami – o tych samych klientów, tych samych
+pracowników i te same lokale.
 
 > **W pięciu zdaniach.** Jedna runda to jeden tydzień, gra ma zwykle 18 rund (1.09.2025 – 4.01.2026). W każdej
-> rundzie oglądasz wyniki poprzedniego tygodnia, podejmujesz decyzje na następny i klikasz **Wyślij decyzje**.
+> rundzie ogląda się wyniki poprzedniego tygodnia, podejmuje decyzje na następny i klika **Wyślij decyzje**.
 > Mistrz gry zamyka rundę, a gra liczy tydzień dzień po dniu: klientów, sprzedaż, koszty i podatki. Wygrywa
-> drużyna z najwyższym **wynikiem gry** (0–1000 pkt). Kapitał na start:
-> **50 000 zł** – i nic więcej, więc licz, zanim wydasz.
+> drużyna z najwyższym **wynikiem gry** (0–1000 pkt). Kapitał na start: **50 000 zł** i nic więcej, więc liczy się
+> każda złotówka.
 
-Mistrz gry może skrócić albo wydłużyć grę – kalendarz miejski sięga do kwietnia 2026 (WOŚP, Wielkanoc, wiosenne
-mecze Motoru).
+Mistrz gry może skrócić albo wydłużyć grę i zmienić kapitał startowy – ustawienia gry są widoczne w panelu drużyny.
 
-## 1. Pierwsze kroki
+## 1. Pierwsze 10 minut
 
-1. **Zaloguj się** i otwórz grę swojej drużyny z listy gier (link daje mistrz gry).
-2. Z boku (albo u góry – zależnie od wyglądu) jest **menu** z grupami zakładek, obok – zawartość zakładki. Gra
-   otwiera się na **Dashboardzie** (plan rundy i podsumowanie firmy). Koło zębate **⚙** w górnym pasku chowa listę
-   gier, panel mistrza gry i **Wygląd** – zmianę motywu.
-   Wyszarzone pozycje odblokują się w kolejnych tygodniach (przy nazwie widać, od którego).
-3. U góry większości zakładek jest przełącznik **Decyzje / Wyniki**:
-   - **Decyzje** – co robisz w bieżącym tygodniu (wpisujesz, wybierasz, zaznaczasz),
-   - **Wyniki** – co się stało w poprzednim tygodniu (tabele i wykresy).
-4. **Nawigator rund** pod menu pozwala podejrzeć wcześniejsze tygodnie. Zmieniać można tylko bieżący.
-5. Decyzje zapisują się same po każdej zmianie. Można je poprawiać aż do zamknięcia rundy.
-6. Opisy i wyjaśnienia są schowane w **kółkach „i”** obok tytułów, tabel i pól – najedź na kółko (na telefonie:
-   dotknij), a zobaczysz dymek. Przy najtrudniejszych mechanikach (świeżość, wybór lokalu przez klientów, reklama,
-   VAT, PIT i ZUS, auto-dostawca) w dymku jest też rysunek z przykładem.
+Pierwsza runda to przygotowanie: nic jeszcze się nie sprzedaje, a każda decyzja zostaje na starcie. Kolejność, która
+działa:
 
-### Jak ułożone jest menu
+1. **Zaloguj się** i otwórz grę drużyny z listy „Moje gry” (login i hasło daje mistrz gry).
+2. Gra otwiera się na **Planie tygodnia**: lista rzeczy do zrobienia w tej rundzie. Zajrzyj też na pasek **Zadania**
+   przy prawej krawędzi – odhacza się sam, gdy decyzja jest podjęta.
+3. Wejdź w **Mapę miasta** i kliknij biuro **Klucz** na Starym Mieście (menu: Stare Miasto). **Wynajmij lub kup lokal**.
+   Wybór strefy to połowa sukcesu: Miasteczko akademickie to studenci, Stare Miasto – turyści i wieczory,
+   okolice dworca – podróżni.
+4. W **Kamienicy bankowej** wybierz bank (konto firmowe), a w **Biurowcu przy Zana** – biuro rachunkowe.
+5. W **Moim kebabie** kliknij tablicę z menu i ustaw dania oraz ceny. Na start są trzy dania: kebab w bułce, frytki
+   i napój.
+6. Przy **rożnie** (stanowiska i sprzęt) ustaw stanowiska kuchni i kasy. Każdy pracownik potrzebuje swojego stanowiska.
+7. W **Miasteczku akademickim** (tablica ogłoszeń) zatrudnij kucharza i kasjera.
+8. Otwórz **Listę błędów** w menu – wypisuje, czego jeszcze brakuje. Popraw czerwone pozycje.
+9. Kliknij **Wyślij decyzje**. Decyzje zapisują się same po każdej zmianie i można je poprawiać aż do zamknięcia rundy.
 
-| Grupa | Co w niej jest |
-|---|---|
-| Mapa miasta | Lublin na prawdziwych granicach dzielnic, z płynnym przybliżaniem: lokale, kamienica bankowa, hurtownie, biurowiec z agencjami i parki – kliknij budynek, żeby wejść, a park, żeby zobaczyć, co się w nim dzieje |
-| **Miasto** | |
-| Nowe lokale | Do wynajęcia (najem i kupno), Licytacje, Przejęcia |
-| Klienci | Strefy, Konkurencja, Kalendarz |
-| **Twój lokal** | kafelki Twoich lokali na górze – wybierz jeden |
-| Mój lokal | stan lokalu, kto stoi na którym stanowisku (obsada), sprzedaż |
-| Ludzie | Rynek pracy (zatrudnianie), Zespół (kafelki pracowników, w wynikach – czas pracy), Szkolenia i udogodnienia |
-| Kuchnia | menu i ceny |
-| Zaopatrzenie | Dostawy, Magazyn i świeżość, Przewozy (przy kilku lokalach) |
-| Wnętrze | Stanowiska i sprzęt, Wyposażenie |
-| **Firma** | |
-| Marketing | Promocje, Ulotki i radio |
-| Handel | giełda handlu – ogłoszenia i licytacje |
-| Pieniądze | Wyniki finansowe, Bank, Harpagon |
-| Księgowość | Biuro rachunkowe, KPiR, VAT, PIT i ZUS |
-| Urzędy | Urząd (rejestracja, odbiory lokali), Sanepid, Ubezpieczenia |
-| Właściciel | Czas właściciela, Portfel, Giełda (w budowie) |
-| **Wyniki** | Karta wyników, Wnioski z rundy, Ranking |
-
-Zakładki, które otwierają się później, są w menu szare, z kłódką i napisem „od rundy N”.
-
-**Każdy lokal ma swoje** menu i ceny, zamówienia i magazyn, pracowników, stanowiska, sprzęt i wyposażenie –
-dlatego wybór lokalu jest w grupie „Twój lokal”. Wybrany lokal zostaje wybrany, gdy przechodzisz między zakładkami.
-Wspólne dla całej firmy są: reklama, promocje, bank, podatki, czas właściciela, ubezpieczenia i handel.
-
-> **Wskazówka.** Mapa miasta działa jak drugie menu: kliknij hurtownię, urząd albo park, a gra otworzy właściwą
-> zakładkę. Banki i giełda są w jednej kamienicy przy Krakowskim Przedmieściu, a biura rachunkowe, agencje reklamowe
-> i ubezpieczyciel w biurowcu przy Zana – kliknij budynek i wybierz firmę. Kliknięty lokal pokaże czynsz, cenę i strefę.
-> Mapę przybliżasz kółkiem myszy, dwoma palcami, dwuklikiem albo przyciskami + i −, a przesuwasz, przeciągając.
-> Pasek skrótów na mapie prowadzi do Twojego lokalu, banków, hurtowni, raportu rundy i wysłania decyzji. Gra otwiera się na Dashboardzie
-> (podsumowanie firmy); wrócisz do niego, klikając logo LUKRUM w lewym górnym rogu.
-
-### Funkcje gry: zakryte i wyłączone
-
-Żeby na początku nie było wszystkiego naraz, mistrz gry przed grą ustawia, które **funkcje gry** są od razu odkryte.
-Podstawa (Dashboard, mapa, wyniki, wybór lokalu, Mój lokal, Kuchnia, Rynek pracy i Zespół, Stanowiska i sprzęt,
-Wyniki finansowe i Bank, Biuro rachunkowe, Lista błędów, Wyślij decyzje) jest zawsze odkryta. Pozostałe funkcje –
-Zaopatrzenie, Marketing, Wyposażenie, Rozwój ludzi, Analiza rynku, Sieć lokali, Handel, Samodzielna księgowość,
-Urzędy, Harpagon, Właściciel, Giełda – mogą być:
-
-- **odkryte** – działają jak zwykle;
-- **zakryte** – są w menu szare, z ikoną oka. Kliknięcie pokazuje, do czego służą i **co gra robi teraz za Was**
-  (np. przy zakrytym Zaopatrzeniu lokal jest na auto-dostawach z ilościami liczonymi z prognozy, przy zakrytej
-  Samodzielnej księgowości firmę rozlicza biuro, przy zakrytych Urzędach higiena jest domyślna, a lokal – bez
-  ubezpieczenia). Przycisk **Odsłoń** daje drużynie funkcję do własnych decyzji – od bieżącej rundy, na wszystkich
-  komputerach drużyny. Samodzielne decyzje zwykle opłacają się bardziej niż to, co robi gra (np. własne zamówienia
-  są tańsze niż auto-dostawy). Odsłoniętą funkcję można znów zakryć: **⚙ → Funkcje gry**. Uwaga – zakrycie cofa
-  funkcję do stanu sprzed odsłonięcia, a zapłacone pieniądze nie wracają: kończą się kampanie i promocje
-  (Marketing), znikają Wasze ogłoszenia (Handel), polisy są wypowiadane, a higiena wraca do domyślnej (Urzędy),
-  przepada kupione wyposażenie (Wyposażenie) i udogodnienia, a szkolenia się urywają (Rozwój ludzi); przy Sieci
-  lokali lokale zostają, odpadają tylko licytacje, kupno budynku i przewozy. Gra pokazuje, co przepadnie, i pyta
-  o potwierdzenie. Harpagona nie da się zakryć, dopóki pożyczka u niego nie jest spłacona. Czerwony znaczek przy
-  szarej pozycji mówi, że w tej funkcji dzieje się coś ważnego (np. konkurent reklamuje się w Waszej strefie);
-- **wyłączone** – nie ma ich w tej grze dla nikogo, także dla botów (znikają z menu i mapy).
-
-Kolejny lokal z „Nowych lokali” po cenie wywoławczej można wziąć zawsze – także przy zakrytej Sieci lokali (ona
-dodaje licytacje, kupno budynku z najemcą i przewozy). Przy zakrytym Zaopatrzeniu gra nie wysyła dostaw do lokalu bez
-obsady kuchni, w prognozie uwzględnia Waszą reklamę i promocje, a składniki kupuje w jakości dopasowanej do
-stanowisk i prowadzących w lokalu.
-
-Zestaw funkcji Waszej gry widać też na pulpicie „Moje gry” (sekcja „Funkcje tej gry”). Boty korzystają ze wszystkich
-funkcji, które nie są wyłączone.
+Opisy i wyjaśnienia są schowane w **kółkach „i”** obok tytułów, tabel i pól – najedź na kółko (na telefonie:
+dotknij), a pojawi się dymek.
 
 ## 2. Jak wygląda jedna runda
 
-| Krok | Co robisz | Gdzie |
+| Krok | Co się robi | Gdzie |
 |---|---|---|
-| 1 | Sprawdzasz, jak poszedł poprzedni tydzień | Dashboard, Karta wyników, zakładki w trybie **Wyniki** |
-| 2 | Podejmujesz decyzje na nowy tydzień | Zakładki w trybie **Decyzje** |
-| 3 | Sprawdzasz, czy niczego nie brakuje | **Lista błędów** |
-| 4 | Wysyłasz decyzje | **Wyślij decyzje** |
-| 5 | Czekasz, aż mistrz gry zamknie rundę | – |
+| 1 | Sprawdzenie, jak poszedł poprzedni tydzień | Plan tygodnia, Kurier rankingowy, widoki wyników w miejscach |
+| 2 | Decyzje na nowy tydzień | Mój kebab i pozostałe miejsca |
+| 3 | Sprawdzenie, czy czegoś nie brakuje | Lista błędów |
+| 4 | Wysłanie decyzji | Wyślij decyzje |
+| 5 | Czekanie, aż mistrz gry zamknie rundę | – |
 
-Przy wysyłaniu decyzji wpisujecie w 1–2 zdaniach, **co zmieniacie w tej rundzie i dlaczego**. Czyta to mistrz gry
-przy omawianiu rundy, a na wynik gry nie ma to wpływu. Mistrz gry może ustawić to pole jako wymagane albo je wyłączyć.
+Ekrany większości miejsc mają przełącznik **Decyzje / Wyniki**: pierwszy pokazuje, co robi się w bieżącym tygodniu,
+drugi – co się stało w poprzednim. **Nawigator rund** pozwala podejrzeć wcześniejsze tygodnie, ale zmieniać można
+tylko bieżący. Szczegółowe tabele w wynikach są zwinięte – kliknij nagłówek (▸), żeby je rozwinąć.
 
-Po przeliczeniu rundy ramka **Dlaczego wynik się zmienił?** (Dashboard i Wnioski z rundy) w 1–3 zdaniach mówi,
-który wskaźnik karty zmienił się najbardziej i która pozycja – np. zakup sprzętu albo czynsz – zaważyła na wyniku.
-W pierwszych trzech tygodniach Wnioski z rundy przypominają, że to rozruch: każda firma potrzebuje kilku tygodni,
-zanim klienci ją poznają, a zespół nabierze wprawy – słabszy start to normalne.
+Przy wysyłaniu decyzji wpisuje się w 1–2 zdaniach, **co zmienia się w tej rundzie i dlaczego**. Czyta to mistrz gry
+przy omawianiu rundy, a na wynik nie ma to wpływu. Mistrz gry może to pole ustawić jako wymagane albo je wyłączyć.
 
-Na górze Karty wyników (i Wniosków z rundy) stoi **Tydzień w liczbach**: klienci obsłużeni i ci, którzy odeszli
-bez kebaba, przychody, koszty, dochód netto i saldo konta – ze strzałką ▲/▼ pokazującą zmianę od poprzedniej
-rundy (zielona – na lepsze, czerwona – na gorsze). Pod liczbami trzy zdania o tygodniu: najlepszy dzień,
-najchętniej brane danie i co najbardziej zjadło zysk, a na Karcie wyników jeszcze **3 najważniejsze sprawy** na
-następną rundę z odnośnikiem do właściwej zakładki. Widoki **Wyniki** pozostałych zakładek zaczynają się od
-1–2 zdań podsumowania i kafelków z najważniejszymi liczbami; szczegółowe tabele są zwinięte – kliknij nagłówek
-(▸), żeby je rozwinąć. Gra pamięta, które sekcje są rozwinięte.
-
-Po ostatniej rundzie gra otwiera się na **podsumowaniu** (🏁 na osi rund): wyniki ostatniego tygodnia i końcowe
-miejsce w rankingu. Wcześniejsze rundy dalej obejrzysz strzałkami.
+Po przeliczeniu rundy ramka **Dlaczego wynik się zmienił?** (Plan tygodnia i Kurier rankingowy) mówi, który wskaźnik
+zmienił się najbardziej. W pierwszych tygodniach przypomina też, że to rozruch: firma potrzebuje kilku tygodni, zanim
+klienci ją poznają, więc słabszy start jest normalny. Zmiany liczb pokazują strzałki ▲ (na lepsze) i ▼ (na gorsze) –
+to znaki, a nie tylko kolory.
 
 Gra liczy tydzień **dzień po dniu**: w każdym dniu klienci każdej strefy wybierają lokal, kucharze przygotowują
 dania, dostawy przyjeżdżają w swoje dni, a bułki z poniedziałku we wtorek wieczorem lądują w koszu.
 
-> **Uwaga.** Lista błędów ma trzy grupy: **Do zrobienia** (czerwone – poważne braki, np. brak lokalu albo banku;
-> tylko je liczy znaczek w menu), **Uwaga** (pomarańczowe ostrzeżenia) i **Dla informacji** (niebieskie podpowiedzi,
-> zwinięte – kliknij, żeby rozwinąć). Kilka dań bez sprzętu czy towar do wyrzucenia w jednym lokalu to jedna pozycja.
+> **Uwaga.** Lista błędów ma trzy grupy: **Do zrobienia** (czerwone – poważne braki, np. brak lokalu albo banku; tylko je
+> liczy znaczek w menu), **Uwaga** (pomarańczowe ostrzeżenia) i **Dla informacji** (niebieskie podpowiedzi, zwinięte).
 > Decyzje da się wysłać mimo czerwonych błędów, ale zwykle się tego żałuje.
 
-**Lista zadań** (pasek *Zadania* z licznikiem przy prawej krawędzi ekranu – kliknij, a panel się wysunie; klik obok
-albo Esc go chowa)
-podpowiada, co jeszcze trzeba zrobić w tym tygodniu: wybrać lokal, ustawić menu i ceny, zamówić składniki, obsadzić
-stanowiska, zareagować w parku, spłacić Harpagona, wysłać decyzje. Zadania odhaczają się same, gdy decyzja jest
-podjęta; kliknięcie zadania przenosi do właściwej zakładki. Niżej drużyna dopisuje **własne zadania** (widzą je wszyscy
-z drużyny) – nieodhaczone przechodzą na następny tydzień.
+Po ostatniej rundzie gra otwiera się na **podsumowaniu** (🏁 na osi rund): wyniki ostatniego tygodnia i końcowe miejsce
+w rankingu.
 
 ## 3. Cel gry – wynik 0–1000 pkt
 
 Na końcu liczy się **wynik gry** (0–1000 pkt): średnia z punktów tygodni, w której późniejsze tygodnie ważą więcej
-(ostatni dwa razy więcej niż pierwszy pełny). Tydzień 1 to „Wielkie otwarcie” – punkty za przygotowanie lokalu, menu, ekipy
-i zaopatrzenia. Od tygodnia 2 tydzień ma do 1000 pkt z pięciu działów po 200: Finanse, Goście, Zespół, Rozwój i Bezpieczeństwo
-finansowe. Zakładka Karta wyników pokazuje progi punktów każdego składnika i podpowiada, co go podnosi.
+(waga rośnie od 1 do 2, więc ostatni tydzień liczy się dwa razy mocniej niż pierwszy). Tydzień 1 to „Wielkie otwarcie”:
+punkty za przygotowanie lokalu, menu, ekipy, zaopatrzenia i rezerwy w kasie. Od tygodnia 2 tydzień ma do 1000 pkt
+z pięciu działów po 200. W **Kurierze rankingowym** (Dział wyników) widać progi punktów każdego składnika i podpowiedź,
+co go podnosi.
 
 | Dział | Co mierzy | Jak go poprawić |
 |---|---|---|
-| Finanse | Dochód netto tygodnia (minus odsetki Harpagona i mandaty) i marża | Sprzedawać więcej i z sensowną marżą, pilnować kosztów |
-| Goście | Zadowolenie gości, udział obsłużonych, liczba gości | Rozsądne ceny, dobra jakość, szersze menu, nikt nie odchodzi z kolejki, mało pomyłek w szczycie |
+| Finanse | Dochód netto tygodnia i marża | Sprzedawać więcej, z sensowną marżą, pilnować kosztów |
+| Goście | Zadowolenie gości, udział obsłużonych, liczba gości | Rozsądne ceny, dobra jakość, szersze menu, brak kolejek, mało pomyłek w szczycie |
 | Zespół | Nastrój załogi, przepracowanie, szkolenia, udogodnienia | Uczciwe pensje, dobry sprzęt, udogodnienia, szkolenia |
-| Rozwój | Majątek, lokale, menu, załoga | Nowy sprzęt i wyposażenie, kupione lokale, kolejne lokale |
+| Rozwój | Majątek, lokale, menu, załoga | Nowy sprzęt i wyposażenie, kolejne lokale |
 | Bezpieczeństwo finansowe | Zapas gotówki, udział kapitału własnego, dług | Trzymać zapas na koszty i nie żyć na kredycie dłużej, niż trzeba |
 
-Punkty za Gości, Zespół i Bezpieczeństwo liczą się proporcjonalnie do działalności: firma, która nic nie sprzedaje, ma łącznie
-ok. 0–100 pkt (pełne punkty dopiero od 100 obsłużonych gości w tygodniu).
-Zakładka **Ranking** (od rundy 3) pokazuje miejsca wszystkich drużyn: wynik gry, wynik ostatniej rundy, majątek netto,
-o ile miejsc ktoś awansował lub spadł oraz wykres miejsc w kolejnych rundach.
-
-**Strata obniża dział Finanse** – dochód poniżej zera daje mało punktów (od 0 przy stracie 3 000 zł). Mała strata na rozruchu
-kosztuje mało, duża – dużo.
+Punkty za Gości, Zespół i Bezpieczeństwo liczą się proporcjonalnie do działalności: firma, która nic nie sprzedaje,
+ma łącznie ok. 0–100 pkt (pełne punkty dopiero od 100 obsłużonych gości w tygodniu). Strata obniża dział Finanse.
 
 Kilka zasad, które warto znać:
-- **Odsetki Harpagona i mandaty** (skarbowe za deklaracje, z błędu biura bez OC, sanepidu) nie trafiają do KPiR
-  i nie obniżają podatku, ale karta je widzi: obniżają wynik ekonomiczny tak jak koszty.
-- **Majątek traci na wartości.** Sprzęt i wyposażenie liczą się w rozwoju firmy po amortyzacji, a kupiony lokal,
-  budynek i działka – według ewidencji środków trwałych, ale tylko w połowie wartości (rozwój mierzy przede
-  wszystkim inwestycje w kuchnię i salę; we wskaźniku zadłużenia nieruchomości liczą się w pełnej wartości).
-- **Tani sprzęt to koszt tego tygodnia.** Sprzęt, wyposażenie i stanowiska tańsze niż 10 000 zł od razu idą
-  w koszty, więc w tygodniu zakupu obniżają dochód i kartę wyników (wyposażenie całego lokalu potrafi zabrać
-  więcej niż kilka dobrych tygodni). Lista błędów pokaże przed wysłaniem, o ile mniej więcej spadnie karta.
-  Możesz to zmienić w Księgowość ▸ Biuro rachunkowe („Zakupy tańsze niż 10 000 zł”): przy amortyzacji tańsze
-  zakupy trafiają do ewidencji środków trwałych (20% rocznie, od tygodnia po zakupie), więc tydzień zakupu nie
-  traci, a koszt i podatek rozkładają się na kolejne tygodnie. Majątek w karcie liczy się tak samo. Wybór
-  działa od tygodnia decyzji (bez przeksięgowania wcześniejszych zakupów).
-- **Sprzedaż i odkup to nie inwestycja.** Rozwój podnoszą tylko zakupy ponad najwyższą wartość majątku, jaką
-  firma już miała. Sprzedaż sprzętu obniża rozwój, a odkupienie go potem nie daje nic ekstra.
-- **Wypłaty dla siebie karta pomija.** Pieniądze wypłacone z firmy do portfela właściciela nie są kosztem, więc
-  nie obniżają wyniku działalności – zmniejszają za to gotówkę i majątek netto firmy (widać go w rankingu).
 
-## 4. Tydzień 1 – przygotowanie lokalu (1–7 września)
+- **Mandaty i odsetki od pożyczek** (skarbowe, sanepidu, PIP, odsetki Harpagona) nie obniżają podatku, ale obniżają
+  wynik tak jak koszty.
+- **Majątek traci na wartości.** Sprzęt i wyposażenie liczą się w rozwoju po amortyzacji.
+- **Tani sprzęt to koszt tego tygodnia.** Zakupy tańsze niż 10 000 zł od razu idą w koszty, więc w tygodniu zakupu
+  obniżają dochód. Można to zmienić w biurze rachunkowym („Zakupy tańsze niż 10 000 zł”): przy amortyzacji koszt
+  rozkłada się na kolejne tygodnie. Lista błędów pokaże przed wysłaniem, o ile mniej więcej spadnie wynik.
+- **Sprzedaż i odkup to nie inwestycja.** Rozwój podnoszą tylko zakupy ponad najwyższą wartość majątku, jaką firma już miała.
+- **Wypłaty dla siebie** (z firmy do portfela właściciela) nie są kosztem, ale zmniejszają gotówkę i majątek netto.
 
-W pierwszym tygodniu nic jeszcze nie sprzedajesz. To czas, żeby urządzić firmę (Dashboard pokazuje plan rundy –
-co jeszcze zostało do zrobienia):
+**Ranking** (w Kurierze rankingowym, od rundy 3) pokazuje miejsca wszystkich drużyn: wynik gry, wynik ostatniej rundy,
+majątek netto, awanse i spadki oraz wykres miejsc w kolejnych rundach.
 
-1. **Lokal** – w zakładce **Nowe lokale ▸ Do wynajęcia** albo na mapie. Wynajmujesz (kaucja = 2 czynsze, potem czynsz co tydzień)
-   albo kupujesz. Lokal *gotowy* działa od razu, *do urządzenia* – od następnej rundy, a działkę trzeba
-   zabudować. Liczy się **strefa**: Miasteczko Akademickie to studenci, Stare Miasto – turyści i wieczory,
-   Dworzec – podróżni o każdej porze. Im mniej drużyn w grze, tym mniej lokali na mapie (około pięciu na
-   drużynę), a klientów w mieście jest tyle samo.
-2. **Bank i biuro rachunkowe** – w zakładkach Pieniądze ▸ Bank i Księgowość ▸ Biuro rachunkowe. Bez banku nie ma konta,
-   bez biura – księgujesz sam: co rundę wpisujesz dokumenty do KPiR i składasz deklaracje w tej samej zakładce. Kto
-   deklaracji nie złoży, płaci mandat co rundę – kilka razy więcej niż najtańsze biuro; mandat jest też za każdą błędną
-   deklarację, więc samodzielna księgowość z pomyłkami wychodzi drożej niż biuro (karta „Samodzielnie” pokazuje kwoty).
-3. **Menu** (Kuchnia) – na start trzy dania: kebab w bułce, frytki i napój. Nowe dania (rollo, box, talerz, falafel,
-   dodatki) dodasz od tygodnia 3. Kafelek dania pokazuje **popyt roczny** (ile porcji dania zjadają w roku klienci w całym mieście; na jedną strefę przypada średnio ok. 0,7 tej liczby – patrz „wielkość strefy”)
-   i sezonowość – cztery słupki obok nazwy dania: miesiąc sprzedaży (ciemny) i trzy kolejne; najedź na słupek,
-   a zobaczysz mnożnik popytu (np. „× 1,10”), więc od razu widać, czy danie wchodzi w sezon, czy z niego wychodzi. Prognozę na tydzień liczysz sam – krok po kroku w dymku ⓘ przy „Popyt roczny”: popyt roczny ÷ 52
-   × sezonowość × wielkość strefy (Klienci ▸ Strefy), a z tego część, którą przyciągniesz na tle konkurencji.
-   Na tej liczbie opierają się plan zakupów składników („Wpisz wg prognozy”), lista błędów i potrzebna obsada.
-   **Dania specjalne strefy** (kebab specjalny I i przekąska specjalna od tygodnia 8, kebab specjalny II i napój
-   specjalny od tygodnia 11) w każdej dzielnicy mają własną nazwę. Mają większy popyt niż zwykłe dania tej samej
-   kategorii – warto je dodać, gdy tylko się odblokują.
-   Wybrane danie jest od razu w sprzedaży: cenę i rabat wpisujesz w tym samym kafelku co prognozę (od tygodnia 2;
-   na start cena preferowana).
-4. **Stanowiska** (Wnętrze ▸ Stanowiska i sprzęt) – kuchnia i kasa. Każdy pracownik potrzebuje swojego stanowiska, a liczbę stanowisk ogranicza
-   wielkość lokalu.
-5. **Ludzie** (Ludzie ▸ Rynek pracy, obsada w Mój lokal) – kucharzy i kasjerów możesz zatrudnić już w tygodniu 1, żeby w pierwszym
-   tygodniu sprzedaży kuchnia była obsadzona. W tygodniu 1 działa tylko pracuj.pl (agencja pracy – od tygodnia 2).
-   Pensja liczy się od tygodnia zatrudnienia, choć sprzedaż rusza dopiero w tygodniu 2.
+## 4. Miejsca w mieście
 
-> **Wskazówka.** We wrześniu studenci jeszcze siedzą u rodziców – Miasteczko Akademickie świeci pustkami aż do
-> ostatniego weekendu miesiąca. Prawdziwy ruch zaczyna się w październiku. Kalendarz miejski (Klienci ▸
-> Kalendarz) pokazuje, co i kiedy dzieje się w mieście – także mecze Motoru na Arenie (tłum kibiców pod stadionem,
-> więcej kebabów w bułce, frytek i napojów) i to, jak wydarzenia zmieniają popyt na konkretne dania (w Wigilię
-> wygrywa falafel). Im zimniej, tym więcej kebabów, a mniej zimnych napojów.
-> W tabeli **Strefy miasta** (Klienci ▸ Strefy) słupki pokazują, jak rozkładają się klienci strefy
-> na dni najbliższej rundy sprzedaży – najedź na słupek, a zobaczysz mnożnik popytu dnia (np. „wtorek – popyt: × 1,10”) i liczbę klientów.
-> Najciemniejszy słupek to najmocniejszy dzień: pod niego planuj obsadę.
+Gra to **miejsca**, a nie zakładki. Menu z boku prowadzi do każdego z nich, a **Mapa miasta** to prawdziwy plan
+Lublina: przybliża się go kółkiem myszy (na telefonie – dwoma palcami, a także dwuklikiem albo przyciskami + i −),
+przesuwa przeciąganiem, a kliknięcie budynku otwiera jego wnętrze. W wnętrzu klika się tabliczki i postacie –
+każdy punkt prowadzi do ekranu decyzji.
 
-## 5. Tydzień 2 – otwarcie
+| Miejsce | Co się tam załatwia |
+|---|---|
+| Plan tygodnia | Podsumowanie firmy i lista spraw do zrobienia w tej rundzie. Wraca się tu, klikając logo LUKRUM |
+| Mapa miasta | Wszystkie budynki Lublina: lokale, banki, hurtownie, urzędy, parki. Kliknięty lokal pokazuje czynsz, cenę i strefę |
+| Mój kebab | Wnętrze lokalu. Tablica: menu i ceny; lada: stan lokalu, obsada i sprzedaż; rożen: stanowiska i sprzęt; zaplecze: zespół i grafik; kasa: wyniki finansowe; stoliki: wyposażenie; okno: klienci na ulicy; szyld: promocje. Pod sceną: magazyn, szkolenia, czas właściciela i portfel |
+| Stare Miasto | Biuro „Klucz” (lokale do wynajęcia lub kupna), sala licytacji, notariusz (kupno budynku z najemcą) i kantor „U Harpagona” (droga pożyczka) |
+| Hurtownie | Zamówienia u dostawców i przewozy towaru między własnymi lokalami |
+| Park handlowy | Sprzęt gastronomiczny (kupno, wynajem, sprzedaż) i sklep meblowy z wyposażeniem dla gości |
+| Miasteczko akademickie | Rynek pracy, klienci w strefach, konkurencja („Sokole Oko”) i kalendarz miasta (juwenalia, mecze, jarmarki) |
+| Kamienica bankowa | Sześć banków (konto, kredyty, lokaty, leasing, debet) i giełda właściciela |
+| Biurowiec przy Zana | Biura rachunkowe, księga firmy (KPiR), ubezpieczyciel, agencja reklamowa „Fala Koziołka” i internetowa „Lajk i Spółka” |
+| Urzędy | Urząd miasta (rejestracja i odbiory lokalu), sanepid, urząd skarbowy (VAT i podatek dochodowy) |
+| Bazar | Handel między drużynami: ogłoszenia i licytacje towaru i sprzętu |
+| Kurier rankingowy | Wyniki tygodnia, wnioski i ranking drużyn |
+| Lista błędów | Czego brakuje przed wysłaniem decyzji |
+| Zadania | Lista spraw na ten tydzień, także własnych (widzi je cała drużyna; nieodhaczone przechodzą dalej) |
+| Wyślij decyzje | Zatwierdzenie decyzji na rundę |
 
-Od drugiego tygodnia lokal sprzedaje. Żeby danie trafiło do klienta, potrzebujesz **czterech rzeczy naraz**:
+Miejsca, które odblokowują się później, są w menu szare, z kłódką i numerem tygodnia. Koło zębate **⚙** otwiera
+ustawienia: **paleta kolorów** (Bar mleczny, Pewex albo Wysoka widoczność), **tryb jasny lub ciemny** i **układ menu**
+(z boku lub u góry). Paleta „Wysoka widoczność” ma mocny kontrast, większe litery, grube ramki i bardzo czytelny krój
+pisma; w każdej palecie zysk jest oznaczony znakiem ▲, a strata ▼.
 
-| Potrzebujesz | Zakładka | Co trzeba wiedzieć |
-|---|---|---|
-| Sprzęt | Wnętrze ▸ Stanowiska i sprzęt | Rożen, frytownica, lodówka… kupowany na konkretne stanowisko |
-| Pracowników | Ludzie ▸ Rynek pracy | Kucharze gotują, kasjer sprzedaje; każdy ma gwiazdki umiejętności i oczekiwaną pensję |
-| Składniki | Zaopatrzenie ▸ Dostawy | Mięso, pita, warzywa, sosy – kupione wcześniej niż sprzedane |
-| Cenę | Kuchnia | Cena brutto dania w kafelku dania (obok prognozy); za droga – klienci idą obok, za tania – sprzedajesz ze stratą |
+**Każdy lokal ma swoje** menu i ceny, zamówienia i magazyn, pracowników, stanowiska i wyposażenie. Przy kilku lokalach
+wybiera się je kafelkami u góry. Wspólne dla całej firmy są: reklama, promocje, bank, podatki, czas właściciela,
+ubezpieczenia i handel.
 
-Sanepid musi **odebrać lokal** przed pierwszą sprzedażą (zakładka Urzędy ▸ Sanepid) – bez porządnego
-sprzątania odbioru nie będzie.
+### Funkcje gry: odkryte, zakryte i wyłączone
 
-## 6. Klienci – skąd się biorą
+Żeby na początku nie było wszystkiego naraz, mistrz gry przed grą ustawia, które **funkcje gry** są od razu odkryte.
+Podstawa (plan tygodnia, mapa, wyniki, wybór lokalu, kuchnia, rynek pracy i zespół, stanowiska i sprzęt, wyniki
+finansowe i bank, biuro rachunkowe, lista błędów, wysyłanie decyzji) jest zawsze odkryta. Pozostałe – Zaopatrzenie,
+Marketing, Wyposażenie, Rozwój ludzi, Analiza rynku, Sieć lokali, Handel, Samodzielna księgowość, Urzędy, Harpagon,
+Właściciel, Giełda – mogą być:
 
-Lublin podzielono na **strefy**. Każda ma swoich klientów, a ich liczba zależy od dania, dnia tygodnia, pogody
-roku akademickiego i wydarzeń w mieście (sesja, Halloween, jarmark, mecze).
+- **odkryte** – działają jak zwykle;
+- **zakryte** – w menu są szare, z ikoną oka. Kliknięcie pokazuje, do czego służą i **co gra robi teraz za drużynę**
+  (np. przy zakrytym Zaopatrzeniu zamawia składniki według prognozy, a przy zakrytej Samodzielnej księgowości firmę
+  rozlicza biuro). Przycisk **Odsłoń** daje drużynie funkcję do własnych decyzji – od bieżącej rundy, na wszystkich
+  komputerach drużyny. Samodzielne decyzje zwykle opłacają się bardziej niż to, co robi gra. Odsłoniętą funkcję można
+  znów zakryć w ⚙ → Funkcje gry, ale zapłacone pieniądze nie wracają, a gra pokazuje, co przepadnie (np. trwające
+  kampanie, polisy, kupione wyposażenie), i pyta o potwierdzenie;
+- **wyłączone** – nie ma ich w tej grze dla nikogo, także dla botów.
 
-Klienci strefy to mieszanka **grup**: studenci, uczniowie, pracownicy biur, imprezowicze, rodziny, turyści,
-podróżni i goście wydarzeń. Każda grupa ma ulubione dania (rodziny biorą talerze i boxy, uczniowie – frytki
-i napój), inną wrażliwość na cenę (studenci liczą każdą złotówkę, turyści mniej) i inną cierpliwość w kolejce
-(podróżni i biurowi nie czekają). Wśród klientów są też wegetarianie – oni wybierają falafel i dania bez mięsa.
-Skład grup strefy widać w zakładce **Klienci i strefy** – dlatego w różnych strefach opłaca się inna oferta.
-Gdy w menu brakuje ulubionego dania, część klientów weźmie u Ciebie coś innego.
+Kolejny lokal po cenie wywoławczej można wziąć zawsze – także przy zakrytej Sieci lokali (ona dodaje licytacje,
+kupno budynku z najemcą i przewozy). Zestaw funkcji gry widać też na pulpicie „Moje gry”.
+
+## 5. Klienci – skąd się biorą
+
+Lublin podzielono na **strefy**. Każda ma swoich klientów, a ich liczba zależy od dania, dnia tygodnia, pogody, roku
+akademickiego i wydarzeń w mieście (sesja, Halloween, jarmark, mecze Motoru).
+
+Klienci strefy to mieszanka **grup**: studenci, uczniowie, pracownicy biur, imprezowicze, rodziny, turyści, podróżni
+i goście wydarzeń. Każda grupa ma ulubione dania, inną wrażliwość na cenę (studenci liczą każdą złotówkę, turyści
+mniej) i inną cierpliwość w kolejce. Wśród klientów są też wegetarianie – wybierają falafel i dania bez mięsa. Skład
+grup strefy widać w Miasteczku akademickim (Pracownia Analiz), dlatego w różnych strefach opłaca się inna oferta.
 
 Klienci wybierają lokal według:
 
 - **ceny** w porównaniu z cenami w strefie,
 - **jakości** dania (gwiazdki sprzętu i składników),
 - **odległości** – sąsiednie strefy też przychodzą, ale mniej chętnie,
-- **opinii o lokalu** – gwiazdki na mapie (ocena 1–5★ i liczba opinii, kliknij lokal, żeby przeczytać
-  komentarze). Klienci oceniają to, co przeżyli w lokalu: jakość dań, cenę na tle strefy, czekanie w kolejce,
-  brakujące dania, pomyłki w szczycie i wyposażenie. Ocena to średnia z opinii – nowe ważą więcej niż stare. Im więcej
-  opinii, tym bardziej klienci jej ufają: lokal z oceną powyżej przeciętnej przyciąga więcej klientów, poniżej –
-  mniej. Rozbicie oceny Twoich lokali na powody jest w wynikach zakładki Klienci i strefy.
-- **renomy lokalu** – nowy lokal dopiero zdobywa stałych bywalców: w pierwszym tygodniu sprzedaży
-  przychodzi niecała połowa klientów, co tydzień więcej, aż po kilku tygodniach lokal jest „znany”.
-  Tak samo jest z każdym kolejnym lokalem – zaplanuj na start mniejszą obsadę i zamówienia. Dopóki lokal
-  się rozkręca, Dashboard pokazuje ramkę „Rozruch nowego lokalu” z odsetkiem klientów w tym tygodniu.
+- **opinii o lokalu** – ocena 1–5★ i liczba opinii (kliknij lokal na mapie, żeby przeczytać komentarze). Klienci oceniają
+  to, co przeżyli: jakość dań, cenę na tle strefy, kolejkę, brakujące dania, pomyłki w szczycie i wyposażenie. Nowe
+  opinie ważą więcej niż stare, a im więcej opinii, tym bardziej klienci ufają ocenie,
+- **renomy lokalu** – nowy lokal dopiero zdobywa stałych bywalców: w pierwszym tygodniu sprzedaży przychodzi niecała
+  połowa klientów, co tydzień więcej. Dotyczy to każdego kolejnego lokalu, więc na start planuje się mniejszą obsadę
+  i zamówienia.
 
-Dwa lokale w jednej strefie dzielą tych samych klientów, a część ludzi i tak zje u konkurencji spoza gry albo
-w domu. Jeśli brakuje rąk, sprzętu albo miejsc przy kasie, klienci odchodzą z kolejki – to **utracona sprzedaż**,
-widoczna w wynikach Menu i cen, bolesna dla zadowolenia klientów i dla opinii o lokalu.
+Dwa lokale w jednej strefie dzielą tych samych klientów. Jeśli brakuje rąk, sprzętu albo miejsc przy kasie, klienci
+odchodzą z kolejki – to **utracona sprzedaż**, bolesna dla wyniku i dla opinii o lokalu.
+
+**Pomyłki w szczycie.** Gdy w lokalu jest tłok, kucharze się mylą: danie trzeba zrobić drugi raz, a gość czeka dłużej
+i jest mniej zadowolony. Pomyłek jest więcej przy przeciążonej kuchni, zmęczonej załodze i braku szkoleń. Powtórka
+zużywa składniki jeszcze raz – jeśli ich zabraknie, gość odchodzi bez dania, a składniki i tak są zużyte. Zapas „na styk”
+kosztuje więc więcej, niż widać w prognozie. Rada: dodać kucharza albo stanowisko, nie przepracowywać ludzi, kupić
+szkolenie.
+
+**Dymki przy ladzie.** Co rundę kilku gości mówi to, co policzyła gra: że cena jest wysoka, smak średni albo kolejka za
+długa. Bywają też plotki o parkach i konkurencji, pytania z WOS-u z krótką odpowiedzią oraz propozycje (catering, kapela,
+skarga sąsiadki). Przy każdej odpowiedzi widać wskazówkę, w którą stronę pójdą skutki – bez liczb i bez szansy
+powodzenia.
+
+## 6. Menu i ceny
+
+- Na start są trzy dania; od tygodnia 3 dochodzą kolejne (rollo, box, talerz, falafel, dodatki). **Dania specjalne
+  strefy** (każda dzielnica ma własne nazwy) wchodzą od tygodnia 8 i 11 – mają większy popyt niż zwykłe dania tej
+  samej kategorii.
+- Kafelek dania pokazuje **popyt roczny**, sezonowość (cztery słupki: miesiąc sprzedaży i trzy kolejne) i prognozę.
+  Prognozę na tydzień liczy się tak: popyt roczny ÷ 52 × sezonowość × wielkość strefy, a z tego część, którą lokal
+  przyciągnie na tle konkurencji. Na tej liczbie opierają się plan zakupów, lista błędów i potrzebna obsada.
+- Cena jest **brutto**. Za droga – klienci idą obok, za tania – sprzedaż ze stratą.
+- Aby danie trafiło do klienta, potrzebne są **cztery rzeczy naraz**: sprzęt na stanowisku, pracownik (kucharz gotuje,
+  kasjer sprzedaje), składniki w magazynie i cena. Sanepid musi też **odebrać lokal** przed pierwszą sprzedażą (Urzędy)
+  – bez porządnego sprzątania odbioru nie będzie.
 
 ## 7. Dostawcy i świeżość
 
-- **Hurtownie** dowożą w swoje dni (za darmo od progu zamówienia), **piekarnia** – codziennie, **producent mięsa**
-  ma minimalne zamówienie, a w **dyskoncie** kupujesz sam: taniej przy małych ilościach i z gazetką, ale tracisz
-  czas właściciela i nie wyniesiesz więcej niż limit.
-- Ceny zmieniają się co tydzień – porównuj oferty w bazie składników dostawcy.
-- Składniki mają **termin przydatności**: bułka wytrzyma dwa dni, mięso cztery, mrożonki – miesiące. Dzień dostawy
-  wybierasz przy zamówieniu.
-- Szafa chłodnicza i zamrażarka mają ograniczoną pojemność. Nadmiar jedzie do wynajętej chłodni – płacisz za litr,
-  a dużo towaru w wynajmie i jedzenie w koszu przyciągają **sanepid** (kontrole od tygodnia 4).
-- Do dań idą najpierw partie z **najkrótszym terminem**; po terminie – wieczorem do kosza.
-- Każdy lokal zamawia **do siebie** i ma własny magazyn. Progi darmowej dostawy i minimum producenta mięsa liczą się
-  razem dla całej firmy. Towar możesz **przewieźć** do innego swojego lokalu (od tygodnia 2): kurs kosztuje 30 zł
-  i 1 godzinę właściciela, a przewieziona partia traci 1 dzień terminu. Pracowników przenosić się nie da.
-- **Auchan** (hipermarket na Zygmuntowskim) – cały asortyment dla wszystkich, ale drożej niż w hurtowni i z odbiorem
-  osobistym.
-- **Auto-dostawca** (od tygodnia 2) – wygoda za dopłatą. Włączasz go dla całego lokalu: wpisujesz, ile czego kupić na
-  tydzień, i płacisz od razu za całość (ceny Auchan + 6% prowizji + 120 zł abonamentu tygodniowo). Co rano dowozi tyle,
-  ile lokal zużyje – nic nie psuje się w lokalu. Co zostanie, czeka u dostawcy na następny tydzień za 0,15 zł za litr
-  dziennie, a termin biegnie. Za mało towaru – dania wypadają z menu. Lokal na auto-dostawach nie przyjmuje Twoich
-  zamówień od innych dostawców.
+- **Hurtownie** dowożą w swoje dni (za darmo od progu zamówienia), **piekarnia** – codziennie, **producent mięsa** ma
+  minimalne zamówienie, a w **dyskoncie** kupuje się samemu: taniej przy małych ilościach, ale kosztuje to czas
+  właściciela.
+- Ceny zmieniają się co tydzień – warto porównywać oferty. Dzień dostawy wybiera się przy zamówieniu.
+- Składniki mają **termin przydatności**: bułka wytrzyma dwa dni, mięso cztery, mrożonki – miesiące. Do dań idą
+  najpierw partie z najkrótszym terminem, a po terminie towar wieczorem ląduje w koszu.
+- Chłodnia ma ograniczoną pojemność. Nadmiar jedzie do wynajętej chłodni (płaci się za litr), a dużo towaru w wynajmie
+  i jedzenie w koszu przyciągają **sanepid** (kontrole od tygodnia 4). Mandat obniża też popyt na kilka tygodni.
+- Każdy lokal zamawia **do siebie**. Progi darmowej dostawy i minimum producenta mięsa liczą się razem dla całej firmy.
+  Towar można **przewieźć** do innego własnego lokalu (od tygodnia 2): kurs kosztuje 30 zł i 1 godzinę właściciela,
+  a partia traci 1 dzień terminu. Pracowników przenosić się nie da.
+- **Auto-dostawca** (od tygodnia 2) to wygoda za dopłatę: wpisuje się, ile czego kupić na tydzień, a on codziennie
+  dowozi tyle, ile lokal zużyje (ceny Auchan, prowizja 6%, abonament 120 zł tygodniowo). Za mało towaru – dania
+  wypadają z menu.
 
-> **Wskazówka.** Zakładka Zaopatrzenie ▸ Dostawy pokazuje zapotrzebowanie na prognozowanych klientów: ile czego potrzebujesz,
-> ile masz w magazynie i czego brakuje. Policz zamówienie tak, żeby starczyło, ale nie wyrzucać.
+> **Wskazówka.** Ekran Zamówień w Hurtowniach pokazuje zapotrzebowanie na prognozowanych klientów: ile czego trzeba,
+> ile jest w magazynie i czego brakuje. Zamówienie ma wystarczyć, ale nie zostawać na wyrzucenie.
 
-## 8. Ludzie
+## 8. Ludzie i Kodeks pracy
 
-- **Rynek pracy jest wspólny** dla wszystkich drużyn. Kandydatów szukasz przez pracuj.pl, agencję pracy albo
-  headhuntera – tylko headhunter złoży ofertę pracownikowi innej drużyny (a jego szef może dać kontrofertę).
-- **Kto pierwszy, ten lepszy.** Kandydata dostaje drużyna, która **pierwsza zapisze** jego zatrudnienie. Inne drużyny
-  od razu (bez odświeżania strony) widzą przy nim znaczek „zajęty: nazwa drużyny”, a przycisk „Zatrudnij” jest
-  wyłączony. Gdy drużyna wycofa zatrudnienie, kandydat znów jest wolny. Drużyna zawsze wygrywa z botem.
-- **Podkupywanie.** Mistrz gry decyduje, czy w grze wolno podkupywać pracowników innych drużyn (domyślnie wolno).
-  Gdy ktoś chce podkupić Twojego pracownika, zobaczysz to w Zespole („chce go podkupić”) i na liście błędów –
-  kontrofertę złożysz w Rynku pracy. Wygrywa najwyższa oferta (B2B i pół etatu w przeliczeniu na pełny etat), przy
-  remisie losowanie. Pracownik przechodzi tylko wtedy, gdy nowa oferta jest **o co najmniej 5% wyższa** niż jego obecna
-  pensja (i niż kontroferta). Po tygodniu raport mówi, kto wygrał i za ile. Gdy mistrz gry wyłączy podkupywanie, nie ma
-  ofert dla cudzych pracowników ani kontrofert – headhunter dalej szuka kandydatów z rynku.
-- **Boty też podkupują.** Przy włączonym podkupywaniu silniejsze boty składają oferty tym pracownikom drużyn,
-  którzy zarabiają poniżej 97% oczekiwanej pensji albo mają zadowolenie poniżej 0,9 (każdy bot najwyżej jedną taką
-  ofertę na tydzień). Bot decyduje przy przeliczaniu tygodnia, więc na jego ofertę nie ma kontroferty. W wynikach
-  Rynku pracy i w uwagach przy pracowniku zobaczysz, która firma przejęła osobę i za ile. Najlepsza obrona: płać
-  blisko oczekiwanej pensji i dbaj o zadowolenie.
-- **Za niska oferta?** Kandydat odrzuci pensję niższą niż **95% oczekiwanej** – okno zatrudnienia ostrzega o tym na
-  czerwono, a odrzucone oferty są w wynikach Rynku pracy (stanowisko zostaje wolne). Pensję od 95 do 100% oczekiwanej
-  osoba przyjmie, ale **jej zadowolenie będzie trwale niższe**, dopóki nie dostanie podwyżki do oczekiwanej – przy
-  95% na tyle, że zwykle pracuje wolniej i może odejść.
-- **Zatrudniasz w zakładce Rynek pracy**: wybierasz kandydata, pensję, umowę, kanał rekrutacji oraz lokal i wolne
-  stanowisko. **Obsadę** zmieniasz w Mój lokal ▸ Obsada stanowisk: na wolne stanowisko przypiszesz osobę z tego
-  samego lokalu (od razu) albo z innego Twojego lokalu. Na przejście do innego lokalu **pracownik musi się zgodzić** –
-  chętniej, gdy jest zadowolony, lokale są blisko na mapie i dostanie jednorazowy dodatek (płacisz go tylko po zgodzie).
-  Odpowiedź poznasz po przeliczeniu tygodnia (Rynek pracy ▸ wyniki); kto odmówi, zostaje na swoim miejscu.
-- Pensja w umowie jest miesięczna, gra pokazuje jej koszt na tydzień – razem z ZUS pracodawcy (płacisz go tylko przy
-  umowie o pracę i pół etatu). **Premia** jest jednorazowa – płacisz ją w tym tygodniu, bez ZUS, i tylko w tym
-  tygodniu podnosi zadowolenie.
-- **Formy zatrudnienia** wybierasz przy zatrudnieniu (i zmieniasz w profilu pracownika):
-  - *umowa o pracę* – pełne godziny, ZUS pracodawcy, okres wypowiedzenia, pracownicy ją lubią;
-  - *pół etatu* – połowa godzin za połowę pensji, poza tym jak umowa o pracę;
-  - *umowa zlecenie* – bez ZUS pracodawcy i bez wypowiedzenia, ale obniża zadowolenie;
-  - *zlecenie ze studentem* – tylko dla kandydatów-studentów (do 26 lat, plakietka „student”): bez ZUS i PIT,
-    więc zgodzą się na niższą pensję, ale pracują mniej godzin i częściej odchodzą;
-  - *staż z urzędu pracy* – tylko osoba bez doświadczenia (1★), jedna naraz: przez 6 tygodni nie płacisz pensji
-    (stypendium daje urząd), potem osoba sama przechodzi na umowę o pracę za pensję preferowaną;
-  - *kontrakt B2B* – osoba wystawia fakturę z VAT (VAT odliczysz), bez ZUS, bez płacy minimalnej i bez wypowiedzenia,
-    ale chce ok. 25% więcej niż na etacie.
-  Mistrz gry może część form wyłączyć – wtedy w oknie zatrudnienia ich nie ma.
-- **Studenci.** Mniej więcej co trzeci kandydat to student (każda osoba poniżej 26 lat). Przy nazwisku jest pigułka
-  „student”, a w dymku po najechaniu – skutki zatrudnienia: nie płaci PIT (zadowala go pensja ok. 92% preferowanej),
-  na zleceniu nie ma składek ZUS, pracuje tylko ok. 60% zwykłych godzin, a niezadowolony odchodzi częściej (szansa ×1,5).
-  To samo zdanie jest w oknie zatrudnienia i w profilu pod wyborem formy. Dobrze sprawdza się jako tania pomoc
-  w mniej obłożonym lokalu, gorzej na stanowisku, które pracuje cały tydzień.
-- **Zespół** to kafelki – jeden na każdą osobę: imię, gwiazdki, zawód, charakter, pensja i forma zatrudnienia,
-  pasek zadowolenia (kreska na pasku to próg, poniżej którego osoba może odejść, teraz 0,87) i stanowisko, na którym
-  pracuje. Przycisk **Profil** otwiera pensję, premię, formę i zwolnienie, a **Przenieś** – listę wolnych stanowisk
-  tego samego rodzaju we wszystkich Twoich lokalach (w tym samym lokalu od razu, do innego – za zgodą, jak wyżej).
-  Nowej osoby nie przeniesiesz w tygodniu zatrudnienia.
-- **Czas pracy w wynikach.** W wynikach Zespołu każdy pracownik (i właściciel, jeśli stał przy stanowisku) ma
-  półokrągły wskaźnik od 0 do 100%: ile godzin obsługiwał klientów z godzin, które miał (np. „32 / 40 h”; pół etatu
-  i student mają mniej godzin). Kasjerzy jednego lokalu dzielą ruch przy kasach. Łuk jest **niebieski** poniżej 50%
-  (mało pracy – może wystarczy mniej osób), **zielony** od 50 do 85%, **pomarańczowy** powyżej 85% (przeciążenie –
-  spada zadowolenie, a przy 100% kolejni klienci odchodzą bez kebaba). Pod wskaźnikami tabela **Obciążenie w dni
-  tygodnia** pokazuje to samo dzień po dniu (pn–nd), liczone od wszystkich klientów, którzy tego dnia przyszli. Ponad
-  100% (na czerwono) znaczy, że tyle pracy zabrakło: 130% to o 30% więcej klientów, niż osoba dała radę obsłużyć.
-- **Szkolenia i udogodnienia** są w jednej zakładce Ludzie ▸ Szkolenia i udogodnienia (udogodnienia na górze, bo
-  odblokowują się wcześniej).
-- **Szkoleń** jest osiem, każde w trzech firmach szkoleniowych, które różnią się ceną i odsetkiem zadowolonych klientów. **Szkolenie**
-  obejmuje całą załogę. Cenę z tabeli płacisz **raz**, a szkolenie działa przez **4 tygodnie** – w zakładce
-  widać „działa do rundy N”; dopóki trwa, nie kupisz go ponownie. Szkolenia działające naraz się sumują: każde podnosi
-  zadowolenie, a to, na które czeka więcej pracowników (wyższy procent w tabeli), podnosi je bardziej.
-- **Tempo pracy.** Bardzo zadowolona osoba (zadowolenie powyżej 0,95) obsługuje klientów o 5% szybciej, a mniej
-  zadowolona (poniżej 0,9) – o 5% wolniej. Na kafelku w Zespole jest etykieta „Tempo pracy”.
-- **Zadowolenie pracowników** rośnie z płacą bliską oczekiwanej, dobrym sprzętem, udogodnieniami (od tygodnia 3;
-  co kilka tygodni dochodzą nowe – aż po kota zakładowego i hamak na zapleczu)
-  i szkoleniami (od tygodnia 7). Spada przez przepracowanie (pracownik zajęty prawie cały tydzień), słaby sprzęt
-  i umowę zlecenie. Gra liczy je **dla każdej osoby** – zobaczysz je w profilu pracownika i w wynikach.
-- **Niezadowoleni odchodzą.** Kto ma zadowolenie poniżej progu, dostaje ostrzeżenie na liście błędów (z powodami
-  i szansą odejścia). Jeśli tydzień później nadal jest niezadowolony, może złożyć wypowiedzenie – im bardziej
-  niezadowolony, tym większa szansa. Ratuje podwyżka, lepszy sprzęt albo odciążenie (drugi pracownik).
-- **Każdy ma charakter.** Przy pracowniku i kandydacie jest etykieta z nazwą charakteru (na przykład lojalność,
-  materializm, optymizm), a w kółku „i” i w profilu pracownika – jak wpływa na zadowolenie (na przykład „zadowolenie +0,04”,
-  „szansa odejścia ×0,3”, „pensja waży ×2”). Nic nie trzeba zgadywać – dobierz zespół do tego, co możesz mu zaoferować.
-- Zwolnienie i odejście do konkurencji mają **2 rundy wypowiedzenia** (umowa o pracę) – pracownik przez ten czas
-  jeszcze pracuje i dostaje pensję (odprawy w firmie poniżej 20 osób nie ma). Długość wypowiedzenia zależy od stażu u Ciebie: przy okresie próbnym do 2 tygodni 3 dni robocze, dłuższym 1 tydzień, przy okresie próbnym 3 miesiące 2 tygodnie (art. 34 KP); potem 2 tygodnie, miesiąc i 3 miesiące (art. 36 KP). Na zleceniu, stażu i B2B odchodzi się bez wypowiedzenia.
-- **Puste stanowisko?** Właściciel sam na nim staje – zawsze, bez żadnego przycisku. Pracuje jak pracownik 1★ i nie bierze
-  pensji, ale tylko w godzinach, które zostają mu po sprawach poza lokalem (zakładka *Czas właściciela*).
+- **Rynek pracy jest wspólny** dla wszystkich drużyn. Kandydatów szuka się przez pracuj.pl (od tygodnia 1; ogłoszenie
+  kosztuje 400 zł), agencję pracy (od tygodnia 2) albo headhuntera (od tygodnia 4, najdroższy). Opłata agencji
+  i headhuntera to część pensji kandydata.
+- **Kto pierwszy, ten lepszy.** Kandydata dostaje drużyna, która pierwsza zapisze jego zatrudnienie – inne widzą
+  przy nim znaczek „zajęty”. Drużyna zawsze wygrywa z botem.
+- **Podkupywanie.** Mistrz gry decyduje, czy wolno podkupywać pracowników innych drużyn. Gdy ktoś chce podkupić
+  pracownika, widać to w Zespole i na liście błędów, a kontrofertę składa się na rynku pracy. Pracownik przechodzi
+  tylko wtedy, gdy nowa oferta jest o co najmniej 5% wyższa. Boty też podkupują, więc najlepsza obrona to pensja
+  blisko oczekiwanej i dbałość o zadowolenie.
+- **Za niska oferta.** Kandydat odrzuci pensję niższą niż 95% oczekiwanej. Od 95 do 100% przyjmie, ale jego
+  zadowolenie będzie trwale niższe, dopóki nie dostanie podwyżki.
+- **Obsada.** Pracownika przypisuje się do wolnego stanowiska w lokalu (od razu), a do innego własnego lokalu – za jego
+  zgodą (chętniej, gdy jest zadowolony, lokale są blisko, a dodatek jednorazowy).
+- Pensja w umowie jest miesięczna, a gra pokazuje jej koszt na tydzień razem z ZUS pracodawcy. **Premia** jest
+  jednorazowa, bez ZUS, i tylko w tym tygodniu podnosi zadowolenie.
 
-## 9. Czas właściciela
+**Formy zatrudnienia** (część mistrz gry może wyłączyć):
 
-Właściciel ma **20 godzin w tygodniu**. Najpierw schodzą z nich **sprawy poza lokalem**: zakupy w dyskoncie, rekrutacja,
-kursy z towarem między lokalami, reakcje na zdarzenia w parkach, detektyw. Gdy godzin zabraknie, kolejne sprawy po prostu się nie odbędą –
-zobaczysz to na liście błędów. **Godziny, które zostaną, właściciel spędza sam na pustym stanowisku** (najpierw tam, gdzie lokal bez niego
-nie działa: kasa, potem kuchnia; najwyżej tyle, ile etat). Nie trzeba tego ustawiać: im mniej spraw poza lokalem, tym dłużej stoi za ladą.
-Zakładka **Czas właściciela** pokazuje licznik: pula / sprawy poza lokalem / na stanowisku / wolne.
+- *umowa o pracę* – pełne godziny, ZUS pracodawcy, wypowiedzenie, płatny urlop; pracownicy ją lubią;
+- *pół etatu* – połowa godzin za połowę pensji, poza tym jak umowa o pracę;
+- *umowa zlecenie* – bez ZUS pracodawcy i bez wypowiedzenia, ale obniża zadowolenie (o 0,04) i grozi **kontrolą PIP** (zob. niżej);
+- *zlecenie ze studentem* – dla kandydatów-studentów (do 26 lat, plakietka „student”): bez ZUS i PIT, więc zgodzą się
+  na niższą pensję, ale pracują ok. 60% zwykłych godzin i częściej odchodzą;
+- *staż z urzędu pracy* – tylko osoba bez doświadczenia (1★), jedna naraz: przez 6 tygodni nie płaci się pensji, potem
+  osoba przechodzi na umowę o pracę;
+- *kontrakt B2B* – osoba wystawia fakturę z VAT, bez ZUS i bez wypowiedzenia, ale chce ok. 25% więcej niż na etacie.
+
+**Kodeks pracy w grze:**
+
+- **Urlop.** Na umowie o pracę 10% czasu to płatny urlop (26 dni w roku, art. 154 KP), więc pracownik daje mniej godzin
+  za tę samą pensję. Zlecenie, B2B i staż urlopu nie mają.
+- **Wypowiedzenie** (umowa o pracę, w obie strony) zależy od stażu u pracodawcy: 2 tygodnie przy krótkim stażu,
+  miesiąc od pół roku pracy, 3 miesiące od 3 lat (art. 34 i 36 KP). Pracownik przez ten czas pracuje i dostaje
+  pensję, a odpraw w tak małej firmie nie ma. Na zleceniu, stażu i B2B odchodzi się od razu.
+- **Kontrola PIP.** Umowa zlecenie nie jest sposobem na etat bez składek (art. 22 § 1 KP): o rodzaju umowy decyduje
+  sposób pracy, a nie nazwa na papierze. Jeśli osoba na zleceniu stoi przy stanowisku w pełnym wymiarze (co najmniej
+  30 godzin w tygodniu) przez **4 tygodnie z rzędu**, to co tydzień z szansą **5%** do lokalu przychodzi inspektorka
+  Państwowej Inspekcji Pracy i wystawia **karę 2 000 zł** (jedną na firmę, nie na osobę). Kara nie wchodzi do księgi
+  przychodów i rozchodów, obniża wynik i pojawia się we wnioskach z rundy. Kontrola może się powtarzać, dopóki
+  firma nie zmieni umowy albo godzin. Student na zleceniu pracuje poniżej progu, więc tego nie dotyczy.
+- **Wynagrodzenia.** Płaca minimalna w 2026 roku to 4 806 zł brutto. Kasjerzy zarabiają blisko niej, kucharze więcej.
+
+**Zadowolenie i tempo pracy:**
+
+- **Zespół** to kafelki – jeden na każdą osobę: gwiazdki, zawód, charakter, pensja, forma zatrudnienia, pasek
+  zadowolenia i stanowisko. Zadowolenie rośnie z płacą bliską oczekiwanej, dobrym sprzętem, udogodnieniami
+  (od tygodnia 3) i szkoleniami (od tygodnia 7). Spada przez przepracowanie, słaby sprzęt i umowę zlecenie.
+- **Tempo pracy.** Bardzo zadowolona osoba (powyżej 0,95) obsługuje klientów o 5% szybciej, a mniej zadowolona
+  (poniżej 0,9) – o 5% wolniej.
+- **Czas pracy w wynikach.** Półokrągły wskaźnik pokazuje, ile godzin z puli dana osoba obsługiwała klientów. Poniżej
+  50% jest niebieski (mało pracy), od 50 do 85% zielony, powyżej 85% pomarańczowy (przeciążenie – spada zadowolenie,
+  a przy 100% klienci odchodzą bez kebaba).
+- **Szkolenia** (8 rodzajów, trzy firmy szkoleniowe różnej ceny) obejmują całą załogę. Cenę płaci się raz, a szkolenie
+  działa przez 4 tygodnie. Szkolenia działające naraz się sumują.
+- **Niezadowoleni odchodzą.** Kto ma zadowolenie poniżej progu, dostaje ostrzeżenie na liście błędów, a tydzień
+  później może złożyć wypowiedzenie. Ratuje podwyżka, lepszy sprzęt albo odciążenie.
+- **Każdy ma charakter** (np. lojalność, materializm, optymizm), a w kółku „i” widać, jak wpływa on na zadowolenie.
+- **Puste stanowisko?** Właściciel sam na nim staje, ale tylko w godzinach, które zostają mu po sprawach poza lokalem.
+
+**Czas właściciela.** Właściciel ma 20 godzin w tygodniu. Najpierw schodzą z nich sprawy poza lokalem: zakupy
+w dyskoncie, rekrutacja, przewozy, reakcje na zdarzenia w parkach, detektyw. Co zostanie, właściciel spędza na pustym
+stanowisku (najpierw kasa, potem kuchnia). Licznik jest w Moim kebabie (biurko).
+
+## 9. Pieniądze
+
+- **Ceny są brutto.** Z każdej sprzedaży i większości zakupów wydzielany jest VAT, a do księgi trafia kwota netto.
+- **Podatki**: PIT liniowy, składka zdrowotna i ZUS rozliczają się same na koniec tygodnia, ale płaci się je z konta.
+  Księgę przychodów i rozchodów (KPiR) prowadzi biuro albo – przy odkrytej Samodzielnej księgowości – sama drużyna.
+  Każda błędna deklaracja i każda niezłożona to mandat, a przy samodzielnej księgowości z pomyłkami wychodzi drożej niż
+  z biurem.
+- **Środki trwałe**: kupiony lokal i drogi sprzęt płaci się od razu, ale w księdze koszt rozkłada się na lata
+  (amortyzacja).
+- **Portfel właściciela**: z jednoosobowej działalności można wypłacić pieniądze dla siebie albo dołożyć własne
+  oszczędności. To nie jest koszt ani przychód firmy.
+
+### Konto, bank i debet
+
+W **Kamienicy bankowej** działa sześć banków o różnych specjalizacjach: Kmicic (szybki, drogi kredyt na start),
+Wokulski i S-ka (kredyt inwestycyjny), Ziemia Obiecana (leasing sprzętu), Oszczędności Rzeckiego (najlepsze lokaty),
+Soplicowo (najtańsze konto i terminal) i Solaris (największy debet). Konto firmowe jest w jednym banku i tylko tam
+można brać lokaty, kredyty i leasing, więc wybór banku to wybór oferty. Kredyty obrotowe wymagają kilku tygodni
+historii firmy. Kredyt inwestycyjny spłaca się w ratach, a zastawem może być kupiony lokal, budynek albo sprzęt;
+gdy raty zalegają kilka tygodni, bank zabiera zastaw.
+
+**Debet** to zgoda banku na to, żeby konto zeszło poniżej zera. Nie działa sam – włącza się go w banku konta, a limit
+zależy od banku (od 5 000 zł w Oszczędnościach Rzeckiego do 40 000 zł w Solarisie). Liczy się saldo na **koniec tygodnia**:
+chwilowy minus w trakcie tygodnia nic nie kosztuje. Tydzień zakończony na minusie za zgodą to opłata i odsetki (nie
+wyższe niż odsetki maksymalne, art. 359 § 2¹ KC). Bez zgody (albo ponad limit) jest drożej: stała opłata, odsetki karne
+(art. 481 § 2¹ KC) i **alarm** – w następnym tygodniu bank blokuje inwestycje, nowe kredyty, leasing i lokaty. Alarm to
+czerwony pasek na Planie tygodnia i pierwsza pozycja Listy błędów. Wyjściem jest spłata debetu albo prośba do
+mistrza gry o **inwestora ratunkowego**: wpłaci pieniądze (najpierw spłaci debet), a przez kilka tygodni weźmie część
+dochodu.
+
+**Zmiana banku z otwartym debetem.** Pierwszy wybór banku i zmiana bez debetu nic nie kosztują. Gdy konto ma debet:
+
+- jeśli gotówki wystarcza, debet jest najpierw spłacany w starym banku;
+- jeśli nie wystarcza, **nowy bank przejmuje dług** i pobiera jednorazową opłatę: 2% kwoty debetu, nie mniej niż
+  najmniejsza opłata za debet w ofercie banków (40 zł). Opłata jest kosztem firmy. Dług dalej podlega zasadom nowego
+  banku (jego limitowi i oprocentowaniu).
+
+**Harpagon** (Stare Miasto) pożycza od ręki i bez pytań, ale bardzo drogo. Spłata po terminie to przypomnienia, odsetki
+karne, a potem wizyty, po których w lokalu brakuje krzeseł. Okno pożyczki od razu pokazuje, ile trzeba oddać w terminie.
+
+### Biura rachunkowe
+
+Firma może księgować sama albo oddać papiery biuru z **Biurowca przy Zana**. Każde z czterech biur ma trzy pakiety
+(S, M, L): cenę, limit dokumentów i dopłatę za dokumenty ponad limit. Do tego dochodzi opłata za kadry (za każdego
+pracownika, część biur ma kilka osób w cenie).
+
+| Biuro | Charakter |
+|---|---|
+| J.K.Ś. | Dokładne i uczciwe, z ubezpieczeniem OC, kadry do czterech osób w cenie |
+| Józef K. | Tanie, ale wszystko trwa: zmiana pakietu wchodzi dopiero po dwóch tygodniach; bez OC, ryzyko błędu 4% |
+| Scrooge | Najtańsze, ale w tygodniu ze świętem zamknięte: dokumenty czekają do następnego tygodnia z dopłatą 6 zł za każdy; bez OC |
+| Asteroida 328 | Dokładne i drogie, nigdy się nie myli, bez limitu dokumentów, z OC, kadry do sześciu osób w cenie |
+
+Pomyłka biura w deklaracji kosztuje mandat, ale biuro z OC oddaje go w tym samym tygodniu.
+
+**Zmiana biura kosztuje.** Za przejście do nowego biura płaci się jednorazowo tyle, ile wynosi tydzień jego pakietu
+(koszt firmy, z dokumentem w księdze). Wybór biura na starcie jest bez opłaty, a powrót do dawnego biura jest płatny tak
+samo jak każda zmiana. Przejście na samodzielną księgowość nic nie kosztuje, ale powrót po przerwie do innego biura niż
+ostatnie – już tak. Przed zmianą warto policzyć, czy oszczędność na dokumentach zwróci opłatę.
 
 ## 10. Marketing
 
-- **Promocje** (od tygodnia 3) – zniżka na wybrane dania. Przyciąga klientów, ale obcina cenę: włączaj, gdy kuchnia
-  ma wolne ręce. Promocji nadajesz własną, ozdobną nazwę – na wynik nie wpływa, na humor klientów owszem.
-  Po promocji klienci pamiętają ją jeszcze kilka tygodni: po wyłączeniu zostaje 40% jej przyciągania (już bez
-  rabatu), co tydzień o 20% mniej. Dobra promocja w spokojnym tygodniu procentuje więc także później.
-  Każdy rodzaj sprawdza się w innej sytuacji: „2 za 1” mocno przyciąga, ale szybko się nudzi i kuchnia robi
-  podwójnie – to krótka akcja przy wolnej kuchni; happy hours zapełnia słabsze dni; karta stałego klienta z małym
-  rabatem rozkręca się z każdym tygodniem; zniżka studencka działa tylko na studentów; zestaw podnosi rachunek.
-- **Agencje reklamowe** – kampanie w strefach: ulotki i plakaty (drukarnia, od tygodnia 5), billboard i radio
-  (od tygodnia 8), degustacje i Noc Kebaba (agencja eventowa, od tygodnia 10). Kampanię zamawiasz na **jedną rundę**: wybierasz kanał, strefę i **liczbę emisji** (emisja to
-  np. paczka 250 ulotek, godzina degustacji albo spot w radiu).
-  - **Cena emisji** zależy od kanału i strefy; od progów (np. od 4 i od 11 emisji) dostajesz **rabat na wszystkie
-    emisje**. Każdy kanał ma swój kafelek: duża cena za emisję, pasek progów rabatu (bieżący podświetlony),
-    przyciski **− / +** i **kalkulator** – tabelka „ile emisji → koszt i siła kampanii”; klik w wiersz ustawia tę
-    liczbę emisji.
-  - **Efekt się nasyca**: 1 emisja to ok. 23% tego, co kanał może dać, 4 – ok. 65%, 10 – ponad 90%. Dalsze emisje
-    kosztują, a prawie nic nie dodają.
-  - Kampania działa w rundzie emisji, a potem jeszcze przez chwilę **wygasa**. Chcesz efekt dłużej – zamów znowu.
-  - Kampania przyciąga więcej głodnych i podbiera klientów konkurencji. Kilka firm reklamujących się tak samo w jednej
-    strefie zagłusza się nawzajem. Kampanie się sumują, ale **z sufitem**: jedna daje zwykle +4–10% popytu, kilka
-    naraz ok. +10–30% – dalsze dokładanie to już głównie wydatek.
-- **Internet** (od tygodnia 7, Marketing → Internet) – agencja „Lajk i Spółka”: posty na grupach osiedlowych,
-  influencerka, własne filmiki na TikToku, wizytówka w Mapach Google, grupa „Lublin Jedzie”. Zamawia się tak samo
-  (kanał, strefa, emisje), ale **efekt rośnie przez kilka rund** (w rundzie emisji ok. 1/3, pełny po dwóch rundach –
-  posty się udostępnia, opinie przybywają) i **gaśnie wolniej** niż ulotki. Tabela „Twoja obecność w sieci” pokazuje,
-  ile kampanie już zamówione dadzą w kolejnych rundach. Opłaca się zacząć wcześnie; kampania na tydzień przed końcem
-  gry to w większości efekt, którego nie zobaczysz.
+- **Promocje** (od tygodnia 3) – zniżka na wybrane dania. Przyciąga klientów, ale obcina cenę: włączaj, gdy kuchnia ma
+  wolne ręce. Po wyłączeniu zostaje część przyciągania, co tydzień mniejsza. Każdy rodzaj sprawdza się w innej sytuacji:
+  „2 za 1” mocno przyciąga, ale szybko się nudzi; happy hours zapełnia słabsze dni; karta stałego klienta rozkręca się
+  z każdym tygodniem; zniżka studencka działa tylko na studentów; zestaw podnosi rachunek.
+- **Agencje reklamowe** (Biurowiec przy Zana, drukarnia) – kampanie w strefach: ulotki i plakaty (od tygodnia 5),
+  billboard i radio (od tygodnia 8), degustacje i Noc Kebaba (od tygodnia 10). Kampanię zamawia się na **jedną rundę**:
+  wybiera się kanał, strefę i **liczbę emisji**. Cena emisji zależy od kanału i strefy, a od progów dochodzi rabat.
+  Efekt się nasyca – pierwsze emisje dają najwięcej, a dalsze kosztują i prawie nic nie dodają. Kampanie się sumują, ale
+  z sufitem, a firmy reklamujące się tak samo w jednej strefie zagłuszają się nawzajem.
+- **Internet** (od tygodnia 7, „Lajk i Spółka”) – zamawia się tak samo, ale efekt rośnie przez kilka rund i gaśnie
+  wolniej niż ulotki. Opłaca się zacząć wcześnie.
 
-## 11. Pieniądze
+## 11. Zdarzenia, wypadki i rozwój
 
-- **Wszystkie ceny są brutto.** Z każdej sprzedaży i większości zakupów wydzielany jest VAT, a do księgi trafia kwota
-  netto. Zakładka **VAT** pokazuje rejestr i deklarację.
-- **KPiR** (księga przychodów i rozchodów) i **Raport finansowy** pokazują przychody, koszty i dochód tygodnia.
-- **Podatki**: PIT liniowy, składka zdrowotna i ZUS rozliczają się same na koniec tygodnia – ale płacisz je z konta.
-- **Bank**: konto, lokaty, kredyty i leasing. Produkty bierzesz tylko w banku, w którym firma ma konto firmowe – wybór
-  banku to wybór oferty (inne banki widać po „Zmień bank konta”; zmiana działa od tej samej rundy, a wzięte wcześniej
-  kredyty i lokaty trwają dalej). **Debet** (zgoda w banku konta) działa, gdy tydzień kończy się na minusie: płacisz opłatę i odsetki (nie wyższe niż odsetki maksymalne, art. 359 § 2¹ KC). Chwilowy minus w trakcie tygodnia nic nie kosztuje. Bez zgody banku na minusie na koniec tygodnia jest drożej: stała opłata, odsetki karne (maksymalne za opóźnienie, art. 481 § 2¹ KC), alarm i blokada inwestycji. Kredyt inwestycyjny spłacasz w ratach.
-- **Zastaw kredytu inwestycyjnego**: kupiony lokal, kupiony budynek z najemcą albo kupiony sprzęt (wartość netto).
-  Zastawem może być też lokal albo budynek z najemcą kupowany w tym samym tygodniu (Nowe lokale ▸ Przejęcia) –
-  kredyt pokrywa wtedy część ceny, a gdy zakup się nie uda, przepada. Gdy raty zalegają kilka tygodni, bank zabiera
-  zastaw; najemca kupionego budynku wynajmuje lokal dalej jak przed kupnem.
-- **Debet ponad limit konta** to alarm: odsetki karne, a w następnym tygodniu bank blokuje inwestycje (lokal,
-  stanowiska, sprzęt, wyposażenie), nowe kredyty, leasing i lokaty. Alarm zobaczysz jako czerwony pasek
-  na Dashboardzie i pierwszą pozycję Listy błędów. Spłać debet albo poproś mistrza gry o **inwestora ratunkowego**:
-  wpłaci pieniądze (najpierw spłaci debet), a przez kilka tygodni weźmie część dochodu. Dopóki wpłata nie wróci, liczy się jak dług – firma gra dalej, ale miejsca w rankingu to nie poprawia.
-  Ile inwestor wpłacił, ile już wziął i przez ile tygodni jeszcze bierze udział – zobaczysz w Pieniądze ▸ Bank
-  (i na Dashboardzie do końca umowy).
-- **Środki trwałe**: kupiony lokal i drogi sprzęt płacisz od razu, ale w księdze koszt rozkłada się na lata
-  (amortyzacja). Ewidencję i odpisy widać w Księgowość ▸ KPiR, a sprzęt sprzedajesz w Wnętrze ▸ Stanowiska i sprzęt.
-- **Portfel właściciela**: z jednoosobowej działalności można wypłacić pieniądze dla siebie albo dołożyć własne
-  oszczędności. To nie jest koszt ani przychód firmy.
-- **Harpagon** spod dworca pożycza od ręki i bez pytań. Spłata po terminie to przypomnienia, odsetki karne, a potem
-  wizyty, po których w lokalu brakuje krzeseł. Ostatnia deska ratunku – naprawdę ostatnia.
-  Okno pożyczki od razu pokazuje, ile oddasz w terminie – np. 5000 zł zamienia się w ponad 6000 zł.
-- **Jak to działa naprawdę?** W zakładkach VAT, KPiR, Podatki, Bank i Raport finansowy jest zwinięta niebieska
-  ramka 📘 – krótko i na przykładach wyjaśnia, jak te sprawy wyglądają w prawdziwej firmie.
+**Parki.** Od tygodnia 2 w parkach Lublina co tydzień dzieje się 3–4 rzeczy naraz – te same dla wszystkich drużyn.
+Wybiera się reakcję, która może kosztować czas właściciela (zwykle 2–5 h), gotówkę albo porcje jedzenia, a skutki bywają
+odłożone w czasie. **Na wszystko nie starczy czasu** (właściciel ma 20 h w tygodniu). Bez wyboru gra stosuje reakcję
+domyślną. Park, w którym coś się dzieje, ma na mapie znak „!”; kliknięcie otwiera okno z opisem i reakcjami A, B, C.
 
-## 12. Parki, zdarzenia i wypadki
+**Wypadki w lokalu.** Czasem coś przytrafia się tylko jednej drużynie – rożen odmawia posłuszeństwa, kot sąsiada wchodzi
+do kuchni. Wypadki kosztują, a **ubezpieczenie** (od tygodnia 4, u ubezpieczyciela przy Zana) zwraca część szkody po
+okresie karencji. Im dłużej spokojnie, tym ryzyko wypadku rośnie, a po wypadku wraca do niskiego poziomu.
 
-Od tygodnia 2 w parkach Lublina co tydzień dzieją się **3–4 rzeczy naraz** – te same dla wszystkich drużyn: konkurs
-jedzenia cebularzy, pan Zbyszek z ławki, profesor przy szachownicy, wiewiórka Gienia. Wybierasz reakcję – może kosztować
-czas właściciela (zwykle 2–5 h), gotówkę albo porcje jedzenia, a skutki (pieniądze, klienci, nowy pracownik) bywają
-odłożone w czasie. **Na wszystko nie starczy czasu** – właściciel ma 20 h w tygodniu, więc wybierz to, co się opłaca.
-Jeśli kilka drużyn wybierze to samo, każda dostaje tę samą nagrodę. Bez wyboru gra wybiera reakcję domyślną
-(bez czasu właściciela). Parki są **tylko na mapie**: park, w którym coś się dzieje, ma znak „!”, a nad
-mapą jest lista spraw tygodnia (✓ – reakcja wybrana, ○ – zostaje domyślna, ! – na wybraną reakcję brakuje czasu).
-Kliknij park albo sprawę z listy – otworzy się okno parku z opisem i reakcjami jako kafelki A, B, C (czas, koszt),
-z tym, co stało się tam w poprzedniej rundzie, i z historią parku. Pasek w oknie pokazuje, ile z 20 h zajmują sprawy
-w parkach, a ile inne zadania. Reakcja, na którą nie starcza wolnych godzin, jest wyszarzona z dopiskiem „wymaga 5 h,
-masz wolne 3 h” – zwolnij czas gdzie indziej albo wybierz inną.
+**Falafel.** Nie wszyscy stali bywalcy kebabu są gotowi na kebab bez mięsa – po wprowadzeniu falafela do karty jest
+niewielka szansa, że ktoś przyjdzie wyrazić swoje zdanie zrolowaną gazetką promocyjną. Zdarza się najwyżej raz na grę
+i kosztuje niewiele.
 
-Czasem coś przytrafia się **tylko Tobie** – w lokalu. Rożen odmawia posłuszeństwa, kot sąsiada wchodzi do kuchni.
-Takie sprawy (i bank żywności) pojawiają się w zakładce Mój lokal, w części „Sprawy w lokalu”.
-Wypadki kosztują, a **ubezpieczenie** zwraca część szkody (po okresie karencji). Wypadki i polisy – od tygodnia 4. Im dłużej spokojnie, tym
-groźniej: ryzyko wypadku rośnie o 4 punkty procentowe za każdy tydzień bez wypadku (od 8% do najwyżej 40%), a po
-wypadku wraca do 8%. Aktualne ryzyko pokazuje zakładka Ubezpieczenia.
+**Rozwój:**
 
-Uwaga na **falafel**. Nie wszyscy stali bywalcy kebabu są gotowi na kebab bez mięsa – w tygodniu po falafelu
-w karcie (od rundy 4) jest niewielka szansa, że ktoś przyjdzie wyrazić swoje zdanie zrolowaną gazetką promocyjną.
-Zdarza się to najwyżej raz na grę i kosztuje niewiele – plastry albo kilka godzin właściciela.
+- **Wyposażenie dla klientów** (od tygodnia 4) – stoliki, ogródek, WiFi, telewizor z meczami, płatności BLIK, kiosk
+  zamówień i inne. Przyciąga klientów, którzy go oczekują, i poprawia opinie, ale kosztuje przy zakupie i co tydzień.
+  Każda kolejna rzecz daje mniej niż poprzednia. Zespół można nagrodzić **udogodnieniami** (np. karta sportowa,
+  posiłki), które podnoszą zadowolenie.
+- **Kolejny lokal** można wziąć co 3 rundy (po przeprowadzce właściciel musi odpocząć). Ma własne menu, ceny, magazyn
+  i załogę. Gotowy lokal ma sprzęt od poprzedniego najemcy w jakości ★, ★★ albo ★★★.
+- **Licytacje lokali są jawne.** Gdy inna drużyna złożyła już ofertę na ten sam lokal, widać najwyższą ofertę i to, kto
+  prowadzi. Nowa oferta musi ją przebić o co najmniej 2%. Wygrywa najwyższa oferta w chwili zamknięcia rundy. Boty składają
+  oferty dopiero przy zamknięciu, więc ich ofert nie widać.
+- **Bazar** (od tygodnia 6) – wspólny rynek drużyn i botów. Towar z magazynu albo sprzęt wystawia się z ceną wywoławczą
+  od 50% do 200% wartości, najwyżej 5 ogłoszeń w tygodniu. Ogłoszenie licytuje się przez cały następny tydzień, a nowa
+  oferta musi przebić prowadzącą o co najmniej 3%. Złożonej oferty nie można obniżyć ani wycofać.
+- **Konkurencja** – ogólny obraz rywali widzi każdy. Dokładne dane jednego rywala (od tygodnia 2) zbierze detektyw
+  „Sokole Oko”: 300–800 zł i 2 godziny właściciela. W 15% przypadków detektyw wpada i rywal dowiaduje się, kto go śledził.
 
-## 13. Rozwój
+## 12. Kiedy co się odblokowuje
 
-- **Wyposażenie dla klientów** (od tygodnia 4) – stoliki i krzesła, darmowe WiFi, telewizor z meczami: przyciąga
-  klientów, którzy go oczekują, i poprawia opinie. Kupujesz je w dwóch sklepach: meble w IKEA, resztę w Leroy Merlin. Każda kolejna rzecz daje mniej niż poprzednia – komplet opłaca
-  się, gdy kuchnia ma wolne moce; przy pełnej kuchni wystarczy kilka najważniejszych.
-- **Kolejny lokal** (Nowe lokale ▸ Do wynajęcia) można wziąć co 3 rundy – po każdej przeprowadzce właściciel musi odpocząć (gra przypomni o tym
-  bez litości). Nowy lokal ma własne menu, ceny, magazyn i załogę – urządzasz go od zera
-  w zakładce Lokale. Od tygodnia 4 działają też **licytacje i przejęcia** lokali.
-- **Licytacja lokali jest jawna.** Gdy inna drużyna zapisała już ofertę na ten sam lokal (albo budynek do przejęcia),
-  przy lokalu widać na żywo najwyższą ofertę i nazwę prowadzącej drużyny, a także to, czy prowadzisz Ty. Nowa albo
-  zmieniona oferta musi przebić najwyższą ofertę innej drużyny o co najmniej 2% (panel podpowiada minimalną kwotę,
-  a gra odrzuci niższą). Ofertę zawsze można wycofać. Gdy ktoś przebije Twoją ofertę, dostaniesz powiadomienie.
-  Wygrywa najwyższa oferta w chwili, gdy mistrz gry zamyka rundę. Boty składają oferty dopiero przy zamknięciu
-  rundy, więc ich ofert nie widać – przebicie drużyny nie daje pewności, że bot nie da więcej.
-- **Giełda handlu** (od tygodnia 6) – wspólny rynek wszystkich drużyn i botów. Towar z magazynu albo sprzęt ze
-  stanowiska wystawia się w ogłoszeniu z ceną wywoławczą od 50% do 200% wartości (towar – koszt zakupu, sprzęt – cena
-  katalogowa), najwyżej 5 ogłoszeń w tygodniu. Ogłoszenie wpisane w tym tygodniu inni widzą od razu jako zapowiedź,
-  a licytują przez cały następny tydzień. Licytacja jest jawna i na żywo: każdy widzi, kto prowadzi i za ile, a nowa
-  oferta musi przebić prowadzącą o co najmniej 3%. Złożonej oferty nie można obniżyć ani wycofać, a własnego
-  ogłoszenia nie można licytować. Na początku przeliczenia najwyższa oferta kupuje – sprzedawca dostaje fakturę
-  sprzedaży, kupujący fakturę zakupu (obie w KPiR), towar przychodzi z terminem przydatności sprzedawcy. Gdy
-  kupującemu zabraknie pieniędzy, wygrywa następna oferta; ogłoszenie bez ofert wygasa. Boty też handlują: wystawiają
-  nadwyżki towaru i niepotrzebny sprzęt, a licytują to, czego używają w swoich daniach – zwykle płacą najwyżej
-  70–90% wartości (zależnie od poziomu), przy równej kwocie wygrywa drużyna.
-- **Konkurencja** (Klienci ▸ Konkurencja) – ogólny obraz rywali widzi każdy: lokale, przedział cen,
-  reklama i promocje, udział w klientach. Dokładne dane jednego rywala (od tygodnia 2) zbierze detektyw „Sokole Oko”
-  z biura przy dworcu: 300–800 zł i 2 godziny właściciela. Raport przychodzi po tygodniu, ale w 15% przypadków
-  detektyw wpada – i rywal dowiaduje się, kto go śledził.
-
-## 14. Kiedy co się odblokowuje
-
-| Tydzień | Nowe zakładki |
+| Tydzień | Co nowego |
 |---|---|
-| 1 | Mapa, Nowe lokale ▸ Do wynajęcia, Lokale (Przegląd, Menu i ceny, Sprzęt – stanowiska, Ludzie), Rynek pracy, Bank, Biuro rachunkowe, Kalendarz miejski |
-| 2 | Sprzęt w lokalu, Zaopatrzenie (dostawy z auto-dostawcą, magazyn, przewozy), Parki, raporty finansowe, detektyw |
-| 3 | Karta wyników, Udogodnienia, Promocje, nowe dania w menu |
-| 4 | Wyposażenie, karta skumulowana, licytacje i przejęcia lokali, Ubezpieczenia (polisy), kontrole sanepidu |
-| 5 | Agencje reklamowe – drukarnia (ulotki, plakaty) |
-| 6 | Giełda handlu |
-| 7 | Szkolenia, Marketing internetowy |
-| 8 | Radio i billboardy, dania specjalne strefy (kebab specjalny I, przekąska specjalna) |
-| 10 | Agencja eventowa (degustacje, Noc Kebaba) |
-| 11 | Dania specjalne strefy (kebab specjalny II, napój specjalny) |
+| 1 | Lokal (najem, kupno, licytacje), bank, biuro rachunkowe, rynek pracy (pracuj.pl), menu (3 dania), stanowiska, kalendarz miasta |
+| 2 | Sprzedaż, sprzęt, zaopatrzenie z auto-dostawcą i przewozami, parki, detektyw, agencja pracy |
+| 3 | Kurier rankingowy (wyniki i ranking), udogodnienia, promocje, nowe dania |
+| 4 | Wyposażenie dla gości, przejęcia budynków, ubezpieczenia, kontrole sanepidu, headhunter |
+| 5 | Ulotki i plakaty (drukarnia) |
+| 6 | Bazar |
+| 7 | Szkolenia, reklama w internecie |
+| 8 | Radio i billboardy, dania specjalne strefy (część I) |
+| 10 | Degustacje i Noc Kebaba (agencja eventowa) |
+| 11 | Dania specjalne strefy (część II) |
 
-Mistrz gry może przesunąć te terminy (poza tygodniem 1 – tydzień przygotowawczy jest zawsze taki sam) – aktualny tydzień zawsze widać w menu przy wyszarzonej zakładce.
+Mistrz gry może przesunąć te terminy (poza tygodniem 1) i zakryć albo wyłączyć całe funkcje. Aktualny tydzień
+widać w menu przy szarej pozycji.
 
-## 15. Dziesięć rad na dobry start
+## 13. Dziesięć rad na dobry start
 
 1. **Policz, zanim kupisz.** 50 000 zł znika szybciej, niż się wydaje: kaucja, sprzęt, pierwsze pensje i towar.
 2. **Lokal to połowa sukcesu.** Tani lokal w pustej strefie jest drogi.
 3. **Cena to nie wszystko.** Najtańszy kebab w mieście z jednym kucharzem to kolejka, której nikt nie obsłuży.
-4. **Patrz na utraconą sprzedaż i opinie.** Jeśli klienci odchodzą z kolejki – brakuje ludzi, sprzętu albo miejsc
-   przy kasie. Zapamiętają to w opiniach, a gwiazdki na mapie widzą wszyscy.
+4. **Patrz na utraconą sprzedaż i opinie.** Jeśli klienci odchodzą z kolejki, brakuje ludzi, sprzętu albo miejsc
+   przy kasie. Opinie widzą wszyscy.
 5. **Zamawiaj pod prognozę, nie na zapas.** Przeterminowane jedzenie to strata i zaproszenie dla sanepidu.
-6. **Czytaj kalendarz miejski.** Sesja, mecz Motoru, jarmark – zaplanuj obsadę i zamówienia, zanim tydzień się zacznie.
-7. **Dbaj o ludzi.** Niezadowolony pracownik odchodzi, a nowego trzeba znaleźć i przyuczyć. Lista błędów ostrzeże Cię tydzień wcześniej.
+6. **Czytaj kalendarz miasta.** Sesja, mecz Motoru, jarmark – obsadę i zamówienia planuje się przed tygodniem.
+7. **Dbaj o ludzi.** Niezadowolony pracownik odchodzi, a zlecenie „jak etat” kończy się karą PIP.
 8. **Sprawdzaj listę błędów przed wysłaniem.** Zawsze.
-9. **Najedź na kółko „i”.** Każda zakładka i pole ma tam wyjaśnienie – przeczytaj je, zanim zgadniesz.
+9. **Czytaj dymki „i”.** Każdy ekran i pole ma wyjaśnienie, a bywa, że z przykładem.
 10. **Nie bierz od Harpagona.** Serio.
 
-Jeśli mistrz gry włączył **podpowiedzi**, przez pierwsze trzy rundy Dashboard pokazuje „3 rzeczy do sprawdzenia
-w tej rundzie” – rady z tej listy dobrane do etapu gry. Kliknięcie rady otwiera właściwą zakładkę.
+Jeśli mistrz gry włączył **podpowiedzi**, przez pierwsze trzy rundy Plan tygodnia pokazuje „3 rzeczy do sprawdzenia”
+dobrane do etapu gry.
+
+---
+
+## Dla mistrza gry
+
+Ta część jest dla nauczyciela, który prowadzi grę. Panel mistrza gry jest pod adresem `/mg/` (przycisk „Pulpit
+mistrza gry”); dostępny jest tylko dla kont z rolą mistrza.
+
+### Zakładanie gry
+
+Pulpit pokazuje wszystkie gry: w której rundzie są i które drużyny wysłały decyzje. **Nowa gra** to cztery kroki,
+które można poprawiać aż do kliknięcia „Utwórz grę”:
+
+1. **Podstawy** – nazwa gry, liczba rund (od 2 do maksimum; domyślnie 18) i kapitał startowy drużyny (domyślnie
+   50 000 zł). W „Więcej ustawień”: sposób rozliczania debetu (na bieżąco albo tylko niedobór na koniec tygodnia)
+   i ziarno losowości – ta sama liczba daje za każdym razem tę samą grę, co przydaje się do powtórek i porównań.
+2. **Drużyny i boty** – drużyny uczniów (1–4 osoby) oraz boty, czyli firmy komputerowe o różnych strategiach
+   i poziomach, które konkurują na tym samym rynku.
+3. **Funkcje gry** – zestaw gotowych ustawień („Pierwsza gra”, „Pełna gra”, „Krótka lekcja”) i stan każdej funkcji:
+   odkryta, zakryta albo wyłączona. Tu też ustawia się podpowiedzi na Planie tygodnia, przycisk „Zamów brakujące
+   u najtańszych” w Zamówieniach i refleksję przy wysyłaniu decyzji (nieobowiązkowa, wymagana albo wyłączona).
+4. **Sprawdź i utwórz** – podsumowanie całej gry.
+
+Można też **wczytać grę z pliku** (.json pobranego przyciskiem „Pobierz plik gry”) – np. kopię zapasową albo grę
+z innego komputera. Wczytana gra wraca bez kont uczniów.
+
+Uczniów dopisuje się do drużyn po utworzeniu gry, w zakładce **Drużyny**: z listy albo przez „Nowe konta uczniów”
+(login i hasło przekazuje się uczniom; adres logowania to `/konta/login/`). Hasło można nadać od nowa, a ucznia
+usunąć z drużyny.
+
+### Zakrywanie funkcji
+
+Stan funkcji ustawia się przy zakładaniu gry; po jej utworzeniu nie można go zmienić z poziomu panelu. Drużyny
+odsłaniają zakryte funkcje same, a zakładka **Funkcje** pokazuje, która drużyna co odsłoniła, i opisuje, co gra robi
+za zakrytą funkcję. Zestaw „Pierwsza gra” zakrywa wszystko oprócz podstawy – to dobry wybór na pierwszą lekcję.
+„Krótka lekcja” wyłącza handel, Harpagona, giełdę i sieć lokali, żeby zmieścić się w 1–2 lekcjach.
+
+### Zamykanie rundy
+
+W zakładce **Decyzje** widać, które drużyny wysłały decyzje, kto i kiedy je zapisywał (dziennik) oraz wpisane przy
+wysyłaniu refleksje „co zmieniamy i dlaczego”. Boty decydują dopiero przy zamknięciu rundy.
+
+- **Zamknij rundę N** liczy tydzień. Panel ostrzega, kto nie wysłał decyzji – taka drużyna gra zapisanymi do tej pory.
+- **Wstrzymaj grę** blokuje zmiany i wysyłanie decyzji (drużyny dalej je widzą), a runda się nie zamyka. „Wznów grę”
+  cofa wstrzymanie.
+- **Cofnij rundę** wraca o jedną rundę.
+- **Zamykanie rund o stałej porze** (np. wtorek 8:00 i czwartek 8:00) zamyka rundy samo; działa, gdy na serwerze co kilka
+  minut uruchamia się polecenie `zamykaj_rundy`.
+- **Harmonogram odblokowań** pozwala przesunąć tydzień odblokowania elementów gry (najwcześniej na tydzień 2,
+  tylko tych, które się jeszcze nie odblokowały; tydzień po końcu gry oznacza element wyłączony).
+- W ustawieniach gry mistrz włącza też podkupywanie pracowników, podpowiedzi i przycisk zamawiania.
+
+### Podgląd drużyn
+
+Przy każdej drużynie jest odnośnik **Strona firmy**, który otwiera jej panel tak, jak widzi go drużyna. Zakładka
+**Wyniki** pokazuje ranking i wykresy, a przy debecie ponad limit – ostrzeżenie. Ważne ustawienia i alarmy:
+
+- drużyna z **alarmem** (debet ponad limit) ma zablokowane inwestycje, kredyty i lokaty; mistrz gry może jej
+  **przysłać inwestora ratunkowego** (kwota do ustalonego maksimum, wpłacana na początku rundy);
+- konta uczniów, hasła i skład drużyn są w zakładce **Drużyny**.
+
+### Tryb lekcyjny
+
+Gra nie ma osobnego przełącznika „tryb lekcji”, ale sprawdza się takie ustawienie:
+
+- **Pierwsze 2–3 rundy na żywo na lekcji.** Mistrz gry zamyka rundę ręcznie, gdy większość drużyn wyśle decyzje,
+  a potem krótko omawia wyniki (Kurier rankingowy, wnioski z rundy). To czas na pierwsze kroki: lokal, bank, biuro,
+  menu i ludzie.
+- **Dalsze rundy między lekcjami**, np. 2 w tygodniu. Wystarczy ustawić zamykanie o stałej porze (np. wtorek
+  i czwartek) – drużyny decydują w domu, a na kolejnej lekcji omawia się wyniki.
+- Na krótszą naukę: liczba rund od 2 w górę, zestaw „Krótka lekcja” i podpowiedzi na Planie tygodnia.
+- Pole „co zmieniamy i dlaczego” (wymagane w ustawieniach) ułatwia rozmowę o decyzjach.
+
+### Kontrola PIP, spory i pytania uczniów
+
+- **Kontrola PIP** to kara za zlecenie „jak etat” (zob. rozdział 8). Drużyna widzi ją we wnioskach z rundy. To dobry
+  moment na rozmowę: czym różni się umowa zlecenie od umowy o pracę (art. 22 § 1 KP), co zmienia stały grafik i kto
+  decyduje o charakterze umowy. Wyjściem jest zmiana formy zatrudnienia albo ograniczenie godzin.
+- **Spory o podkupywanie** – mistrz gry może wyłączyć podkupywanie w ustawieniach gry. Wygrywa najwyższa oferta
+  (przy remisie losowanie), a pracownik przechodzi tylko przy ofercie o co najmniej 5% wyższej.
+- **Spory o licytacje** – zasady są jawne: oferta musi przebić najwyższą o ustalony procent, wygrywa najwyższa w chwili
+  zamknięcia rundy, a boty składają oferty dopiero przy zamknięciu. Każda drużyna widzi te same reguły.
+- **Błąd w grze** albo niejasny wynik – pomocne są dziennik zapisów decyzji i, w ostateczności, **Cofnij rundę**
+  oraz **Pobierz plik gry** (kopia zapasowa przed zmianą).
+- Dokładne liczby i źródła mechanik są w plikach `dane/*.yaml`.
+
+### Jak czytać ranking
+
+Zakładka **Wyniki** pokazuje ranking według wyniku działalności (średnia z rund od 2, z rosnącymi wagami) oraz wynik
+ostatniej rundy, dochód netto (ostatni i łączny), majątek netto, gotówkę, zadłużenie, lokaty i liczbę pracowników
+i stanowisk. Pod tabelą są wykresy dochodu, majątku i gotówki w rundach. Do arkusza można pobrać **ranking (CSV)** i
+**wyniki firm w rundach (CSV)**.
+
+Kilka wskazówek do omówienia:
+
+- Najwyższy dochód w tygodniu nie musi dawać najlepszego miejsca – wynik liczy też gości, zespół, rozwój i
+  bezpieczeństwo finansowe.
+- Duży majątek netto przy słabym wyniku może oznaczać drużynę, która dużo zainwestowała, ale jeszcze nie sprzedaje.
+- Wynik zależy też od rozruchu: pierwsze tygodnie mają niższe wagi, a ostatnie liczą się podwójnie.
+- Drużyny porównuje się z botami, ale warto pamiętać, że boty też podkupują pracowników i licytują lokale.
 
 ---
 
