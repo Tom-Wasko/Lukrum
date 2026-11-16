@@ -4,6 +4,7 @@ import { ikona } from "./ikony.js";
 import { ikonaMarki } from "./ikony_marek.js";
 import { ukryta, wylaczona } from "./funkcje.js";
 import { listWujka } from "./wujek.js";
+import { finalHtml } from "./final.js";
 
 const DZIALY = ["finanse", "goscie", "zespol", "rozwoj", "bezpieczenstwo"];
 const NAZWY_DZIALOW = { finanse: "Finanse", goscie: "Goście", zespol: "Zespół", rozwoj: "Rozwój", bezpieczenstwo: "Bezpieczeństwo finansowe" };
@@ -149,7 +150,7 @@ function podpowiedziHtml(v) {
 // U9: rozruch nowego lokalu (dane/mapa/popyt.yaml: model.rozruch) – strata w pierwszych tygodniach sprzedaży jest normalna
 function rozruchHtml(v) {
   const R = v.dashboard?.rozruch;
-  if (!R || !R.lokale.length) return "";   // w 1. tygodniu o rozruchu pisze wujek (wujek.js), bez ściany tekstu
+  if (!R || !R.lokale.length || v.gra.zakonczona) return "";   // w 1. tygodniu o rozruchu pisze wujek (wujek.js), bez ściany tekstu
   const pr = (m) => `ok. ${Math.round(m * 100)}%`;
   const lokale = R.lokale.map((l) => `<li><b>${esc(l.nazwa)}</b>: ${l.poprzednia != null
     ? `w poprzednim tygodniu przyszło ${pr(l.poprzednia)} pełnej liczby klientów, a w tym tygodniu ${l.teraz < 1 ? `przyjdzie ${pr(l.teraz)}` : "popyt jest już pełny"}`
@@ -180,7 +181,7 @@ export const dashboard = {
     const pasek = alarm ? `<div class="komunikat zly">${esc(alarm.tekst)}
       <button class="btn jasny maly" data-akcja="popraw" data-z="bank">Przejdź do banku</button></div>` : "";
     const inwestor = v.inwestor && v.runda <= v.inwestor.do_rundy + 1 ? inwestorHtml(v) : "";   // U11: potem tylko w Banku
-    return `${pasek}${inwestor}${status}${klub}${v.edycja ? listWujka(v, c) : ""}${rundaMarki ? formularzMarki(v, szkic) : ""}${podpowiedziHtml(v)}${rozruchHtml(v)}${dlaczegoHtml(v)}<div class="sekcja-tytul">Twoja firma</div><div class="dash">
+    return `${finalHtml(v)}${pasek}${inwestor}${status}${klub}${v.edycja ? listWujka(v, c) : ""}${rundaMarki ? formularzMarki(v, szkic) : ""}${podpowiedziHtml(v)}${rozruchHtml(v)}${dlaczegoHtml(v)}<div class="sekcja-tytul">Twoja firma</div><div class="dash">
       ${kafel("Nazwa i logo firmy", "osoba", `<div class="srodek">${znakFirmy(m)}<b>${esc(m.nazwa)}</b>${m.slogan ? `<div class="maly-tekst">„${esc(m.slogan)}”</div>` : ""}</div>`)}
       ${kafel("Miejsce", "karta", d.miejsce ? `${d.miejsce} / ${d.liczba_firm}` : `<span class="maly-tekst">Ranking dostępny od rundy 3</span>`)}
       ${kafel(`Liczba rund w grze`, "zegar", `<div>${Math.min(v.gra.runda, v.gra.liczba_rund)} / ${v.gra.liczba_rund}
