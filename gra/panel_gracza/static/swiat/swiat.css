@@ -187,8 +187,8 @@
 .lw-tytul { display: flex; justify-content: space-between; padding: 6px 12px; background: var(--tusz); color: var(--papier); font-family: var(--font-szyld); letter-spacing: .07em; text-transform: uppercase; font-size: 13.5px; }
 .lw-kroki ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
 .lw-kroki li { border-top: 1px solid var(--ramka); }
-.lw-kroki a { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 12px; color: var(--tusz); text-decoration: none; cursor: pointer; height: 100%; }
-.lw-kroki a:hover { background: color-mix(in srgb, var(--akcent-2) 10%, transparent); }
+.lw-kroki li > a { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 12px; color: var(--tusz); text-decoration: none; cursor: pointer; height: 100%; }
+.lw-kroki li > a:hover { background: color-mix(in srgb, var(--akcent-2) 10%, transparent); }
 .lw-nr { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--tusz); display: grid; place-items: center; font-family: var(--font-gruby); font-size: 14px; }
 .lw-co small { display: block; font-family: var(--font-szyld); letter-spacing: .06em; text-transform: uppercase; font-size: 12px; color: color-mix(in srgb, var(--tusz) 75%, var(--papier)); }
 .lw-co b { display: block; font-size: 15px; }
@@ -201,3 +201,5 @@
 .lw-kroki li.teraz .lw-nr { background: var(--akcent); border-color: var(--akcent); color: var(--papier); }
 .lw-kroki li.teraz .lw-stan { color: var(--akcent); font-weight: 700; }
 @media (max-width: 1000px) { .lw-list { grid-template-columns: 1fr; } .lw-kartka { transform: none; } }
+.lw-nowe { display: flex; flex-wrap: wrap; gap: 4px 22px; padding: 8px 12px; border-top: 2px solid var(--tusz); font-size: 13.5px; background: color-mix(in srgb, var(--uwaga) 9%, transparent); }
+.lw-nowe a { color: var(--akcent-2); cursor: pointer; }
