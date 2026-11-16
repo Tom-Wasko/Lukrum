@@ -7,7 +7,7 @@ from django.http import Http404
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from gry import serwisy
+from gry import lekcje, serwisy
 from gry.models import Gra
 from konta.role import jest_mg
 from silnik import funkcje as fn
@@ -56,6 +56,7 @@ def lista(request):
         "pierwsza": dane.nazwa_rundy(1),
         "okres": dane.okres["mianownik"],
         "mnoga": dane.okres["mnoga"],
+        "lekcje": lekcje.zakresy(),   # tryb lekcyjny: domyślne i zakresy z danych (katalog.yaml)
     }
     ustawienia.update(_funkcje_kreatora(dane))
     return render(request, "panel_mg/lista.html", {"ustawienia": ustawienia})

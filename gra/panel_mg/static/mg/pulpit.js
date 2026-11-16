@@ -36,9 +36,11 @@ function termin(g) {
   const p = g.prowadzenie || {};
   if (g.zakonczona) return "Gra zakończona – wyniki i plik CSV w panelu gry.";
   if (p.pauza) return "<b>Pauza</b> – drużyny nie mogą wysyłać decyzji.";
+  if (p.lekcje?.etap === "na_zywo") return `<b>Na żywo</b>: ${esc(p.lekcje.tekst.replace("na żywo: ", ""))} – rundy zamykasz sam(a).`;
+  if (p.lekcje && p.termin && p.termin_minal) return `<b>Termin minął</b> – zamknij rundę (tryb lekcyjny, ${p.lekcje.termin_dni} dni na rundę).`;
   if (p.termin) {
     const t = new Date(p.termin).toLocaleString("pl-PL", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-    return `Runda zamknie się: <b>${esc(t)}</b>${p.harmonogram_opis ? ` (${esc(p.harmonogram_opis)})` : ""}`;
+    return `${p.lekcje ? "Między lekcjami, termin" : "Runda zamknie się"}: <b>${esc(t)}</b>${p.harmonogram_opis ? ` (${esc(p.harmonogram_opis)})` : ""}`;
   }
   return "Runda zamknie się, gdy wszystkie drużyny wyślą (albo gdy zamkniesz ją w panelu gry).";
 }
@@ -217,12 +219,24 @@ function podsumowanie() {
     pole(`Boty (${boty.length})`, boty.map((x) => `${esc(x.nazwa)}${x.poziom ? ` – ${esc(U.poziomy[x.poziom] || x.poziom)}` : ""}`).join("<br>") || "bez botów"),
     pole("Funkcje gry", FUNKCJE.length ? `${zestaw ? `zestaw „${esc(zestaw.nazwa)}”` : "własny zestaw"}<br>odkryte: ${liczba("odkryta")}, zakryte: ${liczba("zakryta")}, `
       + `wyłączone: ${wylaczone.length}${wylaczone.length ? ` (${wylaczone.join(", ")})` : ""}` : "bez funkcji"),
+    pole("Sposób prowadzenia", lekcje() ? `tryb lekcyjny<br>${lekcje().rundy_na_zywo} ${odmiana(lekcje().rundy_na_zywo, "runda", "rundy", "rund")} na żywo, potem ${lekcje().termin_dni} dni na rundę` : "na żywo"),
     pole("Pomoc dla drużyn", [`podpowiedzi: ${$("podpowiedzi").checked ? "tak" : "nie"}`,
       `„Zamów brakujące”: ${$("auto-zamowienia").checked ? "tak" : "nie"}`, `refleksja: ${esc(opis($("refleksja")))}`].join("<br>")),
     pole("Więcej ustawień", [`kredyt: ${esc(opis($("kredyt")).split(" – ")[0])}`,
       `ziarno: ${esc($("ziarno").value || "losowe")}`].join("<br>")),
   ].join("");
 }
+
+// sposób prowadzenia: „na żywo” albo tryb lekcyjny (domyślne i zakresy z danych: U.lekcje)
+function lekcje() {
+  if ($("tryb").value !== "lekcyjny") return null;
+  return { rundy_na_zywo: +$("rundy-na-zywo").value, termin_dni: +$("termin-dni").value };
+}
+for (const [id, k] of [["rundy-na-zywo", "rundy_na_zywo"], ["termin-dni", "termin_dni"]]) {
+  const z = U.lekcje[k];
+  Object.assign($(id), { min: z.min, max: z.max, value: z.domyslnie });
+}
+$("tryb").onchange = () => { $("tryb-lekcyjny").hidden = $("tryb").value !== "lekcyjny"; };
 
 $("utworz").onclick = async () => {
   pokazBlad("");
@@ -232,7 +246,7 @@ $("utworz").onclick = async () => {
       nazwa: $("nazwa").value, liczba_rund: +$("rundy").value, kapital_startowy: $("kapital").value, ziarno: $("ziarno").value,
       ceny_dostawcow: "losowe", tryb_debetu: $("kredyt").value, auto_zamowienia: $("auto-zamowienia").checked,
       refleksja: $("refleksja").value, podpowiedzi: $("podpowiedzi").checked, firmy: firmy(),
-      funkcje: FUNKCJE.length ? stany : undefined,
+      funkcje: FUNKCJE.length ? stany : undefined, lekcje: lekcje(),
     }) });
     const j = await r.json();
     if (!r.ok) return pokazBlad(j.blad);

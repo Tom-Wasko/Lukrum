@@ -67,6 +67,18 @@
           (nie ma ich w grze dla nikogo, także dla botów). Po utworzeniu gry stanów funkcji nie można zmienić.</p>
         <div class="zestawy" id="zestawy"></div>
         <table class="tabela-funkcji" id="funkcje"></table>
+        <div class="podsekcja">Sposób prowadzenia</div>
+        <div class="opcje-p">
+          <label class="pole" style="max-width:420px">Sposób prowadzenia<select id="tryb">
+            <option value="na_zywo">Na żywo – rundy zamykasz sam(a)</option>
+            <option value="lekcyjny">Tryb lekcyjny – rundy na lekcji, potem między lekcjami</option></select>
+            <small>w trybie lekcyjnym pierwsze rundy są na żywo, a kolejne mają termin liczony od otwarcia rundy</small></label>
+          <div id="tryb-lekcyjny" hidden>
+            <label class="pole" style="max-width:420px">Rundy na żywo na start<input type="number" id="rundy-na-zywo" step="1"></label>
+            <label class="pole" style="max-width:420px">Termin kolejnych rund (dni)<input type="number" id="termin-dni" step="1">
+              <small>runda zamknie się sama po tym czasie, jeśli na serwerze działa <code>zamykaj_rundy</code>; inaczej panel pokaże „termin minął”</small></label>
+          </div>
+        </div>
         <div class="podsekcja">Pomoc dla drużyn</div>
         <div class="opcje-p">
           <label class="przelacznik"><input type="checkbox" id="podpowiedzi"><span>Podpowiedzi na Pulpicie drużyny

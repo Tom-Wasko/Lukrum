@@ -121,7 +121,9 @@ function decyzje() {
   const { gra, firmy, prowadzenie: P } = S.p;
   const druzyny = firmy.filter((f) => !f.bot);
   const wyslaly = druzyny.filter((f) => f.wyslane).length;
-  const kiedy = P.termin ? ` Termin z harmonogramu: <b>${esc(termin(P.termin))}</b>.` : "";
+  const L = P.lekcje;
+  const kiedy = P.termin ? ` ${L ? "Termin rundy" : "Termin z harmonogramu"}: <b>${esc(termin(P.termin))}</b>.${L && P.termin_minal
+    ? " <b>Termin minął – zamknij rundę.</b>" : ""}` : "";
   const opis = gra.zakonczona ? "Gra zakończona – wyniki w zakładce „Wyniki”."
     : P.pauza ? "<b>Gra wstrzymana.</b> Drużyny widzą decyzje, ale nie mogą ich zmieniać ani wysyłać, runda się nie zamyka. Wznów grę przyciskiem poniżej."
     : `Decyzje wysłało ${wyslaly} z ${druzyny.length} ${druzyny.length === 1 ? "drużyny" : "drużyn"}. Runda zamyka się sama, gdy wyślą wszystkie.${kiedy}
@@ -164,6 +166,8 @@ function decyzje() {
       <button class="btn jasny" data-akcja="odswiez">Odśwież</button></div>
     ${tabela("Prowadzenie gry", ["", ""], [["Zamykanie rund o stałej porze", `${harm}
         ${gra.zakonczona ? "" : ` <a data-akcja="harmonogram">zmień</a>`}`], ["Najbliższy termin", P.pauza ? "– (gra wstrzymana)" : P.termin ? esc(termin(P.termin)) : "–"],
+      ["Sposób prowadzenia", `${L ? `tryb lekcyjny – ${esc(L.tekst)}${L.etap === "na_zywo" ? ` (potem ${L.termin_dni} dni na rundę)` : ""}` : "na żywo"}${gra.zakonczona ? ""
+        : ` <a data-akcja="lekcje">zmień</a>`}`],
       ...(P.odblokowanie.length ? [["Odblokowania (tygodnie)", `${opisOdblokowan(P.odblokowanie)}${gra.zakonczona ? "" : ` <a data-akcja="odblokowanie">zmień</a>`}`]] : [])],
     { klasy: ["l", "l"] })}
     ${tabela("Ustawienia gry", ["", ""], ustawienia, { klasy: ["l", "l"] })}`;
@@ -200,6 +204,21 @@ function edytujHarmonogram() {
     <div id="terminy">${S.p.prowadzenie.harmonogram.map(wierszTerminu).join("")}</div>
     <p><a data-akcja="dodaj-termin">+ termin</a></p>`,
   { przyciski: `<button class="btn jasny" data-akcja="zamknij-okno">Anuluj</button><button class="btn pom" data-akcja="zapisz-harmonogram">Zapisz</button>` });
+}
+
+// tryb lekcyjny (gry/lekcje.py): rundy na żywo na lekcji, potem rundy z terminem w dniach
+function edytujLekcje() {
+  const L = S.p.prowadzenie.lekcje, Z = S.p.prowadzenie.zakresy_lekcji;
+  okno("Sposób prowadzenia", `<label class="pole">Sposób prowadzenia<select id="tryb-mg">
+      <option value="na_zywo"${L ? "" : " selected"}>Na żywo – rundy zamykasz sam(a)</option>
+      <option value="lekcyjny"${L ? " selected" : ""}>Tryb lekcyjny – rundy na lekcji, potem między lekcjami</option></select></label>
+    <label class="pole">Rundy na żywo na start<input type="number" id="rundy-na-zywo" step="1" min="${Z.rundy_na_zywo.min}" max="${Z.rundy_na_zywo.max}"
+      value="${L ? L.rundy_na_zywo : Z.rundy_na_zywo.domyslnie}"></label>
+    <label class="pole">Termin kolejnych rund (dni)<input type="number" id="termin-dni" step="1" min="${Z.termin_dni.min}" max="${Z.termin_dni.max}"
+      value="${L ? L.termin_dni : Z.termin_dni.domyslnie}"></label>
+    <p class="podpowiedz">Termin liczy się od otwarcia rundy (po zmianie – od teraz). Runda zamyka się sama, gdy na serwerze działa
+      <code>zamykaj_rundy</code>; inaczej zobaczysz „termin minął – zamknij rundę”.</p>`,
+  { przyciski: `<button class="btn jasny" data-akcja="zamknij-okno">Anuluj</button><button class="btn pom" data-akcja="zapisz-lekcje">Zapisz</button>` });
 }
 
 // harmonogram odblokowań (gra z lokalami, silnik/harmonogram.py): tydzień każdego elementu, zmiany tylko przyszłych
@@ -353,6 +372,15 @@ async function wykonaj(akcja, el) {
     await api(`${URL_GRY}/prowadzenie`, "POST", { harmonogram });
     zamknijOkno();
     toast(harmonogram.length ? "Harmonogram zapisany." : "Harmonogram usunięty – rundy zamykasz sam(a).");
+    return wczytaj();
+  }
+  if (akcja === "lekcje") return edytujLekcje();
+  if (akcja === "zapisz-lekcje") {
+    const lekcje = document.getElementById("tryb-mg").value === "lekcyjny"
+      ? { rundy_na_zywo: +document.getElementById("rundy-na-zywo").value, termin_dni: +document.getElementById("termin-dni").value } : null;
+    await api(`${URL_GRY}/prowadzenie`, "POST", { lekcje });
+    zamknijOkno();
+    toast(lekcje ? "Tryb lekcyjny zapisany." : "Gra prowadzona na żywo.");
     return wczytaj();
   }
   if (akcja === "odblokowanie") return edytujOdblokowanie();

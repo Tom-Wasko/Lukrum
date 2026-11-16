@@ -15,6 +15,7 @@ from datetime import datetime, time, timedelta
 
 from django.utils import timezone
 
+from . import lekcje
 from .models import Gra
 
 DNI = ["poniedziałek", "wtorek", "środa", "czwartek", "piątek", "sobota", "niedziela"]
@@ -61,9 +62,21 @@ def nastepny(terminy: list[dict], od: datetime) -> datetime | None:
 
 def termin(obj: Gra) -> datetime | None:
     """Kiedy zamknie się bieżąca runda gry (brak: bez harmonogramu albo w pauzie)."""
-    if obj.pauza or not obj.harmonogram:
+    if obj.pauza:
         return None
-    return nastepny(obj.harmonogram, obj.termin_od or obj.utworzono)
+    od = obj.termin_od or obj.utworzono
+    if obj.harmonogram:   # stałe terminy tygodniowe mają pierwszeństwo przed trybem lekcyjnym
+        return nastepny(obj.harmonogram, od)
+    u = lekcje.ustawienie(obj.konfiguracja)
+    return lekcje.termin(u, _runda(obj), od) if u else None
+
+
+def _runda(obj: Gra) -> int:
+    """Bieżąca runda gry (jak `GraSilnika.runda`) – bez ładowania silnika."""
+    start = int((obj.konfiguracja.get("import") or {}).get("runda", 1))
+    rundy = obj.rundy.filter(przeliczona=True).order_by("-numer")
+    ost = rundy.values_list("numer", flat=True).first()
+    return max(ost, start - 1) + 1 if ost is not None else start
 
 
 def opis(t: dict) -> str:
@@ -73,7 +86,7 @@ def opis(t: dict) -> str:
 def do_zamkniecia(teraz: datetime | None = None) -> list[tuple[str, datetime]]:
     """Gry (id, termin), w których minął termin zamknięcia bieżącej rundy."""
     teraz = teraz or timezone.now()
-    gry = Gra.objects.filter(pauza=False).exclude(harmonogram=[])
+    gry = Gra.objects.filter(pauza=False)   # harmonogram albo tryb lekcyjny (rozstrzyga termin())
     return [(g.pk, t) for g in gry if (t := termin(g)) is not None and t <= teraz]
 
 
@@ -100,12 +113,16 @@ def zamknij_spoznione(teraz: datetime | None = None) -> list[dict]:
 
 def prowadzenie(id_: str) -> dict:
     """Pauza, harmonogram i termin zamknięcia bieżącej rundy – do widoków drużyny i mistrza gry."""
-    obj = Gra.objects.only("pauza", "harmonogram", "termin_od", "utworzono").get(pk=id_)
+    pola = ("pauza", "harmonogram", "termin_od", "utworzono", "konfiguracja")
+    obj = Gra.objects.only(*pola).get(pk=id_)
     t = termin(obj)
+    u = lekcje.ustawienie(obj.konfiguracja)
     return {
         "pauza": obj.pauza,
         "harmonogram": obj.harmonogram,
         "termin": t.isoformat() if t else None,
+        "termin_minal": bool(t and t <= timezone.now()),   # panel MG: „termin minął”
+        "lekcje": lekcje.opis(u, _runda(obj)) if u else None,
         "harmonogram_opis": ", ".join(opis(x) for x in obj.harmonogram),
     }
 

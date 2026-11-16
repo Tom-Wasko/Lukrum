@@ -179,3 +179,82 @@ def test_refleksja_druzyny_przy_wysylaniu_decyzji(client, gra):
     nowa = client.post("/api/gry", {"nazwa": "B", "firmy": FIRMY, "refleksja": "wymagana"}, content_type=JSON).json()["id"]
     assert _mg(client, nowa)["gra"]["refleksja"] == "wymagana"
     assert client.post("/api/gry", {"nazwa": "C", "firmy": FIRMY, "refleksja": "?"}, content_type=JSON).status_code == 400
+
+
+# --- tryb lekcyjny (gry/lekcje.py) ---------------------------------------------------------------------------------
+
+LEKCJE = {"rundy_na_zywo": 2, "termin_dni": 5}
+
+
+def _nowa(client, **d):
+    d = {"nazwa": "Klasa", "ziarno": "7", "liczba_rund": 4, "firmy": FIRMY, **d}
+    return client.post("/api/gry", d, content_type=JSON)
+
+
+def test_lekcje_zakresy_i_domyslne_z_danych():
+    from gry import lekcje
+    z = lekcje.zakresy()
+    assert lekcje.popraw({}) == {"rundy_na_zywo": z["rundy_na_zywo"]["domyslnie"], "termin_dni": z["termin_dni"]["domyslnie"]}
+    assert lekcje.popraw(None) is None and lekcje.popraw(False) is None
+    assert lekcje.popraw({"rundy_na_zywo": "4", "termin_dni": 14}) == {"rundy_na_zywo": 4, "termin_dni": 14}
+    for zle in ({"rundy_na_zywo": 0}, {"rundy_na_zywo": 7}, {"termin_dni": 15}, {"termin_dni": 0}, {"termin_dni": "x"},
+                {"termin_dni": 2.5}, {"termin_dni": True}, "tak"):
+        with pytest.raises(ValueError):
+            lekcje.popraw(zle)
+
+
+def test_lekcje_wyliczenie_terminu():
+    from gry import lekcje
+    od = _lokalnie(2026, 11, 2, 10, 0)
+    assert lekcje.termin(None, 5, od) is None            # gra „na żywo”
+    assert lekcje.termin(LEKCJE, 1, od) is None and lekcje.termin(LEKCJE, 2, od) is None   # rundy na żywo
+    assert lekcje.termin(LEKCJE, 3, od) == od + timedelta(days=5)
+    assert lekcje.opis(LEKCJE, 2)["tekst"] == "na żywo: runda 2 z 2"
+    assert lekcje.opis(LEKCJE, 3)["etap"] == "miedzy" and lekcje.opis(None, 1) is None
+
+
+def test_lekcje_kreator_i_przebieg_rund(client):
+    assert _nowa(client, lekcje={"rundy_na_zywo": 9}).status_code == 400
+    id_ = _nowa(client, lekcje=LEKCJE).json()["id"]
+    p = _mg(client, id_)["prowadzenie"]
+    assert p["lekcje"]["etap"] == "na_zywo" and p["termin"] is None and not p["termin_minal"]
+    assert p["zakresy_lekcji"]["termin_dni"]["max"] == 14
+    client.post(f"/api/gry/{id_}/przelicz")      # runda 1 → 2: nadal na żywo
+    assert _mg(client, id_)["prowadzenie"]["termin"] is None
+    client.post(f"/api/gry/{id_}/przelicz")      # runda 2 → 3: między lekcjami
+    p = _mg(client, id_)["prowadzenie"]
+    assert p["lekcje"]["etap"] == "miedzy" and p["lekcje"]["tekst"] == "między lekcjami: 5 dni na rundę"
+    od = Gra.objects.get(pk=id_).termin_od
+    assert datetime.fromisoformat(p["termin"]) == od + timedelta(days=5) and not p["termin_minal"]
+    # po terminie: panel pokazuje „termin minął”, a komenda zamykająca zamyka rundę
+    Gra.objects.filter(pk=id_).update(termin_od=timezone.now() - timedelta(days=6))
+    assert _mg(client, id_)["prowadzenie"]["termin_minal"] is True
+    assert hg.zamknij_spoznione()[0]["runda"] == 3
+    assert _mg(client, id_)["prowadzenie"]["termin_minal"] is False
+
+
+def test_lekcje_zmiana_w_trakcie_gry_i_pauza(client):
+    id_ = _nowa(client).json()["id"]
+    assert _mg(client, id_)["prowadzenie"]["lekcje"] is None
+    assert _ustaw(client, id_, lekcje={"rundy_na_zywo": 1, "termin_dni": 3}).status_code == 200
+    client.post(f"/api/gry/{id_}/przelicz")
+    p = _mg(client, id_)["prowadzenie"]
+    assert p["lekcje"]["rundy_na_zywo"] == 1 and p["termin"]
+    assert _ustaw(client, id_, lekcje={"termin_dni": 99}).status_code == 400
+    assert _ustaw(client, id_, pauza=True).json()["prowadzenie"]["termin"] is None   # pauza: bez terminu
+    assert _ustaw(client, id_, pauza=False, lekcje=None).json()["prowadzenie"]["lekcje"] is None
+    assert _mg(client, id_)["prowadzenie"]["termin"] is None
+
+
+def test_stara_gra_bez_pol_lekcji_dziala_jak_dotad(client, gra):
+    obj = Gra.objects.get(pk=gra)
+    assert "lekcje" not in obj.konfiguracja
+    p = _mg(client, gra)["prowadzenie"]
+    assert p["lekcje"] is None and p["termin"] is None and p["termin_minal"] is False
+    assert hg.do_zamkniecia(timezone.now() + timedelta(days=400)) == []
+    # harmonogram tygodniowy ma pierwszeństwo przed trybem lekcyjnym
+    _ustaw(client, gra, lekcje={"rundy_na_zywo": 1, "termin_dni": 3})
+    client.post(f"/api/gry/{gra}/przelicz")
+    p = _ustaw(client, gra, harmonogram=[{"dzien": 0, "godzina": "8:00"}]).json()["prowadzenie"]
+    assert hg.opis({"dzien": 0, "godzina": "08:00"}) in p["harmonogram_opis"] and p["termin"]
+    assert datetime.fromisoformat(p["termin"]).astimezone(timezone.get_current_timezone()).weekday() == 0

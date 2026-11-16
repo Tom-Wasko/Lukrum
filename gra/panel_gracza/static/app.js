@@ -328,7 +328,10 @@ function rysuj() {
     + (v.gra.zakonczona ? `<span class="chip">Gra zakończona</span>` : v.wyslane && v.edycja
       ? `<span class="chip ok">Czekamy na: ${esc(v.gra.brakujace.join(", ") || "–")}</span>` : "")
     + (!v.gra.zakonczona && v.prowadzenie?.pauza ? `<span class="chip pom">Gra wstrzymana</span>`
-      : !v.gra.zakonczona && v.prowadzenie?.termin ? `<span class="chip" title="Runda zamknie się sama o tej porze">Zamknięcie: ${esc(terminKrotko(v.prowadzenie.termin))}</span>` : "");
+      : !v.gra.zakonczona && v.prowadzenie?.lekcje?.etap === "na_zywo" ? `<span class="chip" title="Rundę zamyka nauczyciel, gdy drużyny skończą">Na żywo, na lekcji</span>`
+      : !v.gra.zakonczona && v.prowadzenie?.termin ? (v.prowadzenie.lekcje && v.prowadzenie.termin_minal
+        ? `<span class="chip pom" title="Nauczyciel zamknie rundę">Termin minął</span>`
+        : `<span class="chip" title="${v.prowadzenie.lekcje ? "Termin rundy" : "Runda zamknie się sama o tej porze"}">${v.prowadzenie.lekcje ? "Do" : "Zamknięcie"}: ${esc(terminKrotko(v.prowadzenie.termin))}</span>`) : "");
   const c = ctx();
   const wyniki = maWyniki(z), decyzje = !!z.decyzje && !(v.koniec && wyniki);   // po końcu gry – same wyniki
   const tryb = (S.tryb === "wyniki" || v.koniec) && wyniki ? "wyniki" : decyzje ? "decyzje" : "wyniki";

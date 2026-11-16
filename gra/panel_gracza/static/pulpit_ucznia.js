@@ -25,10 +25,12 @@ function termin(g) {
   const p = g.prowadzenie || {};
   if (g.zakonczona) return "";
   if (p.pauza) return `<div class="termin pauza">${ikona("uwaga", 18)}Gra wstrzymana przez mistrza gry – decyzje poczekają.</div>`;
+  if (p.lekcje?.etap === "na_zywo") return `<div class="termin">${ikona("zegar", 18)}<span><b>Na żywo, na lekcji</b> – rundę zamyka nauczyciel, gdy drużyny skończą.</span></div>`;
+  if (p.lekcje && p.termin && p.termin_minal) return `<div class="termin pauza">${ikona("uwaga", 18)}<span>Termin rundy minął – nauczyciel zamknie rundę. Do tego czasu można jeszcze zapisać i wysłać decyzje.</span></div>`;
   if (p.termin) {
     const t = new Date(p.termin);
     const kiedy = t.toLocaleString("pl-PL", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
-    return `<div class="termin">${ikona("zegar", 18)}<span>Runda zamknie się: <b>${esc(kiedy)}</b></span></div>`;
+    return `<div class="termin">${ikona("zegar", 18)}<span>${p.lekcje ? "Termin rundy" : "Runda zamknie się"}: <b>${esc(kiedy)}</b></span></div>`;
   }
   return `<div class="termin">${ikona("zegar", 18)}<span>Runda zamknie się, gdy wszystkie drużyny wyślą decyzje.</span></div>`;
 }
