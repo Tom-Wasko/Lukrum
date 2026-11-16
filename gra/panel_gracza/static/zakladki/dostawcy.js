@@ -201,9 +201,9 @@ function sekcjaAuto(v, kat, edycja) {
       <select id="auto-ad-zapas" style="width:auto"><option value="1">bez zapasu</option><option value="1.1" selected>+10% zapasu</option><option value="1.2">+20% zapasu</option></select>
       <button class="btn pom maly" data-akcja="auto-prognoza" ${dis}>Wpisz</button></span></div>
     <p class="podpowiedz">„Wpisz wg prognozy” bierze ilości z prognozy popytu, którą wpisujesz przy daniach w zakładce
-    <a data-zakladka-k="lokal_menu">Kuchnia</a> (pole „Prognozowany popyt”).</p>`;
+    <a data-zakladka-k="lokal_menu">Menu i ceny</a> (pole „Prognozowany popyt”).</p>`;
   if (!Object.values(pot).some((p) => p > 0)) html += `<div class="komunikat">Prognoza popytu jest pusta, więc „Wpisz” nic nie wpisze.
-    Najpierw wpisz prognozę przy daniach w zakładce <a data-zakladka-k="lokal_menu">Kuchnia</a>.</div>`;
+    Najpierw wpisz prognozę przy daniach w zakładce <a data-zakladka-k="lokal_menu">Menu i ceny</a>.</div>`;
   html += tabela(`Zakupy auto-dostawcy na ten tydzień – ${esc(lok)} (opakowania)`, ["Składnik", "Opakowanie", "Potrzeba wg prognoz", "Zapas (lokal i u dostawcy)",
     "Jakość", "Ilość na tydzień", `Cena ${esc(Z.dostawca)}`, "Z prowizją"], wiersze, { klasy: ["l", "l"] });
   const uwagi = A.przyjete?.uwagi || [];
@@ -319,7 +319,7 @@ export const dostawcy = {
     "zam-wyczysc": (el, c) => c.zmien((d) => { d.zamowienia = (d.zamowienia || []).filter((x) => !tenLokal(c.v, x)); }),
     "auto-prognoza": (el, c) => {
       const zapas = +document.getElementById("auto-ad-zapas").value, pot = zapotrzebowanie(c.v, c.kat), ceny = cenyAuto(c.v);
-      if (!Object.values(pot).some((p) => p > 0)) return toast("Najpierw wpisz prognozę popytu dań w zakładce Kuchnia.");
+      if (!Object.values(pot).some((p) => p > 0)) return toast("Najpierw wpisz prognozę popytu dań w zakładce Menu i ceny.");
       return zapiszPozycje(c, (lista) => {
         for (const [z, p] of Object.entries(pot)) if (ceny[z]) ustawPozycje(lista, z, { ilosc: Math.ceil(Math.max(0, p * zapas - zapasLokalu(c.v, z)) - 1e-9) }, c.v);
         return lista;
@@ -360,7 +360,7 @@ function oknoBazy(c, dost, { poZapisie = false } = {}) {
   const x = info(v, dost);
   const id = idWybranego(v);
   const uwagi = `<p class="podpowiedz">Ceny w tym ${OKRES.miejscownik}. Ilości wpisujesz w opakowaniach (np. napój: opakowanie 24 szt.).
-      ${dni ? "Kolumny dni – dostawa rano tego dnia (tylko dni dostaw tego dostawcy); termin przydatności liczy się od dnia dostawy (Hurtownie ▸ Dostawy)." : ""}
+      ${dni ? "Kolumny dni – dostawa rano tego dnia (tylko dni dostaw tego dostawcy); termin przydatności liczy się od dnia dostawy (Hurtownie ▸ Zamówienia)." : ""}
       ${dni && x.limit_opakowan ? ` Najwyżej ${licz(x.limit_opakowan)} opakowań składnika dziennie, każdy dzień zakupów to ${licz(x.godziny_odbioru)} h właściciela.` : ""}
       ${dni && x.minimalne_zamowienie ? ` Dostawa poniżej ${zl(x.minimalne_zamowienie)} nie zostanie zrealizowana.` : ""}
       ${dni && x.koszt_dostawy ? ` Dowóz ${zl2(x.koszt_dostawy)} za dostawę${x.darmowa_od ? `, darmowy od ${zl(x.darmowa_od)}` : ""}.` : ""}</p>`;

@@ -129,7 +129,7 @@ def wnioski(dane: Dane, w: dict | None, wp: dict | None = None, runda: int | Non
     if za_nisko:
         poprawa.append(_rada("Chętnych było więcej, niż zakładała prognoza", _lista(za_nisko) + ".",
                              "Podnieście prognozę w Kuchni – według niej zamawiacie składniki i planujecie kuchnię. "
-                             "Pomogą pule klientów stref i wydarzenia w Miasteczko akademickie ▸ Strefy i Miasteczko akademickie ▸ Kalendarz.", "oferta"))
+                             "Pomogą pule klientów stref i wydarzenia: Miasteczko akademickie ▸ Goście w strefach oraz Kalendarz miasta.", "oferta"))
     if za_wysoko:
         poprawa.append(_rada("Prognoza była wyższa niż popyt", _lista(za_wysoko) + ".",
                              "Obniżcie prognozę w Menu albo przyciągnijcie klientów ceną, promocją lub reklamą – "
@@ -141,7 +141,7 @@ def wnioski(dane: Dane, w: dict | None, wp: dict | None = None, runda: int | Non
         poprawa.append(_rada("Część składników się przeterminowała",
                              f"Wyrzucony towar był wart {zl(sanepid['przeterminowane'])}.",
                              "Zamawiajcie mniejsze partie, częściej i bliżej prognozy – terminy przydatności widać "
-                             "w Hurtownie ▸ Dostawy.", "swiezosc"))
+                             "w Hurtownie ▸ Zamówienia.", "swiezosc"))
     pip = w.get("pip") or {}
     if pip.get("kontrola"):
         poprawa.append(_rada("Kontrola PIP: zlecenie jak etat", f"Kara {zl(pip['kara'])}: zlecenie w pełnym wymiarze godzin, jak etat "
