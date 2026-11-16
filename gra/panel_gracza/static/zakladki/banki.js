@@ -24,13 +24,25 @@ const ZASADA = "Lokaty, kredyty i leasing bierzesz tylko w banku, w którym firm
 // sprawa 21 (poprawki 2): bank jako karta marki (jak agencja w Ulotkach i radiu) – kafelki: konto, lokaty, kredyty
 const kolorBanku = (kat, nazwa) => KOLORY[(bankiLista(kat).findIndex((b) => b.nazwa === nazwa) + 1) % KOLORY.length];
 const w = (a, b) => `<div class="wiersz"><span>${a}</span><span>${b}</span></div>`;
+// zmiana banku przy debecie (silnik/pieniadze/banki.py: _debet_przy_zmianie): spłata z gotówki albo przejęcie za opłatą;
+// gdy limit nowego banku jest niższy niż debet, nadwyżka to debet ponad limit (odsetki karne, blokada)
+function infoPrzejeciaDebetu(v, kat, b) {
+  const d = v.banki.przejecie_debetu;
+  if (!d || b.nazwa === v.stan.bank) return "";
+  const u = ustawienia(kat);
+  if (d.gotowka >= d.debet) return `<div class="komunikat"><span class="znak-uwaga">Debet ${zl2(d.debet)}: przy zmianie banku firma spłaci go z gotówki (bez opłaty).</span></div>`;
+  const ponad = d.debet - b.debet.limit;
+  return `<div class="komunikat"><span class="znak-uwaga">Debet ${zl2(d.debet)}: gotówki nie wystarcza, więc ${esc(b.nazwa)} przejmie go za jednorazową opłatą ${zl2(d.oplata)}.</span>`
+    + (ponad > 0 ? `<br><span class="znak-strata">Limit tego banku (${zl2(b.debet.limit)}) jest niższy niż debet: ${zl2(ponad)} to debet ponad limit – odsetki karne ${proc(u.stopa_karna, 0)}, alarm i blokada inwestycji, kredytów, leasingu i lokat.</span>` : "")
+    + `</div>`;
+}
 // karta zwarta (wybór banku): dwa kafelki – konto i oferta; karty w dwóch kolumnach (.banki-siatka)
 function kafelZwarty(v, kat, b, wybrany, edycja) {
   const naj = najlepszyW(v, b.nazwa), moj = b.nazwa === wybrany;
   const konto = kafelOferty({ tytul: "Konto firmowe", pigulka: moj ? "Twoje konto" : "", duza: zl(b.konto + b.terminal.abonament), podpis: "miesięcznie: konto + terminal",
     tresc: w("Prowizja od kart", proc(b.terminal.prowizja, 2)) + w("Debet (za zgodą)", `${zl(b.debet.limit)} · ${proc(b.debet.oprocentowanie, 1)} · ${zl(b.debet.oplata)} / tydz.`),
     stopka: moj ? `<button class="btn zielony">✓ Konto firmowe</button>`
-      : `<button class="btn czarny" data-akcja="bk-konto" data-b="${esc(b.nazwa)}" ${edycja ? "" : "disabled"}>Otwórz konto firmowe</button>` });
+      : `${infoPrzejeciaDebetu(v, kat, b)}<button class="btn czarny" data-akcja="bk-konto" data-b="${esc(b.nazwa)}" ${edycja ? "" : "disabled"}>Otwórz konto firmowe</button>` });
   const oferta = kafelOferty({ tytul: "Lokaty, kredyty, leasing", duza: proc(najLokata(b), 1), podpis: "najlepsza lokata (rocznie)",
     tresc: w(`Lokaty ${Object.keys(b.lokaty).join(" / ")} r.`, Object.values(b.lokaty).map((o) => proc(o, 1)).join(" / "))
       + b.kredyty.map((x) => w(esc(x.nazwa), proc(x.oprocentowanie, 1))).join("")
@@ -186,7 +198,8 @@ export function wynikiBanku({ v }) {
   const sumaRat = (k.raty || []).reduce((a, r) => a + (r.odsetki || 0) + (r.rata || 0), 0), rataLeas = (k.leasing || []).reduce((a, r) => a + (r.rata || 0), 0);
   const odsLok = (k.lokaty || []).reduce((a, l) => a + (l.odsetki || 0), 0), zalegle = (k.zaleglosci || []).length > 0 || w.debet_ponad_limit > 0;
   const czesci = [oplaty > 0 && `opłaty konta i kart ${zl2(oplaty)}`, sumaRat > 0 && `raty kredytów ${zl2(sumaRat)}`, rataLeas > 0 && `raty leasingu ${zl2(rataLeas)}`];
-  let html = podsumowanie([czesci.some(Boolean) ? `Bank pobrał od firmy: ${czesci.filter(Boolean).join(", ")}.` : "W tej rundzie bank niczego nie pobrał.",
+  const zd = w.poczatek?.debet_przy_zmianie;
+  let html = (zd ? `<div class="komunikat"><p class="${zd.oplata > 0 ? "znak-uwaga" : ""}">${esc(zd.komunikat)}</p></div>` : "") + podsumowanie([czesci.some(Boolean) ? `Bank pobrał od firmy: ${czesci.filter(Boolean).join(", ")}.` : "W tej rundzie bank niczego nie pobrał.",
     odsLok > 0 ? `Zakończone lokaty przyniosły ${zl2(odsLok)} odsetek.` : "", zalegle ? "Są zaległości lub debet ponad limit – szczegóły niżej." : ""], zalegle ? "uwaga" : "")
     + kafelkiLiczb([{ etykieta: "Opłaty konta i kart", wartosc: zl(oplaty) }, (k.raty || []).length > 0 && { etykieta: "Raty kredytów", wartosc: zl(sumaRat), opis: `${k.raty.length} z kredytów` },
       (k.leasing || []).length > 0 && { etykieta: "Raty leasingu", wartosc: zl(rataLeas) }, odsLok > 0 && { etykieta: "Odsetki z lokat", wartosc: zl(odsLok), ton: "plus" }]);

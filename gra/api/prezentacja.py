@@ -29,6 +29,7 @@ from silnik.kuchnia.dostawcy import ceny_rundy, oferta_rundy
 from silnik.kuchnia.dostawcy import info as info_dostawcy
 from silnik.ludzie import czas_wlasciciela as cw
 from silnik.ludzie import formy as fz
+from silnik.ludzie import kontrola_pip as kpip
 from silnik.ludzie import przenosiny as przen
 from silnik.ludzie import rynek_pracy as rp
 from silnik.ludzie import szkolenia as szk
@@ -64,6 +65,22 @@ from silnik.swiat import awarie as aw
 from silnik.swiat import zdarzenia as zd
 from silnik.wyniki import punkty as pk
 from silnik.wyniki.wnioski import dlaczego, tydzien, wnioski
+
+
+def _pip(dane: Dane, f: Firma) -> dict | None:
+    """Kontrola PIP (silnik/ludzie/kontrola_pip.py): zasady z danych i osoby na zleceniu, które pracują jak etatowcy –
+    ile tygodni z rzędu (po tej rundzie) i czy kontrola jest już możliwa. None – dane bez kontroli PIP."""
+    z = kpip.zasady(dane)
+    if not z:
+        return None
+    osoby = {}
+    for p in f.pracownicy.values():
+        if kpip.jak_etat(dane, f, p):
+            tygodnie = p.tygodnie_jak_etat + 1   # licznik rośnie na koniec rundy, a wtedy losuje się kontrola
+            osoby[p.id] = {"tygodnie": tygodnie, "ryzyko": tygodnie >= z["tygodni_z_rzedu"],
+                           "godziny": round(dane.z["operacje"]["godziny_pracownika"] * fz.etat(dane, p), 1)}
+    return {"prog_godzin": z["prog_godzin"], "tygodni_z_rzedu": z["tygodni_z_rzedu"], "szansa": z["szansa"],
+            "kara": z["kara"], "osoby": osoby}
 
 
 def _firma_slownik(f: Firma) -> dict:
@@ -468,7 +485,10 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
     fp = poprzedni.firmy[firma]   # zastawy i limit – stan na początku rundy (przed decyzjami)
     v["inwestor"] = inw.raport(f, None, 0.0)   # U11: inwestor ratunkowy (z wpłatą w tej rundzie – w podglądzie)
     v["banki"] = {"najlepsze": bk.najlepsze(dane), "historia": bk.historia(fp, runda), "zastawy": bk.zastawy(dane, fp),
-                  "wolny_limit": bk.wolny_limit(dane, fp), "decyzja": {"bank": info.get("bank"), "leasing": info.get("leasing")}}
+                  "wolny_limit": bk.wolny_limit(dane, fp), "decyzja": {"bank": info.get("bank"), "leasing": info.get("leasing")},
+                  # zmiana banku przy debecie: spłata z gotówki albo przejęcie za opłatą (silnik/pieniadze/banki.py)
+                  "przejecie_debetu": ({"debet": round(fp.debet, 2), "gotowka": round(fp.gotowka, 2),
+                                        "oplata": bk.oplata_przejecia_debetu(dane, fp.debet)} if fp.debet > bk.EPS else None)}
     v["kandydaci"] = rp.widoczni(dane, v["kandydaci"], runda)
     if wl.dane_portfela(dane):
         v["wlasciciel"] = wl.widok(dane, fp, f, info.get("wlasciciel") if edycja
@@ -497,6 +517,7 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
     v["amortyzacja"] = {"prog": dane.z["finanse"]["amortyzacja_prog"], "stawki": dane.z["finanse"]["amortyzacja_roczna"],
                         "niskocenne": wybor_niskocennych(dane)}   # B6: None – zakupy poniżej progu zawsze w koszty
     v["ksiegowosc"] = bo.widok(dane, fp, f, v["decyzje"], v.get("wyniki"))
+    v["pip"] = _pip(dane, f)
     if edycja and fp.deklaracja:   # samodzielna księgowość: wynik podatkowy dopiero po deklaracji drużyny
         v["wyniki"] = bo.ukryj(v.get("wyniki"))
         v["ksiegowosc"]["ukryte"] = True

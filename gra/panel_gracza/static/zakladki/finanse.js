@@ -272,6 +272,10 @@ function wyborNiskocennych(v, d, edycja) {
 
 // biuro jako karta marki w dwóch kolumnach (jak wybór banku): pakiety S / M / L z limitem dokumentów i dopłatą
 const wb = (a, b) => `<div class="wiersz"><span>${a}</span><span>${b}</span></div>`;
+// opłata za zmianę biura (silnik/ksiegowosc/biuro.py: oplata_zmiany): tydzień pakietu nowego biura, nie dotyczy pierwszego wyboru
+// pakiet z decyzji wchodzi od razu tylko w biurze bez opóźnienia zmiany pakietu (i bez zapowiedzianej zmiany)
+const oplataZmiany = (K, b, pakiet) => (K.ostatnie_biuro && K.ostatnie_biuro !== b.id
+  ? b.oplata_zmiany[pakiet && !b.zmiana_pakietu_po && !K.pakiet_nastepny ? pakiet : K.pakiet] : 0) || 0;
 function kartaBiuraMarki(b, i, wybrane, edycja, K, wyr) {
   const moj = b.id === wybrane, dis = edycja ? "" : "disabled";
   const obecny = K.pakiet_nastepny ? K.pakiet_nastepny.pakiet : K.pakiet;
@@ -288,6 +292,7 @@ function kartaBiuraMarki(b, i, wybrane, edycja, K, wyr) {
     tresc: wb("Ubezpieczenie OC", b.oc ? "tak – oddaje mandat" : "<b>nie</b> – mandat płacisz Ty")
       + wb("Cecha biura", esc(b.cecha)) + (b.zamkniete_w_swieta ? wb("W tygodniu ze świętem", `zamknięte, dopłata ${zl2(b.zamkniete_w_swieta.doplata)} za dokument`) : "")
       + (b.zmiana_pakietu_po ? wb("Zmiana pakietu trwa", `${b.zmiana_pakietu_po} rundy`) : "")
+      + (K.ostatnie_biuro && K.ostatnie_biuro !== b.id ? wb("Opłata za przejście do tego biura", `<span class="znak-uwaga">${zl2(oplataZmiany(K, b))}</span> jednorazowo`) : "")
       + wb("Kadry: etat / zlecenie", `${zl2(b.kadry.etat)} / ${zl2(b.kadry.zlecenie)}`) + (b.kadry.w_cenie ? wb("Kadry w cenie", `${b.kadry.w_cenie} os.`) : "") });
   return kartaMarki({ kolor: KOLORY[(i + 1) % KOLORY.length], nazwa: b.nazwa, rodzaj: b.wlasciciel || "",
     opis: (wyr.length ? `<b class="bank-najlepszy">${wyr.join(" · ")}</b>` : "") + `<details class="opis-marki"><summary>O biurze</summary>${esc(b.opis)}</details>`,
@@ -312,6 +317,8 @@ function decyzjeKsiegowosci({ v, edycja }) {
   const wyr = wyroznienia(K.oferty);
   const html = `<div class="banki-siatka">${K.oferty.map((b, i) => kartaBiuraMarki(b, i, wybrane, edycja, K, wyr(b))).join("")}${kartySamodzielnie(S, tanie, wybrane, edycja)}</div>`
     + wyborNiskocennych(v, d, edycja);
+  const nowe = K.oferty.find((b) => b.id === wybrane), oplata = nowe ? oplataZmiany(K, nowe, d.pakiet) : 0;
+  if (oplata > 0) html += `<div class="komunikat"><p class="znak-uwaga">Zmiana biura na ${esc(nowe.nazwa)}: jednorazowa opłata ${zl2(oplata)} (tydzień pakietu nowego biura), zapłacona razem z fakturą za rundę.</p></div>`;
   const D = K.deklaracja;
   if (!D) return html;
   if (wybrane !== "samodzielnie")
