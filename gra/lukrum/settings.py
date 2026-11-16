@@ -143,5 +143,12 @@ LUKRUM_LOKALNIE = os.environ.get("LUKRUM_LOKALNIE") == "1"
 # Dodatkowe miejsce w mieście dla drużyn (domyślnie włączone); LUKRUM_KASYNO=0 je wyłącza.
 LUKRUM_KASYNO = os.environ.get("LUKRUM_KASYNO", "1") == "1"
 
+# Tryb lekcyjny (gry/lekcje.py): pierwsze rundy na żywo na lekcji, kolejne między
+# lekcjami z terminem w dniach. Ustawienie aplikacji, nie mechanika; domyślne wartości i zakresy.
+LUKRUM_TRYB_LEKCYJNY = {
+    "rundy_na_zywo": {"domyslnie": 3, "min": 1, "max": 6},
+    "termin_dni": {"domyslnie": 7, "min": 1, "max": 14},
+}
+
 # Plik gry przy imporcie może mieć kilka MB (decyzje wszystkich rund).
 DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
