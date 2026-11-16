@@ -19,6 +19,8 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 
 Szczegóły i zadania: [`dokumentacja/POSTEP.md`](dokumentacja/POSTEP.md).
 
+**Gałąź `fable` (16.11.2026, do przeglądu autora):** miejsca z wnętrzami zamiast działów menu, panel w paletach PRL, mapa Lublina z wejściem do wnętrz, list od wujka na Planie tygodnia, sklep meblowy z wystrojem lokalu, gazeta „Kurier rankingowy”, księga gości, podium na koniec gry, tryb lekcyjny i nowa instrukcja. Opis każdej zmiany i sposób jej przeniesienia do `main`: [`fable_noc/ZMIANY.md`](fable_noc/ZMIANY.md), raport: [`fable_noc/RAPORT.md`](fable_noc/RAPORT.md).
+
 ## Uruchomienie
 
 Potrzebny jest Python 3.12 lub nowszy. Na Windows wystarczy kliknąć dwa razy **`gra/start.bat`**. Za pierwszym razem
