@@ -36,7 +36,7 @@ function termin(g) {
   const p = g.prowadzenie || {};
   if (g.zakonczona) return "Gra zakończona – wyniki i plik CSV w panelu gry.";
   if (p.pauza) return "<b>Pauza</b> – drużyny nie mogą wysyłać decyzji.";
-  if (p.lekcje?.etap === "na_zywo") return `<b>Na żywo</b>: ${esc(p.lekcje.tekst.replace("na żywo: ", ""))} – rundy zamykasz sam(a).`;
+  if (p.lekcje?.etap === "na_zywo") return `<b>Na żywo</b>: ${esc(p.lekcje.tekst.replace("na żywo: ", ""))} – rundy zamyka mistrz gry.`;
   if (p.lekcje && p.termin && p.termin_minal) return `<b>Termin minął</b> – zamknij rundę (tryb lekcyjny, ${p.lekcje.termin_dni} dni na rundę).`;
   if (p.termin) {
     const t = new Date(p.termin).toLocaleString("pl-PL", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
