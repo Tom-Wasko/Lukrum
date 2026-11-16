@@ -166,13 +166,17 @@
   font: 700 11px/1.4 var(--font-tekst); color: var(--g-czern); background: var(--g-biel); border: 1px solid var(--g-czern); border-radius: 8px; }
 
 /* rodzaje różnią się kształtem tektury i wielkością, nie samym kolorem:
-   budynek – kwadratowy żeton; zespół – większy, z podwójną ramką i liczbą firm; lokal, park i woda – okrągły żeton;
+   budynek – sam przedmiot bez tektury; zespół – większy, z liczbą firm; lokal, park i woda – okrągły żeton;
    punkt orientacyjny – bez tektury, mniejszy, sam rysunek tuszem na planszy;
    lokal wolny – blady druk i przerywana ramka; Twój – lico w kolorze akcentu, ★ albo ✓; innej firmy – ramka i bok w jej kolorze */
 .lm-zespol .lm-kafel { width: calc(var(--rozm) * 1.4); height: calc(var(--rozm) * 1.4); }
 .lm-zespol .zt .zr { stroke-width: 2.4; stroke: var(--akcent-2); }
 .lm-zielony .zt .zf { fill: color-mix(in srgb, var(--zysk) 22%, var(--g-biel)); }
 .lm-zielony .zt .zr { stroke: var(--zysk); }
+/* budynek bez tektury: sam przedmiot z jasną obwódką, żeby odcinał się od planszy */
+:is(.lm-budynek, .lm-szyld) .zt .zd { filter: drop-shadow(0 0 .8px var(--g-biel)) drop-shadow(0 0 .8px var(--g-biel)); }
+:is(.lm-budynek, .lm-szyld) .zt * { stroke-width: 2; }
+.zt .zc { fill: color-mix(in srgb, var(--g-czern) 28%, transparent); stroke: none; }
 .lm-miejsce .lm-kafel { width: calc(var(--rozm) * 0.9); height: calc(var(--rozm) * 0.9); filter: none; }
 .lm-miejsce .zt * { stroke: var(--tusz); stroke-width: 1.3; }
 .lm-miejsce .zt .c { fill: var(--tusz); }

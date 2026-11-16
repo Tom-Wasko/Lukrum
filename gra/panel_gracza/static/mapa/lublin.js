@@ -58,7 +58,7 @@ function zastepczo(id) {
   if (zesp) {   // hol z szyldami – na razie lista firm w oknie
     const firmy = P.budynkiGry(C.v, M.budynki).filter((b) => b.zespol === id);
     return okno(esc(zesp.nazwa), `<p>${esc(zesp.opis)}</p><div class="lm-hol">${firmy.map((b) =>
-      `<button class="lm-szyld" data-akcja="lmapa-firma" data-id="${esc(b.id)}"><i class="lm-pionek">${zeton(b.id, b.rodzaj)}</i><span><b>${esc(b.nazwa)}</b><small>${esc(opisDla(b.opis))}</small></span></button>`).join("")}</div>`,
+      `<button class="lm-szyld" data-akcja="lmapa-firma" data-id="${esc(b.id)}"><i class="lm-pionek">${zeton(b.id, b.rodzaj, "przedmiot")}</i><span><b>${esc(b.nazwa)}</b><small>${esc(opisDla(b.opis))}</small></span></button>`).join("")}</div>`,
     { srednie: true });
   }
   if (M.budynki.some((b) => b.id === id)) return P.akcje["mapa-budynek"]({ dataset: { id } }, C);
@@ -118,14 +118,14 @@ function znakiBudynkow(c) {
     if (!z.geo || !widoczne.some((b) => b.zespol === z.id)) continue;
     const n = widoczne.filter((b) => b.zespol === z.id).length;
     html.push(znak(...xy(z.geo), "lm-budynek lm-zespol", "lmapa-wejdz", z.id, z.nazwa, `${z.opis} Kliknij, żeby wejść.`,
-      `<span class="lm-kafel">${zeton(z.id)}<i class="lm-ile" aria-hidden="true">${n}</i></span>`, 4));
+      `<span class="lm-kafel">${zeton(z.id, null, "przedmiot")}<i class="lm-ile" aria-hidden="true">${n}</i></span>`, 4));
   }
   for (const b of widoczne) {
     if (b.zespol || !b.geo) continue;
     const zielony = b.rodzaj === "park" || b.rodzaj === "woda", sprawa = sprawy.has(b.id);
     const rada = b.zakladka === "zdarzenia" ? (sprawa ? "W tej rundzie coś się tu dzieje – kliknij." : "Kliknij, żeby zobaczyć, co dzieje się w parku.") : "Kliknij, żeby wejść.";
     html.push(znak(...xy(b.geo), `${zielony ? "lm-zielony" : "lm-budynek"} lm-r-${b.rodzaj}`, "lmapa-wejdz", b.id, b.nazwa, `${opisDla(b.opis)} ${rada}`,
-      `<span class="lm-kafel">${zeton(b.id, b.rodzaj, zielony ? "kolo" : "kwadrat")}${sprawa ? `<i class="lm-plakietka lm-uwaga" aria-hidden="true">!</i>` : ""}</span>`, sprawa ? 5 : zielony ? 2 : 3));
+      `<span class="lm-kafel">${zeton(b.id, b.rodzaj, zielony ? "kolo" : "przedmiot")}${sprawa ? `<i class="lm-plakietka lm-uwaga" aria-hidden="true">!</i>` : ""}</span>`, sprawa ? 5 : zielony ? 2 : 3));
   }
   return html.join("");
 }
@@ -191,7 +191,7 @@ function pasekUstawien(c) {
 const pasekSkrotow = () => `<nav class="lm-pasek" aria-label="Skróty">${SKROTY.map(([k, ik, n]) =>
   `<button type="button" class="lm-skrot" data-akcja="lmapa-skrot" data-s="${k}" aria-label="${n}" title="${n}">${ikona(ik, 22)}<span>${n}</span></button>`).join("")}</nav>`;
 
-const wzor = (klasa, id, rodzaj, znakStanu = "") => `<i class="lm-pionek ${klasa}">${zeton(id, rodzaj, /lm-(budynek|zespol)/.test(klasa) ? "kwadrat" : klasa === "lm-miejsce" ? "" : "kolo")}${znakStanu ? `<b>${znakStanu}</b>` : ""}</i>`;
+const wzor = (klasa, id, rodzaj, znakStanu = "") => `<i class="lm-pionek ${klasa}">${zeton(id, rodzaj, /lm-(budynek|zespol)/.test(klasa) ? "przedmiot" : klasa === "lm-miejsce" ? "" : "kolo")}${znakStanu ? `<b>${znakStanu}</b>` : ""}</i>`;
 const legenda = (c) => `<button type="button" class="lm-leg-przycisk" data-akcja="lmapa-legenda" aria-expanded="${!!P.UST.legenda}" aria-controls="lm-legenda" title="Co znaczą żetony">?<span>Legenda</span></button>
 <div class="lm-legenda" id="lm-legenda">
   ${c.v.lokale ? `<span>${wzor("lm-moj", null, "lokal", "★")}Twój lokal</span><span>${wzor("lm-wybrany", null, "lokal", "✓")}wybrany w tej rundzie</span>

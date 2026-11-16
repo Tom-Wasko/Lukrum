@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUKRUM – żetony budynków</title>
+  <link rel="stylesheet" href="../fonty/fonty.css">
+  <link rel="stylesheet" href="../motywy/zmienne.css">
+  <link rel="stylesheet" href="mapa.css">
+  <style>
+    /* Strona robocza: wszystkie żetony budynków z danych mapy w dwóch wielkościach. */
+    body { margin: 0; padding: 16px 20px; font-family: var(--font-tekst); background: var(--papier); color: var(--tusz); }
+    h1 { margin: 0 0 10px; font: 22px var(--font-gruby); }
+    .siatka { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+    .plansza { padding: 12px; background: var(--g-plansza, #d9d2b8); border-radius: 6px; }
+    figure { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 11px; line-height: 1.2; }
+    .lm-pionek { display: block; flex: none; }
+  </style>
+</head>
+<body>
+  <h1>Żetony budynków</h1>
+  <div class="siatka plansza" id="podglad"></div>
+  <script type="module">
+    import { zeton } from "./ikony.js";
+    const B = [["bank_1", "bank", "Bank"], ["kamienica_bankowa", null, "Kamienica bankowa (zespół)"], ["harpagon", "lichwiarz", "Kantor Harpagona"],
+      ["gielda", "gielda", "Giełda"], ["ubezpieczyciel", "ubezpieczenia", "Ubezpieczyciel"], ["detektyw", "detektyw", "Detektyw"],
+      ["ratusz", "urzad", "Urzędy"], ["sanepid", "urzad", "Sanepid"], ["poczta", "poczta", "Poczta"],
+      ["biurowiec_zana", null, "Biurowiec (zespół)"], ["biura", "biuro", "Biura rachunkowe"], ["agencja_nieruchomosci", "nieruchomosci", "Nieruchomości"],
+      ["agencja_pracy", "praca", "Agencja pracy"], ["akademia", "szkola", "Szkoła Kebabu"], ["uczelnia", "uczelnia", "Pracownia UMCS"],
+      ["redakcja", "media", "Redakcja"], ["drukarnia", "reklama", "Drukarnia"], ["agencja_lajk", "reklama", "Lajk i Spółka"],
+      ["fala_koziolka", "reklama", "Fala Koziołka"], ["kozi_grod_events", "reklama", "Kozi Gród Events"], ["inna_reklama", "reklama", "inna reklama"],
+      ["piekarnia", "dostawca", "Piekarnia"], ["makro", "dostawca", "Hurtownia"], ["biedronka", "dostawca", "Dyskont / hipermarket"],
+      ["rozen", "dostawca", "Zakłady mięsne"], ["sprzet_gastro", "sklep", "Sprzęt gastro"], ["market_budowlany", "sklep", "Park handlowy"],
+      ["stolarnia", "sklep", "Stolarnia"], ["galeria", "sklep", "Galeria"], ["ogrod_saski", "park", "Park"], ["ogrod_botaniczny", "park", "Ogród Botaniczny"],
+      ["zalew", "woda", "Zalew"], ["cos", "nieznany", "nieznany"]];
+    const pionek = (id, rodzaj, px, klasa) => `<i class="lm-pionek ${klasa}" style="width:${px}px;height:${px}px">${zeton(id, rodzaj, klasa === "lm-zielony" ? "kolo" : "przedmiot")}</i>`;
+    document.getElementById("podglad").innerHTML = B.map(([id, r, n]) => {
+      const k = r === "park" || r === "woda" ? "lm-zielony" : id.startsWith("kamienica") || id.startsWith("biurowiec") ? "lm-zespol" : "lm-budynek";
+      return `<figure>${pionek(id, r, 56, k)}${pionek(id, r, 30, k)}<span>${n}</span></figure>`;
+    }).join("");
+  </script>
+</body>
+</html>

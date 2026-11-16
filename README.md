@@ -13,7 +13,7 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 |---|---|---|
 | 1 | Gra pod nową nazwą, nowa dokumentacja | zrobione, przegląd autora |
 | 1½ | Planowanie nowego wyglądu | do zrobienia |
-| 2 | Prototyp mapy Lublina z przybliżaniem | w toku: nowa mapa na granicach dzielnic z OpenStreetMap, budynki-ikony, pasek skrótów |
+| 2 | Prototyp mapy Lublina z przybliżaniem | w toku: nowa mapa na granicach dzielnic z OpenStreetMap, budynki jako ikony przedmiotów (moneta, pieczątka, koszyk…), pasek skrótów |
 | 3 | Wszystkie miejsca w grze na mapie | do zrobienia |
 | 4 | Scenariusze lekcji dla nauczyciela | do zrobienia |
 
