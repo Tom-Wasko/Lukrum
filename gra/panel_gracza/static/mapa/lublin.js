@@ -124,7 +124,7 @@ function znakiBudynkow(c) {
     if (b.zespol || !b.geo) continue;
     const zielony = b.rodzaj === "park" || b.rodzaj === "woda", sprawa = sprawy.has(b.id);
     const rada = b.zakladka === "zdarzenia" ? (sprawa ? "W tej rundzie coś się tu dzieje – kliknij." : "Kliknij, żeby zobaczyć, co dzieje się w parku.") : "Kliknij, żeby wejść.";
-    html.push(znak(...xy(b.geo), zielony ? "lm-zielony" : "lm-budynek", "lmapa-wejdz", b.id, b.nazwa, `${opisDla(b.opis)} ${rada}`,
+    html.push(znak(...xy(b.geo), `${zielony ? "lm-zielony" : "lm-budynek"} lm-r-${b.rodzaj}`, "lmapa-wejdz", b.id, b.nazwa, `${opisDla(b.opis)} ${rada}`,
       `<span class="lm-kafel">${zeton(b.id, b.rodzaj, zielony ? "kolo" : "kwadrat")}${sprawa ? `<i class="lm-plakietka lm-uwaga" aria-hidden="true">!</i>` : ""}</span>`, sprawa ? 5 : zielony ? 2 : 3));
   }
   return html.join("");
@@ -260,7 +260,7 @@ function waznosc(el) {
 }
 
 // na pełnym oddaleniu zostaje tylko Twój lokal
-const zostaje = (z) => z.waznosc === 1;
+const zostaje = (z) => z.waznosc === 1 || z.el.classList.contains("lm-swieci");
 
 function zmierz(ramka) {
   ROZM = parseFloat(getComputedStyle(ramka).getPropertyValue("--rozm")) || 30;
@@ -280,7 +280,7 @@ const nachodzi = (a, b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a
 // Przerzedzanie: żeton, który stoi prawie na ważniejszym, znika (wraca po przybliżeniu), żeby nie było zbyt gęsto.
 function przerzedz(s) {
   const kandydaci = ZNAKI.filter((z) => z.bok && z.widac && !(czysta && !zostaje(z)));
-  const klucz = (z) => z.waznosc;
+  const klucz = (z) => z.el.classList.contains("lm-swieci") ? 1 : z.waznosc;
   const trzymane = [];
   for (const z of kandydaci.sort((a, b) => klucz(a) - klucz(b))) {
     const x = z.x * s.k + s.x, y = z.y * s.k + s.y;
@@ -364,6 +364,19 @@ function uloz(s, ramka) {
     else { z.dx = gdzie[0]; z.dy = gdzie[1]; z.el.style.transform = `translate(${(ax + z.dx).toFixed(1)}px, ${(ay + z.dy).toFixed(1)}px)`; }
   }
   if (ramka.dataset.ul !== "1") for (const u of ULICE) u.el.classList.toggle("lm-schowany", ulicaZaslonieta(u, s, zajete));   // nazwa ulicy nie wchodzi pod żeton ani tabliczkę
+}
+
+// --- podświetlenie grupy żetonów po kliknięciu skrótu (hurtownie, banki): pulsują i pokazują nazwy przez kilka sekund ---
+let zgasSwiecenie = 0;
+function podswietl(ramka, wybor, ms = 7000) {
+  if (!ramka) return;
+  clearTimeout(zgasSwiecenie);
+  const ustaw = (wl) => {
+    for (const z of ZNAKI) z.el.classList.toggle("lm-swieci", wl && wybor(z.el));
+    zmierz(ramka); uloz(WIDOK, ramka);
+  };
+  ustaw(true);
+  zgasSwiecenie = setTimeout(() => ustaw(false), ms);
 }
 
 // --- pora dnia: oświetlenie mapy jak Słońce nad Lublinem; suwak jest tymczasowy (do prób) ---
@@ -470,8 +483,14 @@ export const nowaMapa = {
         if (!moj) return toast("Nie masz jeszcze lokalu – przybliż mapę i wybierz wolny lokal albo działkę (żeton z przerywaną ramką).");
         return widok?.lecDo(moj[0], moj[1], 0.9);
       }
-      if (s === "bank") { const z = (M.zespoly || []).find((x) => x.id === "kamienica_bankowa"); if (z?.geo) widok?.lecDo(...xy(z.geo), 0.9); return; }
+      const ramka = document.getElementById("lmapa");
+      if (s === "bank") {
+        const z = (M.zespoly || []).find((x) => x.id === "kamienica_bankowa");
+        if (z?.geo) { widok?.lecDo(...xy(z.geo), 0.9); podswietl(ramka, (el) => el.dataset.id === "kamienica_bankowa"); }
+        return;
+      }
       const p = P.budynkiGry(c.v, M.budynki).filter((b) => b.rodzaj === "dostawca" && b.geo).map((b) => xy(b.geo));
+      if (p.length) podswietl(ramka, (el) => el.classList.contains("lm-r-dostawca"));
       if (p.length) widok?.dopasuj([Math.min(...p.map((q) => q[0])), Math.min(...p.map((q) => q[1])), Math.max(...p.map((q) => q[0])), Math.max(...p.map((q) => q[1]))], 90);
     },
   },
