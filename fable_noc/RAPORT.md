@@ -1,4 +1,4 @@
-# Raport Fable – LUKRUM, gałąź `fable` (stan 16.11.2026, 07:45; praca trwa do 15:50)
+# Raport Fable – LUKRUM, gałąź `fable` (stan 16.11.2026, 12:45; praca trwa do 15:50)
 
 **Uwaga o czasie.** Sesja z 15.11 stanęła o 17:25 na limicie użycia i noc przepadła. Wszystko poniżej (poza pierwszym
 krokiem „świata” i katalogami) powstało 16.11 od 06:49. `main` jest nietknięty, nic nie poszło na FTP.
@@ -12,8 +12,8 @@ krokiem „świata” i katalogami) powstało 16.11 od 06:49. `main` jest nietkn
 | 1 | Gra pokazowa przechodzi wszystkie rundy bez błędów | **Tak.** 12 rund, konsola i log serwera czyste; pełny pytest zielony (739 testów, także po poprawkach prawnych), ruff i `silnik.dane sprawdz` czyste. |
 | 2 | Każdy budynek mapy coś otwiera | **Tak.** Mapa kolegi (`maciex`) scalona; automat kliknął wszystkie 75 znaczników: budynki → wnętrza, lokale i zabytki → okna. |
 | 3 | Instrukcja opisuje obecne mechaniki | **Tak, do przeczytania przez autora.** Gracz + „Dla mistrza gry”; PDF nie przegenerowany. |
-| 4 | Trzy palety × jasny/ciemny czytelne | **Główne ekrany tak** (Plan tygodnia, wnętrze, mapa, sklep, menu, panel MG obejrzane w 4 z 6 wariantów). Rzadkie ekrany (giełda, kalendarz, VAT) w trybie ciemnym nieobejrzane. |
-| 5 | Uczeń wie po 10 minutach, co robić | **Dużo lepiej, niesprawdzone na ludziach.** List od wujka prowadzi krok po kroku do miejsc; potrzebny test z prawdziwą klasą. |
+| 4 | Trzy palety × jasny/ciemny czytelne | **Tak dla obejrzanych ekranów** (Plan tygodnia, wnętrze, mapa, sklep, menu, kalendarz, wyniki finansowe, giełda, panel MG w 5 z 6 wariantów). Automat przeszedł 39 ekranów w trybie ciemnym bez błędów; nie każdy ekran oglądałem okiem w każdej palecie. |
+| 5 | Uczeń wie po 10 minutach, co robić | **Ścieżka działa, niesprawdzona na ludziach.** Przeszedłem tydzień 1 od zera samymi krokami z listu od wujka (lokal → bank → biuro → menu → ludzie → wyślij) i runda się zamknęła; potrzebny test z prawdziwą klasą. |
 
 ## Tematy od najbardziej wartych wzięcia (szczegóły i „jak wziąć”: `ZMIANY.md`)
 1. **`fable-swiat`** – miejsca z wnętrzami zamiast działów menu. Fundament reszty.
@@ -27,17 +27,15 @@ krokiem „świata” i katalogami) powstało 16.11 od 06:49. `main` jest nietkn
 8. **`fable-kurier`**, **`fable-final`**, **`fable-ksiega`** – gazeta w redakcji, podium na koniec, księga gości
    z oceną w pięciu wymiarach. Same widoki, zero zmian zasad, łatwe do wzięcia albo pominięcia.
 9. **`fable-lekcje`** – tryb lekcyjny (rundy na żywo, potem terminy). Wymaga `zamykaj_rundy` na serwerze.
-10. **`fable-nazwy`** – tytuły ekranów w duchu mapy; kwestia gustu, jedna tabela do poprawek.
-11. **`fable-katalogi`** – ceny od zera; zmienia balans (strategia premium traci), do oceny w grze testowej.
+10. **`fable-dymki-mg`** – przełącznik rodzajów dymków w panelu mistrza gry (brakujący kawałek decyzji z 14.11).
+11. **`fable-nazwy`** – tytuły ekranów w duchu mapy; kwestia gustu, jedna tabela do poprawek.
+12. **`fable-katalogi`** – ceny od zera; zmienia balans (strategia premium traci), do oceny w grze testowej.
 
 ## Niedokończone (dla Opusa)
-- Zrzuty i przejście rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; telefon sprawdzony tylko na 2 ekranach.
+- Telefon sprawdzony tylko na 2 ekranach (Plan tygodnia, wnętrze); wysoka widoczność tylko na 3 ekranach.
 - `fable-pip`: nieobejrzane w przeglądarce w grze z debetem i zleceniami (testy widoku są).
-- `INSTRUKCJA.pdf` do przegenerowania (`manage.py instrukcja_pdf`); README bez opisu nowości.
 - Wnętrza poza kebabem są schematyczne (drzwi, okienka); pawilon na działce korzysta ze sceny budowy i zwykłego wnętrza.
 - Strona startowa pokazuje „Nowe w tej rundzie” starymi nazwami („Zakładki”, „HR”).
-- Rodzaj męski w kilku starych tekstach danych (`reklama.yaml`, `parki.yaml`, `kasyno.yaml` – lista w `pozew-2.md`, pkt 7).
-- Przełącznik dymków dla mistrza gry (decyzja 14.11) nie istnieje w panelu MG.
 
 ## Otwarte decyzje autora
 Spisane z wariantami w `notatki/Do decyzji.md` (gałąź `fable` repo notatek), sekcja „Po nocy Fable”: „Nocna 13”

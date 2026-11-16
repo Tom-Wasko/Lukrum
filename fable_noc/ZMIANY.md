@@ -125,3 +125,18 @@ Wszystko razem jest na gałęzi `fable`. Hashe: `git log main..fable-<temat> --n
   Czystość z planu toru B zastąpiona wymiarem „wnętrze” (wyposażenie i wystrój), bo czystości silnik nie liczy.
 - **Pliki:** `swiat/ksiega.js` (nowy), `swiat/swiat.js`, `swiat/swiat.css`. **Zależności:** temat 1 (i 5 dla odsyłacza do sklepu).
 - **Ocena:** pewne (zrzut 95). **Jak wziąć:** `git cherry-pick` jedynego commitu tematu.
+
+## 15. Dymki gości: przełącznik mistrza gry – `fable-dymki-mg`
+- **Mistrz gry widzi:** w panelu gry wiersz „Dymki gości we wnętrzu kebaba” z czterema przełącznikami (opinie, plotki,
+  propozycje, zaczepki WOS). Zmiana działa od następnego wejścia drużyny do lokalu. Opis w instrukcji.
+- **Zasady:** bez zmian; API (`/wnetrza-ustawienia`) istniało od 14.11, brakowało tylko miejsca w panelu (decyzja autora 14.11).
+- **Pliki:** `panel_mg/static/mg/mg.js`, `INSTRUKCJA.md`. **Zależności:** żadnych. **Ocena:** pewne (przełączone w przeglądarce w obie strony).
+- **Jak wziąć:** `git cherry-pick` jedynego commitu tematu.
+
+## 16. Poprawki po przeglądzie prawnym – commity bezpośrednio na `fable`
+- `d210108`: instrukcja (zlecenie i debet jako uproszczenia, urlop 20/26 dni, art. 36 KP, hipoteka i zastaw, mandaty),
+  „Nocna 13” bez zachęty do ukrywania przed mistrzem gry i ze zdaniem o 18 latach, opis czterech biur na mapie,
+  stopka /jak-grac, 50 000 zł w AGENTS.md.
+- commit „Teksty neutralne płciowo…”: 6 zdań w `reklama.yaml`, `parki.yaml`, `kasyno.yaml`, instrukcji i `hr.js`.
+- commit „Instrukcja PDF przegenerowana”.
+- **Jak wziąć:** `git cherry-pick` po temacie 6 (instrukcja); poprawki danych i kasyna stosują się też do samego `main`.

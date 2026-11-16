@@ -42,3 +42,13 @@ Format: godzina · gałąź/commit · co i dlaczego · „decyzja Fable” albo 
 - 07:30 · `fable-ksiega` · księga gości (tor B: opinie w wymiarach; **decyzja Fable:** bez nowej mechaniki, pokazuję powody,
   które silnik już liczy; nastrój pracownika 0–100 z toru B zostaje nietknięty – jest jako „zadowolenie” w Zapleczu).
 - 07:32 · – · palety: wysoka widoczność ciemna i Bar mleczny ciemny obejrzane na Planie tygodnia, wnętrzu i mapie (zrzuty 96–98).
+- 07:34 · `fable` d210108 · przegląd prawny (agent Sonnet, `pozew-2.md`): poprawki pewne od razu, reszta do „Do decyzji”.
+- 07:45 · `fable` · dokumenty w `fable_noc/` (kopie bez nazw innych gier, bo repo ich nie dopuszcza), README, `START_FABLE.bat`
+  w folderze `lukrum/` (poza repo). Gra uruchomiona autorowi do przeglądu na porcie 8765.
+- 07:50 · – · automat przeszedł 39 ekranów w decyzjach i wynikach (paleta Pewex ciemna): bez „undefined”/„NaN”, konsola czysta;
+  rzadkie ekrany w trybie ciemnym obejrzane (zrzuty 110–112). PDF instrukcji przegenerowany.
+- 07:52 · – · próba zmiany nazw grup „Nowe w tej rundzie” wycofana (łamała 2 testy silnika, mała wartość) – zostaje dla Opusa.
+- 07:55 / 12:33 · `fable-dymki-mg` · przełącznik dymków w panelu MG (ustalone przez autora 14.11). Przerwa do 12:33.
+- 12:40 · – · **przejście ucznia od zera**: w grze „Runda 1” kroki z listu od wujka po kolei (lokal → bank → biuro → menu →
+  ludzie → wyślij), runda zamknęła się sama, w tygodniu 2 list „Otwieramy!” i kolejny krok „Zamów składniki”. Bez błędów.
+- 12:45 · `fable` · teksty neutralne płciowo z listy przeglądu prawnego.
