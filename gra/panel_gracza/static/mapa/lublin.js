@@ -8,12 +8,13 @@
 import { esc, kolorFirmy, marka, nazwaFirmy, okno, toast, zamknijOkno } from "../zakladki/wspolne.js";
 import { ikona, zeton } from "./ikony.js";
 import { utworzWidok } from "./widok.js";
+import { nakladkaPory, naGodzine, terazMinuty, wysokoscSlonca } from "./slonce.js";
 
 const ADRES = (plik) => new URL(plik, import.meta.url).href;
 const POZIOMY = [0.14, 0.45];
 const PROG_GESTOSCI = 0.6;   // żeton bliżej niż tyle szerokości od ważniejszego znika
 // ulice wyłaniają się stopniowo: krycie rośnie od 0 do 1 na tym przedziale skali (px na metr), po poziomie, od którego są rysowane
-const KRYCIE = { 2: [0.14, 0.3], 3: [0.45, 0.8] };
+const KRYCIE = { 2: [0.07, 0.14], 3: [0.1, 0.3] };
 const ZANIK = [0.1, 0.17];   // px na metr: poniżej pierwszej żetony są niewidoczne (same nazwy dzielnic), powyżej drugiej pełne   // px na metr: poniżej – całe miasto, pomiędzy – dzielnica, powyżej – ulica i budynek
 const PALETY = { bar: "Bar mleczny", pewex: "Pewex", wysoka: "Wysoka widoczność" };
 // odcień strefy (4 odcienie z palety; sąsiednie strefy mają różne) – strefę i tak podpisuje nazwa, nie sam kolor
@@ -25,6 +26,8 @@ const SKROTY = [["lokal", "lokal", "Mój lokal"], ["bank", "bank", "Banki"], ["h
 // punkty orientacyjne widoczne już na widoku całego miasta (reszta pojawia się po przybliżeniu)
 const DALEKO = new Set(["zamek", "arena", "lotnisko", "gorki_czechowskie", "skansen", "dworzec_glowny", "plac_litewski"]);
 
+// pora dnia na mapie: null = czas rzeczywisty, liczba = godzina z tymczasowego suwaka (minuty od północy)
+let CZAS = null, zegar = 0;
 let DANE = null, BLAD = null, WIDOK = null, widok = null, C = null, P = null, ZNAKI = [], poziom = 0, ulice = false;
 const krycie = {};
 let ostatniZanik = "", ostatnieK = 0, ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0, czysta = false, ULICE = [];
@@ -74,6 +77,13 @@ function strefyDzielnic(M) {
   return s;
 }
 
+// Poświata latarni nocą: ciepłe pasy szerszych dróg w osobnej warstwie NAD nakładką pory dnia, żeby ciemność ich nie tłumiła
+function swiatloLatarn() {
+  const klasa = (kl) => DANE.drogi.filter((x) => x.klasa === kl).map((x) => x.d).join("");
+  const pasy = ["lokalna", "zbiorcza", "glowna", "ekspresowa"].map((kl) => { const d = klasa(kl); return `<path class="lm-p lm-p2 lm-${kl}" d="${d}"/><path class="lm-p lm-p1 lm-${kl}" d="${d}"/>`; }).join("");
+  return `<svg class="lmapa-svg lm-svg-lampy" aria-hidden="true"><g id="lmapa-lampy" class="lm-poswiata">${pasy}</g></svg>`;
+}
+
 function rysunek(M, wart, zakres) {
   const D = DANE, czyja = strefyDzielnic(M);
   const sila = (k) => !wart ? "" : ` style="--w:${wart[k] ? (zakres[1] > zakres[0] ? (wart[k][0] - zakres[0]) / (zakres[1] - zakres[0]) : 0.5).toFixed(2) : 0}"`;
@@ -114,7 +124,7 @@ function znakiBudynkow(c) {
     if (b.zespol || !b.geo) continue;
     const zielony = b.rodzaj === "park" || b.rodzaj === "woda", sprawa = sprawy.has(b.id);
     const rada = b.zakladka === "zdarzenia" ? (sprawa ? "W tej rundzie coś się tu dzieje – kliknij." : "Kliknij, żeby zobaczyć, co dzieje się w parku.") : "Kliknij, żeby wejść.";
-    html.push(znak(...xy(b.geo), zielony ? "lm-zielony" : "lm-budynek", "lmapa-wejdz", b.id, b.nazwa, `${opisDla(b.opis)} ${rada}`,
+    html.push(znak(...xy(b.geo), `${zielony ? "lm-zielony" : "lm-budynek"} lm-r-${b.rodzaj}`, "lmapa-wejdz", b.id, b.nazwa, `${opisDla(b.opis)} ${rada}`,
       `<span class="lm-kafel">${zeton(b.id, b.rodzaj, zielony ? "kolo" : "kwadrat")}${sprawa ? `<i class="lm-plakietka lm-uwaga" aria-hidden="true">!</i>` : ""}</span>`, sprawa ? 5 : zielony ? 2 : 3));
   }
   return html.join("");
@@ -201,15 +211,25 @@ function naZmiane(s) {
   WIDOK = s;
   const ramka = document.getElementById("lmapa");
   if (!ramka) return;
-  ramka.querySelector("#lmapa-swiat")?.setAttribute("transform", `matrix(${s.k} 0 0 ${s.k} ${s.x} ${s.y})`);
-  if (poziom > 1 || s.k >= POZIOMY[0]) ramka.style.setProperty("--k", s.k);   // używają go tylko napisy ulic (od poziomu 2)
+  const macierz = `matrix(${s.k} 0 0 ${s.k} ${s.x} ${s.y})`;
+  ramka.querySelector("#lmapa-swiat")?.setAttribute("transform", macierz);
+  ramka.querySelector("#lmapa-lampy")?.setAttribute("transform", macierz);
+  if (s.k >= KRYCIE[2][0]) ramka.style.setProperty("--k", s.k);   // używają go tylko napisy ulic (od poziomu 2)
   for (const z of ZNAKI) z.el.style.transform = `translate(${(z.x * s.k + s.x + z.dx + z.ox).toFixed(1)}px, ${(z.y * s.k + s.y + z.dy + z.oy).toFixed(1)}px)`;
   // przy oddalaniu żetony bledną; na pełnym oddaleniu zostają nazwy dzielnic i własny lokal
   const zanik = Math.min(1, Math.max(0, (s.k - ZANIK[0]) / (ZANIK[1] - ZANIK[0])));
   for (const [n, [a, b]] of Object.entries(KRYCIE)) {   // zmienne na grupie SVG, żeby nie przeliczać stylów żetonów
     const kr = Math.min(1, Math.max(0, (s.k - a) / (b - a))).toFixed(2);
-    if (kr !== krycie[n]) { krycie[n] = kr; ramka.querySelector("#lmapa-swiat")?.style.setProperty(`--kr-${n}`, kr); }
+    if (kr !== krycie[n]) { krycie[n] = kr; for (const id of ["#lmapa-swiat", "#lmapa-lampy"]) ramka.querySelector(id)?.style.setProperty(`--kr-${n}`, kr); }
   }
+  const ul3 = s.k >= KRYCIE[3][0];
+  if (ul3 && !ulice) {   // ulice osiedlowe dorysowujemy dopiero z bliska
+    ulice = true;
+    const g = ramka.querySelector("#lmapa-ulice");
+    if (g) g.innerHTML = `<path class="lm-uliczka" d="${Object.values(DANE.ulice).join("")}"/>`;
+  }
+  const ul = s.k >= KRYCIE[3][0] ? 3 : s.k >= KRYCIE[2][0] ? 2 : 1;
+  if (ramka.dataset.ul !== String(ul)) ramka.dataset.ul = ul;
   const zn = zanik.toFixed(2);
   if (zn !== ostatniZanik) { ostatniZanik = zn; ramka.style.setProperty("--zanik", zn); }   // zmiana zmiennej przelicza style wszystkich żetonów
   czysta = zanik < 0.3;
@@ -219,11 +239,6 @@ function naZmiane(s) {
     poziom = p;
     ramka.dataset.poziom = p;
     zmierz(ramka);
-    if (p === 3 && !ulice) {   // ulice osiedlowe dorysowujemy dopiero z bliska
-      ulice = true;
-      const g = ramka.querySelector("#lmapa-ulice");
-      if (g) g.innerHTML = `<path class="lm-uliczka" d="${Object.values(DANE.ulice).join("")}"/>`;
-    }
   }
   // Układanie (czytanie rozmiarów z DOM + rozsuwanie) jest drogie, więc przy samym przesuwaniu robimy je dopiero po
   // zatrzymaniu mapy, a przy przybliżaniu najwyżej co 160 ms i jeszcze raz po zatrzymaniu.
@@ -245,7 +260,7 @@ function waznosc(el) {
 }
 
 // na pełnym oddaleniu zostaje tylko Twój lokal
-const zostaje = (z) => z.waznosc === 1;
+const zostaje = (z) => z.waznosc === 1 || z.el.classList.contains("lm-swieci");
 
 function zmierz(ramka) {
   ROZM = parseFloat(getComputedStyle(ramka).getPropertyValue("--rozm")) || 30;
@@ -265,7 +280,7 @@ const nachodzi = (a, b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a
 // Przerzedzanie: żeton, który stoi prawie na ważniejszym, znika (wraca po przybliżeniu), żeby nie było zbyt gęsto.
 function przerzedz(s) {
   const kandydaci = ZNAKI.filter((z) => z.bok && z.widac && !(czysta && !zostaje(z)));
-  const klucz = (z) => z.waznosc;
+  const klucz = (z) => z.el.classList.contains("lm-swieci") ? 1 : z.waznosc;
   const trzymane = [];
   for (const z of kandydaci.sort((a, b) => klucz(a) - klucz(b))) {
     const x = z.x * s.k + s.x, y = z.y * s.k + s.y;
@@ -322,7 +337,7 @@ function uloz(s, ramka) {
   rozsun(s);
   const ekran = (z) => [z.x * s.k + s.x + z.ox, z.y * s.k + s.y + z.oy];
   const r0 = ramka.getBoundingClientRect();
-  for (const el of ramka.querySelectorAll(".lm-pasek, .lm-zoom, .lm-osm, .lm-leg-przycisk, .lm-z-legenda .lm-legenda")) {   // napisy nie wchodzą pod przyciski mapy
+  for (const el of ramka.querySelectorAll(".lm-pasek, .lm-zoom, .lm-slonce, .lm-osm, .lm-leg-przycisk, .lm-z-legenda .lm-legenda")) {   // napisy nie wchodzą pod przyciski mapy
     const r = el.getBoundingClientRect();
     zajete.push({ pr: [r.left - r0.left - 4, r.top - r0.top - 4, r.right - r0.left + 4, r.bottom - r0.top + 4], czyj: null });
   }
@@ -334,7 +349,7 @@ function uloz(s, ramka) {
   for (const z of ZNAKI.filter((q) => q.w).sort((a, b) => a.waznosc - b.waznosc)) {
     const n = z.napis || z.el, [ax, ay] = ekran(z);
     let gdzie = null;
-    if (z.widac && !z.ukryty && (poziom > 1 || z.waznosc <= 4 || z.waznosc === 9) && !(czysta && z.napis && !zostaje(z)) && ax > -40 && ax < W + 40 && ay > -40 && ay < H + 40) {
+    if (!z.napis && z.widac && !z.ukryty && (poziom > 1 || z.waznosc <= 4 || z.waznosc === 9) && !(czysta && z.napis && !zostaje(z)) && ax > -40 && ax < W + 40 && ay > -40 && ay < H + 40) {
       const b = z.bok, w = z.w, h = z.h;
       // szyld żetonu: pod, nad, z prawej, z lewej; napis na planszy: na środku, wyżej, niżej
       const miejsca = z.napis ? [[-w / 2, b * 0.14 + 4], [-w / 2, -b * 0.86 - 4 - h], [b / 2 + 4, -b * 0.36 - h / 2], [-b / 2 - 4 - w, -b * 0.36 - h / 2]]
@@ -348,7 +363,40 @@ function uloz(s, ramka) {
     if (z.napis) n.style.transform = `translate(${gdzie[0].toFixed(1)}px, ${gdzie[1].toFixed(1)}px)`;
     else { z.dx = gdzie[0]; z.dy = gdzie[1]; z.el.style.transform = `translate(${(ax + z.dx).toFixed(1)}px, ${(ay + z.dy).toFixed(1)}px)`; }
   }
-  if (poziom > 1) for (const u of ULICE) u.el.classList.toggle("lm-schowany", ulicaZaslonieta(u, s, zajete));   // nazwa ulicy nie wchodzi pod żeton ani tabliczkę
+  if (ramka.dataset.ul !== "1") for (const u of ULICE) u.el.classList.toggle("lm-schowany", ulicaZaslonieta(u, s, zajete));   // nazwa ulicy nie wchodzi pod żeton ani tabliczkę
+}
+
+// --- podświetlenie grupy żetonów po kliknięciu skrótu (hurtownie, banki): pulsują i pokazują nazwy przez kilka sekund ---
+let zgasSwiecenie = 0;
+function podswietl(ramka, wybor, ms = 7000) {
+  if (!ramka) return;
+  clearTimeout(zgasSwiecenie);
+  const ustaw = (wl) => {
+    for (const z of ZNAKI) z.el.classList.toggle("lm-swieci", wl && wybor(z.el));
+    zmierz(ramka); uloz(WIDOK, ramka);
+  };
+  ustaw(true);
+  zgasSwiecenie = setTimeout(() => ustaw(false), ms);
+}
+
+// --- pora dnia: oświetlenie mapy jak Słońce nad Lublinem; suwak jest tymczasowy (do prób) ---
+function suwakSlonca() {
+  const m = CZAS ?? terazMinuty();
+  return `<div class="lm-slonce"><span aria-hidden="true">☀</span>
+    <input type="range" min="0" max="1439" step="5" value="${m}" aria-label="Pora dnia na mapie (tymczasowy suwak)">
+    <output>${naGodzine(m)}</output><button type="button" class="lm-pora-teraz" data-akcja="lmapa-pora-teraz"${CZAS == null ? " hidden" : ""}>Teraz</button></div>`;
+}
+
+function ustawPore(ramka) {
+  const noc = ramka.querySelector(".lm-noc");
+  if (!noc) return;
+  const h = wysokoscSlonca(CZAS), { kolor, krycie } = nakladkaPory(h);
+  const lampy = Math.min(1, Math.max(0, (4 - h) / 10));   // zapalają się przy zachodzie, pełne od −6°
+  ramka.classList.toggle("lm-lampy", lampy > 0);
+  ramka.querySelector("#lmapa-lampy")?.style.setProperty("--lampy", lampy.toFixed(2));
+  const ciemny = document.documentElement.dataset.tryb === "ciemny";   // w trybie ciemnym mapa i tak jest ciemna
+  noc.style.background = kolor;
+  noc.style.opacity = (krycie * (ciemny ? 0.6 : 1)).toFixed(3);
 }
 
 export const nowaMapa = {
@@ -369,11 +417,14 @@ export const nowaMapa = {
     return `${brak}${P.parkiNaMapie(c.v, c.kat, c.edycja)}${pasekUstawien(c)}
       <div class="lmapa${wart ? " warstwa" : ""}${P.UST.legenda ? " lm-z-legenda" : ""}" id="lmapa" tabindex="0" role="application" aria-label="Mapa Lublina – strzałki przesuwają, plus i minus przybliżają">
         <svg class="lmapa-svg" aria-hidden="true">${rysunek(M, wart, zakres)}</svg>
+        <div class="lm-noc" aria-hidden="true"></div>
+        ${swiatloLatarn()}
         <div class="lmapa-nakladka">${napisy(M, wart)}${znakiMiejsc(M)}${znakiBudynkow(c)}${znakiLokali(c)}</div>
         ${pasekSkrotow()}
         <div class="lm-zoom"><button type="button" data-akcja="lmapa-zoom" data-z="1.6" aria-label="Przybliż" title="Przybliż">${ikona("plus", 20)}</button>
           <button type="button" data-akcja="lmapa-zoom" data-z="0.625" aria-label="Oddal" title="Oddal">${ikona("minus", 20)}</button>
           <button type="button" data-akcja="lmapa-zoom" data-z="0" aria-label="Całe miasto" title="Całe miasto">${ikona("calosc", 20)}</button></div>
+        ${suwakSlonca()}
         ${legenda(c)}
         <a class="lm-osm" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© autorzy OpenStreetMap</a>
       </div>`;
@@ -383,7 +434,7 @@ export const nowaMapa = {
     const ramka = document.getElementById("lmapa");
     if (!ramka || !DANE) return;
     widok?.zniszcz();
-    poziom = 0; ulice = false; for (const n in krycie) delete krycie[n];
+    poziom = 0; ulice = false; delete ramka.dataset.ul; for (const n in krycie) delete krycie[n];
     ULICE = [...ramka.querySelectorAll(".lm-ulica-napis")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, kx: +el.dataset.kx, ky: +el.dataset.ky, n: +el.dataset.n }));
     ZNAKI = [...ramka.querySelectorAll(".lmapa-nakladka > [data-x]")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, dx: 0, dy: 0, ox: 0, oy: 0,
       napis: el.querySelector(".lm-podpis"), waznosc: waznosc(el) }));
@@ -391,11 +442,23 @@ export const nowaMapa = {
     // na początku widać strefy gry (od Czechowa po Zalew), a nie całe granice miasta
     const p = [...ramka.querySelectorAll(".lm-strefa-napis")].map((el) => [+el.dataset.x, +el.dataset.y]);
     const start = p.length ? [Math.min(...p.map((q) => q[0])) - 3200, Math.min(...p.map((q) => q[1])) - 2600, Math.max(...p.map((q) => q[0])) + 3200, Math.max(...p.map((q) => q[1])) + 1800] : null;
+    ustawPore(ramka);
+    clearInterval(zegar);
+    zegar = setInterval(() => { if (!ramka.isConnected) return clearInterval(zegar); if (CZAS == null) { ustawPore(ramka); const w = ramka.querySelector(".lm-slonce input"); if (w) { w.value = terazMinuty(); w.nextElementSibling.textContent = naGodzine(+w.value); } } }, 60000);
+    ramka.querySelector(".lm-slonce input")?.addEventListener("input", (e) => {
+      CZAS = +e.target.value; e.target.nextElementSibling.textContent = naGodzine(CZAS);
+      ramka.querySelector(".lm-pora-teraz")?.removeAttribute("hidden"); ustawPore(ramka);
+    });
     widok = utworzWidok(ramka, { zasieg: DANE.zasieg, start, stan: WIDOK, naZmiane });
   },
 
   akcje: {
     "lmapa-zoom": (el) => { const z = +el.dataset.z; if (z) widok?.przybliz(z); else widok?.calosc(); },
+    "lmapa-pora-teraz": (el) => {
+      CZAS = null; const ramka = document.getElementById("lmapa"), w = ramka?.querySelector(".lm-slonce input");
+      if (w) { w.value = terazMinuty(); w.nextElementSibling.textContent = naGodzine(+w.value); }
+      el.hidden = true; if (ramka) ustawPore(ramka);
+    },
     "lmapa-wejdz": (el) => window.lukrum.otworzWnetrze(el.dataset.id),
     "lmapa-lokal": (el, c) => P.akcje["mapa-lokal"](el, c),
     "lmapa-miejsce": (el, c) => P.akcje["mapa-miejsce"](el, c),
@@ -420,8 +483,14 @@ export const nowaMapa = {
         if (!moj) return toast("Nie masz jeszcze lokalu – przybliż mapę i wybierz wolny lokal albo działkę (żeton z przerywaną ramką).");
         return widok?.lecDo(moj[0], moj[1], 0.9);
       }
-      if (s === "bank") { const z = (M.zespoly || []).find((x) => x.id === "kamienica_bankowa"); if (z?.geo) widok?.lecDo(...xy(z.geo), 0.9); return; }
+      const ramka = document.getElementById("lmapa");
+      if (s === "bank") {
+        const z = (M.zespoly || []).find((x) => x.id === "kamienica_bankowa");
+        if (z?.geo) { widok?.lecDo(...xy(z.geo), 0.9); podswietl(ramka, (el) => el.dataset.id === "kamienica_bankowa"); }
+        return;
+      }
       const p = P.budynkiGry(c.v, M.budynki).filter((b) => b.rodzaj === "dostawca" && b.geo).map((b) => xy(b.geo));
+      if (p.length) podswietl(ramka, (el) => el.classList.contains("lm-r-dostawca"));
       if (p.length) widok?.dopasuj([Math.min(...p.map((q) => q[0])), Math.min(...p.map((q) => q[1])), Math.max(...p.map((q) => q[0])), Math.max(...p.map((q) => q[1]))], 90);
     },
   },
