@@ -8,9 +8,11 @@ import { BUDYNEK_DO_EKRANU, BUDYNEK_DO_MIEJSCA, MIEJSCA, miejsceEkranu, ustawEkr
 import { scenaBezLokalu, scenaBudowy, scenaHali, scenaHolu, scenaKebabu, scenaOkienek, scenaSurowa, ustawRozmiary } from "./sceny.js";
 
 import { gazeta } from "./kurier.js";
+import { ksiegaGosci } from "./ksiega.js";
 
 // dodatek pod sceną miejsca (np. pierwsza strona gazety w redakcji)
 const DODATKI = { redakcja: gazeta };
+const DODATKI_POD = { kebab: ksiegaGosci };   // pod sceną
 
 const M = { id: "kebab", grafiki: null, wn: {}, wnKlucz: "", karta: null, fokusKarty: false };
 export const aktualneMiejsce = () => M.id;
@@ -187,7 +189,7 @@ export const miejsce = {
     return `<div class="sw">${naglowek(c, m)}${wyborLokalu(c, m)}${DODATKI[M.id] ? DODATKI[M.id](c) : ""}
       <div class="sw-scena-ramka"><div class="sw-scena"><svg viewBox="0 0 1220 612" role="img" aria-label="${esc(sc.opis)}">${sc.s}</svg>
         <div class="sw-nakladka">${sc.h}</div><div id="sw-karta-miejsce">${kartaHtml(c)}</div></div></div>
-      <h2 class="sw-co">Co tu zrobisz</h2>${lista(c, m)}</div>`;
+      ${DODATKI_POD[M.id] ? DODATKI_POD[M.id](c) : ""}<h2 class="sw-co">Co tu zrobisz</h2>${lista(c, m)}</div>`;
   },
   po(c) {
     const naMiejscu = () => document.querySelector(".sw");

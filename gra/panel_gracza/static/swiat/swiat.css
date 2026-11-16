@@ -261,3 +261,30 @@
 }
 @keyframes fn-rosnij { from { transform: scaleY(.05); opacity: .2; } to { transform: none; opacity: 1; } }
 @media (max-width: 800px) { .fn-uklad { grid-template-columns: 1fr; } }
+
+
+/* Księga gości we wnętrzu kebaba (swiat/ksiega.js) */
+.kg { border: 2px solid var(--tusz); border-radius: 6px; background: var(--g-karta); padding: 12px 16px 10px; display: grid; gap: 10px; }
+.kg header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; border-bottom: 2px solid var(--tusz); padding-bottom: 6px; }
+.kg h2 { font-family: var(--font-gruby); font-weight: 400; font-size: 19px; }
+.kg-ocena { font-size: 14px; } .kg-ocena b { font-family: var(--font-gruby); font-weight: 400; font-size: 22px; }
+.kg-uklad { display: grid; grid-template-columns: minmax(0, 3fr) minmax(220px, 2fr); gap: 18px; align-items: start; }
+.kg-wymiary { width: 100%; border-collapse: collapse; font-size: 14px; }
+.kg-wymiary caption { text-align: left; font-family: var(--font-szyld); letter-spacing: .06em; text-transform: uppercase; font-size: 12.5px; padding-bottom: 4px; }
+.kg-wymiary th, .kg-wymiary td { padding: 5px 6px; border-top: 1px solid var(--ramka); text-align: left; vertical-align: middle; }
+.kg-wymiary th { font-weight: 700; white-space: nowrap; }
+.kg-pasek { width: 150px; white-space: nowrap; }
+.kg-pasek span { display: inline-block; width: 70px; height: 12px; vertical-align: middle; background: color-mix(in srgb, var(--tusz) 8%, transparent); }
+.kg-pasek span:first-child { border-right: 2px solid var(--tusz); direction: rtl; }
+.kg-pasek i { display: block; height: 100%; }
+.kg-pasek span:first-child i { background: var(--wzor-strata); margin-left: auto; }
+.kg-pasek span:last-child i { background: var(--zysk); }
+.kg-ile { white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 700; }
+.kg-opis a { color: var(--akcent-2); cursor: pointer; white-space: nowrap; }
+.kg-wpisy { display: grid; gap: 8px; }
+.kg-wpisy blockquote { margin: 0; padding: 7px 10px; background: var(--g-biel); color: var(--g-czern); border-left: 4px solid var(--uwaga); font-size: 13.5px; }
+.kg-wpisy blockquote:nth-child(2) { transform: rotate(.4deg); } .kg-wpisy blockquote:nth-child(3) { transform: rotate(-.3deg); }
+.kg-wpisy p { margin: 2px 0; } .kg-wpisy footer { font-size: 12px; opacity: .8; text-align: right; }
+.kg-gw { letter-spacing: 2px; }
+.kg-stopka { font-size: 13px; color: color-mix(in srgb, var(--tusz) 75%, var(--papier)); }
+@media (max-width: 800px) { .kg-uklad { grid-template-columns: 1fr; } .kg-pasek { display: none; } }
