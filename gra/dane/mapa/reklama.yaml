@@ -105,7 +105,7 @@ agencje:
         - 'Billboard przy rondzie w strefie {strefa} jest tak duży, że kierowcy robią dodatkowe kółko, żeby doczytać
           menu. Korki wzrosły o 4%, sprzedaż – też. Drogowcy pytają, czy możesz zmniejszyć czcionkę.'
         - 'Na billboardzie w strefie {strefa} ktoś domalował kebabowi wąsy. Agencja uważa, że „dodało to charakteru”,
-          i wysłała Ci fakturę za „pakiet street-art”. Fakturę grzecznie odrzuciłeś.'
+          i wysłała Ci fakturę za „pakiet street-art”. Faktura została grzecznie odrzucona.'
       radio:
         nazwa: Spot w „Radiu Tichy” (Fala Koziołka)
         od_rundy: 8
@@ -157,7 +157,7 @@ agencje:
         pula: 0.16
         przyciaganie: 0.4
         teksty:
-        - 'Noc Kebaba w strefie {strefa}: DJ grał do trzeciej, Ty kroiłeś do czwartej. Pierwszy rok studiów już wie,
+        - 'Noc Kebaba w strefie {strefa}: DJ grał do trzeciej, mięso kroiło się do czwartej. Pierwszy rok studiów już wie,
           gdzie się je po kolokwium. Ktoś z politechniki zaproponował, żeby zrobić z tego przedmiot obieralny.'
         - 'Na otrzęsinach w strefie {strefa} starosta roku ogłosił Twój kebab „oficjalnym posiłkiem sesji”. Dziekan
           podobno nie protestował, bo dostał porcję bez cebuli.'
@@ -191,7 +191,7 @@ internet:
           przyciaganie: 0.05
           teksty:
           - 'Post na grupie „Strefa {strefa} – Uwaga, Policja / Sprzedam / Oddam” zebrał 214 komentarzy. 180 to kłótnia
-            o to, czy kebab może mieć ananasa. Wygrałeś: wszyscy już znają nazwę lokalu.'
+            o to, czy kebab może mieć ananasa. Wygrana: wszyscy już znają nazwę lokalu.'
           - 'Administratorka grupy osiedlowej w strefie {strefa} usunęła post jako reklamę, po czym sama zamówiła u Ciebie
             dwa kebaby i wrzuciła zdjęcie z podpisem „Polecam, nie reklama”. Zasięg: trzy razy większy.'
         influencer:
@@ -208,7 +208,7 @@ internet:
           - 'Kebabowa Królowa nagrała w strefie {strefa} 47 ujęć jednego gryza w zwolnionym tempie. Sos kapnął jej na
             kamerę, co podbiło film do 300 tysięcy wyświetleń. Komentarz numer jeden: „gdzie to jest, jadę”.'
           - 'Filmik „Oceniam kebaby w strefie {strefa} na ślepo” skończył się dla Ciebie notą 9/10 („minus punkt, bo
-            serwetki za cienkie”). Kupiłeś grubsze serwetki. Agencja chce za to osobny bonus.'
+            serwetki za cienkie”). Grubsze serwetki kupione. Agencja chce za to osobny bonus.'
         tiktok:
           nazwa: Własne filmiki na TikToku
           od_rundy: 7

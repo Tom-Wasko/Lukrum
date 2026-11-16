@@ -113,7 +113,7 @@ export const zatrudnienie = {
     if (v.lokale) html += `<p class="podpowiedz">Na wolne stanowisko przypiszesz osobę z tego lokalu (od razu) albo z innego Twojego lokalu –
       wtedy pracownik musi się zgodzić (zależy to od jego zadowolenia, odległości i dodatku za przejście; odpowiedź po przeliczeniu rundy).
       Nowych ludzi zatrudniasz w zakładce <a data-zakladka-k="rynek_pracy">Rynek pracy</a>.</p>
-      <p class="podpowiedz">Puste stanowisko nie stoi bezczynnie: właściciel sam na nim staje (jak pracownik 1★, bez pensji) – ale tylko
+      <p class="podpowiedz">Puste stanowisko nie stoi bezczynnie: właściciel staje na nim osobiście (jak pracownik 1★, bez pensji) – ale tylko
       w godzinach, które zostają mu po sprawach poza lokalem (<a data-zakladka-k="czas_wlasciciela">Czas właściciela</a>).</p>`;
     return html;
   },

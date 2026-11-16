@@ -288,7 +288,7 @@ powodzenia.
 - **Niezadowoleni odchodzą.** Kto ma zadowolenie poniżej progu, dostaje ostrzeżenie na liście błędów, a tydzień
   później może złożyć wypowiedzenie. Ratuje podwyżka, lepszy sprzęt albo odciążenie.
 - **Każdy ma charakter** (np. lojalność, materializm, optymizm), a w kółku „i” widać, jak wpływa on na zadowolenie.
-- **Puste stanowisko?** Właściciel sam na nim staje, ale tylko w godzinach, które zostają mu po sprawach poza lokalem.
+- **Puste stanowisko?** Właściciel staje na nim osobiście, ale tylko w godzinach, które zostają mu po sprawach poza lokalem.
 
 **Czas właściciela.** Właściciel ma 20 godzin w tygodniu. Najpierw schodzą z nich sprawy poza lokalem: zakupy
 w dyskoncie, rekrutacja, przewozy, reakcje na zdarzenia w parkach, detektyw. Co zostanie, właściciel spędza na pustym
