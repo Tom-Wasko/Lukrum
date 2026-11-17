@@ -428,7 +428,7 @@ magazyn:   # gra z lokalami (zmiana 26.10): bez kosztu magazynowania i zwrotów 
       bazowa + za litr w wynajętej chłodni + za zł przeterminowanego towaru (najwyżej szansa_max); kontrola kończy
       się mandatem z szansą (szansa − bazowa) / szansa; mandat = min + za litr + za zł strat (od min do max, co 50
       zł), poza KPiR; po mandacie popyt × popyt_po_mandacie przez rund_spadku rund. Liczby – założenie do kalibracji
-      w kroku 5 (100 l w wynajmie i 300 zł przeterminowanych → ok. 20% na kontrolę)'
+      przykład: (100 l w wynajmie i 300 zł przeterminowanych → ok. 20% na kontrolę)'
   przewoz:
     wartosc:
       od_rundy: 2
@@ -567,7 +567,7 @@ pracownicy:   # (decyzja autora 4.11.2026) zadowolenie każdej osoby i odejścia
     pewnosc: zalozenie
     zrodlo: 'decyzja autora 6.11.2026: formy zatrudnienia do wyboru przy zatrudnianiu i w profilu osoby. etat –
       mnożnik godzin pracy; urlop – udział płatnego urlopu wypoczynkowego w czasie pracy (26 dni z ok. 260 dni
-      roboczych w roku, art. 154 KP, to 10%; w grze też 10% (decyzja autora 14.11.2026; pomiar c4_urlop: 5% daje ok. +30 pkt wyniku zamiast 10%); zlecenie, B2B i staż go nie mają, więc dają więcej godzin za tę samą pensję, ale
+      roboczych w roku, art. 154 KP, to 10%; w grze też 10% (decyzja autora 14.11.2026; pomiar balansu botami, listopad 2026: 5% daje ok. +30 pkt wyniku zamiast 10%); zlecenie, B2B i staż go nie mają, więc dają więcej godzin za tę samą pensję, ale
       bez wypowiedzenia); zus – stawka składek pracodawcy (etat: podatki.zus_pracodawcy, zlecenie:
       podatki.zus_pracodawcy_zlecenie, brak: 0); kadry – opłata biura za osobę (etat/zlecenie/brak); kara_zlecenia –
       składnik „umowa zlecenie” w zadowoleniu; oczekiwana – mnożnik pensji preferowanej, przy którym osoba jest

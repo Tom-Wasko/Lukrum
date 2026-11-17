@@ -8,7 +8,7 @@ opis: 'Kontrola sanepidu: tekst losowany z listy (kontrola bez zastrzeżeń albo
   zapisu w KPiR – towar był już kosztem przy zakupie).'
 zrodlo: 'Odpowiedzi użytkownika 26.10: zamiast kosztu magazynowania wynajem chłodni i kontrole sanepidu, zamiast
   zwrotów – brak zwrotów i zdarzenie z oddaniem jedzenia do banku żywności; teksty i progi – założenie, do
-  kalibracji w kroku 5'
+  kalibracji (pomiar botami)'
 sanepid:
   kontrole_ok:
   - >-

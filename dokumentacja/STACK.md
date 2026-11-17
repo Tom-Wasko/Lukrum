@@ -117,5 +117,5 @@ cd gra
 - Identyfikatory po polsku bez ogonków (`snake_case`, klasy `PascalCase`). Komentarze, docstringi i teksty dla
   gracza po polsku z ogonkami.
 - Końce linii LF (`.gitattributes`), z wyjątkiem `*.bat` w CRLF.
-- Historia liniowa na `main`: jeden commit na skończoną część etapu, a postęp w `dokumentacja/POSTEP.md`. Zasady pracy agentów
+- Historia liniowa na `main`: jeden commit na skończoną część etapu, a postęp w `notatki/Postęp.md (repo notatek)`. Zasady pracy agentów
   opisuje `AGENTS.md`.
