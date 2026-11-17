@@ -1,11 +1,11 @@
-"""Środki trwałe i amortyzacja (gra z lokalami, F3a.6).
+"""Środki trwałe i amortyzacja (gra z lokalami).
 
 Kupiony lokal i wybudowany budynek oraz inwestycje od progu `amortyzacja_prog` (sprzęt, wyposażenie, stanowiska)
 trafiają do ewidencji środków trwałych: zakup to ruch na rachunku, a koszt w KPiR rozkłada się liniowo – co rundę
 odpis amortyzacyjny według rocznej stawki (`amortyzacja_roczna`). Tańsze zakupy od razu w koszty.
 Grunt (działka) jest w ewidencji, ale się nie amortyzuje. Przy sprzedaży niezamortyzowana wartość idzie w koszty.
-Z VAT (F3a.11): zakup sprzętu, wyposażenia i stanowisk daje VAT naliczony, a do ewidencji trafia wartość netto.
-B6 (decyzja autora 7.11.2026): firma wybiera w Księgowości, czy tańsze zakupy idą od razu w koszty (domyślnie), czy też do ewidencji z amortyzacją `finanse.amortyzacja_niskocenna.stawka` – jak środki trwałe od progu.
+Z VAT: zakup sprzętu, wyposażenia i stanowisk daje VAT naliczony, a do ewidencji trafia wartość netto.
+Decyzja autora 7.11.2026: firma wybiera w Księgowości, czy tańsze zakupy idą od razu w koszty (domyślnie), czy też do ewidencji z amortyzacją `finanse.amortyzacja_niskocenna.stawka` – jak środki trwałe od progu.
 Wybór działa od rundy decyzji (bez przeksięgowania wcześniejszych zakupów); `wybor: false` – zawsze w koszty.
 """
 
@@ -20,19 +20,19 @@ def stawka(dane: Dane, rodzaj: str) -> float:
     return dane.z["finanse"]["amortyzacja_roczna"][rodzaj]
 
 
-W_KOSZTY, AMORTYZACJA = "koszty", "amortyzacja"   # B6: zakupy poniżej progu (Firma.amortyzacja_niskocenna)
+W_KOSZTY, AMORTYZACJA = "koszty", "amortyzacja"   # zakupy poniżej progu (Firma.amortyzacja_niskocenna)
 NISKOCENNE = (W_KOSZTY, AMORTYZACJA)
 
 
 def przyjmij(dane: Dane, firma: Firma, nazwa: str, rodzaj: str, wartosc: float, runda: int,
              stawka_roczna: float | None = None) -> None:
-    """Nowy środek trwały w ewidencji (amortyzacja od następnej rundy); stawka_roczna – B6, zakup poniżej progu."""
+    """Nowy środek trwały w ewidencji (amortyzacja od następnej rundy); stawka_roczna, zakup poniżej progu."""
     firma.srodki_trwale.append(SrodekTrwaly(nazwa=nazwa, rodzaj=rodzaj, wartosc=wartosc, od_rundy=runda,
                                             stawka=stawka(dane, rodzaj) if stawka_roczna is None else stawka_roczna))
 
 
 def wybor_niskocennych(dane: Dane) -> dict | None:
-    """B6: {"wybor", "stawka"} z finanse.amortyzacja_niskocenna; None – gracz nie wybiera (zawsze w koszty)."""
+    """{"wybor", "stawka"} z finanse.amortyzacja_niskocenna; None – gracz nie wybiera (zawsze w koszty)."""
     p = dane.z["finanse"].get("amortyzacja_niskocenna")
     return p if p and p["wybor"] else None
 
@@ -44,7 +44,7 @@ def stawka_niskocennych(dane: Dane, firma: Firma) -> float | None:
 
 
 def ustaw_niskocenne(dane: Dane, firma: Firma, d: dict) -> None:
-    """B6: wybór z decyzji `amortyzacja_niskocenna` – na początku przeliczenia, przed wszystkimi zakupami rundy
+    """Wybór z decyzji `amortyzacja_niskocenna` – na początku przeliczenia, przed wszystkimi zakupami rundy
     (giełda, lokal, budynek z najemcą, sprzęt); trwa do zmiany."""
     if d.get("amortyzacja_niskocenna") in NISKOCENNE and wybor_niskocennych(dane):
         firma.amortyzacja_niskocenna = d["amortyzacja_niskocenna"]
@@ -52,7 +52,7 @@ def ustaw_niskocenne(dane: Dane, firma: Firma, d: dict) -> None:
 
 def zakup(dane: Dane, firma: Firma, ksiega: Ksiega, rachunek: Rachunek, opis: str, nazwa: str, rodzaj: str,
           cena: float, runda: int) -> float:
-    """Zakup inwestycji: od progu – środek trwały (amortyzacja), poniżej progu – koszt od razu albo (B6, wybór
+    """Zakup inwestycji: od progu – środek trwały (amortyzacja), poniżej progu – koszt od razu albo (wybór
     firmy) środek trwały ze stawką `amortyzacja_niskocenna`. Zwraca koszt wpisany do KPiR w tej rundzie
     (bez VAT; 0 – środek trwały)."""
     nisko = stawka_niskocennych(dane, firma) if 0 < cena < dane.z["finanse"]["amortyzacja_prog"] else None
@@ -66,9 +66,9 @@ def zakup(dane: Dane, firma: Firma, ksiega: Ksiega, rachunek: Rachunek, opis: st
 
 def sprzet_w_cenie(dane: Dane, firma: Firma, ksiega: Ksiega, adres: str, sprzet: list[tuple[str, int]],
                    runda: int) -> float:
-    """B6: sprzęt kupiony razem z lokalem (kupno gotowego, wykup najmowanego) – część ceny lokalu, nie dodatek:
+    """Sprzęt kupiony razem z lokalem (kupno gotowego, wykup najmowanego) – część ceny lokalu, nie dodatek:
     poniżej progu amortyzacji koszt w KPiR od razu (bez wydatku – zapłacony w cenie lokalu), od progu środek
-    trwały (B6: poniżej progu też, gdy firma amortyzuje tańsze zakupy); majątek firmy (rozwój) jak przy zakupie
+    trwały (poniżej progu też, gdy firma amortyzuje tańsze zakupy); majątek firmy (rozwój) jak przy zakupie
     osobno. Zwraca wartość sprzętu – o tyle mniej wart jest lokal w ewidencji (wcześniej sprzęt liczył się drugi
     raz ponad cenę)."""
     razem = 0.0
@@ -88,7 +88,7 @@ def sprzet_w_cenie(dane: Dane, firma: Firma, ksiega: Ksiega, adres: str, sprzet:
 
 def sprzedaj(firma: Firma, nazwa: str, ksiega: Ksiega, opis: str = "sprzedanego") -> bool:
     """Usuwa środek trwały z ewidencji; niezamortyzowana wartość – koszt w KPiR. False – nie było go w ewidencji.
-    `opis` – sprzedanego albo zlikwidowanego (K1: przepadek przy ponownym zakryciu funkcji)."""
+    `opis` – sprzedanego albo zlikwidowanego (przepadek przy ponownym zakryciu funkcji)."""
     st = next((s for s in firma.srodki_trwale if s.nazwa == nazwa), None)
     if st is None:
         return False
@@ -110,7 +110,7 @@ def amortyzuj(dane: Dane, firma: Firma, runda: int, ksiega: Ksiega) -> None:
 
 
 def amortyzuj_majatek(dane: Dane, firma: Firma, majatek_przed: float) -> None:
-    """Amortyzacja sumy inwestycji do karty (Z1): tańsze zakupy są od razu w kosztach, więc do rozwoju firmy
+    """Amortyzacja sumy inwestycji do karty: tańsze zakupy są od razu w kosztach, więc do rozwoju firmy
     majątek traci na wartości jak sprzęt – liniowo od sumy sprzed rundy (zakupy rundy od następnej)."""
     odpis = round(min(firma.majatek, majatek_przed) * stawka(dane, "sprzet") / dane.rund_w_roku, 2)
     firma.umorzenie_majatku = round(min(firma.majatek, firma.umorzenie_majatku + odpis), 2)
@@ -124,6 +124,6 @@ def zmniejsz_majatek(firma: Firma, wartosc: float) -> None:
 
 
 def ewidencja(firma: Firma) -> list[dict]:
-    """Tabela ewidencji środków trwałych (Biurowiec przy Zana ▸ KPiR, od UF12)."""
+    """Tabela ewidencji środków trwałych (Biurowiec przy Zana ▸ KPiR)."""
     return [{"nazwa": s.nazwa, "rodzaj": s.rodzaj, "od_rundy": s.od_rundy, "stawka": s.stawka, "wartosc": s.wartosc,
              "umorzenie": s.umorzenie, "netto": round(s.wartosc - s.umorzenie, 2)} for s in firma.srodki_trwale]

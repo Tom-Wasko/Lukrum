@@ -1,4 +1,4 @@
-"""Poprawki 4 (P6): obciążenie każdej osoby w dni tygodnia (Ludzie ▸ Zespół, wyniki – tabela pn–nd).
+"""obciążenie każdej osoby w dni tygodnia (Ludzie ▸ Zespół, wyniki – tabela pn–nd).
 
 Dzień = praca potrzebna na obsłużenie wszystkich klientów, którzy przyszli (także tych, co odeszli z kolejki,
 bo zabrakło godzin), wobec godzin stanowiska tego dnia. Ponad 1 – tyle pracy zabrakło. Tylko raport: wyniki gry

@@ -1,18 +1,18 @@
-// Marketing: kampanie agencji reklamowych w strefach miasta (tradycyjne i – UF19 – internetowe) i promocje.
+// Marketing: kampanie agencji reklamowych w strefach miasta (tradycyjne i internetowe) i promocje.
 import { brakWynikow, esc, kafelkiLiczb, kafelOferty, kartaMarki, kolorFirmy, KOLORY, licz, nazwaFirmy, nazwaOgolna, nazwaUslugi, podsumowanie, proc, tabela, wykres, zl, zl2, zwin, zwinTabela } from "./wspolne.js";
 import { igReklama } from "./infografiki.js";
 import { znakMarki } from "./wspolne.js";
 
 const RODZAJ = { druk: "druk", internet: "internet", radio_billboard: "radio i billboardy", wydarzenia: "wydarzenia" };
-// UF14: kolor agencji (znak i pasek karty) według rodzaju
+// kolor agencji (znak i pasek karty) według rodzaju
 const KOLOR = { druk: KOLORY[2], radio_billboard: KOLORY[1], wydarzenia: KOLORY[3], internet: KOLORY[6] };
 const znakAgencji = (nazwa) => znakMarki(nazwa);   // poprawki 3: ikona agencji (ikony_marek.js)
 const odmiana = (n, [jeden, kilka, wiele]) => (n === 1 ? jeden : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? kilka : wiele);
 const FAZA = { trwa: "trwa", narasta: "narasta", wygasa: "wygasa" };
-// UF19: agencje jednego rodzaju (internetowe albo tradycyjne – widok bez znacznika to same tradycyjne)
+// agencje jednego rodzaju (internetowe albo tradycyjne – widok bez znacznika to same tradycyjne)
 const tylko = (R, internet) => ({ ...R, agencje: R.agencje.filter((a) => !!a.internet === internet) });
 const zamowioneW = (v, R) => (v.decyzje.kampanie || []).filter((x) => x.emisje > 0 && R.agencje.some((a) => a.id === x.agencja));
-// UF19: „35% → 70% → 100%, potem −20% co rundę”
+// „35% → 70% → 100%, potem −20% co rundę”
 const profilInternetu = (mi) => `${mi.narastanie.map((x) => proc(x, 0)).join(" → ")}, potem −${proc(1 - mi.trwalosc, 0)} co rundę`;
 const wybor = {};   // wybrana strefa kanału (agencja/kanał → strefa), do przeliczenia kosztu przed zamówieniem
 
@@ -23,7 +23,7 @@ function strefaKanalu(R, a, k) {
   return wybor[klucz];
 }
 
-// Z5: kampania = liczba emisji w tej rundzie; cena emisji z rabatem z progów kanału, efekt nasyca się 1 − e^(−tempo · emisje).
+// kampania = liczba emisji w tej rundzie; cena emisji z rabatem z progów kanału, efekt nasyca się 1 − e^(−tempo · emisje).
 const rabatKanalu = (k, n) => k.znizki.reduce((r, [od, x]) => (n >= od ? Math.max(r, x) : r), 0);
 const efektEmisji = (R, n) => (n > 0 ? 1 - Math.exp(-R.model.tempo_emisji * n) : 0);
 const kosztKampanii = (k, s, n) => n * k.ceny[s] * (1 - rabatKanalu(k, n));
@@ -37,7 +37,7 @@ const kanalReklamy = (R, a, k) => R.agencje.find((x) => x.id === a)?.kanaly.find
 const takaSama = (x, a, k, strefa) => x.agencja === a && x.kanal === k && (x.strefa ?? null) === strefa;
 const emisjeWDecyzji = (v, a, k, s) => (v.decyzje.kampanie || []).find((x) => takaSama(x, a, k, s === "miasto" ? null : s))?.emisje || 0;
 
-// UF14: progi rabatu jako pasek („1–3: cena pełna · 4–10: −15% · 11–20: −30%”), bieżący próg podświetlony
+// progi rabatu jako pasek („1–3: cena pełna · 4–10: −15% · 11–20: −30%”), bieżący próg podświetlony
 function progiHtml(k, n) {
   const p = [...(k.znizki[0]?.[0] > 1 ? [[1, 0]] : []), ...k.znizki].filter(([od]) => od <= k.maks_emisji);
   const tu = p.reduce((j, [od], i) => (n >= od ? i : j), -1);
@@ -47,7 +47,7 @@ function progiHtml(k, n) {
   }).join("")}</div>`;
 }
 
-// UF14: kalkulator emisji – koszt i siła kampanii przy 1 emisji, na progach rabatów, przy maksimum i przy wybranej liczbie;
+// kalkulator emisji – koszt i siła kampanii przy 1 emisji, na progach rabatów, przy maksimum i przy wybranej liczbie;
 // klik w wiersz ustawia tę liczbę emisji
 function kalkulatorHtml(R, a, k, s, n, mozna) {
   const l = [...new Set([1, ...k.znizki.map(([od]) => od), k.maks_emisji, ...(n ? [n] : [])])]
@@ -93,7 +93,7 @@ const pasekHtml = (v, R, siec) => { const zam = zamowioneW(v, R);
       <span>Emisje: <span class="kwota">${licz(zam.reduce((s, x) => s + x.emisje, 0))}</span></span>
       <span>Koszt (netto): <span class="kwota">${zl(kosztZamowien(R, zam))}</span></span>`; };
 
-// UF14: karta agencji – znak w kolorze agencji, opis, zamówione kampanie i koszt; w środku kafelki kanałów
+// karta agencji – znak w kolorze agencji, opis, zamówione kampanie i koszt; w środku kafelki kanałów
 function agencjaHtml(v, R, a, edycja, mi = null) {
   const zam = zamowioneW(v, { agencje: [a] });
   const koszt = zam.reduce((s, x) => { const k = a.kanaly.find((y) => y.id === x.kanal); return s + (k ? kosztKampanii(k, x.strefa || "miasto", x.emisje) : 0); }, 0);
@@ -119,7 +119,7 @@ function trwajaceHtml(v, lista, tytul, zw = false) {
       `+${proc(x.pula, 1)}`, `+${proc(x.przyciaganie, 1)}`, x.koszt ? zl2(x.koszt) : "–"]), { klasy: ["l", "l", "l"] });
 }
 
-// UF23: podsumowanie i kafelki wyników kampanii (lista kampanii z v.wyniki.reklama_agencje.kampanie)
+// podsumowanie i kafelki wyników kampanii (lista kampanii z v.wyniki.reklama_agencje.kampanie)
 function podsumowanieKampanii(lista, gdzie) {
   if (!lista.length) return podsumowanie(`W tej rundzie nie działała żadna Twoja kampania${gdzie}.`);
   const koszt = lista.reduce((a, x) => a + (x.koszt || 0), 0), n = lista.length, best = lista.reduce((a, x) => x.przyciaganie > a.przyciaganie ? x : a);
@@ -176,7 +176,7 @@ export const agencje = {
     "kampania-strefa": (el, c) => { wybor[el.dataset.k] = el.value; c.rysuj(); },
     "kampania-emisje": (el, c) => ustawEmisje(el, c, el.value),
   },
-  akcje: { "kampania-ustaw": (el, c) => ustawEmisje(el, c, el.dataset.n) },   // UF14: −/+ i wiersz kalkulatora
+  akcje: { "kampania-ustaw": (el, c) => ustawEmisje(el, c, el.dataset.n) },   // −/+ i wiersz kalkulatora
 };
 
 // Lokalna zmiana emisji: po zapisie podmieniany jest tylko kafel kanału, suma agencji i pasek – reszta zakładki (i przewijanie) bez zmian
@@ -205,7 +205,7 @@ function ustawEmisje(el, c, ile) {
   }, () => odswiezKanal(c, a, k));
 }
 
-// UF19: obecność w sieci – przyciąganie z już zamówionych kampanii internetowych w tej i kolejnych rundach
+// obecność w sieci – przyciąganie z już zamówionych kampanii internetowych w tej i kolejnych rundach
 function obecnoscHtml(v, R) {
   const P = Object.entries(R.internet?.prognoza || {});
   if (!P.length) return "";
@@ -247,7 +247,7 @@ function listaPromocji(v) {
   return v.decyzje.promocje ?? (v.promocje?.aktywne || []).map(({ typ, nazwa, danie }) => ({ typ, nazwa, danie }));
 }
 
-// B7: pamięć klientów po promocji – zasady i bieżący poziom (z widoku albo z wyników rundy)
+// pamięć klientów po promocji – zasady i bieżący poziom (z widoku albo z wyników rundy)
 function pamiecHtml(P, lista, kat) {
   let html = P ? `<p class="podpowiedz">Po promocji klienci pamiętają ją jeszcze kilka tygodni: po wyłączeniu zostaje
     ${proc(P.udzial, 0)} jej przyciągania (już bez rabatu), co tydzień o ${proc(P.zanik, 0)} mniej; razem najwyżej

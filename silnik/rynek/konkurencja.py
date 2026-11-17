@@ -1,4 +1,4 @@
-"""Konkurencja i detektyw (gra z lokalami, P16 – pytanie 26; dane: `dane/zdarzenia/detektyw.yaml`).
+"""Konkurencja i detektyw (gra z lokalami; dane: `dane/zdarzenia/detektyw.yaml`).
 
 Przegląd – każda drużyna widzi ogólny obraz rywali z rynku poprzedniej rundy (`StanGry.rynek`): liczbę lokali,
 przedział cen menu, czy się reklamują i mają promocje, udział w popycie na wszystkie dania.

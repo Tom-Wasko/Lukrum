@@ -1,7 +1,7 @@
 # Rynek pracy
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Rynek pracy: znane osoby (kucharze i kasjerzy) i parametry losowania nowych kandydatów (wg gwiazdek).'
-zrodlo: znani – założenie F2.6 (osoby fikcyjne, pensje 1★ 4806–5100, 2★ 5400–6000, 3★ 6200–6900 – oferty gastronomii w Lublinie 2026 (pracuj.pl – kucharz, kuchnia gorąca, 5 400–6 800 zł brutto; aplikuj.pl – praca w gastronomii w Lublinie; płaca minimalna 2026 – 4 806 zł)); losowanie – założenie autora, kalibrowane
+zrodlo: znani – założenie autora (osoby fikcyjne, pensje 1★ 4806–5100, 2★ 5400–6000, 3★ 6200–6900 – oferty gastronomii w Lublinie 2026 (pracuj.pl – kucharz, kuchnia gorąca, 5 400–6 800 zł brutto; aplikuj.pl – praca w gastronomii w Lublinie; płaca minimalna 2026 – 4 806 zł)); losowanie – założenie autora, kalibrowane
   pomiarami botów (balans/)
 znani:
 - imie_nazwisko: Mehmet Yılmaz
@@ -144,8 +144,8 @@ losowanie:
   - 0.05
   - 0.09
 agencja:
-  zrodlo: notatki „Elementy mapy” (Agencja pracy, limit 3), „Ustalenia gry” (odblokowanie, okres wypowiedzenia),
-    „Prawidła świata” (KP art. 36); opłaty, gwiazdki w kanałach i czas właściciela – założenie F3a.8
+  zrodlo: założenia autora o elementach mapy (Agencja pracy, limit 3), ustalenia autora (odblokowanie, okres wypowiedzenia),
+    ustalenia autora o prawidłach świata (KP art. 36); opłaty, gwiazdki w kanałach i czas właściciela – założenie autora
   limit_nowych: 3
   kanaly:
     pracuj:
@@ -177,8 +177,8 @@ agencja:
   - {staz_od: 13, rund: 2}     # mniej niż 6 miesięcy: 2 tygodnie (art. 36 § 1 pkt 1)
   - {staz_od: 26, rund: 4}     # co najmniej 6 miesięcy: miesiąc (art. 36 § 1 pkt 2)
   - {staz_od: 156, rund: 13}   # co najmniej 3 lata: 3 miesiące (art. 36 § 1 pkt 3)
-cechy:   # U20 (decyzja autora 4.11.2026): cecha (charakter) każdej osoby – od 7.11.2026 jawna: pigułka z nazwą i zdanie o skutkach, bez zgadywania z opisu
-  zrodlo: 'U20: cechy i opisy – założenie (raporty/projekt_U20_dynamika_pracownikow.md). Mnożniki działają na składniki
+cechy:   # (decyzja autora 4.11.2026) cecha (charakter) każdej osoby – od 7.11.2026 jawna: pigułka z nazwą i zdanie o skutkach, bez zgadywania z opisu
+  zrodlo: 'cechy i opisy – założenie autora. Mnożniki działają na składniki
     zadowolenia osoby (silnik/ludzie/zadowolenie.py): placa – waga pensji, warunki – sprzęt i udogodnienia, przeciazenie
     – kara za przepracowanie, odejscie – szansa wypowiedzenia; zadowolenie – stałe przesunięcie; wydajnosc – mnożnik
     godzin pracy na stanowisku. Losowanie wg wag, opis – jeden z listy'

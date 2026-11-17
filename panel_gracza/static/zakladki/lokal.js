@@ -1,4 +1,4 @@
-// Sekcja „Twój lokal” (Z3 2.11.2026, UF15 6.11.2026): kafelki wyboru lokalu na górze i zakładki Mój lokal, Kuchnia,
+// Sekcja „Twój lokal” (przebudowa zakładek, listopad 2026): kafelki wyboru lokalu na górze i zakładki Mój lokal, Kuchnia,
 // Zaopatrzenie, Wnętrze. Każda składa się z dawnych zakładek („części”), które działają na wybranym lokalu
 // (lokal_wybor.js); dawne klucze zakładek prowadzą tu przez ALIAS (index.js), a część ma kotwicę #czesc-<klucz>.
 import { esc, licz, naOkres, naRunde, proc, tabela, zl, zl2, zwinTabela } from "./wspolne.js";
@@ -148,7 +148,7 @@ function sanepid(v) {
     <div class="kd"><a class="podpowiedz" data-zakladka-k="sanepid">Szczegóły – Urzędy → Sanepid</a></div></div>`;
 }
 
-// UF15: część „Stan lokalu” zakładki Mój lokal (kafelki wyboru lokalu rysuje zakładka złożona)
+// część „Stan lokalu” zakładki Mój lokal (kafelki wyboru lokalu rysuje zakładka złożona)
 export const stan_lokalu = {
   tytul: "Stan lokalu", odblokowanie: (v) => !!v.lokale, ukryta: (v) => !v.lokale,
   info: `Wszystko o wybranym lokalu w jednym miejscu: liczby z poprzedniej rundy, braki z listy błędów, umowa i sanepid.

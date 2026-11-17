@@ -1,4 +1,4 @@
-# Eventy w parkach (F3b.1, P9; silnik/swiat/zdarzenia.py) – co rundę 3–4 historie, te same dla wszystkich drużyn
+# Eventy w parkach (silnik/swiat/zdarzenia.py) – co rundę 3–4 historie, te same dla wszystkich drużyn
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Co rundę w parkach Lublina dzieją się 3–4 rzeczy, w których każda drużyna może wziąć udział (niezależnie od
   innych). Historia ma kilka scen w kolejnych rundach; wybór w scenie zmienia dalszy ciąg. Opcje kosztują czas
@@ -6,13 +6,13 @@ opis: 'Co rundę w parkach Lublina dzieją się 3–4 rzeczy, w których każda 
   (zawsze bez czasu właściciela). Skutki: gotowka (+ przychód, − koszt; bez VAT), popyt (mnożnik atrakcyjności
   lokali przez `rund` rund od tej rundy), czas (mniej godzin właściciela w następnych `rund` rundach), kandydat
   (osoba na rynku pracy widoczna tylko dla tej drużyny). nastepna: kolejne sceny z szansą – reszta do 1 = koniec.'
-zrodlo: 'Notatka „Elementy mapy” (Parki: prawdziwe parki Lublina, jeden event na rundę dla wszystkich, czas
+zrodlo: 'Założenia autora o elementach mapy (Parki: prawdziwe parki Lublina, jeden event na rundę dla wszystkich, czas
   właściciela, gotówka, porcje, opóźnione skutki jak w „60 Seconds!” – bezdomny, który przychodzi do pracy) i
-  „Zdarzenia i historie” (2–4 sceny, ok. 80% komicznych, lubelskie smaczki, postacie fikcyjne); koszt porcji,
-  kwoty i siła skutków – założenie F3b.1, do kalibracji w kroku 5'
+  ustalenia autora o zdarzeniach (2–4 sceny, ok. 80% komicznych, lubelskie smaczki, postacie fikcyjne); koszt porcji,
+  kwoty i siła skutków – założenie autora, do kalibracji'
 zasady:
   od_rundy: 2          # w rundzie 1 drużyny dopiero otwierają lokale
-  eventow_na_runde: [3, 4]   # P9: 3–4 historie na rundę, opcje po 2–5 h – czasu właściciela nie starczy na wszystko
+  eventow_na_runde: [3, 4]   # 3–4 historie na rundę, opcje po 2–5 h – czasu właściciela nie starczy na wszystko
   koszt_porcji: 9      # zł za porcję rozdaną w parku (składniki i opakowanie)
 historie:
 

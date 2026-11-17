@@ -1,5 +1,5 @@
-"""Prowadzenie gry przez mistrza gry (F3a.14): harmonogram zamykania rund, pauza, wgląd w drużyny tylko do
-odczytu, poziom botów, eksport wyników do arkusza, alarm debetu i inwestor ratunkowy (Z3)."""
+"""Prowadzenie gry przez mistrza gry: harmonogram zamykania rund, pauza, wgląd w drużyny tylko do
+odczytu, poziom botów, eksport wyników do arkusza, alarm debetu i inwestor ratunkowy."""
 
 from datetime import datetime, timedelta
 from io import StringIO
@@ -140,7 +140,7 @@ def test_eksport_csv(client, gra, uczen):
 
 
 def test_alarm_debetu_i_inwestor_ratunkowy(client, gra):
-    """Z3: alarm przy firmie z debetem ponad limit; mistrz gry przysyła inwestora albo go odwołuje."""
+    """Alarm przy firmie z debetem ponad limit; mistrz gry przysyła inwestora albo go odwołuje."""
     assert client.post(f"/api/gry/{gra}/przelicz", content_type=JSON).status_code == 200
     r = _ustaw(client, gra, inwestor={"firma": "Kebab Ali", "kwota": 10000})
     assert r.status_code == 400 and "debetem ponad limit" in r.json()["blad"]
@@ -156,7 +156,7 @@ def test_alarm_debetu_i_inwestor_ratunkowy(client, gra):
 
 
 def test_refleksja_druzyny_przy_wysylaniu_decyzji(client, gra):
-    """U17: refleksja przy „Wyślij decyzje” – widzi ją mistrz gry (panel, CSV); opcja gry wymagana / wyłączona."""
+    """Refleksja przy „Wyślij decyzje” – widzi ją mistrz gry (panel, CSV); opcja gry wymagana / wyłączona."""
     url = f"/api/gry/{gra}/wyslij/Kebab Ali"
     assert _mg(client, gra)["gra"]["refleksja"] == "opcjonalna"
     v = client.post(url, {"wyslane": True, "refleksja": "  Obniżamy ceny,\n bo  sprzedaliśmy połowę. "}, content_type=JSON).json()

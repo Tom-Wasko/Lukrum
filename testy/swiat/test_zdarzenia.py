@@ -1,4 +1,4 @@
-"""Eventy w parkach (F3b.1): ta sama historia dla wszystkich drużyn, reakcje kosztują czas, gotówkę i porcje, ciąg
+"""Eventy w parkach: ta sama historia dla wszystkich drużyn, reakcje kosztują czas, gotówkę i porcje, ciąg
 dalszy w kolejnych rundach, skutki (popyt, czas właściciela, kandydat tylko dla jednej drużyny)."""
 
 import pytest
@@ -32,7 +32,7 @@ def test_dane_historii():
 
 
 def test_kolejnosc_bez_powtorzen():
-    """P9: co rundę 3–4 różne historie; zanim któraś się powtórzy, przejdą wszystkie."""
+    """co rundę 3–4 różne historie; zanim któraś się powtórzy, przejdą wszystkie."""
     g = _gra()
     z, n = zd.zasady(g.dane), len(zd.historie_parkow(g.dane))
     ziarno = g.konfiguracja["ziarno"]

@@ -1,4 +1,4 @@
-opis: 'Promocje w grze z lokalami (F3b.3; notatka „Prawidła świata”: promocje z listy, drużyna może nadać im
+opis: 'Promocje w grze z lokalami (ustalenia autora o prawidłach świata: promocje z listy, drużyna może nadać im
   własną, ozdobną nazwę – nazwa nie wpływa na wynik). Promocja trwa, dopóki drużyna jej nie wyłączy; obejmuje jedno
   danie (zakres „danie”) albo całe menu, wybrane dni tygodnia (0 = poniedziałek) i klientów z wybranych stref
   (brak – wszystkie). Objęci promocją klienci: przyciąganie – mnożnik atrakcyjności lokalu (1 + przyciąganie) w ich
@@ -7,13 +7,13 @@ opis: 'Promocje w grze z lokalami (F3b.3; notatka „Prawidła świata”: promo
   dodatek do zestawu (napój, KPiR – towary, VAT 23%). Przyciąganie zmienia się z każdą rundą trwania o `przyrost`
   (znużenie albo przywiązanie), w granicach przyciaganie_min–przyciaganie_max. koszt_startu – zł netto przy włączeniu
   (plakaty, karty), VAT 23%. Najwyżej `limit_aktywnych` promocji naraz, każdy rodzaj raz.'
-zrodlo: 'Założenia projektowe LUKRUM (roboczo, do kalibracji w kroku 5); teksty – własne. Poprawki 3 (decyzja autora
+zrodlo: 'Założenia projektowe LUKRUM (roboczo, do kalibracji); teksty – własne. Poprawki 3 (decyzja autora
   8.11.2026: wzmocnić wszystkie rodzaje tak, żeby każdy miał strategię, w której się opłaca, i żaden nie wygrywał
   wszędzie) – nowe liczby przy rodzajach, było: w komentarzach; pomiar szybki (balans.warianty, 2 ziarna).'
 od_rundy: 3
 limit_aktywnych: 2
 nazwa_max: 40
-# B7 (decyzja autora 7.11.2026 – trwały skutek promocji, propozycja 1): po końcu promocji klienci ją pamiętają –
+# (decyzja autora 7.11.2026 – trwały skutek promocji, propozycja 1) po końcu promocji klienci ją pamiętają –
 # część `udzial` przyciągania z ostatniego tygodnia promocji działa dalej (te same dni, strefy klientów i danie,
 # bez rabatu), co tydzień × (1 − zanik). Ponowne zakończenie tej samej promocji dodaje się do resztki pamięci;
 # suma pamięci firmy najwyżej `maks`, poniżej `prog` pamięć znika. udzial: 0 – promocja bez trwałego skutku.
@@ -23,10 +23,10 @@ pamiec:
   maks: 0.25
   prog: 0.01
   pewnosc: zalozenie
-  zrodlo: 'B7, decyzja autora 7.11.2026: pamięć 30–50% przyciągnięcia, zanik ok. 20% na tydzień
-    (raporty/kalibracja/notatki_do_zmiany.md); maks 0,25 – mniej więcej jak obniżka ceny o 10% (+22%, B7); do pomiaru'
+  zrodlo: 'decyzja autora 7.11.2026: pamięć 30–50% przyciągnięcia, zanik ok. 20% na tydzień
+    (kalibracja z 7.11.2026); maks 0,25 – mniej więcej jak obniżka ceny o 10% (+22%); do pomiaru'
 # Poprawki 3 (decyzja autora 8.11.2026): każdy rodzaj na inną okazję – 2 za 1 mocny i krótki (start, wolna kuchnia,
-# pamięć B7), happy hours zapełnia słabe dni, karta rozkręca się z tygodniami, studencka – tylko studenci, zestaw
+# pamięć), happy hours zapełnia słabe dni, karta rozkręca się z tygodniami, studencka – tylko studenci, zestaw
 # podnosi rachunek. Wartości „było” w komentarzach przy liczbach.
 typy:
   dwa_za_jeden:

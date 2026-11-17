@@ -5,7 +5,7 @@ Każda strefa ma własną pulę klientów na każde danie i każdy dzień rundy:
     pula = popyt roczny / 52 × sezonowość dania × pula strefy × miesiąc strefy × kalendarz (strefa i danie)
            × waga dnia × szum
 
-Sezonowość dania (P14) zmienia się płynnie z dnia na dzień: 12 wartości z uslugi.yaml to środki miesięcy, między
+Sezonowość dania  zmienia się płynnie z dnia na dzień: 12 wartości z uslugi.yaml to środki miesięcy, między
 nimi – liniowo (koniec września to już trochę październik).
 
 Klienci strefy wybierają lokal (model logitowy z opcją zewnętrzną A_0 – bary spoza gry, obiad w domu):
@@ -17,10 +17,10 @@ Klienci strefy wybierają lokal (model logitowy z opcją zewnętrzną A_0 – ba
 Dwa lokale w jednej strefie dzielą tę samą pulę; lokal łapie też klientów sąsiednich stref, słabiej z odległością
 (środki stref na siatce mapy). Obsługa – dzień po dniu w każdym lokalu (operacje.obsluz: godziny pracowników
 i sprzętu rundy rozłożone równo na dni), więc szczyt w piątek przy zbyt małej obsadzie to utracona sprzedaż.
-Dzień firmy (F3a.5): rano dostawy (swiezosc.przyjmij), dania bez składnika wyłączone – część klientów bierze inne
+Dzień firmy: rano dostawy (swiezosc.przyjmij), dania bez składnika wyłączone – część klientów bierze inne
 danie (menu.przenies), obsługa w lokalach, wieczorem przeterminowane partie do kosza (swiezosc.wyrzuc).
-Reklama: na razie mnożniki podstawowe (rynek.py), własny model reklamy – krok F3b.
-U24: klienci strefy to grupy z koszykiem (silnik/rynek/klienci.py) – koszyk zmienia pule dań stref, a każda grupa
+Reklama: na razie mnożniki podstawowe (rynek.py), własny model reklamy – krok.
+klienci strefy to grupy z koszykiem (silnik/rynek/klienci.py) – koszyk zmienia pule dań stref, a każda grupa
 wybiera lokal z własną wrażliwością na cenę; klienci dania, którego lokal nie ma, częściowo biorą u niego inne danie
 z tej samej grupy dań. Zadowolenie klientów to ocena lokalu z opinii (silnik/rynek/opinie.py).
 """
@@ -108,7 +108,7 @@ def pule(dane: Dane, runda: int, ziarno=None, reklama: dict[str, float] | None =
     szum = p["model"]["szum_proc"]
     sezony = {u: np.array([sezon(du["sezonowosc"], d) for d in dni]) for u, du in dane.uslugi.items()}
     trwajace = [kal.aktywne(dane, d) for d in dni]
-    koszyk = kl.mnozniki_koszyka(dane)   # U24: grupy klientów strefy (bez grup – {})
+    koszyk = kl.mnozniki_koszyka(dane)   # grupy klientów strefy (bez grup – {})
     wynik = {}
     for z, ps in p["strefy"].items():
         baza = ps["pula"] * (ps["miesiace"][m] if ps.get("miesiace") else 1.0) * len(dni) / 7
@@ -126,7 +126,7 @@ def pule(dane: Dane, runda: int, ziarno=None, reklama: dict[str, float] | None =
 
 def mnoznik_zadowolenia(dane: Dane, zadowolenie: float | None) -> float:
     """Zadowolenie klientów firmy z poprzedniej rundy (karta wyników) → mnożnik atrakcyjności (brak karty – 1).
-    Z opiniami klientów (U24) zamiast niego działa ocena lokalu – `zadowolenie_lokalu`."""
+    Z opiniami klientów zamiast niego działa ocena lokalu – `zadowolenie_lokalu`."""
     if not zadowolenie:
         return 1.0
     m = dane.mapa["popyt"]["model"]
@@ -134,12 +134,12 @@ def mnoznik_zadowolenia(dane: Dane, zadowolenie: float | None) -> float:
 
 
 def zadowolenie_lokalu(dane: Dane, lokal: Lokal, firmy: float = 1.0) -> float:
-    """Mnożnik zadowolenia klientów lokalu: z opiniami (U24) – ocena lokalu, bez nich – mnożnik karty firmy."""
+    """Mnożnik zadowolenia klientów lokalu: z opiniami – ocena lokalu, bez nich – mnożnik karty firmy."""
     return op.mnoznik(dane, lokal) if op.ustawienia(dane) else firmy
 
 
 def rozruch(dane: Dane, lokal: Lokal, runda: int) -> float:
-    """Nowy lokal dopiero zdobywa klientów (B5): mnożnik popytu `start` w pierwszym tygodniu sprzedaży, co tydzień
+    """Nowy lokal dopiero zdobywa klientów: mnożnik popytu `start` w pierwszym tygodniu sprzedaży, co tydzień
     o `przyrost` więcej, do 1 (dane/mapa/popyt.yaml: model.rozruch; bez niego – 1). Runda 1 to przygotowanie –
     sprzedaż najwcześniej od rundy 2."""
     r = dane.mapa["popyt"]["model"].get("rozruch")
@@ -153,7 +153,7 @@ def _skladniki(dane: Dane, strefa_klienta: str, usluga: str, o: dict, jakosc: fl
     r = o["cena"] / (dane.uslugi[usluga]["cena_preferowana"] * ps["cena"])
     q = menu.jakosc_dania(dane, o["jakosc"]) if jakosc is None else jakosc
     return (q * math.exp(-odleglosc(dane, strefa_klienta, o["strefa"]) / p["model"]["zasieg"])
-            / p["strefy"][o["strefa"]].get("konkurencja", 1.0)   # B6: lokal ginie wśród innych lokali swojej strefy
+            / p["strefy"][o["strefa"]].get("konkurencja", 1.0)   # lokal ginie wśród innych lokali swojej strefy
             * o.get("zadowolenie", 1.0) * o.get("wyposazenie", 1.0) * o.get("dekor", 1.0) * o.get("mnoznik_firmy", 1.0) * o.get("rozruch", 1.0)
             * (1 + o.get("reklama", 0.0) + (o.get("reklama_strefy") or {}).get(strefa_klienta, 0.0)),
             p["model"]["elastycznosc_ceny"] * ps["wrazliwosc_ceny"] * (r - 1))
@@ -175,7 +175,7 @@ def podzial(dane: Dane, pule_rundy: dict, oferty: dict[str, dict[tuple[str, str]
             grupy: dict | None = None) -> dict:
     """Podział pul stref między lokale. oferty: {danie: {(firma, lokal): oferta}} (oferta jak w `atrakcyjnosc`,
     opcjonalnie "promocje" – efekty z promocje.efekty_ofert: przyciąganie objętych klientów w dniach z maski).
-    grupy – klienci.udzialy (U24): każda grupa klientów strefy wybiera z własną wrażliwością na cenę; lokal bez dania
+    grupy – klienci.udzialy: każda grupa klientów strefy wybiera z własną wrażliwością na cenę; lokal bez dania
     łapie część jego klientów najlepszym zamiennikiem z grupy dań (sprzedaż zamiennika).
     Zwraca {(firma, lokal): {danie: {"dni": np.ndarray, "strefy": {strefa: suma}, "porcje": np.ndarray,
     "objeci": {typ promocji: np.ndarray}, "grupy": {grupa: suma}}}} – wartości ułamkowe; porcje – klienci + porcje
@@ -248,7 +248,7 @@ def ceny_lokalu(firma: Firma, lok: Lokal) -> dict[str, float]:
 
 def oferty_lokali(dane: Dane, firma: Firma, runda: int, wspolne: dict) -> dict[str, dict]:
     """Oferty działających lokali firmy: {lokal: {danie: oferta}} – danie jest w lokalu, gdy jest w menu i sprzedaży
-    lokalu, a lokal ma kasjera i stanowisko z pracownikiem i sprzętem dla dania. Cena i wyposażenie – lokalu (Z2);
+    lokalu, a lokal ma kasjera i stanowisko z pracownikiem i sprzętem dla dania. Cena i wyposażenie – lokalu;
     wspolne: reklama, mnoznik_firmy, zadowolenie, reklama_strefy."""
     wynik = {}
     for lok in firma.lokale:
@@ -277,7 +277,7 @@ def rynek_lokali(dane: Dane, firmy: dict[str, Firma], oferty: dict[str, dict[str
     "rynek": {danie: {firma: {"popyt", "skladniki"}}}, "strefy": {…}, "swiezosc": {firma: …},
     "promocje": {firma z promocjami: {"przychod": {danie: zł brutto}, "doplaty", "koszt_dodatkow", "typy"}}} – dane do
     wyników i zakładek „Klienci” oraz „Magazyn i świeżość”. reklama – poszerzenie pul stref (jak w `pule`).
-    Z2: każdy lokal ma swój magazyn (widok lokalu), przewozy {firma: [...]} (per_lokal.przewozy) jadą rano przed
+    każdy lokal ma swój magazyn (widok lokalu), przewozy {firma: [...]} (per_lokal.przewozy) jadą rano przed
     dostawami; "przychod": {firma: {danie: zł brutto}} – suma sprzedaży lokali po ich cenach (z promocjami).
     Popyt i sprzedaż – w porcjach (2 za 1: dwie porcje na klienta)."""
     dni = dni_rundy(dane, runda)
@@ -298,7 +298,7 @@ def rynek_lokali(dane: Dane, firmy: dict[str, Firma], oferty: dict[str, dict[str
         lokale_wynik, przyczyny = [], {}
         laczna = {"obsluzeni": {}, "utracona": {}, "pomylki": {}, "zuzyte_zasoby": {}, "godziny_stanowisk": {},
                   "godziny_kasy": 0.0, "godziny_kasy_lokali": {}, "liczba_kasjerow": 0, "godziny_sprzetu": {},
-                  # P6 (tylko raport): dzień po dniu [potrzebne, pojemność] godzin – stanowiska kuchni i kasy lokali
+                  # dzień po dniu [potrzebne, pojemność] godzin – stanowiska kuchni i kasy lokali
                   "dni_stanowisk": {}, "dni_kasy_lokali": {lok: [None] * len(dni) for lok in lokale}}
         dzien_popyt = {lok: [{u: int(round(pod[(f, lok)][u]["porcje"][i])) for u in dania} for i in range(len(dni))]
                        for lok, dania in lokale.items()}
@@ -312,8 +312,8 @@ def rynek_lokali(dane: Dane, firmy: dict[str, Firma], oferty: dict[str, dict[str
             widoki.setdefault(lok, widok_lokalu(firma, lok))
         przew = (przewozy or {}).get(f, [])
         sprzedaz_lokalu = {lok: 0 for lok in lokale}
-        obsluga_lokalu = {lok: {"obsluzeni": {}, "kolejka": 0, "brak": 0, "pomylki": 0} for lok in lokale}   # U24
-        # Z3: przychód (ceny lokalu, bez promocji) i wartość zużytych składników każdego lokalu – zakładka Mój lokal
+        obsluga_lokalu = {lok: {"obsluzeni": {}, "kolejka": 0, "brak": 0, "pomylki": 0} for lok in lokale}
+        # przychód (ceny lokalu, bez promocji) i wartość zużytych składników każdego lokalu – zakładka Mój lokal
         przychod_lokalu = {lok: 0.0 for lok in lokale}
         skladniki_lokalu = {lok: 0.0 for lok in lokale}
         przych = przychod[f] = {}
@@ -383,7 +383,7 @@ def rynek_lokali(dane: Dane, firmy: dict[str, Firma], oferty: dict[str, dict[str
                 zaj = {t: 0.0 for t in sw.CHLODZONE}
                 for v in widoki.values():
                     _dodaj_straty(raport, sw.wyrzuc(v, dzien), i, len(dni))
-                    raport["przechowanie"] += ad.przechowanie(dane, v, dzien, runda)   # Z4: towar u auto-dostawcy
+                    raport["przechowanie"] += ad.przechowanie(dane, v, dzien, runda)   # towar u auto-dostawcy
                     for t, x in sw.zajete(dane, v, dzien).items():
                         zaj[t] += x
                 raport["zajetosc"].append(zaj)
@@ -474,7 +474,7 @@ def _zakoncz_raport(raport: dict) -> dict:
         for k in w:
             w[k] = [round(x, 3) for x in w[k]]
     raport["wartosc_strat"] = round(sum(s["wartosc"] for s in raport["straty"]), 2)
-    # Z4: przechowanie u auto-dostawcy – dni zsumowane na lokal i składnik
+    # przechowanie u auto-dostawcy – dni zsumowane na lokal i składnik
     suma: dict[tuple, dict] = {}
     for x in raport.get("przechowanie", []):
         s = suma.setdefault((x["lokal"], x["zasob"], x["jakosc"]), {"lokal": x["lokal"], "zasob": x["zasob"],
@@ -592,7 +592,7 @@ def widok_popytu(dane: Dane, stan, firma: Firma, runda: int, zadowolenie: float 
     for n, g in stan.firmy.items():
         for lok in g.lokale:
             lokale_stref.setdefault(dane.lokale[lok.id]["strefa"], []).append(n)
-    sklad = kl.sklad_stref(dane, dni)   # U24: grupy klientów stref
+    sklad = kl.sklad_stref(dane, dni)   # grupy klientów stref
     m = dane.miesiac_rundy(r)
     # wielkość strefy – mnożnik popytu rocznego dania (pula × miesiąc strefy), krok 3 instrukcji prognozy w panelu
     strefy = {z: {"pula": round(sum(float(pr[z][u].sum()) for u in dania)), "potencjal": pot[z],

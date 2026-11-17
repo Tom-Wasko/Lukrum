@@ -1,4 +1,4 @@
-// Rejestr zakładek i układ menu (UF15, 6.11.2026: Miasto · Twój lokal · Firma · Wyniki; każda funkcja ma decyzje i wyniki).
+// Rejestr zakładek i układ menu (6.11.2026: Miasto · Twój lokal · Firma · Wyniki; każda funkcja ma decyzje i wyniki).
 import { dashboard, karta_wynikow, lista_bledow, ranking, wnioski, wyslij } from "./ogolne.js";
 import { oferta } from "./oferta.js";
 import { sprzet, stanowiska, wyposazenie } from "./inwestycje.js";
@@ -136,12 +136,12 @@ export const ALIAS = { oferta: "lokal_menu", sprzedaz: "lokal_przeglad", zatrudn
   dostawcy: "zaop_dostawy", swiezosc: "zaop_magazyn", przewozy: "zaop_przewozy",
   stanowiska: "wnetrze_sprzet", sprzet: "wnetrze_sprzet", wyposazenie: "wnetrze_wyposazenie", dekor: "wnetrze_wyposazenie",
   lokal_dostawy: "zaop_dostawy", lokal_sprzet: "wnetrze_sprzet", lokal_ludzie: "zespol", srodki_trwale: "kpir",
-  zdarzenia: "mapa", sprawy: "lokal_przeglad", szkolenia: "hr_rozwoj", udogodnienia: "hr_rozwoj" };   // UF13: parki tylko z mapy, sprawy w lokalu – w Moim lokalu
+  zdarzenia: "mapa", sprawy: "lokal_przeglad", szkolenia: "hr_rozwoj", udogodnienia: "hr_rozwoj" };   // parki tylko z mapy, sprawy w lokalu – w Moim lokalu
 ustawAliasy(ALIAS);   // funkcje gry: dawny klucz (np. „dostawcy” z budynku mapy) należy do funkcji zakładki złożonej
 
 // Układ paska (fable-swiat, 15.11.2026): miejsca zamiast działów. Pozycja z `miejsce` to budynek z wnętrzem (swiat/miejsca.js):
 // kliknięcie otwiera scenę, a `pod` to ekrany, które są w tym budynku (pasek nad treścią). { sekcja } – nagłówek grupy.
-// Bez pozycji w pasku: parki – klik w park na mapie (UF13). „Nocna 13” jest ukryta w bramie na Starym Mieście.
+// Bez pozycji w pasku: parki – klik w park na mapie. „Nocna 13” jest ukryta w bramie na Starym Mieście.
 export const MENU = [
   { klucz: "dashboard", tytul: "Plan tygodnia", ikona: "dashboard" },
   { klucz: "mapa", tytul: "Mapa miasta", ikona: "mapa", klasa: "mapa" },

@@ -76,7 +76,7 @@ export const harpagon = {
   akcje: {
     "hp-wez": (el, c) => {
       const W = c.v.harpagon.warunki, termin = c.v.runda + W.termin_rund;
-      // U15: kwota do oddania na żywo – odsetki od całego długu doliczane na koniec każdej rundy (silnik/pieniadze/lichwiarz.py)
+      // kwota do oddania na żywo – odsetki od całego długu doliczane na koniec każdej rundy (silnik/pieniadze/lichwiarz.py)
       const oddasz = (k) => `Oddasz ok. <b>${zl2(Math.round(k * (1 + W.oprocentowanie_rundy) ** W.termin_rund))}</b>, jeśli spłacisz
         w terminie (na początku rundy ${termin}, po ${W.termin_rund} rundach odsetek).`;
       const z = okno("Pożyczka od Harpagona", `<label class="pole">Kwota<input type="number" id="hp-kwota"

@@ -1,12 +1,12 @@
-# Lichwiarz Harpagon (F3a.10, silnik/pieniadze/lichwiarz.py i silnik/pieniadze/zaleglosci.py) – pożyczka „na czarno” poza KPiR
+# Lichwiarz Harpagon (silnik/pieniadze/lichwiarz.py i silnik/pieniadze/zaleglosci.py) – pożyczka „na czarno” poza KPiR
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Pożyczka od ręki, bez sprawdzania zdolności kredytowej i poza księgami: gotówka nie jest przychodem, spłata
   i odsetki nie są kosztem. Jedna pożyczka naraz. Odsetki co rundę od całego długu (kapitał + naliczone odsetki).
   Po terminie rośnie presja: przypomnienia, odsetki karne, a potem wizyty (szkody w lokalu, odpływ klientów,
   odejście pracownika). Teksty: {dlug}, {kwota}, {koszt}, {procent}, {pracownik}, {termin}.'
-zrodlo: 'Notatka „Elementy mapy” (Lichwiarz Harpagon: pożyczka poza KPiR, rosnąca presja) i „Zdarzenia i historie”
+zrodlo: 'Założenia autora o elementach mapy (Lichwiarz Harpagon: pożyczka poza KPiR, rosnąca presja) i ustalenia autora o zdarzeniach
   (rozbudowane, komiczne historie); postacie ze „Skąpca” Moliera (Harpagon, Mistrz Jakub – kucharz i stangret
-  w jednej osobie); kwoty i oprocentowanie – założenie F3a.10, do kalibracji w kroku 5'
+  w jednej osobie); kwoty i oprocentowanie – założenie autora, do kalibracji'
 maks_kwota: 20000           # bez sprawdzania zdolności – ale więcej Harpagon nie ma w szkatułce
 min_kwota: 500
 oprocentowanie_rundy: 0.05  # 5% tygodniowo od całego długu

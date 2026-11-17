@@ -4,7 +4,7 @@
   chłodni (silnik/kuchnia/swiezosc.py, przyjmij) – koszt za litr nadmiaru (z VAT) księgowany na koniec rundy, termin krótszy.
 - Sanepid: co rundę szansa kontroli rośnie z litrami w wynajętej chłodni i wartością przeterminowanego towaru
   (strumień „sanepid”); kontrola z zastrzeżeniami to mandat poza KPiR (rodzaj „kary”) i mniejszy popyt w kolejnych
-  rundach (`Firma.efekty`); pierwsze kontrole od rundy `od_rundy` (UF6). Teksty kontroli – `dane/zdarzenia/magazyn.yaml`, liczby – zalozenia.yaml magazyn.sanepid.
+  rundach (`Firma.efekty`); pierwsze kontrole od rundy `od_rundy`. Teksty kontroli – `dane/zdarzenia/magazyn.yaml`, liczby – zalozenia.yaml magazyn.sanepid.
   Higiena lokalu i skargi z historii (silnik/ksiegowosc/urzad.py, `modyfikatory`) zmieniają część szansy z problemów i mandat.
 - Bank żywności: historia z `dane/zdarzenia/magazyn.yaml` (silnik/swiat/zdarzenia.py), gdy w lokalu zostało dużo jedzenia
   z krótkim terminem – `zapas_do_oddania` wybiera te partie, `oddaj` zabiera je z magazynu.
@@ -32,7 +32,7 @@ def zasady_sanepidu(dane: Dane) -> dict | None:
 
 
 def kontrole_od(dane: Dane) -> int | None:
-    """UF6: runda pierwszych kontroli sanepidu (magazyn.sanepid.od_rundy; None – od początku gry)."""
+    """Runda pierwszych kontroli sanepidu (magazyn.sanepid.od_rundy; None – od początku gry)."""
     return (zasady_sanepidu(dane) or {}).get("od_rundy")
 
 
@@ -73,7 +73,7 @@ def koniec_rundy(dane: Dane, f: Firma, runda: int, ziarno, raport: dict, ks: Ksi
     if koszt > 0:
         ksieguj(f, ks, rach, f"{WYNAJEM} ({litry:.0f} l)", koszt, "pozostale")
     wynik = {"wynajem": {"litry": litry, "koszt": koszt}, "sanepid": None}
-    # Z4: auto-dostawca – przechowanie towaru z poprzednich tygodni, reszta z tego tygodnia zostaje u niego
+    # auto-dostawca – przechowanie towaru z poprzednich tygodni, reszta z tego tygodnia zostaje u niego
     prz = raport.get("przechowanie") or []
     litrodni = round(sum(x["litrodni"] for x in prz), 1)
     koszt_p = round(sum(x["koszt"] for x in prz), 2)

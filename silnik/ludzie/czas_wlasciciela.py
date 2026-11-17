@@ -1,4 +1,4 @@
-"""Czas właściciela (gra z lokalami, F3a.7).
+"""Czas właściciela (gra z lokalami).
 
 Właściciel ma na rundę pulę godzin na sprawy poza lokalem (`operacje.czas_wlasciciela` w zalozenia.yaml): odbiór
 osobisty w dyskontach, a w kolejnych etapach ogłoszenia na pracuj.pl i parki. Decyzje zużywają godziny po kolei;

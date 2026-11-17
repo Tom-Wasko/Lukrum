@@ -1,14 +1,14 @@
 # Katalog ofert stałych
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Stałe oferty gry (ceny, koszty utrzymania, zasięgi). Liczby: założenia autora i kalibracja pomiarami botów, nazwy
-  dopasowane do kebaba i Lublina (F2.6).'
+  dopasowane do kebaba i Lublina.'
 rundy:
   zrodlo: założenie autora (zakładki odblokowywane w kolejnych rundach) i ustalenia z użytkownikiem
   kalendarz:
     okres: tydzien
     rund_w_roku: 52
     start: 2025-09-01
-    zrodlo: 'notatka „Ustalenia gry”: runda = 1 tydzień; start – użytkownik 27.10 (PRACA_NOCNA pyt. 2): pierwszy
+    zrodlo: 'ustalenia autora: runda = 1 tydzień; start – użytkownik 27.10 (założenie autora): pierwszy
       tydzień września (poniedziałek 1.09.2025), wrzesień to wprowadzenie, zabawa zaczyna się, gdy wracają studenci'
   domyslna_liczba: 18   # 18 pełnych tygodni: 1.09.2025 – 4.01.2026 (użytkownik 27.10)
   odblokowanie:
@@ -37,11 +37,11 @@ rundy:
     '7':
     - hr_szkolenia
   harmonogram_lokali:
-    zrodlo: 'gra z lokalami (F4.3): tydzień, od którego działa zakładka – mistrz gry może go zmienić dla gry; terminy
+    zrodlo: 'gra z lokalami: tydzień, od którego działa zakładka – mistrz gry może go zmienić dla gry; terminy
       elementów mapy (kanały rekrutacji, agencje, promocje, parki, handel…) są w ich danych. Domyślnie:
-      tydzień 1 to przygotowanie lokalu (bez ofert dostawców i sprzedaży), notatka „Ustalenia gry” – karta skumulowana
-      od 4 (dostawcy i pracuj.pl od 1 – PRACA_NOCNA pyt. 24); zatrudnianie od tygodnia 1 – U23 (decyzja autora
-      3.11.2026, raporty/analiza_gracza.md pyt. 6: pierwszy tydzień sprzedaży nie startuje z rekrutacją)'
+      tydzień 1 to przygotowanie lokalu (bez ofert dostawców i sprzedaży), ustalenia autora – karta skumulowana
+      od 4 (dostawcy i pracuj.pl od 1); zatrudnianie od tygodnia 1 (decyzja autora
+      3.11.2026: pierwszy tydzień sprzedaży nie startuje z rekrutacją)'
     zakladki:
       nazwa_firmy: {nazwa: Nazwa firmy, tydzien: 1}
       misja: {nazwa: Misja, tydzien: 1}
@@ -63,11 +63,11 @@ rundy:
   - kebab_w_bulce
   - frytki
   - napoj
-  uslugi_startowe_zrodlo: 'założenie F2.6: na start podstawowe menu – kebab w bułce, frytki, napój'
+  uslugi_startowe_zrodlo: 'założenie autora: na start podstawowe menu – kebab w bułce, frytki, napój'
   nowe_uslugi_na_runde: 3
   nowe_uslugi_od_rundy: 3
 stanowiska:
-  zrodlo: 'założenie autora i skalibrowane pomiarami botów (balans/); działają w rundzie zakupu. startowe – plan F2.7: jeden
+  zrodlo: 'założenie autora i skalibrowane pomiarami botów (balans/); działają w rundzie zakupu. startowe: jeden
     gotowy lokal na start (kuchnia z rożnem, frytownicą i lodówką, kasa), jakość podstawowa'
   startowe:
   - typ: kuchnia
@@ -105,7 +105,7 @@ udogodnienia:
     zużycie z cenników (kawa ok. 4 kg miesięcznie ≈ 320 zł, prąd klimatyzatorów ≈ 90 zł, prąd szafy chłodniczej ≈ 60 zł);
     procent – szacunek projektanta, jaka część załogi gastronomii na zmianie korzysta z danej rzeczy (rowery 35% – nie
     wszyscy dojeżdżają rowerem; kawa 85% – prawie wszyscy; pokój socjalny 18% – tylko ci, którzy mają przerwę dłuższą niż 30 min);
-    od_rundy – im droższe i mniej oczywiste, tym później. Sprzedaż za 50% ceny. Pozycje UF9 poniżej mają osobne opisy'
+    od_rundy – im droższe i mniej oczywiste, tym później. Sprzedaż za 50% ceny. Dodatkowe pozycje poniżej mają osobne opisy'
   pozycje:
   - nazwa: Ekspres do kawy ziarnistej dla zespołu
     procent: 85
@@ -152,7 +152,7 @@ udogodnienia:
     cena: 3300
     utrzymanie: 25
     od_rundy: 8
-  # UF9: nowe udogodnienia (rundy 5–14); cena za punkt procentu > 37,5 zł (gorsza niż klimatyzacja), przed rundą 9
+  # nowe udogodnienia (rundy 5–14); cena za punkt procentu > 37,5 zł (gorsza niż klimatyzacja), przed rundą 9
   # tylko drogie (≥ 1500 zł) – boty (wg ceny za punkt, 2–3 sztuki, do rundy 8 komplet) wybierają jak dotąd
   - nazwa: Piłkarzyki na zapleczu
     procent: 25
@@ -228,7 +228,7 @@ udogodnienia:
     opis: 'Kebab na koszt firmy dla każdego, kto stoi przy grillu. Kucharze twierdzą, że to tylko test jakości.'
 wyposazenie:
   zrodlo: 'założenie autora: wyposażenie lokalu; cena = 2 × cena sprzedaży; parking i terminal – cena zakupu nieznana (sprzedaż
-    0); sklep – notatka „Elementy mapy” (Leroy Merlin, IKEA, OBI, Jula, Castorama), przypisanie – założenie F3a.6;
+    0); sklep – założenia autora o elementach mapy (Leroy Merlin, IKEA, OBI, Jula, Castorama), przypisanie – założenie autora;
     Poprawki 3 (8.11) – autor chce tylko dwa sklepy, IKEA (meble) i Leroy Merlin (reszta). Tor A (14.11.2026): pozycje dla kebaba
     (ogródek, ładowarki, BLIK, kiosk, muzyka, toaleta dla gości, dostawa przez aplikację) z cenami rynkowymi 2026: meble ogrodowe
     i parasole ok. 6 tys. zł, kiosk samoobsługowy 8–10 tys. zł, licencja muzyczna (ZAiKS, STOART) ok. 60 zł miesięcznie,
@@ -308,7 +308,7 @@ wyposazenie:
     utrzymanie: 300
     od_rundy: 8
 szkolenia:
-  zrodlo: 'Tor A (14.11.2026): własne firmy szkoleniowe i ceny – kursy branżowe w Lublinie 2026 (HACCP i higiena ok. 250–400 zł od osoby, szkolenia zespołowe 800–2 000 zł); założenie autora: HR – szkolenia, % pracowników oczekujących; oceny firm szkoleniowych (zadowoleni_klienci 87 / 79 / 74) – własne wartości fikcyjnych firm: wyższa dla szkoły o węższej, kebabowej specjalizacji; nazwy firm i szkoleń – gastronomia (F2.6); ceny przeliczone od zera 15.11.2026 (decyzja autora 14.11: priorytet ma rozgrywka): firma o najwyższej ocenie (Lubelska Szkoła Kebabu) jest zawsze o ok. 20% droższa niż Rożen i Rozum, a HACCP w Pięć Minut o ok. 10% tańsza – wcześniej trzecia firma bywała droższa od drugiej przy niższej ocenie (pozycja zdominowana), wybór firmy to teraz cena kontra ocena „zadowolonych klientów”; poprawki 3 (sprawa 8, 8.11.2026): 12 → 8 szkoleń – podobne połączone, cena połączonego ≈ 80% sumy cen (zaokr. do 50 zł), procent – zaokrąglony maks. łączonych; `dawne` – dawne nazwy (stare zapisy gier)'
+  zrodlo: 'Tor A (14.11.2026): własne firmy szkoleniowe i ceny – kursy branżowe w Lublinie 2026 (HACCP i higiena ok. 250–400 zł od osoby, szkolenia zespołowe 800–2 000 zł); założenie autora: HR – szkolenia, % pracowników oczekujących; oceny firm szkoleniowych (zadowoleni_klienci 87 / 79 / 74) – własne wartości fikcyjnych firm: wyższa dla szkoły o węższej, kebabowej specjalizacji; nazwy firm i szkoleń – gastronomia; ceny przeliczone od zera 15.11.2026 (decyzja autora 14.11: priorytet ma rozgrywka): firma o najwyższej ocenie (Lubelska Szkoła Kebabu) jest zawsze o ok. 20% droższa niż Rożen i Rozum, a HACCP w Pięć Minut o ok. 10% tańsza – wcześniej trzecia firma bywała droższa od drugiej przy niższej ocenie (pozycja zdominowana), wybór firmy to teraz cena kontra ocena „zadowolonych klientów”; poprawki 3 (sprawa 8, 8.11.2026): 12 → 8 szkoleń – podobne połączone, cena połączonego ≈ 80% sumy cen (zaokr. do 50 zł), procent – zaokrąglony maks. łączonych; `dawne` – dawne nazwy (stare zapisy gier)'
   firmy:
   - nazwa: Lubelska Szkoła Kebabu
     zadowoleni_klienci: 87

@@ -36,10 +36,10 @@
     pole.querySelector("select").addEventListener("change", function (e) { ustaw(e.target.value); });
     konto.appendChild(pole);
     schowajUstawienia(konto, pole);
-    wyborPalety(pole);   // N1: to samo menu ⚙ na każdej stronie (gra, lista gier, panel MG, konto)
+    wyborPalety(pole);   // to samo menu ⚙ na każdej stronie (gra, lista gier, panel MG, konto)
   });
 
-  // N1 (poprawki 3): w nagłówku zostają firma, saldo i „Jak grać”; reszta (lista gier, konto, panel MG, wygląd)
+  // w nagłówku zostają firma, saldo i „Jak grać”; reszta (lista gier, konto, panel MG, wygląd)
   // jest w rozwijanym menu pod ikoną ⚙ – dostępnym klawiaturą, zamykanym Esc i kliknięciem poza menu
   function schowajUstawienia(konto, pole) {
     var lista = document.createElement("div");

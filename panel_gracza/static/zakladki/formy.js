@@ -1,6 +1,6 @@
-// UF21: formy zatrudnienia z katalogu (kat.parametry.formy, silnik/ludzie/formy.py: widok) – nazwy, składki ZUS
+// formy zatrudnienia z katalogu (kat.parametry.formy, silnik/ludzie/formy.py: widok) – nazwy, składki ZUS
 // pracodawcy, koszt osoby, płaca minimalna, które formy może dostać kandydat i podpowiedź pod wyborem.
-// Bez danych UF21 (stary katalog) – dwie dawne formy: umowa o pracę i zlecenie.
+// Bez danych o formach zatrudnienia (stary katalog) – dwie dawne formy: umowa o pracę i zlecenie.
 import { esc, licz, proc, zl } from "./wspolne.js";
 
 export function formy(kat) {
@@ -35,7 +35,7 @@ export function oczekiwana(kat, k, u) {
   return f.oczekiwana ? Math.round(k.pensja_preferowana * f.oczekiwana * (s ? s.pensja : 1) / 10) * 10 : null;
 }
 
-// kalibracja B9: najniższa pensja, którą kandydat przyjmie (kat.parametry.oferta_pracy; bez danych albo staż – 0)
+// najniższa pensja, którą kandydat przyjmie (kat.parametry.oferta_pracy; bez danych albo staż – 0)
 export function progOferty(kat, k, u) {
   const of = kat.parametry?.oferta_pracy, f = forma(kat, u), s = studenci(kat, k.student);
   return of && f.oczekiwana ? Math.ceil(of.prog_odrzucenia * k.pensja_preferowana * f.oczekiwana * (s ? s.pensja : 1) - 1e-6) : 0;

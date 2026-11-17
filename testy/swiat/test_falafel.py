@@ -1,4 +1,4 @@
-"""Bójka o falafel (UF8): w tygodniu po falafelu w ofercie, z małą szansą, najwyżej raz na grę."""
+"""Bójka o falafel: w tygodniu po falafelu w ofercie, z małą szansą, najwyżej raz na grę."""
 
 import pytest
 from pomocnicze import _gra, _lokal, _runda

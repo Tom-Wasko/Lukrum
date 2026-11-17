@@ -1,4 +1,4 @@
-"""Popyt strefowy (F3a.4): pule stref, wybór lokalu, dni tygodnia, kalendarz, obsługa dzień po dniu, boty, dane."""
+"""Popyt strefowy: pule stref, wybór lokalu, dni tygodnia, kalendarz, obsługa dzień po dniu, boty, dane."""
 
 import time
 from datetime import date
@@ -31,7 +31,7 @@ def test_dwa_lokale_w_jednej_strefie_dziela_klientow():
 
 
 def test_konkurencja_strefy(tmp_path):
-    """B6: `konkurencja` strefy dzieli atrakcyjność lokali gry w tej strefie (giną wśród lokali miasta spoza
+    """`konkurencja` strefy dzieli atrakcyjność lokali gry w tej strefie (giną wśród lokali miasta spoza
     gry) – lokal w centrum traci klientów ze wszystkich stref, lokal w innej strefie zyskuje. Bez klucza – 1."""
     dane = dane_domyslne()
     kat = _kopia(tmp_path / "konk")
@@ -51,7 +51,7 @@ def test_konkurencja_strefy(tmp_path):
 
 
 def test_rozruch_nowego_lokalu(tmp_path):
-    """B5: nowy lokal dopiero zdobywa klientów – mnożnik popytu od `start` w pierwszym tygodniu sprzedaży
+    """Nowy lokal dopiero zdobywa klientów – mnożnik popytu od `start` w pierwszym tygodniu sprzedaży
     (najwcześniej runda 2) rośnie o `przyrost` co tydzień do 1; bez klucza w danych – 1."""
     stary, nowy = Lokal(id="centrum_1", forma="najem", od_rundy=1, dziala_od=1),         Lokal(id="centrum_1", forma="najem", od_rundy=5, dziala_od=6)
     assert pp.rozruch(_bez_rozruchu(tmp_path), stary, 2) == 1.0
@@ -73,7 +73,7 @@ def test_rozruch_nowego_lokalu(tmp_path):
 
 @pytest.mark.django_db
 def test_dashboard_wyjasnia_rozruch(tmp_path):
-    """U9: Dashboard podaje mnożnik rozruchu lokalu w poprzednim i bieżącym tygodniu sprzedaży."""
+    """Dashboard podaje mnożnik rozruchu lokalu w poprzednim i bieżącym tygodniu sprzedaży."""
     from api.prezentacja import widok
     kat = _kopia(tmp_path / "z")
     _zmien(kat, "mapa/popyt.yaml", lambda d: d["model"].update(rozruch={"start": 0.4, "przyrost": 0.3}))
@@ -141,7 +141,7 @@ def test_gra_obsluga_dzien_po_dniu_i_wyniki_klientow(monkeypatch):
         assert sum(d["popyt"] for d in k["dni"]) == sum(v["popyt"] for v in w["sprzedaz"].values())
         assert sum(d["sprzedaz"] for d in k["dni"]) == sum(v["sprzedaz"] for v in w["sprzedaz"].values())
         assert sum(d["sprzedaz"] for d in k["dni"]) > 0
-        # Z3: przychód i składniki lokalu (zakładka Lokale → Przegląd); jeden lokal – cały przychód firmy
+        # przychód i składniki lokalu (zakładka Lokale → Przegląd); jeden lokal – cały przychód firmy
         lok = k["lokale"][0]
         assert lok["przychod"] == pytest.approx(sum(v["przychod"] for v in w["sprzedaz"].values()), abs=0.05)
         assert lok["skladniki"] > 0

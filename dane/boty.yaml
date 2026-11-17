@@ -10,17 +10,17 @@ opis: 'Strategie botów: cena w ułamku ceny preferowanej (null = średnia rynku
 zrodlo: założenie autora (strategie typowych drużyn), liczba dań dopasowana do menu kebaba
 ustawienia:
   bufor_gotowki: 30000
-  rezerwa_po_sprzecie: 10000   # B6: gotówka po zakupie sprzętu (płace i towar tygodnia), resztę – kredyt bez historii
+  rezerwa_po_sprzecie: 10000   # gotówka po zakupie sprzętu (płace i towar tygodnia), resztę – kredyt bez historii
   bufor_kampanii: 12000
-  emisje_kampanii: 6   # Z5; B10 (b10_marketing): 3, 6, 10 i 15 emisji dają podobną kartę
-  przerwa_kampanii: 1  # Z5; B10 (b10_marketing): bez przerwy +0,015…+0,057 karty, liczba bez zmiany
+  emisje_kampanii: 6   # pomiar botów: 3, 6, 10 i 15 emisji dają podobną kartę
+  przerwa_kampanii: 1  # pomiar botów: bez przerwy +0,015…+0,057 karty, liczba bez zmiany
   min_obsluga_promocji: 0.9
   maks_obciazenie_kuchni_porcji: 0.7   # poprawki 3 (decyzja autora 9.11.2026): „2 za 1” tylko przy wolnej kuchni
   # (średnie obciążenie kuchni w poprzedniej rundzie) i na najtańsze danie – założenie, sprawdzane pomiarem promocji
   cena_nasladowcy_bez_danych: 0.95
   krok_ceny: 0.5
   losuj_z_najlepszych_kandydatow: 3
-  zapas_zasobow: 1.2   # B8: przy 1,05 boty traciły ok. 9% sprzedaży na brakach; optimum 1,15–1,3 (b8_zaopatrzenie)
+  zapas_zasobow: 1.2   # przy 1,05 boty traciły ok. 9% sprzedaży na brakach; optimum 1,15–1,3
 # Poziomy trudności (gra z lokalami): mistrz gry wybiera je dla każdego bota (konfiguracja gry: firmy[].poziom,
 # bez niego – sredni). Same mnożniki pokrycia popytu, błędu ceny i reklamy dawały słabszemu botowi często WIĘKSZY
 # zysk, więc poziomy różnią się sposobem planowania (silnik/boty.py):
@@ -38,19 +38,19 @@ ustawienia:
 # - kolejny_lokal – kolejny gotowy lokal, gdy żaden lokal nie obsługuje części popytu `obsluga`, gotówki jest
 #   ponad `gotowka`, a firma ma mniej niż `maks_lokali` (co mapa.zasady.nowy_lokal_co_rund rund).
 # - przewaga_popytu – oszustwo poziomu niemożliwego: mnożnik atrakcyjności wszystkich lokali bota (1 – brak).
-# - prognoza_czlowieka – bot „jak człowiek” (Z5, pomiar trudności w B): zamiast modelu popytu bez szumu prognozuje
+# - prognoza_czlowieka – bot „jak człowiek” (pomiar trudności): zamiast modelu popytu bez szumu prognozuje
 #   z tego, co drużyna widzi w zakładkach – popyt dań w lokalach z raportów `rund` ostatnich rund (średnia),
 #   przy `pule` razy pula strefy w rundzie sprzedaży / pula w tamtych rundach (zakładka Klienci); danie albo
 #   lokal bez historii – potencjał lokalu (2★, ceny preferowane strefy); wyklucza korekta_prognozy, mnozniki_ceny
 #   i przewaga_popytu (to wymaga znajomości modelu);
 # - zamowienia_ze_sprzedazy – gdy tydzień temu danie traciło klientów w kolejce (kuchnia, kasa), bot
-#   zamawia najwyżej tamtą sprzedaż × ta liczba (człowiek widzi, że towar się psuje; H17);
+#   zamawia najwyżej tamtą sprzedaż × ta liczba (człowiek widzi, że towar się psuje);
 # - tylko_pomiar – poziom do pomiarów (balans/), mistrz gry go nie wybiera (wersje „jak człowiek” – decyzja autora
 #   10.11.2026, wcześniej 29.10 były do wyboru; zostają do pomiarów trudności, stare gry z nimi działają).
 # - limit_handlu – giełda handlu (dane/zdarzenia/handel.yaml): bot licytuje ogłoszenia z rzeczami, których używa,
 #   najwyżej do tej części wartości (towar – koszt zakupu sprzedawcy, sprzęt – cena katalogowa); bez pola –
 #   handel.yaml: boty.limit_handlu. Założenie (sprawa 19 autora, 7.11.2026): 70–90%, słabszy bot daje mniej.
-# - podkupuje_ludzi – kalibracja B9 (decyzja autora 7.11.2026): bot składa oferty niedopłacanym albo niezadowolonym
+# - podkupuje_ludzi – decyzja autora 7.11.2026: bot składa oferty niedopłacanym albo niezadowolonym
 #   osobom z innych firm (także drużyn graczy) – progi w zalozenia.yaml: pracownicy.podkupywanie_botow; tylko gdy
 #   mistrz gry pozwala podkupywać. Łatwy i słaby „człowiek” tego nie robią (proste reguły).
 poziomy:
@@ -58,7 +58,7 @@ poziomy:
     nazwa: Łatwy
     opis: proste reguły, łatwo go przegonić
     planowanie: proste
-    zapas_zasobow: 1.05   # B8: proste planowanie bez zapasu bezpieczeństwa (przy 1,2 słaby bankrutował – b8_trudnosc)
+    zapas_zasobow: 1.05   # proste planowanie bez zapasu bezpieczeństwa (przy 1,2 słaby bankrutował)
     blad_prognozy: 0.25
     losowy_kandydat: true
     kampanie: false
@@ -70,8 +70,8 @@ poziomy:
     planowanie: przepustowosc
     cel_obslugi: 0.97
     narzut_pracy: 1.25
-    blad_prognozy: 0.1             # B3: prognoza ±10% – bez tego średni planował jak trudny
-    dba_o_ludzi: {podwyzka_maks: 1.15, zapas: 0.01}   # U20: niezadowolonemu podnosi pensję (do 115% preferowanej)
+    blad_prognozy: 0.1             # prognoza ±10% – bez tego średni planował jak trudny
+    dba_o_ludzi: {podwyzka_maks: 1.15, zapas: 0.01}   # niezadowolonemu podnosi pensję (do 115% preferowanej)
     limit_handlu: 0.8
     podkupuje_ludzi: true
     debet: true   # tor A: włącza debet w banku konta (łatwy i słaby „człowiek” o nim zapominają)
@@ -84,12 +84,12 @@ poziomy:
     mnozniki_ceny: [0.9, 0.95, 1.05, 1.1, 1.15]
     narzut_pracy: 1.25
     obsluga_kampanii: 0.9
-    kolejny_lokal: {obsluga: 1.0, gotowka: 50000, maks_lokali: 2}   # B3: drugi lokal, gdy stać (było 0.85); B14: 50 tys. (było 60 – b14_trudny3)
+    kolejny_lokal: {obsluga: 1.0, gotowka: 50000, maks_lokali: 2}   # drugi lokal, gdy stać (było 0.85); 50 tys. (było 60; pomiar botów 7.11.2026)
     dba_o_ludzi: {podwyzka_maks: 1.15, zapas: 0.01}
     limit_handlu: 0.85
     podkupuje_ludzi: true
     debet: true   # tor A: włącza debet w banku konta (łatwy i słaby „człowiek” o nim zapominają)
-  niemozliwy:                    # P19 (pytanie 25): dla chętnych – wyzwanie, którego zwykle nie da się wygrać
+  niemozliwy:                    # dla chętnych – wyzwanie, którego zwykle nie da się wygrać
     nazwa: Niemożliwy
     opis: jak trudny, ale oszukuje – klienci bez powodu wolą jego lokale
     planowanie: przepustowosc
@@ -104,19 +104,19 @@ poziomy:
     limit_handlu: 0.9
     podkupuje_ludzi: true
     debet: true   # tor A: włącza debet w banku konta (łatwy i słaby „człowiek” o nim zapominają)
-  # Z5: bot „jak człowiek” – wersje różnią się staraniem, nie wiedzą (cele trudności: notatki/Plan optymalizacji)
+  # bot „jak człowiek” – wersje różnią się staraniem, nie wiedzą (cele trudności: ustalenia autora)
   czlowiek_slaby:
     nazwa: Jak człowiek – słaby
     tylko_pomiar: true
     opis: patrzy tylko na zeszły tydzień, na oko; proste reguły jak łatwy
     planowanie: proste
-    zapas_zasobow: 1.05   # B8: proste planowanie bez zapasu bezpieczeństwa (przy 1,2 słaby bankrutował – b8_trudnosc)
+    zapas_zasobow: 1.05   # proste planowanie bez zapasu bezpieczeństwa (przy 1,2 słaby bankrutował)
     blad_prognozy: 0.25
     losowy_kandydat: true
     kampanie: false
     promocje: false
     prognoza_czlowieka: {rund: 1}
-    zamowienia_ze_sprzedazy: 1.1   # H17: gdy kuchnia nie nadążyła, zamawia sprzedaż × 1,1
+    zamowienia_ze_sprzedazy: 1.1   # gdy kuchnia nie nadążyła, zamawia sprzedaż × 1,1
     limit_handlu: 0.7
   czlowiek_sredni:
     nazwa: Jak człowiek – średni
@@ -139,7 +139,7 @@ poziomy:
     cel_obslugi: 0.97
     narzut_pracy: 1.25
     obsluga_kampanii: 0.9
-    # B14 (decyzja autora 7.11.2026, pomiar b14_dobry): drugi lokal jak trudny; było {obsluga: 0.85, gotowka: 60000}
+    # (decyzja autora 7.11.2026) drugi lokal jak trudny; było {obsluga: 0.85, gotowka: 60000}
     kolejny_lokal: {obsluga: 1.0, gotowka: 50000, maks_lokali: 2}
     prognoza_czlowieka: {rund: 2, pule: true}
     dba_o_ludzi: {podwyzka_maks: 1.15, zapas: 0.01}
@@ -155,9 +155,9 @@ strategie:
     uslugi: 6
     dania_specjalne: [kebab_specjalny_1]   # sprawa 4 (Poprawki 3): dania specjalne strefy – dokłada po odblokowaniu, ponad uslugi
     pokrycie: 0.9
-    wyposazenie: 6   # B10: przy wolnej kuchni komplet +0,06 karty (b10_po, 6/6)
+    wyposazenie: 6   # przy wolnej kuchni komplet +0,06 karty
     udogodnienia: 2
-    szkolenia: 1   # B9: jedno szkolenie +0,02 karty (b9_po), dwa już tracą
+    szkolenia: 1   # jedno szkolenie +0,02 karty, dwa już tracą
     kampanie:
     - papier_przyjmie/ulotki
     promocje:
@@ -167,20 +167,20 @@ strategie:
   tani:
     nazwa: Tani Kebab Nocny
     umowa: zlecenie              # tor A: tanio – ludzie na zleceniu (niższe składki, bez urlopu i wypowiedzenia)
-    min_kuchnia: 2               # B7: z jednym miejscem kolejka zjadała połowę popytu (b7_cena, b7_jakosc)
+    min_kuchnia: 2               # z jednym miejscem kolejka zjadała połowę popytu
     cena: 0.78
     jakosc: 1
     uslugi: 8
     dania_specjalne: [przekaska_specjalna, napoj_specjalny]
     pokrycie: 0.85
-    wyposazenie: 3   # B10: WiFi, parking, terminal +0,05 karty (b10_po, 5/6)
+    wyposazenie: 3   # WiFi, parking, terminal +0,05 karty
     udogodnienia: 0
     szkolenia: 0
     kampanie:
     - papier_przyjmie/ulotki
     - lajk/grupa_osiedlowa
     promocje:
-    # B10: bez happy hours +0,04 karty (b10_promocje, 6/6)
+    # bez happy hours +0,04 karty
     - {typ: studencka, nazwa: Indeks Głodomora}
     polisy: []                   # oszczędza na wszystkim, także na ubezpieczeniu
     higiena: podstawowa          # mop i grafik – bez tego sanepid nie odbierze lokalu
@@ -193,14 +193,14 @@ strategie:
     dania_specjalne: [kebab_specjalny_2]
     pokrycie: 1.0
     wyposazenie: 6
-    udogodnienia: 3   # B10: przy uczciwej płacy udogodnienia nic nie dają (9 → 3: +0,055 karty)
-    szkolenia: 1   # B9: drugie szkolenie nic nie daje (efekt włącznik), −0,02 karty
+    udogodnienia: 3   # przy uczciwej płacy udogodnienia nic nie dają (9 → 3: +0,055 karty)
+    szkolenia: 1   # drugie szkolenie nic nie daje (efekt włącznik), −0,02 karty
     kampanie:
     - lajk/influencer
-    - lajk/mapy                 # UF19: marketing internetowy od rundy 7
+    - lajk/mapy                 # marketing internetowy od rundy 7
     - fala_koziolka/billboard
     promocje:
-    # B10: zestaw +0,156 karty wobec karty stałego klienta (b10_promocje, 6/6)
+    # zestaw +0,156 karty wobec karty stałego klienta
     - {typ: zestaw, nazwa: Zestaw Sułtana}
     polisy: [lokal, sprzet, oc]
     higiena: haccp
@@ -214,8 +214,8 @@ strategie:
     dania_specjalne: [kebab_specjalny_1, kebab_specjalny_2, przekaska_specjalna, napoj_specjalny]
     pokrycie: 1.0
     wyposazenie: 6
-    udogodnienia: 3   # B10: jak premium (6 → 3: +0,024 karty)
-    szkolenia: 1   # B9: jak premium
+    udogodnienia: 3   # jak premium (6 → 3: +0,024 karty)
+    szkolenia: 1   # jak premium
     kampanie:
     - papier_przyjmie/plakaty
     - lajk/influencer

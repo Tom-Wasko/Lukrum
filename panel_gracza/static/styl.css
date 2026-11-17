@@ -73,7 +73,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: .01em; }
   cursor: pointer; border-bottom: 3px solid transparent; transition: color .15s, border-color .15s; }
 .menu .poz > a:hover { color: var(--pom); }
 .menu .poz > a.aktywna { color: var(--pom); border-bottom-color: var(--pom); }
-.menu .poz > a.zablokowana { opacity: .45; filter: grayscale(1); cursor: default; }   /* UF15: szare z kłódką i „od rundy N” */
+.menu .poz > a.zablokowana { opacity: .45; filter: grayscale(1); cursor: default; }   /* szare z kłódką i „od rundy N” */
 .menu .znaczek { position: absolute; top: 2px; right: 6px; min-width: 17px; height: 17px; padding: 0 5px; border-radius: 9px;
   background: var(--czerwony); color: var(--na-kolorze); font-size: 10px; line-height: 17px; text-align: center; }
 .menu .pod { display: none; position: absolute; top: calc(100% - 2px); left: 50%; transform: translateX(-50%); background: var(--biel);
@@ -84,7 +84,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: .01em; }
 .menu .pod a:hover { background: var(--pom-jasny); color: var(--pom); }
 .menu .pod a.zablokowana { opacity: .5; filter: grayscale(1); cursor: default; }
 .menu .pod a .od { margin-left: auto; font-size: 9.5px; color: var(--szary); text-transform: none; }
-/* funkcje gry (raporty/funkcje/plan.md): zakryta funkcja – szara pozycja z okiem; bez filtra, żeby znaczek został
+/* funkcje gry : zakryta funkcja – szara pozycja z okiem; bez filtra, żeby znaczek został
    czerwony; kliknięcie otwiera okno „Odsłoń” (app.js) */
 .menu .poz > a.zakryta, .menu .pod a.zakryta, .podzakladki a.zakryta { color: var(--szary); font-weight: 600; cursor: pointer; }
 .menu a.zakryta .ikona, .podzakladki a.zakryta .ikona { opacity: .65; }
@@ -177,10 +177,10 @@ h1, h2, h3 { font-weight: 700; letter-spacing: .01em; }
 /* siatki kart */
 .siatka { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 16px; }
 .siatka.waska { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
-/* UF14: „3 kolumny, a 2 rzeczy w wierszu” – auto-fit: najwyżej 3 kolumny, puste się zwijają, na wąskim ekranie mniej */
+/* „3 kolumny, a 2 rzeczy w wierszu” – auto-fit: najwyżej 3 kolumny, puste się zwijają, na wąskim ekranie mniej */
 .siatka.trojka { grid-template-columns: repeat(auto-fit, minmax(min(100%, max(240px, calc((100% - 32px) / 3))), 1fr)); }
 /* sprawa 4 (Poprawki 3): kafelki dań zawsze w trzech kolumnach – auto-fill zostawia puste kolumny, więc 1–2 dania
-   w wierszu mają szerokość jednej trzeciej (jak przed UF14); na wąskim ekranie mniej kolumn */
+   w wierszu mają szerokość jednej trzeciej (jak wcześniej); na wąskim ekranie mniej kolumn */
 .siatka.kolumny3 { grid-template-columns: repeat(auto-fill, minmax(min(100%, max(240px, calc((100% - 32px) / 3))), 1fr)); }
 .kafel { background: var(--biel); border-radius: var(--r); border: 1px solid var(--linia); box-shadow: 0 1px 2px rgba(0,0,0,.03);
   display: flex; flex-direction: column; transition: box-shadow .15s, transform .15s, border-color .15s; }
@@ -230,7 +230,7 @@ textarea { font-family: inherit; font-size: 12px; padding: 8px 10px; border: 1px
 textarea:focus, input:focus, select:focus { outline: none; border-color: var(--pom); box-shadow: 0 0 0 3px rgba(30,158,90,.15); }
 input.krotkie { width: 92px; }
 input:disabled, select:disabled { background: var(--szary-jasny); color: var(--szary); }
-/* P3: Parki i zdarzenia – pasek czasu, lista spraw + szczegóły sprawy z kafelkami opcji */
+/* Parki i zdarzenia – pasek czasu, lista spraw + szczegóły sprawy z kafelkami opcji */
 .zd-czas { margin-bottom: 14px; }
 .zd-czas-tekst { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; font-size: 13px; margin-bottom: 6px; }
 .zd-czas-tekst span { color: var(--szary); font-size: 12px; }
@@ -321,7 +321,7 @@ table.t tfoot td { font-weight: 800; background: var(--pom-jasny); border-top: 2
 .plan .st.nie { background: var(--czerwony-jasny); color: var(--czerwony); }
 .plan .st.inf { background: var(--szary-jasny); color: var(--szary); }
 .plan small { display: block; font-weight: 500; color: var(--szary); font-size: 10.5px; }
-.plan.podpowiedzi { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }   /* U19: rady z instrukcji – dłuższy tekst */
+.plan.podpowiedzi { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }   /* rady z instrukcji – dłuższy tekst */
 .plan.podpowiedzi a { align-items: flex-start; }
 .plan.podpowiedzi small { font-size: 12px; line-height: 1.4; margin-top: 3px; }
 .sekcja-tytul { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--szary); letter-spacing: .05em; margin: 4px 0 10px; }
@@ -363,7 +363,7 @@ table.t tfoot td { font-weight: 800; background: var(--pom-jasny); border-top: 2
 .blad.pomaranczowy { border-left-color: var(--zolty); }
 .blad.niebieski { border-left-color: var(--niebieski); }
 .blad .tx { flex: 1; }
-/* U5: grupy na liście błędów */
+/* grupy na liście błędów */
 .grupa-bledow { margin: 16px 0 8px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--szary, var(--szary)); }
 .grupa-bledow.czerwony { color: var(--czerwony); }
 .grupa-bledow.pomaranczowy { color: var(--zolty); }
@@ -383,7 +383,7 @@ details.grupa-bledow > .blad { text-transform: none; letter-spacing: normal; fon
 .dwie { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .trzy { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, max(220px, calc((100% - 32px) / 3))), 1fr)); gap: 16px; }
 .podpowiedz { color: var(--szary); font-size: 11px; text-transform: none; font-weight: 500; }
-/* U24: opinie klientów przy lokalu */
+/* opinie klientów przy lokalu */
 .opinie blockquote { margin: 6px 0; padding: 4px 10px; border-left: 3px solid #e0c060; font-size: 13px; }
 .opinie small { color: var(--szary); }
 .gwiazdki { color: var(--zolty-ciemny); letter-spacing: 1px; }
@@ -410,7 +410,7 @@ details.grupa-bledow > .blad { text-transform: none; letter-spacing: normal; fon
 .stopka { text-align: center; color: var(--szary); font-size: 11px; padding: 20px; }
 .ladowanie { text-align: center; padding: 60px; color: var(--szary); }
 
-/* Z3: zakładka Lokale – kafelki lokali, części podzakładek, liczby lokalu */
+/* zakładka Lokale – kafelki lokali, części podzakładek, liczby lokalu */
 .kafelki-lokali { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; }
 .kafel-lokalu { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-width: 190px; padding: 12px 16px;
   background: var(--biel); border: 1px solid var(--linia); border-radius: var(--r); font: inherit; text-align: left; cursor: pointer; }
@@ -446,7 +446,7 @@ details.grupa-bledow > .blad { text-transform: none; letter-spacing: normal; fon
   .tresc { padding: 16px 14px 22px; }
 }
 
-/* N1: rozwijane menu ustawień (⚙) w nagłówku gry */
+/* rozwijane menu ustawień (⚙) w nagłówku gry */
 .ustawienia { position: relative; }
 .ustawienia-przycisk { font: inherit; font-size: 20px; line-height: 1; width: 36px; height: 36px; border: 0; border-radius: 8px;
   background: transparent; color: var(--czarny); cursor: pointer; }
@@ -471,13 +471,13 @@ details.grupa-bledow > .blad { text-transform: none; letter-spacing: normal; fon
 .karta-konto { max-width: 480px; }
 .logowanie { display: grid; gap: 12px; }
 .zapamietaj { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-/* drużyna (F3a.2): kto zapisał decyzje, skład drużyny */
+/* drużyna: kto zapisał decyzje, skład drużyny */
 .sklad { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 6px 0 14px; }
 .osoba-druzyny { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
 .osoba-druzyny .inicjaly { width: 28px; height: 28px; border-radius: 50%; display: inline-grid; place-items: center;
   background: var(--pom); color: var(--na-kolorze); font-size: 11px; font-weight: 700; }
 
-/* --- Lokale i mapa miasta (prototyp F3a.3) --- */
+/* --- Lokale i mapa miasta --- */
 .strefa-tytul { display: flex; align-items: baseline; gap: 10px; margin: 22px 0 10px; font-size: 15px; }
 .strefa-tytul .kropka { width: 12px; height: 12px; border-radius: 3px; display: inline-block; align-self: center; }
 /* M1–M6: mapa Lublina – teren, warstwy, ruch, przybliżanie (zakladki/mapa.js, mapa_teren.js) */
@@ -569,7 +569,7 @@ details.grupa-bledow > .blad { text-transform: none; letter-spacing: normal; fon
   .kal-siatka th:first-child { width: 44px; }
 }
 
-/* U10: skala przy wskaźnikach karty wyników */
+/* skala przy wskaźnikach karty wyników */
 .skala-karty { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 8px 0 16px; }
 .skala-karty .wsk { background: var(--karta); border-radius: var(--r); box-shadow: var(--cien); padding: 10px 12px;
   border-top: 4px solid var(--linia); }
@@ -582,19 +582,19 @@ details.grupa-bledow > .blad { text-transform: none; letter-spacing: normal; fon
 .ocena.sredni, .ocena-tekst.sredni { color: var(--zolty-ciemny); }
 .ocena.dobry, .ocena-tekst.dobry { color: var(--zielony); }
 
-/* UF15: „w budowie” – żółto-czarne taśmy (mapa, giełda) */
+/* „w budowie” – żółto-czarne taśmy (mapa, giełda) */
 .w-budowie { display: flex; flex-direction: column; margin: 0 0 14px; border-radius: var(--r); overflow: hidden;
   border: 1px solid #e0b400; background: var(--zolty-jasny); }
 .w-budowie .tasma { height: 12px; background: repeating-linear-gradient(-45deg, #f5c400 0 14px, var(--czarny) 14px 28px); }
 .w-budowie .napis { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 8px 14px; color: var(--zolty-ciemny); font-size: 12.5px; }
 .w-budowie .napis b { text-transform: uppercase; letter-spacing: .06em; font-size: 11px; color: var(--czarny); }
-.notka-mapa { margin: 0 0 12px; font-size: 12px; color: var(--szary); }   /* N2: spokojna notka zamiast taśm na mapie */
-/* UF15: zakładki przed swoją rundą – szare, z kłódką i „od rundy N” */
+.notka-mapa { margin: 0 0 12px; font-size: 12px; color: var(--szary); }   /* spokojna notka zamiast taśm na mapie */
+/* zakładki przed swoją rundą – szare, z kłódką i „od rundy N” */
 .menu .klodka { display: inline-flex; vertical-align: -2px; margin-right: 2px; opacity: .8; }
 .menu .poz > a.zablokowana .od-gora, .menu .poz > a.zakryta .od-gora { font-size: 9px; text-transform: none; font-weight: 600; color: var(--szary); }
 
-/* UF22: lista zadań – panel po prawej (wysuwany, zwijany do paska z licznikiem) */
-/* UF25/UF26: zwinięta – sam pasek przy prawej krawędzi; wysunięta – panel wjeżdża z prawej, pasek znika */
+/* lista zadań – panel po prawej (wysuwany, zwijany do paska z licznikiem) */
+/* zwinięta – sam pasek przy prawej krawędzi; wysunięta – panel wjeżdża z prawej, pasek znika */
 .zadania { position: fixed; right: 0; top: 140px; z-index: 30; }
 .zad-pasek { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 7px; cursor: pointer;
   color: var(--tekst); text-decoration: none; font-weight: 700; font-size: 11px;
@@ -635,7 +635,7 @@ a.zad-pole { cursor: pointer; }
   transform: translateY(calc(100% + 24px)); } }
 @media print { .zadania { display: none; } }
 
-/* UF14: agencje reklamowe – karta agencji ze znakiem w jej kolorze, kanały jako kafelki z kalkulatorem emisji */
+/* agencje reklamowe – karta agencji ze znakiem w jej kolorze, kanały jako kafelki z kalkulatorem emisji */
 .agencja { --agencja: var(--pom); margin-top: 22px; border: 1px solid var(--linia); border-top: 4px solid var(--agencja);
   border-radius: var(--r); background: color-mix(in srgb, var(--agencja) 4%, var(--karta)); padding: 14px 16px 16px; }
 .agencja-glowa { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 12px; }
@@ -674,7 +674,7 @@ table.kalkulator tr.klik:hover td { background: color-mix(in srgb, var(--agencja
 table.kalkulator tr.tu td { font-weight: 800; color: var(--agencja); background: color-mix(in srgb, var(--agencja) 10%, transparent); }
 @media (max-width: 560px) { .agencja-glowa { flex-wrap: wrap; } .agencja-suma { width: 100%; } }
 
-/* UF23: redakcja wyników – podsumowanie, kafelki liczb ze strzałkami, zwijane szczegóły, „Tydzień w liczbach” */
+/* redakcja wyników – podsumowanie, kafelki liczb ze strzałkami, zwijane szczegóły, „Tydzień w liczbach” */
 .podsumowanie { padding: 12px 16px; margin: 0 0 14px; border-radius: 9px; background: var(--karta); border: 1px solid var(--linia);
   border-left: 4px solid var(--pom); font-size: 14px; line-height: 1.55; }
 .podsumowanie.ok { border-left-color: var(--zielony); background: var(--zielony-jasny); }
@@ -769,7 +769,7 @@ details.szczegoly .tabela-tytul { display: none; }
 .obc-stan { padding: 1px 8px; border-radius: 9px; font-size: 10.5px; font-weight: 700; color: var(--tekst);
   background: color-mix(in srgb, var(--obc-kolor) 16%, transparent); }
 .obc-kolejka { margin: 8px 0 0; font-size: 12px; color: var(--tekst); }
-/* Poprawki 4 (P6): obciążenie w dni tygodnia – osoba × dzień, ponad 100% na czerwono (tyle pracy zabrakło) */
+/* Poprawki 4: obciążenie w dni tygodnia – osoba × dzień, ponad 100% na czerwono (tyle pracy zabrakło) */
 .obc-dni .t td { vertical-align: middle; }
 .obc-dni .obc-dni-grupa td { font-size: 12px; font-weight: 700; color: var(--tekst); text-align: left; padding-top: 10px; }
 .obc-dzien { display: inline-flex; flex-direction: column; align-items: center; min-width: 46px; padding: 2px 6px; border-radius: 7px;
@@ -843,12 +843,12 @@ details.szczegoly > summary .kategoria-suma { margin-left: auto; color: var(--po
 .baza-kat .agencja-znak { width: 28px; height: 28px; font-size: 13px; }
 
 
-/* N14: hierarchia przycisków w kafelku dania – „Wybierz” główne, „✓ Wybrano” jako stan, „Więcej szczegółów” jako link */
+/* hierarchia przycisków w kafelku dania – „Wybierz” główne, „✓ Wybrano” jako stan, „Więcej szczegółów” jako link */
 .btn.stan-wybrano { background: var(--pom-jasny, #e6f6ec); color: var(--pom-ciemny); border: 2px solid var(--pom); }
 .btn.stan-wybrano:hover { background: var(--czerwony-jasny); border-color: var(--czerwony); color: var(--czerwony); }
 .link-szczegoly { display: block; text-align: center; font-size: 12px; color: var(--pom-ciemny); text-decoration: underline; cursor: pointer; padding: 4px 0; }
 
-/* N15: słupki dni tygodnia z podpisami (Klienci i strefy) */
+/* słupki dni tygodnia z podpisami (Klienci i strefy) */
 .slupki-dni .slupki { gap: 3px; height: 22px; }
 .slupki-dni .slupki i { width: 14px; }
 .slupki-dni .podpis-dni { display: flex; gap: 3px; margin-top: 2px; }

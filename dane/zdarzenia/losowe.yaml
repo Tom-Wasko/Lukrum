@@ -1,4 +1,4 @@
-# Losowe wypadki w lokalu i ubezpieczyciel (F3b.5, silnik/swiat/awarie.py) – rzadkie historie tylko jednej drużyny
+# Losowe wypadki w lokalu i ubezpieczyciel (silnik/swiat/awarie.py) – rzadkie historie tylko jednej drużyny
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Od rundy zasady.od_rundy każda drużyna z działającym lokalem ma co rundę szansę zasady.szansa, że w lokalu
   zacznie się wypadek – historia w 2–4 scenach (format jak w parki.yaml, bez pola park). Naraz najwyżej jeden
@@ -6,36 +6,36 @@ opis: 'Od rundy zasady.od_rundy każda drużyna z działającym lokalem ma co ru
   gdy firma miała polisę danego rodzaju już w rundzie, w której wypadek się zaczął, ubezpieczyciel zwraca
   (szkoda − franszyza) × pokrycie jako przychód pozostały. Składka co rundę: stala + za_lokal × liczba lokali
   + od_majatku × majątek (ceny zakupu inwestycji), kwoty miesięczne. Ochrona od karencja_rund rund po zakupie.'
-zrodlo: 'Notatka „Zdarzenia i historie” (rzadkie wypadki, limit straty, ubezpieczenie zmniejsza stratę, ok. 80%
+zrodlo: 'Notatka ustalenia autora o zdarzeniach (rzadkie wypadki, limit straty, ubezpieczenie zmniejsza stratę, ok. 80%
   komicznych, ok. 20% poważnych bez żartów, lubelskie smaczki, przykłady: Gołąb Zenon, Pani Halina z drugiego
   piętra, Najazd koziołków, Zalanie z góry); składki – rząd wielkości polis dla małej gastronomii (lokal ok.
   1,5–2 tys. zł rocznie, OC ok. 1 tys. zł rocznie, sprzęt ok. 2–3% wartości rocznie), szansa, szkody i pokrycie
-  – założenie F3b.5; B12 (6.11.2026): składki podniesione do ok. 0,9 × średnich odszkodowań w grze (wypadki
-  są w grze dużo częstsze niż w życiu – 2–3 na 18 tygodni), pomiar raporty/kalibracja/pomiary/b12_polisy2'
+  – założenie autora (6.11.2026): składki podniesione do ok. 0,9 × średnich odszkodowań w grze (wypadki
+  są w grze dużo częstsze niż w życiu – 2–3 na 18 tygodni), pomiar botów 6.11.2026'
 zasady:
   od_rundy: 4          # pierwsze tygodnie bez wypadków – drużyny dopiero się urządzają
   szansa: 0.08         # w pierwszej rundzie z wypadkami i zaraz po wypadku; z przyrostem ok. 2–3 wypadki na grę
-  przyrost: 0.04       # P11 (odpowiedź 17): +4 pp. za każdą rundę bez wypadku, po wypadku od nowa
+  przyrost: 0.04       # (odpowiedź 17) +4 pp. za każdą rundę bez wypadku, po wypadku od nowa
   szansa_max: 0.4      # sufit – „im dłużej spokojnie, tym bliżej katastrofy”, ale nie co tydzień
   max_strata: 8000     # zł – górna granica jednej szkody
 ubezpieczyciel:
   nazwa: TUW „Pod Koziołkiem”
   budynek: ubezpieczyciel
   karencja_rund: 1     # polisa kupiona w rundzie r chroni od rundy r + 1
-  od_rundy: 4          # UF6: polisy można kupić od tygodnia 4 (razem z pierwszymi wypadkami)
+  od_rundy: 4          # polisy można kupić od tygodnia 4 (razem z pierwszymi wypadkami)
   polisy:
     lokal:
       nazwa: Polisa na lokal
       opis: Mury, szyby, instalacje i sufity – ogień, woda, stłuczenia i inne nieszczęścia budowlane.
       stala: 0
-      za_lokal: 300        # B12: było 140 – odszkodowania 1,9 × składki
+      za_lokal: 300        # było 140 – odszkodowania 1,9 × składki
       od_majatku: 0
       pokrycie: 0.9
       franszyza: 300
     sprzet:
       nazwa: Polisa na sprzęt
       opis: Sprzęt kuchenny, stanowiska i wyposażenie – kradzież, przepięcia, zalanie, upadki z wysokości.
-      stala: 400          # B12: było 0 – sama składka od majątku to 1/24 odszkodowań
+      stala: 400          # było 0 – sama składka od majątku to 1/24 odszkodowań
       za_lokal: 0
       od_majatku: 0.002
       pokrycie: 0.85
@@ -43,7 +43,7 @@ ubezpieczyciel:
     oc:
       nazwa: OC działalności
       opis: Szkody, które firma wyrządzi innym – klientom, sąsiadom i ich praniu.
-      stala: 60           # B12: było 80 – odszkodowania 0,63 × składki
+      stala: 60           # było 80 – odszkodowania 0,63 × składki
       za_lokal: 0
       od_majatku: 0
       pokrycie: 1

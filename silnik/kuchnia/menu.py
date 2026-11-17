@@ -1,4 +1,4 @@
-"""Menu w grze z lokalami (krok F3a.5; dane: dane/mapa/menu.yaml, notatki/Menu i składniki.md).
+"""Menu w grze z lokalami (dane: dane/mapa/menu.yaml, notatki/Menu i składniki.md).
 
 - jakość dania = średnia ważona współczynników gwiazdek składników, kucharzy i sprzętu (wagi z menu.yaml; w grze
   bez lokali – wagi domyślne z zalozenia.yaml),
@@ -137,7 +137,7 @@ def _zl(x: float) -> str:
 
 
 def bledy(dane: Dane, firma: Firma, runda: int) -> list[dict]:
-    """Lista błędów (F4.2) – dania w sprzedaży, gdy działa któryś lokal: brak sprzętu, brak kucharza, cena poniżej
+    """Lista błędów – dania w sprzedaży, gdy działa któryś lokal: brak sprzętu, brak kucharza, cena poniżej
     kosztu składników (czerwone) albo składniki ponad `lista_bledow.udzial_skladnikow` ceny (pomarańczowe)."""
     if not any(lok.dziala_od <= runda for lok in firma.lokale):
         return []

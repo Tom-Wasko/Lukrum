@@ -18,18 +18,18 @@ export const miesiacRundy = (r) => KAL?.miesiace[r - 1] ?? (r - 1) % 12;
 export const naRunde = (kwotaMiesieczna) => OKRES.rund_w_roku === 12 ? kwotaMiesieczna : kwotaMiesieczna * 12 / OKRES.rund_w_roku;
 export const naOkres = () => ` / ${OKRES.skrot}`;
 
-// N5 (Poprawki 3): separator tysięcy zawsze (także 4806 → 4 806, jak w tekstach silnika); Intl daje go jako twardą spację
+// separator tysięcy zawsze (także 4806 → 4 806, jak w tekstach silnika); Intl daje go jako twardą spację
 const fmt = (min, max) => new Intl.NumberFormat("pl-PL", { minimumFractionDigits: min, maximumFractionDigits: max, useGrouping: "always" });
 const F0 = fmt(0, 0), F2 = fmt(2, 2), F3 = fmt(0, 3);
 
 export const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 export const zl = (x, grosze = false) => x == null ? "–" : (grosze ? F2 : F0).format(x) + "\u00a0zł";
 
-// U13: jedno zdanie „dlaczego” pod rankingiem (uczeń i mistrz gry) – miejsce to nie stan konta
+// jedno zdanie „dlaczego” pod rankingiem (uczeń i mistrz gry) – miejsce to nie stan konta
 export const RANKING_DLACZEGO = "Ranking to suma punktów ze wszystkich tygodni, a ostatnie tygodnie ważą więcej – liczy się zarabianie "
   + "co tydzień, goście, zespół, rozwój i bezpieczeństwo finansowe, a nie sam stan konta.";
 
-// U11: inwestor ratunkowy (silnik/pieniadze/inwestor.py) – ile wpłacił, jaki udział i do kiedy, ile już wziął
+// inwestor ratunkowy (silnik/pieniadze/inwestor.py) – ile wpłacił, jaki udział i do kiedy, ile już wziął
 export function inwestorHtml(v) {
   const I = v.inwestor;
   if (!I) return "";
@@ -42,7 +42,7 @@ export function inwestorHtml(v) {
 }
 export const zl2 = (x) => zl(x, true);
 
-// UF27/UF28: małe słupki (Strefy miasta – dni tygodnia, Menu – sezonowość dania): wysokość wg wartości względem
+// małe słupki (Strefy miasta – dni tygodnia, Menu – sezonowość dania): wysokość wg wartości względem
 // najwyższej, wyróżniony słupek ciemny, dymek „wtorek – popyt: × 1,1” (wspólny dymek z dymki.js – tabela go nie utnie)
 const mnoznik = (x) => `× ${fmt(0, 2).format(x)}`;
 export function slupki(lista, opis = "") {
@@ -127,7 +127,7 @@ export function tabela(tytul, naglowki, wiersze, { stopka = null, klasy = [], so
   return `${tytul ? `<div class="tabela-tytul">${tytul}</div>` : ""}<div class="tab-wrap"><table class="t"><thead><tr>${th}</tr></thead><tbody>${tr}${brak}</tbody>${tf}</table></div>`;
 }
 
-// --- UF23: redakcja wyników – zdanie-podsumowanie na górze widoku, kafelki najważniejszych liczb (ze strzałką
+// --- redakcja wyników – zdanie-podsumowanie na górze widoku, kafelki najważniejszych liczb (ze strzałką
 // względem poprzedniej rundy), szczegóły (tabele) zwijane. Stan zwinięcia pamiętany per sekcja (app.js: toggle).
 export function podsumowanie(zdania, ton = "") {
   const z = (Array.isArray(zdania) ? zdania : [zdania]).filter(Boolean);
@@ -162,7 +162,7 @@ export function zwinTabela(tytul, naglowki, wiersze, opcje = {}) {
 // „Wyniki pojawią się po pierwszej rundzie” – jednakowo we wszystkich zakładkach
 export const brakWynikow = (tekst = "Wyniki pojawią się po przeliczeniu pierwszej rundy.") => `<p class="podpowiedz">${tekst}</p>`;
 
-// N6 (Poprawki 3): kwota nie łamie się w środku („14 445,91 zł”). Teksty z silnika mają zwykłe spacje, więc po
+// kwota nie łamie się w środku („14 445,91 zł”). Teksty z silnika mają zwykłe spacje, więc po
 // wyrysowaniu karty zamieniamy w węzłach tekstowych spację między cyframi grup tysięcy i przed „zł”/„gr” na twardą.
 const SPACJA_TYSIECY = /(\d) (?=\d{3}(?!\d))/g, SPACJA_WALUTY = /(\d) (?=(?:zł|gr|tys\.|mln|%)(?![\p{L}]))/gu;
 export function twardeSpacje(korzen) {
@@ -176,7 +176,7 @@ export function twardeSpacje(korzen) {
   }
 }
 
-// P4 (poprawki 4): wartość pola przy ostatnim zatwierdzeniu (zdarzenie change) – Enter nie zapisuje drugi raz tego samego,
+// Wartość pola przy ostatnim zatwierdzeniu (zdarzenie change) – Enter nie zapisuje drugi raz tego samego,
 // a odświeżane okno wie, które pole ma jeszcze niezatwierdzony wpis
 document.addEventListener("change", (e) => { if (e.target?.matches?.("input, textarea")) e.target._zatwierdzone = e.target.value; }, true);
 export const niezatwierdzone = (el) => !!el?.matches?.("input:not([type=checkbox]):not([type=radio]), textarea")
@@ -206,7 +206,7 @@ export function okno(tytul, html, { male = false, srednie = false, przyciski = "
   _poZamknieciu = poZamknieciu;
   return z;
 }
-// P4: to samo okno otwarte ponownie (np. „Baza składników” po zapisie ilości) odświeża się w miejscu – bez zamykania
+// to samo okno otwarte ponownie (np. „Baza składników” po zapisie ilości) odświeża się w miejscu – bez zamykania
 // i animacji, z tym samym przewinięciem, polem z kursorem i niezatwierdzonym wpisem (gracz po Enter/Tab pisze dalej)
 function odswiezOkno(z, tresc, poZamknieciu) {
   const przewiniecie = z.scrollTop, a = z.contains(document.activeElement) ? document.activeElement : null;
@@ -260,7 +260,7 @@ export function wykres(id, typ, etykiety, serie, opcje = {}) {
   if (tekst) Chart.defaults.color = tekst;
   if (siatka) Chart.defaults.borderColor = siatka;
   Chart.defaults.font.family = font || "Montserrat, sans-serif";
-  // N7 (Poprawki 3): polski format liczb na osiach i w dymkach wszystkich wykresów (60 000 zamiast 60,000; 4 806)
+  // polski format liczb na osiach i w dymkach wszystkich wykresów (60 000 zamiast 60,000; 4 806)
   Chart.defaults.locale = "pl-PL";
   if (Chart.defaults.scales.linear) Chart.defaults.scales.linear.ticks.format = { useGrouping: "always" };
   const kolor = (s, i) => Array.isArray(s.kolor) ? s.kolor : (s.kolor && s.kolor.startsWith("--") ? zmienna(s.kolor) : s.kolor) || kolory[i % kolory.length];
@@ -286,7 +286,7 @@ export const nazwaFirmy = (v, f) => v.marki?.[f]?.nazwa ?? v.rynek?.firmy?.[f] ?
 // kolory firm na mapie (bez zielonego i pomarańczowego – to Twój lokal i lokal wybrany w tej rundzie)
 export const KOLORY_FIRM = ["#2d73d6", "#e5333f", "#9b51e0", "#f2b705", "#17a2b8", "#d63384", "#34495e", "#795548"];
 
-// N12 (Poprawki 3): jeden stały kolor każdej drużyny w całej grze (mapa, karta wyników, ranking, wykresy porównawcze,
+// jeden stały kolor każdej drużyny w całej grze (mapa, karta wyników, ranking, wykresy porównawcze,
 // panel MG) – kolor wybrany w rundzie 1 (marki), a bez wyboru – kolejny wolny kolor palety w kolejności firm w grze
 export function kolorFirmy(v, f) {
   const wybrany = (n) => v.marki?.[n]?.kolor;
@@ -314,12 +314,12 @@ export function marka(v, f) {
   return { nazwa: m.nazwa || f, slogan: m.slogan || "", logo: m.logo || "", kolor: kolorFirmy(v, f) };
 }
 
-// Opis dydaktyczny (P7): zwijana ramka „jak to działa naprawdę”; punkty to gotowy HTML (bez danych gracza).
+// Opis dydaktyczny : zwijana ramka „jak to działa naprawdę”; punkty to gotowy HTML (bez danych gracza).
 export function lekcja(tytul, punkty) {
   return `<details class="lekcja"><summary>${esc(tytul)}</summary><ul>${punkty.map((p) => `<li>${p}</li>`).join("")}</ul></details>`;
 }
 
-// sprawa 21 (poprawki 2): karta „marki” jak w Ulotkach i radiu (UF14) – znak w kolorze, nazwa, rodzaj, opis i suma po prawej,
+// sprawa 21 (poprawki 2): karta „marki” jak w Ulotkach i radiu – znak w kolorze, nazwa, rodzaj, opis i suma po prawej,
 // w środku kafelki ofert. Style: .agencja/.kanal/.progi/.kalkulator w styl.css (kolor z --agencja).
 // poprawki 3: znak = ikona marki/roli (ikony_marek.js), bez ikony – dwie litery jak dawniej
 export const znakMarki = (nazwa) => {

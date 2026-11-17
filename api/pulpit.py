@@ -62,7 +62,7 @@ def nowosci(g: GraSilnika) -> dict:
 
 
 def funkcje_gry(g: GraSilnika, firmy: list[str] | None) -> dict | list | None:
-    """Funkcje gry (seria „funkcje”, J8). Gra bez funkcji (stare gry, dane bez rejestru) – None.
+    """Funkcje gry (seria „funkcje”). Gra bez funkcji (stare gry, dane bez rejestru) – None.
 
     Uczeń (`firmy` – jego drużyny): lista {klucz, nazwa, krotko, ikona, stan, odslonieta};
     odsłonięcie liczy pierwsza z jego drużyn w tej grze.
@@ -139,7 +139,7 @@ def karta_gry(id_: str, g: GraSilnika, firmy: list[str] | None) -> dict:
         "wyslane": len([f for f in g.wyslane() if f in ludzie]),
         "prowadzenie": hg.prowadzenie(id_),
         "nowe": nowosci(g),
-        "funkcje": funkcje_gry(g, firmy),   # J8: stany i odsłonięcia (None – bez funkcji)
+        "funkcje": funkcje_gry(g, firmy),   # stany i odsłonięcia (None – bez funkcji)
     }
     if firmy is None:
         karta["druzyny"] = [_druzyna(g, f, sklad.get(f, [])) for f in ludzie]

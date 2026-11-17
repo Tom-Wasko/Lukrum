@@ -1,4 +1,4 @@
-"""Banki gry z lokalami (F3a.9; dane: dane/mapa/banki.yaml).
+"""Banki gry z lokalami (dane: dane/mapa/banki.yaml).
 
 Sześć banków (nazwy z lektur), każdy z inną najlepszą ofertą. Konto firmowe (`firma.bank`) niesie opłatę za konto,
 terminal (abonament + prowizja od płatności kartą) i debet. Debet to saldo poniżej zera na koniec tygodnia (chwilowy minus
@@ -12,9 +12,9 @@ poprawki 2) bank udziela ich tylko firmie z kontem u siebie – wybór banku to 
 Kredyty: „na start” bez historii firmy, obrotowe dopiero po `historia_rund` rundach od otwarcia pierwszego lokalu;
 inwestycyjny (`od_lokalu`) – od wzięcia pierwszego lokalu, pod zastaw własnego lokalu albo sprzętu (kwota do części
 wartości netto zastawu); zastawem może być lokal kupowany w tej samej rundzie (wartość – cena z oferty, przy
-działce razem z kosztem budowy – zastawem jest budowany lokal, B6): kredyt
+działce razem z kosztem budowy – zastawem jest budowany lokal): kredyt
 liczy się do gotówki na zakup, a wchodzi po decyzji o lokalu (`kredyty_na_lokal`) – gdy lokalu nie uda się kupić,
-kredyt przepada. B6 (decyzja autora 7.11.2026, przełącznik `zastaw_przejecia`): tak samo budynek kupowany w tej
+kredyt przepada. Decyzja autora 7.11.2026 (przełącznik `zastaw_przejecia`): tak samo budynek kupowany w tej
 rundzie z najemcą (wykup własnego najmu albo budynek rywala, gdy w rundzie nie ma kupna lokalu); kupiony budynek
 z najemcą jest potem zastawem jak kupiony lokal (przejęty przez bank – najemca płaci czynsz jak przed kupnem). Raty kapitałowe
 równe + odsetki od pozostałej kwoty, od rundy po zaciągnięciu. Gdy gotówki i wolnego limitu nie starcza na ratę,
@@ -114,7 +114,7 @@ def zastawy(dane: Dane, firma: Firma) -> list[dict]:
             wartosc += dane.lokale[lok.id].get("koszt_budowy", 0)
         if wartosc > EPS:
             wynik.append({"id": f"lokal:{lok.id}", "nazwa": f"Lokal: {dane.lokale[lok.id]['adres']}", "wartosc": round(wartosc, 2)})
-    for b in firma.budynki if ustawienia(dane).get("zastaw_przejecia") else []:   # B6: budynek z najemcą
+    for b in firma.budynki if ustawienia(dane).get("zastaw_przejecia") else []:   # budynek z najemcą
         wartosc = sum(s.wartosc - s.umorzenie for s in _srodki_lokalu(dane, firma, b.id))
         if f"lokal:{b.id}" not in zajete and wartosc > EPS:
             wynik.append({"id": f"lokal:{b.id}", "nazwa": f"Budynek z najemcą: {dane.lokale[b.id]['adres']}",
@@ -136,7 +136,7 @@ def sprzet_wynajmujacego(dane: Dane, firma: Firma, lokal_id: str) -> float:
 
 
 def _nowy_budynek(dane: Dane, decyzje: dict, runda: int, firma: Firma | None) -> dict | None:
-    """B6: budynek z najemcą kupowany w tej rundzie (decyzja `przejecie`) jako zastaw; wartość – oferta, przy
+    """Budynek z najemcą kupowany w tej rundzie (decyzja `przejecie`) jako zastaw; wartość – oferta, przy
     wykupie bez sprzętu wynajmującego (tyle wejdzie do ewidencji jako lokal, jak w przejecia.przejmij)."""
     dp = decyzje.get("przejecie") or {}
     lok = dane.lokale.get(dp.get("id"))
@@ -154,7 +154,7 @@ def _nowy_budynek(dane: Dane, decyzje: dict, runda: int, firma: Firma | None) ->
 def nowy_lokal(dane: Dane, decyzje: dict, runda: int, firma: Firma | None = None) -> dict | None:
     """Lokal (albo działka) kupowany w tej rundzie jako zastaw kredytu inwestycyjnego; wartość – cena z oferty bez
     sprzętu zestawu (tyle wejdzie do ewidencji środków trwałych – sprzęt to osobne pozycje), przy działce razem z kosztem budowy (budynek wejdzie do ewidencji
-    po budowie – zastawem jest budowany lokal, B6). Bez kupna lokalu – budynek z najemcą (`_nowy_budynek`,
+    po budowie – zastawem jest budowany lokal). Bez kupna lokalu – budynek z najemcą (`_nowy_budynek`,
     klucz "przejecie")."""
     dl = decyzje.get("lokal") or {}
     lok = dane.lokale.get(dl.get("id")) if dl.get("forma") == "kupno" else None
@@ -169,7 +169,7 @@ def nowy_lokal(dane: Dane, decyzje: dict, runda: int, firma: Firma | None = None
 
 def finansowanie_lokalu(dane: Dane, firma: Firma, decyzje: dict, runda: int, przejecie: bool = False) -> float:
     """Kredyty tej rundy pod zastaw kupowanego lokalu, których bank udzieli – gotówka na zakup (silnik/nieruchomosci/lokale.py);
-    przejecie – pod zastaw kupowanego budynku z najemcą (silnik/nieruchomosci/przejecia.py, B6)."""
+    przejecie – pod zastaw kupowanego budynku z najemcą (silnik/nieruchomosci/przejecia.py)."""
     nowy = nowy_lokal(dane, decyzje, runda, firma)
     if not nowy or nowy.get("przejecie", False) != przejecie:
         return 0.0
@@ -180,11 +180,11 @@ def finansowanie_lokalu(dane: Dane, firma: Firma, decyzje: dict, runda: int, prz
 def _przejmij_zastaw(dane: Dane, firma: Firma, k: Kredyt, runda: int, ksiega: Ksiega, rachunek: Rachunek,
                      najemcy: dict | None = None) -> dict:
     """Bank przejmuje zastaw zaległego kredytu: wycena pomniejsza dług, nadwyżka wraca na konto. najemcy – umowy
-    najmu budynków firmy z najemcą (id lokalu → Lokal najemcy; B6)."""
+    najmu budynków firmy z najemcą (id lokalu → Lokal najemcy)."""
     u = ustawienia(dane)
     rodzaj, _, reszta = k.zastaw.partition(":")
     b = next((x for x in firma.budynki if x.id == reszta), None) if rodzaj == "lokal" else None
-    if b is not None:   # B6: budynek z najemcą – bank go sprzedaje, najemca płaci czynsz jak przed kupnem
+    if b is not None:   # budynek z najemcą – bank go sprzedaje, najemca płaci czynsz jak przed kupnem
         srodki = _srodki_lokalu(dane, firma, b.id)
         wartosc = sum(s.wartosc - s.umorzenie for s in srodki)
         for s in srodki:
@@ -248,7 +248,7 @@ def powod_kredytu(dane: Dane, firma: Firma, d: dict, runda: int, nowy: dict | No
         return f"kwota najwyżej {produkt['maks_kwota']:,.0f} zł".replace(",", " ")
     if produkt["historia"] and historia(firma, runda) < u["historia_rund"]:
         return f"bank wymaga {u['historia_rund']} rund historii firmy (od otwarcia pierwszego lokalu)"
-    budynek = u.get("zastaw_przejecia") and d.get("zastaw") in {f"lokal:{b.id}" for b in firma.budynki}   # B6
+    budynek = u.get("zastaw_przejecia") and d.get("zastaw") in {f"lokal:{b.id}" for b in firma.budynki}
     if produkt.get("od_lokalu") and not firma.lokale and not (nowy and d.get("zastaw") == nowy["id"]) and not budynek:
         return ("bank udziela go firmie z lokalem – najpierw wynajmij albo kup lokal (Stare Miasto ▸ Do wynajęcia); "
                 "kupowany lokal może być zastawem już w tej rundzie")
@@ -368,7 +368,7 @@ def _udziel(dane: Dane, firma: Firma, d: dict, runda: int, ksiega: Ksiega, rachu
 def kredyty_na_lokal(dane: Dane, firma: Firma, info: dict, runda: int, ksiega: Ksiega, rachunek: Rachunek,
                      przejecie: bool = False) -> None:
     """Odłożone kredyty pod zastaw lokalu kupowanego w tej rundzie – po decyzji o lokalu (silnik/runda.py);
-    przejecie – pod zastaw budynku z najemcą (B6), po decyzji o przejęciu (wtedy też ostatnie wywołanie w rundzie)."""
+    przejecie – pod zastaw budynku z najemcą, po decyzji o przejęciu (wtedy też ostatnie wywołanie w rundzie)."""
     odlozone = info.pop("odlozone", [])
     if not przejecie:
         info["odlozone"] = [d for d in odlozone if d.get("przejecie")]
@@ -436,7 +436,7 @@ def _stac(dane: Dane, firma: Firma, kwota: float) -> bool:
 def koniec_rundy(dane: Dane, firma: Firma, runda: int, ksiega: Ksiega, rachunek: Rachunek,
                  najemcy: dict | None = None) -> dict:
     """Opłaty konta i terminala, raty kredytów i leasingu (zaległości, przejęcia), odsetki limitu, lokaty.
-    najemcy – umowy najmu budynków firmy z najemcą (przejęcie budynku przez bank, B6)."""
+    najemcy – umowy najmu budynków firmy z najemcą (przejęcie budynku przez bank)."""
     u, rwr = ustawienia(dane), dane.rund_w_roku
     bank = banki(dane).get(firma.bank)
     info = {"oplaty": {}, "raty": [], "leasing": [], "przejecia": [], "wykupy": [], "zaleglosci": [], "lokaty": []}

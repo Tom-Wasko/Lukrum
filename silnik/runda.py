@@ -76,9 +76,9 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
     if not lk.tryb_lokali(dane, konfiguracja):
         raise ValueError("Gra bez lokali nie jest obsługiwana – potrzebne dane z mapą miasta.")
     ziarno = konfiguracja["ziarno"]
-    decyzje = {n: fz.przytnij(dane, d, konfiguracja) for n, d in decyzje.items()}   # UF21: formy wyłączone przez MG
+    decyzje = {n: fz.przytnij(dane, d, konfiguracja) for n, d in decyzje.items()}   # formy wyłączone przez MG
     ksiegi = {n: Ksiega(vat=rz.reguly_vat(dane)) for n in sorted(s.firmy)}
-    # funkcje gry (silnik/autopilot.py): przy ponownym zakryciu przepada to, co drużyna w funkcji kupiła (K1);
+    # funkcje gry (silnik/autopilot.py): przy ponownym zakryciu przepada to, co drużyna w funkcji kupiła ;
     # decyzje wyłączonych funkcji pomijane, zakryte i wyłączone robi gra
     przepadki = ap.przepadki_rundy(dane, s, konfiguracja, r, ksiegi)
     decyzje, bledy_funkcji = ap.decyzje_rundy(dane, s if przepadki else stan, decyzje, konfiguracja, r)
@@ -96,17 +96,17 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
              for n, f in s.firmy.items()}
     for nazwa in nazwy:
         rachunki[nazwa] = Rachunek()
-    # inwestor ratunkowy od mistrza gry, potem blokada inwestycji i kredytów przy debecie ponad limit (Z3) – przed
+    # inwestor ratunkowy od mistrza gry, potem blokada inwestycji i kredytów przy debecie ponad limit – przed
     # licytacjami lokali i budynków (silnik/pieniadze/inwestor.py)
     decyzje, inwestor, blokady = dict(decyzje), {}, {}
     for nazwa in nazwy:
         f = s.firmy[nazwa]
         inwestor[nazwa] = inw.poczatek_rundy(dane, f, inw.przyznany(konfiguracja, nazwa, r), r, rachunki[nazwa])
         d, blokady[nazwa] = inw.blokada(dane, f, decyzje.get(nazwa, {}))
-        blokady[nazwa] = inw.alarm(dane, f) + blokady[nazwa]   # U2: alarm na górze listy błędów
+        blokady[nazwa] = inw.alarm(dane, f) + blokady[nazwa]   # alarm na górze listy błędów
         if blokady[nazwa]:
             decyzje[nazwa] = d
-        ustaw_niskocenne(dane, f, decyzje.get(nazwa, {}))   # B6: przed zakupami rundy (giełda, lokale)
+        ustaw_niskocenne(dane, f, decyzje.get(nazwa, {}))   # przed zakupami rundy (giełda, lokale)
     # wyprowadzki po wypowiedzeniu najmu, potem licytacje lokali i budynków (silnik/nieruchomosci/przejecia.py)
     wyprowadzki = pr.koniec_najmu(dane, s, r, ksiegi, rachunki)
     lic = pr.licytacje(dane, s.firmy, decyzje, r, ziarno, lk.zajete(s.firmy))
@@ -132,17 +132,17 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         lokal = lk.wybierz(dane, f, d.get("lokal"), r, zajete, ksiegi[nazwa], rachunki[nazwa],
                            przegrane.get((nazwa, "lokal")), bk.finansowanie_lokalu(dane, f, d, r), len(s.firmy))
         bk.kredyty_na_lokal(dane, f, bank_info, r, ksiegi[nazwa], rachunki[nazwa])   # pod zastaw kupionego lokalu
-        # kupno budynku z najemcą (B6: kredyt pod jego zastaw liczy się do gotówki), wypowiedzenia najmu
+        # kupno budynku z najemcą (kredyt pod jego zastaw liczy się do gotówki), wypowiedzenia najmu
         # (silnik/nieruchomosci/przejecia.py)
         info_przejecia = {"przejecie": pr.przejmij(dane, s.firmy, nazwa, d.get("przejecie"), r,
                                                    przegrane.get((nazwa, "przejecie")), ksiegi[nazwa], rachunki[nazwa],
                                                    bk.finansowanie_lokalu(dane, f, d, r, przejecie=True)),
                           "wypowiedzenia": pr.wypowiedz(dane, s.firmy, nazwa, d.get("wypowiedz"), r)}
-        bk.kredyty_na_lokal(dane, f, bank_info, r, ksiegi[nazwa], rachunki[nazwa], przejecie=True)   # B6: budynku
+        bk.kredyty_na_lokal(dane, f, bank_info, r, ksiegi[nazwa], rachunki[nazwa], przejecie=True)   # budynku
         przed = dict(f.pracownicy)
         pula = rp.pula_dla(s.kandydaci, rezerwacje, nazwa)
         info[nazwa] = zastosuj(dane, f, d, r, pula, ceny_dost, ksiegi[nazwa], rachunki[nazwa])
-        if utracony := (przepadki.get(nazwa) or {}).get("majatek"):   # K1: przepadek – jak sprzedaż (rozwój firmy)
+        if utracony := (przepadki.get(nazwa) or {}).get("majatek"):   # przepadek – jak sprzedaż (rozwój firmy)
             info[nazwa]["sprzedany_majatek"] += utracony
             info[nazwa]["majatek_przed"] += utracony
         info[nazwa]["ksiegowosc"] = ksiegowosc
@@ -184,8 +184,8 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
     rp.po_decyzjach(dane, s, r, rynek_pracy, ksiegi, rachunki)
     for nazwa in nazwy:
         rynek_pracy[nazwa]["zatrudnieni"] = info[nazwa].get("kanaly_zatrudnienia", [])
-        rynek_pracy[nazwa]["przeniesieni"] = info[nazwa].get("przenosiny", [])   # UF20: obsada i przenosiny
-        rynek_pracy[nazwa]["odrzucone"] = [{k: v for k, v in o.items() if k != "tekst"}   # kalibracja B9
+        rynek_pracy[nazwa]["przeniesieni"] = info[nazwa].get("przenosiny", [])   # obsada i przenosiny
+        rynek_pracy[nazwa]["odrzucone"] = [{k: v for k, v in o.items() if k != "tekst"}   #
                                            for o in info[nazwa].get("odrzucone_oferty", [])]
         info[nazwa]["rynek_pracy"] = rynek_pracy[nazwa]
         bledy[nazwa] += [{"poziom": "czerwony", "zakladka": "rynek_pracy", "tekst": t} for t in rynek_pracy[nazwa]["uwagi"]]
@@ -210,7 +210,7 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
             mn_firmy = f.baza_klientow * (1 - info[nazwa]["harpagon_presja"]["odplyw"])   # Harpagon odstrasza gości
             mn_firmy *= zd.mnoznik_popytu(f, r)   # skutki eventów w parkach
             mn_firmy *= bt.przewaga_popytu(dane, konfiguracja, nazwa)   # bot niemożliwy oszukuje
-            oferty_lok[nazwa] = pp.oferty_lokali(dane, f, r, {   # ceny, menu i wyposażenie – każdego lokalu (Z2)
+            oferty_lok[nazwa] = pp.oferty_lokali(dane, f, r, {   # ceny, menu i wyposażenie – każdego lokalu
                 "reklama": 0.0, "mnoznik_firmy": mn_firmy,
                 "zadowolenie": pp.mnoznik_zadowolenia(dane, zk),
                 "reklama_strefy": (kampanie or {}).get("firmy", {}).get(nazwa, {})})
@@ -218,14 +218,14 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         strefowy = pp.rynek_lokali(dane, s.firmy, oferty_lok, r, ziarno, (kampanie or {}).get("pula"),
                                    {n: info[n].get("przewozy") or [] for n in nazwy})
         popyt, obsluga, rynek = strefowy["popyt"], strefowy["obsluga"], strefowy["rynek"]
-        opinie_rundy = op.po_rundzie(dane, s.firmy, strefowy, oferty_lok, r, ziarno)   # U24: opinie klientów o lokalach
+        opinie_rundy = op.po_rundzie(dane, s.firmy, strefowy, oferty_lok, r, ziarno)   # opinie klientów o lokalach
         for nazwa, lokale in oferty_lok.items():  # oferta firmy: jakość lokalu z największym popytem dania
             for u in popyt[nazwa]:
                 lok = max((x for x in lokale if u in lokale[x]), key=lambda x: rynek[u][nazwa]["skladniki"]["lokale"][x])
                 oferty.setdefault(u, {})[nazwa] = lokale[lok][u]
         for nazwa in nazwy:
             promo = (strefowy or {}).get("promocje", {}).get(nazwa)   # przychód z rabatami promocji
-            przych = info[nazwa]["przychod_sprzedazy"] = strefowy["przychod"].get(nazwa, {})   # suma lokali (Z2)
+            przych = info[nazwa]["przychod_sprzedazy"] = strefowy["przychod"].get(nazwa, {})   # suma lokali
             for u in obsluga[nazwa]["obsluzeni"]:
                 ksieguj(s.firmy[nazwa], ksiegi[nazwa], rachunki[nazwa], f"Sprzedaż: {menu.nazwa_dania(dane, u, firma=s.firmy[nazwa])}",
                         przych.get(u, 0.0), "przychod", stawka=rz.stawka_sprzedazy(dane, u))
@@ -246,7 +246,7 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         for p in f.pracownicy.values():
             if p.premia > 0:
                 ksieguj(f, ks, rach, f"Bonus dla pracownika: {p.imie_nazwisko}", p.premia, "wynagrodzenia")
-        # UF21: kontrakt B2B – faktura z VAT zamiast wynagrodzenia; ZUS pracodawcy wg formy (student na zleceniu – 0)
+        # kontrakt B2B – faktura z VAT zamiast wynagrodzenia; ZUS pracodawcy wg formy (student na zleceniu – 0)
         b2b = [p for p in f.pracownicy.values() if fz.forma(dane, p.umowa).get("faktura")]
         ksieguj(f, ks, rach, "Wynagrodzenia pracowników",
                 dane.na_runde(sum(p.pensja for p in f.pracownicy.values() if p not in b2b)), "wynagrodzenia")
@@ -294,14 +294,14 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         f.skumulowany_dochod_netto = round(f.skumulowany_dochod_netto + netto, 2)
         wyniki[nazwa] = w = _wyniki_firmy(dane, f, r, ks, rach, info[nazwa], popyt.get(nazwa, {}),
                                           obsluga.get(nazwa), oferty, rynek, start[nazwa], bledy[nazwa], netto)
-        odejscia = zo.po_rundzie(dane, f, w, r, ziarno, info[nazwa]["szkolenia_procent"])   # U20
+        odejscia = zo.po_rundzie(dane, f, w, r, ziarno, info[nazwa]["szkolenia_procent"])
         if odejscia is not None:
             w["odejscia_pracownikow"] = odejscia
         w["lokale"] = lk.stan_lokali(dane, f, r)
         w["lokal_decyzja"] = info[nazwa]["lokal"]
         w["przejecia"] = pr.raport(dane, s.firmy, nazwa, r, info[nazwa]["przejecia"], przetargi, wyprowadzki.get(nazwa, []))
         w["dostawy"] = info[nazwa].get("dostawy")
-        if info[nazwa].get("auto_dostawy", {}).get("lokale"):   # Z4: zakupy auto-dostawcy
+        if info[nazwa].get("auto_dostawy", {}).get("lokale"):   # zakupy auto-dostawcy
             w["auto_dostawy"] = info[nazwa]["auto_dostawy"]
         w["czas_wlasciciela"] = info[nazwa].get("czas_wlasciciela")
         w["zdarzenia"] = info[nazwa].get("zdarzenia")
@@ -324,14 +324,14 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         if kampanie:
             w["reklama_agencje"] = {"zamowione": (info[nazwa].get("kampanie") or {}).get("zamowione", []),
                                     "kampanie": kampanie["kampanie"].get(nazwa, []), "pula_stref": kampanie["pula"],
-                                    "laczne": {z: {"suma": x, "dziala": kampanie["firmy"][nazwa][z]}   # P10: sufit
+                                    "laczne": {z: {"suma": x, "dziala": kampanie["firmy"][nazwa][z]}   # sufit
                                                for z, x in kampanie["suma"].get(nazwa, {}).items()}}
         w["bank"] = {"poczatek": info[nazwa].get("bank"), "koniec": bank_koniec, "leasing": info[nazwa].get("leasing"),
                      "historia": bk.historia(f, r), "debet_ponad_limit": bk.debet_ponad_limit(dane, f)}
         w["harpagon"] = {"poczatek": info[nazwa].get("harpagon"), "presja": info[nazwa].get("harpagon_presja"),
                          "odsetki": info[nazwa].get("harpagon_odsetki"), "stan": lw.stan(dane, f, r + 1)}
-        w["majatek_netto"] = majatek_netto(f)   # Z2: składniki i razem
-        w["alarm"] = bk.debet_ponad_limit(dane, f)   # Z3: alarm u mistrza gry, w następnej rundzie blokada
+        w["majatek_netto"] = majatek_netto(f)   # składniki i razem
+        w["alarm"] = bk.debet_ponad_limit(dane, f)   # alarm u mistrza gry, w następnej rundzie blokada
         w["inwestor"] = inw.raport(f, inwestor[nazwa], udzial_inwestora)
         if pm.zasady(dane):
             promo = (strefowy or {}).get("promocje", {}).get(nazwa)
@@ -421,7 +421,7 @@ def _wyniki_firmy(dane, f: Firma, r, ks: Ksiega, rach: Rachunek, info, popyt, ob
         prac.append({**do_slownika(p), "wykorzystanie": cz["obciazenie"], **cz,
                      **_obciazenie_dni(dane, f, obsluga, next((x for x in f.stanowiska if x.pracownik == p.id), None))})
     w["pracownicy"] = prac
-    if f.wlasciciel_na:   # właściciel na stanowisku (P5): ta sama miara jego godzin
+    if f.wlasciciel_na:   # właściciel na stanowisku : ta sama miara jego godzin
         cz = _czas_pracy(dane, f, obsluga, godz)
         w["wlasciciel_stanowisko"] = {**info["wlasciciel_stanowisko"], "wykorzystanie": cz["obciazenie"], **cz,
                                       **_obciazenie_dni(dane, f, obsluga, f.stanowisko(f.wlasciciel_na.typ, f.wlasciciel_na.nr))}
@@ -465,7 +465,7 @@ def _wyniki_firmy(dane, f: Firma, r, ks: Ksiega, rach: Rachunek, info, popyt, ob
     w["zasoby"] = zasoby
     w["zuzyte_zasoby"] = zuzyte
     w["szkolenia"] = info.get("szkolenia", [])   # zakładka Mój kebab ▸ Szkolenia (wyniki)
-    if "szkolenia_aktywne" in info:   # kalibracja B9: szkolenia działające w tej rundzie (do której rundy)
+    if "szkolenia_aktywne" in info:   # szkolenia działające w tej rundzie (do której rundy)
         w["szkolenia_aktywne"] = info["szkolenia_aktywne"]
 
     return w
@@ -498,7 +498,7 @@ def _czas_pracy(dane: Dane, f: Firma, obsluga: dict | None, godz: float, p=None)
 
 
 def _obciazenie_dni(dane: Dane, f: Firma, obsluga: dict | None, s) -> dict:
-    """P6 (poprawki 4, tylko raport – wyniki gry się nie zmieniają): {"obciazenie_dni": [7 wartości]} – obciążenie
+    """{"obciazenie_dni": [7 wartości]} – obciążenie
     osoby na stanowisku `s` w każdym dniu rundy = godziny potrzebne na obsłużenie klientów, którzy doszli do
     stanowiska (zajęte + zajęcia klientów utraconych przez brak godzin tego etapu: kuchnia – brak godzin stanowisk
     albo sprzętu, kasa – kolejka do kasy), przez pojemność stanowiska tego dnia; ponad 1 = tyle pracy zabrakło.
@@ -526,7 +526,7 @@ def _obciazenie_dni(dane: Dane, f: Firma, obsluga: dict | None, s) -> dict:
 
 
 def mandaty_rundy(info: dict) -> float:
-    """B12: mandaty rundy (poza KPiR): skarbowe za deklaracje, z błędu biura bez OC (z OC biuro je oddaje), sanepidu."""
+    """Mandaty rundy (poza KPiR): skarbowe za deklaracje, z błędu biura bez OC (z OC biuro je oddaje), sanepidu."""
     blad = (info.get("biuro") or {}).get("blad") or {}
     return round(((info.get("ksiegowosc") or {}).get("kara") or 0.0)
                  + (0.0 if blad.get("oc") else blad.get("kara") or 0.0)
@@ -535,15 +535,15 @@ def mandaty_rundy(info: dict) -> float:
 
 
 def _netto_karty(dane: Dane, netto: float, info: dict) -> float:
-    """Dochód netto do karty: odsetki Harpagona (poza KPiR) obniżają wynik jak koszty (Z1), a przy
-    wynik.mandaty_w_dochodzie także mandaty rundy (B12). KPiR i podatki bez zmian."""
+    """Dochód netto do karty: odsetki Harpagona (poza KPiR) obniżają wynik jak koszty, a przy
+    wynik.mandaty_w_dochodzie także mandaty rundy. KPiR i podatki bez zmian."""
     odsetki = (info.get("harpagon_odsetki") or {}).get("odsetki") or 0.0
     mandaty = mandaty_rundy(info) if dane.z["wynik"].get("mandaty_w_dochodzie") else 0.0
     return round(netto - odsetki - mandaty, 2)
 
 
 def _procent_lokali(dane: Dane, f: Firma, rodzaj: str, wagi: bool = False) -> float:
-    """Premia z wyposażenia / udogodnień do karty: średnia lokali (Z2 – każdy lokal ma swoje), przy wagi=True ważona
+    """Premia z wyposażenia / udogodnień do karty: średnia lokali (każdy lokal ma swoje), przy wagi=True ważona
     liczbą stanowisk lokalu (tam pracują ludzie). Gra bez lokali – suma firmy jak dawniej."""
     poz = dane.pozycje(rodzaj)
     if not f.lokale:

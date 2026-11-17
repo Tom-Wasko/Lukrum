@@ -62,7 +62,7 @@ function statusDecyzji(f, gra) {
   return `<span class="chip pom" title="${a.zapisal ? `Ostatni zapis: ${esc(a.zapisal.nazwa)}, ${godzina(a.zapisal.kiedy)}` : "Brak zapisanych decyzji"}">czeka</span>`;
 }
 
-// U18: dziennik zapisów decyzji drużyny w bieżącej rundzie (kto, kiedy, w której zakładce, z której przeglądarki)
+// dziennik zapisów decyzji drużyny w bieżącej rundzie (kto, kiedy, w której zakładce, z której przeglądarki)
 function dziennik(nazwa) {
   const f = S.p.firmy.find((x) => x.nazwa === nazwa);
   const wiersze = [...(f.dziennik || [])].reverse().map((w) => [
@@ -83,12 +83,12 @@ function ostrzezeniaHtml() {
     Może to być uczeń zalogowany na konto kolegi albo wspólny komputer w pracowni – sprawdź w dzienniku zapisów (link przy statusie decyzji).`);
 }
 
-// Z3: debet ponad limit – w tej rundzie blokada inwestycji i kredytów; mistrz gry może przysłać inwestora ratunkowego
+// debet ponad limit – w tej rundzie blokada inwestycji i kredytów; mistrz gry może przysłać inwestora ratunkowego
 function alarm(f, gra) {
   if (gra.zakonczona) return "";
   if (f.inwestor_przyslany) return ` <span class="chip ok" title="Wpłata na początku rundy ${gra.runda}">inwestor: ${zl(f.inwestor_przyslany)}</span>
     <a data-akcja="inwestor-odwolaj" data-f="${esc(f.nazwa)}">odwołaj</a>`;
-  // U12: po wykorzystaniu inwestora link znika – zostaje informacja, kiedy i ile wpłacił
+  // po wykorzystaniu inwestora link znika – zostaje informacja, kiedy i ile wpłacił
   const byl = f.inwestor ? ` <span class="chip" title="Bierze ${Math.round(f.inwestor.udzial * 100)}% dochodu do rundy ${f.inwestor.do_rundy}, dotąd wziął ${zl(f.inwestor.wyplacone)}">inwestor: runda ${f.inwestor.od_rundy}, ${zl(f.inwestor.kwota)}</span>` : "";
   if (!(f.alarm > 0)) return byl;
   const ratunek = f.inwestor ? "" : ` <a data-akcja="inwestor" data-f="${esc(f.nazwa)}">przyślij inwestora</a>`;
@@ -108,7 +108,7 @@ function przyslijInwestora(nazwa) {
     <button class="btn pom" data-akcja="inwestor-tak" data-f="${esc(nazwa)}">Przyślij inwestora</button>` });
 }
 
-// U17: refleksja drużyn przy wysyłaniu decyzji (opcja gry) – tabela od najnowszej rundy, obok dochodu tej rundy
+// refleksja drużyn przy wysyłaniu decyzji (opcja gry) – tabela od najnowszej rundy, obok dochodu tej rundy
 const TRYB_REFLEKSJI = { opcjonalna: "nieobowiązkowa", wymagana: "wymagana", wylaczona: "wyłączona" };
 function refleksje() {
   const { refleksje: R = [], historia } = S.p;
@@ -134,7 +134,7 @@ function decyzje() {
   const wiersze = firmy.map((f) => [`<b>${esc(f.nazwa)}</b>`, prowadzi(f),
     statusDecyzji(f, gra) + (f.dziennik?.length ? ` <a data-akcja="dziennik" data-f="${esc(f.nazwa)}" title="Kto i kiedy zapisywał decyzje">dziennik</a>` : ""),
     zl(f.gotowka) + alarm(f, gra),
-    wsk(f.wynik_skumulowany), f.miejsce ?? "–",   // U12: kto tonie w rankingu – bez przełączania na Wyniki
+    wsk(f.wynik_skumulowany), f.miejsce ?? "–",   // kto tonie w rankingu – bez przełączania na Wyniki
     `<a class="btn jasny maly" href="${strona(f)}" target="_blank" rel="noopener">Strona firmy</a>`]);
   const ustawienia = [["Kapitał startowy", zl(gra.kapital)], ["Ziarno losowości", esc(gra.ziarno)],
     ["Rozliczanie debetu", gra.tryb_debetu === "na_biezaco" ? "na bieżąco" : "na niedobór na koniec rundy"],
@@ -146,7 +146,7 @@ function decyzje() {
     // poprawki 2 (sprawa 6): headhunter – oferty dla pracowników innych drużyn i kontroferty
     ["Podkupywanie pracowników innych drużyn", `${gra.podkupywanie !== false ? "dozwolone" : "wyłączone"}${gra.zakonczona ? ""
       : ` <a data-akcja="podkupywanie">${gra.podkupywanie !== false ? "wyłącz" : "pozwól"}</a>`}`],
-    // UF21 – TYMCZASOWE, usunąć przed oficjalną wersją: włączanie i wyłączanie form zatrudnienia (umowa o pracę zawsze)
+    // TYMCZASOWE, usunąć przed oficjalną wersją: włączanie i wyłączanie form zatrudnienia (umowa o pracę zawsze)
     ...(gra.formy_wszystkie ? [["Formy zatrudnienia (test)", Object.entries(gra.formy_wszystkie).map(([u, n]) => {
       const wl = gra.formy_zatrudnienia.includes(u);
       return u === "prace" || gra.zakonczona ? `${esc(n)}${wl ? "" : " (wył.)"}`
@@ -306,7 +306,7 @@ function pokazHasla(konta, tytul) {
 }
 
 // --- Wyniki: ranking i wykresy -----------------------------------------------------------------------------------
-// N12: te same stałe kolory drużyn co w panelu gracza (kolor z rundy 1, inaczej paleta w kolejności firm)
+// te same stałe kolory drużyn co w panelu gracza (kolor z rundy 1, inaczej paleta w kolejności firm)
 const kolorMg = (firmy, n) => kolorFirmy({ gra: { firmy }, marki: Object.fromEntries(firmy.map((f) => [f.nazwa, { kolor: f.kolor }])) }, n);
 
 function wyniki() {
@@ -426,7 +426,7 @@ async function wykonaj(akcja, el) {
     toast(`${S.wnetrza.rodzaje[r]}: ${wl ? "wyłączone" : "włączone"}.`);
     return rysuj();
   }
-  if (akcja === "forma-zatrudnienia") {   // UF21 – TYMCZASOWE, usunąć przed oficjalną wersją
+  if (akcja === "forma-zatrudnienia") {   // TYMCZASOWE, usunąć przed oficjalną wersją
     const u = el.dataset.u, teraz = S.p.gra.formy_zatrudnienia;
     const nowe = teraz.includes(u) ? teraz.filter((x) => x !== u) : [...teraz, u];
     await api(`${URL_GRY}/prowadzenie`, "POST", { formy_zatrudnienia: nowe });

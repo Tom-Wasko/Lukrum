@@ -174,7 +174,7 @@ def test_marka_firmy_w_pierwszej_rundzie(client):
 
 
 def test_wlasne_zadania_druzyny_przechodza_na_kolejna_runde(client):
-    """UF22: lista zadań – własne zadania w decyzjach rundy, nieodhaczone przechodzą dalej, walidacja przy zapisie."""
+    """Lista zadań – własne zadania w decyzjach rundy, nieodhaczone przechodzą dalej, walidacja przy zapisie."""
     id_ = _nowa(client)
     zadania = [{"id": "a", "tekst": "  Sprawdzić   ceny konkurencji ", "zrobione": False},
                {"id": "b", "tekst": "Kupić grill", "zrobione": True}]

@@ -1,4 +1,4 @@
-// UF22: lista zadań po prawej stronie ekranu (wysuwana, zwijana do paska z licznikiem).
+// lista zadań po prawej stronie ekranu (wysuwana, zwijana do paska z licznikiem).
 // Zadania z sytuacji liczy przeglądarka z widoku i bieżących decyzji (odświeżane po każdym zapisie, razem z listą
 // błędów) – odhaczają się same, gdy warunek jest spełniony. Własne zadania drużyny są w decyzjach rundy
 // (`zadania_wlasne`: [{id, tekst, zrobione}]) – nieodhaczone przechodzą na kolejną rundę (api/prezentacja.py).
@@ -54,7 +54,7 @@ export function zadaniaAutomatyczne(v, d, kat, tytul = (k) => k) {
     const cel = DOKAD[z] || z;
     lista.push({ id: `bl-${z}`, tekst: `Popraw: ${tytul(cel)}`, gotowe: false, cel, opis: teksty.join(" "), zBledow: true });
   }
-  // sprawy w parkach i w lokalu (UF13): zadanie – wybrać reakcję (inaczej liczy się reakcja domyślna)
+  // sprawy w parkach i w lokalu: zadanie – wybrać reakcję (inaczej liczy się reakcja domyślna)
   const Z = v.zdarzenia, wybory = d.zdarzenia || {};
   if (Z && v.runda >= Z.od_rundy) {
     const parki = {};   // sprawy pogrupowane po parkach
@@ -123,7 +123,7 @@ export function panelZadan(v, d, kat, { edycja = false, tytul } = {}) {
 }
 
 // --- panel w dokumencie --------------------------------------------------------------------------
-// UF25/UF26: lista domyślnie zwinięta (na każdym wejściu), wysuwa się i chowa z animacją (styl.css: .zad-panel);
+// lista domyślnie zwinięta (na każdym wejściu), wysuwa się i chowa z animacją (styl.css: .zad-panel);
 // klik poza nią albo Esc – zwija. Przerysowanie nie zmienia klasy, więc animuje się tylko przełączenie.
 let wysuniete = false;
 function przelacz(tak) {
@@ -181,7 +181,7 @@ export function podepnijZadania(c) {
     if (e.key === "Enter" && e.target.id === "zad-nowe") { e.preventDefault(); dodaj(c()); }
     if (e.key === "Escape" && wysuniete) przelacz(false);
   });
-  // UF26: klik obok listy ją zwija (faza przechwytywania – zanim klik przerysuje panel i odepnie cel od dokumentu)
+  // klik obok listy ją zwija (faza przechwytywania – zanim klik przerysuje panel i odepnie cel od dokumentu)
   document.addEventListener("click", (e) => {
     if (wysuniete && e.target.isConnected && !e.target.closest("#zadania, .dymek, .zaslona")) przelacz(false);
   }, true);

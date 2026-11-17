@@ -1,4 +1,4 @@
-"""Urząd i sanepid (F3b.6): odbiór lokalu, higiena (koszt i wpływ na kontrole), skargi z historii, boty, widok API."""
+"""Urząd i sanepid: odbiór lokalu, higiena (koszt i wpływ na kontrole), skargi z historii, boty, widok API."""
 
 import copy
 

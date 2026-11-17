@@ -4,12 +4,12 @@ opis: >-
   (klucz `wszystkie` – każda strefa bez własnego mnożnika). Daty stałe jako 'MM-DD' (zakres może przechodzić przez
   Nowy Rok); daty ruchome – `wzgledem` (klucz z `ruchome`) i przesunięcie w dniach `od`/`do`.
 zrodlo: >-
-  Notatki „Prawidła świata” (kalendarz miejski: święta, sesja i wakacje studentów, wydarzenia w mieście – zmieniają
+  Ustalenia autora o prawidłach świata (kalendarz miejski: święta, sesja i wakacje studentów, wydarzenia w mieście – zmieniają
   popyt w strefach) i „Menu i składniki” (popyt zależny od kalendarza miejskiego). Mnożniki, daty ferii i wydarzeń
-  miejskich – założenia gry (do potwierdzenia); wcześniej kalendarz był w mapa/popyt.yaml (F3a.4). Mecze Motoru
+  miejskich – założenia gry (do potwierdzenia); wcześniej kalendarz był w mapa/popyt.yaml. Mecze Motoru
   Lublin – prawdziwe domowe mecze Ekstraklasy jesienią 2025 (Wikipedia: „Motor Lublin (piłka nożna) w sezonie
-  2025/2026”), domowe mecze wiosną 2026 – ta sama strona; daty finałów WOŚP – prawdziwe (Z6); `dania` – mnożnik
-  popytu na danie w strefach wydarzenia (P14, „na oko”).
+  2025/2026”), domowe mecze wiosną 2026 – ta sama strona; daty finałów WOŚP – prawdziwe; `dania` – mnożnik
+  popytu na danie w strefach wydarzenia („na oko”).
 rodzaje:
   swieto: Święto
   uczelnie: Uczelnie

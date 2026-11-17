@@ -1,4 +1,4 @@
-// Funkcje gry w panelu drużyny (seria „funkcje”, raporty/funkcje/plan.md: decyzje 3, 4, 7). Dane: v.funkcje
+// Funkcje gry w panelu drużyny (seria „funkcje”). Dane: v.funkcje
 // (api/prezentacja.py: funkcje_widok). Zakryta funkcja – szara pozycja menu z okiem; kliknięcie otwiera okno
 // z opisem i przyciskiem „Odsłoń” (zakładka nie otwiera się bez odsłonięcia). Wyłączona – bez pozycji w menu,
 // linków, „Popraw” z listy błędów i budynków mapy. Gra bez funkcji (v.funkcje puste) – wszystko jak dawniej.
@@ -28,7 +28,7 @@ export const funkcjeZakladek = (v, lista) => [...new Set(lista.map((k) => funkcj
 /** Czy mistrz gry coś zakrył (menu ⚙ → Funkcje gry, notka w podglądzie mistrza gry). */
 export const saZakryte = (v) => Object.values(v?.funkcje || {}).some((f) => f.stan === "zakryta");
 
-/** Znaczek szarej pozycji (J9): liczba, gdy tekst zaczyna się od liczby, inaczej kropka; tekst – w dymku. */
+/** Znaczek szarej pozycji : liczba, gdy tekst zaczyna się od liczby, inaczej kropka; tekst – w dymku. */
 export function znaczekFunkcji(v, klucze) {
   const teksty = klucze.map((k) => v.funkcje?.[k]).filter(zakrytaFunkcja).map((f) => f.znaczek).filter(Boolean);
   if (!teksty.length) return "";
@@ -66,7 +66,7 @@ export function oknoFunkcji(v, klucze, cel, { mg = false } = {}) {
 export function oknoUstawienFunkcji(v, { mg = false } = {}) {
   const wpisy = Object.entries(v.funkcje || {});
   const wiersz = ([k, f]) => {
-    // K2: znów zakryć nie zawsze można (np. Harpagon z niespłaconą pożyczką) – przycisk nieaktywny z wyjaśnieniem
+    // znów zakryć nie zawsze można (np. Harpagon z niespłaconą pożyczką) – przycisk nieaktywny z wyjaśnieniem
     const odsl = f.odslonieta, blokada = odsl && f.zakrycie_zablokowane;
     const przel = (wartosc, napis) => `<button class="${odsl === wartosc ? "aktywny" : ""}"
       data-akcja="funkcja-przelacz" data-f="${esc(k)}" data-o="${wartosc ? 1 : 0}" aria-pressed="${odsl === wartosc}"${mg || (blokada && !wartosc) ? " disabled" : ""}${blokada && !wartosc ? ` title="${esc(blokada)}"` : ""}>${napis}</button>`;
@@ -83,7 +83,7 @@ export function oknoUstawienFunkcji(v, { mg = false } = {}) {
     ${mg ? `<p class="podpowiedz zostaw">Podgląd mistrza gry – przełączać może tylko drużyna.</p>` : ""}`;
 }
 
-/** K1: ostrzeżenie przed ponownym zakryciem odsłoniętej funkcji `k` – co przepada (funkcje.yaml: zakrycie), pieniądze
+/** Ostrzeżenie przed ponownym zakryciem odsłoniętej funkcji `k` – co przepada (funkcje.yaml: zakrycie), pieniądze
  * nie wracają; „Zakryj” zakrywa, „Anuluj” wraca do ⚙ → Funkcje gry. Zwraca [tytuł, html, przyciski]. */
 export function oknoZakryciaFunkcji(v, k) {
   const f = v.funkcje?.[k] || {};

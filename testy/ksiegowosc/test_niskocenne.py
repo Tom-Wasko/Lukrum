@@ -1,4 +1,4 @@
-"""B6 (decyzja autora 7.11.2026): wybór, czy zakupy poniżej progu amortyzacji idą od razu w koszty, czy do ewidencji
+"""Decyzja autora 7.11.2026): wybór, czy zakupy poniżej progu amortyzacji idą od razu w koszty, czy do ewidencji
 środków trwałych z amortyzacją `finanse.amortyzacja_niskocenna.stawka`."""
 
 import copy
@@ -92,7 +92,7 @@ def test_wybor_w_grze_zakupy_rundy_bez_kosztu_a_odpisy_od_nastepnej():
     # w kosztach rundy zakupu było co najmniej tyle (stanowiska w koszty – brutto: bez reguły VAT w podatki_2026)
     assert wa["kpir"]["dochod_netto"] - wz["kpir"]["dochod_netto"] >= w_ewidencji - 1
     assert [b for b in wz["lista_bledow"] if "od razu idą w koszty" in b["tekst"]]
-    assert not [b for b in wa["lista_bledow"] if "od razu idą w koszty" in b["tekst"]]   # U1 bez ostrzeżenia
+    assert not [b for b in wa["lista_bledow"] if "od razu idą w koszty" in b["tekst"]]   # bez ostrzeżenia
     odpisy = {p["opis"] for p in sa.wyniki[2]["H"]["kpir"]["pozycje"] if p["opis"].startswith("Amortyzacja: ")}
     assert {f"Amortyzacja: {e['nazwa']}" for e in wa["srodki_trwale"]} <= odpisy
     assert not [p for p in sz.wyniki[2]["H"]["kpir"]["pozycje"] if p["opis"].startswith("Amortyzacja: ")]

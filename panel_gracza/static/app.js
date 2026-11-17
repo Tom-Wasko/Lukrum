@@ -12,7 +12,7 @@ import { funkcjaZakladki, funkcjeZakladek, oknoFunkcji, oknoUstawienFunkcji, okn
 import { aktualneMiejsce, idzDoMiejsca, okruszek, otworzBudynek, ustawMiejsce } from "./swiat/swiat.js";
 import { ustawWybrany } from "./zakladki/lokal_wybor.js";
 
-const start = () => "dashboard";   // N2 (poprawki 3): ekran startowy – plan rundy (pulpit); mapa jest w menu
+const start = () => "dashboard";   // ekran startowy – plan rundy (pulpit); mapa jest w menu
 const S = { v: null, kat: null, zakladka: null, tryb: "decyzje", runda: null, d: {}, zapis: Promise.resolve(),
   nrZapytania: 0, oczekujace: 0, poleZmiany: null, odliczanie: null, zadania: 0 };
 
@@ -94,7 +94,7 @@ async function zmien(fn, lokalnie = null) {
     try {
       // wersja: ktoś z drużyny zapisał w międzyczasie → 409 i wczytanie jego decyzji (bez nadpisania)
       const wersja = S.v.druzyna?.autorzy?.wersja ?? "";
-      const zakladka = encodeURIComponent(ZAKLADKI[S.zakladka]?.tytul || S.zakladka || "");   // U18: dziennik zapisów (MG)
+      const zakladka = encodeURIComponent(ZAKLADKI[S.zakladka]?.tytul || S.zakladka || "");   // dziennik zapisów (MG)
       const v = await api(`/api/gry/${GRA}/decyzje/${encodeURIComponent(FIRMA)}?wersja=${wersja}&zakladka=${zakladka}`,
         { method: "PUT", body: JSON.stringify(S.d) });
       // w kolejce czeka nowsza zmiana: szkic S.d już ją ma (ustaw by ją skasował) – tylko nowa wersja do zapisu
@@ -113,7 +113,7 @@ const najwczesniej = (lista) => lista.reduce((m, r) => (r && (!m || r < m) ? r :
 const odRundy = (k) => odRundy1(k) ?? (ZAKLADKI[k]?.czesci ? najwczesniej(ZAKLADKI[k].czesci.map(odRundy1)) : null);
 function dostepna(z) { return !z.odblokowanie || (typeof z.odblokowanie === "function" ? z.odblokowanie(S.v) : odbl(z.odblokowanie)); }
 const maWyniki = (z) => !!(z && z.wyniki && S.v.wyniki && (!z.wynikiOd || S.v.runda >= z.wynikiOd) && (!z.wynikiGdy || z.wynikiGdy(S.v)));
-// dawne zakładki (oferta, dostawcy, …) są częściami zakładek złożonych (UF15) – link prowadzi do zakładki i jej części
+// dawne zakładki (oferta, dostawcy, …) są częściami zakładek złożonych – link prowadzi do zakładki i jej części
 const docelowa = (k) => (ALIAS[k] && ZAKLADKI[ALIAS[k]] ? ALIAS[k] : k);
 function pokazCzesc(k) {
   if (!ALIAS[k]) return;
@@ -122,7 +122,7 @@ function pokazCzesc(k) {
 }
 const kluczZakladki = (z) => Object.keys(ZAKLADKI).find((k) => ZAKLADKI[k] === z);
 
-// --- funkcje gry (raporty/funkcje/plan.md): zakryta – okno „Odsłoń” zamiast zakładki, wyłączona – Pulpit -------------
+// --- funkcje gry : zakryta – okno „Odsłoń” zamiast zakładki, wyłączona – Pulpit -------------
 function pokazOknoFunkcji(klucze, cel) {
   const [tytul, html, przyciski] = oknoFunkcji(S.v, klucze, cel, { mg: !!S.v.tylko_odczyt });
   okno(tytul, html, { male: klucze.length === 1, srednie: klucze.length > 1, przyciski });
@@ -223,7 +223,7 @@ function rysujMenu() {
     const cel = poz.pod ? poz.pod.find(otwarta) || poz.pod.find((k) => !zakrytaF(S.v, k)) || poz.pod[0] : poz.klucz;
     const znaczek = poz.klucz === "lista_bledow" && czerwone && S.v.edycja ? `<span class="znaczek">${czerwone}</span>`
       : znaczekFunkcji(S.v, funkcje);
-    // UF22: obok Listy błędów – przycisk panelu zadań (z liczbą otwartych zadań)
+    // obok Listy błędów – przycisk panelu zadań (z liczbą otwartych zadań)
     const zadania = poz.klucz === "lista_bledow" ? `<div class="poz"><a data-akcja="zadania-przelacz" title="Lista zadań – panel po prawej">
       ${ikona("ok")}Zadania${S.zadania ? `<span class="znaczek zad">${S.zadania}</span>` : ""}</a></div>` : "";
     // „od rundy N” także przy zakrytej, a jeszcze nieodblokowanej funkcji (oko zamiast kłódki)
@@ -257,7 +257,7 @@ function chipDruzyny(v) {
   return `<span class="chip" title="Drużyna: ${esc(sklad.map((o) => o.nazwa).join(", "))}">${ikona("osoba", 14)}${esc(imiona.join(", "))}</span>`;
 }
 
-// Po końcu gry ostatni element osi to podsumowanie: wyniki ostatniej rundy i końcowe miejsce (Z7).
+// Po końcu gry ostatni element osi to podsumowanie: wyniki ostatniej rundy i końcowe miejsce.
 const koniecGry = (v, r) => v.gra.zakonczona && r > v.gra.liczba_rund;
 const napisRundy = (v, r) => koniecGry(v, r) ? `Koniec gry (<b>podsumowanie</b>)`
   : `<b>${esc(nazwaRundy(r))}</b>${r === v.gra.runda && !v.gra.zakonczona ? "" : " · podgląd"}`;
@@ -314,7 +314,7 @@ function rysuj() {
   const fokus = kluczPola(document.activeElement);
   const przewiniecie = window.scrollY;
   wyczyscWykresy();
-  S.zadania = rysujZadania(ctx());   // UF22: przeliczane po każdej zmianie decyzji, jak lista błędów
+  S.zadania = rysujZadania(ctx());   // przeliczane po każdej zmianie decyzji, jak lista błędów
   rysujMenu();
   const v = S.v, z = ZAKLADKI[S.zakladka];
   const grupa = S.zakladka === "miejsce" ? MENU.find((p) => p.miejsce === aktualneMiejsce())
@@ -357,7 +357,7 @@ function rysuj() {
   if (z.po) z.po(c, tryb);
   const pole = znajdzPole(fokus);
   if (pole) pole.focus({ preventScroll: true });
-  window.scrollTo({ top: przewiniecie, behavior: "instant" });   // P4: bez płynnego przewijania (html: scroll-behavior: smooth)
+  window.scrollTo({ top: przewiniecie, behavior: "instant" });   // bez płynnego przewijania (html: scroll-behavior: smooth)
 }
 
 // strzałki rund: natychmiastowa zmiana napisu, wczytanie po krótkiej pauzie (można klikać szybko)
@@ -412,7 +412,7 @@ document.addEventListener("click", async (e) => {
     if (a === "tryb") { S.tryb = el.dataset.t; return rysuj(); }
     if (a === "funkcje-gry") { e.preventDefault(); zamknijUstawienia(); return oknoUstawien(); }
     if (a === "funkcja-odslon") return await przelaczFunkcje(el.dataset.f, true, el.dataset.cel);
-    if (a === "funkcja-przelacz") {   // K1: ponowne zakrycie – najpierw ostrzeżenie, co przepada
+    if (a === "funkcja-przelacz") {   // ponowne zakrycie – najpierw ostrzeżenie, co przepada
       if (el.dataset.o !== "1" && S.v.funkcje?.[el.dataset.f]?.odslonieta) {
         const [t, h, p] = oknoZakryciaFunkcji(S.v, el.dataset.f);
         return okno(t, h, { male: true, przyciski: p });
@@ -438,7 +438,7 @@ document.addEventListener("change", async (e) => {
   } catch (err) { toast(err.message); console.error(err); }
 });
 
-// Enter w polu = zatwierdzenie bez wychodzenia z pola (kursor i przewinięcie zostają). P4: przeglądarka sama zgłasza
+// Enter w polu = zatwierdzenie bez wychodzenia z pola (kursor i przewinięcie zostają). Przeglądarka sama zgłasza
 // change po Enter – tu tylko zapas, gdy tego nie zrobiła (wcześniej zapis szedł dwa razy); także w oknach (Baza składników)
 document.addEventListener("keydown", (e) => {
   const el = e.target;
@@ -491,7 +491,7 @@ document.addEventListener("keydown", (e) => {
 
 // zmiana motywu: wykresy biorą kolory z motywu, więc widok rysujemy od nowa
 document.addEventListener("motyw", () => { if (S.v) rysuj(); });
-// UF23: zwijane szczegóły wyników (wspolne.js: zwin) – pamiętaj, co gracz rozwinął albo zwinął (toggle nie bąbelkuje)
+// zwijane szczegóły wyników (wspolne.js: zwin) – pamiętaj, co gracz rozwinął albo zwinął (toggle nie bąbelkuje)
 document.addEventListener("toggle", (e) => zapamietajZwiniecie(e.target), true);
 
 window.addEventListener("hashchange", () => {
@@ -545,7 +545,7 @@ async function sprawdzZmiany() {
   if ((st.wersja !== wersja || wyslaneTeraz !== wyslanePrzed) && !pisze) {
     if (st.wersja !== wersja && st.zapisal && st.zapisal.login !== KONTO) toast(`${st.zapisal.nazwa} zmienia decyzje drużyny – widok odświeżony.`);
     await S.zapis;
-    // P4: to był własny zapis, który właśnie wrócił z serwera – widok jest aktualny, bez przeładowania karty
+    // to był własny zapis, który właśnie wrócił z serwera – widok jest aktualny, bez przeładowania karty
     if ((S.v.druzyna?.autorzy?.wersja ?? 0) === st.wersja && S.v.gra.wyslane.join("|") === wyslaneTeraz) return;
     return wczytaj();
   }

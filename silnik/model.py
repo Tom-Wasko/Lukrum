@@ -55,14 +55,14 @@ class Model(BaseModel):
 
 
 class Odejscie(Model):
-    """Pracownik przyjął ofertę innej firmy (F3a.8) albo został zwolniony (P6, `do` puste): odchodzi w rundzie `runda`
+    """Pracownik przyjął ofertę innej firmy albo został zwolniony (`do` puste): odchodzi w rundzie `runda`
     (po okresie wypowiedzenia) – do nowej firmy albo z powrotem do puli kandydatów."""
     do: str
     runda: int
     pensja_gr: int
     umowa: str = "prace"
     od_rundy: int                 # runda przyjęcia oferty
-    powod: str = ""               # "niezadowolenie" – wypowiedzenie złożone przez osobę (U20)
+    powod: str = ""               # "niezadowolenie" – wypowiedzenie złożone przez osobę
 
     pensja = _kwota("pensja")
 
@@ -77,18 +77,18 @@ class Pracownik(Model):
     zadowolenie_klientow: float
     ryzyko_pomylki: float
     pensja_gr: int = 0
-    umowa: str = "prace"          # forma zatrudnienia (UF21, silnik/ludzie/formy.py): "prace", "zlecenie", "pol_etatu", …
-    student: bool = False         # UF21: student do 26 lat – bez PIT, mniej godzin, częściej odchodzi
+    umowa: str = "prace"          # forma zatrudnienia (silnik/ludzie/formy.py): "prace", "zlecenie", "pol_etatu", …
+    student: bool = False         # student do 26 lat – bez PIT, mniej godzin, częściej odchodzi
     od_rundy: int = 0
     stanowisko: int = 0           # numer stanowiska (od 1) w grupie: kucharz albo kasa
     premia_gr: int = 0            # premia w bieżącej rundzie
     odchodzi: Odejscie | None = None   # gra z lokalami: okres wypowiedzenia po przyjęciu oferty innej firmy
-    cecha: str = ""               # U20: ukryta cecha (dane/kandydaci.yaml: cechy) – nie trafia do panelu gracza
-    opis: str = ""                # U20: żartobliwy opis, z którego gracz zgaduje cechę
-    wydajnosc: float = 1.0        # U20: mnożnik godzin pracy z cechy (ukryty)
-    zadowolenie: float | None = None   # U20: zadowolenie osoby po ostatniej rundzie
-    niezadowolony: int = 0        # U20: tygodnie z rzędu poniżej progu zadowolenia
-    wykorzystanie: float = 0.0    # U20: wykorzystanie godzin w ostatniej rundzie (do ostrzeżeń)
+    cecha: str = ""               # ukryta cecha (dane/kandydaci.yaml: cechy) – nie trafia do panelu gracza
+    opis: str = ""                # żartobliwy opis, z którego gracz zgaduje cechę
+    wydajnosc: float = 1.0        # mnożnik godzin pracy z cechy (ukryty)
+    zadowolenie: float | None = None   # zadowolenie osoby po ostatniej rundzie
+    niezadowolony: int = 0        # tygodnie z rzędu poniżej progu zadowolenia
+    wykorzystanie: float = 0.0    # wykorzystanie godzin w ostatniej rundzie (do ostrzeżeń)
     tygodnie_jak_etat: int = 0    # tygodnie z rzędu, gdy zleceniobiorca pracuje w pełnym wymiarze (kontrola PIP)
 
     pensja_preferowana = _kwota("pensja_preferowana")
@@ -101,7 +101,7 @@ WLASCICIEL = "wlasciciel"   # id właściciela na stanowisku (nie ma go w Firma.
 
 
 class WlascicielNaStanowisku(Model):
-    """Właściciel sam staje na wolnym stanowisku w tej rundzie (P5): pracownik 1★ bez pensji, godziny z puli
+    """Właściciel sam staje na wolnym stanowisku w tej rundzie : pracownik 1★ bez pensji, godziny z puli
     czasu właściciela (silnik/ludzie/czas_wlasciciela.py)."""
     typ: str
     nr: int
@@ -164,7 +164,7 @@ class Lokal(Model):
     najem_do: int | None = None   # po wypowiedzeniu: ostatnia runda najmu
     ulepszenia: str | None = None # rozliczenie nakładów po wypowiedzeniu: "zatrzymaj" | "przywroc" (KC art. 676)
     naklady_gr: int = 0           # nakłady najemcy na lokal (adaptacja, stanowiska) – do rozliczenia ulepszeń
-    # Z2 (przebudowa 2.11.2026): menu, ceny, wyposażenie i udogodnienia osobno w każdym lokalu
+    # Przebudowa 2.11.2026: menu, ceny, wyposażenie i udogodnienia osobno w każdym lokalu
     # (silnik/nieruchomosci/per_lokal.py); None – jeszcze nie ustalone (stary zapis), wtedy jak w całej firmie
     menu: dict[str, int] | None = None          # usługa → prognoza popytu w lokalu
     ceny: dict[str, Cena] | None = None         # usługa → cena i rabat w lokalu
@@ -174,7 +174,7 @@ class Lokal(Model):
     # brak grupy w `dekor` – styl podstawowy (stare zapisy wczytują się z pustymi słownikami)
     dekor_kupiony: dict[str, list[str]] = Field(default_factory=dict)
     dekor: dict[str, str] = Field(default_factory=dict)
-    # U24: opinie klientów (silnik/rynek/opinie.py) – ocena 1–5 (średnia krocząca), liczba wszystkich opinii,
+    # opinie klientów (silnik/rynek/opinie.py) – ocena 1–5 (średnia krocząca), liczba wszystkich opinii,
     # waga opinii w średniej (po zaniku) i ostatnie komentarze {tekst, gwiazdki, podpis, powod}
     ocena: float | None = None
     opinie: int = 0
@@ -208,8 +208,8 @@ class Partia(Model):
     dostawca: str = ""
     runda: int = 0                # runda zakupu
     wynajem: bool = False         # w wynajętej chłodni (nie zmieściło się we własnej) – nie zajmuje własnego miejsca
-    lokal: str | None = None      # Z2: lokal, w którym leży partia (None – stary zapis: pierwszy lokal firmy)
-    u_dostawcy: bool = False      # Z4: leży u auto-dostawcy (silnik/kuchnia/auto_dostawca.py) – dowożona w miarę zużycia,
+    lokal: str | None = None      # lokal, w którym leży partia (None – stary zapis: pierwszy lokal firmy)
+    u_dostawcy: bool = False      # leży u auto-dostawcy (silnik/kuchnia/auto_dostawca.py) – dowożona w miarę zużycia,
                                   # nie zajmuje miejsca w lokalu
 
     @property
@@ -285,7 +285,7 @@ class PozyczkaHarpagona(Model):
 
 
 class Inwestor(Model):
-    """Inwestor ratunkowy od mistrza gry (Z3, silnik/pieniadze/inwestor.py) – wpłata poza KPiR za udział w dochodach."""
+    """Inwestor ratunkowy od mistrza gry (silnik/pieniadze/inwestor.py) – wpłata poza KPiR za udział w dochodach."""
     kwota_gr: int
     od_rundy: int
     do_rundy: int                     # ostatnia runda udziału w dochodzie netto
@@ -339,7 +339,7 @@ class OtwartaHistoria(Model):
 
 
 class Szkolenie(Model):
-    """Kupione szkolenie, które działa kilka rund (kalibracja B9, silnik/ludzie/szkolenia.py)."""
+    """Kupione szkolenie, które działa kilka rund (silnik/ludzie/szkolenia.py)."""
     szkolenie: str
     firma: str
     procent: float
@@ -359,15 +359,15 @@ class Efekt(Model):
 
 class Kampania(Model):
     """Kampania agencji reklamowej (silnik/rynek/reklama.py): emisje w rundzie od_rundy (= do_rundy), potem wygasa.
-    Zapisy sprzed Z5: kampania na kilka rund (do_rundy > od_rundy), bez emisji – pełny efekt."""
+    Zapisy sprzed kampania na kilka rund (do_rundy > od_rundy), bez emisji – pełny efekt."""
     agencja: str
     kanal: str
     strefa: str | None            # None – zasięg „miasto”
     od_rundy: int
     do_rundy: int
     koszt: float                  # netto
-    sila: float = 1.0             # zapisy sprzed Z5: osłabienie powtórki; od Z5 – nasycenie emisjami
-    emisje: int | None = None     # Z5: liczba emisji w rundzie (None – zapis sprzed Z5)
+    sila: float = 1.0             # zapisy sprzed nasycenia emisjami: osłabienie powtórki; teraz – nasycenie emisjami
+    emisje: int | None = None     # liczba emisji w rundzie (None – zapis sprzed nasycenia emisjami)
 
 
 class Promocja(Model):
@@ -379,7 +379,7 @@ class Promocja(Model):
 
 
 class PamiecPromocji(Model):
-    """B7: klienci pamiętają zakończoną promocję (silnik/rynek/promocje.py) – przyciąganie `sila` w rundzie od_rundy
+    """Klienci pamiętają zakończoną promocję (silnik/rynek/promocje.py) – przyciąganie `sila` w rundzie od_rundy
     (pierwszej po promocji), potem co rundę mniej (mapa/promocje.yaml: pamiec)."""
     typ: str
     danie: str | None = None
@@ -421,9 +421,9 @@ class Firma(Model):
     inwestor: Inwestor | None = None   # inwestor ratunkowy (silnik/pieniadze/inwestor.py)
     historie: list[OtwartaHistoria] = Field(default_factory=list)   # eventy w parkach: ciągi dalsze
     efekty: list[Efekt] = Field(default_factory=list)
-    szkolenia: list[Szkolenie] = Field(default_factory=list)   # kalibracja B9: szkolenia działające kilka rund
-    falafel_runda: int | None = None   # UF8: ostatnia runda z falafelem w ofercie (silnik/swiat/falafel.py)
-    bojka_falafel: int | None = None   # UF8: runda bójki o falafel – najwyżej raz na grę
+    szkolenia: list[Szkolenie] = Field(default_factory=list)   # szkolenia działające kilka rund
+    falafel_runda: int | None = None   # ostatnia runda z falafelem w ofercie (silnik/swiat/falafel.py)
+    bojka_falafel: int | None = None   # runda bójki o falafel – najwyżej raz na grę
     wypadki: dict[str, int] = Field(default_factory=dict)   # wypadki w lokalu (silnik/swiat/awarie.py): id → runda początku
     polisy: dict[str, int] = Field(default_factory=dict)    # polisy ubezpieczyciela: rodzaj → runda początku ochrony
     higiena: str | None = None    # poziom higieny lokali (silnik/ksiegowosc/urzad.py); None – domyślny z danych
@@ -434,14 +434,14 @@ class Firma(Model):
     wlasciciel_na: WlascicielNaStanowisku | None = None   # tylko w trakcie rundy (silnik/decyzje.py)
     kampanie: list[Kampania] = Field(default_factory=list)          # agencje reklamowe (gra z lokalami)
     promocje: list[Promocja] = Field(default_factory=list)          # promocje z listy (gra z lokalami)
-    pamiec_promocji: list[PamiecPromocji] = Field(default_factory=list)   # B7: zakończone promocje w pamięci klientów
+    pamiec_promocji: list[PamiecPromocji] = Field(default_factory=list)   # zakończone promocje w pamięci klientów
     rozliczenie: RozliczenieJDG = Field(default_factory=RozliczenieJDG)   # JDG – gra z lokalami
-    amortyzacja_niskocenna: str = "koszty"   # B6: zakupy poniżej progu – "koszty" (od razu) albo "amortyzacja" (ewidencja)
+    amortyzacja_niskocenna: str = "koszty"   # zakupy poniżej progu – "koszty" (od razu) albo "amortyzacja" (ewidencja)
     deklaracja: dict | None = None    # samodzielna księgowość: dokumenty i poprawne kwoty rundy (silnik/ksiegowosc/biuro.py)
     debet_gr: int = 0                 # saldo poniżej zera na koniec tygodnia (silnik/pieniadze/banki.py)
     debet_wlaczony: bool = False      # zgoda na debet w banku konta – włączana decyzją `debet`
     majatek_gr: int = 0               # suma inwestycji (sprzęt, stanowiska, udogodnienia, wyposażenie) – rozwój firmy
-    umorzenie_majatku_gr: int = 0     # amortyzacja tej sumy (karta po amortyzacji, Z1)
+    umorzenie_majatku_gr: int = 0     # amortyzacja tej sumy (karta po amortyzacji)
     skumulowany_dochod_netto_gr: int = 0
     baza_klientow: float = 1.0        # trwała utrata klientów po utraconej sprzedaży (mnożnik popytu firmy)
     licznik: int = 0                  # do numerowania lokat i kredytów
@@ -479,7 +479,7 @@ class Firma(Model):
 
     def godziny_stanowiska(self, s: Stanowisko, godziny_pracownika: float, dane: Any = None) -> float:
         """Godziny pracy na stanowisku w rundzie: etat pracownika albo godziny właściciela (0 – nieobsadzone).
-        `dane` – mnożnik godzin formy zatrudnienia i studenta (UF21, silnik/ludzie/formy.py: etat)."""
+        `dane` – mnożnik godzin formy zatrudnienia i studenta (silnik/ludzie/formy.py: etat)."""
         if s.pracownik:
             p = self.pracownicy.get(s.pracownik)
             if not p:
@@ -487,7 +487,7 @@ class Firma(Model):
             if dane is None:
                 return godziny_pracownika * p.wydajnosc
             from .ludzie.formy import etat
-            from .ludzie.zadowolenie import tempo  # kalibracja B10: zadowolenie zmienia tempo pracy
+            from .ludzie.zadowolenie import tempo  # zadowolenie zmienia tempo pracy
             return godziny_pracownika * p.wydajnosc * etat(dane, p) * tempo(dane, p)
         w = self.wlasciciel_na
         return min(godziny_pracownika, w.godziny) if w and (w.typ, w.nr) == (s.typ, s.nr) else 0.0

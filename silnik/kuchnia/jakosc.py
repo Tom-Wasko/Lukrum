@@ -24,7 +24,7 @@ def mnoznik_jakosci(dane: Dane, pracownicy: float, sprzet: float, zasoby: float,
 
 
 def mnoznik_wyposazenia(dane: Dane, wyposazenie: list[str]) -> float:
-    """1 + κ · x, x = Σ % klientów oczekujących wyposażenia / 100; z `wyposazenie_nasycenie` S (B10) przyrost nasyca się:
+    """1 + κ · x, x = Σ % klientów oczekujących wyposażenia / 100; z `wyposazenie_nasycenie` S przyrost nasyca się:
     1 + κ · S · (1 − e^(−x / S)) – pierwsza sztuka działa jak dawniej, każda kolejna słabiej."""
     p, pozycje = dane.z["popyt"], dane.pozycje("wyposazenie")
     x = sum(pozycje[n]["procent"] / 100 for n in wyposazenie)

@@ -1,4 +1,4 @@
-// Kółka „i” z dymkiem (przebudowa zakładek 2.11.2026, archiwum/plany/przebudowa_zakladek.md): na stronie zostają nagłówki,
+// Kółka „i” z dymkiem (przebudowa zakładek 2.11.2026): na stronie zostają nagłówki,
 // tabele, pola i krótkie etykiety, a opisy i objaśnienia pokazują się w dymku po najechaniu (albo dotknięciu) kółka.
 
 // kółko z treścią dymka (HTML: tekst i/lub infografika SVG)
@@ -9,7 +9,7 @@ export const kolko = (html, klasa = "") => html
 const DLUGA = 60;   // znaków – krótsza podpowiedź zostaje na stronie jako etykieta
 const NAGLOWEK = ".pasek, .tabela-tytul, h3, h4, .kg";
 
-// N10 (poprawki 3): kółko nie może wisieć w osobnym, pustym wierszu – dokleja się do najbliższego wcześniejszego nagłówka,
+// kółko nie może wisieć w osobnym, pustym wierszu – dokleja się do najbliższego wcześniejszego nagłówka,
 // etykiety albo tytułu (do 3 elementów wstecz w tym samym kontenerze); gdy go nie ma, zostaje w linii z poprzedzającym akapitem
 const ETYKIETA = "h2, h3, h4, label:not(.pole), legend, .pasek, .tabela-tytul, .sekcja-tytul, .czesc-tytul, .zd-parki-tytul, .zd-czas-tekst, .etykieta, .kg";
 const W_LINII = "p, .komunikat, .kafelki-lokali";

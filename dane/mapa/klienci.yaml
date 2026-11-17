@@ -1,6 +1,6 @@
-# Klienci miasta (U24): grupy klientów z koszykiem i opinie o lokalach
+# Klienci miasta: grupy klientów z koszykiem i opinie o lokalach
 # Sprawdzenie: python -m silnik.dane sprawdz
-opis: 'U24 (decyzja autora 4.11.2026). Grupy klientów (silnik/rynek/klienci.py): klienci strefy to mieszanka grup
+opis: 'Decyzja autora 4.11.2026. Grupy klientów (silnik/rynek/klienci.py): klienci strefy to mieszanka grup
   (strefy – udziały, suma 1); goście wydarzeń to nadwyżka klientów z kalendarza miejskiego. Grupa ma wrażliwość
   na cenę (cena: mnożnik wrażliwości strefy, w strefie uśredniony do 1), wrażliwość na czekanie i wagę jakości
   (w ocenie lokalu), udział wegetarian i koszyk (ile chętniej niż przeciętnie bierze danie). Wegetarianie grupy
@@ -17,14 +17,14 @@ opis: 'U24 (decyzja autora 4.11.2026). Grupy klientów (silnik/rynek/klienci.py)
   brak dań, reklamacje, wyposażenie), opinie – ułamek klientów; ocena lokalu = średnia krocząca (zanik wagi
   starych opinii); mnożnik popytu = 1 + zaufanie × ((ocena / odniesienie)^wykladnik − 1), zaufanie = W / (W + n0).
   Komentarze – szablony do powodów (losowane strumieniem „opinie”).'
-zrodlo: 'założenia U24 (pewność: założenie, do kalibracji): grupy i udziały – wg opisów klientów stref (strefy.yaml)
+zrodlo: 'założenia autora (pewność: założenie, do kalibracji): grupy i udziały – wg opisów klientów stref (strefy.yaml)
   i notatek autora (koszyk, wegetarianie); odniesienie oceny dobrane tak, żeby mnożnik typowego lokalu botów był
   zbliżony do dawnego mnożnika z karty zadowolenia (mediana 0,91–0,98 dla poziomów łatwy…trudny, pomiar 4.11.2026 –
-  dziennik kalibracji U24)'
+  dziennik kalibracji)'
 mieso: [kebab_w_bulce, kebab_w_tortilli, kebab_box, talerz_kebab, kebab_specjalny_1, kebab_specjalny_2]
 wege: [falafel]
 zastepstwo:
-  udzial: 0.1            # U24 kalibracja 4.11: przy 0,35 lokale z wąskim menu (premium) zyskiwały ~2× wynik
+  udzial: 0.1            # przy 0,35 lokale z wąskim menu (premium) zyskiwały ~2× wynik
   grupy_dan:
     - [kebab_w_bulce, kebab_w_tortilli, kebab_box, talerz_kebab]
 wydarzenia: goscie_wydarzen

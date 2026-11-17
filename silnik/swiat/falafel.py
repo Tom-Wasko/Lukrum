@@ -1,4 +1,4 @@
-"""Bójka o falafel (UF8; pomysł autora: „jak wybierzesz do oferty falafel, to ktoś cię pobije kolejnego dnia”).
+"""Bójka o falafel (pomysł autora: „jak wybierzesz do oferty falafel, to ktoś cię pobije kolejnego dnia”).
 
 Dane: `dane/zdarzenia/falafel.yaml` (plik opcjonalny – bez niego historii nie ma). Od rundy `zasady.od_rundy` drużyna,
 która w poprzedniej rundzie miała w ofercie danie `zasady.usluga`, ma szansę `zasady.szansa` (strumień „falafel”), że

@@ -1,4 +1,4 @@
-"""Agencje reklamowe w grze z lokalami (F3b.2, Z5): emisje, progi rabatów, zamówienie z walidacją, zagłuszanie,
+"""Agencje reklamowe w grze z lokalami: emisje, progi rabatów, zamówienie z walidacją, zagłuszanie,
 nasycenie emisjami, wygasanie, poszerzenie puli i przyciąganie klientów, gra z botami, widok API i brak reklamy bazowej."""
 
 import copy
@@ -93,10 +93,10 @@ def test_nasycenie_emisjami_i_wygasanie():
     pula5 = rk.kanal(dane, "papier_przyjmie", "ulotki")["pula"] * e[5]
     assert rk.efekty_rundy(dane, {"A": f}, 3)["pula"]["centrum"] == pytest.approx(rk.nasycenie(pula5, m["maks_puli"]), abs=1e-4)
     assert rk.efekty_rundy(dane, {"A": f}, 3)["kampanie"]["A"][0]["nasycenie"] == pytest.approx(e[5], abs=1e-4)
-    f.kampanie = [_kampania()]                                  # zapis sprzed Z5 (bez emisji) – pełny efekt
+    f.kampanie = [_kampania()]                                  # zapis sprzed nasycenia emisjami (bez emisji) – pełny efekt
     pula = rk.kanal(dane, "papier_przyjmie", "ulotki")["pula"]
     fazy = [rk.efekty_rundy(dane, {"A": f}, r) for r in (2, 3, 4, 5, 6, 7)]
-    P = lambda x: pytest.approx(rk.nasycenie(x, m["maks_puli"]), abs=1e-4)   # P10: sufit sumy kampanii
+    P = lambda x: pytest.approx(rk.nasycenie(x, m["maks_puli"]), abs=1e-4)   # sufit sumy kampanii
     assert fazy[0]["kampanie"] == {} and fazy[1]["pula"]["centrum"] == P(pula)
     assert fazy[2]["kampanie"]["A"][0]["faza"] == "wygasa" and fazy[2]["pula"]["centrum"] == P(pula * m["wygasanie"])
     assert fazy[3]["pula"]["centrum"] == P(pula * m["wygasanie"] ** 2)
@@ -107,7 +107,7 @@ def test_nasycenie_emisjami_i_wygasanie():
 
 
 def test_sufit_sumy_kampanii():
-    """P10: kampanie się sumują z nasyceniem – jedna prawie w pełni, wiele naraz nie przekroczy sufitu."""
+    """kampanie się sumują z nasyceniem – jedna prawie w pełni, wiele naraz nie przekroczy sufitu."""
     dane, f = _firma_z_lokalem()
     m = rk.zasady(dane)["model"]
     R = rk.zasady(dane)["agencje"]
@@ -218,7 +218,7 @@ def test_widok_api_i_gra_bez_lokali():
 
 
 def test_strategia_nadpisuje_emisje_i_przerwe_kampanii():
-    """B10: emisje_kampanii i przerwa_kampanii ze strategii mają pierwszeństwo przed ustawieniami botów."""
+    """Emisje_kampanii i przerwa_kampanii ze strategii mają pierwszeństwo przed ustawieniami botów."""
     g = _gra(("Zrown", "zrownowazony"), ("Tani", "tani"))
     st = g.dane.boty["strategie"]
     g.dane = copy.copy(g.dane)

@@ -1,4 +1,4 @@
-# Dymki przy ladzie (decyzje autora 13.11.2026, notatka „Wygląd” w repo Lukrum-notatki)
+# Dymki przy ladzie (decyzje autora 13.11.2026; notatka „Wygląd” w repozytorium notatek)
 # Klienci i bywalcy (bywalcy.yaml) mówią w dymkach to, co policzył silnik w ostatniej rundzie. Silnik: silnik/wnetrza/.
 # Sprawdzenie: python -m silnik.dane sprawdz
 #

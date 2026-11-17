@@ -83,7 +83,7 @@ def _kpir(netto, **pozostale):
 
 
 def test_dlaczego_wynik_sie_zmienil():
-    """U16: 1–3 zdania z największej zmiany działu – w finansach z pozycją KPiR, która zaważyła."""
+    """1–3 zdania z największej zmiany działu – w finansach z pozycją KPiR, która zaważyła."""
     assert dlaczego(D, None, None) is None and dlaczego(D, {"kpir": {}}, None) is None
     wp = {"karta": _karta(finanse=140.0), "kpir": _kpir(2000.0, Czynsz=900.0)}
     w = {"karta": _karta(finanse=20.0), "kpir": _kpir(-11000.0, Czynsz=900.0, **{"Zakup sprzętu": 11448.0})}
@@ -137,9 +137,9 @@ def test_tydzien_w_liczbach_uf23():
     assert "100 → 130 (+30%)" in dobre
 
 
-@pytest.mark.dane_gry   # próg rozruchu jest w dane/ (UF5)
+@pytest.mark.dane_gry   # próg rozruchu jest w dane/
 def test_rozruch_w_pierwszych_rundach():
-    """UF5: wnioski z rund 1–3 mówią, że firma potrzebuje kilku tygodni na rozruch; później – nie."""
+    """Wnioski z rund 1–3 mówią, że firma potrzebuje kilku tygodni na rozruch; później – nie."""
     dane = dane_domyslne()
     do = dane.z["wnioski"]["rozruch_do_rundy"]
     assert do == 3

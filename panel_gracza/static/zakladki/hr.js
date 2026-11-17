@@ -1,5 +1,5 @@
 // Ludzie: zatrudnienie (obsada stanowisk w Mój lokal), zespół, udogodnienia, szkolenia.
-// UF20 (gra z lokalami): nowych ludzi zatrudnia się w Rynku pracy (od razu z lokalem i stanowiskiem), a obsada w Moim
+// Nowych ludzi zatrudnia się w Rynku pracy (od razu z lokalem i stanowiskiem), a obsada w Moim
 // lokalu przypisuje osoby już zatrudnione – z tego lokalu od razu, z innego za zgodą pracownika (decyzja `przenosiny`).
 import { esc, naOkres, naRunde, OKRES, gw, inicjaly, licz, nazwaFirmy, okno, ponadLimitPracownikow, podsumowanie, kafelkiLiczb, proc, tabela, tekstLimituPracownikow, toast,
   wykres, zamknijOkno, zl, zwin, zwinTabela, kartaMarki, KOLORY, zl2 } from "./wspolne.js";
@@ -11,9 +11,9 @@ import { idWybranego, nazwaLokalu, stanowiskaLokalu, wyborLokaluKrotki } from ".
 import { forma, kosztMiesieczny, minimum, nazwaFormy, oczekiwana, opcjeForm, opisFormy, pigulkaStudenta, progOferty } from "./formy.js";
 
 const TYPY = ["kuchnia", "kasa"];  // nazwy i zawody typów: kat.oferty.stanowiska.typy (katalog.yaml)
-const NIEZADOWOLENIE = "niezadowolenie";   // silnik/ludzie/zadowolenie.py: powód wypowiedzenia (U20)
+const NIEZADOWOLENIE = "niezadowolenie";   // silnik/ludzie/zadowolenie.py: powód wypowiedzenia
 
-// UF18: „oferty: 2 drużyny” – ile innych drużyn złożyło już ofertę dla tej osoby (bez kwot; silnik: rynek_pracy.zainteresowanie)
+// „oferty: 2 drużyny” – ile innych drużyn złożyło już ofertę dla tej osoby (bez kwot; silnik: rynek_pracy.zainteresowanie)
 const odmiana = (n, jedna, kilka, wiele) => n === 1 ? jedna : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? kilka : wiele;
 const osob = (n) => `${licz(n)} ${odmiana(n, "osoba", "osoby", "osób")}`;
 const druzyn = (n) => `${n} ${n === 1 ? "drużyna" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? "drużyny" : "drużyn"}`;
@@ -35,7 +35,7 @@ function przyciskZatrudnij(v, k, edycja, dane = "") {
   return `<button class="btn pom maly" data-akcja="zatrudnij" data-k="${esc(k.id)}"${dane} ${edycja && !kto ? "" : "disabled"}${kto
     ? ` title="Kandydata zatrudnia już drużyna ${esc(kto)} – wybierz kogoś innego"` : ""}>Zatrudnij +</button>`;
 }
-// UF18: próba podkupienia mojego pracownika (oferty innych drużyn zapisane w tej rundzie)
+// próba podkupienia mojego pracownika (oferty innych drużyn zapisane w tej rundzie)
 function pigulkaPodkupienia(v, p) {
   const o = (v.agencja?.oferty_dla_mnie || []).filter((x) => x.pracownik === p.id && x.pensja > x.obecna_pensja);
   if (!o.length) return "";
@@ -43,7 +43,7 @@ function pigulkaPodkupienia(v, p) {
   return ` <a class="pigulka nie" data-zakladka-k="rynek_pracy" title="Złóż kontrofertę w zakładce Rynek pracy">chce go podkupić: ${kto}</a>`;
 }
 
-// U20: charakter osoby podany jawnie (decyzja autora 7.11.2026) – pigułka z nazwą i dymek ze skutkami (dane: cechy)
+// charakter osoby podany jawnie (decyzja autora 7.11.2026) – pigułka z nazwą i dymek ze skutkami (dane: cechy)
 const zdanieCharakteru = (o) => `Charakter: ${o.charakter.nazwa}. Wpływ: ${o.charakter.skutek}.`;
 // kontrola PIP (silnik/ludzie/kontrola_pip.py): zlecenie w pełnym wymiarze godzin jak etat; liczby – v.pip z widoku
 const osobaPip = (v, p) => v.pip?.osoby?.[p.id];
@@ -60,18 +60,18 @@ const opisOsoby = (o) => o.charakter ? ` <span class="pigulka">${esc(o.charakter
 const zadowolenieOsoby = (p) => p.zadowolenie == null ? "–"
   : `<span class="${p.niezadowolony ? "minus" : ""}">${licz(p.zadowolenie, 2)}</span>`;
 
-// koszt za rundę: pensje miesięczne z ZUS pracodawcy (wg formy zatrudnienia, UF21) przeliczone na rundę + premie (bez ZUS)
+// koszt za rundę: pensje miesięczne z ZUS pracodawcy (wg formy zatrudnienia) przeliczone na rundę + premie (bez ZUS)
 function kosztWynagrodzen(v, kat) {
   return v.stan.pracownicy.reduce((s, p) => s + naRunde(kosztMiesieczny(kat, p)) + (p.premia || 0), 0);
 }
 
-// UF21: pensja w oknie zatrudnienia/profilu musi spełnić minimum formy (pół etatu – połowa, B2B i staż – bez)
+// pensja w oknie zatrudnienia/profilu musi spełnić minimum formy (pół etatu – połowa, B2B i staż – bez)
 function zlaPensja(kat, pensja, umowa, osoba) {
   const min = minimum(kat, umowa, osoba?.student);
   return pensja < min ? `Pensja w tej formie nie może być niższa niż ${zl(min)}.` : null;
 }
 
-// kalibracja B9: kandydat odrzuca ofertę poniżej progu (ok. 95% oczekiwanej) – silnik/ludzie/formy.py: odrzuca
+// kandydat odrzuca ofertę poniżej progu (ok. 95% oczekiwanej) – silnik/ludzie/formy.py: odrzuca
 function zaNiskaOferta(kat, pensja, umowa, k) {
   const prog = k ? progOferty(kat, k, umowa) : 0;
   return prog && pensja < prog ? `${k.imie_nazwisko} odrzuci ofertę ${zl(pensja)} – to mniej niż ${proc(kat.parametry.oferta_pracy.prog_odrzucenia, 0)} pensji oczekiwanej. Zaproponuj co najmniej ${zl(prog)}.` : null;
@@ -219,7 +219,7 @@ export const zatrudnienie = {
     },
   },
   zmiany: {
-    // UF21: zmiana formy w oknie zatrudnienia/profilu – pensja oczekiwana w tej formie, minimum i opis
+    // zmiana formy w oknie zatrudnienia/profilu – pensja oczekiwana w tej formie, minimum i opis
     "forma-zatrudnienia": (el, c) => {
       const osoba = c.v.kandydaci.find((x) => x.id === el.dataset.k) || c.v.stan.pracownicy.find((x) => x.id === el.dataset.k);
       if (!osoba) return;
@@ -234,7 +234,7 @@ export const zatrudnienie = {
       if (opis) opis.innerHTML = opisFormy(c.kat, u, osoba, { kandydat: c.v.kandydaci.includes(osoba) });
       if (c.v.kandydaci.includes(osoba)) ostrzezenieOferty(c, osoba);
     },
-    // kalibracja B9: ostrzeżenie pod pensją w oknie zatrudnienia, gdy kandydat odrzuci ofertę
+    // ostrzeżenie pod pensją w oknie zatrudnienia, gdy kandydat odrzuci ofertę
     "pensja-oferty": (el, c) => {
       const osoba = c.v.kandydaci.find((x) => x.id === el.dataset.k);
       if (osoba) ostrzezenieOferty(c, osoba);
@@ -285,7 +285,7 @@ function kanalyRekrutacji(v, k) {
       inne drużyny widzą go wtedy jako „zajęty”.</p>`;
 }
 
-// UF20: wolne stanowiska dla zawodu (właściciel staje na tych, które zostaną puste) – w podglądzie decyzji, więc już po przenosinach
+// wolne stanowiska dla zawodu (właściciel staje na tych, które zostaną puste) – w podglądzie decyzji, więc już po przenosinach
 const typyZawodu = (kat, zawod) => TYPY.filter((t) => kat.oferty.stanowiska.typy[t].zawody.includes(zawod));
 function wolneStanowiska(v, kat, zawod) {
   const typy = typyZawodu(kat, zawod);
@@ -340,7 +340,7 @@ function kolumnyKandydatow(v, kat, lista, edycja) {
   }).join("")}</div>`;
 }
 
-// UF20: kandydaci w Rynku pracy – zatrudnienie od razu z lokalem i stanowiskiem; niżej zatrudnienia czekające w tej rundzie
+// kandydaci w Rynku pracy – zatrudnienie od razu z lokalem i stanowiskiem; niżej zatrudnienia czekające w tej rundzie
 export function kandydaciRynku({ v, kat, edycja }) {
   const typy = kat.oferty.stanowiska.typy;
   const czekaja = v.stan.pracownicy.filter((p) => p.od_rundy === v.runda && (v.decyzje.zatrudnij || []).some((z) => z.kandydat === p.id));
@@ -360,7 +360,7 @@ export function kandydaciRynku({ v, kat, edycja }) {
       { klasy: ["l", "l", "l"] }) : "");
 }
 
-// UF20: szansa zgody na przejście – jak silnik/ludzie/przenosiny.py: szansa (parametry i odległości z v.agencja.przenosiny)
+// szansa zgody na przejście – jak silnik/ludzie/przenosiny.py: szansa (parametry i odległości z v.agencja.przenosiny)
 function szansaPrzejscia(v, p, z, doLokalu, dodatek) {
   const P = v.agencja?.przenosiny, u = P?.zasady;
   if (!u) return 1;
@@ -470,7 +470,7 @@ function miejsceOsoby(v, kat, s, bezLokalu = false) {
 }
 
 // kafelek osoby w Zespole: imię, gwiazdki, zawód, charakter, pensja z formą, zadowolenie, stanowisko, Profil / Przenieś
-// kalibracja B10: zadowolenie z poprzedniego tygodnia zmienia tempo pracy (kat.parametry.wydajnosc_z_zadowolenia)
+// zadowolenie z poprzedniego tygodnia zmienia tempo pracy (kat.parametry.wydajnosc_z_zadowolenia)
 function tempoOsoby(kat, p) {
   const u = kat.parametry?.wydajnosc_z_zadowolenia;
   if (!u || p.zadowolenie == null) return "";
@@ -547,7 +547,7 @@ function wskaznikiCzasu({ v, kat }) {
     + `<p class="podpowiedz">Godziny obsługi klientów z godzin dostępnych (etat i forma zatrudnienia; kasa – ruch kas lokalu dzielony między kasjerów).
       Powyżej ${proc(pr.przepracowanie, 0)} spada zadowolenie pracownika.</p>`;
   const progi = { niski: pr.niski, wysoki: pr.przepracowanie };
-  // Poprawki 4 (P6): ten sam zespół dzień po dniu – ponad 100% = tyle pracy zabrakło (stare zapisy bez danych – bez tabeli)
+  // ten sam zespół dzień po dniu – ponad 100% = tyle pracy zabrakło (stare zapisy bez danych – bez tabeli)
   const przypisDni = `<p class="podpowiedz zostaw">Procent = praca potrzebna na obsłużenie klientów danego dnia wobec godzin osoby.
     <b class="minus">Ponad 100%</b> – tyle pracy zabrakło: 130% to o 30% więcej klientów, niż osoba dała radę obsłużyć
     (reszta odeszła z kolejki). Kasa – ruch kas lokalu, u każdego kasjera tak samo.</p>`;
@@ -599,7 +599,7 @@ function narzedziaZespolu(w) {
   return `<div class="zespol-narzedzia"><label>Grupuj: ${wybor("grupy", GRUPY_ZESPOLU)}</label><label>Sortuj: ${wybor("sort", SORT_ZESPOLU)}</label></div>`;
 }
 
-// UF15: Mój kebab → Zespół – wszyscy pracownicy firmy; Poprawki 2 (sprawa 18): kafelki osób, w wynikach wskaźniki czasu pracy
+// Mój kebab → Zespół – wszyscy pracownicy firmy; Poprawki 2 (sprawa 18): kafelki osób, w wynikach wskaźniki czasu pracy
 export const zespol = {
   tytul: "Zespół", tytulPelny: "Ludzie – zespół", ikona: "zatrudnienie", odblokowanie: "hr_zatrudnienie",
   info: "Wszyscy Twoi pracownicy: gdzie pracują, na jakiej umowie, za ile i czy są zadowoleni. Profil – pensja, premia, forma albo zwolnienie; Przenieś – inne wolne stanowisko.",
@@ -639,7 +639,7 @@ export const udogodnienia = {
   akcje: {},
 };
 
-// kalibracja B9: szkolenie kosztuje raz cenę z cennika i działa kat.parametry.szkolenia_rund rund (0 – dawniej: cena na rundę,
+// szkolenie kosztuje raz cenę z cennika i działa kat.parametry.szkolenia_rund rund (0 – dawniej: cena na rundę,
 // działa w rundzie zakupu); trwającego szkolenia nie kupuje się drugi raz (silnik/ludzie/szkolenia.py)
 const rundSzkolenia = (kat) => kat.parametry?.szkolenia_rund || 0;
 const cenaSzkolenia = (kat, cena) => rundSzkolenia(kat) ? cena : naRunde(cena);

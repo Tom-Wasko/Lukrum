@@ -51,7 +51,7 @@ function dniStrefy(P, s) {
     dopisek: `${dataKrotka(P.dni[i].data)}, ok. ${licz(s.pula * x / suma)} klientów` })), "Klienci w dni tygodnia")}<div class="podpis-dni">${podpis}</div></div>`;
 }
 
-// U24: najliczniejsze grupy klientów strefy (opis grupy w dymku)
+// najliczniejsze grupy klientów strefy (opis grupy w dymku)
 function grupyStrefy(P, s) {
   return Object.entries(s.grupy || {}).slice(0, 3).map(([g, x]) =>
     P.grupy[g]?.opis ? `<span class="ma-dymek">${esc(P.grupy[g].nazwa || g)} ${proc(x)}<span class="dymek-tresc">${esc(P.grupy[g].opis)}</span></span>`
@@ -97,7 +97,7 @@ function wynikiLokale(k, kat, P) {
     { klasy: ["l", "l", "", "", "l", "l"] });
 }
 
-// U24: ocena lokali z opinii klientów i jej powody (gwiazdki za jakość, cenę, kolejkę…)
+// ocena lokali z opinii klientów i jej powody (gwiazdki za jakość, cenę, kolejkę…)
 const POWODY = { jakosc: "Jakość", cena: "Cena", kolejka: "Kolejka", brak: "Brak dań", pomylki: "Pomyłki", wyposazenie: "Wyposażenie" };
 const gw = (x) => x == null ? "–" : x.toFixed(1).replace(".", ",");
 function wynikiOpinie(v, k) {
@@ -134,7 +134,7 @@ export const klienci = {
     const dni = `${dataKrotka(P.dni[0].data)}–${dataKrotka(P.dni[P.dni.length - 1].data)}`;
     return `<div class="pasek ciemny"><span>Runda sprzedaży: <span class="kwota">${P.runda}</span></span><span>Dni: <span class="kwota">${dni}</span></span>
       <span>Wydarzenia w mieście: <span class="kwota">${P.wydarzenia.length || "brak"}</span></span></div>`
-      + jakLiczyc(P) + strefyDecyzje(v, kat);   // UF29: wydarzenia są w Kalendarzu – tu tylko ich liczba
+      + jakLiczyc(P) + strefyDecyzje(v, kat);   // wydarzenia są w Kalendarzu – tu tylko ich liczba
   },
   wyniki({ v, kat }) {
     const k = v.wyniki?.klienci, R = v.rynek?.strefy;

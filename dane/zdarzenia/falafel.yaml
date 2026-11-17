@@ -1,10 +1,10 @@
-# Bójka o falafel (UF8, silnik/swiat/falafel.py) – komiczna historia jednej drużyny w tygodniu po falafelu w ofercie
+# Bójka o falafel (silnik/swiat/falafel.py) – komiczna historia jednej drużyny w tygodniu po falafelu w ofercie
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Od rundy zasady.od_rundy drużyna, która w poprzedniej rundzie miała w ofercie danie zasady.usluga, ma co rundę
   szansę zasady.szansa, że w lokalu zacznie się historia bójki o falafel – najwyżej raz na grę. Format historii jak
   w parki.yaml (bez pola park). Skutki małe: plastry (gotówka) albo kilka godzin właściciela mniej.'
 zrodlo: 'Pomysł autora gry (lista ufajniania, punkt 13): „jak wybierzesz do oferty falafel, to ktoś cię pobije kolejnego
-  dnia”; plan raporty/ufajnianie/plan.md (UF8): mała szansa, komiczny raport, mały skutek; liczby – założenie UF8
+  dnia”; założenie autora: mała szansa, komiczny raport, mały skutek; liczby – założenie autora
   (7.11.2026): przy szansie 5% na rundę bójka trafia mniej więcej co drugą drużynę, która cały czas ma falafel w karcie'
 zasady:
   usluga: falafel

@@ -1,4 +1,4 @@
-"""UF19: marketing internetowy od rundy 7 (dane/mapa/reklama.yaml, sekcja internet; silnik/rynek/reklama.py) –
+"""Marketing internetowy od rundy 7 (dane/mapa/reklama.yaml, sekcja internet; silnik/rynek/reklama.py) –
 efekt narasta przez kilka rund i gaśnie wolniej niż reklama tradycyjna, osobna zakładka, prognoza obecności w sieci."""
 
 import copy

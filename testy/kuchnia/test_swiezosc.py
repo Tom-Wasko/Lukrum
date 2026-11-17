@@ -1,4 +1,4 @@
-"""Menu i świeżość (F3a.5): partie z terminem, FIFO, kosz, pojemność chłodni, zamienniki, wyłączanie dań, gra, dane."""
+"""Menu i świeżość: partie z terminem, FIFO, kosz, pojemność chłodni, zamienniki, wyłączanie dań, gra, dane."""
 
 from datetime import date
 
@@ -62,7 +62,7 @@ def test_wynajem_chlodni():
 
 
 def test_pojemnosc_chlodni_bez_wynajmu(monkeypatch):
-    """Dane bez wynajętej chłodni (F3a.5): nadmiar to strata."""
+    """Dane bez wynajętej chłodni: nadmiar to strata."""
     monkeypatch.setattr(sw, "wynajem", lambda dane: None)
     dane = dane_domyslne()
     f = Firma(nazwa="A", stanowiska=[Stanowisko(nr=1, typ=KUCHNIA, sprzet={"Szafa chłodnicza": 1})])

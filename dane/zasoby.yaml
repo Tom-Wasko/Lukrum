@@ -1,12 +1,12 @@
 # Składniki (w kodzie: zasoby)
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Składniki dań (w kodzie silnika: zasoby): opakowanie, jednostka, typ opakowania, średnie ceny. Kolejność = kolejność
-  w raportach. Świeżość (gra z lokalami, F3a.5): przechowywanie (chlodnia, zamrazarka, suche), termin_dni – ile dni
+  w raportach. Świeżość (gra z lokalami): przechowywanie (chlodnia, zamrazarka, suche), termin_dni – ile dni
   partia nadaje się do użycia razem z dniem dostawy (brak = bez terminu), miejsce_l – litry jednego opakowania w chłodni
   lub zamrażarce; zamiennik_dla – składnik używany, gdy zabraknie podstawowego (jakość niższa o kara_jakosci gwiazdek).'
-zrodlo: notatki/Menu i składniki.md (receptury i ceny rynkowe brutto – notatki autora, terminy ważności); ceny hurtowe –
-  założenie F2.6 (rząd wielkości cen hurtowni gastronomicznych); objętości opakowań i ceny mrożonek (ok. 80% świeżych) –
-  założenie F3a.5 Jakości składników (ceny ★ i ★★★ względem ★★) przeliczone od zera 15.11.2026 – ★ = 85% ceny ★★ (tanio, ale ok. 12% mniej popytu na danie), ★★★ = 132% ceny ★★ (ok. 17% więcej popytu; przy marży porcji ok. 15 zł dopłata ok. 1,5–2 zł za porcję zwraca się tylko przy dużych wolnych mocach albo wyższej cenie dania – decyzja autora 14.11, priorytet ma rozgrywka; zwrot mierzony na porcji, nie w tygodniach, bo składnik nie ma kosztu stałego).
+zrodlo: notatki autora o menu i składnikach (receptury i ceny rynkowe brutto – notatki autora, terminy ważności); ceny hurtowe –
+  założenie autora (rząd wielkości cen hurtowni gastronomicznych); objętości opakowań i ceny mrożonek (ok. 80% świeżych) –
+  założenie autora Jakości składników (ceny ★ i ★★★ względem ★★) przeliczone od zera 15.11.2026 – ★ = 85% ceny ★★ (tanio, ale ok. 12% mniej popytu na danie), ★★★ = 132% ceny ★★ (ok. 17% więcej popytu; przy marży porcji ok. 15 zł dopłata ok. 1,5–2 zł za porcję zwraca się tylko przy dużych wolnych mocach albo wyższej cenie dania – decyzja autora 14.11, priorytet ma rozgrywka; zwrot mierzony na porcji, nie w tygodniach, bo składnik nie ma kosztu stałego).
 zasoby:
   Bułka:
     przechowywanie: suche

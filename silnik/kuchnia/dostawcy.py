@@ -5,12 +5,12 @@ Pozostałe – baza serii (średnia z danych) × (1 + odchylenie), odchylenie lo
 (analiza: ceny wahają się wokół stałej bazy, odchylenie std ≈ 5,7%, zmiana m/m ≤ 17%).
 Dostępni dostawcy: do marca trzech (dostawcy.yaml: pierwsi), od kwietnia wszyscy (wszyscy_od_miesiaca).
 
-Gra z lokalami (F3a.6, dostawcy.yaml: dostawcy): dostawca może wejść później (od_rundy), dyskonty mają co tydzień gazetkę
+Gra z lokalami (dostawcy.yaml: dostawcy): dostawca może wejść później (od_rundy), dyskonty mają co tydzień gazetkę
 (kilka składników taniej – losowo z ziarnem gry). W grze z lokalami zamówienie ma dzień dostawy: dostawca dowozi tylko
 w swoje dni, dostawa poniżej progu kosztuje, producent ma minimalne zamówienie, a w dyskoncie właściciel kupuje sam
 (limit opakowań na składnik dziennie, godziny właściciela).
 
-Z4 (przebudowa 2.11.2026): hipermarket (dostawcy.yaml: ceny_z_rynku, Auchan) nie ma własnych cen – w każdej rundzie
+Przebudowa 2.11.2026: hipermarket (dostawcy.yaml: ceny_z_rynku, Auchan) nie ma własnych cen – w każdej rundzie
 sprzedaje każdy składnik i jakość z oferty pozostałych dostawców po ich średniej cenie (przed gazetkami) z narzutem.
 Kupuje tam auto-dostawca (silnik/kuchnia/auto_dostawca.py).
 """

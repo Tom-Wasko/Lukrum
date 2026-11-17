@@ -1,4 +1,4 @@
-"""Zadowolenie każdej osoby i odejścia z niezadowolenia (U20, decyzja autora 4.11.2026).
+"""Zadowolenie każdej osoby i odejścia z niezadowolenia (decyzja autora 4.11.2026).
 
 Zadowolenie osoby liczy własny wzór LUKRUM (zalozenia.yaml: zadowolenie_osoby):
 jej pensja z premią ÷ preferowana, sprzęt jej stanowiska, udogodnienia jej lokalu, szkolenia firmy, umowa zlecenie
@@ -28,7 +28,7 @@ ZASTAPIONE_OPISEM = "opis"   # żartobliwy opis osoby (dawne zgadywanie cechy): 
 
 
 def ustawienia(dane: Dane) -> dict | None:
-    """Parametry odejść; None – dane bez U20 (np. zamrożona kopia testów): osoby nie odchodzą same."""
+    """Parametry odejść; None – dane bez zadowolenia osób (np. zamrożona kopia testów): osoby nie odchodzą same."""
     return (dane.z.get("pracownicy") or {}).get("odejscia")
 
 
@@ -38,9 +38,9 @@ def wplyw(dane: Dane, p: Pracownik) -> dict:
 
 
 def placa_wzgledna(dane: Dane, p: Pracownik) -> float:
-    """B9: (pensja + premia) ÷ pensja preferowana; pensja jest miesięczna, a premia – za rundę, więc w grze
+    """(pensja + premia) ÷ pensja preferowana; pensja jest miesięczna, a premia – za rundę, więc w grze
     tygodniowej liczy się jak miesięczna podwyżka o premia × rund_w_roku / 12 (na ten tydzień).
-    UF21: zamiast preferowanej – pensja oczekiwana w tej formie (pół etatu, B2B, student); staż – płaca neutralna."""
+    zamiast preferowanej – pensja oczekiwana w tej formie (pół etatu, B2B, student); staż – płaca neutralna."""
     premia = p.premia * dane.rund_w_roku / 12
     oczekiwana = fz.oczekiwana(dane, p)
     if oczekiwana is None:
@@ -58,7 +58,7 @@ def skladniki(dane: Dane, f: Firma, p: Pracownik, wykorzystanie: float, szkoleni
     poz = dane.pozycje("udogodnienia")
     udog = sum(poz[n]["procent"] / 100 for n in pl.lista(f, lok, "udogodnienia")) if lok else 0.0
     pw = placa_wzgledna(dane, p)
-    of = fz.zasady_oferty(dane)   # kalibracja B9: pensja poniżej oczekiwanej boli mocniej (co tydzień, póki trwa)
+    of = fz.zasady_oferty(dane)   # pensja poniżej oczekiwanej boli mocniej (co tydzień, póki trwa)
     kara = of["kara_ponizej_oczekiwanej"] * max(0.0, 1 - pw) if of else 0.0
     return {
         "placa": (w["placa_wzgledem_preferowanej"] * (pw - 1) - kara) * c["placa"],
@@ -77,7 +77,7 @@ def zadowolenie(dane: Dane, skl: dict[str, float]) -> float:
 
 
 def zasady_tempa(dane: Dane) -> dict | None:
-    """Kalibracja B10: zadowolenie zmienia tempo pracy (zalozenia.yaml: pracownicy.wydajnosc_z_zadowolenia);
+    """Zadowolenie zmienia tempo pracy (zalozenia.yaml: pracownicy.wydajnosc_z_zadowolenia);
     None – wyłączone albo dane bez tej mechaniki."""
     u = (dane.z.get("pracownicy") or {}).get("wydajnosc_z_zadowolenia")
     return u if u and u.get("wlaczone") else None
@@ -127,7 +127,7 @@ def powody(dane: Dane, p: Pracownik, skl: dict[str, float], wykorzystanie: float
 
 def po_rundzie(dane: Dane, f: Firma, w: dict, r: int, ziarno, szkolenia_procent: float) -> list[dict] | None:
     """Zadowolenie osób po tygodniu (dopisuje je do w["pracownicy"]) i wypowiedzenia z niezadowolenia.
-    None – gra bez U20 albo bez lokali."""
+    None – gra bez zadowolenia osób albo bez lokali."""
     u = ustawienia(dane)
     if not u or not f.lokale:
         return None

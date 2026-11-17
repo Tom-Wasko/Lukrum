@@ -202,7 +202,7 @@ def test_strony_mistrza_gry_i_druzyny(client, gra):
 
 
 def test_dziennik_zapisow_i_jedna_przegladarka_w_dwoch_druzynach(client, gra):
-    """U18: mistrz gry widzi dziennik zapisów drużyny i ostrzeżenie, gdy ta sama przeglądarka
+    """Mistrz gry widzi dziennik zapisów drużyny i ostrzeżenie, gdy ta sama przeglądarka
     (ciasteczko ze strony gry) zapisuje decyzje dwóch drużyn."""
     from konta.druzyny import CIASTKO_URZADZENIA
 

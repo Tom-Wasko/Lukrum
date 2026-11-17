@@ -3,8 +3,8 @@
 opis: 'Dziesięć stref Lublina na wspólnej mapie gry. dzielnice – prawdziwe dzielnice z OSM, z których składa się
   strefa na nowej mapie (15.11 [mapa]: każda strefa to jedna prawdziwa dzielnica; pozostałe 17 dzielnic jest na mapie
   wyszarzone – tło miasta, bez popytu). mapa: prostokąt w polach siatki (x, y – lewy górny róg, szer
-  × gl); kolor – barwa strefy na mapie. Popyt stref (klienci, ich preferencje) – krok F3a.4.'
-zrodlo: notatka „Ustalenia gry” (lista stref); położenie stref uproszczone względem prawdziwego Lublina
+  × gl); kolor – barwa strefy na mapie. Popyt stref (klienci, ich preferencje) – popyt.yaml.'
+zrodlo: ustalenia autora (lista stref); położenie stref uproszczone względem prawdziwego Lublina
 siatka:
   szer: 21
   gl: 20

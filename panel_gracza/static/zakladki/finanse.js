@@ -116,7 +116,7 @@ export const kpir = {
   },
 };
 
-// UF12: ewidencja środków trwałych i odpisy amortyzacji (dawniej osobna zakładka Środki trwałe)
+// ewidencja środków trwałych i odpisy amortyzacji (dawniej osobna zakładka Środki trwałe)
 function amortyzacja(v) {
   const a = v.amortyzacja || { prog: 0, stawki: {} };
   const stawki = Object.entries(a.stawki).filter(([, s]) => s > 0).map(([r, s]) => `${esc(RODZAJ_ST[r] || r)}: ${proc(s)} rocznie`).join(" · ");
@@ -255,7 +255,7 @@ export function podsumowanieDeklaracji(D, zapisy, P) {
 const wybierz = (id, wybrane, edycja, napis = "Wybierz") => id === wybrane ? `<button class="btn zielony">✓ Wybrano</button>`
   : `<button class="btn czarny" data-akcja="biuro" data-b="${esc(id)}" ${edycja ? "" : "disabled"}>${napis}</button>`;
 
-// B6: zakupy poniżej progu amortyzacji – od razu w koszty (domyślnie) albo do ewidencji z amortyzacją
+// zakupy poniżej progu amortyzacji – od razu w koszty (domyślnie) albo do ewidencji z amortyzacją
 function wyborNiskocennych(v, d, edycja) {
   const a = v.amortyzacja || {}, N = a.niskocenne;
   if (!N) return "";
@@ -313,7 +313,7 @@ function wyroznienia(oferty) {   // „Najtańsze”, „Najmniejsze ryzyko” �
 
 function decyzjeKsiegowosci({ v, edycja }) {
   const K = v.ksiegowosc, d = v.decyzje || {}, wybrane = d.biuro || v.stan.biuro, S = K.samodzielna;
-  const tanie = K.oferty.reduce((a, b) => (!a || b.szacunki[b.najlepszy_pakiet].razem < a.szacunki[a.najlepszy_pakiet].razem ? b : a), null);   // U6: obok mandatu
+  const tanie = K.oferty.reduce((a, b) => (!a || b.szacunki[b.najlepszy_pakiet].razem < a.szacunki[a.najlepszy_pakiet].razem ? b : a), null);   // obok mandatu
   const wyr = wyroznienia(K.oferty);
   const html = `<div class="banki-siatka">${K.oferty.map((b, i) => kartaBiuraMarki(b, i, wybrane, edycja, K, wyr(b))).join("")}${kartySamodzielnie(S, tanie, wybrane, edycja)}</div>`
     + wyborNiskocennych(v, d, edycja);

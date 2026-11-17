@@ -1,4 +1,4 @@
-"""Zamrożona kopia danych dla testów mechanik (B2): testy bez znacznika czytają `testy/dane_zamrozone/`,
+"""Zamrożona kopia danych dla testów mechanik: testy bez znacznika czytają `testy/dane_zamrozone/`,
 testy zasad ze znacznikiem `dane_gry` – `dane/` (testy/conftest.py)."""
 
 from pathlib import Path
@@ -24,8 +24,8 @@ def test_zamrozona_kopia_pasuje_do_schematow():
 
 
 def test_zamrozona_kopia_ma_wszystkie_pliki_danych():
-    # mapa/klienci.yaml (U24) – plik opcjonalny: bez niego grupy klientów i opinie są wyłączone, testy mechanik
-    # liczą popyt jak przed U24; zdarzenia/falafel.yaml (UF8) – bez niego nie ma bójki o falafel;
+    # mapa/klienci.yaml – plik opcjonalny: bez niego grupy klientów i opinie są wyłączone, testy mechanik
+    # liczą popyt jak przed wprowadzeniem grup klientów; zdarzenia/falafel.yaml – bez niego nie ma bójki o falafel;
     # mapa/miasto.yaml (M11) – tylko wygląd mapy, silnik go nie czyta; funkcje.yaml (seria „funkcje”) – bez niego
     # wszystkie funkcje odkryte, jak w grach sprzed serii; wnetrza/ (silnik/wnetrza/) – bez folderu gra bez wnętrz,
     # a testy wnętrz mają własne dane (testy/wnetrza/dane_testowe/); mapa/dekor.yaml – bez niego nie ma dekoru lokalu

@@ -52,14 +52,14 @@ function szczegolyKarty(v) {
   return zwinTabela("Skąd Twoje punkty w minionym tygodniu", ["Dział", "Składnik", "Miara", "Punkty"], wiersze, { klasy: ["l", "l"], otwarte: true, sortuj: false });
 }
 
-// U16: „Dlaczego mój wynik się zmienił?” – zdania z silnik/wyniki/wnioski.py: dlaczego (karta ostatniej i poprzedniej rundy)
+// „Dlaczego mój wynik się zmienił?” – zdania z silnik/wyniki/wnioski.py: dlaczego (karta ostatniej i poprzedniej rundy)
 function dlaczegoHtml(v) {
   if (!v.dlaczego?.length) return "";
   return `<div class="komunikat"><b>Dlaczego wynik się zmienił? (${esc(nazwaRundy(v.runda - 1))})</b> ${v.dlaczego.map(esc).join(" ")}
     <a href="#" data-zakladka-k="karta_wynikow">Karta wyników</a></div>`;
 }
 
-// UF23: „Tydzień w liczbach” (silnik/wyniki/wnioski.py: tydzien) – kafelki z porównaniem z poprzednią rundą,
+// „Tydzień w liczbach” (silnik/wyniki/wnioski.py: tydzien) – kafelki z porównaniem z poprzednią rundą,
 // zdania-historie tygodnia i 3 najważniejsze sprawy z wniosków (z odsyłaczem do zakładki)
 function tydzienHtml(v, tytulZakladki, { sprawy = true } = {}) {
   const T = v.tydzien;
@@ -138,7 +138,7 @@ function planRundy(v, kat) {
     <a data-zakladka-k="wyslij"><span class="st ${v.wyslane ? "ok" : "inf"}">${v.wyslane ? "✓" : "→"}</span><span>Wyślij decyzje<small>${v.wyslane ? "wysłane" : "gdy wszystko gotowe"}</small></span></a></div>`;
 }
 
-// U19: tryb podpowiedzi (włącza mistrz gry) – 3 rzeczy do sprawdzenia w pierwszych rundach
+// tryb podpowiedzi (włącza mistrz gry) – 3 rzeczy do sprawdzenia w pierwszych rundach
 function podpowiedziHtml(v) {
   const lista = (v.podpowiedzi || []).filter((p) => !ukryta(v, p.zakladka));   // funkcje gry: bez zakrytych i wyłączonych
   if (!lista.length) return "";
@@ -147,7 +147,7 @@ function podpowiedziHtml(v) {
   return `<div class="sekcja-tytul">${lista.length} rzeczy do sprawdzenia w tej rundzie</div><div class="plan podpowiedzi">${html}</div>`;
 }
 
-// U9: rozruch nowego lokalu (dane/mapa/popyt.yaml: model.rozruch) – strata w pierwszych tygodniach sprzedaży jest normalna
+// rozruch nowego lokalu (dane/mapa/popyt.yaml: model.rozruch) – strata w pierwszych tygodniach sprzedaży jest normalna
 function rozruchHtml(v) {
   const R = v.dashboard?.rozruch;
   if (!R || !R.lokale.length || v.gra.zakonczona) return "";   // w 1. tygodniu o rozruchu pisze wujek (wujek.js), bez ściany tekstu
@@ -178,17 +178,17 @@ export const dashboard = {
     const rynek = [boty.length ? `boty: ${boty.join(", ")}` : "", stali.length ? `stałe ceny: ${stali.join(", ")}` : ""].filter(Boolean).join(" · ");
     const klub = v.kasyno?.zaproszenie ? `<div class="komunikat">${esc(v.kasyno.zaproszenie)}
       · <a data-zakladka-k="kasyno">${esc(v.kasyno.adres)}</a></div>` : "";
-    const alarm = (v.lista_bledow || []).find((b) => b.alarm);   // U2: debet ponad limit – blokada w tej rundzie
+    const alarm = (v.lista_bledow || []).find((b) => b.alarm);   // debet ponad limit – blokada w tej rundzie
     const pasek = alarm ? `<div class="komunikat zly">${esc(alarm.tekst)}
       <button class="btn jasny maly" data-akcja="popraw" data-z="bank">Przejdź do banku</button></div>` : "";
-    const inwestor = v.inwestor && v.runda <= v.inwestor.do_rundy + 1 ? inwestorHtml(v) : "";   // U11: potem tylko w Banku
+    const inwestor = v.inwestor && v.runda <= v.inwestor.do_rundy + 1 ? inwestorHtml(v) : "";   // potem tylko w Banku
     return `${finalHtml(v)}${pasek}${inwestor}${status}${klub}${v.edycja ? listWujka(v, c) : ""}${rundaMarki ? formularzMarki(v, szkic) : ""}${podpowiedziHtml(v)}${rozruchHtml(v)}${dlaczegoHtml(v)}<div class="sekcja-tytul">Twoja firma</div><div class="dash">
       ${kafel("Nazwa i logo firmy", "osoba", `<div class="srodek">${znakFirmy(m)}<b>${esc(m.nazwa)}</b>${m.slogan ? `<div class="maly-tekst">„${esc(m.slogan)}”</div>` : ""}</div>`)}
       ${kafel("Miejsce", "karta", d.miejsce ? `${d.miejsce} / ${d.liczba_firm}` : `<span class="maly-tekst">Ranking dostępny od rundy 3</span>`)}
       ${kafel(`Liczba rund w grze`, "zegar", `<div>${Math.min(v.gra.runda, v.gra.liczba_rund)} / ${v.gra.liczba_rund}
         <div class="maly-tekst">${v.gra.zakonczona ? "Gra zakończona" : `Bieżąca runda: ${v.gra.runda}`} · ${v.gra.firmy.length + stali.length} firm na rynku</div>
         ${rynek ? `<div class="podpowiedz">${rynek}</div>` : ""}</div>`)}
-      ${kafel("Dochód netto", "wykres", d.dochod_netto == null && v.ksiegowosc?.ukryte   // U7: ukryty do złożenia deklaracji
+      ${kafel("Dochód netto", "wykres", d.dochod_netto == null && v.ksiegowosc?.ukryte   // ukryty do złożenia deklaracji
         ? `<div class="maly-tekst">Księgujesz samodzielnie – dochód tej rundy poznasz po złożeniu deklaracji albo wybierz biuro.</div>
            <button class="btn jasny maly" data-akcja="popraw" data-z="biuro">Biurowiec przy Zana ▸ Biuro rachunkowe</button>`
         : `<span class="${d.dochod_netto < 0 ? "minus" : ""}">${zl(d.dochod_netto)}</span>`)}
@@ -241,7 +241,7 @@ export const wnioski = {
     const rady = W.do_poprawy.filter((r) => !wylaczona(v, r.zakladka)).map((r) => `<div class="kafel"><div class="kg">${esc(r.tytul)}</div><div class="kt">
       <p>${esc(r.co)}</p><p><b>Co zrobić:</b> ${esc(r.rada)}</p></div>
       <div class="kd"><a class="btn jasny maly" data-zakladka-k="${esc(r.zakladka)}">Przejdź: ${esc(tytulZakladki(r.zakladka))}</a></div></div>`).join("");
-    const rozruch = W.rozruch ? `<div class="komunikat">${esc(W.rozruch)}</div>` : "";   // UF5: pierwsze tygodnie
+    const rozruch = W.rozruch ? `<div class="komunikat">${esc(W.rozruch)}</div>` : "";   // pierwsze tygodnie
     return `${rozruch}${tydzienHtml(v, tytulZakladki, { sprawy: false })}${dlaczegoHtml(v)}<div class="sekcja-tytul">Runda ${v.runda - 1}: co się udało</div><ul class="wnioski-dobre">${dobre}</ul>
       <div class="sekcja-tytul">Co poprawić w rundzie ${v.runda}</div>
       ${rady ? `<div class="siatka">${rady}</div><p class="podpowiedz">Nie wszystko naraz – zacznijcie od pierwszej rady.
@@ -289,7 +289,7 @@ export const karta_wynikow = {
   akcje: { "karta-skum": (el, c) => { skumulowana = el.dataset.s === "1"; c.idz("karta_wynikow", "wyniki"); } },
 };
 
-// UF11: ranking drużyn – miejsca jak u mistrza gry (wynik gry w punktach z tygodni 1…), zmiana miejsca i wykres miejsc
+// ranking drużyn – miejsca jak u mistrza gry (wynik gry w punktach z tygodni 1…), zmiana miejsca i wykres miejsc
 export const ranking = {
   tytul: "Ranking", tytulPelny: "Ranking drużyn", ikona: "karta", wynikiOd: 3, odblokowanie: "karta_wynikow",
   info: () => "Kto prowadzi? Miejsce liczy się z punktów z kolejnych tygodni (ostatnie ważą więcej) – tak samo jak w panelu mistrza gry i na Planie tygodnia.",
@@ -343,7 +343,7 @@ export const lista_bledow = {
     if (!v.lista_bledow.length) return `<div class="komunikat ok">Brak uwag – wszystkie najważniejsze decyzje są podjęte.</div>`;
     const wiersz = (b) => `<div class="blad ${b.poziom}"><span class="tx">${esc(b.tekst)}</span>
        ${dokad(b.zakladka) ? `<button class="btn jasny maly" data-akcja="popraw" data-z="${dokad(b.zakladka)}">Popraw</button>` : ""}</div>`;
-    // U5: trzy grupy – „Dla informacji” domyślnie zwinięte
+    // trzy grupy – „Dla informacji” domyślnie zwinięte
     const grupy = [["czerwony", "Do zrobienia"], ["pomaranczowy", "Uwaga"], ["niebieski", "Dla informacji"]].map(([poziom, nazwa]) => {
       const g = v.lista_bledow.filter((b) => b.poziom === poziom);
       if (!g.length) return "";
@@ -366,7 +366,7 @@ function skladDruzyny(v) {
     <p class="sklad">${sklad.map((o) => `<span class="osoba-druzyny"><span class="inicjaly">${inicjaly(o.nazwa)}</span>${esc(o.nazwa)}</span>`).join("")}</p>`;
 }
 
-// U17: refleksja drużyny przy wysyłaniu decyzji – widzi ją mistrz gry (panel i eksport CSV).
+// refleksja drużyny przy wysyłaniu decyzji – widzi ją mistrz gry (panel i eksport CSV).
 // Szkic trzymany w pamięci strony, żeby odświeżenie zakładki (zapis kolegi z drużyny) go nie skasowało.
 let szkicRefleksji = null;
 document.addEventListener("input", (e) => { if (e.target.id === "refleksja") szkicRefleksji = e.target.value; });

@@ -1,4 +1,4 @@
-"""B10: mnożnik wyposażenia – liniowy bez `wyposazenie_nasycenie`, z nim malejące korzyści z kolejnych sztuk."""
+"""Mnożnik wyposażenia – liniowy bez `wyposazenie_nasycenie`, z nim malejące korzyści z kolejnych sztuk."""
 import copy
 import math
 

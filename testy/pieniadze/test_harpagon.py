@@ -1,4 +1,4 @@
-"""Lichwiarz Harpagon (F3a.10): pożyczka od ręki poza KPiR, odsetki od całego długu, po terminie rosnąca presja –
+"""Lichwiarz Harpagon: pożyczka od ręki poza KPiR, odsetki od całego długu, po terminie rosnąca presja –
 przypomnienia, odsetki karne, wizyty (szkody w lokalu, odpływ klientów, odejście pracownika); spłata kończy presję."""
 
 from copy import deepcopy
@@ -45,7 +45,7 @@ def test_pozyczka_poza_kpir_i_odsetki_od_calego_dlugu():
 
 
 def test_kwota_do_oddania_w_terminie_jak_w_oknie_pozyczki():
-    """U15: okno pożyczki (harpagon.js) podaje kwota × (1 + oprocentowanie) ** termin_rund – tyle trzeba oddać
+    """Okno pożyczki (harpagon.js) podaje kwota × (1 + oprocentowanie) ** termin_rund – tyle trzeba oddać
     na początku rundy terminu."""
     g = _gra(("A", None), ("B", None))
     u = lw.ustawienia(g.dane)

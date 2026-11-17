@@ -1,4 +1,4 @@
-"""B6: boty korzystają z każdej opcji lokalu – kupno na kredyt pod zastaw, lokal niewyposażony, działka, przebicie
+"""Boty korzystają z każdej opcji lokalu – kupno na kredyt pod zastaw, lokal niewyposażony, działka, przebicie
 w licytacji – z leasingu sprzętu i z kupna budynku z najemcą (parametry strategii `lokal`, `leasing`, `wykup`,
 `przejecie`; pomiar w balans/warianty.py)."""
 import copy
@@ -115,7 +115,7 @@ def test_bot_z_mala_gotowka_bierze_sprzet_w_leasingu():
 
 
 def test_bot_z_dwoma_lokalami_zamawia_z_zapasow_kazdego_lokalu(monkeypatch):
-    """Magazyn każdego lokalu jest osobny (Z2), więc zamówienie bot liczy osobno z zapasów lokalu (B6: wcześniej z
+    """Magazyn każdego lokalu jest osobny, więc zamówienie bot liczy osobno z zapasów lokalu (wcześniej z
     zapasów całej firmy – nadmiar jednego lokalu „pokrywał” braki drugiego; drugi lokal tracił sprzedaż)."""
     g = Gra.nowa("t", [("A", "zrownowazony"), ("B", "tani")], 12, 5, poziomy={"A": "trudny", "B": "sredni"},
                  kapital_startowy=200000)

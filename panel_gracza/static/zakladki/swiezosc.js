@@ -32,7 +32,7 @@ function ryzykoHtml(M) {
 
 function wynikiMagazynu(W, M, v) {
   let html = "";
-  const A = M?.auto_dostawca;   // Z4: towar u auto-dostawcy
+  const A = M?.auto_dostawca;   // towar u auto-dostawcy
   if (A?.koszt) html += `<p class="podpowiedz">Przechowanie towaru u auto-dostawcy: ${licz(A.litrodni)} litrodni, <span class="minus">${zl2(A.koszt)}</span>.</p>`;
   if (A?.zostaje?.length) html += zwinTabela("Zostaje u auto-dostawcy na następny tydzień (płacisz za przechowanie)", ["Lokal", "Składnik", "Jakość", "Opakowania", "Ostatni dzień"],
     A.zostaje.map((x) => [esc(nazwaLokalu(v, x.lokal)), esc(x.zasob), gw(x.jakosc), ulamek(x.ilosc), x.termin ? dataKrotka(x.termin) : "–"]), { klasy: ["l", "l"] });
@@ -96,7 +96,7 @@ function wynikiMenu(W, kat) {
 }
 
 
-// Z3: przewozy towaru z wybranego lokalu do innego własnego (silnik/nieruchomosci/per_lokal.py: przewozy) –
+// przewozy towaru z wybranego lokalu do innego własnego (silnik/nieruchomosci/per_lokal.py: przewozy) –
 // kurs (para lokali, jeden dzień) zajmuje czas właściciela i kosztuje; towar jedzie rano, termin krótszy.
 function przewozyHtml(v, S, edycja) {
   const P = v.przewozy, id = idWybranego(v);
@@ -146,7 +146,7 @@ export const swiezosc = {
     Dużo towaru w wynajmie i przeterminowane jedzenie w koszu przyciągają sanepid. Mrożona pita i mrożone mięso zastępują świeże, gdy tych zabraknie,
     ale klienci to czują (−1★ jakości składnika).${IG_SWIEZOSC}`,
   decyzje({ v }) {
-    const id = idWybranego(v);   // Z3: kilka lokali – magazyn wybranego lokalu
+    const id = idWybranego(v);   // kilka lokali – magazyn wybranego lokalu
     const S = (id && v.swiezosc?.lokale?.[id]) || v.swiezosc;
     if (!S) return `<p class="podpowiedz">Brak danych o magazynie.</p>`;
     const koniec = S.dni[S.dni.length - 1].data;
@@ -179,7 +179,7 @@ export const swiezosc = {
   },
 };
 
-// UF15: przewozy towaru między lokalami – osobna podzakładka Zaopatrzenia (dawniej na dole Magazynu)
+// przewozy towaru między lokalami – osobna podzakładka Zaopatrzenia (dawniej na dole Magazynu)
 export const przewozy = {
   tytul: "Przewozy", tytulPelny: "Zaopatrzenie – przewozy między lokalami", ikona: "dostawcy",
   odblokowanie: (v) => !!v.przewozy?.zasady && wieleLokali(v), ukryta: (v) => !v.lokale,

@@ -1,4 +1,4 @@
-"""Funkcje gry przy przeliczeniu rundy (seria „funkcje”, raporty/funkcje/plan.md: J3, J5).
+"""Funkcje gry przy przeliczeniu rundy (seria „funkcje”).
 
 Przed zastosowaniem decyzji rundy (silnik/runda.py, podgląd decyzji drużyny – api/prezentacja.py: stan_po_szkicu)
 decyzje każdej firmy przechodzą przez `decyzje_firmy`:
@@ -7,7 +7,7 @@ decyzje każdej firmy przechodzą przez `decyzje_firmy`:
 - funkcje, których firma sama nie prowadzi (wyłączone; zakryte – tylko drużyny, boty nigdy nie są na autopilocie),
   gra robi za nią bezpiecznymi decyzjami domyślnymi:
   zaopatrzenie – każdy działający lokal z obsadą kuchni na auto-dostawach z ilościami z prognozy popytu (jak boty;
-  K4: prognoza z kampaniami i promocjami drużyny; bez kucharza i właściciela na kuchni – bez dostaw; K5: jakość
+  prognoza z kampaniami i promocjami drużyny; bez kucharza i właściciela na kuchni – bez dostaw; jakość
   składników jak stanowiska kuchni lokalu),
   urzędy – higiena domyślna i bez polis (kontrole sanepidu: wyłączone – harmonogram, zakryte – jak dotąd),
   księgowość – zamiast samodzielnej księgowości najtańsze biuro (bez kar za KPiR i deklaracje),
@@ -15,7 +15,7 @@ decyzje każdej firmy przechodzą przez `decyzje_firmy`:
   właściciel – bez wypłat i wpłat (wolne godziny na puste stanowisko – jak dotąd),
   pozostałe (wyposażenie, rozwój, sieć, handel, Harpagon, giełda, analiza) – bez decyzji, bez kosztu i skutku.
 Autopilot działa od pierwszej nieprzeliczonej rundy po zakryciu (historia odsłonięć – silnik/funkcje.py: odslonieta).
-K1 (decyzja autora 10.11): znów zakryta funkcja wraca do stanu sprzed odsłonięcia, bez zwrotu pieniędzy (`przepadek`,
+Decyzja autora 10.11: znów zakryta funkcja wraca do stanu sprzed odsłonięcia, bez zwrotu pieniędzy (`przepadek`,
 na początku rundy, od której gra ją robi): marketing – kampanie z efektem, promocje (decyzja gry: bez promocji)
 i narzędzia internetowe; handel – ogłoszenia drużyny; wyposażenie i udogodnienia (rozwój) – wszystkie sztuki we
 wszystkich lokalach, jak likwidacja (niezamortyzowana wartość w kosztach, majątek mniejszy); rozwój – trwające
@@ -52,7 +52,7 @@ from .swiat import awarie as aw
 
 def ustawienia(dane: Dane) -> dict:
     """Zakupy gry za drużynę (funkcje.yaml: autopilot – pole wymagane) – zapas auto-dostaw i jakość składników, gdy
-    lokal nie ma jeszcze jakości stanowisk (K5: `_jakosc_lokalu`)."""
+    lokal nie ma jeszcze jakości stanowisk (`_jakosc_lokalu`)."""
     return dane.funkcje["autopilot"]
 
 
@@ -85,7 +85,7 @@ def decyzje_firmy(dane: Dane, stan: StanGry, nazwa: str, d: dict, konf: dict, ru
     if _robi_gra(dane, konf, nazwa, "ksiegowosc", runda):
         zmiany |= _ksiegowosc(dane, f, d, wybrane)
     if _robi_gra(dane, konf, nazwa, "marketing", runda) and f.promocje:
-        zmiany["promocje"] = []   # promocje nie mają końca – na autopilocie się kończą (K1: po ponownym zakryciu)
+        zmiany["promocje"] = []   # promocje nie mają końca – na autopilocie się kończą
     if zmiany:
         d = {**d, **zmiany}
     return d, bledy
@@ -100,7 +100,7 @@ def _robi_gra(dane: Dane, konf: dict, nazwa: str, klucz: str, runda: int) -> boo
 
 def _zaopatrzenie(dane: Dane, stan: StanGry, f: Firma, d: dict, konf: dict, runda: int) -> dict:
     """Auto-dostawy każdego działającego lokalu z obsadą kuchni: składniki na prognozowany popyt × zapas, bez tego,
-    co już leży w lokalu i u dostawcy (silnik/kuchnia/planowanie.py: pozycje_auto_dostaw). K4: lokal bez nikogo na
+    co już leży w lokalu i u dostawcy (silnik/kuchnia/planowanie.py: pozycje_auto_dostaw). lokal bez nikogo na
     stanowiskach kuchni (pracownika ani właściciela) nic nie sprzeda – nie dostaje dostaw (ani abonamentu)."""
     az = ad.zasady(dane)
     if not az or runda < az["od_rundy"] or "dostawcy" not in dane.odblokowane(runda):
@@ -130,11 +130,11 @@ def _zaopatrzenie(dane: Dane, stan: StanGry, f: Firma, d: dict, konf: dict, rund
 
 
 def _jakosc_lokalu(dane: Dane, v: Firma, klienci: dict[str, float], domyslna: int) -> int:
-    """K5: jakość składników auto-dostaw jak lokal – składniki nie gorsze od lepszej części stanowiska dania
+    """jakość składników auto-dostaw jak lokal – składniki nie gorsze od lepszej części stanowiska dania
     (gwiazdki prowadzącego albo sprzętu, silnik/kuchnia/operacje.py: jakosc_uslugi), średnio ważone prognozą porcji
     i zaokrąglone do całych gwiazdek (1–3). Premium (kucharze 2,5–3★) – 3★, zrównoważony – 2★, tani – 1★; bez
     stanowisk dań – `domyslna` (funkcje.yaml). Średnia prowadzącego i sprzętu dawała premium tylko 2★ (sprzęt
-    wynajmującego 2★) – automat dalej wygrywał (pomiar K5)."""
+    wynajmującego 2★) – automat dalej wygrywał, co pokazał pomiar."""
     suma = waga = 0.0
     for u, n in klienci.items():
         if n > 0 and (q := jakosc_uslugi(dane, v, u)):
@@ -155,7 +155,7 @@ def _z_nowym_lokalem(dane: Dane, stan: StanGry, f: Firma, d: dict, runda: int) -
 
 
 def _obsadzone_kuchnie(dane: Dane, f: Firma, d: dict, runda: int) -> set[str]:
-    """K4: lokale, w których w tej rundzie ktoś stanie przy kuchni – pracownik (bez zwolnionych, z zatrudnionymi
+    """lokale, w których w tej rundzie ktoś stanie przy kuchni – pracownik (bez zwolnionych, z zatrudnionymi
     i przeniesionymi w tej rundzie, silnik/decyzje.py) albo właściciel na pustym stanowisku (ta sama kolejność co
     silnik/ludzie/czas_wlasciciela.py, przy wolnych godzinach w puli). Zatrudnienie na stanowisko kupowane w tej
     rundzie (nieznany numer) liczy się w lokalach, które mają na nie miejsce (silnik/decyzje.py: stanowiska)."""
@@ -199,7 +199,7 @@ def _obsadzone_kuchnie(dane: Dane, f: Firma, d: dict, runda: int) -> set[str]:
 def _prognoza(dane: Dane, stan: StanGry, f: Firma, d: dict, runda: int, dzial: list) -> dict[str, dict[str, float]]:
     """Oczekiwany popyt lokali firmy ({lokal: {danie: porcje}}, silnik/rynek/popyt.py: prognoza): menu i ceny
     z decyzji rundy (bez nich – z lokalu, nowe danie po cenie preferowanej), jakość ze stanowisk (bez obsady – 2★),
-    konkurencja z danych publicznych poprzedniej rundy. K4: z kampaniami (trwającymi i zamówionymi w tej rundzie –
+    konkurencja z danych publicznych poprzedniej rundy. z kampaniami (trwającymi i zamówionymi w tej rundzie –
     także konkurencji, jak zakładka Miasteczko akademickie ▸ Goście w strefach) i promocjami drużyny (silnik/rynek/reklama.py,
     promocje.py)."""
     w_lokalu = d.get("w_lokalu") if isinstance(d.get("w_lokalu"), dict) else {}
@@ -238,7 +238,7 @@ def _prognoza(dane: Dane, stan: StanGry, f: Firma, d: dict, runda: int, dzial: l
 
 
 def _marketing_rundy(dane: Dane, stan: StanGry, f: Firma, d: dict, runda: int, moje: dict) -> tuple[Firma, dict | None]:
-    """K4: firma (kopia) z kampaniami i promocjami z decyzji rundy (bez kosztów – księga na brudno) i efekty kampanii
+    """firma (kopia) z kampaniami i promocjami z decyzji rundy (bez kosztów – księga na brudno) i efekty kampanii
     wszystkich firm w rundzie (rk.efekty_rundy; None – gra bez agencji). Dania z prognozy liczą się jako
     w sprzedaży (promocja na nowe danie)."""
     g = f.model_copy(update={"kampanie": list(f.kampanie), "promocje": list(f.promocje),
@@ -278,7 +278,7 @@ def _urzedy(dane: Dane, f: Firma) -> dict:
     return zmiany
 
 
-# --- K1: ponowne zakrycie – co przepada ---------------------------------------------------------------------------
+# --- ponowne zakrycie – co przepada ---------------------------------------------------------------------------
 
 def przepadki_rundy(dane: Dane, stan: StanGry, konf: dict, runda: int, ksiegi: dict[str, Ksiega]) -> dict[str, dict]:
     """`przepadek` każdej firmy (stan zmieniany w miejscu – kopia w przeliczeniu rundy); {firma: wynik} tylko firm,

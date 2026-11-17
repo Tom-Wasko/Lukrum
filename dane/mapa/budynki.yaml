@@ -4,8 +4,8 @@ opis: 'Budynki na mapie. miejsce – prawdziwe położenie w Lublinie (plan, roz
   strona mapy z OSM; wnetrze – id wnętrza budynku. Każdy prowadzi do zakładki gry (zakladka – klucz z panel_gracza/static/zakladki/index.js;
   null = jeszcze bez zakładki). Własny lokal drużyny otwiera okno z zakładkami firmy. mapa: pola siatki.
   zespol – id budynku zbiorczego z listy zespoly (na nowej mapie rysuje się tylko zespół, w środku wybór firmy).'
-zrodlo: notatka „Elementy mapy” (banki w dwóch rzędach po trzy, dostawcy, sklepy, parki, agencje, urząd); nazwy
-  banków z mapa/banki.yaml (F3a.9), biur, dostawców i firm szkoleniowych z katalog.yaml i dostawcy.yaml
+zrodlo: założenia autora o elementach mapy (banki w dwóch rzędach po trzy, dostawcy, sklepy, parki, agencje, urząd); nazwy
+  banków z mapa/banki.yaml, biur, dostawców i firm szkoleniowych z katalog.yaml i dostawcy.yaml
 budynki:
 - id: bank_1
   nazwa: Kmicic

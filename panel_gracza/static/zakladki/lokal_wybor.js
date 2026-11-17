@@ -1,4 +1,4 @@
-// Wybrany lokal (Z3, przebudowa 2.11.2026): kafelki lokali na górze zakładki Lokale – wybór zostaje przy zmianie
+// Wybrany lokal (przebudowa 2.11.2026): kafelki lokali na górze zakładki Lokale – wybór zostaje przy zmianie
 // podzakładek. Przy kilku lokalach menu, ceny, magazyn, stanowiska, wyposażenie i udogodnienia są osobne w każdym
 // lokalu (silnik/nieruchomosci/per_lokal.py), więc decyzje idą do "w_lokalu": {lokal: {klucz: wartość}}; przy jednym
 // lokalu – jak dawniej, decyzja główna (d.oferta, d.sprzedaz, …).
@@ -78,7 +78,7 @@ export function kafelkiLokali(v) {
     osobno dla każdego lokalu – kliknij kafelek, żeby przełączyć lokal. Pracownik pracuje na stanowisku jednego lokalu; szkolenia, czas właściciela i dostawcy są wspólni dla firmy.</p>` : ""}`;
 }
 
-// UF15: krótki wybór lokalu w zakładkach Firmy, które mimo to działają na jednym lokalu (Udogodnienia) – tylko przy kilku lokalach
+// krótki wybór lokalu w zakładkach Firmy, które mimo to działają na jednym lokalu (Udogodnienia) – tylko przy kilku lokalach
 export function wyborLokaluKrotki(v) {
   if (!wieleLokali(v)) return "";
   const akt = lokalWybrany(v).id;

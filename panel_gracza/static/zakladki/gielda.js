@@ -1,4 +1,4 @@
-// Giełda (UF15): miejsce na giełdę, którą dostarczy kolega razem z nową mapą – na razie tylko tablica „w budowie”.
+// Giełda: miejsce na giełdę, którą dostarczy kolega razem z nową mapą – na razie tylko tablica „w budowie”.
 export const W_BUDOWIE = (tekst) => `<div class="w-budowie" role="note"><span class="tasma"></span>
   <div class="napis"><b>W budowie</b><span>${tekst}</span></div><span class="tasma"></span></div>`;
 

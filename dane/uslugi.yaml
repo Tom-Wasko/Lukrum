@@ -2,8 +2,8 @@
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Dania menu (w kodzie silnika: usługi): popyt roczny, sezonowość (styczeń–grudzień), cena preferowana (środek ceny
   rynkowej brutto), czas kucharza i kasy na porcję w godzinach, kucharz, sprzęt i składniki na porcję; pensje rynkowe (niska/średnia/wysoka).'
-zrodlo: notatki/Menu i składniki.md (receptury i ceny rynkowe brutto – notatki autora); popyt, czasy pracy, sezonowość
-  i pensje – założenie F2.6 (do kalibracji w kroku 5)
+zrodlo: notatki autora o menu i składnikach (receptury i ceny rynkowe brutto – notatki autora); popyt, czasy pracy, sezonowość
+  i pensje – założenie autora (do kalibracji)
 uslugi:
   kebab_w_bulce:
     nazwa: Kebab w bułce

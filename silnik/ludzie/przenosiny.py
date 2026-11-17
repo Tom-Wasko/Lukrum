@@ -1,4 +1,4 @@
-"""UF20: obsada stanowisk i przenosiny pracowników (gra z lokalami).
+"""Obsada stanowisk i przenosiny pracowników (gra z lokalami).
 
 Decyzja `przenosiny: [{"pracownik", "typ", "nr", "dodatek"}]` – pracownik przechodzi na wolne stanowisko swojego typu:
 - w tym samym lokalu – zawsze (obsada w zakładce Mój lokal);
@@ -22,7 +22,7 @@ from ..model import Firma, Pracownik, Stanowisko
 
 
 def ustawienia(dane: Dane) -> dict | None:
-    """Parametry zgody; None – dane bez UF20 (np. zamrożona kopia testów): pracownik zawsze się zgadza."""
+    """Parametry zgody; None – dane bez zgody na przenosiny (np. zamrożona kopia testów): pracownik zawsze się zgadza."""
     return (dane.z.get("pracownicy") or {}).get("przenosiny")
 
 

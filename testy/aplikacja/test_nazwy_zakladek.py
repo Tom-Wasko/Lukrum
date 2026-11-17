@@ -1,5 +1,5 @@
-"""U4: nazwy zakładek w tekstach silnika i danych (komunikaty, lista błędów, wnioski, zdarzenia) istnieją w panelu
-gracza – po przebudowie menu (2.11.2026) zostały stare nazwy („Kadry”, „(Inwestycje)” przy stanowiskach). UF15 (6.11.2026): nowy układ menu."""
+"""Nazwy zakładek w tekstach silnika i danych (komunikaty, lista błędów, wnioski, zdarzenia) istnieją w panelu
+gracza – po przebudowie menu (2.11.2026) zostały stare nazwy („Kadry”, „(Inwestycje)” przy stanowiskach).  Układ menu z 6.11.2026."""
 
 import io
 import re

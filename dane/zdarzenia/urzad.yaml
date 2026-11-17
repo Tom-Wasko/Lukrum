@@ -1,4 +1,4 @@
-# Urząd i sanepid w grze z lokalami (F3b.6, silnik/ksiegowosc/urzad.py): rejestracja firmy, odbiór lokalu przez sanepid,
+# Urząd i sanepid w grze z lokalami (silnik/ksiegowosc/urzad.py): rejestracja firmy, odbiór lokalu przez sanepid,
 # higiena lokalu (decyzja) i jej wpływ na kontrole sanepidu z silnik/kuchnia/magazyn.py
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Higiena – decyzja `higiena: poziom` (trwa, dopóki drużyna jej nie zmieni; bez decyzji – higiena.domyslna).
@@ -7,10 +7,10 @@ opis: 'Higiena – decyzja `higiena: poziom` (trwa, dopóki drużyna jej nie zmi
   i skarg (skutek kontrola w historiach) mnożona przez mnoznik poziomu; do mandatu dolicza się mandat poziomu.
   Odbiór: w rundzie, w której lokal ma zacząć działać, sanepid go odbiera – przy poziomie z odbior: false
   odmawia i lokal zaczyna działać odbior.odroczenie_rund rund później (do skutku).'
-zrodlo: 'Plan implementacji F3b.6 i notatka „Elementy mapy” (Urząd / Sanepid – rejestracja firmy, zgoda na otwarcie
+zrodlo: 'założenia autora o elementach mapy (Urząd / Sanepid – rejestracja firmy, zgoda na otwarcie
   lokalu, kontrole: higiena, przeterminowany towar, mandaty); rejestracja w CEIDG i wpis do rejestru zakładów
   sanepidu są bezpłatne (wpis do rejestru zakładów – na wniosek przed rozpoczęciem działalności); koszty sprzątania
-  – rząd wielkości ofert firm sprzątających dla małej gastronomii w 2026 r.; szanse – założenie F3b.6, do
+  – rząd wielkości ofert firm sprzątających dla małej gastronomii w 2026 r.; szanse – założenie autora, do
   kalibracji w kroku 5'
 urzad:
   nazwa: Urzędy i Sanepid

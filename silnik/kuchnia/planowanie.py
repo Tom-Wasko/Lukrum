@@ -32,7 +32,7 @@ def zamowienie_zasobow(dane: Dane, firma: Firma, klienci: dict[str, float], ceny
     """Zamówienia (u najtańszych dostawców w danej jakości), żeby starczyło na `klienci` × zapas.
     dni – udziały dni rundy w popycie (gra z lokalami): dostawy rozbite na dni wg terminu przydatności,
     w dni dostaw dostawcy (start – data pierwszego dnia rundy). Z podziałem na dni pomija dyskonty (odbiór osobisty,
-    limity) i dostawców, u których któraś dostawa nie osiąga minimalnego zamówienia. dyskonty (B8) – zakupy w jednym
+    limity) i dostawców, u których któraś dostawa nie osiąga minimalnego zamówienia. dyskonty – zakupy w jednym
     dyskoncie, który najwięcej oszczędza: składniki tańsze niż u dostawców z dowozem, codziennie do limitu opakowań
     (czas właściciela na odbiór – silnik/kuchnia/dostawcy.py: zasady_dostaw); reszta u dostawców z dowozem."""
     potrzeba = {}
@@ -57,7 +57,7 @@ def zamowienie_zasobow(dane: Dane, firma: Firma, klienci: dict[str, float], ceny
 
 def pozycje_auto_dostaw(dane: Dane, firma: Firma, klienci: dict[str, float], ceny_dostawcow: dict,
                         dostawca: str, jakosc: int, zapas: float) -> list[dict]:
-    """B8: pozycje auto-dostaw (silnik/kuchnia/auto_dostawca.py) na `klienci` × zapas, bez towaru, który już
+    """Pozycje auto-dostaw (silnik/kuchnia/auto_dostawca.py) na `klienci` × zapas, bez towaru, który już
     leży w magazynie lokalu albo u dostawcy; jakość – najbliższa niższa, jaką ma `dostawca`."""
     oferty = najtansze({dostawca: ceny_dostawcow.get(dostawca, {})})
     potrzeba: dict[str, float] = {}
@@ -84,7 +84,7 @@ def _jakosc_oferty(oferty: dict, zasob: str, jakosc: int) -> int | None:
 
 def _z_dyskontu(dane: Dane, firma: Firma, potrzeba: dict[str, float], ceny_dostawcow: dict, jakosc: int,
                 dni: list[float], pomin: set[str]) -> tuple[list[dict], dict[str, float]]:
-    """B8: (zakupy w dyskoncie, potrzeba po nich). Dyskont – ten, w którym składniki tańsze niż u dostawców
+    """(zakupy w dyskoncie, potrzeba po nich). Dyskont – ten, w którym składniki tańsze niż u dostawców
     z dowozem dają największą oszczędność w rundzie (gazetki w cenach); zakupy dzień po dniu na popyt dnia, najwyżej
     limit opakowań składnika, zapas z magazynu i z poprzednich dni (gdy termin dłuższy niż dzień) – zmniejsza zakup."""
     dyskonty = [d for d in ceny_dostawcow if info_dostawcy(dane, d)["odbior_osobisty"]]

@@ -25,7 +25,7 @@ export const sprzedaz = {
     const own = Object.entries(sp).map(([u, s]) => [esc(nazwaUslugi(kat, u)), licz(s.popyt), licz(s.sprzedaz),
       s.utracona ? `<span class="minus">${licz(s.utracona)}</span>` : "0", esc(s.przyczyna), licz(s.pomylki), zl2(s.przychod)]);
     const nag = firmy.map((f) => `${f === v.firma ? "<u>" : ""}${esc(r.firmy[f])}${f === v.firma ? "</u>" : ""}`);
-    // UF23: podsumowanie i kafelki na górze, tabele szczegółów zwijane
+    // podsumowanie i kafelki na górze, tabele szczegółów zwijane
     const S = Object.values(sp), suma = (k) => S.reduce((a, s) => a + (s[k] || 0), 0);
     const chetni = suma("popyt"), obsl = suma("sprzedaz"), utr = suma("utracona");
     const najg = Object.entries(sp).sort((a, b) => b[1].utracona - a[1].utracona)[0];

@@ -1,4 +1,4 @@
-"""Wypadki w lokalu i ubezpieczyciel (F3b.5): historie jednej drużyny, szkody, polisy z karencją, boty, widok API."""
+"""Wypadki w lokalu i ubezpieczyciel: historie jednej drużyny, szkody, polisy z karencją, boty, widok API."""
 
 import copy
 
@@ -23,7 +23,7 @@ def pewne_wypadki(monkeypatch):
 
 
 def test_szansa_rosnie_bez_wypadku_i_wraca_po_wypadku():
-    """P11: +4 pp. za każdą rundę bez wypadku (od otwarcia lokalu / od rundy wypadków), sufit, reset po wypadku."""
+    """+4 pp. za każdą rundę bez wypadku (od otwarcia lokalu / od rundy wypadków), sufit, reset po wypadku."""
     from silnik.model import Firma, Lokal
     dane = dane_domyslne()
     z = aw.zasady(dane)

@@ -1,4 +1,4 @@
-"""Uzgodnienie kasy (F3a.12): w każdej rundzie każdej firmy gotówka zgadza się co do grosza z KPiR ± VAT ± operacjami
+"""Uzgodnienie kasy: w każdej rundzie każdej firmy gotówka zgadza się co do grosza z KPiR ± VAT ± operacjami
 poza KPiR (silnik/ksiegowosc/uzgodnienie.py). Losowe gry botów (hypothesis) – w grze z lokalami i bez; drużyna „H” gra jak bot,
 ale dokłada losowe decyzje finansowe: kredyty, lokaty, Harpagon, kupno lokalu i działki, sprzedaż sprzętu, zwroty,
 a w grze z lokalami – biuro z mapy albo samodzielną księgowość z (czasem błędnymi) deklaracjami (silnik/ksiegowosc/biuro.py)."""

@@ -14,7 +14,7 @@ Poziomy (dane/boty.yaml: poziomy, gra z lokalami; bez lokali – zawsze dawne re
   oczekiwanej marży (po koszcie składników i pracy), reklamuje się tylko z wolną kuchnią i bierze kolejny
   gotowy lokal, gdy obecne nie nadążają;
 - niemożliwy – jak trudny, ale oszukuje: klienci bez powodu wolą jego lokale (przewaga_popytu, silnik/runda.py).
-- jak człowiek – słaby, średni, dobry (Z5, tylko do pomiarów trudności): bez modelu popytu – prognoza z raportów
+- jak człowiek – słaby, średni, dobry (tylko do pomiarów trudności): bez modelu popytu – prognoza z raportów
   poprzednich rund i potencjału lokalu z zakładki Klienci (_prognoza_czlowieka); wersje różnią się staraniem.
 """
 from __future__ import annotations
@@ -81,7 +81,7 @@ def _cena(dane: Dane, strategia: dict, stan: StanGry, u: str, runda: int, mnozni
 
 
 def _podwyzki(dane: Dane, f: Firma, ust: dict) -> dict:
-    """Pensja do progu zadowolenia z zapasem, najwyżej podwyzka_maks × preferowana (U20). Bot nie zna cech – liczy
+    """Pensja do progu zadowolenia z zapasem, najwyżej podwyzka_maks × preferowana. Bot nie zna cech – liczy
     jak dla zwyczajnej osoby, więc materialiście czy marudzie podwyżka może nie wystarczyć."""
     u = zo.ustawienia(dane)
     if not u:
@@ -99,7 +99,7 @@ def _podwyzki(dane: Dane, f: Firma, ust: dict) -> dict:
 
 
 def _pensja(dane: Dane, st: dict, kandydat: dict) -> int:
-    """B9: pensja oferowana kandydatowi – ułamek preferowanej (strategia `pensja`) albo płaca minimalna; kalibracja B9:
+    """Pensja oferowana kandydatowi – ułamek preferowanej (strategia `pensja`) albo płaca minimalna;
     co najmniej próg, poniżej którego kandydat odrzuca ofertę (zalozenia.yaml: pracownicy.oferta_pracy)."""
     minimum = dane.z["finanse"]["placa_minimalna"]
     prog = math.ceil(fz.prog_oferty(dane, kandydat, fz.PRACE))
@@ -109,7 +109,7 @@ def _pensja(dane: Dane, st: dict, kandydat: dict) -> int:
 
 
 def _dla_minimalnej(dane: Dane, st: dict, kandydaci: list[dict]) -> list[dict]:
-    """Kalibracja B9: bot z pensją minimalną wybiera spośród kandydatów, którym minimalna wystarcza (pozostali by
+    """Bot z pensją minimalną wybiera spośród kandydatów, którym minimalna wystarcza (pozostali by
     odmówili); gdy takich nie ma – wszyscy (wtedy `_pensja` podnosi ofertę do progu)."""
     if st.get("pensja") != "minimalna" or not fz.zasady_oferty(dane):
         return kandydaci
@@ -141,7 +141,7 @@ def _bez_czekajacych(cele: list[tuple], w_drodze: dict[str, int]) -> list[tuple]
 
 
 def _niedoplacony(dane: Dane, stan: StanGry, nazwa: str, zawod: str, u: dict, pomin: set[str]) -> dict | None:
-    """Kalibracja B9: oferta dla najbardziej niedopłaconej osoby zawodu w drużynie graczy (z od_botow – także
+    """Oferta dla najbardziej niedopłaconej osoby zawodu w drużynie graczy (z od_botow – także
     u innego bota): pensja poniżej placa_ponizej × oczekiwana albo zadowolenie poniżej zadowolenie_ponizej;
     None – nikogo takiego nie ma."""
     minimum = dane.z["finanse"]["placa_minimalna"]
@@ -170,7 +170,7 @@ def _niedoplacony(dane: Dane, stan: StanGry, nazwa: str, zawod: str, u: dict, po
 
 def _podkup(dane: Dane, stan: StanGry, nazwa: str, cele: list[tuple], pz: dict, konf: dict,
             runda: int) -> tuple[list[dict], list[tuple]]:
-    """Kalibracja B9: oferty podkupienia niedopłacanych osób na stanowiska do obsadzenia (poziom z podkupuje_ludzi,
+    """Oferty podkupienia niedopłacanych osób na stanowiska do obsadzenia (poziom z podkupuje_ludzi,
     opcja MG podkupywanie, od rundy headhuntera); zwraca (oferty, stanowiska, które zostają dla puli kandydatów).
     Stanowisko czeka na podkupioną osobę przez jej okres wypowiedzenia."""
     u = rp.podkupywanie_botow(dane)
@@ -203,7 +203,7 @@ def przewaga_popytu(dane: Dane, konf: dict, nazwa: str) -> float:
 def _kredyt_na_lokal(dane: Dane, f: Firma, decyzja: dict, runda: int, klucz: str = "lokal") -> dict | None:
     """Kredyt pod zastaw kupowanego lokalu (produkt banku z `od_lokalu` i `zastaw`) – najwięcej, ile bank da; None –
     żaden bank nie udzieli (np. ten kredyt już w spłacie). klucz "przejecie" – pod zastaw kupowanego budynku
-    z najemcą (B6)."""
+    z najemcą."""
     nowy = bk.nowy_lokal(dane, {klucz: decyzja}, runda, f)
     for b, bank in bk.dostepne(dane, f.bank).items():
         for p in bank["kredyty"]:
@@ -216,7 +216,7 @@ def _kredyt_na_lokal(dane: Dane, f: Firma, decyzja: dict, runda: int, klucz: str
 
 
 def _kredyt_bez_historii(dane: Dane, f: Firma, brak: float, runda: int, wziete: list[dict] = ()) -> dict | None:
-    """Dopłata do kupna lokalu (B6): kredyt bez zastawu i bez wymogu historii (np. „na start”) na brakującą kwotę
+    """Dopłata do kupna lokalu: kredyt bez zastawu i bez wymogu historii (np. „na start”) na brakującą kwotę
     (w górę do pełnego złotego, najwyżej maks_kwota) – najtańszy, którego bank udzieli; None – żaden albo za mały.
     wziete – kredyty już w decyzjach tej rundy (tego samego produktu bank nie da drugi raz)."""
     kwota = float(math.ceil(brak))
@@ -237,7 +237,7 @@ def _bank_bota(dane: Dane, st: dict) -> str:
     b = bk.banki(dane)
     if not bk.tylko_bank_konta(dane):
         return bk.najlepsze(dane)["konto"]
-    kupno = ((st.get("lokal") or {}).get("forma") == "kupno"   # zastaw: kupowany lokal albo budynek z najemcą (B6)
+    kupno = ((st.get("lokal") or {}).get("forma") == "kupno"   # zastaw: kupowany lokal albo budynek z najemcą
              or any((st.get(k) or {}).get("kredyt") for k in ("wykup", "przejecie")))
     produkt = (st.get("kredyt") or {}).get("produkt")
 
@@ -279,7 +279,7 @@ def _wybierz_lokal(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, 
     Losowanie spośród trzech najlepszych (ziarno gry), żeby boty nie biły się zawsze o ten sam lokal.
     min_kuchnia – najmniej miejsc w kuchni (planujący bot; bez takich lokali – każdy); strefy – tylko lokale w tych
     strefach (strategia: strefy, np. pomiar w balans/warianty.py; bez wolnych – każda strefa). wybor – parametr
-    strategii `lokal` (B6): `typy` lokali (bez – gotowy), `forma` (najem / kupno – na kredyt pod zastaw lokalu, gdy
+    strategii `lokal`: `typy` lokali (bez – gotowy), `forma` (najem / kupno – na kredyt pod zastaw lokalu, gdy
     po wejściu zostaje `rezerwa` gotówki; bez takich lokali – gotowy w najmie), `przebicie` – oferta w licytacji
     × cena wywoławcza. Zwraca (decyzja lokal, kredyty na kupno – pusta lista przy najmie)."""
     w = wybor or {}
@@ -292,7 +292,7 @@ def _wybierz_lokal(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, 
                                                             w.get("rezerwa", 0), w.get("przebicie", 1.0)) is not None]
     if not wolne and wybor:
         return _wybierz_lokal(dane, stan, nazwa, strategia_klucz, runda, konf, min_kuchnia, strefy)
-    if strefy:   # B6: strefa przed kuchnią – inaczej pomiar strefy bez lokalu z min_kuchnia mierzył inną strefę
+    if strefy:   # strefa przed kuchnią – inaczej pomiar strefy bez lokalu z min_kuchnia mierzył inną strefę
         wolne = [lok for lok in wolne if lok["strefa"] in strefy] or wolne
     wolne = [lok for lok in wolne if lok["miejsca"][KUCHNIA] >= min_kuchnia] or wolne
     if not wolne:
@@ -315,7 +315,7 @@ def _wybierz_lokal(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, 
 
 def _przejecie(dane: Dane, stan: StanGry, f: Firma, nazwa: str, st: dict,
                runda: int) -> tuple[dict, dict | None] | None:
-    """B6: kupno budynku z najemcą – wykup własnego lokalu w najmie (strategia `wykup`) albo budynku, który
+    """Kupno budynku z najemcą – wykup własnego lokalu w najmie (strategia `wykup`) albo budynku, który
     wynajmuje rywal (`przejecie`), gdy po zakupie zostaje `rezerwa` gotówki (z `kredyt` – razem z kredytem pod
     zastaw budynku); najtańszy z możliwych. Zwraca (decyzja, kredyt albo None)."""
     if runda < dane.mapa["zasady"]["przejecia_od_rundy"]:
@@ -357,7 +357,7 @@ def _wez_lokal(dane: Dane, stan: StanGry, f: Firma, d: dict, dec: dict, kredyty:
 def _kampanie(dane: Dane, f: Firma, st: dict, runda: int, ust: dict) -> list[dict]:
     """Kampanie ze strategii w strefach własnych lokali: dostępne, po przerwie od poprzedniej w tym kanale i strefie,
     emisje_kampanii emisji (najwyżej maks_emisji kanału), a po zapłacie zostaje bufor gotówki. Emisje i przerwę
-    może nadpisać strategia (B10)."""
+    może nadpisać strategia."""
     ust = {**ust, **{k: st[k] for k in ("emisje_kampanii", "przerwa_kampanii") if st.get(k) is not None}}
     strefy = sorted({dane.lokale[lok.id]["strefa"] for lok in f.lokale})
     wynik, wydatki = [], 0.0
@@ -382,7 +382,7 @@ def _promocje(dane: Dane, f: Firma, st: dict, runda: int, d: dict, bufor: bool, 
               ust: dict) -> list[dict] | None:
     """Promocje ze strategii (nowe tylko z buforem gotówki); danie – trwającej promocji albo najdroższe w sprzedaży.
     Promocja z `rund` (poprawki 3, warianty) idzie falami: `rund` rund promocji, potem przerwa, dopóki klienci ją
-    pamiętają (B7), i znowu. Promocja z kilkoma porcjami („2 za 1”, poprawki 3 – decyzja autora 9.11.2026): tylko
+    pamiętają, i znowu. Promocja z kilkoma porcjami („2 za 1”, poprawki 3 – decyzja autora 9.11.2026): tylko
     przy wolnej kuchni (średnie obciążenie kuchni w poprzedniej rundzie ≤ `maks_obciazenie_kuchni_porcji`) i na
     najtańsze danie – podwójna porcja najdroższego przy pełnej kuchni zawsze traciła.
 
@@ -532,7 +532,7 @@ def _decyzje_planu(dane: Dane, plan: dict, q: int) -> tuple[list[dict], list[tup
                     sp[n] = q
                     kup.append({"typ": KUCHNIA, "nr": nr, "nazwa": n, "jakosc": q})
                     brak -= 1
-        for n in _przechowywanie(dane):   # chłodnia i zamrażarka – jak w zestawie gotowego lokalu (B6)
+        for n in _przechowywanie(dane):   # chłodnia i zamrażarka – jak w zestawie gotowego lokalu
             if miejsca and not any(n in sp for _, sp, _ in miejsca):
                 miejsca[0][1][n] = q
                 kup.append({"typ": KUCHNIA, "nr": miejsca[0][0], "nazwa": n, "jakosc": q})
@@ -577,7 +577,7 @@ def _prognoza_lokali(dane: Dane, f: Firma, nazwa: str, oferta: list[str], ceny: 
 
 def _korekta_prognozy(stan: StanGry, nazwa: str, runda: int, granice: list[float]) -> float:
     """Błąd modelu popytu, którym bot trudny poprawia prognozę, w granicach z danych. W raporcie rundy
-    „prognoza” to oferta bota, a ta zawiera już korektę z tamtej rundy – stąd korekta narastająco (B3: sam
+    „prognoza” to oferta bota, a ta zawiera już korektę z tamtej rundy – stąd korekta narastająco (sam
     stosunek popyt / oferta przy stałym błędzie modelu skakał co rundę między błędem a 1)."""
     sp = (stan.wyniki.get(runda - 1, {}).get(nazwa) or {}).get("sprzedaz", {}).values()
     prog = sum(v["prognoza"] for v in sp if v["prognoza"])
@@ -589,7 +589,7 @@ def _korekta_prognozy(stan: StanGry, nazwa: str, runda: int, granice: list[float
 
 def _prognoza_czlowieka(dane: Dane, stan: StanGry, f: Firma, nazwa: str, oferta: list[str], runda: int,
                         r_sprz: int, konkurencja: dict, pc: dict) -> dict:
-    """Prognoza bota „jak człowiek” (Z5) tylko z tego, co drużyna widzi w zakładkach: popyt dań w lokalach
+    """Prognoza bota „jak człowiek” tylko z tego, co drużyna widzi w zakładkach: popyt dań w lokalach
     z raportów `pc["rund"]` ostatnich rund (średnia), przy `pc["pule"]` razy pula strefy w rundzie sprzedaży
     / pula w tamtej rundzie (zakładka Klienci). Lokal albo danie bez historii – potencjał lokalu jak w zakładce
     Klienci (2★, ceny preferowane strefy, obecna konkurencja). Format jak pp.prognoza."""
@@ -663,7 +663,7 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
     rundy = dane.katalog_ofert["rundy"]
     odbl = dane.odblokowane(runda)
     d: dict = {"zatrudnij": [], "sprzet_kup": [], "zamowienia": []}
-    if (am := st.get("amortyzacja_niskocenna")) and am != f.amortyzacja_niskocenna:   # B6: bez – od razu w koszty
+    if (am := st.get("amortyzacja_niskocenna")) and am != f.amortyzacja_niskocenna:   # bez – od razu w koszty
         d["amortyzacja_niskocenna"] = am
     pz = poziom(dane, konf, nazwa)
     planuje = pz.get("planowanie", "przepustowosc") == "przepustowosc" and dane.mapa.get("popyt")
@@ -690,7 +690,7 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
         d["przejecie"] = pr
         f = deepcopy(f)
         f.gotowka -= dane.lokale[pr["id"]]["cena"]   # dalsze zakupy z gotówki po kupnie budynku
-        if k:   # B6: kredyt pod zastaw kupowanego budynku – wchodzi razem z zakupem
+        if k:   # kredyt pod zastaw kupowanego budynku – wchodzi razem z zakupem
             d.setdefault("kredyty_wez", []).append(k)
             f.gotowka += k["kwota"]
     if (p := st.get("przejecie")) and p.get("wypowiedz"):
@@ -726,7 +726,7 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
 
     # popyt strefowy w rundzie sprzedaży (runda 1 planuje rundę 2): prognoza dla własnych lokali przy cenach
     # konkurencji z poprzedniej rundy
-    glowny = pl.glowny(f, runda)   # wyposażenie bot kupuje do lokalu głównego (Z2)
+    glowny = pl.glowny(f, runda)   # wyposażenie bot kupuje do lokalu głównego
     wyp = mnoznik_wyposazenia(dane, pl.lista(f, glowny, "wyposazenie") if glowny else f.wyposazenie)
     ceny = {u: _cena(dane, st, stan, u, runda) for u in oferta}
     szczyt, udzialy_dni, plan = 1.0, None, None
@@ -801,7 +801,7 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
     else:
         cele = _stanowiska_proste(dane, f, d, oferta, klienci, szczyt, miejsca, q)
 
-    # zatrudnienie (od tygodnia z harmonogramu, domyślnie 1 – U23): stanowiska bez pracownika, które mają (albo dostają) sprzęt
+    # zatrudnienie (od tygodnia z harmonogramu, domyślnie 1 ): stanowiska bez pracownika, które mają (albo dostają) sprzęt
     if "hr_zatrudnienie" in odbl:
         pula = [k for k in kandydaci_firmy(rp.widoczni(dane, stan.kandydaci, runda), stan.firmy[nazwa])
                 if k["id"] not in zajeci]
@@ -819,17 +819,17 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
             cele += [(KASA, f.nowy_nr(KASA) + i, kasjer) for i in range(d["stanowiska"][KASA])]
         wl_kasa = None
         if st.get("wlasciciel_godziny") and (kasy := [c for c in cele if c[0] == KASA]):
-            # B9: ostatnie puste stanowisko kasy zostaje dla właściciela (staje na nim sam, silnik/ludzie/czas_wlasciciela.py)
+            # ostatnie puste stanowisko kasy zostaje dla właściciela (staje na nim sam, silnik/ludzie/czas_wlasciciela.py)
             wl_kasa = kasy[-1]
             cele.remove(wl_kasa)
-        cele = _bez_czekajacych(cele, _w_drodze(stan, nazwa))   # kalibracja B9: miejsca dla podkupionych
+        cele = _bez_czekajacych(cele, _w_drodze(stan, nazwa))   # miejsca dla podkupionych
         cele = cele[: rp.ustawienia(dane)["limit_nowych"]]   # agencja pracy: limit nowych, reszta w kolejnych
         podk, cele = _podkup(dane, stan, nazwa, cele, pz, konf, runda)
         if podk:
             d["podkup"] = podk
         ql, kanal = st.get("jakosc_ludzi") or q, st.get("kanal")
         for typ, nr, zawod in cele:
-            kandydaci = [k for k in pula if k["zawod"] == zawod and not k.get("student")   # UF21: boty bez studentów
+            kandydaci = [k for k in pula if k["zawod"] == zawod and not k.get("student")   # boty bez studentów
                          and (kanal is None or kanal in rp.kanaly_kandydata(dane, k, runda))]
             kandydaci = _dla_minimalnej(dane, st, kandydaci)
             if not kandydaci:
@@ -845,9 +845,9 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
                                   | ({"kanal": kanal} if kanal else {}))
     else:
         d.pop("_obsada", None)
-    if pz.get("dba_o_ludzi"):   # U20: podwyżka dla niezadowolonych (łatwy ich ignoruje)
+    if pz.get("dba_o_ludzi"):   # podwyżka dla niezadowolonych (łatwy ich ignoruje)
         d["zmiany"] = _podwyzki(dane, stan.firmy[nazwa], pz["dba_o_ludzi"])
-    if st.get("premia"):   # B9: premia co rundę dla każdego (bez okresu wypowiedzenia)
+    if st.get("premia"):   # premia co rundę dla każdego (bez okresu wypowiedzenia)
         zm = d.setdefault("zmiany", {})
         for p in stan.firmy[nazwa].pracownicy.values():
             if not p.odchodzi:
@@ -856,12 +856,12 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
     # zasoby na przewidywanych klientów
     if "dostawcy" in odbl:
         ceny_d = ceny_rundy(dane, konf["ziarno"], runda, konf.get("ceny_dostawcow", "dane"))
-        ceny_d = {k: v for k, v in ceny_d.items() if not z_rynku(dane, k)   # Z4: boty nie kupują w Auchan
+        ceny_d = {k: v for k, v in ceny_d.items() if not z_rynku(dane, k)   # boty nie kupują w Auchan
                   and (st.get("dostawcy") is None or k in st["dostawcy"])}
         qz = st.get("jakosc_zasobow") or q
         zapas = st.get("zapas_zasobow") or pz.get("zapas_zasobow") or ust["zapas_zasobow"]
         if len(f.lokale) > 1 and prog_lok:
-            # magazyn każdego lokalu osobno (Z2): zamówienie z zapasów lokalu na jego część klientów (B6: wcześniej
+            # magazyn każdego lokalu osobno: zamówienie z zapasów lokalu na jego część klientów (wcześniej
             # z zapasów całej firmy, dzielone potem wg prognozy – nadmiar w jednym lokalu „pokrywał” braki w drugim,
             # więc w drugim brakowało towaru, a w pierwszym się psuł)
             waga = {x: {u: n * (plan["lokale"][x]["czesc"] if plan is not None else 1.0) for u, n in v.items()}
@@ -878,7 +878,7 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
                                                  dane.data_rundy(runda), bool(st.get("dyskonty")))
         az = ad.zasady(dane)
         if st.get("auto_dostawy") and az and runda >= az["od_rundy"] and (gl := pl.glowny(f, runda)):
-            # B8: lokal główny na auto-dostawach (całość naraz) – jego zamówienia u dostawców odpadają
+            # lokal główny na auto-dostawach (całość naraz) – jego zamówienia u dostawców odpadają
             dzial = [x.id for x in f.lokale if x.dziala_od <= runda]
             if len(dzial) > 1 and prog_lok:
                 wg = {u: n * (plan["lokale"][gl.id]["czesc"] if plan is not None else 1.0)
@@ -893,7 +893,7 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
                                                                 az["dostawca"], qz, zapas)}
             d["zamowienia"] = [z for z in d["zamowienia"] if z.get("lokal", gl.id) != gl.id]
 
-    # inwestycje dodatkowe wg strategii (gdy jest gotówka): po zakupach zostaje bufor gotówki (B5: wcześniej bot
+    # inwestycje dodatkowe wg strategii (gdy jest gotówka): po zakupach zostaje bufor gotówki (wcześniej bot
     # kupował od razu cały komplet i wpadał w debet)
     bufor = f.gotowka > ust["bufor_gotowki"]
     budzet = [f.gotowka - ust["bufor_gotowki"]]
@@ -922,18 +922,18 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
         else:   # liczba – szkolenia o najwyższym procencie oczekujących, w drugiej firmie
             najlepsze = sorted(oferta_szk["pozycje"], key=lambda p: -p["procent"])[:st["szkolenia"]]
             firma = lambda p: oferta_szk["firmy"][1]["nazwa"]   # noqa: E731
-        if szk.rund(dane):   # kalibracja B9: szkolenie działa kilka rund – bot kupuje je ponownie dopiero po końcu
+        if szk.rund(dane):   # szkolenie działa kilka rund – bot kupuje je ponownie dopiero po końcu
             najlepsze = [p for p in najlepsze if szk.trwa(f, p["nazwa"], runda, p.get("dawne", ())) is None]
         d["szkolenia"] = [{"firma": firma(p), "szkolenie": p["nazwa"]} for p in najlepsze]
     if dane.zdarzenia:   # eventy w parkach: losowa opcja (najwyżej 3 h właściciela)
         d["zdarzenia"] = zd.wybor_bota(dane, f, runda, konf["ziarno"])
     if (ls := st.get("leasing")) and d.get("sprzet_kup") and f.gotowka < ls["gotowka"]:
-        # B6: przy małej gotówce nowy sprzęt w leasingu (bank z najtańszym leasingiem) zamiast zakupu
+        # przy małej gotówce nowy sprzęt w leasingu (bank z najtańszym leasingiem) zamiast zakupu
         if bank := _bank_leasingu(dane, f):
             d["leasing_wez"] = [{**x, "bank": bank["nazwa"], "rund": ls["rund"]} for x in d["sprzet_kup"]]
             d["sprzet_kup"] = []
     if plan is not None and d.get("sprzet_kup") and "inwestycje_sprzet" in odbl:
-        # B6: sprzęt ponad gotówkę (lokal bez zestawu – cały komplet naraz), gdy po zakupach zostałoby mniej niż
+        # sprzęt ponad gotówkę (lokal bez zestawu – cały komplet naraz), gdy po zakupach zostałoby mniej niż
         # rezerwa_po_sprzecie – wcześniej bot wpadał w debet ponad limit i bank blokował mu inwestycje na kilka rund.
         # Najpierw leasing (najdroższe pozycje, bank z najtańszym leasingiem, najkrótszy okres) – nie liczy się do
         # wskaźnika zadłużenia karty; resztę braku kredytem bez historii
@@ -951,18 +951,18 @@ def decyzje_bota(dane: Dane, stan: StanGry, nazwa: str, strategia_klucz: str, ru
     _finanse(dane, f, st, runda, d)
     _ksiegowosc(f, st, runda, d, konf, nazwa)
     if aw.dane_wypadkow(dane):   # polisy wg strategii – od kiedy ma lokal
-        od = aw.ubezpieczyciel(dane).get("od_rundy") or runda   # UF6: polisy od rundy z danych
+        od = aw.ubezpieczyciel(dane).get("od_rundy") or runda   # polisy od rundy z danych
         d["polisy"] = list(st.get("polisy", [])) if f.lokale and runda >= od else []
     if st.get("higiena"):   # poziom higieny lokali wg strategii (dane/zdarzenia/urzad.yaml)
         d["higiena"] = st["higiena"]
     if (h := st.get("higiena_po_odbiorze")) and f.lokale and all(x.id in f.odbiory for x in f.lokale):
-        d["higiena"] = h   # B12: oszczędność na higienie dopiero po odbiorze lokali przez sanepid
+        d["higiena"] = h   # oszczędność na higienie dopiero po odbiorze lokali przez sanepid
     # funkcje wyłączone przez mistrza gry – bot z nich nie korzysta (zaopatrzenie i urzędy robi za niego gra)
     return fn.filtruj(dane, konf, nazwa, d, runda)[0]
 
 
 def _ksiegowosc(f: Firma, st: dict, runda: int, d: dict, konf: dict, nazwa: str) -> None:
-    """B12: przy samodzielnej księgowości bot księguje dokumenty poprzedniej rundy i składa deklaracje (`ksiegowosc`;
+    """Przy samodzielnej księgowości bot księguje dokumenty poprzedniej rundy i składa deklaracje (`ksiegowosc`;
     bez – nie składa, urząd rozlicza z urzędu z mandatem). Błąd: deklaracja zaniżona o `odchylenie`."""
     k, dk = st.get("ksiegowosc"), f.deklaracja
     if not k or not dk or (d.get("biuro") or f.biuro) != bo.SAMODZIELNIE:
@@ -976,7 +976,7 @@ def _ksiegowosc(f: Firma, st: dict, runda: int, d: dict, konf: dict, nazwa: str)
 
 
 def _finanse(dane: Dane, f: Firma, st: dict, runda: int, d: dict) -> None:
-    """B11: lokaty, kredyt, Harpagon i kasyno wg strategii (`lokaty`, `kredyt`, `harpagon`, `kasyno`; bez – nic).
+    """Lokaty, kredyt, Harpagon i kasyno wg strategii (`lokaty`, `kredyt`, `harpagon`, `kasyno`; bez – nic).
     Gotówka – ta z początku rundy (po decyzji o lokalu), bez wydatków rundy: bufor lokat musi je pokryć."""
     if (k := st.get("kredyt")) and runda == k.get("od_rundy", 1):
         oferty = sorted((p["oprocentowanie"], b) for b, bank in bk.dostepne(dane, f.bank).items()

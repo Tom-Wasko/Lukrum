@@ -194,7 +194,7 @@ body.pulpit { min-height: 100vh; }
   .tabela-funkcji td:nth-child(2) small { display: none; }
 }
 
-/* funkcje tej gry (pulpit ucznia i karta gry mistrza gry, J8) */
+/* funkcje tej gry (pulpit ucznia i karta gry mistrza gry) */
 .fn-lista { display: flex; flex-direction: column; gap: 8px; }
 .fn-grupa { display: flex; flex-direction: column; gap: 4px; }
 .fn-grupa .fn-tytul { font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: var(--szary); }

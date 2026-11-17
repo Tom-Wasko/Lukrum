@@ -1,4 +1,4 @@
-"""Promocje w grze z lokalami (F3b.3; notatka „Prawidła świata”): rodzaje z listy (`dane/mapa/promocje.yaml`) z ozdobną
+"""Promocje w grze z lokalami (notatka „Prawidła świata”): rodzaje z listy (`dane/mapa/promocje.yaml`) z ozdobną
 nazwą drużyny, która nie wpływa na wynik.
 
 - Decyzja `promocje: [{"typ", "nazwa", "danie"}]` – pełna lista włączonych promocji (brak klucza – bez zmian).
@@ -8,7 +8,7 @@ nazwą drużyny, która nie wpływa na wynik.
   klientów z danych) widzą lokal jako atrakcyjniejszy o `przyciaganie` (z każdą rundą trwania zmienia się o
   `przyrost`). Podział zwraca objętych klientów (`objeci`) – z nich `porcje` (2 za 1: dwie porcje na klienta,
   podwójne składniki i czas kuchni) i `rozlicz`: przychód z rabatem, dopłaty (zestaw) i koszt dodatków.
-- Pamięć klientów (B7, decyzja autora 7.11.2026; sekcja `pamiec`): po wyłączeniu promocji część `udzial` jej
+- Pamięć klientów (decyzja autora 7.11.2026; sekcja `pamiec`): po wyłączeniu promocji część `udzial` jej
   przyciągania z ostatniego tygodnia zostaje w `Firma.pamiec_promocji` i działa dalej (te same dni, strefy i danie,
   bez rabatu – efekt `PAMIEC + typ` w ofercie), co rundę × (1 − zanik). Ponowne zakończenie tej samej promocji
   dodaje się do resztki pamięci; suma pamięci firmy najwyżej `maks`; pamięć trwającej znów promocji czeka (bez
@@ -28,7 +28,7 @@ OPIS_STARTU = "Materiały promocyjne"
 OPIS_DODATKOW = "Napoje do zestawów"
 OPIS_DOPLAT = "Sprzedaż: napoje w zestawach promocyjnych"
 ZAKLADKA = "promocje"
-PAMIEC = "pamiec:"   # B7: przedrostek typu efektu pamięci w ofercie (osobno od trwającej promocji tego rodzaju)
+PAMIEC = "pamiec:"   # przedrostek typu efektu pamięci w ofercie (osobno od trwającej promocji tego rodzaju)
 
 
 def zasady(dane: Dane) -> dict | None:
@@ -43,7 +43,7 @@ def przyciaganie(typ: dict, od_rundy: int, runda: int) -> float:
 
 
 def zasady_pamieci(dane: Dane) -> dict | None:
-    """B7: mapa/promocje.yaml → pamiec (udzial, zanik, maks, prog); None – bez pamięci (brak sekcji albo udzial 0)."""
+    """mapa/promocje.yaml → pamiec (udzial, zanik, maks, prog); None – bez pamięci (brak sekcji albo udzial 0)."""
     P = (zasady(dane) or {}).get("pamiec")
     return P if P and P["udzial"] > 0 else None
 
@@ -97,7 +97,7 @@ def ustaw(dane: Dane, f: Firma, d: dict, runda: int, ks: Ksiega, rach: Rachunek)
     info = {"aktywne": [], "nowe": [], "wylaczone": [], "uwagi": []}
     if not R:
         return info
-    P = zasady_pamieci(dane)   # B7: wygasła pamięć znika ze stanu
+    P = zasady_pamieci(dane)   # wygasła pamięć znika ze stanu
     f.pamiec_promocji = [m for m in f.pamiec_promocji if P is not None and sila_pamieci(P, m, runda) > 0]
     if "promocje" in d:
         stare = {(p.typ, p.danie): p for p in f.promocje}
@@ -153,7 +153,7 @@ def ustaw(dane: Dane, f: Firma, d: dict, runda: int, ks: Ksiega, rach: Rachunek)
 def efekty_ofert(dane: Dane, f: Firma, oferty_firmy: dict[str, dict[str, dict]], runda: int, dni: list,
                  z_pamiecia: bool = True) -> None:
     """Dopisuje do ofert dań firmy ({lokal: {danie: oferta}}) trwające promocje: oferta["promocje"] – lista efektów
-    z maską dni rundy (`dni` – daty rundy, z popyt.dni_rundy). z_pamiecia – także pamięć klientów po promocjach (B7;
+    z maską dni rundy (`dni` – daty rundy, z popyt.dni_rundy). z_pamiecia – także pamięć klientów po promocjach (
     bez niej – prognozy z danych publicznych: pamięci konkurencji nie widać na mieście)."""
     R = zasady(dane)
     if not R or not (f.promocje or f.pamiec_promocji):
@@ -175,7 +175,7 @@ def efekty_ofert(dane: Dane, f: Firma, oferty_firmy: dict[str, dict[str, dict]],
         dopisz({"typ": p.typ, "nazwa": p.nazwa, "rabat": typ["rabat"], "porcje": typ["porcje"], "doplata": typ["doplata"],
                 "koszt_dodatku": typ["koszt_dodatku"], "strefy": typ["strefy_klientow"], "maska": maska(typ),
                 "przyciaganie": przyciaganie(typ, p.od_rundy, runda)}, p.danie)
-    for m, s in pamiec(dane, f, runda) if z_pamiecia else []:   # B7: tylko przyciąganie – bez rabatu i dopłat
+    for m, s in pamiec(dane, f, runda) if z_pamiecia else []:   # tylko przyciąganie – bez rabatu i dopłat
         typ = R["typy"][m.typ]
         dopisz({"typ": PAMIEC + m.typ, "nazwa": typ["nazwa"], "rabat": 0.0, "porcje": 1, "doplata": 0.0,
                 "koszt_dodatku": 0.0, "strefy": typ["strefy_klientow"], "maska": maska(typ), "przyciaganie": s}, m.danie)
@@ -238,7 +238,7 @@ def raport(dane: Dane, f: Firma, nazwa_firmy: str, runda: int, wynik: dict | Non
 
 
 def _pamiec_widok(dane: Dane, f: Firma, runda: int, typy: dict | None = None) -> list[dict]:
-    """B7: pamięć klientów do zakładki: rodzaj, danie, przyciąganie w rundzie, ostatnia runda promocji, objęci
+    """Pamięć klientów do zakładki: rodzaj, danie, przyciąganie w rundzie, ostatnia runda promocji, objęci
     (z wyników rundy)."""
     R = zasady(dane)
     return [{"typ": m.typ, "rodzaj": R["typy"][m.typ]["nazwa"], "danie": m.danie, "przyciaganie": s,

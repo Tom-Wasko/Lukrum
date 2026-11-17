@@ -1,4 +1,4 @@
-"""Licytacje lokali, przejęcia budynków z najemcą i wypowiedzenia najmu (F3b.4, silnik/nieruchomosci/przejecia.py)."""
+"""Licytacje lokali, przejęcia budynków z najemcą i wypowiedzenia najmu (silnik/nieruchomosci/przejecia.py)."""
 
 import pytest
 from pomocnicze import _gra, _kandydat, _lokal, _rachunek, _runda, _z
@@ -103,7 +103,7 @@ def test_wykup_wlasnego_lokalu_zamienia_najem_we_wlasnosc():
     assert (lok.forma, lok.czynsz, lok.kaucja) == ("kupno", 0, 0)
     assert _rachunek(s, od, "A", "Zwrot kaucji") == [2 * g.dane.lokale["politechnika_1"]["czynsz"]]
     assert all(not st.sprzet_wynajmujacego for st in s.firmy["A"].stanowiska)
-    # B6: sprzęt wynajmującego jest w cenie budynku – lokal w ewidencji bez niego, sprzęt w kosztach od razu
+    # sprzęt wynajmującego jest w cenie budynku – lokal w ewidencji bez niego, sprzęt w kosztach od razu
     sprzet = sum(p["pozostale"] for p in s.wyniki[od]["A"]["kpir"]["pozycje"]
                  if p["opis"].startswith("Sprzęt w cenie lokalu"))
     [e] = [e for e in s.wyniki[od]["A"]["srodki_trwale"] if e["rodzaj"] == "lokal"]

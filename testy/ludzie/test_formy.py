@@ -1,4 +1,4 @@
-"""UF21+UF10: formy zatrudnienia (pół etatu, zlecenie bez ZUS, student, staż, B2B) i opcja MG z listą form."""
+"""Formy zatrudnienia (pół etatu, zlecenie bez ZUS, student, staż, B2B) i opcja MG z listą form."""
 
 import pytest
 from pomocnicze import _gra, _kandydat, _lokal, _rachunek, _runda, _z
@@ -26,7 +26,7 @@ def test_parametry_form_i_studenta():
     d = g.dane
     assert set(fz.formy(d)) == {"prace", "pol_etatu", "zlecenie", "student", "staz", "b2b"}
     assert fz.stawka_zus(d, "prace") == fz.stawka_zus(d, "pol_etatu") == rz.zus_pracodawcy(d) > 0.2
-    assert fz.stawka_zus(d, "zlecenie") == fz.stawka_zus(d, "b2b") == fz.stawka_zus(d, "staz") == 0.0   # UF10
+    assert fz.stawka_zus(d, "zlecenie") == fz.stawka_zus(d, "b2b") == fz.stawka_zus(d, "staz") == 0.0
     placa = d.z["finanse"]["placa_minimalna"]
     assert fz.placa_minimalna(d, "pol_etatu") == placa / 2 and fz.placa_minimalna(d, "b2b") == 0
     st = fz.studenci(d)
@@ -54,7 +54,7 @@ def test_pol_etatu_polowa_godzin_i_oczekiwanej_pensji():
     d, f = g.dane, s.firmy["A"]
     st = f.stanowisko(KUCHNIA, 1)
     godz = d.z["operacje"]["godziny_pracownika"]
-    assert f.godziny_stanowiska(st, godz, d) == pytest.approx(godz * p.wydajnosc / 2 * 0.9 * zo.tempo(d, p))   # B10, 10% płatnego urlopu
+    assert f.godziny_stanowiska(st, godz, d) == pytest.approx(godz * p.wydajnosc / 2 * 0.9 * zo.tempo(d, p))   # 10% płatnego urlopu
     p.pensja = p.pensja_preferowana / 2
     assert zo.placa_wzgledna(d, p) == pytest.approx(1.0)
     assert bo._umowy(d, f) == (1, 0)

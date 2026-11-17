@@ -1,4 +1,4 @@
-"""Uzgodnienie kasy z KPiR co rundę (F3a.12) – rachunek przepływów metodą pośrednią:
+"""Uzgodnienie kasy z KPiR co rundę – rachunek przepływów metodą pośrednią:
 
     gotówka na koniec = gotówka na początku
                         + przychody − koszty z KPiR + koszty bez wydatku (amortyzacja, niezamortyzowana wartość)

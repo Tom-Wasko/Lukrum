@@ -1,7 +1,7 @@
 // Nowa mapa Lublina (etap 2, strona [mapa]): prawdziwe granice dzielnic, woda, zieleń i drogi z OpenStreetMap
 // (static/mapa/lublin.json, skrypt narzedzia/mapa/pobierz_osm.py), budynki-ikony w miejscach z dane/mapa/budynki.yaml
 // (pole geo), płynne przybliżanie (widok.js), pasek skrótów. Kolory i kroje tylko ze static/motywy/zmienne.css.
-//
+
 // Wejście do budynku: mapa woła lukrum.otworzWnetrze(id) (umowa w WSPOLPRACA.md). Dopóki strona [mechaniki] nie
 // rysuje wnętrza (nie ustawi e.detail.obsluzone = true w zdarzeniu "lukrum:wnetrze"), mapa sama otwiera
 // dotychczasową zakładkę albo okno – gra jest grywalna na każdym kroku.

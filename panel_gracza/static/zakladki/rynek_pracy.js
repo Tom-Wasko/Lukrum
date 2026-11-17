@@ -1,11 +1,11 @@
 // Rynek pracy (gra z lokalami, silnik/ludzie/rynek_pracy.py): kanały rekrutacji, podkupienia przez headhuntera, kontroferty
-// i okresy wypowiedzenia. UF20: tu też zatrudnia się kandydatów z puli – od razu z lokalem i stanowiskiem (hr.js: kandydaciRynku).
+// i okresy wypowiedzenia. tu też zatrudnia się kandydatów z puli – od razu z lokalem i stanowiskiem (hr.js: kandydaciRynku).
 import { brakWynikow, esc, gw, kafelkiLiczb, licz, nazwaFirmy, okno, podsumowanie, ponadLimitPracownikow, proc, tabela, tekstLimituPracownikow, toast, zamknijOkno, zl, zwinTabela, zl2 } from "./wspolne.js";
 import { kandydaciRynku, pigulkaOfert } from "./hr.js";
 import { nazwaLokalu } from "./lokal_wybor.js";
 import { minimum, nazwaFormy, opcjeForm } from "./formy.js";
 
-const UMOWA = (kat, u) => nazwaFormy(kat, u).toLowerCase();   // UF21: nazwy form z katalogu
+const UMOWA = (kat, u) => nazwaFormy(kat, u).toLowerCase();   // nazwy form z katalogu
 const WYNIK_ZLOZONEJ = { przyjeta: "przyjęta", odrzucona: "odrzucona – pensja nie wyższa od obecnej", kontroferta: "przebita kontrofertą",
   inna_firma: "pracownik wybrał inną firmę", "nieważna": "nieważna" };
 const WYNIK_OTRZYMANEJ = { odchodzi: "przyjął ofertę – odchodzi", kontroferta: "został – kontroferta", odrzucona: "odrzucił ofertę" };
@@ -32,7 +32,7 @@ function kanalyHtml(A) {
        Wypowiedzenie działa w obie strony: zwolniony pracownik też pracuje (i dostaje pensję) do końca okresu.</p>`;
 }
 
-// kalibracja B9 (kat.parametry: oferta_pracy, podkupywanie_botow) – zasady w opisie zakładki
+// (kat.parametry: oferta_pracy, podkupywanie_botow) – zasady w opisie zakładki
 const ofertaPracy = (kat) => {
   const o = kat?.parametry?.oferta_pracy;
   return o ? ` Kandydat odrzuci ofertę niższą niż ${proc(o.prog_odrzucenia, 0)} pensji oczekiwanej, a pensja poniżej oczekiwanej obniża zadowolenie przez cały czas pracy.` : "";
@@ -114,7 +114,7 @@ export const rynek_pracy = {
           l.wygrana ? `wygrana${l.remis ? " (remis – losowanie)" : ""}` : `<span class="minus">przegrana${l.remis ? " (remis – losowanie)" : ""}</span>`])
           : pusto(6, "Nikt inny nie chciał twoich kandydatów."), { klasy: ["l", "", "", "l"] })
       + `<p class="podpowiedz">Pensje porównuje się w przeliczeniu na umowę o pracę (B2B ÷ 1,25, pół etatu × 2).</p>`
-      // kalibracja B9: kandydat odrzuca ofertę poniżej progu (ok. 95% pensji oczekiwanej)
+      // kandydat odrzuca ofertę poniżej progu (ok. 95% pensji oczekiwanej)
       + ((R.odrzucone || []).length ? zwinTabela("Odrzucone oferty pracy", ["Kandydat", "Twoja oferta", "Przyjmie od", "Wynik"],
         R.odrzucone.map((o) => [esc(o.imie_nazwisko), zl2(o.pensja), zl2(Math.ceil(o.prog - 1e-6)), `<span class="minus">odrzuca – za mało</span>`]),
         { klasy: ["l", "r", "r", "l"], otwarte: true }) : "")
@@ -166,7 +166,7 @@ export const rynek_pracy = {
   },
 };
 
-// UF20: obsada i przenosiny w rundzie – przeniesieni, odmowy (brak zgody) i nieudane (np. zajęte stanowisko)
+// obsada i przenosiny w rundzie – przeniesieni, odmowy (brak zgody) i nieudane (np. zajęte stanowisko)
 function przenosinyWyniki(v, R) {
   const wiersz = (x, wynik) => [esc(x.imie_nazwisko), x.z_lokalu ? esc(nazwaLokalu(v, x.z_lokalu)) : "–",
     `${x.do_lokalu ? `${esc(nazwaLokalu(v, x.do_lokalu))} · ` : ""}nr ${x.nr}`, x.dodatek ? zl2(x.dodatek) : "–", wynik];

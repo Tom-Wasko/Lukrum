@@ -1,4 +1,4 @@
-"""Debet ponad limit i inwestor ratunkowy (Z3): alarm, blokada inwestycji i kredytów w następnej rundzie, wpłata
+"""Debet ponad limit i inwestor ratunkowy: alarm, blokada inwestycji i kredytów w następnej rundzie, wpłata
 inwestora od mistrza gry (spłata debetu, udział w dochodach, niezwrócona wpłata jako dług w karcie i majątku)."""
 
 import pytest
@@ -40,7 +40,7 @@ def test_alarm_i_blokada_inwestycji_i_kredytow():
     assert s.firmy["B"].lokaty and not _bledy(s, 2, "B")
     assert s.wyniki[2]["A"]["alarm"] == bk.debet_ponad_limit(g.dane, a) > 0
     lb = s.wyniki[2]["A"]["lista_bledow"]
-    assert lb[0]["alarm"] and lb[0]["tekst"].startswith("ALARM: debet ponad limit")   # U2: pierwsza pozycja
+    assert lb[0]["alarm"] and lb[0]["tekst"].startswith("ALARM: debet ponad limit")   # pierwsza pozycja
 
 
 def test_alarm_w_podgladzie_szkicu_jako_pierwszy_blad():
@@ -75,7 +75,7 @@ def test_inwestor_splaca_debet_i_liczy_sie_jak_dlug():
 
 
 def test_widok_gracza_pokazuje_inwestora():
-    """U11: inwestor w widoku drużyny – w podglądzie rundy wpłaty i po przeliczeniu."""
+    """Inwestor w widoku drużyny – w podglądzie rundy wpłaty i po przeliczeniu."""
     from api.prezentacja import przeglad_mg, widok
     g = _w_debecie()
     assert widok(g, "A")["inwestor"] is None
@@ -86,7 +86,7 @@ def test_widok_gracza_pokazuje_inwestora():
     i = widok(g, "A")["inwestor"]
     assert i["do_rundy"] == 1 + inw.warunki(g.dane)["rund"] and i["dlug"] == 20000 - i["wyplacone"]
     assert widok(g, "B")["inwestor"] is None
-    mg = {f["nazwa"]: f for f in przeglad_mg(g)["firmy"]}   # U12: mistrz gry widzi inwestora i po zniknięciu linku
+    mg = {f["nazwa"]: f for f in przeglad_mg(g)["firmy"]}   # mistrz gry widzi inwestora i po zniknięciu linku
     assert mg["A"]["inwestor"]["od_rundy"] == 2 and mg["A"]["inwestor"]["kwota"] == 20000 and mg["B"]["inwestor"] is None
 
 def test_warunki_przyslania_inwestora():

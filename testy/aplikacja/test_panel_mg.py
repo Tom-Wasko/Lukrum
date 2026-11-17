@@ -92,7 +92,7 @@ def test_domyslny_kredyt_i_przycisk_zamow_brakujace(client):
 
 
 def test_tryb_podpowiedzi_na_pierwsze_rundy(client):
-    """U19: mistrz gry włącza podpowiedzi – przez 3 pierwsze rundy Dashboard drużyny pokazuje 3 rady
+    """Mistrz gry włącza podpowiedzi – przez 3 pierwsze rundy Dashboard drużyny pokazuje 3 rady
     z zakładką; potem (i przy wyłączonym trybie) nic."""
     from api.prezentacja import PODPOWIEDZI
 
@@ -115,7 +115,7 @@ def test_tryb_podpowiedzi_na_pierwsze_rundy(client):
 
 
 def test_miejsce_na_pulpicie_jak_ranking_mistrza_gry():
-    """Z7: pulpit drużyny liczy miejsce ze średniej kart z rund 2…, a nie z karty ostatniej rundy."""
+    """Pulpit drużyny liczy miejsce ze średniej kart z rund 2…, a nie z karty ostatniej rundy."""
     from api import prezentacja as pr
     from silnik import Gra
 
@@ -133,7 +133,7 @@ def test_miejsce_na_pulpicie_jak_ranking_mistrza_gry():
 
 
 def test_historia_rankingu_jak_ranking_mistrza_gry():
-    """UF11: zakładka Ranking – miejsca po każdej rundzie R takie jak miejsca(karta_skumulowana(R)) u mistrza gry."""
+    """Zakładka Ranking – miejsca po każdej rundzie R takie jak miejsca(karta_skumulowana(R)) u mistrza gry."""
     from api import prezentacja as pr
     from silnik import Gra
 
@@ -149,7 +149,7 @@ def test_historia_rankingu_jak_ranking_mistrza_gry():
 
 
 def test_po_koncu_gry_druzyna_widzi_wyniki_ostatniej_rundy():
-    """Decyzja autora (Z7): po końcu gry widok domyślny to podsumowanie – wyniki rundy N, bez decyzji."""
+    """Decyzja autora: po końcu gry widok domyślny to podsumowanie – wyniki rundy N, bez decyzji."""
     from api import prezentacja as pr
     from silnik import Gra
 
@@ -163,7 +163,7 @@ def test_po_koncu_gry_druzyna_widzi_wyniki_ostatniej_rundy():
 
 
 def test_formy_zatrudnienia_opcja_mg(client):
-    """UF21 (TYMCZASOWE): mistrz gry wyłącza formy zatrudnienia – umowa o pracę zostaje zawsze."""
+    """TYMCZASOWE: mistrz gry wyłącza formy zatrudnienia – umowa o pracę zostaje zawsze."""
     id_ = _nowa(client).json()["id"]
     g = _przeglad(client, id_)["gra"]
     assert "prace" in g["formy_zatrudnienia"] and set(g["formy_wszystkie"]) == set(g["formy_zatrudnienia"])

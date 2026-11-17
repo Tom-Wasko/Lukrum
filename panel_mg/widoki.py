@@ -25,7 +25,7 @@ def wymaga_mg(widok):
 
 
 def _funkcje_kreatora(dane) -> dict:
-    """Krok 3 kreatora: funkcje i gotowe zestawy z `dane/funkcje.yaml` (J7)."""
+    """Krok 3 kreatora: funkcje i gotowe zestawy z `dane/funkcje.yaml` ."""
     return {
         "funkcje": [
             {"klucz": k, "nazwa": f["nazwa"], "krotko": f.get("krotko", ""),
@@ -48,7 +48,7 @@ def lista(request):
     ustawienia = {
         "strategie": {k: v["nazwa"] for k, v in dane.boty["strategie"].items()},
         "poziomy": {k: v["nazwa"] for k, v in (dane.boty.get("poziomy") or {}).items()
-                    if not v.get("tylko_pomiar")},   # bez poziomów do pomiarów (Z5: „jak człowiek”)
+                    if not v.get("tylko_pomiar")},   # bez poziomów do pomiarów („jak człowiek”)
         "rundy": dane.katalog_ofert["rundy"]["domyslna_liczba"],
         "maks_rund": dane.rund_w_roku,
         "kapital": dane.z["finanse"]["kapital_startowy"],

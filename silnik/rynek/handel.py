@@ -415,7 +415,7 @@ def _przenies_towar(dane: Dane, s: Firma, k: Firma, o: Ogloszenie, cena_gr: int,
         if zostalo <= EPS:
             break
     reszta = cena_gr   # u kupującego wartość partii = cena z faktury, rozdzielona wg ilości
-    lok = pl.glowny(k, runda)   # towar trafia do lokalu głównego kupującego (Z2)
+    lok = pl.glowny(k, runda)   # towar trafia do lokalu głównego kupującego
     for j, (p, ile) in enumerate(wziete):
         w = reszta if j == len(wziete) - 1 else round(cena_gr * ile / o.ilosc)
         reszta -= w

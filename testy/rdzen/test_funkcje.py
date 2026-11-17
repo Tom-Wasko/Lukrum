@@ -1,4 +1,4 @@
-"""Funkcje gry (seria „funkcje”, raporty/funkcje/plan.md): rejestr dane/funkcje.yaml, stany w konfiguracji gry,
+"""Funkcje gry (seria „funkcje”): rejestr dane/funkcje.yaml, stany w konfiguracji gry,
 odsłonięcia drużyn (historia – przeliczenie starej rundy daje to samo) i wyłączone elementy harmonogramu."""
 
 import re

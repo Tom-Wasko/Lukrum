@@ -1,4 +1,4 @@
-"""Funkcje gry na pulpitach (seria „funkcje”, J7–J8): kreator mistrza gry (dane do kroku 3, POST z funkcjami),
+"""Funkcje gry na pulpitach (seria „funkcje”): kreator mistrza gry (dane do kroku 3, POST z funkcjami),
 GET /api/pulpit (uczeń, mistrz gry, gra bez funkcji) i panel prowadzenia gry (/api/gry/<id>/mg)."""
 
 import pytest

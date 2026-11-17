@@ -6,7 +6,7 @@ import { IG_AUTO } from "./infografiki.js";
 import { glownyLokal, idWybranego, lokalPartii, lokalWybrany, menuLokalu, nazwaLokalu, zapiszWLokalu } from "./lokal_wybor.js";
 import { znakMarki } from "./wspolne.js";
 
-// Z3: przy kilku lokalach magazyn i zamówienia wybranego lokalu (zamówienie bez pola "lokal" – lokal główny)
+// przy kilku lokalach magazyn i zamówienia wybranego lokalu (zamówienie bez pola "lokal" – lokal główny)
 function stan(v, z, q) {
   const id = idWybranego(v);
   if (!id) return v.stan_przed.magazyn[`${z}|${q}`] || 0;
@@ -153,7 +153,7 @@ function najtansze(ceny, pomin = new Set()) {
   return w;
 }
 
-// Z4: auto-dostawca (silnik/kuchnia/auto_dostawca.py) – lokal jest na auto-dostawach albo zaopatruje się sam, całość naraz.
+// auto-dostawca (silnik/kuchnia/auto_dostawca.py) – lokal jest na auto-dostawach albo zaopatruje się sam, całość naraz.
 // Decyzja "auto_dostawy": {pozycje: [{zasob, jakosc, ilosc}]} wybranego lokalu (decyzja główna – lokal główny); null – wyłączone.
 function autoDecyzja(v) {
   const d = v.decyzje, id = idWybranego(v);
@@ -340,7 +340,7 @@ export const dostawcy = {
     "auto-wl": (el, c) => c.zmien((d) => { zapiszWLokalu(d, c.v, "auto_dostawy", el.checked ? { pozycje: [] } : null); }),
     "auto-ilosc": (el, c) => zapiszPozycje(c, (l) => ustawPozycje(l, el.dataset.z, { ilosc: Math.max(0, Math.round(+el.value || 0)) }, c.v)),
     "auto-jakosc": (el, c) => zapiszPozycje(c, (l) => ustawPozycje(l, el.dataset.z, { jakosc: +el.value }, c.v)),
-    // P4: po zapisie odświeża się tylko okno bazy (w miejscu – wspolne.js: okno), karta pod nim – po zamknięciu okna
+    // po zapisie odświeża się tylko okno bazy (w miejscu – wspolne.js: okno), karta pod nim – po zamknięciu okna
     ilosc: (el, c) => {
       const { d: dost, z, q, dz } = el.dataset, ilosc = Math.max(0, +el.value || 0);
       const tenDzien = (x) => dz === undefined || (+x.dzien || 0) === +dz, id = idWybranego(c.v);

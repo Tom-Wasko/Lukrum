@@ -1,5 +1,5 @@
 """Odcisk (skrót) stanów gier botów po każdej rundzie – kontrola, że przyspieszenie silnika albo
-przeniesienie kodu bez zmiany zasad nie zmienia wyników (plan optymalizacji, B2). Kilka gier:
+przeniesienie kodu bez zmiany zasad nie zmienia wyników (plan optymalizacji). Kilka gier:
 poziomy, opcje gry, drużyna ludzi bez decyzji i mały kapitał; skrót stanu, decyzji botów
 i wniosków w każdej rundzie.
 

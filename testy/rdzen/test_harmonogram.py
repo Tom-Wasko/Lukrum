@@ -1,4 +1,4 @@
-"""Harmonogram odblokowań w grze z lokalami (F4.3): zakładki i elementy mapy w tygodniach z danych, zmiany mistrza
+"""Harmonogram odblokowań w grze z lokalami: zakładki i elementy mapy w tygodniach z danych, zmiany mistrza
 gry dla jednej gry (bez zmiany wspólnych danych), widok dla panelu MG i strony drużyny."""
 
 import pytest
@@ -72,7 +72,7 @@ def test_api_prowadzenie(client):
 
 
 def test_tydzien_przygotowawczy():
-    """P15: zakładek tygodnia 1 mistrz gry nie przesuwa i nie przenosi niczego do tygodnia 1."""
+    """zakładek tygodnia 1 mistrz gry nie przesuwa i nie przenosi niczego do tygodnia 1."""
     dane = dane_domyslne()
     el = hm.elementy(dane)
     pierwsze = [k for k, e in el.items() if e["tydzien"] == 1]
@@ -86,9 +86,9 @@ def test_tydzien_przygotowawczy():
     assert all(w[k]["staly"] for k in pierwsze) and not w["handel"]["staly"]
 
 
-@pytest.mark.dane_gry   # terminy UF6 są w dane/
+@pytest.mark.dane_gry   # terminy są w dane/
 def test_terminy_uf6_i_boty():
-    """UF6: promocje od 3, agencje 5 / 8 / 10 (każda osobno), internet 7, kontrole sanepidu i polisy od 4, handel od 6;
+    """Promocje od 3, agencje 5 / 8 / 10 (każda osobno), internet 7, kontrole sanepidu i polisy od 4, handel od 6;
     boty nie zamawiają kampanii, promocji ani polis przed terminem, a sanepid nie kontroluje przed rundą 4."""
     from silnik.kuchnia import magazyn as mag
     from silnik.model import Firma

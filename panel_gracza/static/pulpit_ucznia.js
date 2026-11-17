@@ -72,7 +72,7 @@ function nowe(g) {
   return `<div><div class="blok-tytul">${ikona("zdarzenia", 16)}Nowe w tej rundzie</div>${lista}</div>`;
 }
 
-// Funkcje tej gry (J8): uczeń widzi odkryte, zakryte (z oznaczeniem odsłoniętych przez drużynę) i wyłączone;
+// Funkcje tej gry : uczeń widzi odkryte, zakryte (z oznaczeniem odsłoniętych przez drużynę) i wyłączone;
 // mistrz gry – krótkie podsumowanie liczb i wyłączone funkcje (pełna tabela jest w panelu prowadzenia gry).
 const chip = (f, klasa = f.stan) => `<span class="fn-chip ${klasa}" title="${esc(f.krotko)}">${ikona(f.ikona || "oko", 14)}${esc(f.nazwa)}${f.odslonieta ? " – odsłonięta" : ""}</span>`;
 const grupaFunkcji = (tytul, html) => (html ? `<div class="fn-grupa"><div class="fn-tytul">${tytul}</div><div class="fn-wiersze">${html}</div></div>` : "");

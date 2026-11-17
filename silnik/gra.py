@@ -21,7 +21,7 @@ from .ludzie.kandydaci import pula_startowa
 from .model import Firma, StanGry, firma_z_slownika
 
 WERSJA_SILNIKA = "1.2"  # 1.1: kwoty w groszach; 1.2: lokale na mapie miasta
-# U17: refleksja drużyny przy wysyłaniu decyzji („Co zmieniamy w tej rundzie i dlaczego?”) – bez wpływu na wynik
+# refleksja drużyny przy wysyłaniu decyzji („Co zmieniamy w tej rundzie i dlaczego?”) – bez wpływu na wynik
 REFLEKSJA = ("wylaczona", "opcjonalna", "wymagana")
 
 
@@ -46,19 +46,19 @@ class Gra:
                 "ceny_dostawcow": opcje.get("ceny_dostawcow", "dane"),
                 "tryb_debetu": opcje.get("tryb_debetu", "na_biezaco"),
                 "auto_zamowienia": bool(opcje.get("auto_zamowienia", False)),   # przycisk „Zamów brakujące” (MG)
-                # B11: zaproszenia do klubu także dla botów (pomiary balans.warianty – bot ze strategią `kasyno`)
+                # zaproszenia do klubu także dla botów (pomiary balans.warianty – bot ze strategią `kasyno`)
                 **({"kasyno_botow": True} if opcje.get("kasyno_botow") else {}),
                 # poprawki 2 (sprawa 6): MG może wyłączyć podkupywanie pracowników (bez klucza – wolno)
                 **({"podkupywanie": False} if opcje.get("podkupywanie") is False else {}),
                 "refleksja": _refleksja(opcje.get("refleksja") or "opcjonalna"),
-                "podpowiedzi": bool(opcje.get("podpowiedzi", False)),   # U19: rady na pierwsze rundy (MG)
+                "podpowiedzi": bool(opcje.get("podpowiedzi", False)),   # rady na pierwsze rundy (MG)
                 "wersja_silnika": WERSJA_SILNIKA, "wersja_danych": dane.wersja,
                 "lokale": True}   # lokale z mapy miasta (dane/mapa); zapisy bez tego klucza – bez lokali
         if opcje.get("lekcje"):   # tryb lekcyjny prowadzenia (gry/lekcje.py) – poza mechaniką, tylko zapis ustawienia
             konf["lekcje"] = dict(opcje["lekcje"])
         if opcje.get("kapital_startowy") is not None:  # mistrz gry może zmienić kapitał z danych
             konf["kapital_startowy"] = float(opcje["kapital_startowy"])
-        # funkcje gry (raporty/funkcje/plan.md): pełna lista stanów; bez pola (testy, pomiary, stare gry) – odkryte
+        # funkcje gry : pełna lista stanów; bez pola (testy, pomiary, stare gry) – odkryte
         if (stany := fn.sprawdz_stany(dane, opcje.get("funkcje"))) is not None:
             konf["funkcje"] = stany
         if opcje.get("odblokowanie"):   # mistrz gry może zmienić tygodnie odblokowań
@@ -140,7 +140,7 @@ class Gra:
 
     def wyslij(self, firma: str, wyslane: bool = True, refleksja: str | None = None) -> None:
         """„Wyślij decyzje” (albo „Wróć do podejmowania decyzji”, gdy wyslane=False). `refleksja` – 1–2 zdania drużyny
-        dla mistrza gry (U17); przy opcji gry „wymagana” bez niej nie można wysłać decyzji."""
+        dla mistrza gry; przy opcji gry „wymagana” bez niej nie można wysłać decyzji."""
         tekst = " ".join(str(refleksja or "").split())
         if wyslane and not tekst and self.tryb_refleksji == "wymagana":
             raise ValueError("Przed wysłaniem napiszcie w 1–2 zdaniach, co zmieniacie w tej rundzie i dlaczego.")
@@ -159,7 +159,7 @@ class Gra:
 
     @property
     def tryb_refleksji(self) -> str:
-        return self.konfiguracja.get("refleksja", "opcjonalna")   # zapisy sprzed U17 – opcjonalna
+        return self.konfiguracja.get("refleksja", "opcjonalna")   # zapisy sprzed refleksji – opcjonalna
 
     def ustaw_refleksje(self, tryb: str) -> None:
         self.konfiguracja["refleksja"] = _refleksja(tryb)
@@ -221,7 +221,7 @@ class Gra:
             raise ValueError("Gra jest zakończona.")
         if not odslonic and fn.odslonieta(self.konfiguracja, firma, funkcja, self.runda) and (
                 b := fn.blokada_zakrycia(funkcja, self.stan(self.runda - 1).firmy.get(firma))):
-            raise ValueError(b)   # K2: np. Harpagon z niespłaconą pożyczką
+            raise ValueError(b)   # np. Harpagon z niespłaconą pożyczką
         fn.odslon(self.konfiguracja, firma, funkcja, odslonic, self.runda)
 
     def ustaw_odblokowanie(self, zmiany: dict) -> None:

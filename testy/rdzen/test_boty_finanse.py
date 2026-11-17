@@ -1,6 +1,6 @@
-"""B11: boty potrafią korzystać z finansów – lokata z nadwyżki (`lokaty`), jeden kredyt (`kredyt`), Harpagon przy
+"""Boty potrafią korzystać z finansów – lokata z nadwyżki (`lokaty`), jeden kredyt (`kredyt`), Harpagon przy
 braku gotówki (`harpagon`) i kasyno po zaproszeniu (`kasyno`); bez ustawień – nic z tego. Pomiar w
-balans/warianty.py (warianty lokata:*, kredyt:*, harpagon:*, kasyno:*). B12: samodzielna księgowość
+balans/warianty.py (warianty lokata:*, kredyt:*, harpagon:*, kasyno:*). samodzielna księgowość
 (`ksiegowosc`) i higiena obniżona po odbiorze lokali (`higiena_po_odbiorze`)."""
 import copy
 

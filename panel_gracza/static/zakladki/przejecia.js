@@ -125,7 +125,7 @@ export const przejecia = {
   },
 };
 
-// UF15: licytacje lokali osobno – kto, ile i za ile licytował w mieście (oferty wpisuje się w Stare Miasto → Do wynajęcia)
+// licytacje lokali osobno – kto, ile i za ile licytował w mieście (oferty wpisuje się w Stare Miasto → Do wynajęcia)
 function licytacjeMiasta(v, kat, zwijane = false) {
   const przetargi = v.rynek?.przejecia?.przetargi || [];
   const moje = przetargi.filter((x) => x.oferty.some((o) => o.firma === v.firma)), wygrane = moje.filter((x) => x.zwyciezca === v.firma).length;

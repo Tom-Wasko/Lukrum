@@ -1,6 +1,6 @@
 // Adres z wizytówki (silnik/pieniadze/kasyno.py): zakładka widoczna tylko w rundzie z zaproszeniem albo z wynikami gier.
 // Decyzja `kasyno`: lista {gra, zaklad, stawka} – stawki z portfela właściciela, wynik dopiero po zamknięciu rundy.
-// P12: przelew z firmy do portfela wprost z klubu – to zwykła decyzja `wyplata_wlasna` (silnik/pieniadze/wlasciciel.py), więc
+// przelew z firmy do portfela wprost z klubu – to zwykła decyzja `wyplata_wlasna` (silnik/pieniadze/wlasciciel.py), więc
 // na koncie firmy widać tylko „wypłatę własną właściciela”; wypłata idzie przed zakładami, można ją od razu postawić.
 import { esc, kafelkiLiczb, podsumowanie, tabela, toast, zl2, zwinTabela, zl } from "./wspolne.js";
 
@@ -47,7 +47,7 @@ function grafHtml(id, g, L) {
     <div class="przyciski">${wybor}${stawka}<button class="btn" data-akcja="ks-postaw" data-g="${esc(id)}">${g.typ === "ruletka" ? "Postaw" : "Pociągnij za wajchę"}</button></div></div></div>`;
 }
 
-// UF2: hasło „koziol” wpisane z klawiatury (app.js) – zakładka widoczna w tej przeglądarce także bez zaproszenia
+// hasło „koziol” wpisane z klawiatury (app.js) – zakładka widoczna w tej przeglądarce także bez zaproszenia
 export const HASLO = "koziol";
 const KLUCZ_HASLA = "lukrum-nocna13";
 export const znaHaslo = () => { try { return localStorage.getItem(KLUCZ_HASLA) === "1"; } catch { return false; } };

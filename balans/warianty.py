@@ -1,4 +1,4 @@
-"""Porównania par gier (plan optymalizacji, B2): ta sama gra, ziarno i rywale, a badana firma (bot)
+"""Porównania par gier (plan optymalizacji): ta sama gra, ziarno i rywale, a badana firma (bot)
 różni się tylko jedną decyzją albo parametrem strategii. Gra bazowa jest wspólna dla wszystkich
 wariantów z tym samym kontekstem i ziarnem – liczona raz. Wyniki gier trafiają na bieżąco do
 `gry.csv` (przerwany pomiar wznawia się od miejsca przerwania), a pary i tabela – do `pary.csv`
@@ -7,20 +7,20 @@ i `raport.md`.
     python -X utf8 -m balans.warianty szybki [-o katalog]        # ≤ 10 min, kontrola regresji
     python -X utf8 -m balans.warianty pelny -o katalog --minut 60 [--ziarna 30] [--strategie …]
         [--firm 4,6,8] [--rund 12,18,26] [--strefy …] [--warianty bank,jakosc:3] [--procesy 5]
-        [--dane "mapa.popyt.model.zasieg=2|mapa.popyt.model.zasieg=4"]   # B6: liczby całej gry
+        [--dane "mapa.popyt.model.zasieg=2|mapa.popyt.model.zasieg=4"]   # liczby całej gry
     python -X utf8 -m balans.warianty raport katalog             # tabela z zapisanych gier
     python -X utf8 -m balans.warianty lista                      # dostępne warianty
 
 Wariant to dane, nie kod: nadpisanie parametrów strategii albo poziomu bota (dane/boty.yaml),
 decyzji, którą bot podejmuje (klucz z silnik/decyzje.py), albo pól każdego zatrudnienia.
-Wyjątek – „zamknięcie firmy” od rundy N (U21): badana firma od tej rundy nie gra (decyzje
+Wyjątek – „zamknięcie firmy” od rundy N: badana firma od tej rundy nie gra (decyzje
 z `_zamknij`), a gra trwa. Najemca nie może wypowiedzieć najmu (`wypowiedz` w decyzjach to
 wypowiedzenie przez nowego właściciela budynku), więc czynsz płaci do końca gry.
 Kontekst: strategia badanej firmy, długość gry, liczba firm, poziom botów, strefa lokalu
 (parametr strategii `strefy`), kapitał startowy i poziom rywali (bez niego – jak badanej; trudność
-mierzy badana firma „jak człowiek” wśród rywali na poziomie średnim, Z5:
+mierzy badana firma „jak człowiek” wśród rywali na poziomie średnim,
 `--poziom czlowiek_dobry --rywale sredni`). Rywale – boty kolejnych strategii, przesunięte o ziarno.
-Kontekst `dane` (B6) zmienia liczby dla wszystkich firm (`dane_ze_zmianami`) – do porównania tabel
+Kontekst `dane` zmienia liczby dla wszystkich firm (`dane_ze_zmianami`) – do porównania tabel
 kontekstów przy innych liczbach; `--warianty baza` – same gry bazowe.
 """
 from __future__ import annotations
@@ -52,7 +52,7 @@ BADANA = "Badana"
 BAZA = "baza"
 POLA_GRY = ["karta", "dochod", "gotowka", "majatek", "pierwszy_plus", "alarmy", "miejsce",
             "lokale", "czas_s"]
-POLA_OPISU = ["strefy_lokali"]   # B6: strefy lokali badanej na koniec (strefa bywa zajęta)
+POLA_OPISU = ["strefy_lokali"]   # strefy lokali badanej na koniec (strefa bywa zajęta)
 ROZNICE = ("karta", "majatek", "dochod")   # różnice w parach
 DOMINACJA = 0.7   # plan: opcja wygrywa ≥ 70% par przy istotnej różnicy
 POMIARY = KATALOG_GRY.parent / "_robocze" / "pomiary" / "kalibracja"
@@ -67,7 +67,7 @@ class Kontekst:
     strefa: str = ""
     kapital: int = 0          # 0 – kapitał domyślny gry
     rywale: str = ""          # poziom rywali; "" – jak badanej (poziom)
-    dane: str = ""            # B6: zmiany danych gry „ścieżka=wartość;…” (dane_ze_zmianami)
+    dane: str = ""            # zmiany danych gry „ścieżka=wartość;…” (dane_ze_zmianami)
 
     def klucz(self) -> str:
         k = f"{self.strategia}/{self.rund}r/{self.firm}f/{self.poziom}"
@@ -79,7 +79,7 @@ class Kontekst:
 
 def dane_ze_zmianami(zmiany: str = "") -> Dane:
     """Dane domyślne ze zmianami `ścieżka=wartość` po „;”, np. `mapa.popyt.model.zasieg=2`
-    (B6: liczby dla wszystkich firm w grze – porównanie kontekstów, nie par wariantów).
+    (liczby dla wszystkich firm w grze – porównanie kontekstów, nie par wariantów).
     Ścieżka: atrybut danych, potem klucze słowników, `*` – każdy klucz; wartość w składni YAML;
     `ścieżka*=x` mnoży liczbę, np. `lokale.*.cena*=1.5`."""
     d = dane_domyslne()
@@ -115,7 +115,7 @@ class Wariant:
     poziom: tuple = ()        # ((ustawienie, wartość), …) – nadpisanie poziomu bota badanej firmy
     decyzje: tuple = ()       # ((klucz, wartość), …) – zamiast decyzji bota, gdy ją podejmuje
     zatrudnienie: tuple = ()  # ((pole, wartość), …) – w każdym zatrudnieniu (np. umowa)
-    zamknij_od: int = 0       # U21: od tej rundy firma się zamyka (0 – nie zamyka)
+    zamknij_od: int = 0       # od tej rundy firma się zamyka (0 – nie zamyka)
     zamknij_twardo: bool = False   # przy zamknięciu też sprzedaje sprzęt, zdejmuje menu i polisy
 
 
@@ -130,12 +130,12 @@ class Zadanie:
 
 
 def katalog_wariantow(dane: Dane) -> dict[str, Wariant]:
-    """Warianty, które dzisiejsze boty umieją rozegrać; nowe opcje botów (B3) dopisuje się tutaj."""
+    """Warianty, które dzisiejsze boty umieją rozegrać; nowe opcje botów dopisuje się tutaj."""
     zd = dane.zdarzenia or {}   # gra z lokalami: higiena i polisy
     w = [Wariant(f"bank:{b}", f"konto w {b}", decyzje=(("bank", b),)) for b in bk.banki(dane)]
     w += [Wariant(f"biuro:{b}", f"biuro rachunkowe {x['nazwa']}", decyzje=(("biuro", b),))
           for b, x in bo.biura(dane).items()]
-    # B12: samodzielna księgowość – rzetelna, z błędami (co 4. deklaracja zaniżona o 20%),
+    # samodzielna księgowość – rzetelna, z błędami (co 4. deklaracja zaniżona o 20%),
     # bez deklaracji
     sam = (("biuro", bo.SAMODZIELNIE),)
     w += [Wariant("biuro:samodzielnie", "samodzielna księgowość bez błędów", decyzje=sam,
@@ -160,21 +160,21 @@ def katalog_wariantow(dane: Dane) -> dict[str, Wariant]:
                   strategia=(("jakosc", q),)) for q in (1, 2, 3)]
     w += [Wariant(f"cena:{c}", f"cena {c:.0%} ceny preferowanej", strategia=(("cena", c),))
           for c in (0.85, 1.0, 1.15, 1.3)]
-    # B7: szerokość menu (liczba dań bota) i jedna promocja danego typu zamiast promocji strategii
+    # szerokość menu (liczba dań bota) i jedna promocja danego typu zamiast promocji strategii
     w += [Wariant(f"menu:{n}", f"menu {n} dań", strategia=(("uslugi", n),)) for n in (3, 5, 8)]
     w += [Wariant(f"promocja:{t}", f"tylko promocja {t}",
                   strategia=(("promocje", [{"typ": t, "nazwa": f"Promocja {t}"}]),))
           for t in dane.mapa["promocje"]["typy"]]
-    # poprawki 3: promocja falami – 3 rundy, przerwa, póki klienci ją pamiętają (B7), i znowu
+    # poprawki 3: promocja falami – 3 rundy, przerwa, póki klienci ją pamiętają, i znowu
     w += [Wariant(f"promocja:{t}:fala", f"tylko promocja {t} falami po 3 rundy",
                   strategia=(("promocje", [{"typ": t, "nazwa": f"Promocja {t}", "rund": 3}]),))
           for t in dane.mapa["promocje"]["typy"]]
-    # B8: zaopatrzenie – gwiazdki składników (sprzęt i ludzie wg strategii), zapas, dostawcy
+    # zaopatrzenie – gwiazdki składników (sprzęt i ludzie wg strategii), zapas, dostawcy
     w += [Wariant(f"skladniki:{q}", f"składniki {q}★ (sprzęt i ludzie wg strategii)",
                   strategia=(("jakosc_zasobow", q),)) for q in (1, 2, 3)]
     w += [Wariant(f"zapas:{z}", f"zapas zamówień ×{z}", strategia=(("zapas_zasobow", z),))
           for z in (1.0, 1.15, 1.3, 1.5, 2.0)]
-    # B9: ludzie – pensja, gwiazdki, kanał, premia, szkolenia, podwyżki, właściciel przy kasie
+    # ludzie – pensja, gwiazdki, kanał, premia, szkolenia, podwyżki, właściciel przy kasie
     w += [Wariant("pensja:minimalna", "pensja minimalna", strategia=(("pensja", "minimalna"),))]
     w += [Wariant(f"pensja:{m}", f"pensja {m:.0%} preferowanej", strategia=(("pensja", m),))
           for m in (1.1, 1.25)]
@@ -195,7 +195,7 @@ def katalog_wariantow(dane: Dane) -> dict[str, Wariant]:
                   poziom=(("dba_o_ludzi", None),))]
     w += [Wariant(f"wlasciciel:{h}", f"właściciel {h} h na kasie zamiast kasjera",
                   strategia=(("wlasciciel_godziny", h),)) for h in (10, 20)]
-    # B10: marketing – jeden kanał kampanii zamiast kanałów strategii, emisje i przerwa,
+    # marketing – jeden kanał kampanii zamiast kanałów strategii, emisje i przerwa,
     # udogodnienia i wyposażenie
     agencje = ((dane.mapa or {}).get("reklama") or {}).get("agencje", {})
     kanaly = [f"{a}/{k}" for a, x in agencje.items() for k in x["kanaly"]]
@@ -211,7 +211,7 @@ def katalog_wariantow(dane: Dane) -> dict[str, Wariant]:
           for n in (0, 3, 6)]   # w katalogu 6 pozycji
     w += [Wariant("zdarzenia:brak", "bez udziału w eventach w parkach (zawsze opcja domyślna)",
                   decyzje=(("zdarzenia", {}),))]
-    # B11: finanse – lokata z nadwyżki, jeden kredyt, Harpagon przy braku gotówki, kasyno
+    # finanse – lokata z nadwyżki, jeden kredyt, Harpagon przy braku gotówki, kasyno
     w += [Wariant(f"lokata:{n}", f"nadwyżka ponad 30 tys. zł na lokatę {n}-tygodniową",
                   strategia=(("lokaty", {"bufor": 30000, "rund": n, "min_kwota": 2000,
                                          "zerwij_ponizej": 10000}),)) for n in (4, 13)]
@@ -232,7 +232,7 @@ def katalog_wariantow(dane: Dane) -> dict[str, Wariant]:
                   strategia=(("dostawcy", hurt),)),
           Wariant("dostawcy:dyskont", "zakupy w dyskoncie (odbiór osobisty), reszta jak baza",
                   strategia=(("dyskonty", True),)),
-          Wariant("dostawcy:auto", "lokal główny na auto-dostawach (Z4)",
+          Wariant("dostawcy:auto", "lokal główny na auto-dostawach",
                   strategia=(("auto_dostawy", True),)),
           Wariant("dostawcy:bez_piekarni", "bez piekarni",
                   strategia=(("dostawcy", [k for k, r in rodzaj.items() if r != "piekarnia"]),))]
@@ -242,7 +242,7 @@ def katalog_wariantow(dane: Dane) -> dict[str, Wariant]:
     drugi = dane.boty["poziomy"]["trudny"]["kolejny_lokal"]
     w += [Wariant("lokale:drugi", "drugi lokal jak bot trudny",
                   poziom=(("kolejny_lokal", drugi),)),
-          # B11 (H20): kredyt na rozwój – gotówka z kredytu przyspiesza drugi lokal
+          # kredyt na rozwój – gotówka z kredytu przyspiesza drugi lokal
           Wariant("kredyt:rozwoj", "kredyt start 50 tys. zł w 1. rundzie, drugi lokal jak trudny",
                   strategia=(("kredyt", {"produkt": "start", "kwota": 50000, "rund": 52}),),
                   poziom=(("kolejny_lokal", drugi),)),
@@ -252,7 +252,7 @@ def katalog_wariantow(dane: Dane) -> dict[str, Wariant]:
                                          "od_rundy": 7}),),
                   poziom=(("kolejny_lokal", drugi),)),
           Wariant("lokale:jeden", "bez drugiego lokalu", poziom=(("kolejny_lokal", None),))]
-    # B6: typ i forma lokalu (strategia `lokal`, silnik/boty.py: _wybierz_lokal); kupno – na kredyt
+    # typ i forma lokalu (strategia `lokal`, silnik/boty.py: _wybierz_lokal); kupno – na kredyt
     # pod zastaw lokalu, gdy zostaje rezerwa gotówki (inaczej gotowy w najmie); drugi lokal – jak
     # u trudnego, ale innego typu
     # u lokalu bez zestawu – większa rezerwa na sprzęt kupowany po urządzeniu albo budowie;
@@ -272,7 +272,7 @@ def katalog_wariantow(dane: Dane) -> dict[str, Wariant]:
                   strategia=(("przejecie", {"rezerwa": 30000}),)),
           Wariant("lokale:przejecie_wypowiedz", "kupno budynku rywala i wypowiedzenie najmu",
                   strategia=(("przejecie", {"rezerwa": 30000, "wypowiedz": True}),)),
-          # B6 (7.11): kupowany budynek z najemcą zastawem kredytu w tej samej rundzie
+          # kupowany budynek z najemcą zastawem kredytu w tej samej rundzie
           Wariant("lokale:wykup_kredyt", "wykup własnego lokalu z kredytem pod jego zastaw, zostaje"
                   " 30 tys. zł",
                   strategia=(("wykup", {"rezerwa": 30000, "kredyt": True}),)),
@@ -288,7 +288,7 @@ def katalog_wariantow(dane: Dane) -> dict[str, Wariant]:
           # porównanie z `jakosc:3` (gotowy z zestawem wynajmującego, reszta 3★)
           Wariant("lokale:niewyposazony_q3", "niewyposażony w najmie, sprzęt i reszta 3★",
                   strategia=(("lokal", typy["niewyposazony"]), ("jakosc", 3)))]
-    # B6 (7.11): zakupy poniżej progu do ewidencji z amortyzacją zamiast od razu w koszty –
+    # zakupy poniżej progu do ewidencji z amortyzacją zamiast od razu w koszty –
     # niewyposażony lokal (sprzęt kupowany od zera) względem gotowego, z amortyzacją i bez
     am = (("amortyzacja_niskocenna", "amortyzacja"),)
     niew = (("lokal", typy["niewyposazony"]),)
@@ -305,7 +305,7 @@ def katalog_wariantow(dane: Dane) -> dict[str, Wariant]:
     w += [Wariant(f"lokale:drugi_{n}", f"drugi lokal jak bot trudny, {x}",
                   poziom=(("kolejny_lokal", {**drugi, "lokal": x}),))
           for n, x in typy.items() if n in ("kupno", "niewyposazony", "dzialka")]
-    # U21: „zarób i zamknij” – zwolnienia i koniec zamówień (jak w analizie A), wersja twarda:
+    # „zarób i zamknij” – zwolnienia i koniec zamówień (jak w analizie A), wersja twarda:
     # do tego sprzedaż sprzętu, puste menu i bez polis; lokal zostaje (najemca nie wypowie najmu)
     w += [Wariant(f"zamkniecie:{r}{'_twarde' if t else ''}",
                   f"od rundy {r} zwalnia wszystkich i nie zamawia"
@@ -313,7 +313,7 @@ def katalog_wariantow(dane: Dane) -> dict[str, Wariant]:
                   zamknij_od=r, zamknij_twardo=t) for r in (6, 11) for t in (False, True)]
     w.append(Wariant("zamkniecie:1", "od rundy 1 nic nie robi (bez lokalu) – punkt odniesienia",
                      zamknij_od=1))
-    # B3: umiejętności poziomu trudnego pojedynczo wyłączone (na innych poziomach – bez zmian)
+    # umiejętności poziomu trudnego pojedynczo wyłączone (na innych poziomach – bez zmian)
     w += [Wariant(f"poziom:bez_{u}", f"poziom bez ustawienia {u}", poziom=((u, None),))
           for u in ("korekta_prognozy", "mnozniki_ceny", "obsluga_kampanii")]
     # K: diagnoza poziomu „jak człowiek – dobry” – po jednej przewadze nad średnim zabranej
@@ -369,7 +369,7 @@ def _wymus(w: Wariant, d: dict) -> dict:
 
 
 def _zamknij(w: Wariant, f, r: int) -> dict:
-    """U21: decyzje zamkniętej firmy (brak klucza = bez zmian): nic nie kupuje, nie zatrudnia, nie
+    """Decyzje zamkniętej firmy (brak klucza = bez zmian): nic nie kupuje, nie zatrudnia, nie
     reklamuje się; w rundzie zamknięcia zwalnia wszystkich (wersja twarda: sprzedaje sprzęt)."""
     d = {"zatrudnij": [], "zamowienia": [], "kampanie": [], "promocje": [], "sprzet_kup": [],
          "kredyty_wez": [], "leasing_wez": [], "lokaty_zaloz": [], "szkolenia": []}
@@ -394,7 +394,7 @@ def rozegraj(z: Zadanie) -> dict:
     t = time.perf_counter()
     k, w = z.kontekst, z.wariant
     fs = firmy(k, z.ziarno, list(dane_domyslne().boty["strategie"]))
-    # B11: zaproszenia do klubu także dla botów – bez zakładów nic nie zmieniają
+    # zaproszenia do klubu także dla botów – bez zakładów nic nie zmieniają
     opcje = {"kasyno_botow": True} | ({"kapital_startowy": k.kapital} if k.kapital else {})
     poziomy = {n: k.poziom if n == BADANA else k.rywale or k.poziom for n, _ in fs}
     g = Gra.nowa("warianty", fs, k.rund, z.ziarno, poziomy=poziomy, dane=dane_ze_zmianami(k.dane),
@@ -420,7 +420,7 @@ def miary(s, rund: int) -> dict:
         karty[n] = punkty.ranking(dane, tygodnie, rund)["wynik"]
     ws = [s.wyniki[r][BADANA] for r in range(1, rund + 1)]
     plus = next((r for r, w in enumerate(ws, 1) if w["kpir"]["dochod_netto"] > 0), rund + 1)
-    # alarm = debet ponad limit konta (plan; po Z3 – pole alarm w wynikach)
+    # alarm = debet ponad limit konta (pole alarm w wynikach)
     alarmy = sum(bool(w["alarm"]) if "alarm" in w else w["bank"]["debet_ponad_limit"] > 0
                  for w in ws)
     return {"karta": round(karty[BADANA], 4),
@@ -606,7 +606,7 @@ def main(argv: list[str]) -> int:
     pa.add_argument("--strefy", help="strefy lokalu badanej firmy, po przecinku (bez – strategia)")
     pa.add_argument("--kapital", type=int, default=0)
     pa.add_argument("--dane", default="",
-                    help="zmiany danych gry „ścieżka=wartość;…”, kolejne konteksty po „|” (B6)")
+                    help="zmiany danych gry „ścieżka=wartość;…”, kolejne konteksty po „|”")
     pa.add_argument("--warianty", help="nazwy albo przedrostki po przecinku (bez – wszystkie)")
     pa.add_argument("--minut", type=float)
     pa.add_argument("--procesy", type=int, default=max(1, (os.cpu_count() or 2) - 1))

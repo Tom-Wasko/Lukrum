@@ -1,4 +1,4 @@
-"""Poziomy botów (F4.4, P19, Z5): łatwy, średni, trudny i niemożliwy różnią się sposobem planowania (niemożliwy –
+"""Poziomy botów : łatwy, średni, trudny i niemożliwy różnią się sposobem planowania (niemożliwy –
 oszukuje); wersje „jak człowiek” prognozują z raportów poprzednich rund."""
 import pytest
 
@@ -34,7 +34,7 @@ def test_planujacy_bot_marnuje_mniej_towaru(poziomy):
 
 def test_trudny_bot_otwiera_kolejny_lokal(poziomy):
     zasady = dane_domyslne().boty["poziomy"]["trudny"]["kolejny_lokal"]
-    # drugi lokal zależy od progu gotówki, więc na jednym ziarnie bywa na granicy (U20: na ziarnie 7 jedno odejście
+    # drugi lokal zależy od progu gotówki, więc na jednym ziarnie bywa na granicy (na ziarnie 7 jedno odejście
     # i podwyżki go przesunęły; na ziarnach 1–5 liczba drugich lokali bez zmian) – drugie ziarno, gdy pierwsze nie wyjdzie
     assert any(x["lokale"] > 1 for x in poziomy["trudny"].values()) or any(
         x["lokale"] > 1 for x in rozegraj(RUND, "trudny", 1).values())
@@ -43,7 +43,7 @@ def test_trudny_bot_otwiera_kolejny_lokal(poziomy):
 
 
 def test_czlowiek_dobry_kupuje_drugi_lokal_jak_trudny():
-    """B14 (decyzja autora 7.11.2026): „jak człowiek – dobry” kupuje drugi lokal na warunkach trudnego
+    """Decyzja autora 7.11.2026): „jak człowiek – dobry” kupuje drugi lokal na warunkach trudnego
     (obsługa 1,0, gotówka 50 tys. zł, najwyżej 2 lokale) – i w grze rzeczywiście go kupuje (przy dawnych
     warunkach – obsługa 0,85, 60 tys. zł – w tej grze żaden „dobry” nie kupował drugiego lokalu)."""
     pz = dane_domyslne().boty["poziomy"]
@@ -108,7 +108,7 @@ def test_dwa_za_jeden_tylko_przy_wolnej_kuchni_na_najtansze_danie():
 
 
 def test_niemozliwy_bot_oszukuje_popytem():
-    """Poziom niemożliwy (P19): przy tej samej strategii klienci wolą jego lokale; drużyn graczy to nie dotyczy."""
+    """Poziom niemożliwy : przy tej samej strategii klienci wolą jego lokale; drużyn graczy to nie dotyczy."""
     dane = dane_domyslne()
     konf = {"firmy": [{"nazwa": "A", "bot": "tani", "poziom": "niemozliwy"}, {"nazwa": "B", "bot": "tani", "poziom": "trudny"},
                       {"nazwa": "C", "bot": None, "poziom": "niemozliwy"}]}
@@ -122,7 +122,7 @@ def test_niemozliwy_bot_oszukuje_popytem():
 
 
 def test_bot_jak_czlowiek_prognozuje_z_raportow_a_nie_z_modelu(monkeypatch):
-    """Z5: wersje „jak człowiek” nie używają prognozy modelu popytu (pp.prognoza dla własnych cen i jakości),
+    """Wersje „jak człowiek” nie używają prognozy modelu popytu (pp.prognoza dla własnych cen i jakości),
     tylko popytu z raportów poprzednich rund; wersja dobra – średnia z dwóch rund razy zmiana puli strefy."""
     def model(*a, **k):
         raise AssertionError("bot „jak człowiek” użył prognozy modelu")
@@ -171,7 +171,7 @@ def test_poziomy_jak_czlowiek_tylko_do_pomiarow():
 
 
 def test_korekta_prognozy_trudnego_zbiega_do_bledu_modelu():
-    """B3: raport pokazuje ofertę bota (prognoza z korektą), więc korekta liczy się narastająco – przy stałym
+    """Raport pokazuje ofertę bota (prognoza z korektą), więc korekta liczy się narastająco – przy stałym
     błędzie modelu (+10%) zbiega do niego, zamiast skakać co rundę między 1,1 a 1,0."""
     from types import SimpleNamespace
 
@@ -184,7 +184,7 @@ def test_korekta_prognozy_trudnego_zbiega_do_bledu_modelu():
 
 
 def test_zakupy_dodatkowe_bota_zostawiaja_bufor_gotowki():
-    """B5: wyposażenie i udogodnienia bot kupuje po kolei, póki po zakupie zostaje bufor gotówki – wcześniej brał
+    """Wyposażenie i udogodnienia bot kupuje po kolei, póki po zakupie zostaje bufor gotówki – wcześniej brał
     od razu cały komplet strategii (agresywny ~17 tys. zł naraz) i wpadał w debet ponad limit."""
     poz = [{"nazwa": n, "cena": c, "od_rundy": o} for n, c, o in
            (("A", 3000, 1), ("B", 2500, 9), ("C", 2000, 1), ("D", 200, 1), ("E", 100, 1))]

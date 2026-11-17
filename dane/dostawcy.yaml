@@ -4,8 +4,8 @@ opis: 'Dostawcy jedzenia: rodzaj, dni dostaw (0 = poniedziałek), koszt dostawy 
   odbiór osobisty w dyskoncie (czas właściciela, limit opakowań na składnik na dzień), gazetki (co tydzień kilka składników
   taniej). Ceny: miesiąc → dostawca → składnik → jakość → cena za opakowanie; w miesiącach bez danych cena waha się losowo
   wokół tej bazy.'
-zrodlo: notatka „Elementy mapy” (dyskonty, hurtownie, producent mięsa, piekarnia – marki z notatki); ceny, dni dostaw, progi
-  i limity – założenie F3a.6 (ceny względem dawnej hurtowni z F2.6), do kalibracji w kroku 5; Auchan (Z4, przebudowa
+zrodlo: założenia autora o elementach mapy (dyskonty, hurtownie, producent mięsa, piekarnia – marki z założeń autora); ceny, dni dostaw, progi
+  i limity – założenie autora (ceny względem dawnej hurtowni), do kalibracji; Auchan (przebudowa
   2.11.2026) – bez własnych cen, czyli średnia cen pozostałych dostawców w rundzie + narzut (ceny_z_rynku) Jakości składników (ceny ★ i ★★★ względem ★★) przeliczone od zera 15.11.2026 – ★ = 85% ceny ★★ (tanio, ale ok. 12% mniej popytu na danie), ★★★ = 132% ceny ★★ (ok. 17% więcej popytu; przy marży porcji ok. 15 zł dopłata ok. 1,5–2 zł za porcję zwraca się tylko przy dużych wolnych mocach albo wyższej cenie dania – decyzja autora 14.11, priorytet ma rozgrywka; zwrot mierzony na porcji, nie w tygodniach, bo składnik nie ma kosztu stałego).
 pierwsi:
 - Piekarnia Koziołek

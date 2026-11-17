@@ -10,14 +10,14 @@ opis: >-
   wyłącza (tydzień liczba_rund + 1, jak „wyłączone” w harmonogramie mistrza gry). `zakrycie` – co przepada, gdy
   drużyna znów zakryje odsłoniętą funkcję (silnik/autopilot.py: przepadek; brak – nic), pokazywane w oknie
   ostrzeżenia przed zakryciem.
-zrodlo: decyzje autora 9–10.11.2026 (raporty/funkcje/plan.md, pomysł nauczyciela – gra przytłacza licealistów)
+zrodlo: decyzje autora 9–10.11.2026 (pomysł nauczyciela – gra przytłacza licealistów)
 # Zakupy, które gra robi za drużynę (zaopatrzenie zakryte albo wyłączone – silnik/autopilot.py): auto-dostawy
 # na prognozowany popyt lokalu × zapas, składniki w tej jakości (albo najbliższej niższej u auto-dostawcy).
 autopilot:
   jakosc_zasobow: 2
   zapas_zasobow: 1.2
-  zrodlo: jak boty (boty.yaml ustawienia.zapas_zasobow – B8, b8_zaopatrzenie); założenie serii funkcje (J5),
-    sprawdzane pomiarem pierwszej gry bez decyzji zakupowych. K5 (decyzja autora 10.11.2026) – jakość składników
+  zrodlo: jak boty (boty.yaml ustawienia.zapas_zasobow); założenie autora,
+    sprawdzane pomiarem pierwszej gry bez decyzji zakupowych. Decyzja autora 10.11.2026 – jakość składników
     jak stanowiska kuchni lokalu (lepsze z gwiazdek prowadzącego i sprzętu, ważone prognozą porcji;
     silnik/autopilot.py, _jakosc_lokalu), jakosc_zasobow tylko dla lokalu bez stanowisk dań (2★ – podstawa gry)
 domyslny_zestaw: pierwsza_gra

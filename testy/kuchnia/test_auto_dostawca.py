@@ -1,4 +1,4 @@
-"""Z4: auto-dostawca i Auchan (silnik/kuchnia/auto_dostawca.py, dostawcy.hipermarkety)."""
+"""Auto-dostawca i Auchan (silnik/kuchnia/auto_dostawca.py, dostawcy.hipermarkety)."""
 import copy
 from datetime import timedelta
 

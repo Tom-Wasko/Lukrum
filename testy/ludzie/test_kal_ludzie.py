@@ -1,4 +1,4 @@
-"""Kalibracja B9/B10 (decyzje autora 7.11.2026): kandydat odrzuca za niską ofertę, pensja poniżej oczekiwanej trwale
+"""Kalibracja (decyzje autora 7.11.2026): kandydat odrzuca za niską ofertę, pensja poniżej oczekiwanej trwale
 obniża zadowolenie, boty płacą co najmniej próg i podkupują niedopłacanych, szkolenie działa 4 tygodnie, a zadowolenie
 zmienia tempo pracy. Każda mechanika ma wyłącznik w zalozenia.yaml (pracownicy.*.wlaczone)."""
 import math
@@ -293,7 +293,7 @@ def test_trwajace_szkolenie_o_dawnej_nazwie_to_trwajace_polaczone():
     assert szk.pozycja(g.dane.katalog_ofert["szkolenia"], "Szkolenie, którego nie ma") is None
 
 
-# --- B10: tempo pracy z zadowolenia -----------------------------------------------------------------------------
+# --- tempo pracy z zadowolenia -----------------------------------------------------------------------------
 
 @pytest.mark.parametrize("zadowolenie, mnoznik", [(None, 1.0), (1.02, 1.05), (1.0, 1.0), (0.97, 1.0), (0.95, 1.0),
                                                   (0.9, 0.95)])

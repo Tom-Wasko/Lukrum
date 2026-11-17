@@ -1,4 +1,4 @@
-"""Debet ponad limit i inwestor ratunkowy (Z3, warunki w dane/zalozenia.yaml → finanse.inwestor_ratunkowy).
+"""Debet ponad limit i inwestor ratunkowy (warunki w dane/zalozenia.yaml → finanse.inwestor_ratunkowy).
 
 Debet ponad limit konta na koniec rundy (silnik/pieniadze/banki.py) to alarm u mistrza gry (`w["alarm"]`). W następnej
 rundzie firma nie inwestuje i nie bierze kredytów, leasingu ani lokat (BLOKOWANE); zostają Harpagon, sprzedaż majątku
@@ -58,7 +58,7 @@ def poczatek_rundy(dane: Dane, f: Firma, kwota: float | None, runda: int, rachun
 
 
 def alarm(dane: Dane, f: Firma) -> list[dict]:
-    """U2: alarm dla drużyny na początku rundy z blokadą – pierwsza pozycja listy błędów i pasek na Dashboardzie."""
+    """Alarm dla drużyny na początku rundy z blokadą – pierwsza pozycja listy błędów i pasek na Dashboardzie."""
     debet = bk.debet_ponad_limit(dane, f)
     if debet <= 0:
         return []

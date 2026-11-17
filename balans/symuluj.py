@@ -1,4 +1,4 @@
-"""Balans poziomów botów (F4.4): gra z lokalami, w której wszystkie strategie z dane/boty.yaml
+"""Balans poziomów botów: gra z lokalami, w której wszystkie strategie z dane/boty.yaml
 grają na jednym poziomie; wypisuje gotówkę, wynik gry w pkt (0–1000), lokale, pracowników,
 przeterminowany towar i sprzedaż/popyt ostatniej rundy.
 

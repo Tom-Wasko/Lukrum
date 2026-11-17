@@ -1,4 +1,4 @@
-// Konkurencja (gra z lokalami, silnik/rynek/konkurencja.py, P16): ogólny obraz rywali dla wszystkich, dokładne dane – detektyw.
+// Konkurencja (gra z lokalami, silnik/rynek/konkurencja.py): ogólny obraz rywali dla wszystkich, dokładne dane – detektyw.
 // Decyzja `detektyw: firma` – zlecenie obserwacji jednego rywala w tej rundzie (koszt w zł i godziny właściciela).
 import { brakWynikow, esc, gw, kafelkiLiczb, licz, nazwaFirmy, nazwaOgolna, podsumowanie, proc, kropkaFirmy, tabela, zl2, zwinTabela, zl } from "./wspolne.js";
 

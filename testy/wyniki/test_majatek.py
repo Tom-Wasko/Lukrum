@@ -1,4 +1,4 @@
-"""Majątek netto firmy (Z2): składniki, długi, leasing poza majątkiem, wynik rundy i widok mistrza gry."""
+"""Majątek netto firmy: składniki, długi, leasing poza majątkiem, wynik rundy i widok mistrza gry."""
 
 import pytest
 from pomocnicze import _gra, _lokal, _runda

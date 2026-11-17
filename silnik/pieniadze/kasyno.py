@@ -2,7 +2,7 @@
 
 Klubu nie ma na mapie ani w menu. Na koniec rundy drużyna może dostać zaproszenie (`Firma.zaproszenia`) – wtedy
 w następnej rundzie drzwi są otwarte i można postawić kilka zakładów (`kasyno`: lista {gra, zaklad, stawka}).
-UF2: od `kasyno.kod_od_rundy` drzwi są otwarte dla każdego, kto zna hasło – panel pokazuje zakładkę po wpisaniu
+od `kasyno.kod_od_rundy` drzwi są otwarte dla każdego, kto zna hasło – panel pokazuje zakładkę po wpisaniu
 z klawiatury „koziol” (albo z zaproszeniem); boty grają dalej tylko z zaproszenia (`otwarte`).
 Gra się z prywatnego portfela właściciela (silnik/pieniadze/wlasciciel.py), więc w księgach firmy nic się nie pojawia;
 wygraną można wpłacić do firmy jako zwykłą wpłatę własną.
@@ -113,7 +113,7 @@ def rozegraj(dane: Dane, f: Firma, d: dict, runda: int, ziarno: int | str, portf
 
 def zaproszenie(dane: Dane, f: Firma, runda: int, ziarno: int | str, liczba_rund: int,
                 boty: bool = False) -> int | None:
-    """Na koniec rundy: czy drużyna dostaje zaproszenie na następną rundę (boty – tylko przy `boty`: pomiary B11,
+    """Na koniec rundy: czy drużyna dostaje zaproszenie na następną rundę (boty – tylko przy `boty`: pomiary balansu,
     konfiguracja `kasyno_botow`)."""
     K = dane_kasyna(dane)
     if not K or (f.bot and not boty):

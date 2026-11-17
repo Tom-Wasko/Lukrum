@@ -1,11 +1,11 @@
 // LUKRUM – wspólne wejście mapy ([mapa]) i wnętrz ([mechaniki]). Umowa: notatki WSPOLPRACA.md, „Umowy na granicy” (14.11).
 // Ładowany w <head> bez defer (jak motyw.js), żeby paleta była ustawiona przed pierwszym rysowaniem strony.
-//
+
 //   lukrum.wyglad.ustaw({ paleta, tryb })  paleta: "bar" | "pewex" | "wysoka", tryb: "jasny" | "ciemny"
 //   lukrum.wyglad.odczytaj()               → { paleta, tryb }
 //   lukrum.otworzWnetrze(idMiejsca)        mapa woła po kliknięciu budynku (id z dane/mapa/budynki.yaml albo id lokalu)
 //   lukrum.wrocNaMape()                    wnętrze woła przyciskiem „Wróć na mapę”
-//
+
 // Zdarzenia na document (CustomEvent, dane w detail):
 //   "lukrum:wyglad"  { paleta, tryb }   – po zmianie wyglądu (mapa przerysowuje kolory z zmienne.css)
 //   "lukrum:wnetrze" { id }             – prośba o wnętrze; rysuje je strona [mechaniki]

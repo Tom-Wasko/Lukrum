@@ -96,7 +96,7 @@ def test_w_kodzie_silnika_nie_ma_liczb_gry():
 
 
 def test_nowe_udogodnienia_nie_zmieniaja_wyboru_botow_uf9():
-    """UF9: nowe udogodnienia (z opisem, rundy 5–14) mają gorszą cenę za punkt niż klimatyzacja, a przed rundą 9
+    """Nowe udogodnienia (z opisem, rundy 5–14) mają gorszą cenę za punkt niż klimatyzacja, a przed rundą 9
     (zanim boty skompletują swoje 2–3 sztuki) są drogie – boty (silnik/boty.py: cena/procent) wybierają jak dotąd."""
     from silnik.dane import dane_domyslne
     poz = dane_domyslne().katalog_ofert["udogodnienia"]["pozycje"]

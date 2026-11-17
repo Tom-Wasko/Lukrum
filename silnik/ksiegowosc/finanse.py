@@ -8,7 +8,7 @@
 - saldo poniżej zera zamienia się w debet (limit i opłaty – bank konta, tylko za zgodą `debet`); debet jest spłacany,
   gdy gotówka wróci.
 
-Gra z lokalami (F3a.11, dane/podatki_2026.yaml): księga ma reguły VAT (`vat`). Kwoty w grze są brutto – `ksieguj`
+Gra z lokalami (dane/podatki_2026.yaml): księga ma reguły VAT (`vat`). Kwoty w grze są brutto – `ksieguj`
 wydziela VAT (stawka podana albo z reguł po opisie), do KPiR idzie netto, do rejestru VAT podatek, a rachunek
 dostaje brutto. Pozycje bez ruchu gotówki (`Ksiega.dodaj`: amortyzacja) są bez VAT. CIT zastępuje rozliczenie
 JDG (silnik/ksiegowosc/rozliczenie.py).
@@ -167,6 +167,6 @@ def wyrownaj_gotowke(firma: Firma, rachunek: Rachunek) -> float:
 
 
 def zadluzenie(firma: Firma) -> float:
-    """Kredyty i debet; niezwrócona wpłata inwestora ratunkowego liczy się jak dług (Z3)."""
+    """Kredyty i debet; niezwrócona wpłata inwestora ratunkowego liczy się jak dług."""
     inwestor = firma.inwestor.dlug if firma.inwestor else 0.0
     return round(sum(k.pozostalo for k in firma.kredyty) + firma.debet + inwestor, 2)

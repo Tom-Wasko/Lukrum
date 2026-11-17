@@ -1,4 +1,4 @@
-"""UF17: gra pokazowa – pełna gra rozegrana przez boty, do obejrzenia w „Twoich grach”.
+"""Gra pokazowa – pełna gra rozegrana przez boty, do obejrzenia w „Twoich grach”.
 
 `python manage.py gra_pokazowa` usuwa starą grę „Pokazowa”, zakłada nową (domyślnie 18 rund,
 4 boty i drużyna „Pokazowa”, za którą decyduje dobry bot), przypisuje do drużyny konta mistrzów
@@ -21,7 +21,7 @@ from silnik.dane import dane_domyslne
 
 NAZWA = "Pokazowa"
 RYWALE = ("zrownowazony", "tani", "premium", "agresywny")
-# UF17 (pomiar 4 ziarna, rywale średni): zrównoważony trudny – średnio 1,75 miejsca, premium 2,0,
+# pomiar (4 ziarna, rywale średni): zrównoważony trudny – średnio 1,75 miejsca, premium 2,0,
 # „jak człowiek – dobry” 2,5
 STRATEGIA, POZIOM, POZIOM_RYWALI = "zrownowazony", "trudny", "sredni"
 REFLEKSJA = "Gra pokazowa – decyzje podjął bot."

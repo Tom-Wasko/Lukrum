@@ -105,7 +105,7 @@ class Gazetka(Schemat):
 
 
 class CenyZRynku(Schemat):
-    narzut: float = Field(ge=0, lt=1)          # hipermarket (Z4): średnia cen pozostałych × (1 + narzut)
+    narzut: float = Field(ge=0, lt=1)          # hipermarket: średnia cen pozostałych × (1 + narzut)
 
 
 class Dostawca(Schemat):
@@ -115,7 +115,7 @@ class Dostawca(Schemat):
     koszt_dostawy: float = Field(default=0, ge=0)  # za każdą dostawę (dzień) poniżej progu
     darmowa_od: float | None = Field(default=None, gt=0)
     minimalne_zamowienie: float = Field(default=0, ge=0)   # wartość jednej dostawy
-    odbior_osobisty: bool = False                 # dyskont: właściciel jedzie sam (czas właściciela, F3a.7)
+    odbior_osobisty: bool = False                 # dyskont: właściciel jedzie sam (czas właściciela)
     godziny_odbioru: float = Field(default=0, ge=0)
     limit_opakowan: int | None = Field(default=None, ge=1)  # na składnik na dzień
     od_rundy: int = Field(default=0, ge=0)
@@ -212,7 +212,7 @@ class Agencja(Schemat):
 
 
 class Cecha(Schemat):
-    """Cecha osoby (U20) – mnożniki składników zadowolenia; panel pokazuje nazwę i skutki (charakter jawny)."""
+    """Cecha osoby – mnożniki składników zadowolenia; panel pokazuje nazwę i skutki (charakter jawny)."""
     nazwa: str = ""   # rzeczownik do pigułki w panelu (np. „optymizm”); pusty – nazwa z klucza
     waga: float = Field(gt=0)
     placa: float = Field(1.0, ge=0)
@@ -232,8 +232,8 @@ class Cechy(Schemat):
 class PlikKandydatow(Plik):
     znani: list[ZnanyKandydat]
     losowanie: Losowanie
-    agencja: Agencja | None = None  # kanały rekrutacji gry z lokalami (F3a.8); katalog bazowy ich nie ma
-    cechy: Cechy | None = None      # U20: ukryte cechy osób; bez nich – wszyscy zwyczajni
+    agencja: Agencja | None = None  # kanały rekrutacji gry z lokalami; katalog bazowy ich nie ma
+    cechy: Cechy | None = None      # ukryte cechy osób; bez nich – wszyscy zwyczajni
     imiona_kobiet: list[str] = Field(min_length=1)
     imiona_mezczyzn: list[str] = Field(min_length=1)
     nazwiska: list[Nazwisko] = Field(min_length=1)
@@ -274,7 +274,7 @@ class Rundy(Sekcja):
     kalendarz: Kalendarz
     domyslna_liczba: int = Field(gt=0)
     odblokowanie: dict[str, list[str]]
-    harmonogram_lokali: HarmonogramLokali | None = None   # gra z lokalami (F4.3) – zamiast `odblokowanie`
+    harmonogram_lokali: HarmonogramLokali | None = None   # gra z lokalami – zamiast `odblokowanie`
     uslugi_w_rundzie_1: int = Field(ge=0)
     uslugi_startowe: list[str]
     uslugi_startowe_zrodlo: str
@@ -314,8 +314,8 @@ class Udogodnienie(Schemat):
     cena: float
     utrzymanie: float
     od_rundy: int = 1
-    sklep: str | None = None      # gra z lokalami: sklep budowlany / meblowy na mapie (F3a.6)
-    opis: str | None = None       # UF9: krótki opis w kafelku (panel)
+    sklep: str | None = None      # gra z lokalami: sklep budowlany / meblowy na mapie
+    opis: str | None = None       # krótki opis w kafelku (panel)
 
 
 class FirmaSzkoleniowa(Schemat):
@@ -366,7 +366,7 @@ class PromocjaBota(Schemat):
 
 
 class LokalBota(Schemat):
-    """Wybór lokalu przez bota (B6) – opis pól w silnik/boty.py: _wybierz_lokal."""
+    """Wybór lokalu przez bota – opis pól w silnik/boty.py: _wybierz_lokal."""
     typy: list[Literal["gotowy", "niewyposazony", "dzialka"]] = ["gotowy"]
     forma: Literal["najem", "kupno"] = "najem"
     przebicie: float = Field(1.0, ge=1)
@@ -374,13 +374,13 @@ class LokalBota(Schemat):
 
 
 class LeasingBota(Schemat):
-    """Nowy sprzęt w leasingu, gdy gotówki (po decyzji o lokalu) jest mniej niż `gotowka` (B6)."""
+    """Nowy sprzęt w leasingu, gdy gotówki (po decyzji o lokalu) jest mniej niż `gotowka`."""
     gotowka: float = Field(ge=0)
     rund: int = Field(gt=0)
 
 
 class PrzejecieBota(Schemat):
-    """Kupno budynku z najemcą (B6), gdy po zakupie zostaje `rezerwa` gotówki: przy `wykup` – własnego lokalu
+    """Kupno budynku z najemcą, gdy po zakupie zostaje `rezerwa` gotówki: przy `wykup` – własnego lokalu
     w najmie, przy `przejecie` – budynku rywala; `wypowiedz` – potem wypowiada rywalowi najem; `kredyt` – z kredytem
     inwestycyjnym pod zastaw kupowanego budynku (banki.yaml: zastaw_przejecia)."""
     rezerwa: float = Field(0, ge=0)
@@ -390,7 +390,7 @@ class PrzejecieBota(Schemat):
 
 
 class LokatyBota(Schemat):
-    """B11: nadwyżka gotówki ponad `bufor` na lokatę na `rund` rund (bank z najlepszą lokatą), najwyżej jedna
+    """Nadwyżka gotówki ponad `bufor` na lokatę na `rund` rund (bank z najlepszą lokatą), najwyżej jedna
     lokata w rundzie i nie mniej niż `min_kwota`; gdy gotówki jest mniej niż `zerwij_ponizej` – zrywa najnowszą."""
     bufor: float = Field(ge=0)
     rund: int = Field(gt=0)
@@ -399,7 +399,7 @@ class LokatyBota(Schemat):
 
 
 class KredytBota(Schemat):
-    """B11: jeden kredyt `produkt` (najtańszy bank z tym produktem) w rundzie `od_rundy` na `kwota` i `rund` rund."""
+    """Jeden kredyt `produkt` (najtańszy bank z tym produktem) w rundzie `od_rundy` na `kwota` i `rund` rund."""
     produkt: str
     kwota: float = Field(gt=0)
     rund: int = Field(gt=0)
@@ -407,21 +407,21 @@ class KredytBota(Schemat):
 
 
 class HarpagonBota(Schemat):
-    """B11: pożyczka `kwota` od Harpagona, gdy gotówki jest mniej niż `prog`; spłata z nadwyżki ponad `prog`
+    """Pożyczka `kwota` od Harpagona, gdy gotówki jest mniej niż `prog`; spłata z nadwyżki ponad `prog`
     (także częściowa)."""
     prog: float
     kwota: float = Field(gt=0)
 
 
 class KsiegowoscBota(Schemat):
-    """B12: samodzielna księgowość (gdy firma wybrała `biuro: samodzielnie`) – bot księguje dokumenty i składa
+    """Samodzielna księgowość (gdy firma wybrała `biuro: samodzielnie`) – bot księguje dokumenty i składa
     deklaracje; każda deklaracja z szansą `bledy` jest błędna o `odchylenie` (część poprawnej kwoty, w dół)."""
     bledy: float = Field(default=0, ge=0, le=1)
     odchylenie: float = Field(default=0, ge=0, le=1)
 
 
 class KasynoBota(Schemat):
-    """B11: po zaproszeniu `zakladow` zakładów po `stawka` zł (gra, zakład ruletki) – stawki wypłatą własną z firmy,
+    """Po zaproszeniu `zakladow` zakładów po `stawka` zł (gra, zakład ruletki) – stawki wypłatą własną z firmy,
     w następnej rundzie wygrana ponad oszczędności właściciela wraca do firmy wpłatą własną."""
     gra: str
     zaklad: str | None = None
@@ -431,13 +431,13 @@ class KasynoBota(Schemat):
 
 class Strategia(Schemat):
     nazwa: str
-    # B11: finanse (bez – bot ich nie używa)
+    # finanse (bez – bot ich nie używa)
     lokaty: LokatyBota | None = None
     kredyt: KredytBota | None = None
     harpagon: HarpagonBota | None = None
     kasyno: KasynoBota | None = None
-    ksiegowosc: KsiegowoscBota | None = None   # B12: deklaracje przy samodzielnej księgowości (bez – nie składa)
-    # B6: zakupy poniżej progu amortyzacji – od razu w koszty (domyślnie) albo do ewidencji z amortyzacją
+    ksiegowosc: KsiegowoscBota | None = None   # deklaracje przy samodzielnej księgowości (bez – nie składa)
+    # zakupy poniżej progu amortyzacji – od razu w koszty (domyślnie) albo do ewidencji z amortyzacją
     amortyzacja_niskocenna: Literal["koszty", "amortyzacja"] = "koszty"
     leasing: LeasingBota | None = None   # gra z lokalami: sprzęt w leasingu przy małej gotówce (bez – zawsze zakup)
     wykup: PrzejecieBota | None = None       # wykup własnego lokalu w najmie (bez – nie wykupuje)
@@ -446,12 +446,12 @@ class Strategia(Schemat):
     min_kuchnia: int = Field(0, ge=0)   # gra z lokalami, bot planujący: najmniej miejsc w kuchni wybieranego lokalu
     cena: float | None  # ułamek ceny preferowanej; None = średnia rynku z poprzedniej rundy
     jakosc: int = Field(ge=1, le=3)
-    jakosc_zasobow: int | None = Field(None, ge=1, le=3)   # B8: gwiazdki składników (bez – jak jakosc)
-    zapas_zasobow: float | None = Field(None, ge=1)   # B8: zapas w zamówieniach (bez – ustawienia botów)
-    dostawcy: list[str] | None = None   # B8: dostawcy, u których bot zamawia (bez – wszyscy poza hipermarketem)
-    dyskonty: bool = False   # B8: zakupy w dyskoncie (odbiór osobisty, czas właściciela)
-    auto_dostawy: bool = False   # B8: lokal główny na auto-dostawach (Z4, silnik/kuchnia/auto_dostawca.py)
-    # B9: ludzie – pensja (ułamek preferowanej albo „minimalna”), gwiazdki zatrudnianych (bez – jak jakosc),
+    jakosc_zasobow: int | None = Field(None, ge=1, le=3)   # gwiazdki składników (bez – jak jakosc)
+    zapas_zasobow: float | None = Field(None, ge=1)   # zapas w zamówieniach (bez – ustawienia botów)
+    dostawcy: list[str] | None = None   # dostawcy, u których bot zamawia (bez – wszyscy poza hipermarketem)
+    dyskonty: bool = False   # zakupy w dyskoncie (odbiór osobisty, czas właściciela)
+    auto_dostawy: bool = False   # lokal główny na auto-dostawach (silnik/kuchnia/auto_dostawca.py)
+    # ludzie – pensja (ułamek preferowanej albo „minimalna”), gwiazdki zatrudnianych (bez – jak jakosc),
     # kanał rekrutacji (bez – najtańszy), premia na osobę co rundę, godziny właściciela na pustym stanowisku kasy
     pensja: float | Literal["minimalna"] = 1.0
     jakosc_ludzi: int | None = Field(None, ge=1, le=3)
@@ -466,18 +466,18 @@ class Strategia(Schemat):
     udogodnienia: int = Field(ge=0)
     szkolenia: int = Field(ge=0)
     kampanie: list[str] = Field(default_factory=list)   # gra z lokalami: "agencja/kanał" z mapa/reklama.yaml
-    # B10: emisje w kampanii i rundy przerwy po kampanii w tym kanale i strefie (bez – ustawienia botów)
+    # emisje w kampanii i rundy przerwy po kampanii w tym kanale i strefie (bez – ustawienia botów)
     emisje_kampanii: int | None = Field(None, ge=1)
     przerwa_kampanii: int | None = Field(None, ge=0)
     promocje: list[PromocjaBota] = Field(default_factory=list)   # gra z lokalami: typy z mapa/promocje.yaml
     polisy: list[str] = Field(default_factory=list)   # gra z lokalami: rodzaje polis z zdarzenia/losowe.yaml
     higiena: str | None = None   # gra z lokalami: poziom higieny z zdarzenia/urzad.yaml (None – domyślny)
-    higiena_po_odbiorze: str | None = None   # B12: poziom, gdy wszystkie lokale już odebrane (None – jak `higiena`)
+    higiena_po_odbiorze: str | None = None   # poziom, gdy wszystkie lokale już odebrane (None – jak `higiena`)
 
 
 class UstawieniaBotow(Schemat):
     bufor_gotowki: float
-    rezerwa_po_sprzecie: float = Field(0, ge=0)   # B6: gotówka po zakupie sprzętu; resztę bot bierze kredytem bez historii
+    rezerwa_po_sprzecie: float = Field(0, ge=0)   # gotówka po zakupie sprzętu; resztę bot bierze kredytem bez historii
     bufor_kampanii: float = Field(0, ge=0)   # gra z lokalami: gotówka, która musi zostać po kampaniach reklamowych
     emisje_kampanii: int = Field(6, ge=1)     # tyle emisji bot zamawia w kampanii (najwyżej maks_emisji kanału)
     przerwa_kampanii: int = Field(1, ge=0)    # rund przerwy po kampanii w tym samym kanale i strefie
@@ -498,7 +498,7 @@ class KolejnyLokalBota(Schemat):
 
 
 class PrognozaCzlowieka(Schemat):
-    """Bot „jak człowiek” (Z5): prognoza z raportów poprzednich rund – opis pól w dane/boty.yaml."""
+    """Bot „jak człowiek”: prognoza z raportów poprzednich rund – opis pól w dane/boty.yaml."""
     rund: int = Field(1, ge=1)
     pule: bool = False
 
@@ -525,13 +525,13 @@ class PoziomBota(Schemat):
     kolejny_lokal: KolejnyLokalBota | None = None
     przewaga_popytu: float = Field(1.0, ge=1)   # niemożliwy: mnożnik atrakcyjności lokali bota (oszustwo)
     prognoza_czlowieka: PrognozaCzlowieka | None = None
-    zamowienia_ze_sprzedazy: float | None = Field(None, ge=1)   # H17: limit zamówień po kolejce w kuchni
-    zapas_zasobow: float | None = Field(None, ge=1)   # B8: zapas zamówień poziomu (bez – ustawienia botów)
+    zamowienia_ze_sprzedazy: float | None = Field(None, ge=1)   # limit zamówień po kolejce w kuchni
+    zapas_zasobow: float | None = Field(None, ge=1)   # zapas zamówień poziomu (bez – ustawienia botów)
     tylko_pomiar: bool = False   # poziom do pomiarów (balans/), bez wyboru w panelu mistrza gry
-    dba_o_ludzi: DbaOLudzi | None = None   # U20: podwyżka dla niezadowolonych (łatwy ich ignoruje)
+    dba_o_ludzi: DbaOLudzi | None = None   # podwyżka dla niezadowolonych (łatwy ich ignoruje)
     limit_handlu: float | None = Field(None, gt=0, le=1)   # giełda handlu: najwyższa cena w licytacji × wartość
     debet: bool = False   # tor A: włącza debet w banku konta (bez – saldo poniżej zera to alarm i odsetki karne)
-    podkupuje_ludzi: bool = False   # kalibracja B9: podkupuje niedopłacanych (zalozenia.yaml: pracownicy.podkupywanie_botow)
+    podkupuje_ludzi: bool = False   # podkupuje niedopłacanych (zalozenia.yaml: pracownicy.podkupywanie_botow)
 
     @model_validator(mode="after")
     def _czlowiek_bez_modelu(self) -> PoziomBota:
@@ -667,7 +667,7 @@ class Lokal(Schemat):
     tylko_kupno: bool = False
     wlasciciel: str | None = None
     od_rundy: int = Field(default=1, ge=1)
-    od_firm: int = Field(default=1, ge=1)   # Z4: na mapie w grze z co najmniej tyloma firmami
+    od_firm: int = Field(default=1, ge=1)   # na mapie w grze z co najmniej tyloma firmami
     mapa: Pole
 
     @model_validator(mode="after")
@@ -750,7 +750,7 @@ class PopytStrefy(Schemat):
     pula: float = Field(ge=0)
     cena: float = Field(gt=0)
     wrazliwosc_ceny: float = Field(ge=0)
-    konkurencja: float = Field(default=1.0, gt=0)   # B6: dzielnik atrakcyjności lokali gry w strefie (lokale miasta spoza gry)
+    konkurencja: float = Field(default=1.0, gt=0)   # dzielnik atrakcyjności lokali gry w strefie (lokale miasta spoza gry)
     dni: list[float] | None = Field(default=None, min_length=7, max_length=7)
     miesiace: list[float] | None = Field(default=None, min_length=12, max_length=12)
 
@@ -784,7 +784,7 @@ class PlikPopytu(Plik):
     strefy: dict[str, PopytStrefy]
 
 
-# --- mapa/banki.yaml (F3a.9) ---
+# --- mapa/banki.yaml ---
 
 
 class Terminal(Schemat):
@@ -849,7 +849,7 @@ class PlikBankow(Plik):
     przejecie_po: int = Field(gt=0)
     wycena_zastawu: float = Field(gt=0, le=1)
     czynsz_po_przejeciu: float = Field(gt=0, lt=1)
-    zastaw_przejecia: bool = False   # B6: budynek z najemcą jako zastaw kredytu (silnik/pieniadze/banki.py)
+    zastaw_przejecia: bool = False   # budynek z najemcą jako zastaw kredytu (silnik/pieniadze/banki.py)
     tylko_bank_konta: bool = False   # lokaty, kredyty i leasing tylko w banku konta firmowego (sprawa 21)
     banki: list[BankMapy] = Field(min_length=1)
 
@@ -894,7 +894,7 @@ class PlikHarpagona(Plik):
     wizyty: list[Wizyta] = Field(min_length=1)
 
 
-# --- mapa/biura.yaml (F3a.13) ---
+# --- mapa/biura.yaml ---
 
 class KadryBiura(Schemat):
     w_cenie: int = Field(ge=0)
@@ -964,7 +964,7 @@ class PlikBiur(Plik):
         return self
 
 
-# --- mapa/reklama.yaml (agencje reklamowe, F3b.2) ---
+# --- mapa/reklama.yaml (agencje reklamowe) ---
 
 
 class KanalReklamy(Schemat):
@@ -1003,12 +1003,12 @@ class ModelReklamy(Schemat):
     tempo_emisji: float = Field(gt=0)    # efekt kampanii × (1 − e^(−tempo × emisje))
     wygasanie: float = Field(ge=0, lt=1)
     prog_wygasania: float = Field(gt=0, le=1)
-    maks_przyciagania: float = Field(default=10.0, gt=0)   # P10: sufit sumy kampanii firmy w strefie (nasycenie)
+    maks_przyciagania: float = Field(default=10.0, gt=0)   # sufit sumy kampanii firmy w strefie (nasycenie)
     maks_puli: float = Field(default=10.0, gt=0)           # sufit poszerzenia puli strefy przez wszystkie kampanie
 
 
 class ModelInternetu(Schemat):
-    """UF19: efekt kampanii internetowej w kolejnych rundach – narastanie (od rundy emisji), potem × trwalosc."""
+    """Efekt kampanii internetowej w kolejnych rundach – narastanie (od rundy emisji), potem × trwalosc."""
     narastanie: list[float] = Field(min_length=1)
     trwalosc: float = Field(gt=0, lt=1)
     prog_wygasania: float = Field(gt=0, le=1)
@@ -1029,7 +1029,7 @@ class ReklamaInternetowa(Schemat):
 class PlikReklamy(Plik):
     model: ModelReklamy
     agencje: dict[str, AgencjaReklamowa] = Field(min_length=1)
-    internet: ReklamaInternetowa | None = None   # UF19: marketing internetowy (zakładka Biurowiec przy Zana → Internet)
+    internet: ReklamaInternetowa | None = None   # marketing internetowy (zakładka Biurowiec przy Zana → Internet)
 
     @model_validator(mode="after")
     def _rozne_agencje(self):
@@ -1070,7 +1070,7 @@ class TypPromocji(Schemat):
 
 
 class PamiecPromocjiDane(Schemat):
-    """B7: trwały skutek promocji – udzial 0 wyłącza."""
+    """Trwały skutek promocji – udzial 0 wyłącza."""
     udzial: float = Field(ge=0, le=1)            # część przyciągania z ostatniego tygodnia promocji
     zanik: float = Field(ge=0, le=1)             # o tyle mniej co tydzień
     maks: float = Field(ge=0, lt=2)              # suma pamięci firmy najwyżej tyle
@@ -1084,7 +1084,7 @@ class PlikPromocji(Plik):
     limit_aktywnych: int = Field(ge=1)
     nazwa_max: int = Field(ge=1)
     typy: dict[str, TypPromocji] = Field(min_length=1)
-    pamiec: PamiecPromocjiDane | None = None     # B7: brak – promocja bez trwałego skutku
+    pamiec: PamiecPromocjiDane | None = None     # brak – promocja bez trwałego skutku
 
 
 class GrupaKlientow(Schemat):
@@ -1132,7 +1132,7 @@ class UstawieniaOpinii(Schemat):
 
 
 class PlikKlientow(Plik):
-    """dane/mapa/klienci.yaml (U24): grupy klientów z koszykiem i opinie o lokalach."""
+    """dane/mapa/klienci.yaml: grupy klientów z koszykiem i opinie o lokalach."""
     mieso: list[str]
     wege: list[str]
     zastepstwo: Zastepstwo
@@ -1208,11 +1208,11 @@ SCHEMATY_MAPY: dict[str, type[BaseModel]] = {
     "biura.yaml": PlikBiur,
     "reklama.yaml": PlikReklamy,
     "promocje.yaml": PlikPromocji,
-    "klienci.yaml": PlikKlientow,   # U24 – opcjonalny w danych gry (bez niego: bez grup i opinii)
+    "klienci.yaml": PlikKlientow,   # opcjonalny w danych gry (bez niego: bez grup i opinii)
     "dekor.yaml": PlikDekoru,       # dekor lokalu – opcjonalny (bez niego: mechanika nie istnieje)
 }
 
-# --- podatki_2026.yaml (gra z lokalami, F3a.11) ---
+# --- podatki_2026.yaml (gra z lokalami) ---
 
 Stawka = Field(ge=0, lt=1)
 
@@ -1256,10 +1256,10 @@ class PlikPodatkow(Plik):
     zus_wlasciciela: ZusWlasciciela
     vat: Vat
     zus_pracodawcy: float = Stawka
-    zus_pracodawcy_zlecenie: float = Field(0.0, ge=0, le=1)   # P1: składki przy umowie zlecenie
+    zus_pracodawcy_zlecenie: float = Field(0.0, ge=0, le=1)   # składki przy umowie zlecenie
 
 
-# --- zdarzenia/*.yaml (eventy w parkach F3b.1; katalog opcjonalny – bez niego gra bez eventów) ---
+# --- zdarzenia/*.yaml (eventy w parkach; katalog opcjonalny – bez niego gra bez eventów) ---
 
 
 class KosztOpcji(Schemat):
@@ -1432,7 +1432,7 @@ class ZasadyWypadkow(Schemat):
     od_rundy: int = Field(ge=1)
     szansa: float = Field(gt=0, le=1)      # na rundę i drużynę z działającym lokalem
     max_strata: float = Field(gt=0)        # zł – górna granica jednej szkody
-    przyrost: float = Field(default=0, ge=0)     # P11: + za każdą rundę bez wypadku (reset po wypadku)
+    przyrost: float = Field(default=0, ge=0)     # + za każdą rundę bez wypadku (reset po wypadku)
     szansa_max: float = Field(default=1, gt=0, le=1)
 
 
@@ -1450,7 +1450,7 @@ class Ubezpieczyciel(Schemat):
     nazwa: str
     budynek: str | None                    # id z mapa/budynki.yaml
     karencja_rund: int = Field(ge=0)
-    od_rundy: int | None = Field(default=None, ge=1)   # UF6: od której rundy można kupić polisę (None – od 1)
+    od_rundy: int | None = Field(default=None, ge=1)   # od której rundy można kupić polisę (None – od 1)
     polisy: dict[str, Polisa] = Field(min_length=1)
 
     @model_validator(mode="after")
@@ -1509,7 +1509,7 @@ class ZasadyFalafela(Schemat):
 
 
 class PlikFalafela(Plik):
-    """dane/zdarzenia/falafel.yaml (UF8, plik opcjonalny): bójka o falafel w tygodniu po falafelu w ofercie
+    """dane/zdarzenia/falafel.yaml (plik opcjonalny): bójka o falafel w tygodniu po falafelu w ofercie
     (silnik/swiat/falafel.py) – najwyżej raz na grę, w lokalu jednej drużyny."""
     zasady: ZasadyFalafela
     historia: Historia
@@ -1590,7 +1590,7 @@ class Klub(Schemat):
     nazwa: str
     adres: str
     tekst: str = Field(min_length=3)
-    kod_od_rundy: int | None = Field(default=None, ge=1)   # UF2: wejście z hasłem
+    kod_od_rundy: int | None = Field(default=None, ge=1)   # wejście z hasłem
     rekopis_znaleziony_w_jsonie: str | None = None   # wskazówka dla tego, kto zajrzy w surowe dane (hasło „saragossa”)
 
 
@@ -1706,7 +1706,7 @@ class ZasadyDetektywa(Schemat):
 
 
 class PlikDetektywa(Plik):
-    """dane/zdarzenia/detektyw.yaml: przegląd konkurencji i detektyw (silnik/rynek/konkurencja.py, P16)."""
+    """dane/zdarzenia/detektyw.yaml: przegląd konkurencji i detektyw (silnik/rynek/konkurencja.py)."""
     detektyw: ZasadyDetektywa
     powitania: list[str] = Field(min_length=1)
     raporty: list[str] = Field(min_length=1)    # {rywal}
@@ -1734,7 +1734,7 @@ SCHEMATY_ZDARZEN: dict[str, type[BaseModel]] = {
 ZDARZENIA_OPCJONALNE = {"falafel.yaml"}   # bez pliku – bez tej historii (np. zamrożona kopia danych testów)
 
 
-# --- kalendarz/kalendarz.yaml (F3b.9) ---
+# --- kalendarz/kalendarz.yaml ---
 
 DATA_MD = r"^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"   # 'MM-DD'
 
@@ -1747,7 +1747,7 @@ class WydarzenieKalendarza(Schemat):
     do: str | int
     wzgledem: str | None = None   # klucz z `ruchome` (np. wielkanoc)
     strefy: dict[str, float] = Field(min_length=1)
-    dania: dict[str, float] = Field(default_factory=dict)   # P14: mnożnik popytu na danie w strefach wydarzenia
+    dania: dict[str, float] = Field(default_factory=dict)   # mnożnik popytu na danie w strefach wydarzenia
     rok: int | None = None        # wydarzenie jednego roku (np. mecz z terminarza); None – co roku
 
     @model_validator(mode="after")
@@ -1798,7 +1798,7 @@ class FunkcjaGry(Schemat):
     zakryta: str = Field(min_length=10)      # co gra robi za drużynę, gdy funkcja jest zakryta
     zakladki: list[str] = Field(min_length=1)
     elementy: list[str] = []                 # elementy harmonogramu (wzorce `*`), które wyłączona funkcja wyłącza
-    zakrycie: str = ""                       # K1: co przepada przy ponownym zakryciu (puste – nic)
+    zakrycie: str = ""                       # co przepada przy ponownym zakryciu (puste – nic)
 
 
 class ZestawFunkcji(Schemat):

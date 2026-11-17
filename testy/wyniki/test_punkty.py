@@ -218,7 +218,7 @@ def test_przelaczniki_w_danych_gry_i_sciezki_dla_wariantow():
 
 
 def test_ranking_ucznia_z_majatkiem_netto():
-    """U13: w rankingu drużyna widzi majątek netto wszystkich firm z ostatniej przeliczonej rundy."""
+    """W rankingu drużyna widzi majątek netto wszystkich firm z ostatniej przeliczonej rundy."""
     from api.prezentacja import widok
     g = _gra()
     s = _runda(g, A=_lokal("centrum_3"), B=_lokal("dworzec_1"))

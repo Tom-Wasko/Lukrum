@@ -1,4 +1,4 @@
-"""Narzędzie porównań par gier (balans/warianty.py, B2): wymuszanie decyzji bota, pomiar ze wznawianiem
+"""Narzędzie porównań par gier (balans/warianty.py): wymuszanie decyzji bota, pomiar ze wznawianiem
 i statystyki par."""
 
 import pytest
@@ -72,7 +72,7 @@ def test_pomiar_zapisuje_gry_i_wznawia_sie(tmp_path):
 
 
 def test_pomiar_zapisuje_strefe_lokalu_i_wznawia_stary_uklad(tmp_path):
-    """Kolumna strefy_lokali (B6) – a pomiar sprzed niej wznawia się w swoim układzie kolumn."""
+    """Kolumna strefy_lokali – a pomiar sprzed niej wznawia się w swoim układzie kolumn."""
     kat = wr.katalog_wariantow(D)
     k = wr.Kontekst(rund=2, firm=2, strefa="felin")
     assert wr.mierz(tmp_path, wr.zadania([k], [1], [])) == 1
@@ -102,8 +102,8 @@ def test_ocena_par():
 
 @pytest.mark.dane_gry   # poziomy „jak człowiek” są tylko w dane/
 def test_badana_jak_czlowiek_wsrod_rywali_innego_poziomu():
-    """Z5: pomiar trudności – badana firma „jak człowiek”, rywale na swoim poziomie (Kontekst.rywale)."""
-    sami = wr.Kontekst(rund=5, firm=4, poziom="czlowiek_sredni")   # UF6: rywale różnią się reklamą od rundy 5
+    """Pomiar trudności – badana firma „jak człowiek”, rywale na swoim poziomie (Kontekst.rywale)."""
+    sami = wr.Kontekst(rund=5, firm=4, poziom="czlowiek_sredni")   # rywale różnią się reklamą od rundy 5
     wsrod = wr.Kontekst(rund=5, firm=4, poziom="czlowiek_sredni", rywale="sredni")
     assert wsrod.klucz() == sami.klucz() + "/rywale_sredni"
     assert wr.rozegraj(wr.Zadanie(wsrod, 3))["karta"] != wr.rozegraj(wr.Zadanie(sami, 3))["karta"]
@@ -111,7 +111,7 @@ def test_badana_jak_czlowiek_wsrod_rywali_innego_poziomu():
 
 
 def test_kontekst_ze_zmianami_danych_gry():
-    """B6: kontekst `dane` zmienia liczby dla wszystkich firm (kopia danych; `*` – każdy klucz)."""
+    """Kontekst `dane` zmienia liczby dla wszystkich firm (kopia danych; `*` – każdy klucz)."""
     d = wr.dane_ze_zmianami("mapa.popyt.model.zasieg=2;mapa.popyt.strefy.*.pula=0.5")
     assert d.mapa["popyt"]["model"]["zasieg"] == 2 and D.mapa["popyt"]["model"]["zasieg"] != 2
     assert {s["pula"] for s in d.mapa["popyt"]["strefy"].values()} == {0.5}

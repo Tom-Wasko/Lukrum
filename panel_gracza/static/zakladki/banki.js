@@ -232,7 +232,7 @@ export function wynikiBanku({ v }) {
 
 // lokal kupowany w tej rundzie (zakładka Lokale) – zastaw kredytu inwestycyjnego, wartość = cena z oferty
 // (działka – razem z kosztem budowy, silnik/pieniadze/banki.py: nowy_lokal); bez kupna lokalu – budynek z najemcą
-// kupowany w tej rundzie (Stare Miasto ▸ Przejęcia, B6; przy wykupie bez sprzętu wynajmującego)
+// kupowany w tej rundzie (Stare Miasto ▸ Przejęcia; przy wykupie bez sprzętu wynajmującego)
 function kupowanyLokal(c) {
   const wyb = c.d.lokal, lok = wyb?.forma === "kupno" ? (c.v.lokale?.oferta || []).find((l) => l.id === wyb.id) : null;
   if (lok?.cena) return [{ id: `lokal:${lok.id}`, nazwa: `${lok.typ === "dzialka" ? "Działka" : "Lokal"}: ${lok.adres} (kupowany w tej rundzie)`, wartosc: (+wyb.oferta || lok.cena) + (lok.koszt_budowy || 0) }];

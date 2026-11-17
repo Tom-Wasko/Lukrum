@@ -1,4 +1,4 @@
-"""Szkolenia działające kilka tygodni (kalibracja B9, decyzja autora 7.11.2026; zalozenia.yaml: pracownicy.szkolenia).
+"""Szkolenia działające kilka tygodni (decyzja autora 7.11.2026; zalozenia.yaml: pracownicy.szkolenia).
 
 Szkolenie kosztuje raz cenę z katalogu (cena miesięczna) i działa od tygodnia zakupu przez `tygodni` tygodni – tyle
 rund gry tygodniowej. Działające szkolenia są w stanie firmy (`Firma.szkolenia`); ich procent oczekujących liczy się

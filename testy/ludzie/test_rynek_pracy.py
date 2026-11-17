@@ -1,4 +1,4 @@
-"""Agencja pracy i rynek pracy (F3a.8): kanały rekrutacji, licytacja kandydatów, limit nowych, podkupienie
+"""Agencja pracy i rynek pracy: kanały rekrutacji, licytacja kandydatów, limit nowych, podkupienie
 przez headhuntera z kontrofertą i okresem wypowiedzenia, powrót zwolnionych do puli."""
 
 import pytest
@@ -47,7 +47,7 @@ def test_zatrudnienie_kanalem_koszt_i_czas_wlasciciela():
 
 @pytest.mark.dane_gry
 def test_zatrudnienie_w_tygodniu_przygotowawczym():
-    """U23: zatrudnianie od tygodnia 1 (decyzja autora) – pracownik przez pracuj.pl stoi na stanowisku przed
+    """Zatrudnianie od tygodnia 1 (decyzja autora) – pracownik przez pracuj.pl stoi na stanowisku przed
     pierwszym tygodniem sprzedaży, a jego pensja liczy się od tygodnia zatrudnienia."""
     g = _gra(("A", None), ("B", None))
     assert "hr_zatrudnienie" in g.dane.odblokowane(1)
@@ -132,7 +132,7 @@ def test_zwolniony_wraca_do_puli():
     s = _runda(g, A={"zatrudnij": [_z(k, 1)]})
     r = s.runda + 1
     s = _runda(g, A={"zwolnij": [k["id"]]})
-    p = s.firmy["A"].pracownicy[k["id"]]   # umowa o pracę: 2 rundy wypowiedzenia (P6), odprawa od razu
+    p = s.firmy["A"].pracownicy[k["id"]]   # umowa o pracę: 2 rundy wypowiedzenia , odprawa od razu
     assert p.odchodzi and p.odchodzi.do == "" and p.odchodzi.runda == r + 2
     assert k["id"] not in {x["id"] for x in s.kandydaci}
     assert any("dostaje wypowiedzenie" in t for t in _bledy(s, r, "A", "zatrudnienie"))
@@ -199,7 +199,7 @@ def test_wlasciciel_zawsze_na_pustym_stanowisku_po_sprawach_poza_lokalem():
 
 
 def test_licytacje_widoczne_liczba_ofert_bez_kwot():
-    """UF18: przy kandydacie widać, ile innych drużyn złożyło ofertę – bez kwot i bez własnej oferty."""
+    """Przy kandydacie widać, ile innych drużyn złożyło ofertę – bez kwot i bez własnej oferty."""
     decyzje = {"A": {"zatrudnij": [{"kandydat": "k1", "pensja": 5000}], "podkup": [{"pracownik": "p9", "firma": "C"}]},
                "B": {"zatrudnij": [{"kandydat": "k1", "pensja": 6000}, {"kandydat": "k2"}],
                      "podkup": [{"pracownik": "p9", "firma": "C", "pensja": 7000}]},

@@ -1,4 +1,4 @@
-"""Biura rachunkowe i samodzielna księgowość (F3a.13, silnik/ksiegowosc/biuro.py)."""
+"""Biura rachunkowe i samodzielna księgowość (silnik/ksiegowosc/biuro.py)."""
 
 import pytest
 
@@ -204,7 +204,7 @@ def test_podglad_nie_sprawdza_deklaracji():
 
 
 def test_brak_deklaracji_na_liscie_bledow_mowi_co_zrobic_i_ile_kosztuje_biuro():
-    """U6: komunikat o mandacie podpowiada tabelę deklaracji i najtańsze biuro z kwotą za rundę."""
+    """Komunikat o mandacie podpowiada tabelę deklaracji i najtańsze biuro z kwotą za rundę."""
     g = _gra()
     dk = _do_deklaracji(g)
     f = g.stan().firmy["H"]

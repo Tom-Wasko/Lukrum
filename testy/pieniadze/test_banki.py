@@ -1,4 +1,4 @@
-"""Banki gry z lokalami (F3a.9): sześć banków z różnymi najlepszymi ofertami, konto i terminal, lokaty w dowolnym
+"""Banki gry z lokalami: sześć banków z różnymi najlepszymi ofertami, konto i terminal, lokaty w dowolnym
 banku, kredyt na start bez historii, inwestycyjny pod zastaw (przejęcie po zaległościach), leasing, limit w koncie."""
 
 from copy import copy, deepcopy
@@ -108,7 +108,7 @@ def test_kredyt_inwestycyjny_pod_zastaw_lokalu_i_przejecie():
 
 
 def test_kredyt_pod_zastaw_kupowanej_dzialki_liczy_budowany_lokal():
-    """B6: zastaw działki to budowany lokal – wartość = cena + koszt budowy, więc kredyt pokrywa też budowę."""
+    """Zastaw działki to budowany lokal – wartość = cena + koszt budowy, więc kredyt pokrywa też budowę."""
     g = _gra(("A", None), ("B", None))
     dz = g.dane.lokale["czechow_3"]
     nowy = bk.nowy_lokal(g.dane, _lokal("czechow_3", "kupno"), 1)

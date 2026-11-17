@@ -15,7 +15,7 @@ Najem: kaucja (`kaucja_miesiecy` × czynsz) i co rundę czynsz (KPiR). Każdy dz
 (utrzymanie, KPiR). Kupno, kaucja i budowa to ruchy na rachunku (bez KPiR). Nowy lokal można wziąć, gdy
 od wzięcia każdego poprzedniego minęło `nowy_lokal_co_rund` rund. Stanowiska stoją w działających lokalach
 i jest ich najwyżej tyle, ile lokal ma miejsc (`miejsca`). Na mapie są tylko lokale z `od_firm` nie większym niż
-liczba firm w grze (Z4: mniej drużyn – mniej lokali, popyt bez zmian). Kilka drużyn chcących ten sam lokal w jednej
+liczba firm w grze (mniej drużyn – mniej lokali, popyt bez zmian). Kilka drużyn chcących ten sam lokal w jednej
 rundzie: licytacja – wygrywa najwyższa oferta, remis rozstrzyga losowanie (silnik/nieruchomosci/przejecia.py).
 """
 from __future__ import annotations
@@ -55,7 +55,7 @@ def runda_nowego_lokalu(dane: Dane, firma: Firma) -> int:
     return max((lok.od_rundy + co for lok in firma.lokale), default=1)
 
 
-# lokal „co 3 rundy” (P8): zamiast suchego limitu – właściciel musi odpocząć po ostatniej przeprowadzce
+# lokal „co 3 rundy” : zamiast suchego limitu – właściciel musi odpocząć po ostatniej przeprowadzce
 ODPOCZYNEK = (
     "Właściciel musi odpocząć po ostatniej przeprowadzce – wciąż śni mu się umowa najmu w trzech egzemplarzach.",
     "Właściciel leży na kanapie z mrożonym kebabem na czole i mówi, że jeszcze jeden lokal w tym tygodniu "
@@ -90,7 +90,7 @@ def koszt_wejscia(dane: Dane, lok: dict, forma: str, kwota: float | None = None)
 
 
 def sprzet_zestawu(dane: Dane, lok: dict) -> list[tuple[str, int]]:
-    """Sprzęt zestawu gotowego lokalu [(nazwa, jakość)] – przy kupnie część ceny lokalu (B6)."""
+    """Sprzęt zestawu gotowego lokalu [(nazwa, jakość)] – przy kupnie część ceny lokalu."""
     if lok.get("typ") != "gotowy" or not lok.get("zestaw"):
         return []
     return [(n, q) for st in dane.mapa["zestawy"][lok["zestaw"]]["stanowiska"] for n, q in st["sprzet"].items()]
@@ -166,7 +166,7 @@ def wybierz(dane: Dane, firma: Firma, decyzja: dict | None, runda: int, zajete_l
     else:
         nowy.cena = kwota
         rachunek.zapisz(firma, f"Zakup {'działki' if lok['typ'] == 'dzialka' else 'lokalu'}: {lok['adres']}", -nowy.cena, "inwestycje")
-        # sprzęt zestawu gotowego lokalu jest częścią ceny (B6)
+        # sprzęt zestawu gotowego lokalu jest częścią ceny
         w_cenie = sprzet_w_cenie(dane, firma, ksiega, lok["adres"], sprzet_zestawu(dane, lok), runda)
         przyjmij(dane, firma, f"{'Działka' if lok['typ'] == 'dzialka' else 'Lokal'}: {lok['adres']}",
                  "grunt" if lok["typ"] == "dzialka" else "lokal", max(0.0, nowy.cena - w_cenie), runda)

@@ -24,7 +24,7 @@
   & .menu .sekcja::after { content: attr(data-nazwa); }
   & .menu .sekcja.linia { margin: 10px 10px 2px; height: 1px; background: var(--linia); }
   & .menu .sekcja.linia::after { content: none; }
-  /* N11 (poprawki 3): drobne napisy zwykłymi literami + pogrubienie zamiast wersalików (stary wygląd bez zmian) */
+  /* drobne napisy zwykłymi literami + pogrubienie zamiast wersalików (stary wygląd bez zmian) */
   & label.pole, & table.t th, & table.kalkulator th, & .pasek, & .tabela-tytul, & .kafel .kg, & .wiersz, & .sekcja-tytul,
   & .zd-lista-tytul, & .zd-parki-tytul, & .zd-dalej b, & .liczby-lokalu .etykieta, & .lw .etykieta, & .baza-naglowek,
   & .podpis-progow, & .grupa-bledow, & .agencja-suma, & .zad-sekcja, & .kal-runda small, & .w-budowie .napis b,

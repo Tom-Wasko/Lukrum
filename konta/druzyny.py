@@ -20,7 +20,7 @@ ZNAKI_HASLA = "abcdefghjkmnpqrstuvwxyz23456789"  # bez l/1, o/0 – hasło przep
 DLUGOSC_HASLA = 8
 MAKS_LOGO_KB = 300  # logo firmy (runda 1) – mały obrazek, trzymany w bazie jako data URL
 FORMATY_LOGO = {"image/png": b"\x89PNG", "image/jpeg": b"\xff\xd8\xff"}
-# U18: dziennik zapisów decyzji. Ciasteczko przeglądarki przetrwa wylogowanie (klucz sesji
+# dziennik zapisów decyzji. Ciasteczko przeglądarki przetrwa wylogowanie (klucz sesji
 # Django zmienia się przy każdym logowaniu, a w szkole wszyscy wychodzą jednym adresem IP);
 # w dzienniku jest tylko jego skrót.
 CIASTKO_URZADZENIA = "lukrum_urz"
@@ -163,7 +163,7 @@ def skrot_urzadzenia(request) -> str | None:
 def autor(g, firma: str, user, wyslal: bool | None = None, zakladka: str | None = None,
           urzadzenie: str | None = None) -> None:
     """Zapisuje w rundzie, kto z drużyny ostatnio zapisał (albo wysłał) decyzje; podbija wersję.
-    U18: dopisuje wpis do dziennika – kolejne zapisy tej samej osoby w tej samej zakładce łączą się
+    dopisuje wpis do dziennika – kolejne zapisy tej samej osoby w tej samej zakładce łączą się
     w jeden wpis z licznikiem."""
     a = g.decyzje.setdefault(g.runda, {}).setdefault("_autorzy", {}).setdefault(firma, {})
     teraz = timezone.now().isoformat()
@@ -199,13 +199,13 @@ def autorzy(g, firma: str) -> dict:
 
 
 def dziennik(g, firma: str, runda: int | None = None) -> list[dict]:
-    """U18: zapisy decyzji drużyny w rundzie (od najstarszego) – dla mistrza gry."""
+    """Zapisy decyzji drużyny w rundzie (od najstarszego) – dla mistrza gry."""
     a = g.decyzje.get(runda or g.runda, {}).get("_autorzy", {}).get(firma, {})
     return list(a.get("dziennik", []))
 
 
 def ostrzezenia(g) -> list[dict]:
-    """U18: ta sama przeglądarka zapisywała decyzje dwóch (lub więcej) drużyn w bieżącej albo
+    """Ta sama przeglądarka zapisywała decyzje dwóch (lub więcej) drużyn w bieżącej albo
     ostatniej przeliczonej rundzie – np. uczeń przelogował się na konto kolegi. Zapisy mistrza gry
     się nie liczą."""
     wynik = []

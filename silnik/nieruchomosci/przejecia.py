@@ -61,7 +61,7 @@ def najem(firmy: dict[str, Firma], lokal_id: str) -> tuple[str, Lokal] | None:
 def powod_przejecia(dane: Dane, firmy: dict[str, Firma], nazwa: str, decyzja: dict, runda: int,
                     finansowanie: float = 0.0) -> str | None:
     """Dlaczego budynku nie można kupić (None – można). finansowanie – kredyt tej rundy pod zastaw tego budynku
-    (silnik/pieniadze/banki.py: finansowanie_lokalu, B6)."""
+    (silnik/pieniadze/banki.py: finansowanie_lokalu)."""
     z, lok = zasady(dane), dane.lokale.get(decyzja.get("id"))
     if runda < z["przejecia_od_rundy"]:
         return f"Budynki z najemcą można kupować od rundy {z['przejecia_od_rundy']}."
@@ -97,7 +97,7 @@ def przejmij(dane: Dane, firmy: dict[str, Firma], nazwa: str, decyzja: dict | No
     kwota = oferta(dane, decyzja, lok, "kupno", runda)[0]
     najemca, umowa = najem(firmy, lok["id"])
     rachunek.zapisz(f, f"Zakup budynku z najemcą: {lok['adres']}", -kwota, "inwestycje")
-    if najemca == nazwa:   # wykup: najem zamienia się we własność, sprzęt wynajmującego – część ceny (B6)
+    if najemca == nazwa:   # wykup: najem zamienia się we własność, sprzęt wynajmującego – część ceny
         rachunek.zapisz(f, f"Zwrot kaucji za lokal: {lok['adres']}", umowa.kaucja, "kaucje")
         umowa.forma, umowa.cena, umowa.czynsz, umowa.kaucja, umowa.naklady = "kupno", kwota, 0, 0, 0
         sprzet = []
@@ -245,7 +245,7 @@ def _wyprowadzka(dane: Dane, s: StanGry, nazwa: str, umowa: Lokal, runda: int, z
         wlasciciel.stanowiska.append(Stanowisko(nr=wlasciciel.nowy_nr(st.typ), typ=st.typ, od_rundy=runda,
                                                 lokal=umowa.id, sprzet=sprzet))
         info["stanowiska_wlasciciela"] += 1
-    # wyposażenie i udogodnienia lokalu – sprzedane; towar z magazynu lokalu – do innego lokalu najemcy (Z2)
+    # wyposażenie i udogodnienia lokalu – sprzedane; towar z magazynu lokalu – do innego lokalu najemcy
     info["sprzedane_wyposazenie"] = []
     pl.utrwal(najemca)   # stary zapis: listy firmy przypisane do lokali, zanim ten lokal zniknie
     for rodzaj in pl.LISTY:
@@ -357,7 +357,7 @@ def widok(dane: Dane, firmy: dict[str, Firma], nazwa: str, runda: int, decyzja: 
             continue
         do_kupienia.append({"id": lok["id"], "nazwa": lok["nazwa"], "adres": lok["adres"], "strefa": lok["strefa"],
                             "cena": lok["cena"], "czynsz": wynajety[1].czynsz, "najemca": wynajety[0],
-                            "wykup": wynajety[0] == nazwa,   # B6: przy wykupie sprzęt wynajmującego to część ceny
+                            "wykup": wynajety[0] == nazwa,   # przy wykupie sprzęt wynajmującego to część ceny
                             "sprzet_w_cenie": bk.sprzet_wynajmujacego(dane, firmy[nazwa], lok["id"])
                             if wynajety[0] == nazwa else 0})
     return {"od_rundy": z["przejecia_od_rundy"], "licytacje_od_rundy": z["licytacje_od_rundy"],

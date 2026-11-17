@@ -63,7 +63,7 @@ def strona_gry(request, id_, firma):
         raise PermissionDenied("To nie jest firma Twojej drużyny.")
     kontekst = {"id": id_, "firma": firma, "mg": jest_mg(request.user)}
     odp = render(request, "panel_gracza/gra.html", kontekst)
-    if not request.COOKIES.get(CIASTKO_URZADZENIA):   # U18: przeglądarka w dzienniku zapisów
+    if not request.COOKIES.get(CIASTKO_URZADZENIA):   # przeglądarka w dzienniku zapisów
         odp.set_cookie(CIASTKO_URZADZENIA, secrets.token_hex(16), max_age=400 * 24 * 3600,
                        httponly=True, samesite="Lax")
     return odp

@@ -1,4 +1,4 @@
-"""Środki trwałe i amortyzacja (F3a.6): kupiony lokal, działka i budynek, zakupy od progu, sprzedaż, gra bez lokali bez zmian."""
+"""Środki trwałe i amortyzacja: kupiony lokal, działka i budynek, zakupy od progu, sprzedaż, gra bez lokali bez zmian."""
 
 import pytest
 from pomocnicze import _gra, _lokal, _runda
@@ -14,7 +14,7 @@ def _kpir(s, r, firma, poczatek):
 
 
 def test_kupiony_lokal_amortyzuje_sie_od_nastepnej_rundy():
-    """B6: sprzęt zestawu gotowego lokalu jest częścią ceny – lokal w ewidencji bez niego, sprzęt poniżej progu
+    """Sprzęt zestawu gotowego lokalu jest częścią ceny – lokal w ewidencji bez niego, sprzęt poniżej progu
     w kosztach od razu (bez wydatku), majątek firmy liczony raz."""
     g = _gra()
     lok = g.dane.lokale["zygmuntowskie_1"]

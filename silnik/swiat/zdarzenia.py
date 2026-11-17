@@ -1,7 +1,7 @@
-"""Eventy w parkach (gra z lokalami, F3b.1; notatki „Elementy mapy” i „Zdarzenia i historie”).
+"""Eventy w parkach (gra z lokalami; notatki „Elementy mapy” i „Zdarzenia i historie”).
 
 Dane: `dane/zdarzenia/parki.yaml`. Od rundy `zasady.od_rundy` co rundę w parkach zaczyna się kilka historii
-(`zasady.eventow_na_runde`, P9: 3–4) – tych samych dla wszystkich drużyn (talia wszystkich historii tasowana na nowo
+(`zasady.eventow_na_runde`: 3–4) – tych samych dla wszystkich drużyn (talia wszystkich historii tasowana na nowo
 po wyczerpaniu, strumień „parki”; w jednej rundzie bez powtórzeń). Opcje kosztują po 2–5 h, więc nie starczy czasu
 właściciela na wszystko – trzeba wybierać. Każda
 drużyna przeżywa ją osobno: w scenie wybiera opcję (decyzja `zdarzenia: {historia: opcja}`, bez wyboru – opcja
@@ -13,7 +13,7 @@ Poza parkami: historia „bank żywności” (`dane/zdarzenia/magazyn.yaml`, sil
 drużynie, która ma w lokalu dużo jedzenia z krótkim terminem; skutek oddaj_zapas zabiera te partie z magazynu.
 Wypadki w lokalu (`dane/zdarzenia/losowe.yaml`, silnik/swiat/awarie.py) – rzadkie historie jednej drużyny; skutek szkoda
 to koszt, który może pokryć polisa ubezpieczyciela. Bójka o falafel (`dane/zdarzenia/falafel.yaml`, silnik/swiat/falafel.py,
-UF8) – w tygodniu po falafelu w ofercie, najwyżej raz na grę.
+falafel) – w tygodniu po falafelu w ofercie, najwyżej raz na grę.
 """
 from __future__ import annotations
 
@@ -26,7 +26,7 @@ from ..model import Efekt, Firma, OtwartaHistoria
 from . import awarie as aw
 from . import falafel as fl
 
-# UF13: parki są tylko na mapie (klik w park → okno parku), sprawy w lokalu – w Moim lokalu (część „sprawy”)
+# parki są tylko na mapie (klik w park → okno parku), sprawy w lokalu – w Moim lokalu (część „sprawy”)
 ZAKLADKA_PARKU, ZAKLADKA_LOKALU = "mapa", "sprawy"
 
 
@@ -147,7 +147,7 @@ def rozegraj(dane: Dane, f: Firma, d: dict, runda: int, ziarno, ks: Ksiega, rach
             opcje = {o["id"]: o for o in sc["opcje"]}
             o = opcje.get(wybory.get(h["id"])) or opcje[sc["domyslna"]]
             wolne = czas.wolne
-            if podglad:   # U8: zakładka wyszarza opcje, na które nie starcza godzin (po scenach wcześniejszych)
+            if podglad:   # zakładka wyszarza opcje, na które nie starcza godzin (po scenach wcześniejszych)
                 wpis["wolne_przed"] = wolne
             if o["koszt"]["czas"] and not czas.wez(o["koszt"]["czas"], f"{h['tytul']}: {o['tekst']}", _zakladka(h)):
                 domyslna = opcje[sc["domyslna"]]["tekst"]

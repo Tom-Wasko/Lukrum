@@ -4,7 +4,7 @@ import { esc, kartaMarki, KOLORY, naOkres, naRunde, gw, kafelkiLiczb, licz, nazw
 import { decyzjaLokalu, idWybranego, listaLokalu, nazwaLokalu, opisLokalu, stanowiskaLokalu } from "./lokal_wybor.js";
 import { klienciZKolejki, OPISY_SPRZETU, wykresObciazenia } from "./obciazenie.js";
 
-// Z3: miejsca na stanowiska – przy kilku lokalach tylko w wybranym lokalu
+// miejsca na stanowiska – przy kilku lokalach tylko w wybranym lokalu
 function miejscaWybranego(v, typ) {
   const id = idWybranego(v), l = id && opisLokalu(v, id);
   return l ? { wszystkie: l.miejsca[typ], zajete: l.zajete[typ] } : miejscaLokali(v, typ);
@@ -229,7 +229,7 @@ export const wyposazenie = {
 
 export const RODZAJ_ST = { lokal: "lokal", budynek: "budynek", grunt: "grunt (bez amortyzacji)", sprzet: "sprzęt", wyposazenie: "wyposażenie" };
 
-// UF12: ewidencja środków trwałych jest w Biurowiec przy Zana ▸ KPiR (zakładka Środki trwałe usunięta)
+// ewidencja środków trwałych jest w Biurowiec przy Zana ▸ KPiR (zakładka Środki trwałe usunięta)
 export function ewidencja(lista, tytul) {
   const w = (lista || []).map((s) => [esc(s.nazwa), esc(RODZAJ_ST[s.rodzaj] || s.rodzaj), licz(s.od_rundy), proc(s.stawka),
     zl2(s.wartosc), zl2(s.umorzenie), zl2(s.netto)]);
@@ -241,7 +241,7 @@ export function ewidencja(lista, tytul) {
 
 export function kafleUdogodnien({ v, kat, edycja }, rodzaj, kogo) {
   const pozycje = kat.oferty[rodzaj].pozycje.filter((p) => p.od_rundy <= v.runda);
-  // Z3: przy kilku lokalach – wyposażenie / udogodnienia wybranego lokalu
+  // przy kilku lokalach – wyposażenie / udogodnienia wybranego lokalu
   const id = idWybranego(v), przed = listaLokalu(v.stan_przed, rodzaj, id), teraz = listaLokalu(v.stan, rodzaj, id);
   const kupno = pozycje.filter((p) => teraz.includes(p.nazwa) && !przed.includes(p.nazwa)).reduce((s, p) => s + p.cena, 0);
   const utrz = pozycje.filter((p) => teraz.includes(p.nazwa)).reduce((s, p) => s + p.utrzymanie, 0);

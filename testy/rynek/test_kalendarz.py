@@ -1,4 +1,4 @@
-"""Kalendarz miejski (F3b.9): daty stałe i ruchome, mnożniki stref, zmiana tygodniowej puli, widok, sprawdzanie danych."""
+"""Kalendarz miejski: daty stałe i ruchome, mnożniki stref, zmiana tygodniowej puli, widok, sprawdzanie danych."""
 
 from datetime import date, timedelta
 
@@ -98,7 +98,7 @@ def test_widok_kalendarza():
 
 
 def test_mecze_motoru_i_dania():
-    """P14: siedem domowych meczów Motoru jesienią 2025 (tylko w 2025), mnożniki dań w strefach wydarzenia."""
+    """siedem domowych meczów Motoru jesienią 2025 (tylko w 2025), mnożniki dań w strefach wydarzenia."""
     d = dane_domyslne()
     k = kl.dane_kalendarza(d)
     mecze = [w for w in k["wydarzenia"] if w["rodzaj"] == "sport"]

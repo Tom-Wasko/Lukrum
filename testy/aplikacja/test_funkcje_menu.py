@@ -1,4 +1,4 @@
-"""J9 (seria „funkcje”): znaczki zakrytych funkcji w widoku drużyny (api/prezentacja.py: znaczki_funkcji)
+"""znaczki zakrytych funkcji w widoku drużyny (api/prezentacja.py: znaczki_funkcji)
 i handel innych drużyn ukryty, dopóki drużyna nie odsłoni Handlu."""
 
 import copy

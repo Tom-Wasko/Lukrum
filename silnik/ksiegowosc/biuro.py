@@ -1,4 +1,4 @@
-"""Biura rachunkowe i samodzielna księgowość (gra z lokalami, F3a.13, dane/mapa/biura.yaml).
+"""Biura rachunkowe i samodzielna księgowość (gra z lokalami, dane/mapa/biura.yaml).
 
 Biuro: opłata za rundę = ryczałt (z limitem dokumentów) + dokumenty ponad limit (albo za każdy dokument, nie mniej
 niż minimum) + kadry za pracownika ponad `w_cenie`; koszt w KPiR (VAT 23%). Biuro rozlicza podatki od razu
@@ -148,7 +148,7 @@ def swieto_w_rundzie(dane: Dane, runda: int) -> bool:
 
 
 def najnizsza_oplata(dane: Dane, firma: Firma, dokumenty: int) -> tuple[str, float]:
-    """U6: biuro z najniższą opłatą za rundę przy tylu dokumentach i pracownikach firmy – (nazwa, kwota brutto)."""
+    """Biuro z najniższą opłatą za rundę przy tylu dokumentach i pracownikach firmy – (nazwa, kwota brutto)."""
     etat, zlecenie = _umowy(dane, firma)
     oplaty = [(b["nazwa"], oplata(dane, b, dokumenty, etat, zlecenie,
                                   najlepszy_pakiet(dane, b, dokumenty, etat, zlecenie))["razem"])
@@ -157,7 +157,7 @@ def najnizsza_oplata(dane: Dane, firma: Firma, dokumenty: int) -> tuple[str, flo
 
 
 def _umowy(dane: Dane, firma: Firma) -> tuple[int, int]:
-    """Osoby do opłaty kadrowej: (jak etat, jak zlecenie) wg formy zatrudnienia (UF21; B2B – bez opłaty)."""
+    """Osoby do opłaty kadrowej: (jak etat, jak zlecenie) wg formy zatrudnienia (B2B – bez opłaty)."""
     from ..ludzie.formy import forma
     rodzaje = [forma(dane, p.umowa)["kadry"] for p in firma.pracownicy.values()]
     return rodzaje.count("etat"), rodzaje.count("zlecenie")

@@ -5,13 +5,13 @@ opis: 'Lokale do najmu lub kupna. Kwoty w złotych, czynsz i utrzymanie (media) 
   urządzania, jednorazowa adaptacja, cały sprzęt trzeba kupić; dzialka: tylko kupno, budowa budowa_rund rund, koszt_budowy
   płatny w równych ratach co rundę budowy. miejsca: ile stanowisk każdego typu zmieści lokal. Kaucja przy najmie:
   kaucja_miesiecy × czynsz (zwrotna po końcu najmu).'
-zrodlo: 'założenie F3a.3: czynsz = metraż × stawka strefy (strefy.yaml: czynsz_m2; gotowy +25%), cena kupna ≈ 60
-  miesięcznych czynszów (gotowy +10%; B6 6.11.2026: ×1,5 z 40 – pomiar b6_kupno3, przy 40 kupno wygrywało
+zrodlo: 'założenie autora: czynsz = metraż × stawka strefy (strefy.yaml: czynsz_m2; gotowy +25%), cena kupna ≈ 60
+  miesięcznych czynszów (gotowy +10%; kalibracja 6.11.2026: ×1,5 z 40 – pomiar botów, przy 40 kupno wygrywało
   z najmem w 75% par już w 18 rundach; rynek ok. 150 czynszów, ceny przeskalowane do kapitału gry), działka = m² gruntu × 3 × czynsz_m2,
   budowa 900 zł/m², adaptacja 100 zł/m², media 300 zł + 25 zł/m²; niewyposażony: czynsz i cena kupna −25% (test gry
   28.10: lokal do urządzenia razem z adaptacją i zakupem sprzętu wychodził drożej niż gotowy z zestawem); rząd wielkości (oferty najmu w Lublinie 2025:
-  40–130 zł/m²), do kalibracji w kroku 5'
-# od_firm (Z4): lokal jest na mapie tylko w grze z co najmniej tyloma firmami – 8 firm: 38 lokali, 6–7: 29,
+  40–130 zł/m²), do kalibracji'
+# od_firm: lokal jest na mapie tylko w grze z co najmniej tyloma firmami – 8 firm: 38 lokali, 6–7: 29,
 # 4–5: 20 (około 5 na firmę, proporcje typów podobne); popyt miasta się nie zmienia
 zasady:
   nowy_lokal_co_rund: 3

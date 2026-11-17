@@ -1,4 +1,4 @@
-"""Opinie klientów o lokalach (U24, decyzja autora 4.11.2026; dane: `dane/mapa/klienci.yaml`: opinie, komentarze).
+"""Opinie klientów o lokalach (decyzja autora 4.11.2026; dane: `dane/mapa/klienci.yaml`: opinie, komentarze).
 
 Ocena tygodnia lokalu (1–5★) bierze się z przeżyć jego klientów:
 

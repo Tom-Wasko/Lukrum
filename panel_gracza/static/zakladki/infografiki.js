@@ -1,4 +1,4 @@
-// Z6 (przebudowa zakładek 2.11.2026): proste infografiki SVG w dymkach kółek „i” dla najtrudniejszych mechanik.
+// Proste infografiki SVG w dymkach kółek „i” dla najtrudniejszych mechanik.
 // Liczby na rysunkach to przykłady – prawdziwe wartości są w tabelach zakładek.
 
 const KOL = { pom: "#1e9e5a", pomJ: "#eaf7ef", tekst: "#2b2b30", szary: "#70707a", szaryJ: "#f4f4f6", linia: "#cfd8d2",

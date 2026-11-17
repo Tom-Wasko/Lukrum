@@ -1,19 +1,19 @@
-"""Agencje reklamowe w grze z lokalami (F3b.2, Z5; notatki „Elementy mapy” i „Ustalenia gry”): kampanie z listy
+"""Agencje reklamowe w grze z lokalami (notatki „Elementy mapy” i „Ustalenia gry”): kampanie z listy
 agencja × kanał × strefa (`dane/mapa/reklama.yaml`) z liczbą emisji w rundzie.
 
 - Zamówienie (`zamow`, w decyzje.zastosuj): emisje × cena emisji (przy zasięgu „strefa” × pula strefy) z rabatem
   z progów kanału (`znizki`, na wszystkie emisje), + VAT, płatne z góry. Kampania w `Firma.kampanie` działa w rundzie
   zamówienia (od_rundy = do_rundy); jedna na kanał i strefę w rundzie, najwyżej `maks_emisji` emisji.
-- Nasycenie (Z5, nasycenie reklamy tradycyjnej): efekt kampanii × (1 − e^(−tempo_emisji · emisje)) –
+- Nasycenie (nasycenie reklamy tradycyjnej): efekt kampanii × (1 − e^(−tempo_emisji · emisje)) –
   pierwsze emisje działają najmocniej, ok. 10 to ponad 90% efektu kanału.
 - Efekt w rundzie (`efekty_rundy`, w runda.py przed popytem): pula strefy rośnie (mnożnik w popyt.pule – korzystają
   wszystkie lokale, najwięcej reklamujący się) i firma przyciąga mieszkańców strefy (popyt.atrakcyjnosc –
   `reklama_strefy`, odbiera klientów konkurencji). Zagłuszanie: inne firmy z kampanią tego samego rodzaju w tej
   strefie w tej rundzie (kampanie na całe miasto – w każdej strefie). Wygasanie: po rundzie emisji efekt × wygasanie
   co rundę.
-- Sufit (P10): suma kampanii firmy w strefie nasyca się do `maks_przyciagania` (x → maks · (1 − e^(−x/maks))),
+- Sufit : suma kampanii firmy w strefie nasyca się do `maks_przyciagania` (x → maks · (1 − e^(−x/maks))),
   poszerzenie puli strefy – do `maks_puli`; kilka kampanii razem daje kebabowi ok. +10% … +30% popytu, nie więcej.
-- Marketing internetowy (UF19, sekcja `internet` – zakładka Biurowiec przy Zana → Internet): kampanie zamawia się tak samo,
+- Marketing internetowy (sekcja `internet` – zakładka Biurowiec przy Zana → Internet): kampanie zamawia się tak samo,
   ale efekt w rundzie emisji to dopiero część pełnego (`narastanie` – posty się udostępnia, opinie przybywają), pełny
   przychodzi po kilku rundach, a potem gaśnie co rundę × `trwalosc` (wolniej niż reklama tradycyjna). Efekt liczy
   się z historii kampanii firmy (`Firma.kampanie` – pamięć efektu), więc nie trzeba osobnego stanu.
@@ -29,7 +29,7 @@ from ..model import Firma, Kampania
 
 OPIS = "Kampania reklamowa"
 ZAKLADKA = "agencje"
-ZAKLADKA_INTERNET = "internet"   # UF19
+ZAKLADKA_INTERNET = "internet"
 
 
 def zasady(dane: Dane) -> dict | None:
@@ -38,7 +38,7 @@ def zasady(dane: Dane) -> dict | None:
 
 
 def internet(dane: Dane) -> dict | None:
-    """UF19: sekcja `internet` (model, agencje); None – dane bez marketingu internetowego."""
+    """Sekcja `internet` (model, agencje); None – dane bez marketingu internetowego."""
     return (zasady(dane) or {}).get("internet")
 
 
@@ -82,14 +82,14 @@ def brutto(dane: Dane, netto: float) -> float:
 
 
 def efekt_emisji(dane: Dane, emisje: int | None) -> float:
-    """Część pełnego efektu kanału po tylu emisjach: 1 − e^(−tempo · emisje); None (zapis sprzed Z5) – 1."""
+    """Część pełnego efektu kanału po tylu emisjach: 1 − e^(−tempo · emisje); None (zapis sprzed nasycenia emisjami) – 1."""
     if emisje is None:
         return 1.0
     return 1 - math.exp(-zasady(dane)["model"]["tempo_emisji"] * emisje) if emisje > 0 else 0.0
 
 
 def zamowiona(f: Firma, agencja: str, kanal_id: str, strefa: str | None, runda: int) -> bool:
-    """Kampania w tym kanale i strefie już zamówiona w tej rundzie (albo – w zapisie sprzed Z5 – jeszcze trwa)."""
+    """Kampania w tym kanale i strefie już zamówiona w tej rundzie (albo – w zapisie sprzed nasycenia emisjami – jeszcze trwa)."""
     return any((x.agencja, x.kanal, x.strefa) == (agencja, kanal_id, strefa) and x.od_rundy <= runda <= x.do_rundy
                for x in f.kampanie)
 
@@ -101,7 +101,7 @@ def nazwa_strefy(dane: Dane, strefa: str | None) -> str:
 def zamow(dane: Dane, f: Firma, d: dict, runda: int, ks: Ksiega, rach: Rachunek) -> dict:
     """Kampanie z decyzji `kampanie: [{"agencja", "kanal", "strefa", "emisje"}]`.
     Zwraca {"zamowione": [...], "uwagi": [...], "uwagi_internet": [...]}."""
-    info = {"zamowione": [], "uwagi": [], "uwagi_internet": []}   # UF19: uwagi kampanii internetowych osobno (zakładka)
+    info = {"zamowione": [], "uwagi": [], "uwagi_internet": []}   # uwagi kampanii internetowych osobno (zakładka)
     R = zasady(dane)
     if not R:
         return info
@@ -152,7 +152,7 @@ def nasycenie(x: float, maks: float) -> float:
 
 
 def waga_internetu(mi: dict, wiek: int) -> tuple[float, str] | None:
-    """UF19: część efektu kampanii internetowej `wiek` rund po emisji: z listy narastanie, potem × trwalosc co rundę;
+    """Część efektu kampanii internetowej `wiek` rund po emisji: z listy narastanie, potem × trwalosc co rundę;
     faza – „trwa” (runda emisji), „narasta”, „wygasa”; None – efekt poniżej progu."""
     nar = mi["narastanie"]
     if wiek < 0:
@@ -175,7 +175,7 @@ def _waga(m: dict, k: Kampania, runda: int, mi: dict | None = None) -> tuple[flo
 
 
 def dziala(dane: Dane, k: Kampania, runda: int) -> bool:
-    """Kampania ma jeszcze efekt w rundzie (trwa, narasta albo wygasa – K1: przepada przy ponownym zakryciu)."""
+    """Kampania ma jeszcze efekt w rundzie (trwa, narasta albo wygasa – przepada przy ponownym zakryciu)."""
     R = zasady(dane)
     if R is None or kanal(dane, k.agencja, k.kanal) is None:
         return False
@@ -277,7 +277,7 @@ def widok(dane: Dane, f: Firma, runda: int, rynek_poprzedni: dict | None, zamowi
 
 
 def prognoza_internetu(dane: Dane, f: Firma, runda: int, rund: int = 4) -> dict:
-    """UF19: obecność firmy w sieci – przyciąganie z kampanii internetowych (już zamówionych, bez zagłuszania
+    """Obecność firmy w sieci – przyciąganie z kampanii internetowych (już zamówionych, bez zagłuszania
     i sufitu) w tej i kolejnych rundach, gdyby nie zamawiać nowych: {strefa lub „miasto”: [ułamek na rundę]}."""
     mi = internet(dane)["model"]
     wynik: dict[str, list[float]] = {}

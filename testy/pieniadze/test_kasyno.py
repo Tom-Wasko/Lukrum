@@ -1,4 +1,4 @@
-"""Portfel właściciela i tajny klub (F3b.7): wpłaty i wypłaty własne poza KPiR, zaproszenie, zakłady, podgląd,
+"""Portfel właściciela i tajny klub: wpłaty i wypłaty własne poza KPiR, zaproszenie, zakłady, podgląd,
 ukrycie klubu (i portfela) przed mistrzem gry oraz wyłączenie klubu na serwerze."""
 
 import copy
@@ -125,7 +125,7 @@ def test_zaproszenie_i_zaklady(zawsze_zaproszenie):
 
 
 def test_przelew_z_firmy_w_klubie(zawsze_zaproszenie):
-    """P12: przelew z firmy (wypłata własna) w rundzie z klubem wystarcza na stawkę większą niż portfel;
+    """przelew z firmy (wypłata własna) w rundzie z klubem wystarcza na stawkę większą niż portfel;
     na koncie firmy to zwykła wypłata własna, bez śladu klubu."""
     g = _gra(("A", None), ("Bot", "tani"))
     s = _runda(g)
@@ -220,7 +220,7 @@ def test_rekopis_w_surowych_danych_od_pierwszej_rundy(client, uczen, monkeypatch
 
 
 def test_haslo_otwiera_drzwi_bez_zaproszenia(monkeypatch):
-    """UF2: od `kod_od_rundy` klub przyjmuje zakłady także bez zaproszenia (hasło „koziol” w panelu); wcześniej drzwi
+    """Od `kod_od_rundy` klub przyjmuje zakłady także bez zaproszenia (hasło „koziol” w panelu); wcześniej drzwi
     zamknięte. Zaproszenia zostają (szansa 0 – tu żadnych), boty grają tylko z zaproszeniem."""
     from api.prezentacja import widok
     oryginal = kas.dane_kasyna

@@ -76,7 +76,7 @@ function kebaby(n) {
   return `${n} ${n === 1 ? "kebab" : r10 >= 2 && r10 <= 4 && (r100 < 12 || r100 > 14) ? "kebaby" : "kebabów"}`;
 }
 
-/** U24: ocena klientów i ostatnie komentarze przy lokalu (okno lokalu na mapie). */
+/** ocena klientów i ostatnie komentarze przy lokalu (okno lokalu na mapie). */
 function opinieHtml(op) {
   if (!op) return "";
   const gw = (n) => "★".repeat(n) + "☆".repeat(5 - n);
@@ -102,7 +102,7 @@ function budynek(g, b, sprawa = false) {
     // styl prosty w 3D: zabawkowa bryła w kolorze rodzaju; inaczej pełny wygląd (kamienice z attyką, banki, hale…)
     ksztalt = g.prosty && BUDYNKI[b.rodzaj] ? budynekProsty(g, b, ...BUDYNKI[b.rodzaj], IKONY[b.rodzaj]) : rysujBudynek(g, b);
   }
-  if (sprawa) {   // UF13: w parku coś się dzieje w tej rundzie
+  if (sprawa) {   // w parku coś się dzieje w tej rundzie
     const [a, c] = g.p(x + s / 2, y + l / 2, 30);
     ksztalt += `<circle cx="${a}" cy="${c}" r="9" fill="#e45f26" stroke="#fff" stroke-width="2"/>`
       + `<text x="${a}" y="${c + 4}" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">!</text>`;
@@ -121,7 +121,7 @@ function lokal(g, v, d, kat, lok) {
   const wyb = wybranyLokal(d)?.id === lok.id;
   const kto = v.lokale.zajete[lok.id];
   const stan = moje ? (wyb ? "wybrany" : "moj") : kto ? "zajety" : "wolny";
-  // N12: lokal firmy – w stałym kolorze drużyny (Twój także, z ciemną obwódką znaku)
+  // lokal firmy – w stałym kolorze drużyny (Twój także, z ciemną obwódką znaku)
   const kolor = stan === "zajety" ? marka(v, kto).kolor : moje ? kolorFirmy(v, v.firma) : LOKAL[stan];
   const ktoNapis = moje ? (wyb ? "wybrany przez Ciebie w tej rundzie" : "Twój lokal") : kto ? `zajęty: ${nazwaFirmy(v, kto)}` : "wolny";
   const op = (v.lokale.opinie || {})[lok.id];
@@ -152,7 +152,7 @@ function lokal(g, v, d, kat, lok) {
     + `<g transform="translate(${sa.toFixed(1)} ${sb.toFixed(1)})" class="lokal-pin">${puls}`
     + `<circle r="${R}" fill="${pin}" stroke="${stan === "wolny" ? "#5f6b7a" : moje ? "#111" : "#ffffff"}" stroke-width="2"/>`
     + `<text y="${(R * 0.42).toFixed(1)}" text-anchor="middle" font-size="${(R * 1.25).toFixed(1)}"${stan === "wolny" ? ` opacity=".6"` : ""}>🥙</text></g>`;
-  if (op && UST.opinie) {   // U24: ocena klientów nad znakiem kebaba
+  if (op && UST.opinie) {   // ocena klientów nad znakiem kebaba
     const [a, b] = [sa, sb - R - 3];
     znacznik += `<text x="${a}" y="${b}" text-anchor="middle" class="ocena-napis">★${ocena(op.ocena)}</text>`;
   }
@@ -483,7 +483,7 @@ export const mapa = {
   akcje: {
     "mapa-budynek": (el, c) => {
       const b = c.kat.mapa.budynki.find((x) => x.id === el.dataset.id);
-      if (b.zakladka === "zdarzenia") return oknoParku(c, b.id);   // UF13: parki tylko z mapy
+      if (b.zakladka === "zdarzenia") return oknoParku(c, b.id);   // parki tylko z mapy
       if (!b.zakladka) return toast(`${b.nazwa}: ${b.opis}`);
       if (c.zakryta(b.zakladka)) return c.idz(b.zakladka);   // funkcje gry: okno „Odsłoń”
       if (!c.dostepna(b.zakladka)) return toast(`${b.nazwa} – ta zakładka nie jest jeszcze dostępna w tej rundzie.`);

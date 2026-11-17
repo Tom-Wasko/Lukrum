@@ -1,4 +1,4 @@
-"""Księgowość JDG (F3a.11): ceny brutto → KPiR netto + rejestr VAT, rozliczenie rundy co do grosza – składki
+"""Księgowość JDG: ceny brutto → KPiR netto + rejestr VAT, rozliczenie rundy co do grosza – składki
 właściciela (ulga na start, potem preferencyjny ZUS), zdrowotna z minimum, zaliczka PIT narastająco, VAT
 z nadwyżką przenoszoną na następną rundę."""
 

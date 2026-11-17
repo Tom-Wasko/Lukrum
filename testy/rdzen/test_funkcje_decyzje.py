@@ -1,4 +1,4 @@
-"""Decyzje funkcji gry (seria „funkcje”, raporty/funkcje/plan.md: J3, J5): funkcja wyłączona – decyzje pominięte
+"""Decyzje funkcji gry (seria „funkcje”): funkcja wyłączona – decyzje pominięte
 z błędem, boty z niej nie korzystają, zaopatrzenie i urzędy robi gra; harmonogram wyłączonej funkcji stoi;
 funkcja zakryta – autopilot (decyzje gry, bez błędów), odsłonięcie i ponowne zakrycie, przeliczenie bez zmian."""
 
@@ -162,7 +162,7 @@ def test_pelna_gra_jak_gra_bez_funkcji():
     assert wyniki[0] == wyniki[1]
 
 
-# --- J5: autopilot funkcji zakrytych ---------------------------------------------------------------------------
+# --- autopilot funkcji zakrytych ---------------------------------------------------------------------------
 
 def _bledy_funkcji_ukrytych(w: dict) -> list[dict]:
     """Uwagi z zakładek funkcji, których drużyna nie widzi, i błędy funkcji (zakryta – bez błędów)."""

@@ -1,4 +1,4 @@
-"""B8: boty potrafią wybrać każdą opcję zaopatrzenia – gwiazdki składników niezależnie od sprzętu
+"""Boty potrafią wybrać każdą opcję zaopatrzenia – gwiazdki składników niezależnie od sprzętu
 (`jakosc_zasobow`), zapas w zamówieniach (`zapas_zasobow`) i dostawców (`dostawcy`, `dyskonty`,
 `auto_dostawy`); pomiar w balans/warianty.py."""
 import copy
@@ -51,7 +51,7 @@ def test_wiekszy_zapas_to_wieksze_zamowienie():
 
 
 def test_bot_z_dyskontami_kupuje_w_jednym_dyskoncie_do_limitu():
-    """B8: bot domyślnie pomija dyskonty (odbiór osobisty); z `dyskonty` kupuje w jednym – tam, gdzie oszczędza
+    """Bot domyślnie pomija dyskonty (odbiór osobisty); z `dyskonty` kupuje w jednym – tam, gdzie oszczędza
     najwięcej – codziennie najwyżej limit opakowań składnika, resztę u dostawców z dowozem."""
     from silnik.kuchnia.dostawcy import info
     g = Gra.nowa("t", [("A", "zrownowazony"), ("B", "tani")], 12, 5)
@@ -72,7 +72,7 @@ def test_bot_z_dyskontami_kupuje_w_jednym_dyskoncie_do_limitu():
 
 
 def test_bot_z_auto_dostawami_nie_zamawia_do_lokalu_glownego():
-    """B8: z `auto_dostawy` lokal główny bota jest na auto-dostawach (Z4): pozycje u auto-dostawcy zamiast
+    """Z `auto_dostawy` lokal główny bota jest na auto-dostawach: pozycje u auto-dostawcy zamiast
     zamówień u dostawców; przed rundą auto-dostawcy (od_rundy) – zamówienia jak zwykle."""
     from silnik.kuchnia import auto_dostawca as ad
     g = Gra.nowa("t", [("A", "zrownowazony"), ("B", "tani")], 12, 5)

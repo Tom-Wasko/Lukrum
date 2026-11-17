@@ -1,4 +1,4 @@
-"""UF21: formy zatrudnienia (zalozenia.yaml: pracownicy.formy_zatrudnienia) i studenci (pracownicy.studenci).
+"""Formy zatrudnienia (zalozenia.yaml: pracownicy.formy_zatrudnienia) i studenci (pracownicy.studenci).
 
 Forma to klucz w `Pracownik.umowa`: „prace” (umowa o pracę) i „zlecenie” jak dotąd, do tego pół etatu, zlecenie ze
 studentem, staż z urzędu pracy i kontrakt B2B. Parametry formy mówią, ile godzin osoba pracuje, jakie są składki ZUS
@@ -15,7 +15,7 @@ from ..model import Firma, Pracownik
 
 PRACE, ZLECENIE, STAZ = "prace", "zlecenie", "staz"
 
-# dawne dwie formy – gdy danych UF21 nie ma (zachowanie sprzed UF21)
+# dawne dwie formy – gdy danych o formach zatrudnienia nie ma (zachowanie sprzed ich wprowadzenia)
 _DAWNE = {
     PRACE: {"nazwa": "Umowa o pracę", "opis": "", "etat": 1.0, "zus": "etat", "wypowiedzenie": True, "kadry": "etat",
             "kara_zlecenia": False, "oczekiwana": 1.0, "placa_minimalna": True},
@@ -76,7 +76,7 @@ def oczekiwana_kandydata(dane: Dane, kandydat: dict, umowa: str) -> float | None
 
 
 def zasady_oferty(dane: Dane) -> dict | None:
-    """Kalibracja B9: odrzucanie niskich ofert i kara za pensję poniżej oczekiwanej (zalozenia.yaml:
+    """Odrzucanie niskich ofert i kara za pensję poniżej oczekiwanej (zalozenia.yaml:
     pracownicy.oferta_pracy); None – wyłączone albo dane bez tej mechaniki (zamrożona kopia testów)."""
     u = (dane.z.get("pracownicy") or {}).get("oferta_pracy")
     return u if u and u.get("wlaczone") else None

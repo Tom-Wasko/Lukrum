@@ -1,6 +1,6 @@
 // Kalendarz miejski (gra z lokalami, silnik/rynek/kalendarz.py, dane/kalendarz/kalendarz.yaml): święta, uczelnie, ferie,
 // okazje handlowe, mecze Motoru na Arenie i wydarzenia w Lublinie – zmiana puli klientów stref w każdym tygodniu gry
-// i popytu na konkretne dania (P14). Układ (przebudowa 2.11.2026): tabela tygodnia dzień po dniu + siatka miesiąca.
+// i popytu na konkretne dania . Układ (przebudowa 2.11.2026): tabela tygodnia dzień po dniu + siatka miesiąca.
 import { brakWynikow, esc, licz, nazwaRundy, nazwaUslugi, podsumowanie, tabela, zwinTabela } from "./wspolne.js";
 import { kolko } from "./dymki.js";
 import { nazwaStrefy } from "./lokale.js";

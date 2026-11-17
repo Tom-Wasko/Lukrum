@@ -96,13 +96,13 @@ def stan_po_szkicu(gra: Gra, firma: str):
     f = stan.firmy[firma]
     d = gra.szkic(firma)
     ks, rach = Ksiega(vat=rz.reguly_vat(gra.dane)), Rachunek()
-    # funkcje gry – jak w przeliczeniu (silnik/autopilot.py): przepadek przy ponownym zakryciu (K1), wyłączone
+    # funkcje gry – jak w przeliczeniu (silnik/autopilot.py): przepadek przy ponownym zakryciu , wyłączone
     # pominięte, zakryte robi gra
     przepadek = ap.przepadek(gra.dane, f, gra.konfiguracja, r, ks)
     d, bledy_funkcji = ap.decyzje_firmy(gra.dane, stan, firma, d, gra.konfiguracja, r)
     bledy_funkcji = bledy_funkcji + przepadek["bledy"]
     poprzednia_oferta = list(f.oferta)
-    # inwestor ratunkowy i blokada przy debecie ponad limit – jak w przeliczeniu (silnik/runda.py), U2: alarm na górze
+    # inwestor ratunkowy i blokada przy debecie ponad limit – jak w przeliczeniu (silnik/runda.py), alarm na górze
     inwestor = inw.poczatek_rundy(gra.dane, f, inw.przyznany(gra.konfiguracja, firma, r), r, rach)
     alarm = inw.alarm(gra.dane, f)
     d, blokady = inw.blokada(gra.dane, f, d)
@@ -143,7 +143,7 @@ def stan_po_szkicu(gra: Gra, firma: str):
     bledy += lista_bledow(gra.dane, f, d, r, poprzednia_oferta, gra.konfiguracja.get("tryb_debetu", "na_biezaco"),
                           lokal, info)
     bledy += [{"poziom": "czerwony", "zakladka": "rynek_pracy", "tekst": t} for t in uwagi_rp]
-    if rp.podkupywanie(gra.konfiguracja):   # UF18; opcja MG – bez podkupywania nie ma czego ostrzegać
+    if rp.podkupywanie(gra.konfiguracja):   # opcja MG – bez podkupywania nie ma czego ostrzegać
         bledy += rp.ostrzezenia(rp.oferty_dla(gra.decyzje.get(r, {}), f, firma), d.get("kontroferty"), stan.firmy)
     # odrzucone kredyty, lokaty i leasing (zaległości i debet – dopiero w przeliczeniu)
     odrzucone = (bank_info or {}).get("odrzucone", []) + info["leasing"]["odrzucone"]
@@ -158,7 +158,7 @@ def stan_po_szkicu(gra: Gra, firma: str):
 
 
 def _harmonogram(dane: Dane, runda: int) -> dict[str, int]:
-    """Tydzień elementów harmonogramu dla panelu; „reklama” – pierwsza agencja reklamowa (UF6: zakładka „Agencje reklamowe”)."""
+    """Tydzień elementów harmonogramu dla panelu; „reklama” – pierwsza agencja reklamowa (zakładka „Agencje reklamowe”)."""
     h = {x["klucz"]: x["tydzien"] for x in hm.widok(dane, runda)}
     if agencje := [t for k, t in h.items() if k.startswith("reklama_")]:
         h["reklama"] = min(agencje)
@@ -167,17 +167,17 @@ def _harmonogram(dane: Dane, runda: int) -> dict[str, int]:
 
 def funkcje_widok(gra: Gra, firma: str, runda: int, harmonogram: dict[str, int]) -> dict[str, dict]:
     """Funkcje gry dla drużyny (seria „funkcje”): {klucz: opis z funkcje.yaml + stan (mistrz gry), odslonieta,
-    aktywna (drużyna decyduje sama), od_rundy (najwcześniejszy element harmonogramu funkcji) i znaczek (J9)}.
+    aktywna (drużyna decyduje sama), od_rundy (najwcześniejszy element harmonogramu funkcji) i znaczek }.
     Pusty słownik – dane bez funkcje.yaml (menu jak dawniej)."""
     w = {}
     for k, f in fn.rejestr(gra.dane).items():
         tyg = [t for e, t in harmonogram.items() if any(fnmatchcase(e, x) for x in f.get("elementy", []))]
         w[k] = {**{p: f[p] for p in ("nazwa", "krotko", "ikona", "opis", "zakryta", "zakladki")},
-                "zakrycie": f.get("zakrycie") or "",   # K1: co przepada przy ponownym zakryciu
+                "zakrycie": f.get("zakrycie") or "",   # co przepada przy ponownym zakryciu
                 "stan": fn.stan(gra.konfiguracja, k), "odslonieta": fn.odslonieta(gra.konfiguracja, firma, k, runda),
                 "aktywna": fn.aktywna(gra.konfiguracja, firma, k, runda), "od_rundy": min(tyg) if tyg else None,
                 "znaczek": None, "zakrycie_zablokowane": ""}
-        if w[k]["odslonieta"]:   # K2: np. Harpagona z niespłaconą pożyczką nie da się znów zakryć
+        if w[k]["odslonieta"]:   # np. Harpagona z niespłaconą pożyczką nie da się znów zakryć
             w[k]["zakrycie_zablokowane"] = fn.blokada_zakrycia(k, gra.stan(runda - 1).firmy.get(firma))
     return w
 
@@ -192,7 +192,7 @@ def _zl(x: float) -> str:
 
 
 def znaczki_funkcji(v: dict) -> None:
-    """J9: znaczki na wyszarzonych pozycjach menu – co się dzieje w funkcji, którą gra robi za drużynę (krótki
+    """znaczki na wyszarzonych pozycjach menu – co się dzieje w funkcji, którą gra robi za drużynę (krótki
     tekst; zaczyna się liczbą – panel pokazuje liczbę, inaczej kropkę). Handel innych drużyn zakrytej funkcji
     znika z widoku (ogłoszenia i zapowiedzi); zostaje tylko ich liczba w znaczku."""
     zakryte, funkcje = _zakryte(v), v.get("funkcje") or {}
@@ -241,7 +241,7 @@ def kalendarz(dane: Dane, liczba_rund: int) -> dict:
 
 
 def zadania_z_poprzedniej(gra, firma: str, szkic: dict) -> dict:
-    """UF22: nieodhaczone własne zadania drużyny przechodzą na kolejną rundę – szkic bez listy zadań dostaje
+    """Nieodhaczone własne zadania drużyny przechodzą na kolejną rundę – szkic bez listy zadań dostaje
     listę z ostatniej rundy, w której drużyna ją miała (do decyzji trafi przy pierwszym zapisie)."""
     if "zadania_wlasne" in szkic:
         return szkic
@@ -268,8 +268,8 @@ def katalogi(dane: Dane) -> dict:
             "parametry": {"kapital": dane.z["finanse"]["kapital_startowy"], "godziny": dane.z["operacje"]["godziny_pracownika"],
                           "godziny_sprzetu": dane.z["operacje"]["godziny_sprzetu"],   # poprawki 3 (sprawa 11): wykres obłożenia sprzętu
                           "zus": rz.zus_pracodawcy(dane), "zus_zlecenie": rz.zus_pracodawcy(dane, "zlecenie"),
-                          **fz.widok(dane),   # UF21: formy zatrudnienia i studenci
-                          # kalibracja B9/B10: ile rund działa szkolenie (0 – jedną, cena na rundę), tempo z zadowolenia
+                          **fz.widok(dane),   # formy zatrudnienia i studenci
+                          # ile rund działa szkolenie (0 – jedną, cena na rundę), tempo z zadowolenia
                           "szkolenia_rund": szk.rund(dane), "wydajnosc_z_zadowolenia": zo.zasady_tempa(dane),
                           "podkupywanie_botow": rp.podkupywanie_botow(dane),
                           "amortyzacja_prog": dane.z["finanse"]["amortyzacja_prog"],
@@ -300,7 +300,7 @@ def karta_skumulowana(gra: Gra, do_rundy: int) -> dict:
 
 
 def historia_rankingu(dane, stan, do_rundy: int, liczba_rund: int) -> dict:
-    """UF11: miejsca firm po każdej rundzie 1…do_rundy – jak `miejsca(karta_skumulowana(gra, R))`, ale z jednego stanu
+    """Miejsca firm po każdej rundzie 1…do_rundy – jak `miejsca(karta_skumulowana(gra, R))`, ale z jednego stanu
     (wynik gry z tygodni 1…R; remis – kolejność firm w grze)."""
     rundy = [r for r in range(1, do_rundy + 1) if r in stan.wyniki]
     punkty: dict[str, dict[int, float]] = {}
@@ -321,7 +321,7 @@ def miejsca(skum: dict) -> dict[str, int]:
     return {n: i + 1 for i, n in enumerate(ranking)}
 
 
-# U19: tryb podpowiedzi (włącza mistrz gry) – przez pierwsze rundy Dashboard pokazuje 3 rzeczy do sprawdzenia.
+# tryb podpowiedzi (włącza mistrz gry) – przez pierwsze rundy Dashboard pokazuje 3 rzeczy do sprawdzenia.
 # Teksty z INSTRUKCJA rozdz. 15 („Dziesięć rad na dobry start”); trzeci element – zakładka panelu gracza.
 PODPOWIEDZI = (
     (("Policz, zanim kupisz", "Kapitał startowy znika szybciej, niż się wydaje: kaucja, sprzęt, pierwsze pensje "
@@ -346,7 +346,7 @@ PODPOWIEDZI = (
 
 
 def podpowiedzi(gra, runda: int) -> list[dict]:
-    """U19: rady na Dashboardzie w pierwszych rundach gry, gdy mistrz gry włączył tryb podpowiedzi."""
+    """Rady na Dashboardzie w pierwszych rundach gry, gdy mistrz gry włączył tryb podpowiedzi."""
     nr = runda - gra.runda_startowa
     if not gra.konfiguracja.get("podpowiedzi") or not 0 <= nr < len(PODPOWIEDZI):
         return []
@@ -356,7 +356,7 @@ def podpowiedzi(gra, runda: int) -> list[dict]:
 def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
     """Widok firmy w rundzie `runda` (domyślnie bieżąca). Decyzje: bieżąca runda – edytowalne, wcześniejsze – podgląd.
     Wyniki w rundzie r: skutki decyzji z rundy r−1 (tak jak w całej grze). Po końcu gry runda N+1 to podsumowanie: wyniki
-    ostatniej rundy i końcowe miejsce, bez decyzji (Z7)."""
+    ostatniej rundy i końcowe miejsce, bez decyzji."""
     dane = gra.dane
     biezaca = gra.runda
     runda = min(runda or biezaca, biezaca)
@@ -371,11 +371,11 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
                  "auto_zamowienia": bool(gra.konfiguracja.get("auto_zamowienia")),
                  "refleksja": gra.tryb_refleksji,
                  "podpowiedzi": bool(gra.konfiguracja.get("podpowiedzi")),
-                 "formy_zatrudnienia": fz.dozwolone(dane, gra.konfiguracja),   # UF21 (TYMCZASOWE – opcja MG)
+                 "formy_zatrudnienia": fz.dozwolone(dane, gra.konfiguracja),   # TYMCZASOWE – opcja MG
                  "podkupywanie": rp.podkupywanie(gra.konfiguracja),   # poprawki 2 (sprawa 6) – opcja MG
                  "lokale": True,
                  "kalendarz": kalendarz(dane, gra.konfiguracja["liczba_rund"])},
-         "refleksja": gra.refleksje(runda).get(firma),   # U17: co drużyna napisała przy wysłaniu decyzji
+         "refleksja": gra.refleksje(runda).get(firma),   # co drużyna napisała przy wysłaniu decyzji
          "podpowiedzi": podpowiedzi(gra, runda) if edycja else [],
          "firma": firma, "runda": runda, "miesiac": dane.nazwa_rundy(runda), "edycja": edycja, "koniec": koniec,
          "odblokowane": sorted(dane.odblokowane(runda)),
@@ -424,8 +424,8 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
         w = poprzedni.wyniki.get(runda - 1, {})
         v["wyniki"] = w.get(firma)
         v["wnioski"] = wnioski(dane, v["wyniki"], poprzedni.wyniki.get(runda - 2, {}).get(firma), runda - 1, f)   # „Wnioski z rundy”
-        v["dlaczego"] = dlaczego(dane, v["wyniki"], poprzedni.wyniki.get(runda - 2, {}).get(firma))   # U16
-        # UF23: „Tydzień w liczbach” – liczby rundy z poprzednią (strzałki) i zdania-historie tygodnia
+        v["dlaczego"] = dlaczego(dane, v["wyniki"], poprzedni.wyniki.get(runda - 2, {}).get(firma))
+        # „Tydzień w liczbach” – liczby rundy z poprzednią (strzałki) i zdania-historie tygodnia
         v["tydzien"] = tydzien(dane, v["wyniki"], poprzedni.wyniki.get(runda - 2, {}).get(firma), f)
         v["rynek"] = poprzedni.rynek.get(runda - 1)
         v["karta_skumulowana"] = karta_skumulowana(gra, runda - 1) if runda - 1 >= 1 else {}
@@ -435,8 +435,8 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
         # poprawki 2 (sprawy 17/18): kolory wskaźników czasu pracy w Mój kebab ▸ Zespół (wyniki)
         v["progi_czasu_pracy"] = {"niski": dane.z["operacje"].get("niskie_obciazenie"),   # brak w danych zamrożonych testów
                                   "przepracowanie": dane.z["zadowolenie_osoby"]["wspolczynniki"]["prog_przepracowania"]}
-        v["majatek_firm"] = {n: _majatek_netto(x) for n, x in w.items()}   # U13: majątek netto obok wyniku w rankingu
-        v["ranking"] = historia_rankingu(dane, poprzedni, runda - 1, gra.konfiguracja["liczba_rund"])   # UF11: zakładka Kurier rankingowy ▸ Ranking
+        v["majatek_firm"] = {n: _majatek_netto(x) for n, x in w.items()}   # majątek netto obok wyniku w rankingu
+        v["ranking"] = historia_rankingu(dane, poprzedni, runda - 1, gra.konfiguracja["liczba_rund"])   # zakładka Kurier rankingowy ▸ Ranking
         v["historia"] = [{"runda": r, "miesiac": dane.nazwa_rundy(r), "skrot": dane.skrot_rundy(r), "karta": poprzedni.wyniki[r][firma].get("karta"),
                           "dochod_netto": poprzedni.wyniki[r][firma]["kpir"]["dochod_netto"],
                           "gotowka": poprzedni.wyniki[r][firma]["gotowka"]}
@@ -458,10 +458,10 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
                              else wr.get("czas_wlasciciela")) or cw.nowy(dane).podsumowanie()
     v["wlasciciel_stanowisko"] = ((info or {}).get("wlasciciel_stanowisko") if edycja
                                   else wr.get("wlasciciel_stanowisko"))
-    if ad.zasady(dane) and f.lokale:   # Z4: auto-dostawca (zakładka Lokale → Dostawy i magazyn)
+    if ad.zasady(dane) and f.lokale:   # auto-dostawca (zakładka Lokale → Dostawy i magazyn)
         v["auto_dostawca"] = {"zasady": ad.zasady(dane),
                               "przyjete": ((info or {}).get("auto_dostawy") if edycja else wr.get("auto_dostawy")) or {}}
-    if len(f.lokale) > 1:   # Z3: przewozy towaru między lokalami (zakładka Lokale → Dostawy i magazyn)
+    if len(f.lokale) > 1:   # przewozy towaru między lokalami (zakładka Lokale → Dostawy i magazyn)
         v["przewozy"] = {"zasady": pl.zasady_przewozu(dane), "przyjete": (info or {}).get("przewozy", []) if edycja else [],
                          "uwagi": (info or {}).get("uwagi_przewozow", []) if edycja else []}
     v["dekor"] = dk.widok(dane, f)   # sklep meblowy: katalog i dekor lokali (pusty, gdy mechaniki nie ma)
@@ -477,13 +477,13 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
     if dane.zdarzenia:
         v["zdarzenia"] = zd.widok(dane, poprzedni.firmy[firma], runda, gra.konfiguracja["ziarno"], poprzedni.wyniki, firma)
         wolne = {w["historia"]: w.get("wolne_przed") for w in ((info or {}).get("zdarzenia") or {}).get("sceny", [])}
-        for s in v["zdarzenia"]["aktywne"] if edycja else []:   # U8: godziny wolne na tę scenę (po wcześniejszych)
+        for s in v["zdarzenia"]["aktywne"] if edycja else []:   # godziny wolne na tę scenę (po wcześniejszych)
             s["wolne"] = wolne.get(s["historia"])
     if aw.dane_wypadkow(dane):
         v["ubezpieczenia"] = aw.widok(dane, f, runda, info.get("ubezpieczenia") if edycja
                                       else wr.get("ubezpieczenia"), poprzedni.wyniki, firma)
     fp = poprzedni.firmy[firma]   # zastawy i limit – stan na początku rundy (przed decyzjami)
-    v["inwestor"] = inw.raport(f, None, 0.0)   # U11: inwestor ratunkowy (z wpłatą w tej rundzie – w podglądzie)
+    v["inwestor"] = inw.raport(f, None, 0.0)   # inwestor ratunkowy (z wpłatą w tej rundzie – w podglądzie)
     v["banki"] = {"najlepsze": bk.najlepsze(dane), "historia": bk.historia(fp, runda), "zastawy": bk.zastawy(dane, fp),
                   "wolny_limit": bk.wolny_limit(dane, fp), "decyzja": {"bank": info.get("bank"), "leasing": info.get("leasing")},
                   # zmiana banku przy debecie: spłata z gotówki albo przejęcie za opłatą (silnik/pieniadze/banki.py)
@@ -515,7 +515,7 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
                                                    "odsetki_karne_rundy", "karne_od", "wizyty_od")}}
     v["podatki"] = _podatki(dane, fp, runda, rz.rejestr(ks) if edycja else wr.get("vat"))
     v["amortyzacja"] = {"prog": dane.z["finanse"]["amortyzacja_prog"], "stawki": dane.z["finanse"]["amortyzacja_roczna"],
-                        "niskocenne": wybor_niskocennych(dane)}   # B6: None – zakupy poniżej progu zawsze w koszty
+                        "niskocenne": wybor_niskocennych(dane)}   # None – zakupy poniżej progu zawsze w koszty
     v["ksiegowosc"] = bo.widok(dane, fp, f, v["decyzje"], v.get("wyniki"))
     v["pip"] = _pip(dane, f)
     if edycja and fp.deklaracja:   # samodzielna księgowość: wynik podatkowy dopiero po deklaracji drużyny
@@ -526,12 +526,12 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
         v["dashboard"]["dochod_netto"] = None
         v["podatki"]["stan"] = fp.deklaracja["stan_przed"]
         v["podatki"]["stan_przed_deklaracja"] = True
-    znaczki_funkcji(v)   # J9: znaczki zakrytych funkcji; cudzy handel tylko po odsłonięciu
+    znaczki_funkcji(v)   # znaczki zakrytych funkcji; cudzy handel tylko po odsłonięciu
     return v
 
 
 def _podatki(dane: Dane, fp: Firma, runda: int, rejestr: dict | None) -> dict:
-    """JDG (F3a.11): stawki, stan rozliczeń na początku rundy i VAT z decyzji (szkic) albo z rundy (wyniki)."""
+    """JDG: stawki, stan rozliczeń na początku rundy i VAT z decyzji (szkic) albo z rundy (wyniki)."""
     p, roz = dane.podatki, fp.rozliczenie
     return {"rejestr": rejestr, "ulga_na_start": rz.ulga_na_start(dane, runda),
             "stan": {"vat_nadwyzka": roz.vat_nadwyzka, "dochod": roz.dochod, "zaliczki": roz.zaliczki,
@@ -563,13 +563,13 @@ def _agencja(gra: Gra, firma: str, runda: int, f: Firma, stan, edycja: bool) -> 
             "podkupywanie": podk,
             "cudzy": rp.pracownicy_rynku(dane, stan, firma, runda) if podk and rp.headhunter_dostepny(dane, runda) else [],
             "oferty_dla_mnie": rp.oferty_dla(szkice, f, firma) if edycja and podk else [],
-            # UF18: ile innych drużyn złożyło już ofertę (kandydaci z puli, pracownicy innych drużyn) – bez kwot
+            # ile innych drużyn złożyło już ofertę (kandydaci z puli, pracownicy innych drużyn) – bez kwot
             "zainteresowanie": zainteresowanie,
             # „kto pierwszy, ten lepszy”: kandydaci, których zatrudnienie zapisała już inna drużyna ludzi
             # {id: nazwa drużyny} – na żywo (silnik/na_zywo.py), przycisk „Zatrudnij” wyłączony
             "zajeci": {kid: szkice[n].get("nazwa") or rp._nazwa(stan.firmy, n)
                        for kid, n in rp.zajeci(szkice, firma, rp.boty(gra.konfiguracja)).items()} if edycja else {},
-            # UF20: szansa zgody na przejście do innego lokalu – panel liczy ją na żywo (wzór jak przenosiny.szansa)
+            # szansa zgody na przejście do innego lokalu – panel liczy ją na żywo (wzór jak przenosiny.szansa)
             "przenosiny": {"zasady": przen.ustawienia(dane),
                            "prog": ((dane.z.get("pracownicy") or {}).get("odejscia") or {}).get("prog_zadowolenia", 0.0),
                            "odleglosci": {a.id: {b.id: przen.odleglosc(dane, a.id, b.id) for b in f.lokale} for a in f.lokale}},
@@ -595,7 +595,7 @@ def _lokale(gra: Gra, firma: str, runda: int, f: Firma, poprzedni, stan, info: d
             "odpoczynek": komunikat_odpoczynku(dane, poprzedni.firmy[firma], runda)
             if runda < runda_nowego_lokalu(dane, poprzedni.firmy[firma]) else None,
             "decyzja": decyzja,
-            # U24: oceny i komentarze klientów (stan po poprzedniej rundzie) – publiczne, widać je na mapie
+            # oceny i komentarze klientów (stan po poprzedniej rundzie) – publiczne, widać je na mapie
             "opinie": op.publiczne(poprzedni.firmy) if op.ustawienia(dane) else {}}
 
 
@@ -606,9 +606,9 @@ def _dashboard(gra: Gra, firma: str, runda: int, poprzedni, skum: dict) -> dict:
          "zadluzenie": sum(k.pozostalo for k in f.kredyty) + f.debet}
     if runda - 1 in poprzedni.wyniki:
         d["dochod_netto"] = poprzedni.wyniki[runda - 1][firma]["kpir"]["dochod_netto"]
-    d["miejsce"] = miejsca(skum).get(firma)   # Z7: jak ranking mistrza gry (średnia z rund 2…)
+    d["miejsce"] = miejsca(skum).get(firma)   # jak ranking mistrza gry (średnia z rund 2…)
     zr = gra.dane.mapa["popyt"]["model"].get("rozruch")
-    if zr:   # U9: lokale w rozruchu (poprzedni i bieżący tydzień sprzedaży) – wyjaśnienie straty na starcie
+    if zr:   # lokale w rozruchu (poprzedni i bieżący tydzień sprzedaży) – wyjaśnienie straty na starcie
         def mnoznik(lok, r):
             return round(rozruch(gra.dane, lok, r), 2) if r >= max(lok.dziala_od, 2) else None
         lokale = [{"nazwa": gra.dane.lokale[lok.id]["nazwa"], "poprzednia": mnoznik(lok, runda - 1),
@@ -619,7 +619,7 @@ def _dashboard(gra: Gra, firma: str, runda: int, poprzedni, skum: dict) -> dict:
 
 
 def _majatek_netto(w: dict | None) -> float | None:
-    """Majątek netto firmy na koniec rundy (Z2); gry zapisane przed Z2 go nie mają."""
+    """Majątek netto firmy na koniec rundy; gry zapisane przed podziałem majątku na lokale go nie mają."""
     return ((w or {}).get("majatek_netto") or {}).get("razem")
 
 
@@ -679,7 +679,7 @@ def przeglad_mg(gra: Gra) -> dict:
             "zadluzenie": zadluzenie(fs),
             "lokaty": sum(lk.kwota for lk in fs.lokaty),
             "majatek_netto": _majatek_netto(stan.wyniki.get(ostatnia, {}).get(n)),
-            # Z3: debet ponad limit (blokada w bieżącej rundzie), inwestor ratunkowy i wpłata przysłana na tę rundę
+            # debet ponad limit (blokada w bieżącej rundzie), inwestor ratunkowy i wpłata przysłana na tę rundę
             "alarm": bk.debet_ponad_limit(dane, fs) if ostatnia >= gra.runda_startowa else 0.0,
             "inwestor": inw.raport(fs, None, 0.0),
             "inwestor_przyslany": inw.przyznany(konf, n, r),
@@ -699,17 +699,17 @@ def przeglad_mg(gra: Gra) -> dict:
                 "auto_zamowienia": bool(konf.get("auto_zamowienia")),
                 "refleksja": gra.tryb_refleksji,
                 "podpowiedzi": bool(konf.get("podpowiedzi")),
-                # UF21 – TYMCZASOWE, usunąć przed oficjalną wersją: które formy zatrudnienia są w grze
+                # TYMCZASOWE, usunąć przed oficjalną wersją: które formy zatrudnienia są w grze
                 "formy_zatrudnienia": fz.dozwolone(dane, konf),
                 "formy_wszystkie": {k: f["nazwa"] for k, f in fz.formy(dane).items()},
                 "podkupywanie": rp.podkupywanie(konf),   # poprawki 2 (sprawa 6): headhunter i kontroferty
                 "ceny_dostawcow": konf.get("ceny_dostawcow", "dane"),
                 "lokale": True,
-                "inwestor": inw.warunki(dane),   # warunki inwestora ratunkowego (Z3)
+                "inwestor": inw.warunki(dane),   # warunki inwestora ratunkowego
                 "brakujace": [] if gra.zakonczona else gra.brakujace(),
                 "kalendarz": kalendarz(dane, konf["liczba_rund"])},
         "firmy": firmy,
-        # U17: refleksje drużyn – od najnowszej rundy (bieżąca: tylko wysłane decyzje)
+        # refleksje drużyn – od najnowszej rundy (bieżąca: tylko wysłane decyzje)
         "refleksje": [{"runda": x, "firma": n, "tekst": t} for x in range(r, gra.runda_startowa - 1, -1)
                       for n, t in sorted(gra.refleksje(x).items())],
         "historia": [{"runda": x, "skrot": dane.skrot_rundy(x),

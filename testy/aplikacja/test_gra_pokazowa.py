@@ -1,4 +1,4 @@
-"""UF17: `manage.py gra_pokazowa` – nowa gra „Pokazowa” rozegrana do końca, widoczna dla mistrza gry w „Twoich grach”."""
+"""`manage.py gra_pokazowa` – nowa gra „Pokazowa” rozegrana do końca, widoczna dla mistrza gry w „Twoich grach”."""
 
 import pytest
 from django.core.management import call_command

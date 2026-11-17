@@ -1,4 +1,4 @@
-"""B9: boty potrafią wybrać każdą opcję kadrową – pensję (`pensja`), gwiazdki ludzi niezależnie od sprzętu
+"""Boty potrafią wybrać każdą opcję kadrową – pensję (`pensja`), gwiazdki ludzi niezależnie od sprzętu
 (`jakosc_ludzi`), kanał rekrutacji (`kanal`), premię (`premia`) i właściciela na stanowisku kasy
 (`wlasciciel_godziny`); pomiar w balans/warianty.py."""
 import copy

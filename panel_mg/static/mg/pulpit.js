@@ -8,7 +8,7 @@ const csrf = () => document.cookie.match(/(?:^|; )csrftoken=([^;]*)/)?.[1] ?? ""
 const $ = (id) => document.getElementById(id);
 const PALETA = ["#1e9e5a", "#2d73d6", "#e45f26", "#9b51e0", "#f2b705", "#e5333f", "#17a2b8", "#795548"];
 
-// Funkcje gry (decyzje autora 9–10.11, raporty/funkcje/plan.md): lista i gotowe zestawy przychodzą z dane/funkcje.yaml
+// Funkcje gry (decyzje autora 9–10.11): lista i gotowe zestawy przychodzą z dane/funkcje.yaml
 // (panel_mg/widoki.py → ustawienia), a stany idą do POST /api/gry w polu `funkcje`.
 const PODSTAWA = "Pulpit, mapa, wyniki, wybór lokalu, mój lokal, kuchnia, rynek pracy i zespół, stanowiska i sprzęt, "
   + "wyniki finansowe i bank, biuro rachunkowe, lista błędów, wysyłanie decyzji";
@@ -45,7 +45,7 @@ function termin(g) {
   return "Runda zamknie się, gdy wszystkie drużyny wyślą (albo gdy zamkniesz ją w panelu gry).";
 }
 
-function funkcjeGry(g) {   // J8: krótkie podsumowanie stanów funkcji (gra bez funkcji – nic)
+function funkcjeGry(g) {   // krótkie podsumowanie stanów funkcji (gra bez funkcji – nic)
   if (!g.funkcje) return "";
   const { liczby, lista } = g.funkcje;
   const wylaczone = lista.filter((f) => f.stan === "wylaczona").map((f) => f.nazwa);

@@ -13,7 +13,7 @@ from silnik.dane import KATALOG_GRY, dane_domyslne
 from silnik.ksiegowosc.finanse import vat_z_brutto
 
 DANE_GRY = KATALOG_GRY / "dane"
-DANE_ZAMROZONE = Path(__file__).parent / "dane_zamrozone"   # kopia dane/ ze startu kalibracji (B2)
+DANE_ZAMROZONE = Path(__file__).parent / "dane_zamrozone"   # kopia dane/ ze startu kalibracji
 
 
 def _kopia(tmp_path: Path) -> Path:
@@ -45,7 +45,7 @@ def _lokal(id_, forma="najem"):
 
 
 def _netto(brutto, stawka=0.23):
-    """Kwota w KPiR gry z lokalami: ceny są brutto, VAT idzie do rejestru (F3a.11)."""
+    """Kwota w KPiR gry z lokalami: ceny są brutto, VAT idzie do rejestru."""
     return round(brutto - vat_z_brutto(brutto, stawka), 2)
 
 
@@ -63,7 +63,7 @@ def _oferta(strefa, cena_proc=1.0, jakosc=(2, 2, 2), **inne):
 
 
 def _kandydat(s, gwiazdki, pomin=(), student=False):
-    """Kucharz o tylu gwiazdkach; domyślnie nie student (UF21: student pracuje mniej godzin i chce mniej)."""
+    """Kucharz o tylu gwiazdkach; domyślnie nie student (student pracuje mniej godzin i chce mniej)."""
     return next(k for k in s.kandydaci if k["gwiazdki"] == gwiazdki and k["zawod"] == "Kucharz" and k["id"] not in pomin
                 and bool(k.get("student")) == student)
 

@@ -1,4 +1,4 @@
-"""Grupy klientów (U24, decyzja autora 4.11.2026; dane: `dane/mapa/klienci.yaml`).
+"""Grupy klientów (decyzja autora 4.11.2026; dane: `dane/mapa/klienci.yaml`).
 
 Klienci strefy to mieszanka grup (studenci, biurowi, rodziny…). Grupa ma:
 
@@ -10,7 +10,7 @@ Klienci strefy to mieszanka grup (studenci, biurowi, rodziny…). Grupa ma:
 - wagę czekania i jakości – w ocenie lokalu (silnik/rynek/opinie.py).
 
 Goście wydarzeń to nadwyżka klientów z kalendarza miejskiego (mecz, koncert, festyn): w dniu z mnożnikiem kalendarza
-m > 1 ich udział to 1 − 1/m. Bez pliku klienci.yaml (dane zamrożone testów) – jedna grupa, jak przed U24.
+m > 1 ich udział to 1 − 1/m. Bez pliku klienci.yaml (dane zamrożone testów) – jedna grupa, jak przed wprowadzeniem grup klientów.
 """
 from __future__ import annotations
 

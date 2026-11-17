@@ -69,7 +69,7 @@ export function wykresObciazenia({ tytul, pozycje, progi = {}, opisy = OPISY_LUD
     ${legenda(progi, opisy)}<div class="obc-siatka">${html}</div>${przypis}</section>`;
 }
 
-// Poprawki 4 (P6): obciążenie osób w dni tygodnia (silnik/runda.py: _obciazenie_dni) – potrzebne godziny / pojemność
+// obciążenie osób w dni tygodnia (silnik/runda.py: _obciazenie_dni) – potrzebne godziny / pojemność
 // stanowiska w danym dniu; ponad 100% = tyle pracy zabrakło (klienci odeszli przez brak godzin osoby). null – bez zmiany.
 const dataKrotka = (iso) => { const [, m, d] = iso.split("-"); return `${+d}.${m}`; };
 const NAZWY_DNI = ["pn", "wt", "śr", "czw", "pt", "sob", "nd"];

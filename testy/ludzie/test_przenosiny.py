@@ -1,4 +1,4 @@
-"""UF20: obsada stanowisk i przenosiny pracowników między lokalami (zgoda zależna od zadowolenia, odległości i dodatku)."""
+"""Obsada stanowisk i przenosiny pracowników między lokalami (zgoda zależna od zadowolenia, odległości i dodatku)."""
 
 import pytest
 

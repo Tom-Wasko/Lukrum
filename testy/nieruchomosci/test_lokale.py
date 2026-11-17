@@ -1,4 +1,4 @@
-"""Lokale i działki na mapie miasta (F3a.3): przydział, koszty, miejsca na stanowiska, budowa, boty, dane mapy."""
+"""Lokale i działki na mapie miasta: przydział, koszty, miejsca na stanowiska, budowa, boty, dane mapy."""
 
 import re
 from pathlib import Path
@@ -85,7 +85,7 @@ def test_stanowiska_tylko_na_wolnych_miejscach_w_lokalu_do_wyposazenia():
 
 
 def test_dzialka_budowa_w_ratach_potem_lokal_bez_sprzetu():
-    g = _gra(kapital_startowy=200000)   # działka i budowa bez debetu ponad limit (Z3: blokada inwestycji)
+    g = _gra(kapital_startowy=200000)   # działka i budowa bez debetu ponad limit (blokada inwestycji)
     lok = g.dane.lokale["czechow_3"]
     n = lok["budowa_rund"]
     assert n >= 2   # wyposażanie dopiero w ostatniej rundzie budowy
@@ -122,7 +122,7 @@ def test_dane_mapy():
     # budynki prowadzą do istniejących zakładek panelu gracza
     zakladki = set(re.search(r"const ZAKLADKI = \{([^}]*)\}", INDEX_JS.read_text(encoding="utf-8")).group(1).replace(" ", "")
                    .replace("\n", "").split(","))
-    # UF13: „zdarzenia” przy parku to nie zakładka – klik w park otwiera okno parku (mapa.js)
+    # „zdarzenia” przy parku to nie zakładka – klik w park otwiera okno parku (mapa.js)
     assert {b["zakladka"] for b in dane.mapa["budynki"] if b["zakladka"]} - {"zdarzenia"} <= zakladki
     assert "lokale" in zakladki and "mapa" in zakladki
 
@@ -142,7 +142,7 @@ def test_sprawdz_wykrywa_bledy_mapy(tmp_path):
 
 @pytest.mark.dane_gry
 def test_liczba_lokali_na_mapie_zalezy_od_liczby_firm():
-    """Z4: w mniejszej grze część lokali (od_firm) nie trafia na mapę – ani do oferty, ani do decyzji."""
+    """W mniejszej grze część lokali (od_firm) nie trafia na mapę – ani do oferty, ani do decyzji."""
     from silnik.nieruchomosci import lokale as lk
     wszystkie = dane_domyslne().mapa["lokale"]
     liczby = [sum(lk.na_mapie(lok, n) for lok in wszystkie) for n in range(4, 9)]

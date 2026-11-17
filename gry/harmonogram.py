@@ -1,4 +1,4 @@
-"""Zamykanie rund o ustalonej godzinie i pauza gry (F3a.14).
+"""Zamykanie rund o ustalonej godzinie i pauza gry.
 
 Harmonogram gry to lista terminów tygodniowych {"dzien": 0–6 (0 = poniedziałek),
 "godzina": "HH:MM"} w czasie lokalnym (`TIME_ZONE`). Runda zamyka się w pierwszym terminie po

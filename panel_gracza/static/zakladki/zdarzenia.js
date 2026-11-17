@@ -1,7 +1,7 @@
 // Zdarzenia – eventy w parkach (gra z lokalami, silnik/swiat/zdarzenia.py). Co rundę w parkach zaczynają się 3–4 historie,
-// UF13: bez własnej zakładki – park na mapie otwiera okno parku (`oknoParku`, nad mapą pasek `parkiNaMapie`),
+// bez własnej zakładki – park na mapie otwiera okno parku (`oknoParku`, nad mapą pasek `parkiNaMapie`),
 // sprawy tylko tej drużyny (bank żywności, wypadki) są częścią „sprawy” zakładki Mój lokal.
-// te same dla wszystkich drużyn (P9: opcje po 2–5 h – czasu właściciela nie starczy na wszystko); każda drużyna wybiera reakcję (decyzja `zdarzenia: {historia: opcja}`). Do tego
+// te same dla wszystkich drużyn (opcje po 2–5 h – czasu właściciela nie starczy na wszystko); każda drużyna wybiera reakcję (decyzja `zdarzenia: {historia: opcja}`). Do tego
 // historie jednej drużyny: bank żywności i wypadki w lokalu (silnik/swiat/awarie.py – szkody i polisy).
 import { esc, kartaMarki, KOLORY, licz, okno, podsumowanie, proc, tabela, toast, zl2, zwinTabela } from "./wspolne.js";
 
@@ -29,13 +29,13 @@ function skutekTekst(s) {
 const skutkiHtml = (sk) => sk?.length ? `<ul>${sk.map((s) => `<li>${skutekTekst(s)}</li>`).join("")}</ul>` : "";
 const naglowek = (s) => `<h3>${esc(s.tytul)}</h3>`;
 
-// P3: układ „lista spraw + szczegóły” – która sprawa jest pokazana po prawej (stan przeglądarki, nie decyzja)
+// układ „lista spraw + szczegóły” – która sprawa jest pokazana po prawej (stan przeglądarki, nie decyzja)
 let pokazana = null;
 
 const nazwaParku = (kat, id) => kat?.mapa?.budynki?.find((b) => b.id === id)?.nazwa || id;
 const gdzie = (s, kat) => s.park ? nazwaParku(kat, s.park) : s.wypadek ? "wypadek w lokalu" : "w lokalu";
 
-// stan sprawy: wybrana opcja, czy własny wybór i czy starcza na nią godzin (U8: wolne godziny przed tą sprawą)
+// stan sprawy: wybrana opcja, czy własny wybór i czy starcza na nią godzin (wolne godziny przed tą sprawą)
 function stanSprawy(s, wybor, edycja) {
   const id = wybor ?? s.domyslna, o = s.opcje.find((x) => x.id === id) || s.opcje[0];
   const brakNa = (x) => !!(edycja && x?.koszt?.czas && s.wolne != null && x.koszt.czas > s.wolne + 1e-9);
@@ -127,7 +127,7 @@ function zakonczoneHtml(w, E, runda) {
 const wParku = (s) => !!s.park;
 const lokalne = (lista) => (lista || []).filter((s) => !wParku(s));
 
-// UF13: okno parku z mapy – sprawy tego parku w tej rundzie (kafelki opcji), skutki poprzedniej rundy i historia parku
+// okno parku z mapy – sprawy tego parku w tej rundzie (kafelki opcji), skutki poprzedniej rundy i historia parku
 export function oknoParku(c, id) {
   const { v, kat } = c, b = kat.mapa?.budynki?.find((x) => x.id === id), nazwa = b?.nazwa || id, Z = v.zdarzenia;
   if (!Z) return toast(`${nazwa}: ${b?.opis || ""}`);

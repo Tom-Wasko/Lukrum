@@ -1,4 +1,4 @@
-"""Limity (F3a.15): najwyżej 3 nowych pracowników na rundę i nowy lokal co 3 rundy – zapis decyzji z przekroczeniem
+"""Limity: najwyżej 3 nowych pracowników na rundę i nowy lokal co 3 rundy – zapis decyzji z przekroczeniem
 jest odrzucony, lista błędów mówi, ile zostało i od kiedy można wziąć kolejny lokal."""
 
 import pytest
@@ -50,7 +50,7 @@ def test_naruszenia_w_silniku():
     co = g.dane.mapa["zasady"]["nowy_lokal_co_rund"]
     assert "co 3 rundy" in lm.naruszenia(g.dane, f, _lokal("dworzec_1"), 2)[0]
     from silnik.nieruchomosci.lokale import (
-        ODPOCZYNEK,  # P8: zamiast suchego limitu – właściciel musi odpocząć
+        ODPOCZYNEK,  # zamiast suchego limitu – właściciel musi odpocząć
     )
     assert lm.naruszenia(g.dane, f, _lokal("dworzec_1"), 2)[0].startswith(ODPOCZYNEK[2 % len(ODPOCZYNEK)])
     assert lm.naruszenia(g.dane, f, _lokal("dworzec_1"), 1 + co) == []
@@ -76,8 +76,8 @@ def test_zapis_lokalu_przed_terminem_odrzucony(client, gra):
     client.post(f"/api/gry/{gra}/przelicz")
     v = _widok(client, gra)
     assert v["lokale"]["nowy_od"] == 4
-    assert not any("najwcześniej w rundzie 4" in t for t in _bledy(v, "niebieski"))   # U3: nie na liście błędów
-    assert "najwcześniej w rundzie 4" in v["lokale"]["odpoczynek"]   # P8: komunikat z żartem
+    assert not any("najwcześniej w rundzie 4" in t for t in _bledy(v, "niebieski"))   # nie na liście błędów
+    assert "najwcześniej w rundzie 4" in v["lokale"]["odpoczynek"]   # komunikat z żartem
     r = _zapisz(client, gra, {**v["decyzje"], **_lokal("dworzec_1")})
     assert r.status_code == 400 and "najwcześniej w rundzie 4" in r.json()["blad"]
     # inna drużyna bez lokalu może wziąć lokal od razu

@@ -1,4 +1,4 @@
-"""Czas właściciela (F3a.7): pula godzin na rundę, odbiór osobisty w dyskontach, odrzucenie zakupów bez czasu."""
+"""Czas właściciela: pula godzin na rundę, odbiór osobisty w dyskontach, odrzucenie zakupów bez czasu."""
 
 from datetime import date, timedelta
 

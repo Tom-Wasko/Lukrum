@@ -1,4 +1,4 @@
-"""U20 (decyzja autora 4.11.2026): zadowolenie każdej osoby, ukryte cechy z żartobliwym opisem, ostrzeżenie na liście
+"""Decyzja autora 4.11.2026: zadowolenie każdej osoby, ukryte cechy z żartobliwym opisem, ostrzeżenie na liście
 błędów i wypowiedzenie z niezadowolenia (szansa rośnie z niezadowoleniem)."""
 
 import pytest
@@ -121,7 +121,7 @@ def test_bot_daje_podwyzke_niezadowolonemu():
 
 
 def test_zlecenie_bez_skladek_zus_pracodawcy():
-    # UF10 (decyzja autora 6.11.2026, zastępuje P1 z 29.10): w grze zlecenie bez składek pracodawcy, etat – ze składkami
+    # Decyzja autora 6.11.2026, zastępuje wcześniejsze założenie z 29.10.2026): w grze zlecenie bez składek pracodawcy, etat – ze składkami
     from pomocnicze import _rachunek
 
     from silnik.ksiegowosc import rozliczenie as rz
@@ -135,7 +135,7 @@ def test_zlecenie_bez_skladek_zus_pracodawcy():
 
 
 def test_premia_za_runde_liczy_sie_jak_miesieczna_podwyzka():
-    # B9: pensja w umowie jest miesięczna, premia – za rundę (tydzień), więc w zadowoleniu premia × rund_w_roku / 12
+    # pensja w umowie jest miesięczna, premia – za rundę (tydzień), więc w zadowoleniu premia × rund_w_roku / 12
     g, s, p = _start()
     d = g.dane
     p.pensja, p.premia = p.pensja_preferowana, 120.0
@@ -146,8 +146,8 @@ def test_premia_za_runde_liczy_sie_jak_miesieczna_podwyzka():
 
 
 def test_szkolenie_kosztuje_cene_miesieczna_przeliczona_na_runde(monkeypatch):
-    # B9: ceny szkoleń w katalogu są miesięczne, efekt działa jedną rundę – koszt za rundę jak czynsz
-    # (kalibracja B9 – szkolenie na 4 tygodnie – wyłączona; z nią: testy/ludzie/test_kal_ludzie.py)
+    # ceny szkoleń w katalogu są miesięczne, efekt działa jedną rundę – koszt za rundę jak czynsz
+    # (szkolenie na 4 tygodnie jest wyłączone; z nim: testy/ludzie/test_kal_ludzie.py)
     from pomocnicze import _rachunek
     g = _gra(("A", None), ("B", None), odblokowanie={"hr_szkolenia": 2})
     monkeypatch.setitem(g.dane.z["pracownicy"]["szkolenia"], "wlaczone", False)

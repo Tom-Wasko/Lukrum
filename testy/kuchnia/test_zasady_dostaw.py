@@ -1,4 +1,4 @@
-"""Dostawcy (F3a.6): dni dostaw, opłaty za dowóz, minimalne zamówienie, limity i czas właściciela w dyskontach,
+"""Dostawcy: dni dostaw, opłaty za dowóz, minimalne zamówienie, limity i czas właściciela w dyskontach,
 gazetki, producent od rundy 3, planowanie dostaw w dni dostawcy, gra i sprawdzanie danych."""
 
 from datetime import date, timedelta

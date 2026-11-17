@@ -1,4 +1,4 @@
-"""Funkcje gry: odkryte, zakryte i wyłączone (seria „funkcje”, raporty/funkcje/plan.md).
+"""Funkcje gry: odkryte, zakryte i wyłączone (seria „funkcje”).
 
 Rejestr funkcji – `dane/funkcje.yaml` (brak pliku – gra bez funkcji, wszystko odkryte). Mistrz gry ustawia stany przy
 tworzeniu gry (konfiguracja: `funkcje` – {klucz: "odkryta"|"zakryta"|"wylaczona"}, później bez zmian); brak klucza
@@ -91,7 +91,7 @@ def autopilot(konfiguracja: dict, firma: str, klucz: str, runda: int) -> bool:
 
 
 def zakryta_ponownie(konfiguracja: dict, firma: str, klucz: str, runda: int) -> bool:
-    """K1: drużyna znów zakryła odsłoniętą wcześniej funkcję i od rundy `runda` robi ją gra – w tej rundzie przepada
+    """drużyna znów zakryła odsłoniętą wcześniej funkcję i od rundy `runda` robi ją gra – w tej rundzie przepada
     to, co drużyna w funkcji kupiła (silnik/autopilot.py: przepadek). Wpis [runda, klucz, False] w historii jest tylko
     po odsłonięciu (`odslon` zapisuje same zmiany)."""
     return autopilot(konfiguracja, firma, klucz, runda) and [runda, klucz, False] in (
@@ -102,7 +102,7 @@ BLOKADA_HARPAGONA = "Najpierw spłaćcie pożyczkę u Harpagona."
 
 
 def blokada_zakrycia(klucz: str, firma) -> str:
-    """K2: dlaczego drużyna nie może znów zakryć funkcji `klucz` („” – może). `firma` – stan firmy na początku
+    """dlaczego drużyna nie może znów zakryć funkcji `klucz` („” – może). `firma` – stan firmy na początku
     bieżącej rundy (Firma albo None). Harpagona z niespłaconą pożyczką nie da się zakryć – autopilot nic za drużynę
     przy nim nie robi, a dług by został."""
     if klucz == "harpagon" and getattr(firma, "harpagon", None) is not None:
@@ -143,12 +143,12 @@ def elementy_funkcji(dane, konfiguracja: dict, elementy: dict) -> dict[str, str]
     return wynik
 
 
-# --- decyzje funkcji (J3, J5) ------------------------------------------------------------------------------------
+# --- decyzje funkcji  ------------------------------------------------------------------------------------
 # Mapa decyzja → funkcja w jednym miejscu: to klucze formatu decyzji silnika (silnik/decyzje.py: opis formatu),
 # a nie liczby gry, więc nie ma ich w danych; z mapy korzystają przeliczenie rundy (silnik/autopilot.py), boty
 # i podgląd decyzji drużyny. Klucze z KLUCZE_W_LOKALU bywają też w `w_lokalu[lokal]`. Szczególne przypadki (w `filtruj`):
 # - „lokal” (także kolejny lokal z „Nowych lokali”) to podstawa gry; do sieci lokali należy tylko licytacja – bez
-#   sieci „oferta” znika i lokal idzie po cenie wywoławczej (K3, silnik/nieruchomosci/lokale.py: oferta),
+#   sieci „oferta” znika i lokal idzie po cenie wywoławczej (silnik/nieruchomosci/lokale.py: oferta),
 # - „biuro”: „samodzielnie” należy do samodzielnej księgowości (wybór biura z mapy – podstawa gry),
 # - „harpagon_splac” – na autopilocie drużyna dalej może spłacić dług (pomija się tylko przy wyłączonym Harpagonie).
 DECYZJE: dict[str, tuple[str, ...]] = {
@@ -220,7 +220,7 @@ def filtruj(dane, konfiguracja: dict, firma: str, d: dict, runda: int) -> tuple[
                 for w in list(wynik["w_lokalu"]):
                     usun(klucz, w)
         if k == "siec" and isinstance(wynik.get("lokal"), dict) and "oferta" in wynik["lokal"]:
-            # K3: licytacja (oferta ponad cenę wywoławczą) – sieć lokali; bez niej lokal po cenie wywoławczej
+            # licytacja (oferta ponad cenę wywoławczą) – sieć lokali; bez niej lokal po cenie wywoławczej
             # (bez błędu: sam lokal – podstawa gry – zostaje)
             if wynik is d:
                 wynik = dict(d)

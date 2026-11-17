@@ -22,7 +22,7 @@ Strumien = np.random.Generator   # typ strumienia losowego (adnotacje w innych m
 CELE = frozenset({
     "bot",         # decyzje bota: runda, nazwa firmy
     "wypadki",     # wypadki w lokalu (silnik/swiat/awarie.py): runda, firma
-    "falafel",     # bójka o falafel (silnik/swiat/falafel.py, UF8): runda, firma
+    "falafel",     # bójka o falafel (silnik/swiat/falafel.py): runda, firma
     "biuro",       # błąd biura rachunkowego w deklaracji: runda, firma
     "dostawcy",    # ceny dostawców w trybie losowym: runda = miesiąc (0 = styczeń)
     "gazetki",     # promocje w gazetkach dyskontów: runda, dostawca
@@ -31,11 +31,11 @@ CELE = frozenset({
     "handel",      # tekst transakcji na giełdzie handlu (silnik/rynek/handel.py): runda, id ogłoszenia
     "kasyno",      # zaproszenie i gry w klubie (silnik/pieniadze/kasyno.py): runda, firma[, nr zakładu]
     "kandydaci",   # rynek pracy: runda 0 = pula startowa
-    "cechy",       # ukryta cecha i opis osoby (U20): runda dołączenia do puli, id osoby
+    "cechy",       # ukryta cecha i opis osoby: runda dołączenia do puli, id osoby
     "opinie",      # rozrzut nowych opinii i komentarze o lokalu (silnik/rynek/opinie.py): runda, firma, lokal
     "odejscia",    # wypowiedzenie z niezadowolenia (silnik/ludzie/zadowolenie.py): runda, firma, id osoby
-    "przenosiny",  # zgoda na przejście do innego lokalu (silnik/ludzie/przenosiny.py, UF20): runda, firma, id osoby
-    "studenci",    # czy kandydat do 26 lat jest studentem (silnik/ludzie/kandydaci.py, UF21): runda, id osoby
+    "przenosiny",  # zgoda na przejście do innego lokalu (silnik/ludzie/przenosiny.py): runda, firma, id osoby
+    "studenci",    # czy kandydat do 26 lat jest studentem (silnik/ludzie/kandydaci.py): runda, id osoby
     "kolejnosc",   # kolejność firm w rundzie
     "parki",       # kolejność historii w parkach: runda = numer cyklu wszystkich historii
     "lokal",       # wybór lokalu przez bota: runda, nazwa firmy

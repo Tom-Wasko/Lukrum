@@ -1,4 +1,4 @@
-"""B6 (decyzja autora 7.11.2026): budynek z najemcą kupowany w rundzie jest zastawem kredytu inwestycyjnego w tej
+"""Decyzja autora 7.11.2026): budynek z najemcą kupowany w rundzie jest zastawem kredytu inwestycyjnego w tej
 samej rundzie (jak kupowany lokal); przełącznik `zastaw_przejecia` w mapa/banki.yaml (w danych zamrożonych wyłączony)."""
 
 import copy

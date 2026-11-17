@@ -33,7 +33,7 @@ from .schematy import (
     sprawdz_zalozenia,
 )
 
-OPCJONALNE_MAPY = ("klienci.yaml", "dekor.yaml")   # bez nich: bez grup i opinii (U24) / bez dekoru lokalu
+OPCJONALNE_MAPY = ("klienci.yaml", "dekor.yaml")   # bez nich: bez grup i opinii / bez dekoru lokalu
 KATALOG_GRY = Path(__file__).resolve().parents[1]
 KATALOG_DANYCH = KATALOG_GRY / "dane"   # testy mechanik: zamrożona kopia (testy/conftest.py)
 
@@ -84,7 +84,7 @@ def _wczytaj_mape(katalog: Path) -> dict | None:
             "biura": PlikBiur.model_validate(bi).model_dump(exclude={"opis", "zrodlo"}),
             "reklama": PlikReklamy.model_validate(re).model_dump(exclude={"opis", "zrodlo"}),
             "promocje": PlikPromocji.model_validate(pm).model_dump(exclude={"opis", "zrodlo"}),
-            # U24: grupy klientów i opinie (brak pliku – mechanika wyłączona, np. dane zamrożone testów)
+            # grupy klientów i opinie (brak pliku – mechanika wyłączona, np. dane zamrożone testów)
             "klienci": PlikKlientow.model_validate(_wczytaj(kl)).model_dump(exclude={"opis", "zrodlo"}) if kl.exists() else None,
             # dekor lokalu (sklep meblowy): brak pliku – mechanika nie istnieje
             "dekor": PlikDekoru.model_validate(_wczytaj(de)).model_dump(exclude={"opis", "zrodlo"}) if de.exists() else None,
@@ -102,8 +102,8 @@ def _wczytaj_miasto(plik: Path) -> dict:
 
 
 def _wczytaj_zdarzenia(katalog: Path) -> dict | None:
-    """Eventy (`dane/zdarzenia/`): parki (F3b.1), sanepid i bank żywności (magazyn), wypadki i ubezpieczyciel (losowe,
-    F3b.5), urząd i higiena (urzad, F3b.6). Brak katalogu = gra bez eventów."""
+    """Eventy (`dane/zdarzenia/`): parki, sanepid i bank żywności (magazyn), wypadki i ubezpieczyciel (losowe,
+    awarie), urząd i higiena (urzad). Brak katalogu = gra bez eventów."""
     if not (katalog / "parki.yaml").exists():
         return None
     return {n.removesuffix(".yaml"): s.model_validate(_wczytaj(katalog / n)).model_dump(exclude={"opis", "zrodlo"})
@@ -112,7 +112,7 @@ def _wczytaj_zdarzenia(katalog: Path) -> dict | None:
 
 
 def _wczytaj_kalendarz(katalog: Path) -> dict | None:
-    """Kalendarz miejski (`dane/kalendarz/`, F3b.9): święta, uczelnie, ferie, wydarzenia. Brak katalogu = bez kalendarza."""
+    """Kalendarz miejski (`dane/kalendarz/`): święta, uczelnie, ferie, wydarzenia. Brak katalogu = bez kalendarza."""
     if not (katalog / "kalendarz.yaml").exists():
         return None
     return {k: v for n, s in SCHEMATY_KALENDARZA.items()
@@ -142,7 +142,7 @@ class Dane:
         self.dostawcy: dict = p["dostawcy.yaml"]["ceny"]
         self.dostawcy_pierwsi: list[str] = p["dostawcy.yaml"]["pierwsi"]
         self.dostawcy_wszyscy_od: int = MIESIACE.index(p["dostawcy.yaml"]["wszyscy_od_miesiaca"])
-        self.dostawcy_info: dict = p["dostawcy.yaml"].get("dostawcy", {})   # dni dostaw, koszty, gazetki (F3a.6)
+        self.dostawcy_info: dict = p["dostawcy.yaml"].get("dostawcy", {})   # dni dostaw, koszty, gazetki
         self.kandydaci: list = p["kandydaci.yaml"]["znani"]
         self.rynek_pracy: dict = p["kandydaci.yaml"]
         self.katalog_ofert: dict = p["katalog.yaml"]
@@ -156,7 +156,7 @@ class Dane:
         self.zdarzenia: dict | None = _wczytaj_zdarzenia(katalog / "zdarzenia")
         self.kalendarz_miasta: dict | None = _wczytaj_kalendarz(katalog / "kalendarz")
         self.wnetrza: dict | None = _wczytaj_wnetrza(katalog / "wnetrza")   # brak folderu – gra bez wnętrz
-        self.podatki: dict | None = _wartosci(p["podatki_2026.yaml"]) if "podatki_2026.yaml" in p else None   # JDG (F3a.11)
+        self.podatki: dict | None = _wartosci(p["podatki_2026.yaml"]) if "podatki_2026.yaml" in p else None   # JDG
         # funkcje gry – zakryte i wyłączone (silnik/funkcje.py); brak pliku – wszystko odkryte
         self.funkcje: dict | None = {k: v for k, v in p["funkcje.yaml"].items() if k not in ("opis", "zrodlo")}             if "funkcje.yaml" in p else None
         # widok danych gry z lokalami (silnik/harmonogram.py: dla_gry) – harmonogram zakładek i tygodnie mistrza gry
@@ -288,7 +288,7 @@ def sprawdz(katalog: Path | None = None) -> list[str]:
     if mapa.exists():
         for nazwa, schemat in SCHEMATY_MAPY.items():
             if not (mapa / nazwa).exists():
-                if nazwa in OPCJONALNE_MAPY:   # klienci (U24): bez niego grupy i opinie wyłączone; dekor: bez dekoru
+                if nazwa in OPCJONALNE_MAPY:   # klienci: bez niego grupy i opinie wyłączone; dekor: bez dekoru
                     continue
                 bledy.append(f"brak pliku dane/mapa/{nazwa}")
                 continue
@@ -541,7 +541,7 @@ def _sprawdz_mape(d: Dane, brak) -> list[str]:
 
 
 def _sprawdz_klientow(d: Dane, bledy: list[str], brak):
-    """U24 – mapa/klienci.yaml: każda strefa popytu ma udziały grup, dania z uslugi.yaml."""
+    """mapa/klienci.yaml: każda strefa popytu ma udziały grup, dania z uslugi.yaml."""
     k = d.mapa.get("klienci")
     if not k:
         return

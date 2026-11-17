@@ -13,7 +13,7 @@ from .formy import studenci
 
 
 def cechy(dane: Dane) -> dict:
-    """Ukryte cechy osób (U20, kandydaci.yaml: cechy.lista); brak – wszyscy bez cechy."""
+    """Ukryte cechy osób (kandydaci.yaml: cechy.lista); brak – wszyscy bez cechy."""
     return (dane.rynek_pracy.get("cechy") or {}).get("lista") or {}
 
 
@@ -57,7 +57,7 @@ def _gwiazdki(dane: Dane, rng) -> int:
 
 
 def _ze_studentem(dane: Dane, osoba: dict, ziarno, runda: int) -> dict:
-    """UF21: kandydat młodszy niż wiek_do jest studentem z szansą udzial – osobny strumień, reszta puli bez zmian."""
+    """Kandydat młodszy niż wiek_do jest studentem z szansą udzial – osobny strumień, reszta puli bez zmian."""
     s = studenci(dane)
     if not s or osoba.get("wiek", s["wiek_do"]) >= s["wiek_do"]:
         return osoba

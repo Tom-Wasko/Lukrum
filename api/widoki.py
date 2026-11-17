@@ -201,18 +201,18 @@ def _przeglad(id_: str) -> dict:
         if not f["bot"]:
             f["sklad"] = sklad.get(f["nazwa"], [])
             f["autorzy"] = druzyny.autorzy(g, f["nazwa"])
-            f["dziennik"] = druzyny.dziennik(g, f["nazwa"])   # U18
+            f["dziennik"] = druzyny.dziennik(g, f["nazwa"])
     p["ostrzezenia"] = druzyny.ostrzezenia(g)
     p["prowadzenie"] = hg.prowadzenie(id_)
     p["prowadzenie"]["dni"] = hg.DNI
     p["prowadzenie"]["zakresy_lekcji"] = lekcje.zakresy()   # tryb lekcyjny: zakresy z ustawień
     poziomy = g.dane.boty.get("poziomy") or {}
-    # Z5: bez poziomów do pomiarów – poza poziomem bota starej gry (np. „jak człowiek”)
+    # bez poziomów do pomiarów – poza poziomem bota starej gry (np. „jak człowiek”)
     uzywane = {f.get("poziom") for f in p["firmy"] if f["bot"]}
     p["prowadzenie"]["poziomy"] = {k: v["nazwa"] for k, v in poziomy.items()
                                    if not v.get("tylko_pomiar") or k in uzywane}
     p["prowadzenie"]["odblokowanie"] = hm.widok(g.dane, g.runda)
-    p["funkcje"] = funkcje_gry(g, None)   # J8: stany funkcji (tylko do odczytu) i kto co odsłonił
+    p["funkcje"] = funkcje_gry(g, None)   # stany funkcji (tylko do odczytu) i kto co odsłonił
     return p
 
 
@@ -223,8 +223,8 @@ def api_prowadzenie(request, id_):
     """Prowadzenie gry: {"pauza": bool}, {"harmonogram": [{"dzien", "godzina"}]},
     {"poziom": {"firma", "poziom"}} (poziom bota), {"odblokowanie": {element: tydzień}}
     (harmonogram odblokowań gry z lokalami), {"auto_zamowienia": bool} (przycisk „Zamów brakujące”
-    w Dostawcach), {"refleksja": "wylaczona" | "opcjonalna" | "wymagana"} (U17),
-    {"podpowiedzi": bool} (U19: rady na Dashboardzie w pierwszych rundach),
+    w Dostawcach), {"refleksja": "wylaczona" | "opcjonalna" | "wymagana"},
+    {"podpowiedzi": bool} (rady na Dashboardzie w pierwszych rundach),
     {"podkupywanie": bool} (czy wolno podkupywać pracowników innych drużyn),
     {"lekcje": {"rundy_na_zywo", "termin_dni"} | null} (tryb lekcyjny; null – na żywo)
     albo {"inwestor": {"firma", "kwota"}} (inwestor ratunkowy, kwota 0 odwołuje)."""
@@ -262,7 +262,7 @@ def api_prowadzenie(request, id_):
     if "podkupywanie" in d:   # poprawki 2 (sprawa 6): headhunter, podkupienia i kontroferty
         with serwisy.zmiana(id_) as g:
             g.konfiguracja["podkupywanie"] = bool(d["podkupywanie"])
-    # UF21 – TYMCZASOWE, usunąć przed oficjalną wersją (test form zatrudnienia)
+    # TYMCZASOWE, usunąć przed oficjalną wersją (test form zatrudnienia)
     if "formy_zatrudnienia" in d:
         lista = d["formy_zatrudnienia"]
         if not isinstance(lista, list) or not all(isinstance(x, str) for x in lista):
@@ -395,7 +395,7 @@ def api_widok(request, id_, firma):
 def _z_druzyna(request, v: dict, id_: str, g: GraSilnika, firma: str) -> dict:
     """Do widoku firmy: skład drużyny, kto ostatnio zapisał / wysłał decyzje, pauza i termin
     zamknięcia rundy, wgląd mistrza gry tylko do odczytu."""
-    v = zo.ukryj(_dla(request, v), g.dane)   # U20: charakter osób jawnie, bez surowej cechy i opisu
+    v = zo.ukryj(_dla(request, v), g.dane)   # charakter osób jawnie, bez surowej cechy i opisu
     sklad = druzyny.sklad(id_).get(firma, [])
     v["druzyna"] = {"sklad": sklad, "autorzy": druzyny.autorzy(g, firma)}
     for f, wersja in druzyny.loga(id_).items():
@@ -492,7 +492,7 @@ def api_decyzje(request, id_, firma):
         _sprawdz_wersje(request, g, firma)
         if _bez_klubu(request):
             d = kas.ukryj_decyzje(d)
-        if "zadania_wlasne" in d:   # UF22: własne zadania drużyny (lista zadań w panelu)
+        if "zadania_wlasne" in d:   # własne zadania drużyny (lista zadań w panelu)
             d["zadania_wlasne"] = _zadania_wlasne(d["zadania_wlasne"])
         # limity (silnik/limity.py): zapis z przekroczeniem jest odrzucony
         bledy = naruszenia(g.dane, g.stan().firmy[firma], d, g.runda)
@@ -539,7 +539,7 @@ def api_logo(request, id_, firma):
     return odpowiedz(_z_druzyna(request, widok(g, firma), id_, g, firma))
 
 
-MAKS_REFLEKSJI = 500   # U17: znaków refleksji drużyny (pole w „Wyślij decyzje” ma ten sam limit)
+MAKS_REFLEKSJI = 500   # znaków refleksji drużyny (pole w „Wyślij decyzje” ma ten sam limit)
 
 
 @require_POST

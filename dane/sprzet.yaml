@@ -1,7 +1,7 @@
 # Sprzęt
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Sprzęt stanowisk: typ stanowiska (kuchnia – kucharz, kasa – kasjer), ceny w 3 jakościach, utrzymanie miesięczne.
-  Do F2.7 sprzęt kupuje się na stanowisko. Szafa chłodnicza i zamrażarka (gra z lokalami, F3a.5) nie są
+  Wcześniej sprzęt kupowało się na stanowisko. Szafa chłodnicza i zamrażarka (gra z lokalami) nie są
   potrzebne do żadnego dania – dają miejsce w chłodni i zamrażarce firmy (pojemnosc_l w litrach).
   Każda jakość to wybór z kosztem: ★ tanio na start, ale droższe utrzymanie (serwis, awarie) i słabsze dania;
   ★★ rozsądny środek; ★★★ wyraźnie droższe (ok. 2,2–2,5 razy ★★), zwraca się dopiero przy dużym ruchu.'

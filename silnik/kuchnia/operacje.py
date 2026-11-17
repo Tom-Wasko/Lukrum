@@ -125,7 +125,7 @@ def obsluz(dane: Dane, firma: Firma, popyt: dict[str, int], ziarno, runda: int,
     """Ilu klientów firma obsłuży. Zmienia magazyn (zużycie). Zwraca szczegóły do wyników.
     skala_godzin – część godzin rundy (obsługa dzień po dniu w popyt.py), klucze – do strumienia pomyłek,
     dzien – data (ISO) w grze z lokalami: zużycie z partii dostarczonych do tego dnia (swiezosc.py)."""
-    pelny_etat = dane.z["operacje"]["godziny_pracownika"]   # właściciel na stanowisku – mniej godzin (P5)
+    pelny_etat = dane.z["operacje"]["godziny_pracownika"]   # właściciel na stanowisku – mniej godzin
     stanowiska = firma.stanowiska_typu(KUCHNIA)
     indeks = {s.nr: i for i, s in enumerate(stanowiska)}
     mozliwe = {u: [indeks[s.nr] for s in stanowiska_uslugi(dane, firma, u)] for u in popyt}
@@ -148,7 +148,7 @@ def obsluz(dane: Dane, firma: Firma, popyt: dict[str, int], ziarno, runda: int,
         obsluzeni[u] = min(d, zajecia * g)
         if obsluzeni[u] < d:
             przyczyna[u] = "pracownicy/sprzęt" if mozliwe[u] else "brak stanowiska z pracownikiem i sprzętem"
-    # P6 (poprawki 4, tylko raport): godziny kuchni, których zabrakło – zajęcia klientów utraconych przez brak godzin
+    # godziny kuchni, których zabrakło – zajęcia klientów utraconych przez brak godzin
     # stanowisk (albo sprzętu), rozłożone na stanowiska dania wg ich pojemności
     brak_godzin = [0.0] * len(stanowiska)
     for u in popyt:
@@ -275,7 +275,7 @@ def obsluz(dane: Dane, firma: Firma, popyt: dict[str, int], ziarno, runda: int,
         "godziny_kasy": zajete_rec,
         "liczba_kasjerow": len(rec),
         "godziny_sprzetu": sprzet_godz,
-        # P6: godziny potrzebne na obsłużenie klientów, którzy doszli do stanowiska (zajęte + utracone przez brak
+        # godziny potrzebne na obsłużenie klientów, którzy doszli do stanowiska (zajęte + utracone przez brak
         # godzin tego etapu) i pojemność – Mój kebab ▸ Zespół (wyniki), obciążenie w dni tygodnia
         "potrzebne_stanowisk": {s.nr: godz_stanowisk[i] + brak_godzin[i] for i, s in enumerate(stanowiska)},
         "pojemnosc_stanowisk": {s.nr: pojemnosc[i] for i, s in enumerate(stanowiska)},

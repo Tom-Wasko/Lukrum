@@ -1,4 +1,4 @@
-"""Konkurencja i detektyw (P16): ogólny obraz rynku, zlecenie (koszt, godziny, odrzucenia), raport, wpadka, widok."""
+"""Konkurencja i detektyw : ogólny obraz rynku, zlecenie (koszt, godziny, odrzucenia), raport, wpadka, widok."""
 
 import copy
 

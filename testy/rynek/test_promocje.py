@@ -1,4 +1,4 @@
-"""Promocje w grze z lokalami (F3b.3): dane, przyciąganie ze znużeniem i przywiązaniem, ustawienie z walidacją
+"""Promocje w grze z lokalami: dane, przyciąganie ze znużeniem i przywiązaniem, ustawienie z walidacją
 i kosztem włączenia, kontynuacja, przyciąganie w popycie (dni, strefy), porcje gratis, rozliczenie rabatów i dopłat,
 gra z promocją, boty, widok API i gra bez lokali."""
 
@@ -203,7 +203,7 @@ def test_widok_api_i_gra_bez_lokali():
     assert any(p["opis"].startswith(pm.OPIS_STARTU) for p in v["koszty_decyzji"])
 
 
-# --- B7: pamięć klientów po promocji (decyzja autora 7.11.2026) ---
+# --- pamięć klientów po promocji (decyzja autora 7.11.2026) ---
 
 PAMIEC = {"udzial": 0.4, "zanik": 0.2, "maks": 0.25, "prog": 0.01, "pewnosc": "zalozenie", "zrodlo": "test B7"}
 

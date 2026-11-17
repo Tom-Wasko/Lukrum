@@ -1,4 +1,4 @@
-// Opisy dydaktyczne do zakładek finansów (P7): jak to działa w prawdziwej firmie. Zwinięte – nie zasłaniają decyzji.
+// Opisy dydaktyczne do zakładek finansów : jak to działa w prawdziwej firmie. Zwinięte – nie zasłaniają decyzji.
 import { esc, lekcja, zl } from "./wspolne.js";
 
 // Samodzielna księgowość (gra z lokalami): co po kolei zrobić z dokumentami i deklaracjami. Reguły kolumn –

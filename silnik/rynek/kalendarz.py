@@ -1,8 +1,8 @@
-"""Kalendarz miejski (F3b.9, gra z lokalami; dane: `dane/kalendarz/kalendarz.yaml`).
+"""Kalendarz miejski (gra z lokalami; dane: `dane/kalendarz/kalendarz.yaml`).
 
 Święta, rok akademicki (sesja, przerwy), ferie, okazje handlowe i wydarzenia w Lublinie w kolejnych tygodniach gry.
 Wydarzenie mnoży dzienną pulę klientów strefy (popyt.wagi_dni): klucz strefy wygrywa z „wszystkie”, mnożniki kilku
-wydarzeń tego samego dnia się mnożą. Wydarzenie może też zmieniać popyt na konkretne dania (`dania`, P14) – w strefach,
+wydarzeń tego samego dnia się mnożą. Wydarzenie może też zmieniać popyt na konkretne dania (`dania`) – w strefach,
 których dotyczy (wymienionych albo wszystkich przy kluczu „wszystkie”); mecze Motoru Lublin na Arenie to rodzaj `sport`.
 Daty stałe co roku ('MM-DD', zakres może przechodzić przez Nowy Rok; `rok` – tylko w tym roku, np. terminarz meczów)
 albo ruchome – przesunięcie w dniach od daty z `ruchome` na dany rok (Wielkanoc, Black Friday, ferie).

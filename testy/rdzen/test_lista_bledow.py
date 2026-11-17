@@ -1,6 +1,6 @@
-"""Lista błędów w grze z lokalami (F4.2): sprzęt i kucharz dania, cena wobec kosztu składników, przeterminowanie
+"""Lista błędów w grze z lokalami: sprzęt i kucharz dania, cena wobec kosztu składników, przeterminowanie
 przy prognozie popytu, zamówienia ponad saldo konta,
-zakupy poniżej progu amortyzacji (U1)."""
+zakupy poniżej progu amortyzacji."""
 
 import copy
 
@@ -158,7 +158,7 @@ def test_zakup_ponizej_progu_amortyzacji_ostrzega_o_wyniku(gra_botow):
 
 
 def test_dania_jednego_lokalu_scalone_w_jedna_pozycje(gra_botow):
-    """U5: lokal bez sprzętu i kucharzy – jedna pozycja „bez sprzętu” i jedna „bez kucharza”, nie linijka na danie."""
+    """Lokal bez sprzętu i kucharzy – jedna pozycja „bez sprzętu” i jedna „bez kucharza”, nie linijka na danie."""
     dane, f, r = _firma(gra_botow)
     dania = [u for u in f.oferta if u in f.ceny]
     assert len(dania) >= dane.z["lista_bledow"]["scal_dania_od"]
@@ -182,7 +182,7 @@ def test_dania_jednego_lokalu_scalone_w_jedna_pozycje(gra_botow):
 
 
 def test_przeterminowanie_kilku_skladnikow_jedna_pozycja(gra_botow):
-    """U5: kilka składników do wyrzucenia – jedna linijka z kwotą łącznie, także gdy każdy osobno jest pod progiem."""
+    """Kilka składników do wyrzucenia – jedna linijka z kwotą łącznie, także gdy każdy osobno jest pod progiem."""
     dane, f, r = _firma(gra_botow)
     prog = dane.z["lista_bledow"]["przeterminowanie_min_zl"]
     partie = [{"zasob": z, "ilosc": 1.0, "wartosc": prog * 0.6, "termin": "2026-01-05", "lokal": None} for z in ("Bułka", "Mięso")]
@@ -213,7 +213,7 @@ def test_odmiana_dan():
 
 
 def test_brak_skladnika_prowadzi_do_dostaw(gra_botow, monkeypatch):
-    """UF4: brak składnika na liście błędów – w zakładce dostaw (tam się zamawia), nie w Menu."""
+    """Brak składnika na liście błędów – w zakładce dostaw (tam się zamawia), nie w Menu."""
     dane, f, r = _firma(gra_botow)
     monkeypatch.setattr(sw, "dostepne", lambda *a, **k: 0)
     lb = lista_bledow(dane, f, {}, r, list(f.oferta), lokal={}, info={})

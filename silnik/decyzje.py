@@ -16,7 +16,7 @@ Format (słownik; brak klucza = bez zmian względem poprzedniej rundy):
     zatrudnij:         [{"kandydat", "typ", "nr", "pensja", "umowa"}]   umowa: forma (silnik/ludzie/formy.py)
                        opcjonalnie "kanal": "pracuj" | "agencja" | "headhunter" (silnik/ludzie/rynek_pracy.py),
                        "imie_nazwisko" (tylko do komunikatu kontroli „kto pierwszy, ten lepszy” przy zapisie)
-    przenosiny:        [{"pracownik", "typ", "nr", "dodatek"}]          UF20: na wolne stanowisko (inny lokal – za zgodą)
+    przenosiny:        [{"pracownik", "typ", "nr", "dodatek"}]          na wolne stanowisko (inny lokal – za zgodą)
     podkup:            [{"pracownik", "firma", "pensja", "umowa"}]   – oferta przez headhuntera (gdy MG pozwala
                                                               na podkupywanie – opcja gry `podkupywanie`)
     kontroferty:       {id pracownika: pensja}              – odpowiedź na oferty innych firm (ta sama runda)
@@ -56,7 +56,7 @@ Format (słownik; brak klucza = bez zmian względem poprzedniej rundy):
     kasyno:            [{"gra", "zaklad", "stawka"}]        – po zaproszeniu (silnik/pieniadze/kasyno.py)
     detektyw:          nazwa firmy rywala                   – raport o rywalu (silnik/rynek/konkurencja.py)
     higiena:           poziom z dane/zdarzenia/urzad.yaml   – trwa do zmiany (silnik/ksiegowosc/urzad.py)
-    amortyzacja_niskocenna: "koszty" | "amortyzacja"        – B6: zakupy poniżej progu amortyzacji od razu w koszty
+    amortyzacja_niskocenna: "koszty" | "amortyzacja"        – zakupy poniżej progu amortyzacji od razu w koszty
                                                               albo do ewidencji (trwa do zmiany; srodki_trwale.py)
     handel_wystaw:     [{"typ": "towar", "zasob", "jakosc", "ilosc", "cena_min"} | {"typ": "sprzet",
                        "stanowisko", "nr", "nazwa", "cena_min"}]  – gra z lokalami: ogłoszenia na giełdzie handlu
@@ -223,10 +223,10 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
              ksiega: Ksiega, rachunek: Rachunek) -> dict:
     """Wykonuje decyzje zakupowe i kadrowe (przed sprzedażą). Zwraca informacje do wyników (np. zakupy zasobów).
     Nowe stanowiska tylko na wolnych miejscach działających lokali (lokal wybrany wcześniej, silnik/nieruchomosci/lokale.py).
-    Z2 (silnik/nieruchomosci/per_lokal.py): "oferta", "sprzedaz", "stanowiska", "{udogodnienia,wyposazenie}_{kup,sprzedaj}"
+    Per lokal (silnik/nieruchomosci/per_lokal.py): "oferta", "sprzedaz", "stanowiska", "{udogodnienia,wyposazenie}_{kup,sprzedaj}"
     dotyczą wszystkich lokali (oferta i ceny) albo lokalu głównego / dowolnego wolnego miejsca; "w_lokalu": {lokal: {te
     same klucze}} – osobno dla lokalu; "zamowienia"[].lokal – dokąd dostawa (domyślnie lokal główny); "przewozy":
-    [{"z", "do", "zasob", "jakosc", "ilosc", "dzien"}] – towar między lokalami; Z4: "auto_dostawy": {"pozycje":
+    [{"z", "do", "zasob", "jakosc", "ilosc", "dzien"}] – towar między lokalami; "auto_dostawy": {"pozycje":
     [{"zasob", "jakosc", "ilosc"}]} (decyzja główna albo w_lokalu) – lokal na auto-dostawach."""
     info = {"zakupy_zasobow": {}, "zatrudnieni": [], "zwolnieni": [], "wypowiedzenia": [], "inwestycje": 0.0, "inwestycje_w_koszty": 0.0,
             "sprzedany_majatek": 0.0,
@@ -238,7 +238,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         firma.misja = d["misja"]
     if re.fullmatch(r"#[0-9a-fA-F]{6}", str(d.get("kolor") or "")):
         firma.kolor = d["kolor"].lower()
-    # Z2: menu i ceny osobno w każdym lokalu – decyzja główna dla wszystkich lokali, w_lokalu[lok] ją zastępuje
+    # menu i ceny osobno w każdym lokalu – decyzja główna dla wszystkich lokali, w_lokalu[lok] ją zastępuje
     w_lokalu = {k: v or {} for k, v in (d.get("w_lokalu") or {}).items() if pl.lokal(firma, k)}
     if firma.lokale:
         pl.utrwal(firma)
@@ -283,7 +283,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         firma.biuro = d["biuro"]
     if d.get("pakiet"):   # pakiet S / M / L w biurze z mapy (w biurze „wszystko trwa” zmiana wchodzi po kilku rundach)
         bo.ustaw_pakiet(dane, firma, d["pakiet"], runda)
-    st_trwale.ustaw_niskocenne(dane, firma, d)   # B6 (przeliczenie rundy ustawia to wcześniej – przed giełdą i lokalami)
+    st_trwale.ustaw_niskocenne(dane, firma, d)   # (przeliczenie rundy ustawia to wcześniej – przed giełdą i lokalami)
 
     # stanowiska (działają od razu)
     pakiety = dane.katalog_ofert["stanowiska"]["pakiety"]
@@ -352,7 +352,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         info["inwestycje"] += cena
 
     # kadry
-    if kadry_ok:   # UF21: po stażu – umowa o pracę za pensję preferowaną
+    if kadry_ok:   # po stażu – umowa o pracę za pensję preferowaną
         for x in fz.koniec_stazu(dane, firma, runda):
             info.setdefault("koniec_stazu", []).append(x)
     for pid in d.get("zwolnij", []) if kadry_ok else []:
@@ -360,7 +360,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         if not p or p.odchodzi:
             continue
         okres = rp.okres_wypowiedzenia(dane, p, runda)
-        if okres:   # umowa o pracę: pracuje (i kosztuje) do końca wypowiedzenia, potem wraca do puli (P6)
+        if okres:   # umowa o pracę: pracuje (i kosztuje) do końca wypowiedzenia, potem wraca do puli
             p.odchodzi = Odejscie(do="", runda=runda + okres, pensja=p.pensja, umowa=p.umowa, od_rundy=runda)
             info["wypowiedzenia"].append({"pracownik": pid, "imie_nazwisko": p.imie_nazwisko, "runda_odejscia": runda + okres})
             continue
@@ -387,7 +387,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         elif not p.pensja:       # koniec stażu zmianą formy – pensja preferowana
             p.pensja = max(p.pensja_preferowana, fz.placa_minimalna(dane, p.umowa, p.student))
         p.premia = float(zm.get("premia", 0) or 0)
-    if kadry_ok and d.get("przenosiny"):   # UF20: obsada i przenosiny – przed zatrudnieniami (silnik/ludzie/przenosiny.py)
+    if kadry_ok and d.get("przenosiny"):   # obsada i przenosiny – przed zatrudnieniami (silnik/ludzie/przenosiny.py)
         info["przenosiny"] = przen.zastosuj(dane, firma, d["przenosiny"], ksiega, rachunek)
     for z in d.get("zatrudnij", []) if kadry_ok else []:
         dostepni = kandydaci_firmy(rp.widoczni(dane, pula, runda), firma)
@@ -405,7 +405,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         if dane.typ_zawodu(kandydat["zawod"]) != st.typ:
             continue
         umowa = z.get("umowa", "prace")
-        if powod := fz.blad(dane, kandydat, umowa, firma):   # UF21: forma niedostępna dla tej osoby
+        if powod := fz.blad(dane, kandydat, umowa, firma):   # forma niedostępna dla tej osoby
             info.setdefault("bledy_form", []).append(f"{kandydat['imie_nazwisko']}: {powod}.")
             info.setdefault("nieudane_zatrudnienia", []).append(z)
             continue
@@ -414,7 +414,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
             prog = fz.prog_oferty(dane, kandydat, umowa)
             if z.get("zastepca"):   # bot: zastępca chce więcej niż wybrany kandydat – bot dopłaca do progu
                 pensja = float(math.ceil(prog))
-            else:   # kalibracja B9: za niska oferta – kandydat odmawia (zostaje w puli)
+            else:   # za niska oferta – kandydat odmawia (zostaje w puli)
                 info.setdefault("odrzucone_oferty", []).append({
                     "kandydat": kandydat["id"], "imie_nazwisko": kandydat["imie_nazwisko"], "pensja": pensja,
                     "prog": round(prog, 2), "tekst": f"{kandydat['imie_nazwisko']} odrzuca ofertę {pensja:.0f} zł – to mniej "
@@ -447,7 +447,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
 
     # zasoby od dostawców
     zakupy, zamowienia, stawki = {}, [], {}
-    # Z4: lokal na auto-dostawach nie przyjmuje własnych zamówień (silnik/kuchnia/auto_dostawca.py)
+    # lokal na auto-dostawach nie przyjmuje własnych zamówień (silnik/kuchnia/auto_dostawca.py)
     na_auto = ad.lokale_na_auto(dane, firma, d, w_lokalu, runda) if "dostawcy" in odbl else set()
     odrzucone_auto = set()
     for z in d.get("zamowienia", []) if "dostawcy" in odbl else []:
@@ -465,7 +465,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
     for lok_id in sorted(odrzucone_auto):
         info["dostawy"]["uwagi"].append(f"{pl.nazwa(dane, lok_id)} jest na auto-dostawach – własne zamówienia do tego"
                                         " lokalu odrzucone (wyłącz auto-dostawy albo usuń zamówienia).")
-    # przewozy towaru między własnymi lokalami (Z2): czas właściciela i koszt kursu teraz, towar jedzie w tygodniu
+    # przewozy towaru między własnymi lokalami: czas właściciela i koszt kursu teraz, towar jedzie w tygodniu
     if len(firma.lokale) > 1 and d.get("przewozy"):
         info["przewozy"] = pl.przewozy(dane, firma, d["przewozy"], runda, czas, info)
         for x in info["przewozy"]:
@@ -483,7 +483,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         # partia z dniem dostawy (świeżość); magazyn do końca decyzji = stan + zamówione
         dni = (dane.data_rundy(runda + 1) - dane.data_rundy(runda)).days
         dzien = min(max(0, int(z.get("dzien") or 0)), dni - 1)
-        lok = pl.lokal(firma, z.get("lokal")) or pl.glowny(firma, runda)   # dostawa do lokalu (Z2)
+        lok = pl.lokal(firma, z.get("lokal")) or pl.glowny(firma, runda)   # dostawa do lokalu
         if lok is not None:
             z["lokal"] = lok.id
         firma.partie.append(sw.nowa_partia(dane, z["zasob"], int(z["jakosc"]), ilosc, cena,
@@ -497,7 +497,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
         ksieguj(firma, ksiega, rachunek, f"Zakup zasobu od dostawcy: {dostawca}", kwota, "towary", stawki=stawki[dostawca])
     for dostawca, kwota in info.get("dostawy", {}).get("oplaty", {}).items():
         ksieguj(firma, ksiega, rachunek, f"Koszt dostawy: {dostawca}", kwota)
-    if "dostawcy" in odbl:   # Z4: auto-dostawca – zakupy na tydzień, prowizja, abonament
+    if "dostawcy" in odbl:   # auto-dostawca – zakupy na tydzień, prowizja, abonament
         info["auto_dostawy"] = ad.zamow(dane, firma, d, w_lokalu, runda, ceny_dostawcow, ksiega, rachunek)
 
     # udogodnienia i wyposażenie
@@ -506,7 +506,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
             continue
         pozycje = dane.pozycje(rodzaj)
         glowny = pl.glowny(firma, runda)
-        # Z2: każdy lokal ma swoje; decyzja główna – lokal główny (sprzedaż: albo inny lokal z tą pozycją)
+        # każdy lokal ma swoje; decyzja główna – lokal główny (sprzedaż: albo inny lokal z tą pozycją)
         zlecenia = [(glowny, d.get(f"{rodzaj}_sprzedaj", []), d.get(f"{rodzaj}_kup", []), True)] + [
             (pl.lokal(firma, k), v.get(f"{rodzaj}_sprzedaj", []), v.get(f"{rodzaj}_kup", []), False)
             for k, v in w_lokalu.items()]
@@ -548,7 +548,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
     if pm.zasady(dane):
         info["promocje"] = pm.ustaw(dane, firma, d, runda, ksiega, rachunek)
 
-    # szkolenia (koszt łączny w firmie szkoleniowej); kalibracja B9: cena miesięczna raz, działa `szk_rund` rund
+    # szkolenia (koszt łączny w firmie szkoleniowej); cena miesięczna raz, działa `szk_rund` rund
     # (silnik/ludzie/szkolenia.py); bez tego – cena na rundę, efekt w tej rundzie
     szk_rund = szk.rund(dane)
     if "hr_szkolenia" in odbl:
@@ -561,7 +561,7 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
             p = szk.pozycja(oferta_szk, s.get("szkolenie"))
             if p is not None and s.get("firma") in firmy and p["nazwa"] not in wybrane:
                 wybrane.add(p["nazwa"])
-                cena = p["ceny"][firmy.index(s["firma"])]   # B9: ceny w danych – miesięczne
+                cena = p["ceny"][firmy.index(s["firma"])]   # ceny w danych – miesięczne
                 wpis = {"szkolenie": p["nazwa"], "firma": s["firma"], "procent": p["procent"]}
                 if szk_rund:
                     if (t := szk.trwa(firma, p["nazwa"], runda, p.get("dawne", ()))) is not None:
@@ -608,7 +608,7 @@ def gotowe_uslugi(dane: Dane, firma: Firma) -> dict[str, list[str]]:
 
 
 def _widoki_bledow(firma: Firma, runda: int) -> list[tuple[str | None, Firma]]:
-    """Lista błędów menu i gotowości dań: osobno dla każdego działającego lokalu (Z2), przy jednym lokalu – cała firma."""
+    """Lista błędów menu i gotowości dań: osobno dla każdego działającego lokalu, przy jednym lokalu – cała firma."""
     if len(firma.lokale) < 2:
         return [(None, firma)]
     return list(pl.widoki(firma, runda).items()) or [(None, firma)]
@@ -623,7 +623,7 @@ def _dan(n: int) -> str:
 
 
 def _scal_dania(dane: Dane, bledy: list[dict], firma: Firma | None = None) -> list[dict]:
-    """U5: kilka dań bez sprzętu (albo bez kucharza) w jednym lokalu – jedna pozycja zamiast linijki na każde danie."""
+    """Kilka dań bez sprzętu (albo bez kucharza) w jednym lokalu – jedna pozycja zamiast linijki na każde danie."""
     wynik = []
     for zakl in ("sprzet", "zatrudnienie"):
         grupa = [b for b in bledy if b["zakladka"] == zakl]
@@ -659,7 +659,7 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
                 dodaj(b["poziom"], b["zakladka"], _w_lokalu(dane, lok_id, b["tekst"]))
         for poziom, tekst in sw.ostrzezenia(dane, firma, runda):
             dodaj(poziom, "swiezosc", tekst)
-        przet = {}   # U5: jedna pozycja na lokal z kwotą łącznie
+        przet = {}   # jedna pozycja na lokal z kwotą łącznie
         for s in sw.przeterminowanie(dane, firma, runda):
             przet.setdefault(s.get("lokal"), []).append(s)
         for lok_id, grupa in przet.items():
@@ -691,7 +691,7 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
         for w in (info or {}).get("wypowiedzenia", []):
             dodaj("niebieski", "zatrudnienie", f"{w['imie_nazwisko']} dostaje wypowiedzenie – pracuje i dostaje pensję "
                   f"do rundy {w['runda_odejscia'] - 1}, potem wraca na rynek pracy.")
-        for poziom, tekst in zo.ostrzezenia(dane, firma, d.get("zmiany") or {}, runda):   # U20
+        for poziom, tekst in zo.ostrzezenia(dane, firma, d.get("zmiany") or {}, runda):
             dodaj(poziom, "zatrudnienie", tekst)
         for tekst in (info or {}).get("uwagi_rynku_pracy", []):
             dodaj("czerwony", "zatrudnienie", tekst)
@@ -707,7 +707,7 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
             dodaj(b["poziom"], b["zakladka"], b["tekst"])
         for b in bo.bledy(dane, firma, d):
             dodaj(b["poziom"], b["zakladka"], b["tekst"])
-        if (koszt := (info or {}).get("inwestycje_w_koszty", 0.0)) > 0:   # U1: tylko ostrzeżenie
+        if (koszt := (info or {}).get("inwestycje_w_koszty", 0.0)) > 0:   # tylko ostrzeżenie
             prog, zl = (f"{x:,.0f}".replace(",", " ") for x in (dane.z["finanse"]["amortyzacja_prog"], koszt))
             dodaj("pomaranczowy", "sprzet", f"Sprzęt, wyposażenie i stanowiska tańsze niż {prog} zł od razu idą "
                   f"w koszty: ten zakup obniży dochód tej rundy o ok. {zl} zł (bez VAT), a tym samym punkty działu "
@@ -719,7 +719,7 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
         if lim["pracownicy"]["nowi"] == lim["pracownicy"]["limit"]:
             dodaj("niebieski", "zatrudnienie", f"Wykorzystany limit nowych pracowników w tej rundzie "
                   f"({lim['pracownicy']['limit']}) – kolejnych przyjmiesz w następnej rundzie.")
-        # U3: „odpoczynek” po lokalu nie trafia na listę – jest w Stare Miasto ▸ Do wynajęcia, a próba wzięcia kolejnego
+        # „odpoczynek” po lokalu nie trafia na listę – jest w Stare Miasto ▸ Do wynajęcia, a próba wzięcia kolejnego
         # lokalu za wcześnie to błąd zapisu (limity.naruszenia)
         for tekst in (info or {}).get("odrzucone_ceny", []):
             dodaj("czerwony", "oferta", tekst)
@@ -745,7 +745,7 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
               f"od rundy {mn.od_rundy(dane, u)} – na razie nie zostało dodane.")
     za_duzo = [u for u in (info or {}).get("odrzucone_uslugi", []) if u not in za_wczesnie]
     if (przyrost > limit or (d.get("oferta") and set(d["oferta"]) - set(firma.oferta) - set(za_wczesnie))
-            or za_duzo) and not (runda == 1 and spoza):   # U5: w rundzie 1 – jeden komunikat
+            or za_duzo) and not (runda == 1 and spoza):   # w rundzie 1 – jeden komunikat
         dodaj("czerwony", "oferta", f"W tej rundzie liczba dań może wzrosnąć najwyżej o {limit} – nadmiarowe nie zostały dodane.")
     if not firma.oferta:   # bez dań w rundzie 1 runda 2 mija bez sprzedaży (nowe dania dopiero od nowe_uslugi_od_rundy)
         od = rundy["nowe_uslugi_od_rundy"]
@@ -757,13 +757,13 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
         dodaj("czerwony", "finanse_bank", "Nie wybrano banku.")
     if not firma.biuro and not d.get("biuro"):
         dodaj("czerwony", "finanse_biuro", "Nie wybrano biura rachunkowego.")
-    if info is not None:   # kalibracja B9: odrzucone oferty pracy i szkolenia, które jeszcze trwają
+    if info is not None:   # odrzucone oferty pracy i szkolenia, które jeszcze trwają
         for o in info.get("odrzucone_oferty", []):
             dodaj("czerwony", "zatrudnienie", o["tekst"])
         for t in info.get("szkolenia_trwaja", []):
             dodaj("pomaranczowy", "szkolenia", f"Szkolenie „{t['szkolenie']}” ({t['firma']}) jeszcze trwa – do rundy "
                                                f"{t['do_rundy']}; kupisz je ponownie od rundy {t['do_rundy'] + 1}.")
-    if info is not None and "zatrudnieni" in info:   # UF21: zastosuj zna osobę i formę (student, pół etatu, B2B…)
+    if info is not None and "zatrudnieni" in info:   # zastosuj zna osobę i formę (student, pół etatu, B2B…)
         for t in info.get("placa_ponizej", []) + info.get("bledy_form", []):
             dodaj("czerwony", "hr_zatrudnienie", t)
     else:
@@ -776,7 +776,7 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
             for u, braki in gotowe_uslugi(dane, v).items():
                 for b in braki:
                     if not ((lok_id, u) in konkretne and b.startswith("brak stanowiska")):
-                        sklad = b.startswith(BRAK_SKLADNIKA)   # UF4: składniki zamawia się w Dostawach, nie w Menu
+                        sklad = b.startswith(BRAK_SKLADNIKA)   # składniki zamawia się w Dostawach, nie w Menu
                         dodaj("czerwony", "dostawcy" if sklad else "oferta", _w_lokalu(
                             dane, lok_id, f"{mn.nazwa_dania(dane, u, firma=v)}: {b}" + (" – zamów w Hurtownie → Dostawy." if sklad else ".")))
         for u in firma.oferta:

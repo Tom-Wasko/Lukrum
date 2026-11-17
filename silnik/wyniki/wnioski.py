@@ -51,8 +51,8 @@ ROZRUCH = ("Pierwsze tygodnie to rozruch – każda firma potrzebuje kilku tygod
 def wnioski(dane: Dane, w: dict | None, wp: dict | None = None, runda: int | None = None,
             firma: Firma | None = None) -> dict | None:
     """{"dobre": [tekst], "do_poprawy": [{tytul, co, rada, zakladka}], "rozruch": tekst | None} z wyników firmy;
-    None – brak wyników. `wp` – wyniki poprzedniej rundy (UF23: wzrost sprzedaży i dochodu z liczbami); `runda` –
-    runda wyników (UF5: do `wnioski.rozruch_do_rundy` zdanie o rozruchu)."""
+    None – brak wyników. `wp` – wyniki poprzedniej rundy (wzrost sprzedaży i dochodu z liczbami); `runda` –
+    runda wyników (do `wnioski.rozruch_do_rundy` zdanie o rozruchu)."""
     if not w:
         return None
     p = dane.z["wnioski"]
@@ -71,7 +71,7 @@ def wnioski(dane: Dane, w: dict | None, wp: dict | None = None, runda: int | Non
     if netto > 0:
         dobre.append(f"Runda na plusie: {zl(netto)} dochodu netto.")
     przed = _liczby(wp)
-    if przed.get("klienci") and klienci > przed["klienci"] * (1 + dane.z["wnioski"]["wzrost_klientow"]):   # UF23: wzrost względem poprzedniej rundy
+    if przed.get("klienci") and klienci > przed["klienci"] * (1 + dane.z["wnioski"]["wzrost_klientow"]):   # wzrost względem poprzedniej rundy
         dobre.append(f"Klientów więcej niż tydzień wcześniej: {round(przed['klienci'])} → {klienci} "
                      f"(+{round(100 * (klienci / przed['klienci'] - 1))}%).")
     if przed.get("dochod_netto") is not None and netto > 0 and netto > przed["dochod_netto"] + 1:
@@ -200,7 +200,7 @@ def wnioski(dane: Dane, w: dict | None, wp: dict | None = None, runda: int | Non
             "rozruch": ROZRUCH if runda is not None and rozruch is not None and runda <= rozruch else None}
 
 
-# U16: „Dlaczego mój wynik się zmienił?” – 1–3 zdania z porównania wyniku punktowego dwóch kolejnych tygodni
+# „Dlaczego mój wynik się zmienił?” – 1–3 zdania z porównania wyniku punktowego dwóch kolejnych tygodni
 def _liczba(x: float) -> str:
     return f"{x:.0f}".replace("-", "−")
 
@@ -250,7 +250,7 @@ def dlaczego(dane: Dane, w: dict | None, wp: dict | None) -> list[str] | None:
     return zdania
 
 
-# UF23: „Tydzień w liczbach” – nagłówek karty wyników i wniosków: najważniejsze liczby rundy z poprzednią rundą
+# „Tydzień w liczbach” – nagłówek karty wyników i wniosków: najważniejsze liczby rundy z poprzednią rundą
 # (strzałki w panelu) i 1–3 zdania-historie tygodnia (najlepszy dzień, najchętniej brane danie, co zjadło zysk)
 DNI = {"pn": "poniedziałek", "wt": "wtorek", "śr": "środa", "czw": "czwartek", "pt": "piątek", "sob": "sobota",
        "nd": "niedziela"}

@@ -1,4 +1,4 @@
-"""Świeżość składników w grze z lokalami (krok F3a.5; notatki/Menu i składniki.md).
+"""Świeżość składników w grze z lokalami (notatki/Menu i składniki.md).
 
 Dane: zasoby.yaml – przechowywanie (chlodnia, zamrazarka, suche), termin_dni, miejsce_l, zamiennik_dla, kara_jakosci;
 sprzet.yaml – przechowywanie i pojemnosc_l sprzętu (szafa chłodnicza, zamrażarka).
@@ -8,9 +8,9 @@ Zasady:
   + termin_dni − 1 (bułka z poniedziałku – 2 dni – ląduje w koszu we wtorek wieczorem),
 - dzień w lokalu: rano dostawy (do chłodni i zamrażarki wchodzi tyle, ile się zmieści – reszta jedzie do wynajętej
   chłodni: zalozenia.yaml magazyn.wynajem_zl_za_litr za litr nadmiaru, termin krótszy o wynajem_skrocenie_terminu_dni;
-  bez tych założeń – jak w F3a.5 – reszta to strata), w ciągu dnia klienci zużywają najpierw partie z najkrótszym
+  bez tych założeń – jak w pierwszej wersji menu – reszta to strata), w ciągu dnia klienci zużywają najpierw partie z najkrótszym
   terminem (FIFO), wieczorem przeterminowane partie idą do kosza,
-- magazyn jest osobny w każdym lokalu (Z2, silnik/nieruchomosci/per_lokal.py: partia ma pole `lokal`): pojemność
+- magazyn jest osobny w każdym lokalu (silnik/nieruchomosci/per_lokal.py: partia ma pole `lokal`): pojemność
   lokalu = suma pojemności sprzętu jego stanowisk; suche – bez limitu; funkcje dnia (przyjmij, zuzyj, wyrzuc) działają
   na widoku lokalu, a towar między lokalami jeździ przewozami (per_lokal.przewozy),
 - zamiennik (np. mrożona pita) jest używany, gdy zabraknie składnika podstawowego; danie z zamiennikiem ma jakość
@@ -270,7 +270,7 @@ def ostrzezenia(dane: Dane, firma: Firma, runda: int) -> list[tuple[str, str]]:
 def podsumowanie(dane: Dane, firma: Firma, runda: int) -> dict:
     """Zakładka „Magazyn i świeżość” (decyzje): partie po decyzjach (z zamówionymi), pojemność i zajętość chłodni
     / zamrażarki dzień po dniu – bez sprzedaży, czyli najwięcej, ile może być w środku."""
-    if len(firma.lokale) > 1:   # Z2: magazyn każdego lokalu osobno + suma partii firmy
+    if len(firma.lokale) > 1:   # magazyn każdego lokalu osobno + suma partii firmy
         from ..nieruchomosci import per_lokal as pl
         wynik = podsumowanie(dane, firma.model_copy(update={"lokale": firma.lokale[:1], "stanowiska": []}), runda)
         wynik["partie"] = [{**x, "lokal": pl.lokal_partii(firma, p)} for x, p in
@@ -302,11 +302,11 @@ def podsumowanie(dane: Dane, firma: Firma, runda: int) -> dict:
 
 
 def przeterminowanie(dane: Dane, firma: Firma, runda: int) -> list[dict]:
-    """Lista błędów (F4.2): szacunek partii, które przy prognozie popytu (`Firma.oferta`, dania w sprzedaży)
+    """Lista błędów: szacunek partii, które przy prognozie popytu (`Firma.oferta`, dania w sprzedaży)
     przeterminują się w tej rundzie, zanim trafią do dań. Zużycie FIFO jak w `zuzyj` (najpierw najkrótszy termin, potem
     zamienniki), dzienne zużycie wg wag dni strefy pierwszego działającego lokalu (z kalendarzem), bez limitów obsługi.
     [{"zasob", "ilosc" (opakowania), "wartosc" (zł), "termin" (pierwszy)}]; składniki dań bez prognozy – pominięte.
-    Kilka lokali (Z2) – każdy osobno: jego menu, ceny, partie i strefa (pole "lokal")."""
+    Kilka lokali – każdy osobno: jego menu, ceny, partie i strefa (pole "lokal")."""
     from ..rynek import popyt as pp  # popyt korzysta ze świeżości – import w funkcji
     if len(firma.lokale) > 1:
         from ..nieruchomosci import per_lokal as pl

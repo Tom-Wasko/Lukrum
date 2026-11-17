@@ -16,7 +16,7 @@ const popytOkresu = () => `popyt ${OKRES.przymiotnik.toLowerCase()}`;
 const MIESIACE = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień"];
 const sprzedazOtwarta = (v) => v.odblokowane.includes("sprzedaz");
 
-// UF7/UF27: sezonowość w kafelku dania – miesiąc sprzedaży (ciemny) i 3 kolejne, te same słupki co w Strefach miasta
+// sezonowość w kafelku dania – miesiąc sprzedaży (ciemny) i 3 kolejne, te same słupki co w Strefach miasta
 export function sezonSlupki(u, m) {
   return slupki([0, 1, 2, 3].map((i) => (m + i) % 12).map((x, i) => ({ x: u.sezonowosc[x], ten: !i, etykieta: MIESIACE[x],
     dopisek: i ? "" : "miesiąc sprzedaży" })), "Sezonowość dania: miesiąc sprzedaży i 3 kolejne");
@@ -72,7 +72,7 @@ function cenaDania(v, kat, klucz, edycja) {
     <span class="podpowiedz zostaw">Dla klienta <b>${dla}</b> · konkurencja ${srednia || "–"}
       ${kolko(`Klient płaci cenę minus rabat: <b>${dla}</b>, czyli ${proc((c.cena - c.rabat) / u.cena_preferowana, 0)} ceny preferowanej (${zl2(u.cena_preferowana)}).${wd ? `<br>Dozwolona cena: ${zl2(wd.min)}–${zl2(wd.max)}.` : ""}<br>Konkurencja: ${srednia ? `średnia cena rywali ${srednia}` : "brak danych – nikt inny jeszcze tego nie sprzedaje"}.`)}</span>
     ${braki.length ? `<span class="podpowiedz zostaw" style="color:var(--czerwony)">${braki.map(esc).join("; ")}</span>` : ""}
-    ${braki.some((b) => b.startsWith("brak składnika")) ? `<a class="btn jasny maly" data-zakladka-k="dostawcy">Zamów składniki – Dostawy</a>` : ""}`;   // UF4
+    ${braki.some((b) => b.startsWith("brak składnika")) ? `<a class="btn jasny maly" data-zakladka-k="dostawcy">Zamów składniki – Dostawy</a>` : ""}`;
 }
 
 // podpowiedź liczby: ilu chętnych miało danie w poprzedniej rundzie (tylko przy jednym lokalu – wyniki są dla całej firmy)
@@ -92,7 +92,7 @@ export const oferta = {
     : `Wybierz dania do menu i określ ich ${popytOkresu()}. W każdej rundzie będzie można uruchamiać maksymalnie ${kat.oferty.rundy.nowe_uslugi_na_runde} nowe dania.`)
     + " Danie wybrane do menu jest w sprzedaży – cenę i rabat ustalasz w jego kafelku. Klient płaci cenę pomniejszoną o rabat.",
   decyzje({ v, kat, edycja }) {
-    // Z3: przy kilku lokalach – menu wybranego lokalu; limit nowych dań liczony dla całej firmy (suma menu lokali)
+    // przy kilku lokalach – menu wybranego lokalu; limit nowych dań liczony dla całej firmy (suma menu lokali)
     const wybrane = menuLokalu(v, lokalWybrany(v)), przed = v.stan_przed.oferta, r = v.runda;
     const m = miesiacSprzedazy(r);
     const limit = limitNowych(kat, r);
@@ -112,7 +112,7 @@ export const oferta = {
         const dozwolona = (r > 1 || kat.oferty.rundy.uslugi_startowe.includes(klucz)) && (klucz in przed || klucz in v.stan.oferta || nowe < limit || jest)
           && (r >= odR || klucz in przed);
         const baza = prognozaDania(v, kat, klucz, m);
-        // U14: czemu „Wybierz” jest wyszarzone – nowe dania dopiero od rundy nowe_uslugi_od_rundy albo limit wyczerpany
+        // czemu „Wybierz” jest wyszarzone – nowe dania dopiero od rundy nowe_uslugi_od_rundy albo limit wyczerpany
         const od = kat.oferty.rundy.nowe_uslugi_od_rundy;
         const czemu = !edycja || dozwolona || jest ? ""
           : r < odR ? `od ${OKRES.dopelniacz} ${odR}`   // sprawa 4: danie specjalne strefy przed odblokowaniem

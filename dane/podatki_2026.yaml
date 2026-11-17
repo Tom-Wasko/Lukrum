@@ -1,4 +1,4 @@
-# Podatki i ZUS jednoosobowej działalności (gra z lokalami, F3a.11: silnik/ksiegowosc/finanse.py – rejestr VAT,
+# Podatki i ZUS jednoosobowej działalności (gra z lokalami, silnik/ksiegowosc/finanse.py – rejestr VAT,
 # silnik/ksiegowosc/rozliczenie.py – rozliczenie tygodnia). Parametry CIT zostają w zalozenia.yaml.
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'JDG na KPiR, czynny podatnik VAT, PIT liniowy. Wszystkie ceny w danych gry są brutto: VAT jest wydzielany
@@ -6,8 +6,8 @@ opis: 'JDG na KPiR, czynny podatnik VAT, PIT liniowy. Wszystkie ceny w danych gr
   (uproszczenie – naprawdę co miesiąc): VAT należny − naliczony − nadwyżka z poprzedniej rundy (nadwyżka przechodzi
   dalej), składki ZUS właściciela, zaliczka PIT liczona narastająco od początku gry. Kwoty deklaracji
   zaokrąglane do pełnych złotych.'
-zrodlo: 'Notatki „Ustalenia gry” (JDG, PIT liniowy 19%, zdrowotna 4,9% z minimum, ulga na start 26 tygodni,
-  VAT dań 8%, napojów 23%, żywność 5%) i „Prawidła świata”; kwoty ZUS na 2026 (płaca minimalna 4806 zł,
+zrodlo: 'Ustalenia autora (JDG, PIT liniowy 19%, zdrowotna 4,9% z minimum, ulga na start 26 tygodni,
+  VAT dań 8%, napojów 23%, żywność 5%) i ustalenia autora o prawidłach świata; kwoty ZUS na 2026 (płaca minimalna 4806 zł,
   preferencyjny ZUS od 30% płacy minimalnej, minimalna zdrowotna 9% od 75% płacy minimalnej, limit odliczenia
   zdrowotnej) – z pamięci, do weryfikacji przed kalibracją (Plan implementacji: „Przepisy i stawki z pamięci”)'
 pit_liniowy: 0.19
@@ -33,7 +33,7 @@ vat:
   koszty:                      # pierwszy pasujący fragment opisu pozycji KPiR; brak dopasowania – bez VAT (zw)
   - zawiera: Czynsz najmu
     stawka: 0.23
-  - zawiera: Faktura B2B         # UF21: kontrakt B2B – osoba wystawia fakturę z VAT
+  - zawiera: Faktura B2B         # kontrakt B2B – osoba wystawia fakturę z VAT
     stawka: 0.23
   - zawiera: Adaptacja lokalu
     stawka: 0.23
@@ -91,8 +91,8 @@ vat:
     stawka: 0.23
   srodki_trwale: 0.23          # sprzęt, wyposażenie, stanowiska od progu amortyzacji (lokal i działka – bez VAT)
 zus_pracodawcy: 0.2048         # od pensji na umowie o pracę: emerytalna 9,76%, rentowa 6,5%, wypadkowa 1,67%, FP 2,45%, FGŚP 0,1%
-# UF10 (decyzja autora 6.11.2026, zastępuje P1 z 29.10.2026): w grze umowa zlecenie jest bez składek pracodawcy
+# (decyzja autora 6.11.2026, zastępuje wcześniejsze założenie z 29.10.2026) w grze umowa zlecenie jest bez składek pracodawcy
 # – uproszczenie, żeby wybór formy zatrudnienia był wyraźny (naprawdę zlecenie ma składki jak etat, ustawa o
 # systemie ubezpieczeń społecznych art. 6 ust. 1 pkt 4; bez nich tylko student do 26 lat). Parametr zostaje – wpisz
-# 0.2048, żeby wrócić do P1.
+# 0.2048, żeby wrócić do wcześniejszego założenia.
 zus_pracodawcy_zlecenie: 0.0

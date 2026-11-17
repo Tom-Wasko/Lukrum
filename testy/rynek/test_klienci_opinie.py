@@ -1,4 +1,4 @@
-"""U24: grupy klientów z koszykiem (silnik/rynek/klienci.py) i opinie klientów o lokalach (silnik/rynek/opinie.py)."""
+"""Grupy klientów z koszykiem (silnik/rynek/klienci.py) i opinie klientów o lokalach (silnik/rynek/opinie.py)."""
 from __future__ import annotations
 
 import numpy as np
@@ -146,7 +146,7 @@ def test_opinie_w_grze_deterministyczne_i_publiczne():
 
 
 def test_dane_zamrozone_bez_grup_i_opinii():
-    """Bez klienci.yaml (zamrożona kopia testów) popyt jak przed U24: jedna grupa, mnożnik karty zadowolenia."""
+    """Bez klienci.yaml (zamrożona kopia testów) popyt jak przed jedna grupa, mnożnik karty zadowolenia."""
     dane = dane_domyslne()
     assert kl.ustawienia(dane) is None and op.ustawienia(dane) is None
     assert kl.mnozniki_koszyka(dane) == {} and kl.udzialy(dane, []) is None

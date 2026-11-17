@@ -26,7 +26,7 @@ function kontrolaHtml(k) {
     ${k.skargi ? `<div class="wiersz"><span>W tym skargi</span><span>${proc(k.skargi)}</span></div>` : ""}</div></div>`;
 }
 
-// UF15: Urzędy → Urząd (rejestracja, odbiory lokali) i Urzędy → Sanepid (higiena, kontrole, skargi)
+// Urzędy → Urząd (rejestracja, odbiory lokali) i Urzędy → Sanepid (higiena, kontrole, skargi)
 export const urzad = {
   tytul: "Urząd", tytulPelny: "Urzędy – ratusz", ikona: "urzad", odblokowanie: (v) => !!v.urzad, ukryta: (v) => !v.urzad,
   info: `Firma jest zarejestrowana, ale każdy lokal przed pierwszą sprzedażą musi odebrać sanepid – bez porządnego sprzątania
