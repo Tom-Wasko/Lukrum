@@ -9,7 +9,7 @@ opis: 'Dekor lokalu (silnik/rynek/dekor.py). Cztery grupy elementów (ściany, s
   (a przez nią do opinii i zaufania klientów). Dekor nie jest ewidencjonowany jako wyposażenie i nie da się go sprzedać.
   wlaczony: false – mechanika nie istnieje (decyzje ignorowane, widok pusty).'
 zrodlo: 'założenia LUKRUM (pewność: założenie): ceny 900–3 200 zł i rozmiar efektu dobrane tak, żeby komplet 4 elementów
-  w dobrze dopasowanym stylu zwracał się w 8–12 tygodni przy lokalu bota średniego (pomiar balansu 17.11.2026, notatki/Analizy/Noc Fable 15-16.11/pomiary/dekor.md)'
+  w dobrze dopasowanym stylu zwracał się w 8–12 tygodni przy lokalu bota średniego (pomiar balansu 17.11.2026, notatki/Serie/Serie.md, „Wystrój lokalu”)'
 wlaczony: true
 prog: 0.40              # dopasowanie, od którego efekt jest pełny
 prog_czesciowy: 0.20    # od tego dopasowania do prog – część efektu
@@ -18,11 +18,11 @@ efekty:
   popyt:
     wartosc: 0.008      # dodatek do mnożnika popytu lokalu za jedną grupę elementów w pełni dopasowaną
     pewnosc: zalozenie
-    zrodlo: 'pomiar 24 rund, 3 ziarna × 5 botów średnich: komplet 8 300 zł zwraca się średnio w 10,9 tyg. przy pełnej konwersji popytu (cel 8–12); pomiar 17.11.2026, notatki/Analizy/Noc Fable 15-16.11/pomiary/dekor.md'
+    zrodlo: 'pomiar 24 rund, 3 ziarna × 5 botów średnich: komplet 8 300 zł zwraca się średnio w 10,9 tyg. przy pełnej konwersji popytu (cel 8–12); pomiar 17.11.2026, notatki/Serie/Serie.md, „Wystrój lokalu”'
   ocena:
     wartosc: 0.07       # gwiazdki oceny tygodnia za jedną grupę elementów w pełni dopasowaną
     pewnosc: zalozenie
-    zrodlo: 'pomiar 24 rund, 3 ziarna × 5 botów średnich: komplet 8 300 zł zwraca się średnio w 10,9 tyg. przy pełnej konwersji popytu (cel 8–12); pomiar 17.11.2026, notatki/Analizy/Noc Fable 15-16.11/pomiary/dekor.md'
+    zrodlo: 'pomiar 24 rund, 3 ziarna × 5 botów średnich: komplet 8 300 zł zwraca się średnio w 10,9 tyg. przy pełnej konwersji popytu (cel 8–12); pomiar 17.11.2026, notatki/Serie/Serie.md, „Wystrój lokalu”'
 domyslny_styl: podstawowy
 grupy:
   sciany:
