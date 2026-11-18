@@ -15,6 +15,8 @@ from django.contrib.staticfiles import finders
 GRA = Path(__file__).resolve().parents[2]
 STATIC = GRA / "panel_gracza" / "static"
 PULPIT_JS = (STATIC / "pulpit" / "pulpit.js").read_text(encoding="utf-8")
+ZESZYT_JS = (STATIC / "pulpit" / "zeszyt.js").read_text(encoding="utf-8")
+KARTA_JS = (STATIC / "pulpit" / "karta.js").read_text(encoding="utf-8")
 PULPIT_CSS = (STATIC / "pulpit" / "pulpit.css").read_text(encoding="utf-8")
 ZMIENNE_CSS = (STATIC / "motywy" / "zmienne.css").read_text(encoding="utf-8")
 INDEX_JS = (STATIC / "zakladki" / "index.js").read_text(encoding="utf-8")
@@ -48,9 +50,10 @@ def test_stary_uklad_zostaje_pod_adresem_uklad_stary():
 def test_kazda_akcja_pulpitu_ma_obsluge():
     obslugiwane = set(re.findall(r'^  "(pp-[\w-]+)":', PULPIT_JS, re.M))
     klucze_paska = set(re.findall(r'\["(\w+)", "\w+", "[^"]+"\]', _ikony_paska())) - {"jak"}
-    uzyte = {f"pp-{k}" for k in klucze_paska} | set(re.findall(r'data-akcja="(pp-[a-z]+)"', PULPIT_JS))
+    uzyte = {f"pp-{k}" for k in klucze_paska} | set(re.findall(r'data-akcja="(pp-[a-z-]+)"', PULPIT_JS + ZESZYT_JS))
     assert 'data-akcja="pp-${k}"' in PULPIT_JS
-    assert uzyte == obslugiwane == {"pp-wyslij", "pp-konto", "pp-koszyk", "pp-mapa", "pp-portfel", "pp-zeszyt", "pp-karta"}
+    assert uzyte == obslugiwane == {"pp-wyslij", "pp-konto", "pp-koszyk", "pp-mapa", "pp-portfel", "pp-zeszyt", "pp-zeszyt-zamknij",
+                                    "pp-zeszyt-strona", "pp-wydarzenia", "pp-warstwy", "pp-filtr"}
 
 
 def test_ikony_paska_istnieja():
@@ -62,7 +65,7 @@ def test_ikony_paska_istnieja():
 def test_style_pulpitu_maja_kolory_tylko_ze_zmiennych():
     css = _bez_komentarzy(PULPIT_CSS)
     assert not re.search(r"#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(", css), "kolory tylko przez zmienne z motywy/zmienne.css"
-    zdefiniowane = set(re.findall(r"(--[\w-]+)\s*:", ZMIENNE_CSS))
+    zdefiniowane = set(re.findall(r"(--[\w-]+)\s*:", ZMIENNE_CSS)) | set(re.findall(r"(--font-reka)\s*:", PULPIT_CSS))
     uzyte = set(re.findall(r"var\((--[\w-]+)", css))
     assert uzyte <= zdefiniowane, uzyte - zdefiniowane
     # grafika SVG w skrypcie też używa tylko zmiennych palety
@@ -91,7 +94,7 @@ def test_teksty_pulpitu_neutralne_plciowo():
         assert not re.search(r"\b\w*(?:łeś|łaś|eś|aś)\b", t), t
 
 
-@pytest.mark.parametrize("plik", ["pulpit/pulpit.js", "zakladki/wujek.js", "app.js"])
+@pytest.mark.parametrize("plik", ["pulpit/pulpit.js", "pulpit/zeszyt.js", "pulpit/karta.js", "zakladki/wujek.js", "mapa/lublin.js", "zakladki/mapa.js", "app.js"])
 def test_skladnia_js(plik):
     node = shutil.which("node")
     if not node:
@@ -119,6 +122,30 @@ def test_poprawki_1b():
     assert "writing-mode: vertical-rl" in PULPIT_CSS
     assert "od tyg." not in PULPIT_JS and "zakupyDostepne" not in PULPIT_JS
     assert "Zakupy tygodnia" in PULPIT_JS and "tylko do odczytu" in PULPIT_JS
-    assert "Rozpiska funkcji" in PULPIT_JS and "MIEJSCA" in PULPIT_JS
+    assert "Rozpiska funkcji" in ZESZYT_JS and "MIEJSCA" in ZESZYT_JS
     swiat = (STATIC / "swiat" / "swiat.js").read_text(encoding="utf-8")
     assert 'wsk("Kasa"' not in swiat and 'wsk("Tydzień"' in swiat
+
+
+def test_krok_2_zeszyt_trzy_stany_i_strony():
+    # strony zeszytu, zamykanie (Esc, przycisk, klik poza), przewracanie z animacją i bez niej, zachowanie przy prefers-reduced-motion
+    for strona in ("Lista wujka", "Rozpiska funkcji", "Gdzie co kupić", "Samouczek"):
+        assert strona in ZESZYT_JS, strona
+    assert '"Escape"' in ZESZYT_JS and "pp-zeszyt-zamknij" in ZESZYT_JS and "e.target === o" in ZESZYT_JS
+    assert "prefers-reduced-motion: reduce" in ZESZYT_JS and "rotateY" in PULPIT_CSS and "perspective" in PULPIT_CSS
+    css = _bez_komentarzy(PULPIT_CSS)
+    assert ".pz-kartka { display: none; }" in css   # bez ruchu strona się tylko zmienia
+    assert ".pp-zeszyt:hover, .pp-zeszyt:focus-visible { translate: 0 0; }" in css   # stan 2
+    assert 'role", "dialog"' in ZESZYT_JS and "aria-modal" in ZESZYT_JS
+
+
+def test_krok_2_interfejs_pulpitu():
+    # szuflada Wydarzenia zamiast „W parkach…”, warstwy pod ikoną, filtr kategorii z etykietami, „Tydzień N” u góry, karta miejsca
+    assert "Wydarzenia tygodnia" in PULPIT_JS and "parkiNaMapie" in PULPIT_JS
+    assert "body.pulpit.na-mapie .tresc > .zd-parki { display: none; }" in PULPIT_CSS
+    assert "pp-warstwy" in PULPIT_JS and "body.pulpit.na-mapie.pp-warstwy .tresc > .lm-ustawienia" in PULPIT_CSS
+    assert 'aria-label="${nazwa}"' in PULPIT_JS and 'aria-pressed="${filtr === k}"' in PULPIT_JS and ".pp-f.aktywny::after" in PULPIT_CSS
+    assert re.search(r"\.pp-tydzien \{ position: fixed; left: 50%; top: 10px;", PULPIT_CSS)
+    assert "pokazKarte" in KARTA_JS and "pk-wejdz" in KARTA_JS and "aria-modal" in KARTA_JS
+    assert "pokazKarte" in (STATIC / "zakladki" / "mapa.js").read_text(encoding="utf-8")
+    assert "pokazKarte" in (STATIC / "mapa" / "lublin.js").read_text(encoding="utf-8")

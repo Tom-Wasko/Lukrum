@@ -10,6 +10,7 @@ import { uruchomPojazdy } from "./mapa_pojazdy.js";
 import { zastosujUklad } from "./mapa_uklad.js";
 import { wylaczona } from "./funkcje.js";
 import { nowaMapa } from "../mapa/lublin.js";
+import { pokazKarte } from "../pulpit/karta.js";
 
 const BUDYNKI = {  // rodzaj → kolor w legendzie (wygląd budynków: mapa_budynki.js)
   bank: ["#2d73d6", 30], urzad: ["#9b51e0", 40], poczta: ["#f2b705", 22], biuro: ["#17a2b8", 26], nieruchomosci: ["#e5333f", 24],
@@ -491,7 +492,7 @@ export const mapa = {
     },
     "mapa-miejsce": (el, c) => {
       const m = (c.kat.mapa.miasto?.miejsca || []).find((x) => x.id === el.dataset.id);
-      if (m) okno(esc(m.nazwa), `<p>${esc(m.opis)}</p><p class="podpowiedz">Punkt orientacyjny na mapie Lublina – nie wpływa na grę.</p>`);
+      if (m) pokazKarte({ rodzaj: "Punkt orientacyjny", tytul: m.nazwa, adres: m.adres || "Lublin", opis: m.opis, uwaga: "Nie wpływa na grę." });
     },
     "mapa-lokal": (el, c) => {
       const lok = c.kat.mapa.lokale.find((x) => x.id === el.dataset.id);

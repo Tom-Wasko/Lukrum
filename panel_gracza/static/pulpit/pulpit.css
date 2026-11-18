@@ -7,22 +7,30 @@
 body.pulpit { display: block !important; }
 body.pulpit > .naglowek, body.pulpit > .menu, body.pulpit > .stopka, body.pulpit .zadania { display: none !important; }
 /* na ekranach poza mapą (wnętrza, okna decyzji) treść omija pasek, zeszyt i portfel */
-body.pulpit .scena { min-height: 100vh; padding: 20px 64px 96px 76px; }
+body.pulpit .scena { min-height: 100vh; padding: 56px 64px 96px 76px; }
 
 /* --- mapa na cały ekran ------------------------------------------------------------------------------------------------ */
 body.pulpit.na-mapie { overflow: hidden; }
 body.pulpit.na-mapie .scena { padding: 0; min-height: 0; }
-body.pulpit.na-mapie .karta { position: fixed; top: 10px; left: 170px; right: 80px; z-index: 40; max-width: none; margin: 0; display: flex;
+body.pulpit.na-mapie .karta { position: fixed; top: 56px; left: 70px; right: 80px; z-index: 40; max-width: none; margin: 0; display: flex;
   flex-direction: column; align-items: flex-start; gap: 8px; background: none; box-shadow: none; border-radius: 0; pointer-events: none; }
 body.pulpit.na-mapie .karta-glowa, body.pulpit.na-mapie .podzakladki { display: none; }
 body.pulpit.na-mapie .tresc { display: contents; }
 body.pulpit.na-mapie .tresc > :not(.lmapa) { position: relative; z-index: 2; pointer-events: auto; max-width: 100%; margin: 0; }
 body.pulpit.na-mapie .lmapa { position: fixed; inset: 0; z-index: 1; height: auto; min-height: 0; border: 0; border-radius: 0; pointer-events: auto; }
-/* nad mapą zostają warstwy (czynsze, popyt, konkurencja) i opinie; paletę i tryb wybiera się w ⚙ */
-body.pulpit .lm-ustawienia { margin: 0; padding: 6px 8px; background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px;
-  box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent); }
+/* sekcja „W parkach w tym tygodniu” jest w szufladzie Wydarzenia; opcje wyglądu mapy (strefy, czynsze, popyt, opinie) – pod ikoną
+   „Warstwy” na pasku (wyskakują obok paska); paletę i tryb wybiera się w ⚙ */
+body.pulpit.na-mapie .tresc > .zd-parki { display: none; }
+body.pulpit .lm-ustawienia { display: none; margin: 0; padding: 6px 8px; background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--tusz) 40%, transparent); }
+body.pulpit.na-mapie.pp-warstwy .tresc > .lm-ustawienia { display: flex; position: fixed; left: 70px; top: 10px; z-index: 46; }
 body.pulpit .lm-ustawienia [aria-label="Paleta kolorów"], body.pulpit .lm-ustawienia [aria-label="Tryb"], body.pulpit .lm-ustawienia .lm-stara { display: none; }
 body.pulpit .lm-pasek { display: none; }   /* skróty mapy zastępuje pasek LUKRUM */
+body.pulpit .lm-osm { left: 430px; right: auto; border-radius: 0 6px 0 0; }   /* podpis OSM obok portfela, nie pod zeszytem */
+/* filtr kategorii: znaki spoza wybranej kategorii przygasają, pasujące dostają obwódkę (stan nie samym kolorem) */
+.lmapa-nakladka .pp-przygaszony { filter: grayscale(1) opacity(.22); }
+.lmapa-nakladka .pp-pasuje { z-index: 30 !important; }
+.lmapa-nakladka .pp-pasuje .lm-kafel { outline: 3px solid var(--akcent); outline-offset: 3px; }
 
 /* --- lewy górny róg ---------------------------------------------------------------------------------------------------- */
 .pp-lewy { position: fixed; left: 10px; top: 10px; z-index: 45; width: 44px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
@@ -47,12 +55,16 @@ body.pulpit .lm-pasek { display: none; }   /* skróty mapy zastępuje pasek LUKR
   background: var(--akcent); border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent);
   font: 400 calc(21px * var(--skala-tekstu, 1))/1 var(--font-gruby); writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: .14em;
   text-transform: uppercase; user-select: none; }
-/* „Tydzień N” – tylko informacja; pod nim nazwa drużyny i stan gry z dawnego nagłówka */
-.pp-tydzien { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: max-content; max-width: 210px; padding: 6px 9px; box-sizing: border-box;
-  color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent);
-  font: calc(13px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .04em; }
+/* „Tydzień N” na środku u góry – tylko informacja */
+.pp-tydzien { position: fixed; left: 50%; top: 10px; translate: -50% 0; z-index: 45; padding: 8px 20px; color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz);
+  border-radius: 6px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent); font: calc(17px * var(--skala-tekstu, 1))/1 var(--font-szyld);
+  letter-spacing: .08em; white-space: nowrap; }
 .pp-tydzien b { font-weight: 400; text-transform: uppercase; }
-.pp-tydzien small { max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: calc(12px * var(--skala-tekstu, 1)) var(--font-tekst); letter-spacing: 0; }
+/* pod paskiem: nazwa drużyny i stan gry z dawnego nagłówka (wstrzymanie, „Czekamy na…”, termin) */
+.pp-druzyna { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: max-content; max-width: 210px; padding: 6px 9px; box-sizing: border-box;
+  color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent); }
+.pp-druzyna[hidden] { display: none; }
+.pp-druzyna small { max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: calc(13px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .04em; text-transform: uppercase; }
 .pp-chip { display: block; font: calc(12px * var(--skala-tekstu, 1))/1.3 var(--font-tekst); letter-spacing: 0; border-top: 1px dashed var(--ramka); padding-top: 3px; white-space: normal; }
 /* menu ⚙: tu nie ma już „Układu menu” (stary układ jest tylko pod ?uklad=stary); nota o fikcyjnych firmach */
 .pp-ust .ustawienia-lista { left: 0; right: auto; z-index: 55; }
@@ -73,34 +85,151 @@ body.pulpit .lm-pasek { display: none; }   /* skróty mapy zastępuje pasek LUKR
 .pp-kw.zle b { color: var(--strata); }
 .pp-debet .pp-plik { outline: 3px dashed var(--strata); outline-offset: -6px; }
 
-/* --- zeszyt wujka przy prawej krawędzi ----------------------------------------------------------------------------------- */
-.pp-zeszyt { position: fixed; right: 0; top: max(76px, min(48vh, calc(100vh - 560px))); z-index: 45; display: flex; width: 340px; padding: 0; border: 0; background: none;
-  text-align: left; cursor: pointer; font: inherit; color: var(--g-czern); translate: calc(100% - 172px) 0; transition: translate .22s ease; rotate: -1.2deg; }
+/* --- zeszyt wujka (prawy dolny róg, szerokość 0,25–0,33 ekranu): stan 1 – wystaje górna część strony, stan 2 – najechanie/fokus
+   wysuwa go i pokazuje listę zadań, stan 3 – klik: na cały ekran (zeszyt.js, .pz). Pismo odręczne: czcionki w grze nie ma, więc
+   systemowy krój odręczny (--font-reka); w wysokiej widoczności zwykły, czytelny krój. ---------------------------------------- */
+.pp-zeszyt, .pz { --font-reka: 'Segoe Print', 'Ink Free', 'Bradley Hand', 'Segoe Script', 'Comic Sans MS', 'Marker Felt', cursive; }
+[data-paleta="wysoka"] .pp-zeszyt, [data-paleta="wysoka"] .pz { --font-reka: var(--font-tekst); }
+.pp-zeszyt { position: fixed; right: 20px; bottom: 0; z-index: 45; display: block; width: clamp(300px, 28vw, 460px); height: 430px; padding: 0; background: none; text-align: left;
+  cursor: pointer; font: inherit; font-family: var(--font-reka); color: var(--g-czern); translate: 0 calc(100% - 124px); transition: translate .24s ease; rotate: .5deg; transform-origin: bottom right; }
 .pp-zeszyt[hidden] { display: none; }
 .pp-zeszyt:hover, .pp-zeszyt:focus-visible { translate: 0 0; }
-.pp-schowane .pp-zeszyt { translate: calc(100% - 172px) 0; }   /* Esc chowa wysunięte elementy, dopóki wskaźnik nie wyjdzie */
+.pp-schowane .pp-zeszyt { translate: 0 calc(100% - 124px); }   /* Esc chowa wysunięte elementy, dopóki wskaźnik nie wyjdzie */
 .pp-schowane .pp-portfel { translate: 0 0; }
 .pp-schowane .pp-kwoty { display: none; }
-.pp-sprezyna { flex: none; width: 26px; border: 2px solid var(--g-czern); border-right: 0; border-radius: 6px 0 0 6px; background-color: var(--g-metal2);
-  background-image: radial-gradient(circle at 50% 50%, var(--g-biel) 0 4px, var(--g-czern) 4.5px 6px, transparent 6.5px); background-size: 100% 24px; background-repeat: repeat-y; }
-.pp-kartka { flex: 1; min-width: 0; display: block; padding: 10px 14px 12px 12px; color: var(--g-czern); border: 2px solid var(--g-czern); border-right: 0;
-  background-color: var(--g-biel); background-image: repeating-linear-gradient(transparent 0 25px, color-mix(in srgb, var(--g-czern) 14%, transparent) 25px 26px);
-  box-shadow: -3px 4px 0 color-mix(in srgb, var(--g-czern) 35%, transparent); }
-.pp-zg { display: block; max-width: 128px; font: calc(12px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .05em; text-transform: uppercase; transition: max-width .22s; }
-.pp-krok { display: block; max-width: 128px; margin-top: 6px; font: 700 calc(17px * var(--skala-tekstu, 1))/1.25 var(--font-tekst); transition: max-width .22s; }
-.pp-krok small { display: block; font: calc(12px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .04em; text-transform: uppercase; opacity: .85; }
+body.pz-otwarty .pp-zeszyt { visibility: hidden; }
+/* okładka (za kartkami): ciemnozielona, wytarta, z cieniem */
+.pp-okladka { position: absolute; inset: -8px -8px 0 -8px; border: 2px solid var(--g-czern); border-bottom: 0; border-radius: 14px 14px 0 0;
+  background: radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--g-biel) 22%, transparent) 0 14px, transparent 15px),
+    radial-gradient(circle at 92% 30%, color-mix(in srgb, var(--g-czern) 25%, transparent) 0 26px, transparent 27px),
+    color-mix(in srgb, var(--g-zielen2) 75%, var(--g-czern)); box-shadow: -3px 4px 0 color-mix(in srgb, var(--g-czern) 35%, transparent); }
+.pp-kartka { position: absolute; inset: 0; display: block; padding: 14px 18px 12px 48px; overflow: hidden; border: 2px solid var(--g-czern); border-bottom: 0; border-radius: 8px 8px 0 0;
+  background: linear-gradient(90deg, transparent 38px, color-mix(in srgb, var(--g-rudy) 55%, transparent) 38px 40px, transparent 40px),
+    radial-gradient(circle at 84% 34%, transparent 0 20px, color-mix(in srgb, var(--g-drewno2) 28%, transparent) 21px 24px, transparent 25px),
+    repeating-linear-gradient(transparent 0 27px, color-mix(in srgb, var(--g-czern) 16%, transparent) 27px 28px), var(--g-biel); }
+.pp-kartka::before { content: ""; position: absolute; left: 14px; top: 10px; bottom: 0; border-left: 3px dashed var(--g-czern); opacity: .7; }   /* szycie grzbietu */
+.pp-zg { display: block; font: calc(14px * var(--skala-tekstu, 1))/28px var(--font-reka); letter-spacing: .02em; opacity: .85; }
+.pp-krok { display: block; margin-top: 2px; font: 700 calc(21px * var(--skala-tekstu, 1))/28px var(--font-reka); }
+.pp-krok small { display: block; font: calc(14px * var(--skala-tekstu, 1))/28px var(--font-reka); opacity: .85; }
 .pp-krok small::before { content: "▶ "; }
 .pp-zrobiony .pp-krok small::before { content: "✓ "; }
-.pp-zeszyt:hover .pp-zg, .pp-zeszyt:focus-visible .pp-zg, .pp-zeszyt:hover .pp-krok, .pp-zeszyt:focus-visible .pp-krok { max-width: 100%; }
-.pp-lista { display: block; margin: 10px 0 0; padding: 8px 0 0; list-style: none; max-height: 0; overflow: hidden; visibility: hidden; opacity: 0;
-  border-top: 1px dashed var(--g-czern); transition: max-height .25s ease, opacity .2s ease, visibility .25s; }
-.pp-zeszyt:hover .pp-lista, .pp-zeszyt:focus-visible .pp-lista { max-height: 420px; visibility: visible; opacity: 1; }
-.pp-schowane .pp-lista { max-height: 0; visibility: hidden; opacity: 0; }
-.pp-lista li { display: flex; gap: 8px; align-items: baseline; padding: 2px 0; font: calc(14px * var(--skala-tekstu, 1))/1.3 var(--font-tekst); }
+.pp-lista { display: block; margin: 14px 0 0; padding: 0; list-style: none; border-top: 1px dashed var(--g-czern); }
+.pp-lista li { display: flex; gap: 8px; align-items: baseline; font: calc(17px * var(--skala-tekstu, 1))/28px var(--font-reka); }
 .pp-lp { flex: none; width: 1.4em; text-align: center; font-weight: 700; }
 .pp-lista li.ok { text-decoration: line-through; opacity: .7; }
 .pp-lista li.teraz { font-weight: 700; color: var(--g-rudy); }
-.pp-zeszyt .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.pp-zeszyt .sr, .pz .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* --- zeszyt na cały ekran (stan 3): tło półprzezroczyste (widać mapę), książka z okładką, szytym grzbietem, kartkami w linię --- */
+.pz { position: fixed; inset: 0; z-index: 48; display: none; place-items: center; padding: 52px 3vw 3vh; box-sizing: border-box; font-family: var(--font-reka);
+  background: color-mix(in srgb, var(--papier) 52%, transparent); backdrop-filter: blur(2px); }
+.pz.otwarty { display: grid; animation: pz-wejscie .25s ease-out; }
+@keyframes pz-wejscie { from { opacity: 0; } }
+.pz-ksiazka { position: relative; width: min(1060px, 100%); height: min(86vh, 800px); padding: 14px 14px 14px 34px; box-sizing: border-box; color: var(--g-czern);
+  background: radial-gradient(circle at 6% 5%, color-mix(in srgb, var(--g-biel) 20%, transparent) 0 40px, transparent 41px), color-mix(in srgb, var(--g-zielen2) 75%, var(--g-czern));
+  border: 3px solid var(--g-czern); border-radius: 12px; box-shadow: 8px 10px 0 color-mix(in srgb, var(--g-czern) 30%, transparent); }
+.pz-grzbiet { position: absolute; left: 0; top: 0; bottom: 0; width: 34px; border-right: 2px solid var(--g-czern); border-radius: 9px 0 0 9px; background: color-mix(in srgb, var(--g-czern) 25%, transparent); }
+.pz-grzbiet::after { content: ""; position: absolute; left: 14px; top: 12px; bottom: 12px; border-left: 3px dashed var(--g-biel); opacity: .8; }   /* szycie */
+.pz-karta { position: relative; height: 100%; display: flex; flex-direction: column; background: var(--g-biel); border: 2px solid var(--g-czern); border-radius: 4px; overflow: hidden;
+  box-shadow: inset 8px 0 14px -8px color-mix(in srgb, var(--g-czern) 45%, transparent); }
+.pz-stronicowanie { position: relative; flex: 1; min-height: 0; perspective: 2400px; }
+.pz-strona { position: absolute; inset: 0; overflow: auto; padding: 22px 40px 18px 78px; box-sizing: border-box; color: var(--g-czern); font-size: calc(19px * var(--skala-tekstu, 1)); line-height: 34px;
+  background: linear-gradient(90deg, transparent 64px, color-mix(in srgb, var(--g-rudy) 55%, transparent) 64px 66px, transparent 66px),
+    radial-gradient(circle at 88% 12%, transparent 0 26px, color-mix(in srgb, var(--g-drewno2) 24%, transparent) 27px 31px, transparent 32px),
+    repeating-linear-gradient(transparent 0 33px, color-mix(in srgb, var(--g-czern) 14%, transparent) 33px 34px) local, var(--g-biel); }
+.pz-strona:focus-visible { outline: var(--ognisko); outline-offset: -4px; }
+.pz-kartka { z-index: 3; pointer-events: none; transform-origin: left center; backface-visibility: hidden; overflow: hidden; box-shadow: 10px 0 26px color-mix(in srgb, var(--g-czern) 40%, transparent); }
+.pz-kartka.wprzod { animation: pz-wprzod .7s ease-in forwards; }
+.pz-kartka.wstecz { animation: pz-wstecz .7s ease-out forwards; }
+@keyframes pz-wprzod { 0% { transform: rotateY(0); opacity: 1; } 55% { transform: rotateY(-92deg); opacity: 1; } 100% { transform: rotateY(-178deg); opacity: 0; } }
+@keyframes pz-wstecz { 0% { transform: rotateY(-178deg); opacity: 0; } 45% { transform: rotateY(-92deg); opacity: 1; } 100% { transform: rotateY(0); opacity: 1; } }
+.pz-stopka { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 18px; border-top: 2px solid var(--g-czern); background: color-mix(in srgb, var(--g-biel) 90%, var(--g-drewno2)); }
+.pz-numer { font-size: calc(16px * var(--skala-tekstu, 1)); }
+.pz-btn, .pz-zamknij, .pz-zakladka { font: calc(17px * var(--skala-tekstu, 1)) var(--font-reka); color: var(--g-czern); background: var(--g-biel); border: 2px solid var(--g-czern); border-radius: 6px; cursor: pointer; }
+.pz-btn { padding: 4px 14px; min-height: 40px; }
+.pz-btn:disabled { opacity: .45; cursor: default; border-style: dashed; }
+.pz-btn:not(:disabled):hover, .pz-zakladka:hover, .pz-zamknij:hover { background: var(--g-rudy); color: var(--g-biel); }
+.pz-btn:focus-visible, .pz-zakladka:focus-visible, .pz-zamknij:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+.pz-zamknij { position: absolute; left: 34px; top: -42px; padding: 4px 14px; min-height: 38px; }
+.pz-zamknij small { font-size: .8em; opacity: .8; }
+.pz-zakladki { position: absolute; right: 18px; top: -38px; display: flex; gap: 4px; }
+.pz-zakladka { padding: 4px 12px; min-height: 36px; border-bottom: 0; border-radius: 8px 8px 0 0; background: color-mix(in srgb, var(--g-biel) 82%, var(--g-drewno2)); }
+.pz-zakladka.aktywna { background: var(--g-biel); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; min-height: 40px; }
+/* treść stron: odręczne listy, kroki, spisy */
+.pz-strona :is(h2, h3, b, small, i, u, a, span) { font-family: inherit; }
+.pz-strona h2 { margin: 0 0 6px; font-size: 1.55em; line-height: 40px; }
+.pz-strona h3 { margin: 18px 0 2px; font-size: 1.15em; line-height: 34px; }
+.pz-strona h3 small, .pz-strona small { font-size: .78em; font-weight: 400; opacity: .85; }
+.pz-strona p, .pz-strona ul, .pz-strona ol { margin: 0 0 10px; }
+.pz-list { text-indent: 1.5em; }
+.pz-podpis { display: block; text-align: right; font-style: italic; }
+.pz-opis { font-size: .9em; opacity: .9; }
+.pz-kroki { list-style: none; padding: 0; }
+.pz-kroki li a { display: grid; grid-template-columns: 2em 1fr auto; gap: 8px; align-items: baseline; padding: 2px 6px; color: inherit; text-decoration: none; border-bottom: 1px dashed color-mix(in srgb, var(--g-czern) 40%, transparent); }
+.pz-kroki li a:hover { background: color-mix(in srgb, var(--g-rudy) 14%, transparent); }
+.pz-kroki li a:focus-visible { outline: var(--ognisko); }
+.pz-kroki li a small { display: block; line-height: 20px; }
+.pz-kroki li a i { font-style: normal; opacity: .8; font-size: .85em; }
+.pz-nr { font-weight: 700; text-align: center; }
+.pz-stan { font-size: .8em; text-transform: uppercase; letter-spacing: .04em; }
+.pz-kroki li.ok b { text-decoration: line-through; }
+.pz-kroki li.ok a { opacity: .7; }
+.pz-kroki li.teraz b, .pz-kroki li.teraz .pz-stan { color: var(--g-rudy); font-weight: 700; }
+.pz-samouczek li { display: grid; grid-template-columns: 2em 1fr; gap: 8px; align-items: baseline; padding: 2px 6px; }
+.pz-punkty { padding-left: 1.3em; }
+.pz-kupic { list-style: none; padding: 0; }
+.pz-kupic li { display: grid; grid-template-columns: minmax(0, 1.2fr) 1.6em minmax(0, 1fr); gap: 6px; align-items: baseline; padding: 2px 0; border-bottom: 1px dashed color-mix(in srgb, var(--g-czern) 40%, transparent); }
+.pz-kupic li.szare { opacity: .65; }
+.pz-kupic u { text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.pz-kupic i { font-style: normal; }
+
+/* --- karta miejsca na mapie (karta.js): rodzaj, tytuł, adres, opis, przyciski; kolory z palety ----------------------------- */
+.pk-tlo { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 24px; box-sizing: border-box; background: color-mix(in srgb, var(--tusz) 38%, transparent); }
+.pk { position: relative; width: min(460px, 100%); padding: 22px 26px 20px; box-sizing: border-box; color: var(--tusz); background: var(--g-karta); font-family: var(--font-tekst);
+  border: max(2px, var(--ramka-grubosc)) solid var(--tusz); border-radius: 8px; box-shadow: 6px 6px 0 color-mix(in srgb, var(--tusz) 40%, transparent); font-size: calc(15px * var(--skala-tekstu, 1)); line-height: 1.5; }
+.pk-x { position: absolute; right: 10px; top: 10px; width: 36px; height: 36px; padding: 0; color: var(--tusz); background: none; border: 2px solid var(--tusz); border-radius: 6px; cursor: pointer; font-size: 16px; }
+.pk-rodzaj { margin: 0 44px 2px 0; color: var(--akcent); font: calc(13px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .08em; text-transform: uppercase; }
+.pk h2 { margin: 0 44px 4px 0; font: 400 calc(25px * var(--skala-tekstu, 1))/1.15 var(--font-gruby); }
+.pk-adres { margin: 0 0 10px; opacity: .85; }
+.pk-adres::before { content: "⌖ "; }
+.pk-opis { margin: 0 0 10px; }
+.pk-uwaga { margin: 0 0 10px; padding-top: 8px; border-top: 1px dashed var(--ramka); font-size: .9em; opacity: .85; }
+.pk-przyciski { display: flex; gap: 10px; justify-content: flex-end; margin-top: 12px; }
+.pk-przyciski button { min-height: 42px; padding: 0 18px; color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px; cursor: pointer; font: calc(15px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .05em; text-transform: uppercase; }
+.pk-przyciski .pk-wejdz { color: var(--papier); background: var(--akcent); }
+.pk-x:hover, .pk-zamknij:hover { background: var(--akcent); color: var(--papier); }
+.pk button:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+
+/* --- szuflada „Wydarzenia” (z paska po lewej) i filtr kategorii (prawy górny róg) ------------------------------------------ */
+.pp-szuflada { position: fixed; left: 70px; top: 10px; z-index: 46; width: min(390px, calc(100vw - 170px)); max-height: calc(100vh - 24px); overflow: auto; padding: 12px 16px 14px; box-sizing: border-box;
+  color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 4px 4px 0 color-mix(in srgb, var(--tusz) 40%, transparent); animation: pp-wysun .18s ease-out; }
+.pp-szuflada[hidden] { display: none; }
+@keyframes pp-wysun { from { opacity: 0; translate: -14px 0; } }
+.pp-sz-gora { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pp-szuflada h2 { margin: 0; font: 400 calc(18px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .06em; text-transform: uppercase; }
+.pp-szuflada h3 { margin: 12px 0 6px; font: 400 calc(14px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .06em; text-transform: uppercase; }
+.pp-sz-x { width: 36px; height: 36px; padding: 0; color: var(--tusz); background: none; border: 2px solid var(--tusz); border-radius: 6px; cursor: pointer; }
+.pp-sz-x:hover { background: var(--akcent); color: var(--papier); }
+.pp-sz-x:focus-visible, .pp-link:focus-visible, .pp-szuflada .zd-park:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+.pp-sz-lista { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.pp-sz-lista li { padding-bottom: 6px; border-bottom: 1px dashed var(--ramka); }
+.pp-sz-lista small { display: block; opacity: .85; }
+.pp-sz-lista span { display: block; font-size: .92em; }
+.pp-link { color: var(--tusz); font-weight: 700; }
+.pp-szuflada .podpowiedz { color: var(--tusz); opacity: .85; }
+.pp-szuflada .zd-parki-tytul { color: var(--tusz); }
+.pp-szuflada .zd-parki-lista { flex-direction: column; }
+.pp-szuflada .zd-park { width: 100%; color: var(--tusz); background: var(--papier); border: 2px solid var(--tusz); border-radius: 6px; cursor: pointer; }
+.pp-szuflada .zd-park small { color: var(--tusz); opacity: .85; }
+.pp-szuflada .zd-znak { color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); }
+.pp-filtr { position: fixed; top: 10px; right: 64px; z-index: 45; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; max-width: calc(50vw - 150px); }   /* nie wchodzi na „Tydzień N” pośrodku */
+.pp-filtr[hidden] { display: none; }
+.pp-f { position: relative; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px; cursor: pointer;
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent); }
+.pp-f:hover { background: var(--akcent); color: var(--papier); }
+.pp-f:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+.pp-f.aktywny { color: var(--papier); background: var(--akcent); border-width: 4px; }
+.pp-f.aktywny::after { content: "✓"; position: absolute; right: -8px; top: -9px; display: grid; place-items: center; width: 18px; height: 18px; font: 700 12px/1 var(--font-tekst); color: var(--papier); background: var(--tusz); border-radius: 50%; }
 
 /* wysoka widoczność daje każdemu przyciskowi ramkę (dostepnosc.css) – portfel i zeszyt są rysunkami, więc bez ramki przycisku */
 #pulpit .pp-portfel, #pulpit .pp-zeszyt { border: 0; }
@@ -115,5 +244,7 @@ body.pulpit .lm-pasek { display: none; }   /* skróty mapy zastępuje pasek LUKR
 
 /* ruch tylko dla tych, którzy go nie wyłączyli: reszta dostaje te same stany od razu, bez przejść */
 @media (prefers-reduced-motion: reduce) {
-  .pp-ik span, .pp-portfel, .pp-zeszyt, .pp-zg, .pp-krok, .pp-lista { transition: none; }
+  .pp-ik span, .pp-portfel, .pp-zeszyt { transition: none; }
+  .pz.otwarty, .pp-szuflada { animation: none; }
+  .pz-kartka { display: none; }   /* bez animacji przewracania strona po prostu się zmienia */
 }

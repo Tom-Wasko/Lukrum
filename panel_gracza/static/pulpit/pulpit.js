@@ -1,4 +1,6 @@
 // Powłoka pulpitu (seria pulpit, krok 1; decyzje 18.11.2026): mapa na cały ekran i trzy elementy przy krawędziach.
+// Krok 2: „Tydzień N” na środku u góry, szuflada „Wydarzenia”, ikona „Warstwy” (czynsze, popyt…), filtr kategorii miejsc w prawym
+// górnym rogu, zeszyt w prawym dolnym rogu na trzy stany (zeszyt.js), karta miejsca (karta.js).
 //  - lewy górny róg: ⚙ (ustawienia z motyw.js) nad pionowym paskiem LUKRUM z ikonami: Wyślij decyzje, konto, Jak grać,
 //    zakupy (tylko do odczytu: co zamówiono i kupiono w tym tygodniu); pod paskiem „Tydzień N” (tylko informacja);
 //  - dół: portfel (plik banknotów) – najechanie pokazuje gotówkę i debet, kliknięcie otwiera okno finansów;
@@ -8,19 +10,21 @@
 import { esc, kafelkiLiczb, okno, otwarteOkno, toast, zamknijOkno, zl } from "../zakladki/wspolne.js";
 import { ikona } from "../zakladki/ikony.js";
 import ZAKLADKI from "../zakladki/index.js";
-import { listWujka, oznaczCel, planTygodnia } from "../zakladki/wujek.js";
-import { MIEJSCA } from "../swiat/swiat.js";
+import { oznaczCel } from "../zakladki/wujek.js";
+import { parkiNaMapie } from "../zakladki/zdarzenia.js";
+import { idzDoStrony, odswiezZeszyt, otworzZeszyt, rysujMalyZeszyt, zamknijZeszyt, zeszytOtwarty } from "./zeszyt.js";
 
 // klasę ustawia skrypt na początku <body> (gra.html), żeby układ nie migał
 export const PULPIT = document.body.classList.contains("pulpit");
 
-const T_WYSLIJ = "Wyślij decyzje", T_FINANSE = "Finanse", T_ZESZYT = "Zeszyt wujka", T_KONTO = "Konto", T_ZAKUPY = "Zakupy tygodnia";
+const T_WYSLIJ = "Wyślij decyzje", T_FINANSE = "Finanse", T_KONTO = "Konto", T_ZAKUPY = "Zakupy tygodnia";
 const IKONY_PASKA = [   // [klucz, ikona, napis]
   ["wyslij", "wyslij", "Wyślij decyzje"], ["konto", "osoba", "Konto"], ["jak", "ksiazka", "Jak grać"], ["koszyk", "sprzedaz", "Zakupy"],
-  ["mapa", "mapa", "Mapa miasta"]];
-let kartaZeszytu = "lista";   // „lista” (list wujka) albo „rozpiska” (spis funkcji gry)
+  ["wydarzenia", "zdarzenia", "Wydarzenia"], ["warstwy", "warstwy", "Warstwy mapy"], ["mapa", "mapa", "Mapa miasta"]];
+let filtr = null;   // wybrana kategoria miejsc na mapie (filtr w prawym górnym rogu) albo null
 
 let zamontowany = false, oknoRunda = null;
+const zeszytNr = () => Number(document.querySelector(".pz-zakladka.aktywna")?.dataset.n || 0);
 const el = (id) => document.getElementById(id);
 
 // --- budowa elementów (raz) ------------------------------------------------------------------------------------------
@@ -42,24 +46,31 @@ function montuj() {
   zamontowany = true;
   const ikonyHtml = IKONY_PASKA.map(([k, ik, napis]) => k === "jak"
     ? `<a class="pp-ik" id="pp-jak" href="/jak-grac" target="_blank" rel="noopener" aria-label="${napis} (nowa karta)" title="${napis}">${ikona(ik, 22)}<span>${napis}</span></a>`
-    : `<button type="button" class="pp-ik" id="pp-${k}" data-akcja="pp-${k}" aria-label="${napis}" title="${napis}"${k === "mapa" ? " hidden" : ""}>${ikona(ik, 22)}<span>${napis}</span><i class="pp-znak" aria-hidden="true" hidden></i></button>`).join("");
+    : `<button type="button" class="pp-ik" id="pp-${k}" data-akcja="pp-${k}" aria-label="${napis}" title="${napis}"${k === "mapa" || k === "warstwy" ? " hidden" : ""}>${ikona(ik, 22)}<span>${napis}</span><i class="pp-znak" aria-hidden="true" hidden></i></button>`).join("");
   const rys = document.createElement("div");
   rys.id = "pulpit";
   rys.className = "pp";
   rys.innerHTML = `<div class="pp-lewy"><div id="pp-ust" class="pp-ust"></div>
       <nav class="pp-pasek" aria-label="Pasek LUKRUM"><div class="pp-szyld" aria-hidden="true">LUKRUM</div>${ikonyHtml}</nav>
-      <div class="pp-tydzien" id="pp-tydzien" role="status"></div></div>
+      <div class="pp-druzyna" id="pp-druzyna"></div></div>
+    <div class="pp-tydzien" id="pp-tydzien" role="status"></div>
+    <nav class="pp-filtr" id="pp-filtr" aria-label="Filtr kategorii miejsc na mapie" hidden></nav>
+    <aside class="pp-szuflada" id="pp-szuflada" aria-label="Wydarzenia tygodnia" hidden></aside>
     <button type="button" class="pp-portfel" id="pp-portfel" data-akcja="pp-portfel">${SVG_PLIK}<span class="pp-kwoty" id="pp-kwoty"></span></button>
     <button type="button" class="pp-zeszyt" id="pp-zeszyt" data-akcja="pp-zeszyt"></button>`;
   document.body.appendChild(rys);
   przeniesUstawienia();
   // Esc chowa wysunięte elementy (WCAG 1.4.13: treść pojawiająca się po najechaniu da się zamknąć bez ruszania myszą)
   document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && (document.body.classList.contains("pp-warstwy") || !el("pp-szuflada").hidden)) { zamknijPodreczne(); return; }
     if (e.key !== "Escape" || !(rys.matches(":hover") || rys.contains(document.activeElement))) return;
     rys.classList.add("pp-schowane");
     if (rys.contains(document.activeElement)) document.activeElement.blur();
   });
   rys.addEventListener("pointerleave", () => rys.classList.remove("pp-schowane"));
+  document.addEventListener("click", (e) => {   // klik poza szufladą i warstwami je zamyka
+    if (!e.target.closest("#pp-szuflada, #pp-wydarzenia, #pp-warstwy, .lm-ustawienia")) zamknijPodreczne();
+  });
 }
 
 // ⚙ buduje motyw.js po załadowaniu strony (do nagłówka); w pulpicie przenosimy go w lewy górny róg
@@ -114,8 +125,6 @@ function pokaz(rodzaj, c) {
   } else if (rodzaj === "finanse") {
     okno(T_FINANSE, htmlFinansow(c), { srednie: true, przyciski: przyciskiFinansow(c) });
     try { if (v.wyniki && c.dostepna("raport")) ZAKLADKI.raport.po?.(c); } catch (e) { console.error(e); }
-  } else if (rodzaj === "zeszyt") {
-    okno(T_ZESZYT, htmlZeszytu(c), { srednie: true });
   } else if (rodzaj === "zakupy") okno(T_ZAKUPY, htmlZakupow(c), { srednie: true });
   else if (rodzaj === "konto") okno(T_KONTO, htmlKonta(), { male: true });
 }
@@ -147,28 +156,68 @@ function htmlZakupow(c) {
     + grupy.map(([n, l]) => `<h3 class="pp-grupa">${n} <span class="licznik">${l.length}</span></h3><ul class="pp-zakupy">${l.map((x) => `<li>${x}</li>`).join("")}</ul>`).join("");
 }
 
-// --- zeszyt wujka: dwie strony – lista wujka i rozpiska funkcji ----------------------------------------------------------
-function htmlRozpiski(c) {
-  const widoczny = (p) => !p.cel || (c.jestZakladka(p.cel) && !c.wylaczona(p.cel) && !c.ukryta(p.cel));
-  const sekcje = Object.values(MIEJSCA).map((m) => {
-    const widziane = new Set();
-    const poz = (m.punkty || []).filter((p) => !p.tylkoScena && widoczny(p)).filter((p) => { const k = `${p.cel}|${p.nazwa}`; return widziane.has(k) ? false : (widziane.add(k), true); });
-    if (!poz.length) return "";
-    return `<h3 class="pp-grupa">${esc(m.tytul)}${m.adres ? ` <small>${esc(m.adres)}</small>` : ""}</h3><ul class="pp-zakupy">${poz.map((p) => {
-      const gra = p.cel && c.zakryta(p.cel) ? ` <i>(robi to gra, dopóki funkcja zostaje zakryta)</i>` : "";
-      return `<li><b>${esc(p.nazwa)}</b> – ${esc(p.opis || p.podpis || "")}${gra}</li>`;
-    }).join("")}</ul>`;
-  }).join("");
-  const poza = [["Poczta", "ikona „Wyślij decyzje” na pasku: wysyłka decyzji tygodnia."], ["Portfel", "plik banknotów przy dolnej krawędzi: gotówka, debet i raport finansowy."],
-    ...(c.jestZakladka("handel") && !c.wylaczona("handel") ? [["Bazar", "handel towarem i sprzętem między drużynami."]] : [])];
-  return `<p class="podpowiedz">Gdzie na mapie co załatwić: budynek, a pod nim to, co się w nim robi. Budynek otwiera się kliknięciem na mapie.</p>${sekcje}
-    <h3 class="pp-grupa">Poza budynkami</h3><ul class="pp-zakupy">${poza.map(([n, o]) => `<li><b>${n}</b> – ${o}</li>`).join("")}</ul>`;
+// --- wydarzenia tygodnia (szuflada na pasku): parki i wydarzenia miasta z widoku gry -----------------------------------
+const dataKrotka = (iso) => { const [, m, d] = String(iso).split("-"); return `${+d}.${m}`; };
+function wydarzenia(c) {
+  const v = c.v;
+  let parki = "";
+  try { parki = parkiNaMapie(v, c.kat, c.edycja); } catch (e) { console.error(e); }
+  const K = v.kalendarz_miasta, miasto = (K?.biezacy?.wydarzenia || []).map((w) => `<li><b>${esc(w.nazwa)}</b> <small>${esc(K.rodzaje?.[w.rodzaj] || w.rodzaj || "")}, ${(w.dni || []).map(dataKrotka).join(", ")}</small>
+    ${w.opis ? `<span>${esc(w.opis)}</span>` : ""}</li>`);
+  const kal = c.jestZakladka("kalendarz") && !c.wylaczona("kalendarz") && !c.ukryta("kalendarz")
+    ? `<p><a class="pp-link" href="#kalendarz" data-zakladka-k="kalendarz">Kalendarz miejski →</a></p>` : "";
+  const html = `<div class="pp-sz-gora"><h2>Wydarzenia tygodnia</h2><button type="button" class="pp-sz-x" data-akcja="pp-wydarzenia" aria-label="Zamknij wydarzenia">✕</button></div>
+    ${parki ? `<section>${parki}</section>` : ""}
+    <section><h3>W mieście</h3>${miasto.length ? `<ul class="pp-sz-lista">${miasto.join("")}</ul>` : `<p class="podpowiedz">W tym tygodniu nic szczególnego.</p>`}${kal}</section>`;
+  return { html, n: (parki.match(/data-akcja="zd-park"/g) || []).length + miasto.length };
 }
-function htmlZeszytu(c) {
-  const karty = [["lista", "Lista wujka"], ["rozpiska", "Rozpiska funkcji"]];
-  const pasek = `<div class="pp-karty" role="group" aria-label="Strony zeszytu">${karty.map(([k, n]) => `<button type="button" class="btn ${kartaZeszytu === k ? "" : "jasny"}"
-    data-akcja="pp-karta" data-k="${k}" aria-pressed="${kartaZeszytu === k}">${n}</button>`).join("")}</div>`;
-  return pasek + (kartaZeszytu === "rozpiska" ? htmlRozpiski(c) : listWujka(c.v, c));
+function odswiezSzuflade(c) {
+  const sz = el("pp-szuflada"), w = wydarzenia(c);
+  if (!sz.hidden) { const przew = sz.scrollTop; sz.innerHTML = w.html; sz.scrollTop = przew; } else sz.innerHTML = w.html;
+  znak("pp-wydarzenia", w.n ? String(w.n) : "", "");
+  const b = el("pp-wydarzenia");
+  b.setAttribute("aria-expanded", String(!sz.hidden));
+  b.title = w.n ? `Wydarzenia tygodnia: ${w.n}` : "Wydarzenia tygodnia";
+  b.setAttribute("aria-label", b.title);
+}
+function zamknijPodreczne() {
+  const sz = el("pp-szuflada");
+  if (sz) sz.hidden = true;
+  document.body.classList.remove("pp-warstwy");
+  el("pp-wydarzenia")?.setAttribute("aria-expanded", "false");
+  el("pp-warstwy")?.setAttribute("aria-expanded", "false");
+}
+
+// --- filtr kategorii miejsc (prawy górny róg): podświetla pasujące znaki na mapie, resztę przygasza -----------------------
+const KATEGORIE = { bank: ["Banki", "bank"], urzad: ["Urzędy", "urzad"], poczta: ["Poczta", "wyslij"], biuro: ["Biura rachunkowe", "biuro"],
+  nieruchomosci: ["Nieruchomości", "lokale"], praca: ["Praca", "rynek_pracy"], dostawca: ["Hurtownie", "dostawcy"], sklep: ["Sklepy", "sprzedaz"],
+  szkola: ["Szkoły i uczelnie", "szkolenia"], reklama: ["Reklama", "marketing"], media: ["Media", "karta"], lichwiarz: ["Lichwiarz", "harpagon"],
+  ubezpieczenia: ["Ubezpieczenia", "tarcza"], detektyw: ["Detektyw", "analiza"], gielda: ["Giełda", "wykres"], park: ["Parki", "zdarzenia"],
+  lokal: ["Lokale kebabów", "klucz"], zabytek: ["Zabytki i punkty orientacyjne", "oko"] };
+const RODZAJ_NA_KAT = { uczelnia: "szkola" };
+function kategorieZnaku(zn, zespoly) {
+  const k = new Set();
+  for (const cls of zn.classList) { const m = /^lm-r-(.+)$/.exec(cls); if (m) k.add(RODZAJ_NA_KAT[m[1]] || m[1]); }
+  if (zn.classList.contains("lm-zespol")) for (const r of zespoly[zn.dataset.id] || []) k.add(RODZAJ_NA_KAT[r] || r);
+  if (zn.classList.contains("lm-lokal")) k.add("lokal");
+  if (zn.classList.contains("lm-miejsce")) k.add("zabytek");
+  return k;
+}
+function odswiezFiltr(c) {
+  const nav = el("pp-filtr"), znaki = [...document.querySelectorAll("#lmapa .lmapa-nakladka > .lm-znak")];
+  nav.hidden = c.zakladka !== "mapa" || !znaki.length;
+  if (nav.hidden) return;
+  const zespoly = {};
+  for (const b of c.kat?.mapa?.budynki || []) if (b.zespol) (zespoly[b.zespol] ||= []).push(b.rodzaj);
+  const dostepne = new Set();
+  const dane = znaki.map((zn) => { const k = kategorieZnaku(zn, zespoly); k.forEach((x) => dostepne.add(x)); return [zn, k]; });
+  if (filtr && !dostepne.has(filtr)) filtr = null;
+  nav.innerHTML = Object.entries(KATEGORIE).filter(([k]) => dostepne.has(k)).map(([k, [nazwa, ik]]) => `<button type="button" class="pp-f${filtr === k ? " aktywny" : ""}" data-akcja="pp-filtr" data-k="${k}"
+    aria-pressed="${filtr === k}" aria-label="${nazwa}" title="${nazwa}${filtr === k ? " – kliknij, żeby wyłączyć filtr" : ""}">${ikona(ik, 20)}</button>`).join("");
+  for (const [zn, k] of dane) {
+    zn.classList.toggle("pp-pasuje", !!filtr && k.has(filtr));
+    zn.classList.toggle("pp-przygaszony", !!filtr && !k.has(filtr));
+  }
 }
 
 export const AKCJE_PULPITU = {
@@ -180,8 +229,24 @@ export const AKCJE_PULPITU = {
   "pp-koszyk": (e, c) => pokaz("zakupy", c),
   "pp-mapa": (e, c) => { zamknijOkno(); c.idz("mapa"); },
   "pp-portfel": (e, c) => pokaz("finanse", c),
-  "pp-zeszyt": (e, c) => { kartaZeszytu = "lista"; pokaz("zeszyt", c); },
-  "pp-karta": (e, c) => { kartaZeszytu = e.dataset.k === "rozpiska" ? "rozpiska" : "lista"; pokaz("zeszyt", c); },
+  "pp-zeszyt": (e, c) => { zamknijPodreczne(); otworzZeszyt(c, 0); },
+  "pp-zeszyt-zamknij": () => zamknijZeszyt(),
+  "pp-zeszyt-strona": (e, c) => idzDoStrony(c, e.dataset.n != null ? +e.dataset.n : zeszytNr() + +(e.dataset.d || 0)),
+  "pp-wydarzenia": (e, c) => {
+    const sz = el("pp-szuflada"), otwieramy = sz.hidden;
+    zamknijPodreczne();
+    if (!otwieramy) return;
+    odswiezSzuflade(c);
+    sz.hidden = false;
+    el("pp-wydarzenia").setAttribute("aria-expanded", "true");
+  },
+  "pp-warstwy": () => {
+    const otwieramy = !document.body.classList.contains("pp-warstwy");
+    zamknijPodreczne();
+    document.body.classList.toggle("pp-warstwy", otwieramy);
+    el("pp-warstwy").setAttribute("aria-expanded", String(otwieramy));
+  },
+  "pp-filtr": (e, c) => { filtr = filtr === e.dataset.k ? null : e.dataset.k; odswiezFiltr(c); },
 };
 
 // --- odświeżanie po każdym przerysowaniu widoku (app.js: rysuj) -----------------------------------------------------
@@ -207,14 +272,18 @@ function odswiezPasek(c) {
   k.setAttribute("aria-label", k.title);
   znak("pp-koszyk", n ? String(n) : "", "");
   el("pp-mapa").hidden = c.zakladka === "mapa";
+  el("pp-warstwy").hidden = c.zakladka !== "mapa";
+  if (c.zakladka !== "mapa") document.body.classList.remove("pp-warstwy");
 }
 
 function odswiezTydzien(c) {
   const v = c.v, st = document.getElementById("status-gry");
-  // stan gry z dawnego nagłówka: wstrzymanie, oczekiwanie na drużyny, termin (bez nazwy gry, składu i salda)
+  // „Tydzień N” na środku u góry – tylko informacja; nazwa drużyny i stan gry z dawnego nagłówka (wstrzymanie, „Czekamy na…”,
+  // termin; bez nazwy gry, składu i salda) zostają przy pasku po lewej
   const chipy = st ? [...st.children].slice(1).filter((x) => !x.querySelector("svg")).map((x) => `<span class="pp-chip">${x.innerHTML}</span>`).join("") : "";
-  el("pp-tydzien").innerHTML = `<b title="Tydzień ${v.runda} z ${v.gra.liczba_rund}">Tydzień ${v.runda}${v.runda < v.gra.runda ? " · podgląd" : ""}</b>
-    <small>${esc(v.dashboard?.nazwa || "")}</small>${chipy}`;
+  el("pp-tydzien").innerHTML = `<b title="Tydzień ${v.runda} z ${v.gra.liczba_rund}">Tydzień ${v.runda}${v.runda < v.gra.runda ? " · podgląd" : ""}</b>`;
+  el("pp-druzyna").innerHTML = `<small>${esc(v.dashboard?.nazwa || "")}</small>${chipy}`;
+  el("pp-druzyna").hidden = !(v.dashboard?.nazwa || chipy);
 }
 
 function odswiezPortfel(c) {
@@ -228,24 +297,6 @@ function odswiezPortfel(c) {
     <span class="pp-kw ${debet > 0 ? "zle" : ""}"><small>Debet</small><b>${debet > 0 ? "! " + zl(debet) : "brak"}</b></span>`;
 }
 
-function odswiezZeszyt(c) {
-  const v = c.v;
-  let plan = null;
-  try { plan = planTygodnia(v); } catch (e) { console.error(e); }
-  const z = el("pp-zeszyt");
-  if (!plan) { z.hidden = true; return; }
-  z.hidden = false;
-  const n = plan.nastepny;
-  z.setAttribute("aria-label", `Zeszyt wujka. ${n ? `Następny krok: ${n.co}, ${n.gdzie}.` : "Wszystkie kroki tygodnia zrobione."} Otwórz cały zeszyt`);
-  z.classList.toggle("pp-zrobiony", !n);
-  const poz = plan.lista.map((k, i) => `<li class="${k.ok ? "ok" : k.teraz ? "teraz" : ""}"><span class="pp-lp" aria-hidden="true">${k.ok ? "✓" : k.teraz ? "▶" : i + 1}</span>
-      <span>${esc(k.co)}${k.ok ? '<i class="sr"> (zrobione)</i>' : k.teraz ? '<i class="sr"> (następny krok)</i>' : ""}</span></li>`).join("");
-  z.innerHTML = `<span class="pp-sprezyna" aria-hidden="true"></span><span class="pp-kartka">
-    <span class="pp-zg">Zeszyt wujka · ${plan.zrobione} z ${plan.lista.length}</span>
-    <span class="pp-krok"><small>${n ? esc(n.gdzie) : "Gotowe"}</small>${n ? esc(n.co) : "Wszystko odhaczone"}</span>
-    <ul class="pp-lista">${poz}</ul></span>`;
-}
-
 export function odswiezPulpit(c) {
   if (!PULPIT) return;
   montuj();
@@ -254,11 +305,13 @@ export function odswiezPulpit(c) {
   odswiezPasek(c);
   odswiezTydzien(c);
   odswiezPortfel(c);
-  odswiezZeszyt(c);
+  rysujMalyZeszyt(c, el("pp-zeszyt"));
+  odswiezSzuflade(c);
+  odswiezFiltr(c);
   try { oznaczCel(c.v); } catch (e) { console.error(e); }   // obwódka „teraz” na budynku następnego kroku także na mapie
   // otwarte okna pulpitu aktualizują się w miejscu; okno wysyłania znika, gdy tydzień się przeliczył
   if (otwarteOkno(T_WYSLIJ)) { if (oknoRunda !== c.v.gra.runda) zamknijOkno(); else pokaz("wyslij", c); }
   if (otwarteOkno(T_FINANSE)) pokaz("finanse", c);
-  if (otwarteOkno(T_ZESZYT)) pokaz("zeszyt", c);
+  if (zeszytOtwarty()) odswiezZeszyt(c);
   if (otwarteOkno(T_ZAKUPY)) pokaz("zakupy", c);
 }

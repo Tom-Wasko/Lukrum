@@ -8,6 +8,7 @@
 import { esc, kolorFirmy, marka, nazwaFirmy, okno, toast, zamknijOkno } from "../zakladki/wspolne.js";
 import { ikona, zeton } from "./ikony.js";
 import { utworzWidok } from "./widok.js";
+import { pokazKarte } from "../pulpit/karta.js";
 import { nakladkaPory, naGodzine, terazMinuty, wysokoscSlonca } from "./slonce.js";
 
 const ADRES = (plik) => new URL(plik, import.meta.url).href;
@@ -471,7 +472,7 @@ export const nowaMapa = {
     },
     "lmapa-punkt": (el) => {
       const m = (DANE.dodatkowe || []).find((x) => x.id === el.dataset.id);
-      if (m) okno(esc(m.nazwa), `<p>${esc(m.opis)}</p><p class="podpowiedz">Punkt orientacyjny na mapie Lublina – nie wpływa na grę.</p>`);
+      if (m) pokazKarte({ rodzaj: "Punkt orientacyjny", tytul: m.nazwa, adres: m.adres || "Lublin", opis: m.opis, uwaga: "Nie wpływa na grę." });
     },
     "lmapa-firma": (el, c) => { zamknijOkno(); P.akcje["mapa-budynek"](el, c); },
     "lmapa-wyglad": (el) => window.lukrum.wyglad.ustaw({ paleta: el.dataset.paleta, tryb: el.dataset.tryb }),
