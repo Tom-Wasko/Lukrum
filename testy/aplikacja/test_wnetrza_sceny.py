@@ -79,3 +79,42 @@ def test_punkty_scen_prowadza_do_istniejacych_ekranow():
         for p in ps:
             if p["wejscie"]:
                 assert re.sub(r"\.html.*", "", p["wejscie"]) in _sceny(), (s, p)
+
+
+def _budynki_mapy():
+    return yaml.safe_load((GRA / "dane" / "mapa" / "budynki.yaml").read_text(encoding="utf-8"))
+
+
+def test_kamienica_i_park_handlowy_maja_zetony_z_tymczasowa_lokalizacja():
+    """Decyzja szefa 18.11: kamienica rachmistrzów i Park handlowy są na mapie, adresy tymczasowe do czasu wskazania miejsc."""
+    mapa = _budynki_mapy()
+    kam = next(b for b in mapa["budynki"] if b["id"] == "kamienica_rachmistrzow")
+    park = next(z for z in mapa["zespoly"] if z["id"] == "park_handlowy")
+    for zeton in (kam, park):
+        assert zeton["geo"] and zeton["adres"]
+        assert "tymczasow" in (zeton["opis"] + zeton["adres"]).lower()
+    assert _budynki_sceny()["kamienica_rachmistrzow"] == "kamienica_rachmistrzow"
+    assert _budynki_sceny()["park_handlowy"] == "park_handlowy"
+
+
+def test_drukarnia_nie_ma_zetonu_na_mapie_a_dom_reklamy_ma_winde():
+    """Drukarnia jest piętrem Domu reklamy (żeton biurowca przy Zana), nie osobnym budynkiem; biura rachunkowe są w kamienicy."""
+    mapa = _budynki_mapy()
+    drukarnia = next(b for b in mapa["budynki"] if b["id"] == "drukarnia")
+    assert drukarnia["zespol"] == "biurowiec_zana" and not drukarnia.get("geo")
+    assert _budynki_sceny()["biurowiec_zana"] == "winda_zana"
+    assert not any(b["id"] == "biura" for b in mapa["budynki"])
+    winda = (SCENY / "winda_zana.js").read_text(encoding="utf-8")
+    pietra = re.findall(r'scena: "(\w+)"', winda)
+    assert pietra == ["zana_internet", "zana_eventy", "zana_radio", "zana_drukarnia", "zana_portiernia"]
+    assert set(pietra) <= _sceny()
+    assert "wejscie: \"pokoj_ksiegi.html\"" in (SCENY / "zana_portiernia.js").read_text(encoding="utf-8")
+
+
+def test_park_handlowy_prowadzi_do_hali_sprzetu_a_kebab_nie_do_parku():
+    park = (SCENY / "park_handlowy.js").read_text(encoding="utf-8")
+    assert 'wejscie: "sprzet_gastro.html"' in park
+    swiat = (GRA / "panel_gracza" / "static" / "swiat" / "swiat.js").read_text(encoding="utf-8")
+    assert 'M.id === "kebab" && MIEJSCA.kebab.punkty.some' in swiat   # ekran z kebaba wraca do kebaba, nie do Parku
+    kebab = (GRA / "panel_gracza" / "static" / "swiat" / "miejsca.js").read_text(encoding="utf-8")
+    assert "park_handlowy" not in kebab.split("kebab: {", 1)[1]

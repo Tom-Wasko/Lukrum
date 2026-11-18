@@ -261,7 +261,9 @@ export function otworzBudynek(c, id) {
 
 /** Okruszek nad ekranem decyzji: powrót do wnętrza, w którym jest ten ekran. */
 export function okruszek(k) {
-  const id = EKRANY_SCEN[M.id]?.has(k) ? M.id : miejsceEkranu(k);
+  // ekran otwarty z kebaba wraca do kebaba: z kebaba nie ma przejścia do Parku handlowego (sprzęt kupuje się tylko po wejściu z mapy)
+  const zKebaba = M.id === "kebab" && MIEJSCA.kebab.punkty.some((p) => p.cel === k);
+  const id = zKebaba ? "kebab" : EKRANY_SCEN[M.id]?.has(k) ? M.id : miejsceEkranu(k);
   if (!id) return "";
   return `<a class="sw-okruszek" data-akcja="sw-miejsce" data-m="${id}" title="Wróć do wnętrza: ${esc(MIEJSCA[id].tytul)}">${ikona("lewo", 16)}${esc(MIEJSCA[id].tytul)}</a>`;
 }

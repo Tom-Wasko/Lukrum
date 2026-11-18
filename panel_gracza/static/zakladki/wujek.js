@@ -53,7 +53,7 @@ function nowosci(v, c) {
 
 // Krok „teraz” na mapie miasta: budynek, do którego trzeba pójść, dostaje obwódkę i plakietkę „teraz”. Mapa (strona
 // [mapa]) nie jest zmieniana: wystarcza reguła CSS po atrybucie data-id znacznika, więc działa też po przerysowaniu mapy.
-export const BUDYNEK_KROKU = { lokale: "agencja_nieruchomosci", bank: "kamienica_bankowa", biuro: "biurowiec_zana", rynek_pracy: "agencja_pracy",
+export const BUDYNEK_KROKU = { lokale: "agencja_nieruchomosci", bank: "kamienica_bankowa", biuro: "kamienica_rachmistrzow", rynek_pracy: "agencja_pracy",
   dostawcy: "makro", sprzet: "sprzet_gastro", wyslij: "poczta" };
 // krok → punkt wnętrza (data-k klikalnego miejsca sceny i pozycji listy „Co tu zrobisz”, swiat/miejsca.js: cel)
 const PUNKT_KROKU = { lokale: "lokale", bank: "bank", biuro: "biuro", oferta: "lokal_menu", sprzedaz: "lokal_menu", stanowiska: "wnetrze_sprzet",

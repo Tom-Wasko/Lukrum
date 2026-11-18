@@ -7,7 +7,7 @@ export default function (R) {
   const YP = 400;
   const garnki = (px, py, pw, ph) => Array.from({ length: Math.floor(pw / 46) }, (_, k) => `<rect class="k1" x="${px + k * 46 + 4}" y="${py + ph - 34 - (k % 2) * 8}" width="36" height="${34 + (k % 2) * 8}" rx="3" fill="var(--g-metal)"/><path class="k1" d="M${px + k * 46} ${py + ph - 26 - (k % 2) * 8}h4M${px + k * 46 + 40} ${py + ph - 26 - (k % 2) * 8}h4"/>`).join("");
   return {
-    id: "sprzet_gastro", tytul: "Hurtownia sprzętu gastronomicznego", adres: "Park handlowy, Węglin Południowy", opis: "Hala wystawowa: trzy rożny na podestach z metkami, stół z frytownicą i grillem, półka z kasami, kącik komisu i lada sprzedawcy.",
+    id: "sprzet_gastro", tytul: "Hurtownia sprzętu gastronomicznego", adres: "Park handlowy, Węglin Południowy", wroc: "Park handlowy", wrocDo: "park_handlowy.html", opis: "Hala wystawowa: trzy rożny na podestach z metkami, stół z frytownicą i grillem, półka z kasami, kącik komisu i lada sprzedawcy.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana)", YP) + `<rect x="0" y="0" width="1220" height="22" fill="var(--akcent-2)"/>` + R.podloga("plytki", YP) + [150, 530, 910].map((x) => R.swietlowka(x, 22, 170)).join("");
       s += R.szyld(610, 50, 470, 48, "Sprzęt gastronomiczny", { tlo: "var(--g-tablica)", tekst: "var(--g-biel)", r: 24 }) + R.t(610, 116, "Konstruktorzy T&K · kupno · wynajem · serwis", 13, { f: "tekst", bez: true, op: .8 });

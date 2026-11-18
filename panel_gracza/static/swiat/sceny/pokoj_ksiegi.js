@@ -1,10 +1,10 @@
-// Scena wnętrza „biurowiec_zana” (wdrożenie z makiet: archiwum/fable-17.11/fable-wnetrza). Układ i opis: projekt.md, sceny/biurowiec_zana.md.
+// Scena wnętrza „pokoj_ksiegi” (dawniej „biurowiec_zana”; z makiet: archiwum/fable-17.11/fable-wnetrza). Pokój z księgą na parterze Domu reklamy.
 // TYTUL: Biurowiec przy Zana (pokój z księgą firmy, KPiR) | Księgowość
 // KOLEJNOSC: 32
 // Wynajęty pokój biurowy: tu leży księga przychodów i rozchodów, gdy drużyna księguje sama (decyzja szefa 9: KPiR zostaje przy Zana).
 export default function (R) {
   return {
-    id: "biurowiec_zana", tytul: "Biurowiec przy Zana", adres: "ul. Zana 39, pokój 12", opis: "Pokój biurowy z księgą przychodów i rozchodów na biurku, pudełkiem paragonów i kalendarzem terminów.",
+    id: "pokoj_ksiegi", tytul: "Biurowiec przy Zana", adres: "ul. Zana 39, pokój 12", wroc: "Portiernia", wrocDo: "zana_portiernia.html", opis: "Pokój biurowy z księgą przychodów i rozchodów na biurku, pudełkiem paragonów i kalendarzem terminów.",
     rysuj: (R) => {
       let s = R.sciana() + R.podloga("wykladzina", 400, "color-mix(in srgb, var(--akcent-2) 25%, var(--g-podloga))") + `<rect x="0" y="0" width="1220" height="26" fill="var(--g-metal2)" opacity=".5"/>` + R.swietlowka(260, 26, 170) + R.swietlowka(760, 26, 170);
       // okno z żaluzjami i widokiem na bloki, kaloryfer, drzwi z numerem

@@ -24,7 +24,7 @@ export default function (R) {
     return s;
   }
   return {
-    id: "kamienica_rachmistrzow", tytul: "Kamienica rachmistrzów", adres: "ul. Zana, Rury", opis: "Klatka schodowa kamienicy z czterema biurami rachunkowymi: J.K.Ś. i Scrooge na parterze, Asteroida 328 i Józef K. na piętrze.",
+    id: "kamienica_rachmistrzow", tytul: "Kamienica rachmistrzów", adres: "Krakowskie Przedmieście (lokalizacja tymczasowa)", opis: "Klatka schodowa kamienicy z czterema biurami rachunkowymi: J.K.Ś. i Scrooge na parterze, Asteroida 328 i Józef K. na piętrze.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana)", DOL) + R.lamperia(PIETRO + 150, DOL, "color-mix(in srgb, var(--g-zielen) 45%, var(--g-sciana2))") + R.lamperia(120, PIETRO, "color-mix(in srgb, var(--g-zielen) 45%, var(--g-sciana2))") + R.podloga("lastryko", DOL);
       // galeria piętra z balustradą (przerwa na wylot schodów), schody, żarówka na kablu
