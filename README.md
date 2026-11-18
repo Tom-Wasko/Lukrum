@@ -77,3 +77,5 @@ Hyperlegible) są w repozytorium na licencji OFL (`panel_gracza/static/fonty/OFL
 ## Autor
 
 Tom-Wasko. Kod jest prywatny do czasu publikacji.
+
+Jak powstał projekt i jak użyto AI: [METODA.md](METODA.md) (szkic).
