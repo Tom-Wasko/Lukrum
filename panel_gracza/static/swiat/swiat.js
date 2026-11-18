@@ -1,7 +1,7 @@
 // Świat gry: miejsca (budynki) z wnętrzami zamiast listy zakładek. Wejście: pasek z lewej, mapa (lukrum.otworzWnetrze)
 // albo okruszki nad ekranem decyzji. Wnętrze to scena z klikalnymi miejscami i lista „co tu zrobisz” pod nią.
 // Ekran „miejsce” jest zwykłą zakładką panelu (rejestr: zakladki/index.js), więc korzysta z tego samego stanu gry.
-import { esc, nazwaUslugi, toast, zl } from "../zakladki/wspolne.js";
+import { esc, nazwaUslugi, toast } from "../zakladki/wspolne.js";
 import { ikona } from "../zakladki/ikony.js";
 import { cenyLokalu, lokalWybrany, menuLokalu, mojeLokale, opisLokalu, wieleLokali } from "../zakladki/lokal_wybor.js";
 import { BUDYNEK_DO_EKRANU, BUDYNEK_DO_MIEJSCA, MIEJSCA, miejsceEkranu, ustawEkranyMiejsc } from "./miejsca.js";
@@ -160,7 +160,7 @@ function naglowek(c, m) {
   const ocena = kebab && lok?.ocena ? wsk("Ocena", `${lok.ocena.toFixed(1).replace(".", ",")} ★`) : "";
   return `<div class="sw-gora"><button class="sw-wroc" data-akcja="sw-mapa" title="Wróć na mapę miasta">${ikona("mapa", 18)}<span>Mapa</span></button>
     <h1>${tytul}</h1><span class="adres">${adres}</span>
-    ${wsk("Tydzień", `${Math.min(v.runda, v.gra.liczba_rund)} z ${v.gra.liczba_rund}`)}${wsk("Kasa", zl(v.dashboard.saldo))}${ocena}</div>`;
+    ${wsk("Tydzień", `${Math.min(v.runda, v.gra.liczba_rund)} z ${v.gra.liczba_rund}`)}${ocena}</div>`;
 }
 
 function lista(c, m) {

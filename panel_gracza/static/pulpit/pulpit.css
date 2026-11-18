@@ -22,7 +22,7 @@ body.pulpit.na-mapie .lmapa { position: fixed; inset: 0; z-index: 1; height: aut
 body.pulpit .lm-ustawienia { margin: 0; padding: 6px 8px; background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px;
   box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent); }
 body.pulpit .lm-ustawienia [aria-label="Paleta kolorów"], body.pulpit .lm-ustawienia [aria-label="Tryb"], body.pulpit .lm-ustawienia .lm-stara { display: none; }
-body.pulpit.na-mapie .lm-pasek { left: 70px; }   /* skróty mapy (lokal, banki…) obok paska LUKRUM */
+body.pulpit .lm-pasek { display: none; }   /* skróty mapy zastępuje pasek LUKRUM */
 
 /* --- lewy górny róg ---------------------------------------------------------------------------------------------------- */
 .pp-lewy { position: fixed; left: 10px; top: 10px; z-index: 45; width: 44px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
@@ -42,10 +42,11 @@ body.pulpit.na-mapie .lm-pasek { left: 70px; }   /* skróty mapy (lokal, banki�
 .pp-wyszarzona { border-style: dashed; opacity: .7; cursor: not-allowed; }
 .pp-znak { position: absolute; right: -8px; top: -8px; display: grid; place-items: center; min-width: 18px; height: 18px; padding: 0 3px; box-sizing: border-box;
   font: 700 12px/1 var(--font-tekst); font-style: normal; color: var(--papier); background: var(--tusz); border-radius: 9px; }
-/* szyld: pionowy napis LUKRUM (stos liter) w kolorze akcentu */
-.pp-szyld { width: 44px; padding: 8px 0; box-sizing: border-box; display: grid; place-items: center; color: var(--papier); background: var(--akcent);
-  border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent);
-  font: 700 calc(15px * var(--skala-tekstu, 1))/1.15 var(--font-gruby); writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 0; user-select: none; }
+/* szyld: pionowy napis LUKRUM (writing-mode), czytany od dołu do góry jak szyld na słupie; kolory akcent/papier w każdej palecie */
+.pp-szyld { width: 44px; padding: 12px 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; color: var(--papier);
+  background: var(--akcent); border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent);
+  font: 400 calc(21px * var(--skala-tekstu, 1))/1 var(--font-gruby); writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: .14em;
+  text-transform: uppercase; user-select: none; }
 /* „Tydzień N” – tylko informacja; pod nim nazwa drużyny i stan gry z dawnego nagłówka */
 .pp-tydzien { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: max-content; max-width: 210px; padding: 6px 9px; box-sizing: border-box;
   color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent);
@@ -105,6 +106,10 @@ body.pulpit.na-mapie .lm-pasek { left: 70px; }   /* skróty mapy (lokal, banki�
 #pulpit .pp-portfel, #pulpit .pp-zeszyt { border: 0; }
 
 /* --- okna otwierane z pulpitu ---------------------------------------------------------------------------------------- */
+.pp-karty { display: flex; gap: 8px; margin-bottom: 14px; }
+.pp-grupa { margin: 14px 0 4px; font-size: 14px; }
+.pp-grupa small { font-weight: 400; opacity: .8; }
+.pp-zakupy { margin: 0; padding-left: 20px; line-height: 1.5; }
 .pp-konto-linki { display: flex; gap: 8px; flex-wrap: wrap; }
 .pp-konto-wyloguj { margin-top: 12px; }
 

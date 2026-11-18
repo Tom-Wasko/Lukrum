@@ -50,17 +50,13 @@ def test_kazda_akcja_pulpitu_ma_obsluge():
     klucze_paska = set(re.findall(r'\["(\w+)", "\w+", "[^"]+"\]', _ikony_paska())) - {"jak"}
     uzyte = {f"pp-{k}" for k in klucze_paska} | set(re.findall(r'data-akcja="(pp-[a-z]+)"', PULPIT_JS))
     assert 'data-akcja="pp-${k}"' in PULPIT_JS
-    assert uzyte == obslugiwane == {"pp-wyslij", "pp-konto", "pp-koszyk", "pp-mapa", "pp-portfel", "pp-zeszyt"}
+    assert uzyte == obslugiwane == {"pp-wyslij", "pp-konto", "pp-koszyk", "pp-mapa", "pp-portfel", "pp-zeszyt", "pp-karta"}
 
 
-def test_ikony_paska_i_ekran_zakupow_istnieja():
+def test_ikony_paska_istnieja():
     ikony = set(re.findall(r"^  (\w+): '<", IKONY_JS, re.M))
     uzyte = re.findall(r'\["\w+", "(\w+)", "[^"]+"\]', _ikony_paska())
     assert uzyte and set(uzyte) <= ikony, set(uzyte) - ikony
-    ekran = re.search(r'EKRAN_ZAKUPOW = "(\w+)"', PULPIT_JS).group(1)
-    rejestr = re.search(r"const ZAKLADKI = \{([^}]*)\}", INDEX_JS).group(1)
-    zlozone = re.findall(r"^  (\w+): zlozona\(", INDEX_JS, re.M)
-    assert ekran in set(re.findall(r"\w+", rejestr)) | set(zlozone)
 
 
 def test_style_pulpitu_maja_kolory_tylko_ze_zmiennych():
@@ -115,3 +111,14 @@ def test_strona_gry_laduje_pulpit(client):
     strona = client.get(f"/gra/{r.json()['id']}/Moja firma")
     html = strona.content.decode()
     assert strona.status_code == 200 and "pulpit/pulpit.css" in html and "uklad=stary" in html
+
+
+def test_poprawki_1b():
+    # skróty mapy usunięte z widoku, szyld pionowo (writing-mode), zakupy tylko do odczytu, rozpiska funkcji, bez „Kasy” we wnętrzu
+    assert "body.pulpit .lm-pasek { display: none; }" in PULPIT_CSS
+    assert "writing-mode: vertical-rl" in PULPIT_CSS
+    assert "od tyg." not in PULPIT_JS and "zakupyDostepne" not in PULPIT_JS
+    assert "Zakupy tygodnia" in PULPIT_JS and "tylko do odczytu" in PULPIT_JS
+    assert "Rozpiska funkcji" in PULPIT_JS and "MIEJSCA" in PULPIT_JS
+    swiat = (STATIC / "swiat" / "swiat.js").read_text(encoding="utf-8")
+    assert 'wsk("Kasa"' not in swiat and 'wsk("Tydzień"' in swiat

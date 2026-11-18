@@ -1,6 +1,6 @@
 // Powłoka pulpitu (seria pulpit, krok 1; decyzje 18.11.2026): mapa na cały ekran i trzy elementy przy krawędziach.
 //  - lewy górny róg: ⚙ (ustawienia z motyw.js) nad pionowym paskiem LUKRUM z ikonami: Wyślij decyzje, konto, Jak grać,
-//    zakupy; pod paskiem „Tydzień N” (tylko informacja);
+//    zakupy (tylko do odczytu: co zamówiono i kupiono w tym tygodniu); pod paskiem „Tydzień N” (tylko informacja);
 //  - dół: portfel (plik banknotów) – najechanie pokazuje gotówkę i debet, kliknięcie otwiera okno finansów;
 //  - prawa krawędź: zeszyt wujka – wystaje z brzegu z następnym krokiem, najechanie wysuwa listę, kliknięcie otwiera zeszyt.
 // Stary układ (nagłówek, menu, stopka) jest do obejrzenia pod adresem ?uklad=stary i na wąskim ekranie (telefon – później).
@@ -9,15 +9,16 @@ import { esc, kafelkiLiczb, okno, otwarteOkno, toast, zamknijOkno, zl } from "..
 import { ikona } from "../zakladki/ikony.js";
 import ZAKLADKI from "../zakladki/index.js";
 import { listWujka, oznaczCel, planTygodnia } from "../zakladki/wujek.js";
+import { MIEJSCA } from "../swiat/swiat.js";
 
 // klasę ustawia skrypt na początku <body> (gra.html), żeby układ nie migał
 export const PULPIT = document.body.classList.contains("pulpit");
 
-const T_WYSLIJ = "Wyślij decyzje", T_FINANSE = "Finanse", T_ZESZYT = "Zeszyt wujka", T_KONTO = "Konto";
+const T_WYSLIJ = "Wyślij decyzje", T_FINANSE = "Finanse", T_ZESZYT = "Zeszyt wujka", T_KONTO = "Konto", T_ZAKUPY = "Zakupy tygodnia";
 const IKONY_PASKA = [   // [klucz, ikona, napis]
   ["wyslij", "wyslij", "Wyślij decyzje"], ["konto", "osoba", "Konto"], ["jak", "ksiazka", "Jak grać"], ["koszyk", "sprzedaz", "Zakupy"],
   ["mapa", "mapa", "Mapa miasta"]];
-const EKRAN_ZAKUPOW = "zaop_dostawy";   // istniejący ekran zamówień składników (Hurtownie)
+let kartaZeszytu = "lista";   // „lista” (list wujka) albo „rozpiska” (spis funkcji gry)
 
 let zamontowany = false, oknoRunda = null;
 const el = (id) => document.getElementById(id);
@@ -114,13 +115,61 @@ function pokaz(rodzaj, c) {
     okno(T_FINANSE, htmlFinansow(c), { srednie: true, przyciski: przyciskiFinansow(c) });
     try { if (v.wyniki && c.dostepna("raport")) ZAKLADKI.raport.po?.(c); } catch (e) { console.error(e); }
   } else if (rodzaj === "zeszyt") {
-    okno(T_ZESZYT, listWujka(v, c), { srednie: true });
-  } else if (rodzaj === "konto") okno(T_KONTO, htmlKonta(), { male: true });
+    okno(T_ZESZYT, htmlZeszytu(c), { srednie: true });
+  } else if (rodzaj === "zakupy") okno(T_ZAKUPY, htmlZakupow(c), { srednie: true });
+  else if (rodzaj === "konto") okno(T_KONTO, htmlKonta(), { male: true });
 }
 
-const zakupyOd = (c) => c.odRundy(EKRAN_ZAKUPOW);
-const zakupyDostepne = (c) => c.jestZakladka(EKRAN_ZAKUPOW) && !c.wylaczona(EKRAN_ZAKUPOW) && (c.zakryta(EKRAN_ZAKUPOW) || c.dostepna(EKRAN_ZAKUPOW));
-const opisZakupow = (c) => zakupyOd(c) ? `Zakupy: dostępne od tygodnia ${zakupyOd(c)}` : "Zakupy: jeszcze niedostępne";
+
+// --- zakupy tygodnia (tylko do odczytu): to, co jest w decyzjach bieżącego tygodnia -------------------------------------
+const DNI = ["poniedziałek", "wtorek", "środa", "czwartek", "piątek", "sobota", "niedziela"];
+const gw = (q) => (q ? ` ${"★".repeat(+q)}` : "");
+function zakupyTygodnia(c) {
+  const d = c.d || {}, zas = c.kat?.zasoby || {};
+  const skladniki = (d.zamowienia || []).map((x) => `${esc(x.dostawca)}: ${esc(x.zasob)}${gw(x.jakosc)}, ${x.ilosc} × ${esc(zas[x.zasob]?.typ_opakowania || "opakowanie")}`
+    + `, dostawa: ${DNI[+x.dzien || 0]}`);
+  const sprzet = (d.sprzet_kup || []).map((x) => `${esc(x.nazwa)}${gw(x.jakosc)} (${esc(x.typ)})`);
+  const reszta = [...(d.wyposazenie_kup || []), ...(d.udogodnienia_kup || [])].map((x) => esc(typeof x === "string" ? x : x.nazwa || ""))
+    .concat((d.dekor_kup || []).map(([g, st]) => `wystrój: ${esc(g)} – ${esc(st)}`));
+  const uslugi = (d.kampanie || []).map((k) => `reklama: ${esc(k.agencja)}, ${esc(k.kanal)}${k.emisje ? ` (${k.emisje} emisji)` : ""}`)
+    .concat((d.szkolenia || []).map((x) => `szkolenie: ${esc(x.szkolenie)} (${esc(x.firma)})`))
+    .concat((d.leasing_wez || []).map((x) => `leasing: ${esc(x.nazwa)} (${esc(x.bank)})`));
+  return [["Składniki z dostaw", skladniki], ["Sprzęt", sprzet], ["Wyposażenie i wystrój", reszta], ["Usługi", uslugi]];
+}
+const liczbaZakupow = (c) => zakupyTygodnia(c).reduce((s, [, l]) => s + l.length, 0);
+function htmlZakupow(c) {
+  const grupy = zakupyTygodnia(c).filter(([, l]) => l.length);
+  if (!grupy.length) {
+    return `<p>Nic jeszcze nie zamówiono ani nie kupiono w tym tygodniu.</p>
+      <p class="podpowiedz">Składniki zamawia się w Hurtowniach, sprzęt i wyposażenie w Parku handlowym, a usługi (reklamy, szkolenia, leasing) w biurowcu, akademii i banku. Ta lista tylko pokazuje, co już jest w decyzjach.</p>`;
+  }
+  return `<p class="podpowiedz">Lista tylko do odczytu: to, co jest w decyzjach tego tygodnia. Zmienia się ją w budynkach na mapie.</p>`
+    + grupy.map(([n, l]) => `<h3 class="pp-grupa">${n} <span class="licznik">${l.length}</span></h3><ul class="pp-zakupy">${l.map((x) => `<li>${x}</li>`).join("")}</ul>`).join("");
+}
+
+// --- zeszyt wujka: dwie strony – lista wujka i rozpiska funkcji ----------------------------------------------------------
+function htmlRozpiski(c) {
+  const widoczny = (p) => !p.cel || (c.jestZakladka(p.cel) && !c.wylaczona(p.cel) && !c.ukryta(p.cel));
+  const sekcje = Object.values(MIEJSCA).map((m) => {
+    const widziane = new Set();
+    const poz = (m.punkty || []).filter((p) => !p.tylkoScena && widoczny(p)).filter((p) => { const k = `${p.cel}|${p.nazwa}`; return widziane.has(k) ? false : (widziane.add(k), true); });
+    if (!poz.length) return "";
+    return `<h3 class="pp-grupa">${esc(m.tytul)}${m.adres ? ` <small>${esc(m.adres)}</small>` : ""}</h3><ul class="pp-zakupy">${poz.map((p) => {
+      const gra = p.cel && c.zakryta(p.cel) ? ` <i>(robi to gra, dopóki funkcja zostaje zakryta)</i>` : "";
+      return `<li><b>${esc(p.nazwa)}</b> – ${esc(p.opis || p.podpis || "")}${gra}</li>`;
+    }).join("")}</ul>`;
+  }).join("");
+  const poza = [["Poczta", "ikona „Wyślij decyzje” na pasku: wysyłka decyzji tygodnia."], ["Portfel", "plik banknotów przy dolnej krawędzi: gotówka, debet i raport finansowy."],
+    ...(c.jestZakladka("handel") && !c.wylaczona("handel") ? [["Bazar", "handel towarem i sprzętem między drużynami."]] : [])];
+  return `<p class="podpowiedz">Gdzie na mapie co załatwić: budynek, a pod nim to, co się w nim robi. Budynek otwiera się kliknięciem na mapie.</p>${sekcje}
+    <h3 class="pp-grupa">Poza budynkami</h3><ul class="pp-zakupy">${poza.map(([n, o]) => `<li><b>${n}</b> – ${o}</li>`).join("")}</ul>`;
+}
+function htmlZeszytu(c) {
+  const karty = [["lista", "Lista wujka"], ["rozpiska", "Rozpiska funkcji"]];
+  const pasek = `<div class="pp-karty" role="group" aria-label="Strony zeszytu">${karty.map(([k, n]) => `<button type="button" class="btn ${kartaZeszytu === k ? "" : "jasny"}"
+    data-akcja="pp-karta" data-k="${k}" aria-pressed="${kartaZeszytu === k}">${n}</button>`).join("")}</div>`;
+  return pasek + (kartaZeszytu === "rozpiska" ? htmlRozpiski(c) : listWujka(c.v, c));
+}
 
 export const AKCJE_PULPITU = {
   "pp-wyslij": (e, c) => {
@@ -128,10 +177,11 @@ export const AKCJE_PULPITU = {
     pokaz("wyslij", c);
   },
   "pp-konto": (e, c) => pokaz("konto", c),
-  "pp-koszyk": (e, c) => { if (!zakupyDostepne(c)) return toast(opisZakupow(c)); zamknijOkno(); c.idz(EKRAN_ZAKUPOW); },
+  "pp-koszyk": (e, c) => pokaz("zakupy", c),
   "pp-mapa": (e, c) => { zamknijOkno(); c.idz("mapa"); },
   "pp-portfel": (e, c) => pokaz("finanse", c),
-  "pp-zeszyt": (e, c) => pokaz("zeszyt", c),
+  "pp-zeszyt": (e, c) => { kartaZeszytu = "lista"; pokaz("zeszyt", c); },
+  "pp-karta": (e, c) => { kartaZeszytu = e.dataset.k === "rozpiska" ? "rozpiska" : "lista"; pokaz("zeszyt", c); },
 };
 
 // --- odświeżanie po każdym przerysowaniu widoku (app.js: rysuj) -----------------------------------------------------
@@ -152,12 +202,10 @@ function odswiezPasek(c) {
   w.title = zak ? "Gra zakończona" : sent ? "Decyzje wysłane – kliknij, żeby wrócić do poprawiania" : "Wyślij decyzje tygodnia";
   w.setAttribute("aria-label", w.title);
   znak("pp-wyslij", sent ? "✓" : bledy && v.edycja ? "!" : "", sent ? "ok" : "uwaga");
-  const k = el("pp-koszyk"), ok = zakupyDostepne(c);
-  k.setAttribute("aria-disabled", ok ? "false" : "true");
-  k.classList.toggle("pp-wyszarzona", !ok);
-  k.title = ok ? "Zakupy: zamówienia składników" : opisZakupow(c);
+  const n = liczbaZakupow(c), k = el("pp-koszyk");
+  k.title = n ? `Zakupy tygodnia: ${n} pozycji (tylko podgląd)` : "Zakupy tygodnia: na razie nic (tylko podgląd)";
   k.setAttribute("aria-label", k.title);
-  k.querySelector("span").textContent = ok ? "Zakupy" : zakupyOd(c) ? `Zakupy · od tyg. ${zakupyOd(c)}` : "Zakupy · wkrótce";
+  znak("pp-koszyk", n ? String(n) : "", "");
   el("pp-mapa").hidden = c.zakladka === "mapa";
 }
 
@@ -212,4 +260,5 @@ export function odswiezPulpit(c) {
   if (otwarteOkno(T_WYSLIJ)) { if (oknoRunda !== c.v.gra.runda) zamknijOkno(); else pokaz("wyslij", c); }
   if (otwarteOkno(T_FINANSE)) pokaz("finanse", c);
   if (otwarteOkno(T_ZESZYT)) pokaz("zeszyt", c);
+  if (otwarteOkno(T_ZAKUPY)) pokaz("zakupy", c);
 }
