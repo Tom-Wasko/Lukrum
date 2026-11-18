@@ -8,6 +8,7 @@
 // Kolory tylko ze zmiennych motywy/zmienne.css; wygląd: pulpit.css.
 import { esc, kafelkiLiczb, nazwaUslugi, okno, otwarteOkno, toast, zamknijOkno, zl } from "../zakladki/wspolne.js";
 import { ikona } from "../zakladki/ikony.js";
+import { stylEkranu } from "./karty-style.js";
 import ZAKLADKI from "../zakladki/index.js";
 import { oznaczCel } from "../zakladki/wujek.js";
 import { nazwaStrefy } from "../zakladki/lokale.js";
@@ -185,12 +186,12 @@ function pokaz(rodzaj, c) {
   const v = c.v;
   if (rodzaj === "wyslij") {
     oknoRunda = v.gra.runda;
-    okno(T_WYSLIJ, htmlKoperty(c), { srednie: true, klasa: "pp-okno-koperta" });
+    okno(T_WYSLIJ, htmlKoperty(c), { srednie: true, klasa: "pp-okno-koperta", styl: 0 });
   } else if (rodzaj === "finanse") {
-    okno(T_FINANSE, htmlFinansow(c), { srednie: true, przyciski: przyciskiFinansow(c) });
+    okno(T_FINANSE, htmlFinansow(c), { srednie: true, przyciski: przyciskiFinansow(c), styl: stylEkranu("raport"), okruszek: "Lublin › Kasa" });
     try { if (v.wyniki && c.dostepna("raport")) ZAKLADKI.raport.po?.(c); } catch (e) { console.error(e); }
-  } else if (rodzaj === "zakupy") okno(T_ZAKUPY, htmlZakupow(c), { male: true, klasa: "pp-okno-paragon" });
-  else if (rodzaj === "konto") okno(T_KONTO, htmlKonta(), { male: true });
+  } else if (rodzaj === "zakupy") okno(T_ZAKUPY, htmlZakupow(c), { male: true, klasa: "pp-okno-paragon", styl: 0 });
+  else if (rodzaj === "konto") okno(T_KONTO, htmlKonta(), { male: true, styl: stylEkranu("ustawienia"), okruszek: "Lublin › Ustawienia" });
 }
 
 

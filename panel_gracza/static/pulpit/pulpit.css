@@ -254,11 +254,7 @@ body.pz-otwarty .pp-zeszyt { visibility: hidden; }
 
 /* --- karta miejsca na mapie (karta.js): rodzaj, tytuł, adres, opis, przyciski; kolory z palety ----------------------------- */
 .pk-tlo { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 24px; box-sizing: border-box; background: color-mix(in srgb, var(--tusz) 38%, transparent); }
-.pk { position: relative; width: min(460px, 100%); padding: 22px 26px 20px; box-sizing: border-box; color: var(--tusz); background: var(--g-karta); font-family: var(--font-tekst);
-  border: max(2px, var(--ramka-grubosc)) solid var(--tusz); border-radius: 8px; box-shadow: 6px 6px 0 color-mix(in srgb, var(--tusz) 40%, transparent); font-size: calc(15px * var(--skala-tekstu, 1)); line-height: 1.5; }
-.pk-x { position: absolute; right: 10px; top: 10px; width: 36px; height: 36px; padding: 0; color: var(--tusz); background: none; border: 2px solid var(--tusz); border-radius: 6px; cursor: pointer; font-size: 16px; }
-.pk-rodzaj { margin: 0 44px 2px 0; color: var(--akcent); font: calc(13px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .08em; text-transform: uppercase; }
-.pk h2 { margin: 0 44px 4px 0; font: 400 calc(25px * var(--skala-tekstu, 1))/1.15 var(--font-gruby); }
+.pk { position: relative; width: min(460px, 100%); box-sizing: border-box; color: var(--tusz); font-family: var(--font-tekst); font-size: calc(15px * var(--skala-tekstu, 1)); line-height: 1.5; }  /* wygląd: karty.css (karta--s4) */
 .pk-adres { margin: 0 0 10px; opacity: .85; }
 .pk-adres::before { content: "⌖ "; }
 .pk-opis { margin: 0 0 10px; }

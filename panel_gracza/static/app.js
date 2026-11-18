@@ -9,7 +9,8 @@ import { AKCJE_ZADAN, podepnijZadania, rysujZadania } from "./zakladki/zadania.j
 import { HASLO, HASLO_SZPERACZ, jestSzperaczem, zapamietajHaslo, zapamietajSzperacza } from "./zakladki/kasyno.js";
 import { funkcjaZakladki, funkcjeZakladek, oknoFunkcji, oknoUstawienFunkcji, oknoZakryciaFunkcji, saZakryte, ukryta as ukrytaF, wylaczona as wylaczonaF,
   zakryta as zakrytaF, zakrytaFunkcja, znaczekFunkcji } from "./zakladki/funkcje.js";
-import { aktualneMiejsce, aktualneQ, idzDoMiejsca, okruszek, otworzBudynek, ustawMiejsce } from "./swiat/swiat.js";
+import { aktualneMiejsce, aktualneQ, idzDoMiejsca, MIEJSCA, okruszek, otworzBudynek, ustawMiejsce } from "./swiat/swiat.js";
+import { stylEkranu, ukladEkranu } from "./pulpit/karty-style.js";
 import { ustawWybrany } from "./zakladki/lokal_wybor.js";
 import { AKCJE_PULPITU, odswiezPulpit, PULPIT } from "./pulpit/pulpit.js";
 
@@ -127,7 +128,7 @@ const kluczZakladki = (z) => Object.keys(ZAKLADKI).find((k) => ZAKLADKI[k] === z
 // --- funkcje gry : zakryta – okno „Odsłoń” zamiast zakładki, wyłączona – Pulpit -------------
 function pokazOknoFunkcji(klucze, cel) {
   const [tytul, html, przyciski] = oknoFunkcji(S.v, klucze, cel, { mg: !!S.v.tylko_odczyt });
-  okno(tytul, html, { male: klucze.length === 1, srednie: klucze.length > 1, przyciski });
+  okno(tytul, html, { male: klucze.length === 1, srednie: klucze.length > 1, przyciski, styl: stylEkranu("ustawienia"), okruszek: "Lublin › Funkcje gry" });
 }
 // przejście do zakładki `k` (także dawny klucz) obsłużone tu – true: zakładka się nie otwiera
 function przechwycFunkcje(k) {
@@ -157,7 +158,7 @@ async function przelaczFunkcje(funkcja, odslonieta, cel = "") {
     + (cel && !wejdz && f.od_rundy && f.od_rundy > v.runda ? ` Zakładki od rundy ${f.od_rundy}.` : ""));
   else toast(`${f.nazwa || funkcja}: znów zakryte – od tej rundy gra robi to za Was.`);
 }
-const oknoUstawien = () => okno("Funkcje gry", oknoUstawienFunkcji(S.v, { mg: !!S.v.tylko_odczyt }), { male: true });
+const oknoUstawien = () => okno("Funkcje gry", oknoUstawienFunkcji(S.v, { mg: !!S.v.tylko_odczyt }), { male: true, styl: stylEkranu("ustawienia"), okruszek: "Lublin › Ustawienia" });
 // ⚙ → „Funkcje gry” – tylko gdy mistrz gry coś zakrył (menu ⚙ buduje motyw.js; tu dopisujemy pozycję)
 function menuUstawien() {
   const lista = document.getElementById("ustawienia-lista");
@@ -227,7 +228,10 @@ function rysujTeczke() {
     ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji przyciskiem „List z decyzjami” na pasku.</div>` : "";
   const opis = typeof z.info === "function" ? z.info(c, tryb) : z.info;
   const html = `${opis ? `<div class="teczka-opis">${kolko(opis)}</div>` : ""}${podglad}${zablokowane}${wyslane}${tresc}`;
-  const okno_ = teczka(`${ikona(IKONY[t.k])} ${z.tytulPelny || z.tytul}`, html, { naglowek: przelacznik, poZamknieciu: () => { if (S.teczka === t) S.teczka = null; } });
+  const okno_ = teczka(`${ikona(IKONY[t.k])} ${z.tytulPelny || z.tytul}`, html, {
+    naglowek: przelacznik, poZamknieciu: () => { if (S.teczka === t) S.teczka = null; },
+    styl: stylEkranu(t.czesc, t.k), okruszek: `Lublin › ${esc(MIEJSCA[aktualneMiejsce()]?.tytul || "Miejsce")}${tryb === "wyniki" ? " › Wyniki" : ""}`,
+    klucz: t.czesc || t.k, uklad: tryb === "decyzje" ? ukladEkranu(t.czesc, t.k) : null });
   for (const a of okno_.querySelectorAll("[data-zakladka-k]")) if (wylaczonaF(v, a.dataset.zakladkaK)) a.remove();
   zwinPodpowiedzi(okno_);
   if (z.po) z.po(c, tryb);
@@ -468,7 +472,7 @@ document.addEventListener("click", async (e) => {
     if (a === "funkcja-przelacz") {   // ponowne zakrycie – najpierw ostrzeżenie, co przepada
       if (el.dataset.o !== "1" && S.v.funkcje?.[el.dataset.f]?.odslonieta) {
         const [t, h, p] = oknoZakryciaFunkcji(S.v, el.dataset.f);
-        return okno(t, h, { male: true, przyciski: p });
+        return okno(t, h, { male: true, przyciski: p, styl: stylEkranu("potwierdzenie"), okruszek: "Lublin › Potwierdzenie" });
       }
       await przelaczFunkcje(el.dataset.f, el.dataset.o === "1"); return oknoUstawien();
     }

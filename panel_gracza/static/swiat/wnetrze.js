@@ -3,6 +3,7 @@
 // sceny (wejscie), albo otwiera okienko z opisem (odsyla, brak ekranu). Dane „na niby” z makiety (stany, plakietki, liczby w teczkach)
 // nie są pokazywane: stan punktu pochodzi z gry (lista błędów, odblokowanie rundą, zakrycie funkcji).
 import { esc, okno, toast, zamknijOkno } from "../zakladki/wspolne.js";
+import { stylEkranu } from "../pulpit/karty-style.js";
 import { R, ustawWyglad } from "./rysunek.js";
 import { SCENY } from "./sceny/index.js";
 
@@ -101,7 +102,7 @@ export function przewinDo(tekst) {
 
 function dymek(tytul, kto, tekst, przyciski = "") {
   okno(esc(tytul), `<div class="wn-info">${kto ? `<span class="wn-kto">${esc(kto)}</span>` : ""}<p>${tekst}</p></div>`,
-    { male: true, przyciski: `${przyciski}<button data-akcja="zamknij-okno">Zostaję</button>` });
+    { male: true, przyciski: `${przyciski}<button data-akcja="zamknij-okno">Zostaję</button>`, styl: stylEkranu("potwierdzenie"), okruszek: "Lublin › Wnętrze" });
 }
 
 /** Parsuje „bank.html?b=kmicic” z makiety → { id: "bank", q: "b=kmicic" }. */

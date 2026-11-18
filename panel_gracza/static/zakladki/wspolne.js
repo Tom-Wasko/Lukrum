@@ -1,6 +1,8 @@
 // Wspólne funkcje interfejsu: formatowanie, okna dialogowe, wykresy.
 import { zwinPodpowiedzi } from "./dymki.js";
 import { ikonaMarki } from "./ikony_marek.js";
+import { STYL_DOMYSLNY } from "../pulpit/karty-style.js";
+import { zastosujUklad } from "../pulpit/uklady.js";
 
 // Kalendarz rund (katalog.yaml: rundy.kalendarz) – ustawiany z widoku gry (v.gra.kalendarz) przy każdym wczytaniu.
 // Kwoty miesięczne z danych (utrzymanie, czynsz) silnik księguje na rundę: naRunde.
@@ -194,14 +196,25 @@ let _okno = null, _poZamknieciu = null, _teczka = null, _poTeczce = null;
 const FOKUSOWALNE = 'a[href], button:not([disabled]), input:not([disabled]):not([type=hidden]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 const bezTagow = (t) => String(t).replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").trim();
 const zamykacz = (akcja) => `<button type="button" class="x" data-akcja="${akcja}" aria-label="Zamknij okno">✕</button>`;
-// `naglowek`: dodatkowe elementy w nagłówku obok ✕ (np. przełącznik Decyzje | Wyniki w teczce)
-function zbudujOkno(tytul, html, { male = false, srednie = false, przyciski = "", klasa = "", akcjaZamknij = "zamknij-okno", naglowek = "" } = {}) {
-  return `<div class="okno ${male ? "male" : srednie ? "srednie" : ""} ${klasa}"><div class="og"><span>${tytul}</span>${naglowek ? `<span class="og-prawa">${naglowek}${zamykacz(akcjaZamknij)}</span>` : zamykacz(akcjaZamknij)}</div>
+// Szablon kart (seria pulpit, krok 6): każde okno ma wspólną budowę – nagłówek `.og` (okruszek, tytuł, przełącznik, ✕), treść `.ot`,
+// stopka akcji `.ost` – i jeden z 4 stylów (klasa karta--s1…s4, pulpit/karty.css). `styl: 0` = własny styl okna (paragon, list…).
+let _stylTeczki = 0;   // styl otwartej teczki: okna otwierane z niej (lokata, kredyt…) mają ten sam wygląd
+const nrSprawy = (t) => { let h = 0; for (const c of String(t)) h = (h * 31 + c.charCodeAt(0)) % 9973; return `LUK/${String(h).padStart(4, "0")}`; };
+// `naglowek`: dodatkowe elementy w nagłówku obok ✕ (np. przełącznik Decyzje | Wyniki w teczce); `okruszek`: tekst nad tytułem
+function zbudujOkno(tytul, html, { male = false, srednie = false, przyciski = "", klasa = "", akcjaZamknij = "zamknij-okno", naglowek = "", styl, okruszek = "Lublin" } = {}) {
+  const x = zamykacz(akcjaZamknij), rozm = male ? "male" : srednie ? "srednie" : "";
+  const s = styl === undefined ? (_stylTeczki || STYL_DOMYSLNY) : styl;
+  if (!s) {   // własny styl okna (klasa z `klasa`): zostaje dawna budowa
+    return `<div class="okno ${rozm} ${klasa}"><div class="og"><span>${tytul}</span>${naglowek ? `<span class="og-prawa">${naglowek}${x}</span>` : x}</div>
+    <div class="ot">${html}</div>${przyciski ? `<div class="ost">${przyciski}</div>` : ""}</div>`;
+  }
+  return `<div class="okno karta karta--s${s} ${rozm} ${klasa}" data-styl="${s}" data-nr="${nrSprawy(bezTagow(tytul))}"><div class="og"><span class="og-t">${okruszek ? `<small class="k-ok">${okruszek}</small>` : ""}<strong class="k-tyt">${tytul}</strong></span><span class="og-prawa">${naglowek || ""}${x}</span></div>
     <div class="ot">${html}</div>${przyciski ? `<div class="ost">${przyciski}</div>` : ""}</div>`;
 }
 function otworzWarstwe(tresc, tytul, klasa, zamknij) {
   const z = document.createElement("div");
-  z.className = `zaslona ${klasa}`.trim();
+  z.className = `zaslona nowa ${klasa}`.trim();   // `nowa`: animacja wejścia karty tylko przy otwarciu (nie przy odświeżeniu)
+  setTimeout(() => z.classList.remove("nowa"), 700);
   z.innerHTML = tresc;
   z._tytul = tytul;
   z._wrocFokus = document.activeElement;
@@ -219,14 +232,16 @@ function otworzWarstwe(tresc, tytul, klasa, zamknij) {
 const oddajFokus = (z) => { const f = z?._wrocFokus; if (f?.isConnected && f !== document.body) f.focus({ preventScroll: true }); };
 
 // `poZamknieciu` (opcjonalnie): wywoływane po zamknięciu okna (np. odświeżenie karty pod oknem po zmianach w nim)
+// `styl` 1–4 (albo 0 – własny styl), domyślnie styl otwartej teczki; `uklad`+`klucz`: układ bez powtórzeń (pulpit/uklady.js)
 export function okno(tytul, html, opcje = {}) {
   const tresc = zbudujOkno(tytul, html, opcje);
-  if (_okno && _okno._tytul === tytul) return odswiezOkno(_okno, tresc, opcje.poZamknieciu, (f) => { _poZamknieciu = f; });
+  if (_okno && _okno._tytul === tytul) return poRysowaniu(odswiezOkno(_okno, tresc, opcje.poZamknieciu, (f) => { _poZamknieciu = f; }), opcje);
   zamknijOkno();
   _okno = otworzWarstwe(tresc, tytul, "", zamknijOkno);
   _poZamknieciu = opcje.poZamknieciu || null;
-  return _okno;
+  return poRysowaniu(_okno, opcje);
 }
+const poRysowaniu = (z, { uklad = null, klucz = "" } = {}) => { if (uklad) zastosujUklad(z, uklad, klucz); return z; };
 // to samo okno otwarte ponownie (np. „Baza składników” po zapisie ilości) odświeża się w miejscu – bez zamykania
 // i animacji, z tym samym przewinięciem, polem z kursorem i niezatwierdzonym wpisem (gracz po Enter/Tab pisze dalej)
 function odswiezOkno(z, tresc, poZamknieciu, ustawPo) {
@@ -260,19 +275,21 @@ export function zamknijOkno() {
 }
 
 /** Teczka: ekran decyzji (albo wyników) w oknie nad wnętrzem. To samo `tytul` odświeża teczkę w miejscu. */
-export function teczka(tytul, html, { przyciski = "", poZamknieciu = null, naglowek = "" } = {}) {
-  const tresc = zbudujOkno(tytul, html, { przyciski, naglowek, klasa: "teczka-okno", akcjaZamknij: "zamknij-teczke" });
-  if (_teczka && _teczka._tytul === tytul) return odswiezOkno(_teczka, tresc, poZamknieciu, (f) => { _poTeczce = f; });
+export function teczka(tytul, html, { przyciski = "", poZamknieciu = null, naglowek = "", styl = STYL_DOMYSLNY, okruszek = "Lublin", uklad = null, klucz = "" } = {}) {
+  _stylTeczki = styl;
+  const tresc = zbudujOkno(tytul, html, { przyciski, naglowek, klasa: "teczka-okno", akcjaZamknij: "zamknij-teczke", styl, okruszek });
+  if (_teczka && _teczka._tytul === tytul) return poRysowaniu(odswiezOkno(_teczka, tresc, poZamknieciu, (f) => { _poTeczce = f; }), { uklad, klucz });
   zamknijTeczke();
+  _stylTeczki = styl;
   _teczka = otworzWarstwe(tresc, tytul, "teczka", zamknijTeczke);
   _poTeczce = poZamknieciu;
-  return _teczka;
+  return poRysowaniu(_teczka, { uklad, klucz });
 }
 export const otwartaTeczka = () => !!_teczka;
 export function zamknijTeczke() {
   if (!_teczka) return;
   const z = _teczka, f = _poTeczce;
-  _teczka.remove(); _teczka = null; _poTeczce = null;
+  _teczka.remove(); _teczka = null; _poTeczce = null; _stylTeczki = 0;
   if (!_okno) oddajFokus(z);
   if (f) f();
 }
