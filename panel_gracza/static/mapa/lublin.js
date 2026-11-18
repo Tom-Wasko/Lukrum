@@ -453,6 +453,21 @@ export const nowaMapa = {
     widok = utworzWidok(ramka, { zasieg: DANE.zasieg, start, stan: WIDOK, naZmiane });
   },
 
+  /** Pulpit: przelot mapy do znaku (budynek, zespół, lokal) o danym id; zwraca element znaku albo null. */
+  pokazZnak(id, k = 0.9) {
+    const zn = [...document.querySelectorAll("#lmapa .lmapa-nakladka > .lm-znak")].find((e) => e.dataset.id === id);
+    if (!zn || !widok) return null;
+    widok.lecDo(+zn.dataset.x, +zn.dataset.y, k);
+    return zn;
+  },
+  /** Pulpit: przelot do nazwy dzielnicy (strefy gry) widocznej na mapie; zwraca true, gdy znaleziona. */
+  pokazDzielnice(nazwa, k = 0.3) {
+    const n = [...document.querySelectorAll("#lmapa .lm-strefa-napis")].find((e) => e.firstChild?.textContent.trim() === nazwa);
+    if (!n || !widok) return false;
+    widok.lecDo(+n.dataset.x, +n.dataset.y, k);
+    return true;
+  },
+
   akcje: {
     "lmapa-zoom": (el) => { const z = +el.dataset.z; if (z) widok?.przybliz(z); else widok?.calosc(); },
     "lmapa-pora-teraz": (el) => {

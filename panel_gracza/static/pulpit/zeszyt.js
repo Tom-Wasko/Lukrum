@@ -4,7 +4,8 @@
 // Strony: Lista wujka, Rozpiska funkcji, Gdzie co kupić, Samouczek. Zamknięcie: Esc, przycisk, klik poza zeszytem.
 // Kolory tylko ze zmiennych palet (wygląd: pulpit.css).
 import { esc } from "../zakladki/wspolne.js";
-import { listTygodnia, planTygodnia } from "../zakladki/wujek.js";
+import { BUDYNEK_KROKU, listTygodnia, planTygodnia } from "../zakladki/wujek.js";
+import ZAKLADKI, { MENU } from "../zakladki/index.js";
 import { MIEJSCA } from "../swiat/swiat.js";
 
 const STRONY = [["lista", "Lista wujka"], ["rozpiska", "Rozpiska funkcji"], ["kupic", "Gdzie co kupić"], ["samouczek", "Samouczek"]];
@@ -30,50 +31,62 @@ export function rysujMalyZeszyt(c, btn) {
 }
 
 // --- strony pełnego zeszytu ---------------------------------------------------------------------------------------------
+// przycisk „pokaż na mapie”: zeszyt się zamyka, mapa przelatuje do budynku i go pulsuje (pulpit.js: pp-pokaz)
+const naMapie = (ids, tekst = "⌖ na mapie", klasa = "pz-mapa") => {
+  const l = [].concat(ids || []).filter(Boolean);
+  return l.length ? `<button type="button" class="${klasa}" data-akcja="pp-pokaz" data-b="${esc(l.join(","))}" title="Pokaż na mapie" aria-label="${tekst.replace(/<[^>]+>/g, "")}: pokaż na mapie">${tekst}</button>` : "";
+};
 function stronaLista(c) {
   const v = c.v, list = listTygodnia(v);
   let plan = null;
   try { plan = planTygodnia(v); } catch (e) { console.error(e); }
-  const kroki = (plan?.lista || []).map((k, i) => `<li class="${k.ok ? "ok" : k.teraz ? "teraz" : ""}"><a data-zakladka-k="${esc(k.klucz)}" href="#${esc(k.klucz)}">
+  const kroki = (plan?.lista || []).map((k, i) => `<li class="${k.ok ? "ok" : k.teraz ? "teraz" : ""}"><button type="button" class="pz-wiersz" data-akcja="pp-wejdz" data-k="${esc(k.klucz)}">
     <span class="pz-nr" aria-hidden="true">${k.ok ? "✓" : k.teraz ? "▶" : i + 1}</span><span><small>${esc(k.gdzie)}</small><b>${esc(k.co)}</b> <i>${esc(k.opis)}</i></span>
-    <span class="pz-stan">${k.ok ? "zrobione" : k.teraz ? "teraz" : ""}</span></a></li>`).join("");
+    <span class="pz-stan">${k.ok ? "zrobione" : k.teraz ? "teraz" : ""}</span></button>${naMapie(BUDYNEK_KROKU[k.klucz])}</li>`).join("");
   return `<h2>List od wujka · tydzień ${v.runda}</h2>
     ${list ? `<p class="pz-list"><b>${esc(list[0])}</b> ${esc(list[1])} <span class="pz-podpis">– Wasz wujek</span></p>` : ""}
-    <h3>Do zrobienia w tym tygodniu${plan ? ` <small>${plan.zrobione} z ${plan.lista.length}</small>` : ""}</h3><ol class="pz-kroki">${kroki}</ol>`;
+    <h3>Do zrobienia w tym tygodniu${plan ? ` <small>${plan.zrobione} z ${plan.lista.length}</small>` : ""}</h3>
+    <p class="pz-opis">Kliknięcie kroku prowadzi od razu do właściwego miejsca; „⌖ na mapie” pokazuje budynek na mapie.</p><ol class="pz-kroki">${kroki}</ol>`;
 }
 
+// Rozpiska: grupy z dawnego menu (budynki na mapie) i to, co się w nich załatwia (pełne tytuły ekranów); kebab – punkty sceny
 function stronaRozpiska(c) {
-  const widoczny = (p) => !p.cel || (c.jestZakladka(p.cel) && !c.wylaczona(p.cel) && !c.ukryta(p.cel));
-  const sekcje = Object.values(MIEJSCA).map((m) => {
-    const widziane = new Set();
-    const poz = (m.punkty || []).filter((p) => !p.tylkoScena && widoczny(p)).filter((p) => { const k = `${p.cel}|${p.nazwa}`; return widziane.has(k) ? false : (widziane.add(k), true); });
-    if (!poz.length) return "";
-    return `<h3>${esc(m.tytul)}${m.adres ? ` <small>${esc(m.adres)}</small>` : ""}</h3><ul class="pz-punkty">${poz.map((p) => {
-      const gra = p.cel && c.zakryta(p.cel) ? ` <i>(robi to gra, dopóki funkcja zostaje zakryta)</i>` : "";
-      return `<li><b>${esc(p.nazwa)}</b> – ${esc(p.opis || p.podpis || "")}${gra}</li>`;
-    }).join("")}</ul>`;
+  const widoczny = (k) => c.jestZakladka(k) && !c.wylaczona(k) && !c.ukryta(k);
+  const zakryta = (k) => (c.zakryta(k) ? " <i>(robi to gra, dopóki funkcja zostaje zakryta)</i>" : "");
+  const sekcje = MENU.filter((p) => p.miejsce).map((p) => {
+    const sceny = (p.miejsca || [p.miejsce]).filter((id) => MIEJSCA[id]);
+    let tresc;
+    if (p.klucz === "kebab") {
+      tresc = (MIEJSCA.kebab.punkty || []).filter((q) => !q.tylkoScena && (!q.cel || widoczny(q.cel)))
+        .map((q) => `<li><b>${esc(q.nazwa)}</b> – ${esc(q.opis || "")}${q.cel ? zakryta(q.cel) : ""}</li>`).join("");
+    } else {
+      tresc = (p.pod || []).filter((k) => ZAKLADKI[k] && widoczny(k)).map((k) => `<li>${esc(ZAKLADKI[k].tytulPelny || ZAKLADKI[k].tytul)}${zakryta(k)}</li>`).join("");
+    }
+    if (!tresc) return "";
+    const przyciski = p.klucz === "kebab" ? "" : `<p class="pz-miejsca">${sceny.map((id) => naMapie(MIEJSCA[id].budynki, esc(MIEJSCA[id].tytul), "pz-miejsce")).join("")}</p>`;
+    return `<h3>${esc(p.tytul)}</h3>${przyciski}<ul class="pz-punkty">${tresc}</ul>`;
   }).join("");
   const poza = [["Poczta", "ikona „Wyślij decyzje” na pasku: wysyłka decyzji tygodnia."], ["Portfel", "plik banknotów przy dolnej krawędzi: gotówka, debet i raport finansowy."],
-    ["Wydarzenia", "ikona na pasku: parki i wydarzenia miasta w tym tygodniu."],
-    ...(c.jestZakladka("handel") && !c.wylaczona("handel") ? [["Bazar", "handel towarem i sprzętem między drużynami."]] : [])];
-  return `<h2>Rozpiska funkcji</h2><p class="pz-opis">Gdzie na mapie co załatwić: budynek, a pod nim to, co się w nim robi. Budynek otwiera się kliknięciem na mapie.</p>${sekcje}
+    ["Wydarzenia", "ikona na pasku: wydarzenia tygodnia w parkach i w mieście."], ["Ustawienia", "⚙ w rogu: wygląd, warstwy mapy, konto."]];
+  return `<h2>Rozpiska funkcji</h2><p class="pz-opis">Gdzie na mapie co załatwić. Nazwa miejsca pokazuje je na mapie (przelot i obwódka).</p>${sekcje}
     <h3>Poza budynkami</h3><ul class="pz-punkty">${poza.map(([n, o]) => `<li><b>${n}</b> – ${o}</li>`).join("")}</ul>`;
 }
 
-// co kupić → gdzie: miejsce (MIEJSCA), ekran i tydzień, od którego jest dostępny (z widoku gry)
-const ZAKUPY = [["Składniki do kuchni: mięso, bułki, warzywa", "hurtownie", "zaop_dostawy"], ["Rożen, ladę i kasę fiskalną (sprzęt kuchenny)", "park_handlowy", "wnetrze_sprzet"],
-  ["Stoliki, klimatyzację, telewizor i wystrój sali", "park_handlowy", "wnetrze_wyposazenie"], ["Ludzi do pracy (zatrudnienie)", "miasteczko", "rynek_pracy"],
-  ["Szkolenia i udogodnienia dla zespołu", "kebab", "hr_rozwoj"], ["Ulotki, radio i reklamę w internecie", "biurowiec_zana", "agencje"],
-  ["Ubezpieczenie lokalu", "biurowiec_zana", "ubezpieczenia"], ["Konto, kredyt, lokatę albo leasing", "kamienica_bankowa", "bank"]];
+// co kupić → gdzie: nazwa miejsca, żetony na mapie, ekran i tydzień, od którego jest dostępny (z widoku gry)
+const ZAKUPY = [["Składniki do kuchni: mięso, bułki, warzywa", "Hurtownie (Makro, Selgros, Biedronka…)", ["makro", "selgros", "eurocash", "auchan", "biedronka", "lidl", "stokrotka"], "zaop_dostawy"],
+  ["Rożen, ladę i kasę fiskalną (sprzęt kuchenny)", "Hurtownia sprzętu gastronomicznego", ["sprzet_gastro"], "wnetrze_sprzet"],
+  ["Stoliki, klimatyzację, telewizor i wystrój sali", "Park handlowy, Stolarnia, Galeria", ["market_budowlany", "stolarnia", "galeria"], "wnetrze_wyposazenie"],
+  ["Ludzi do pracy (zatrudnienie)", "Agencja pracy „Ręce do Rożna”", ["agencja_pracy"], "rynek_pracy"],
+  ["Szkolenia dla zespołu", "Lubelska Szkoła Kebabu", ["akademia"], "szkolenia"],
+  ["Ulotki, radio i reklamę w internecie", "Dom reklamy", ["agencja_lajk", "fala_koziolka", "drukarnia"], "agencje"],
+  ["Ubezpieczenie lokalu", "TUW „Pod Koziołkiem”", ["ubezpieczyciel"], "ubezpieczenia"], ["Konto, kredyt, lokatę albo leasing", "Pierzeja bankowa", ["kamienica_bankowa"], "bank"]];
 function stronaKupic(c) {
-  const wiersze = ZAKUPY.filter(([, , cel]) => c.jestZakladka(cel) && !c.wylaczona(cel) && !c.ukryta(cel)).map(([co, miejsce, cel]) => {
-    const m = MIEJSCA[miejsce], p = (m?.punkty || []).find((x) => x.cel === cel);
+  const wiersze = ZAKUPY.filter(([, , , cel]) => c.jestZakladka(cel) && !c.wylaczona(cel) && !c.ukryta(cel)).map(([co, miejsce, ids, cel]) => {
     const od = !c.zakryta(cel) && !c.dostepna(cel) ? c.odRundy(cel) : null;
     const stan = c.zakryta(cel) ? "robi to gra" : od ? `od tygodnia ${od}` : !c.dostepna(cel) ? "jeszcze zamknięte" : "";
-    return `<li class="${stan ? "szare" : ""}"><b>${esc(co)}</b><span class="pz-strzalka" aria-hidden="true">→</span><span><u>${esc(m?.tytul || miejsce)}</u>${p ? `, ${esc(p.nazwa)}` : ""}
-      ${stan ? `<i> (${esc(stan)})</i>` : ""}</span></li>`;
+    return `<li class="${stan ? "szare" : ""}"><b>${esc(co)}</b><span class="pz-strzalka" aria-hidden="true">→</span><span>${naMapie(ids, esc(miejsce), "pz-miejsce")}${stan ? `<i> (${esc(stan)})</i>` : ""}</span></li>`;
   }).join("");
-  return `<h2>Gdzie co kupić</h2><p class="pz-opis">Wujek podpowiada, do którego budynku iść po co. Zakupy tygodnia widać pod ikoną koszyka na pasku.</p>
+  return `<h2>Gdzie co kupić</h2><p class="pz-opis">Wujek podpowiada, do którego budynku iść po co. Nazwa miejsca pokazuje je na mapie. Zakupy tygodnia widać pod ikoną koszyka na pasku.</p>
     <ul class="pz-kupic">${wiersze}</ul>`;
 }
 
@@ -93,6 +106,17 @@ const tresc = (c, nr) => TRESCI[STRONY[nr][0]](c);
 
 // --- pełny ekran -----------------------------------------------------------------------------------------------------------
 const nakladka = () => document.getElementById("pz");
+// wskaźnik „przewiń w dół”: gradient i strzałka u dołu strony, dopóki jest co czytać niżej (przycisk – dostępny też z klawiatury i dla czytników)
+function wskaznik() {
+  const s = document.getElementById("pz-strona"), b = document.getElementById("pz-wiecej");
+  if (!s || !b) return;
+  b.hidden = !(Z.otwarty && s.scrollHeight - s.scrollTop - s.clientHeight > 12);
+}
+const poRysowaniu = () => requestAnimationFrame(() => requestAnimationFrame(wskaznik));
+export function przewinZeszyt() {
+  const s = document.getElementById("pz-strona");
+  s?.scrollBy({ top: Math.round(s.clientHeight * 0.8), behavior: bezRuchu() ? "auto" : "smooth" });
+}
 function szkielet() {
   let o = nakladka();
   if (o) return o;
@@ -103,15 +127,15 @@ function szkielet() {
   o.setAttribute("aria-modal", "true");
   o.setAttribute("aria-label", "Zeszyt wujka");
   o.innerHTML = `<div class="pz-ksiazka"><div class="pz-grzbiet" aria-hidden="true"></div>
-    <div class="pz-karta"><div class="pz-stronicowanie"><div class="pz-strona" id="pz-strona" tabindex="-1" aria-live="polite"></div></div>
+    <div class="pz-karta"><div class="pz-stronicowanie"><div class="pz-strona" id="pz-strona" tabindex="-1" aria-live="polite"></div>
+        <button type="button" class="pz-wiecej" id="pz-wiecej" data-akcja="pz-dol" hidden aria-label="Są dalsze treści niżej: przewiń w dół">▾<span>dalej</span></button></div>
       <div class="pz-stopka"><button type="button" class="pz-btn" data-akcja="pp-zeszyt-strona" data-d="-1">‹ Wstecz</button><span class="pz-numer" id="pz-numer"></span>
         <button type="button" class="pz-btn" data-akcja="pp-zeszyt-strona" data-d="1">Dalej ›</button></div></div>
     <nav class="pz-zakladki" aria-label="Strony zeszytu">${STRONY.map(([, n], i) => `<button type="button" class="pz-zakladka" data-akcja="pp-zeszyt-strona" data-n="${i}">${n}</button>`).join("")}</nav>
     <button type="button" class="pz-zamknij" data-akcja="pp-zeszyt-zamknij">✕ Zamknij <small>(Esc)</small></button></div>`;
-  o.addEventListener("click", (e) => {
-    if (e.target === o) zamknijZeszyt();
-    else if (e.target.closest("[data-zakladka-k]")) zamknijZeszyt(false);   // przejście do ekranu z listy – obsługuje je app.js
-  });
+  o.addEventListener("click", (e) => { if (e.target === o) zamknijZeszyt(); });
+  o.querySelector("#pz-strona").addEventListener("scroll", wskaznik, { passive: true });
+  addEventListener("resize", wskaznik);
   document.body.appendChild(o);
   return o;
 }
@@ -133,6 +157,7 @@ export function otworzZeszyt(c, nr = 0) {
   document.body.classList.add("pz-otwarty");
   o.classList.add("otwarty");
   o.querySelector(".pz-zamknij").focus({ preventScroll: true });
+  poRysowaniu();
 }
 
 export function zamknijZeszyt(oddajFokus = true) {
@@ -152,6 +177,7 @@ export function odswiezZeszyt(c) {
   const s = o.querySelector("#pz-strona"), przew = s.scrollTop;
   s.innerHTML = tresc(c, Z.nr);
   s.scrollTop = przew;
+  poRysowaniu();
 }
 
 // przewrócenie strony: stara strona odchyla się od grzbietu (3D), a pod nią jest już nowa; wstecz – odwrotnie
@@ -162,7 +188,7 @@ export function idzDoStrony(c, nr) {
   const kier = nr > Z.nr ? 1 : -1, s = o.querySelector("#pz-strona"), nowa = tresc(c, nr);
   Z.nr = nr;
   zaznacz(o);
-  if (bezRuchu()) { s.innerHTML = nowa; s.scrollTop = 0; return; }
+  if (bezRuchu()) { s.innerHTML = nowa; s.scrollTop = 0; poRysowaniu(); return; }
   const klon = s.cloneNode(true);
   klon.removeAttribute("id");
   klon.removeAttribute("aria-live");
@@ -175,6 +201,7 @@ export function idzDoStrony(c, nr) {
     if (kier < 0) { s.innerHTML = nowa; s.scrollTop = 0; }
     klon.remove();
   }, { once: true });
+  poRysowaniu();
 }
 
 // klawiatura: Esc zamyka, ← → przewracają strony, Tab krąży po zeszycie (fokus nie ucieka na mapę)

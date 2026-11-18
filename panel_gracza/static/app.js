@@ -163,12 +163,13 @@ function menuUstawien() {
   const lista = document.getElementById("ustawienia-lista");
   if (!lista) return;
   let el = document.getElementById("ustawienia-funkcje");
-  if (!saZakryte(S.v)) return el?.remove();
+  const sekcja = document.getElementById("pp-sek-gra");   // pulpit: „Funkcje gry” w sekcji Gra panelu ustawień
+  if (!saZakryte(S.v)) { if (sekcja) sekcja.hidden = true; return el?.remove(); }
   if (el) return;
   el = document.createElement("a");
   Object.assign(el, { id: "ustawienia-funkcje", href: "#", textContent: "Funkcje gry" });
   el.dataset.akcja = "funkcje-gry";
-  lista.insertBefore(el, lista.querySelector(".wybor-motywu"));
+  if (sekcja) { sekcja.hidden = false; sekcja.appendChild(el); } else lista.insertBefore(el, lista.querySelector(".wybor-motywu"));
 }
 function zamknijUstawienia() {
   const lista = document.getElementById("ustawienia-lista");

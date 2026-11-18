@@ -48,12 +48,15 @@ def test_stary_uklad_zostaje_pod_adresem_uklad_stary():
 
 
 def test_kazda_akcja_pulpitu_ma_obsluge():
-    obslugiwane = set(re.findall(r'^  "(pp-[\w-]+)":', PULPIT_JS, re.M))
+    obslugiwane = set(re.findall(r'^  "(p[pz]-[\w-]+)":', PULPIT_JS, re.M))
     klucze_paska = set(re.findall(r'\["(\w+)", "\w+", "[^"]+"\]', _ikony_paska())) - {"jak"}
-    uzyte = {f"pp-{k}" for k in klucze_paska} | set(re.findall(r'data-akcja="(pp-[a-z-]+)"', PULPIT_JS + ZESZYT_JS))
+    uzyte = {f"pp-{k}" for k in klucze_paska} | set(re.findall(r'data-akcja="(pp-[a-z-]+)"', PULPIT_JS + ZESZYT_JS)) - {"pp-wyglad"}
     assert 'data-akcja="pp-${k}"' in PULPIT_JS
-    assert uzyte == obslugiwane == {"pp-wyslij", "pp-konto", "pp-koszyk", "pp-mapa", "pp-portfel", "pp-zeszyt", "pp-zeszyt-zamknij",
-                                    "pp-zeszyt-strona", "pp-wydarzenia", "pp-warstwy", "pp-filtr"}
+    uzyte |= set(re.findall(r'data-akcja="(pz-[a-z-]+)"', ZESZYT_JS))
+    assert uzyte <= obslugiwane | {"pp-wyglad"}
+    assert obslugiwane >= {"pp-wyslij", "pp-konto", "pp-koszyk", "pp-mapa", "pp-portfel", "pp-zeszyt", "pp-zeszyt-zamknij", "pp-zeszyt-strona",
+                           "pp-wydarzenia", "pp-filtr", "pp-wroc", "pp-pokaz", "pp-wejdz", "pp-kat", "pp-wyglad", "pz-dol"}
+    assert 'akcja = "pp-wyglad"' in PULPIT_JS
 
 
 def test_ikony_paska_istnieja():
@@ -141,11 +144,43 @@ def test_krok_2_zeszyt_trzy_stany_i_strony():
 
 def test_krok_2_interfejs_pulpitu():
     # szuflada Wydarzenia zamiast „W parkach…”, warstwy pod ikoną, filtr kategorii z etykietami, „Tydzień N” u góry, karta miejsca
-    assert "Wydarzenia tygodnia" in PULPIT_JS and "parkiNaMapie" in PULPIT_JS
+    assert "Wydarzenia tygodnia" in PULPIT_JS and "kalendarz_miasta" in PULPIT_JS
     assert "body.pulpit.na-mapie .tresc > .zd-parki { display: none; }" in PULPIT_CSS
-    assert "pp-warstwy" in PULPIT_JS and "body.pulpit.na-mapie.pp-warstwy .tresc > .lm-ustawienia" in PULPIT_CSS
-    assert 'aria-label="${nazwa}"' in PULPIT_JS and 'aria-pressed="${filtr === k}"' in PULPIT_JS and ".pp-f.aktywny::after" in PULPIT_CSS
+    assert "pp-warstwy" not in PULPIT_JS and "body.pulpit .lm-ustawienia { display: none !important;" in PULPIT_CSS
+    assert 'aria-pressed="${filtr === k}"' in PULPIT_JS and ".pp-f.aktywny" in PULPIT_CSS and 'id="pp-kat-btn"' in PULPIT_JS
     assert re.search(r"\.pp-tydzien \{ position: fixed; left: 50%; top: 10px;", PULPIT_CSS)
     assert "pokazKarte" in KARTA_JS and "pk-wejdz" in KARTA_JS and "aria-modal" in KARTA_JS
     assert "pokazKarte" in (STATIC / "zakladki" / "mapa.js").read_text(encoding="utf-8")
     assert "pokazKarte" in (STATIC / "mapa" / "lublin.js").read_text(encoding="utf-8")
+
+
+def test_krok_3_ustawienia_wroc_wydarzenia_zeszyt():
+    # panel ustawień w sekcjach (Wygląd, Mapa, Dźwięk, Konto), warstwy mapy w ⚙, przycisk „Wróć” + Esc, wskaźnik przewijania zeszytu,
+    # klik w nazwę miejsca pokazuje je na mapie, kroki wchodzą od razu do celu, wydarzenia z kalendarza i parków
+    for sekcja in ("<h3>Wygląd</h3>", "<h3>Mapa</h3>", "<h3>Dźwięk</h3>", "<h3>Konto</h3>", "Rozmiar pisma", "Radio: wkrótce"):
+        assert sekcja in PULPIT_JS, sekcja
+    assert '"mapa-warstwa"' in PULPIT_JS and 'data-akcja="mapa-opinie"' in PULPIT_JS
+    assert 'data-rozmiar="duzy"' in PULPIT_CSS or ':root[data-rozmiar="duzy"]' in PULPIT_CSS
+    nawigacja = (STATIC / "pulpit" / "nawigacja.js").read_text(encoding="utf-8")
+    assert "export function wroc" in nawigacja and "export function zapamietajWidok" in nawigacja and 'id="pp-wroc"' in PULPIT_JS
+    assert "mozeWrocic(ostatniC)" in PULPIT_JS and '"Escape"' in PULPIT_JS
+    assert 'id="pz-wiecej"' in ZESZYT_JS and "scrollHeight - s.scrollTop" in ZESZYT_JS and ".pz-wiecej" in PULPIT_CSS
+    assert 'data-akcja="pp-pokaz"' in ZESZYT_JS and 'data-akcja="pp-wejdz"' in ZESZYT_JS and "data-akcja=\"pp-pokaz\"" in PULPIT_JS or 'data-akcja="pp-pokaz"' in PULPIT_JS
+    assert "otworzBudynek" in nawigacja and "BUDYNEK_KROKU" in nawigacja and "pokazZnak" in nawigacja
+    lublin = (STATIC / "mapa" / "lublin.js").read_text(encoding="utf-8")
+    assert "pokazZnak(" in lublin and "pokazDzielnice(" in lublin
+    assert "menuUstawien" in APP_JS and "pp-sek-gra" in APP_JS
+
+
+def test_rozpiska_i_kupowanie_uzywaja_istniejacych_budynkow():
+    # zeszyt odwołuje się do żetonów budynków i scen, które istnieją (inaczej „pokaż na mapie” nic by nie pokazało)
+    import yaml
+    mapa = yaml.safe_load((GRA / "dane" / "mapa" / "budynki.yaml").read_text(encoding="utf-8"))
+    zetony = {b["id"] for b in mapa["budynki"]} | {z["id"] for z in mapa.get("zespoly", [])}
+    blok = re.search(r"const ZAKUPY = \[(.*?)\];\nfunction stronaKupic", ZESZYT_JS, re.S).group(1)
+    uzyte = {x for lista in re.findall(r"\[((?:\"[a-z_]+\",? ?)+)\]", blok) for x in re.findall(r"\"([a-z_]+)\"", lista)}
+    assert uzyte, "brak żetonów w ZAKUPY"
+    assert {"makro", "sprzet_gastro", "kamienica_bankowa", "ubezpieczyciel"} <= uzyte
+    nieznane = {x for x in uzyte if x not in zetony and x not in {"zaop_dostawy", "wnetrze_sprzet", "wnetrze_wyposazenie", "rynek_pracy", "szkolenia",
+                                                                    "agencje", "ubezpieczenia", "bank"}}
+    assert not nieznane, nieznane

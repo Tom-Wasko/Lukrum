@@ -19,6 +19,7 @@ const M = { id: "kebab", q: "", widok: "", def: null, punkty: [], grafiki: null,
 // ekrany, do których prowadzą punkty wczytanych scen (okruszek nad ekranem wraca do sceny, z której przyszło się do ekranu)
 const EKRANY_SCEN = {};
 export const aktualneMiejsce = () => M.id;
+export const aktualneQ = () => M.q;
 export function ustawMiejsce(id, q = "") { if (MIEJSCA[id]) { M.id = id; M.q = q; M.widok = ""; M.def = null; M.blad = false; M.karta = null; } return !!MIEJSCA[id]; }
 export { MIEJSCA, miejsceEkranu, ustawEkranyMiejsc };
 
