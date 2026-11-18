@@ -109,7 +109,7 @@ lokale:
   strefa: stare_miasto
   typ: gotowy
   adres: ul. Grodzka 14
-  geo: {lat: 51.24876, lon: 22.56841}
+  geo: {lat: 51.2499, lon: 22.5691}
   opis: Sklepione piwnice, w których podobno straszy. Duch jest wegetarianinem i krytykuje każdy kebab.
   metraz: 45
   miejsca:
@@ -126,7 +126,7 @@ lokale:
   strefa: stare_miasto
   typ: gotowy
   adres: Rynek 8
-  geo: {lat: 51.24805, lon: 22.56854}
+  geo: {lat: 51.2471, lon: 22.5684}
   opis: Widok na Trybunał Koronny i ceny jak w Trybunale. Turyści robią zdjęcia witryny, czasem coś kupią.
   metraz: 85
   miejsca:
@@ -144,7 +144,7 @@ lokale:
   strefa: stare_miasto
   typ: niewyposazony
   adres: ul. Bramowa 3
-  geo: {lat: 51.24772, lon: 22.56689}
+  geo: {lat: 51.2474, lon: 22.566}
   opis: Surowe mury i 14 schodów w dół. Dostawca mięsa już zapowiedział, że chce dodatek za schody.
   metraz: 55
   miejsca:
@@ -162,7 +162,7 @@ lokale:
   strefa: stare_miasto
   typ: gotowy
   adres: ul. Złota 2
-  geo: {lat: 51.24805, lon: 22.56870}
+  geo: {lat: 51.2471, lon: 22.5708}
   opis: 'Najmniejszy lokal w mieście: kucharz i kasjer muszą się mijać bokiem, ale kolejka sama się ustawia.'
   metraz: 30
   miejsca:
@@ -179,7 +179,7 @@ lokale:
   strefa: stare_miasto
   typ: niewyposazony
   adres: ul. Kowalska 6
-  geo: {lat: 51.24981, lon: 22.56778}
+  geo: {lat: 51.2505, lon: 22.5668}
   opis: Pod Bramą Krakowską, z oknami na deptak. Konserwator zabytków chce zatwierdzić kolor szyldu.
   metraz: 70
   miejsca:
@@ -215,7 +215,7 @@ lokale:
   strefa: centrum
   typ: niewyposazony
   adres: ul. Peowiaków 9
-  geo: {lat: 51.24678, lon: 22.55954}
+  geo: {lat: 51.2465, lon: 22.5597}
   opis: Po kwiaciarni – przez pierwszy miesiąc wszystko będzie pachnieć różami, nawet czosnkowy sos.
   metraz: 50
   miejsca:
@@ -232,7 +232,7 @@ lokale:
   strefa: centrum
   typ: gotowy
   adres: ul. Chmielna 4
-  geo: {lat: 51.25090, lon: 22.55703}
+  geo: {lat: 51.251, lon: 22.5569}
   opis: Narożnik z dwiema witrynami. Poprzedni najemca wyjechał nagle, zostawił sprzęt i kota.
   metraz: 40
   miejsca:
@@ -250,7 +250,7 @@ lokale:
   strefa: centrum
   typ: niewyposazony
   adres: ul. 3 Maja 12
-  geo: {lat: 51.24979, lon: 22.55777}
+  geo: {lat: 51.2496, lon: 22.5579}
   opis: Duża sala po banku. Sejf został, szyfru nikt nie zna.
   metraz: 75
   miejsca:
@@ -267,7 +267,7 @@ lokale:
   strefa: centrum
   typ: gotowy
   adres: ul. Okopowa 7
-  geo: {lat: 51.24556, lon: 22.55434}
+  geo: {lat: 51.2448, lon: 22.5556}
   opis: Przy przystanku, na którym zatrzymuje się pół miasta. Kierowcy trolejbusów dostają tu kawę gratis od zawsze.
   metraz: 50
   miejsca:
@@ -285,7 +285,7 @@ lokale:
   strefa: akademickie
   typ: gotowy
   adres: ul. Radziszewskiego 16
-  geo: {lat: 51.24510, lon: 22.53784}
+  geo: {lat: 51.2451, lon: 22.5378}
   opis: Okno wychodzi na akademik. O 2 w nocy studenci składają zamówienia, opuszczając koszyk na sznurku.
   metraz: 45
   miejsca:
@@ -356,7 +356,7 @@ lokale:
   strefa: politechnika
   typ: gotowy
   adres: ul. Nadbystrzycka 38
-  geo: {lat: 51.23522, lon: 22.54924}
+  geo: {lat: 51.2352, lon: 22.5492}
   opis: Między wydziałami. Studenci mechaniki już zaproponowali ulepszenie rożna z silnikiem krokowym.
   metraz: 45
   miejsca:
@@ -703,7 +703,7 @@ lokale:
   strefa: felin
   typ: niewyposazony
   adres: al. Witosa 30
-  geo: {lat: 51.23313, lon: 22.61134}
+  geo: {lat: 51.2334, lon: 22.6112}
   opis: Przy obwodnicy. Ciężarówki zatrzymują się tylko wtedy, gdy szyld widać z kilometra.
   metraz: 70
   miejsca:

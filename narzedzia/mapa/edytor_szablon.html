@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUKRUM – edytor rozmieszczenia żetonów na mapie Lublina</title>
+<style>
+/* Kolory z panel_gracza/static/motywy/zmienne.css: paleta „Bar mleczny” (jasny, a przy ciemnym systemie ciemny). */
+:root {
+  --papier: #e9ede3; --tusz: #1d2721; --akcent: #c2302a; --akcent-2: #2f6f8f; --ramka: #8d978c;
+  --zysk: #2e6b3a; --strata: #b3261e; --uwaga: #8a5a00;
+  --font-tekst: 'PT Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-szyld: 'Oswald', 'Arial Narrow', 'Segoe UI', sans-serif;
+  --ognisko: 3px solid var(--akcent-2);
+  --karta: color-mix(in srgb, var(--papier) 45%, #fff);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --papier: #121815; --tusz: #e5ebe2; --akcent: #ff5a4e; --akcent-2: #62c3e6; --ramka: #3d4a43;
+    --zysk: #7fd18b; --strata: #ff7a70; --uwaga: #f2c14e;
+    --karta: color-mix(in srgb, var(--papier) 86%, #fff);
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--papier); color: var(--tusz); font: 15px/1.35 var(--font-tekst); display: flex; flex-direction: column; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+header { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 8px 12px; border-bottom: 2px solid var(--tusz); background: var(--karta); }
+h1 { margin: 0; font: 600 20px var(--font-szyld); letter-spacing: .04em; text-transform: uppercase; }
+h1 small { font: 13px var(--font-tekst); text-transform: none; letter-spacing: 0; opacity: .8; margin-left: 6px; }
+.pasek { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.przycisk { border: 2px solid var(--tusz); background: var(--karta); border-radius: 6px; padding: 5px 11px; cursor: pointer; min-height: 36px; }
+.przycisk:hover:not(:disabled) { background: color-mix(in srgb, var(--karta) 80%, var(--akcent-2)); }
+.przycisk:disabled { opacity: .45; cursor: not-allowed; border-style: dashed; }
+.przycisk.glowny { background: var(--akcent-2); color: var(--papier); font-weight: 700; }
+.przycisk.glowny:hover:not(:disabled) { background: color-mix(in srgb, var(--akcent-2) 80%, var(--tusz)); }
+.licznik { font-weight: 700; padding: 4px 8px; border: 2px dashed var(--akcent); border-radius: 6px; }
+main { flex: 1; min-height: 0; display: grid; grid-template-columns: 340px 1fr; }
+aside { border-right: 2px solid var(--tusz); display: flex; flex-direction: column; min-height: 0; background: var(--karta); }
+.szukaj { padding: 8px; display: grid; gap: 6px; border-bottom: 1px solid var(--ramka); }
+.szukaj input, .szukaj select { width: 100%; padding: 6px 8px; border: 2px solid var(--ramka); border-radius: 6px; background: var(--papier); min-height: 36px; }
+.legenda { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 13px; padding: 6px 8px; border-bottom: 1px solid var(--ramka); }
+.legenda span { display: inline-flex; align-items: center; gap: 5px; }
+.lista { list-style: none; margin: 0; padding: 0; overflow: auto; flex: 1; min-height: 0; }
+.lista li { border-bottom: 1px solid color-mix(in srgb, var(--ramka) 50%, transparent); }
+.lista button { all: unset; box-sizing: border-box; display: flex; gap: 8px; align-items: center; width: 100%; padding: 6px 10px; cursor: pointer; }
+.lista button:hover { background: color-mix(in srgb, var(--karta) 75%, var(--akcent-2)); }
+.lista button:focus-visible { outline: var(--ognisko); outline-offset: -3px; }
+.lista li.wybrany button { background: color-mix(in srgb, var(--karta) 60%, var(--akcent-2)); font-weight: 700; }
+.lista .nazwa { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lista .rodzaj { font-size: 12px; opacity: .75; }
+.znaczek { font-size: 11px; font-weight: 700; padding: 0 5px; border-radius: 4px; border: 1.5px solid currentColor; white-space: nowrap; }
+.znaczek.przes { color: var(--akcent); }
+.ikona { flex: none; width: 18px; height: 18px; }
+.karta-wybor { padding: 8px 10px; border-top: 2px solid var(--tusz); font-size: 14px; display: grid; gap: 3px; }
+.karta-wybor b { font-size: 16px; }
+.karta-wybor .przycisk { justify-self: start; margin-top: 4px; }
+.mapa-box { position: relative; min-width: 0; min-height: 0; overflow: hidden; background: var(--papier); touch-action: none; }
+svg#mapa { width: 100%; height: 100%; display: block; cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none; }
+svg#mapa.chwyt { cursor: grabbing; }
+.m-miasto { fill: color-mix(in srgb, var(--papier) 88%, var(--ramka)); }
+.m-dzielnica { fill: none; stroke: var(--ramka); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-dasharray: 5 3; }
+.m-woda { fill: color-mix(in srgb, var(--akcent-2) 38%, var(--papier)); stroke: color-mix(in srgb, var(--akcent-2) 70%, var(--tusz)); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.m-rzeka { fill: none; stroke: color-mix(in srgb, var(--akcent-2) 60%, var(--papier)); stroke-width: 2.5; vector-effect: non-scaling-stroke; stroke-linecap: round; }
+.m-zielen { fill: color-mix(in srgb, var(--zysk) 20%, var(--papier)); stroke: none; }
+.m-droga { fill: none; stroke: color-mix(in srgb, var(--tusz) 45%, var(--papier)); vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+.m-droga.ekspresowa { stroke-width: 3.2; stroke: color-mix(in srgb, var(--tusz) 70%, var(--papier)); }
+.m-droga.glowna { stroke-width: 2.2; }
+.m-droga.zbiorcza { stroke-width: 1.4; }
+.m-droga.lokalna { stroke-width: .7; opacity: .7; }
+.napis-dz { font: 600 12px var(--font-szyld); letter-spacing: .06em; text-transform: uppercase; fill: color-mix(in srgb, var(--tusz) 65%, var(--papier)); text-anchor: middle; pointer-events: none; paint-order: stroke; stroke: var(--papier); stroke-width: 3px; }
+.zeton { cursor: grab; }
+.zeton:active { cursor: grabbing; }
+.zeton .trafienie { fill: transparent; }
+.zeton .korpus { fill: var(--akcent-2); stroke: var(--tusz); stroke-width: 2; }
+.zeton.zablokowany .korpus { fill: var(--tusz); stroke: var(--papier); }
+.zeton .klodka { fill: var(--papier); stroke: var(--papier); }
+.zeton .klodka-lacznik { fill: none; stroke: var(--papier); stroke-width: 1.6; }
+.zeton .pierscien { display: none; fill: none; stroke: var(--akcent); stroke-width: 3; stroke-dasharray: 3 2.5; }
+.zeton.przesuniety .pierscien { display: inline; }
+.zeton .delta { display: none; font: 700 11px var(--font-tekst); fill: var(--akcent); paint-order: stroke; stroke: var(--papier); stroke-width: 3px; }
+.zeton.przesuniety .delta { display: inline; }
+.zeton.wybrany .korpus { stroke: var(--akcent); stroke-width: 3.5; }
+.zeton.przygaszony { opacity: .22; }
+.zeton.trafiony .korpus { stroke: var(--akcent); stroke-width: 3.5; }
+.etykieta { font: 700 12px var(--font-tekst); fill: var(--tusz); paint-order: stroke; stroke: var(--papier); stroke-width: 4px; pointer-events: none; }
+.duch .korpus { fill: none; stroke: var(--zysk); stroke-width: 2.5; stroke-dasharray: 4 3; }
+.duch-linia { stroke: var(--zysk); stroke-width: 2; stroke-dasharray: 5 3; }
+.zoom { position: absolute; right: 10px; top: 10px; display: grid; gap: 6px; }
+.zoom .przycisk { width: 42px; height: 42px; font-size: 20px; padding: 0; font-weight: 700; }
+.podglad { position: absolute; left: 10px; right: 64px; bottom: 10px; max-width: 560px; background: var(--karta); border: 2px solid var(--zysk); border-radius: 8px; padding: 10px 12px; display: none; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,.25); }
+.podglad.pokaz { display: grid; }
+.podglad h2 { margin: 0; font: 600 16px var(--font-szyld); text-transform: uppercase; letter-spacing: .04em; }
+.podglad label { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.podglad input[type=number] { width: 80px; padding: 3px 6px; border: 2px solid var(--ramka); border-radius: 6px; background: var(--papier); }
+.kopiuj-box { position: absolute; left: 10px; top: 10px; width: min(420px, calc(100% - 80px)); background: var(--karta); border: 2px solid var(--tusz); border-radius: 8px; padding: 10px 12px; display: none; gap: 6px; box-shadow: 0 2px 10px rgba(0,0,0,.25); }
+.kopiuj-box.pokaz { display: grid; }
+.kopiuj-box textarea { width: 100%; height: 150px; font: 12px/1.35 Consolas, monospace; background: var(--papier); border: 2px solid var(--ramka); border-radius: 6px; padding: 6px; resize: vertical; }
+.kopiuj-box .stan { font-weight: 700; }
+.tlo-dialog { position: fixed; inset: 0; background: rgba(10,14,12,.55); display: none; align-items: center; justify-content: center; z-index: 50; padding: 12px; }
+.tlo-dialog.pokaz { display: flex; }
+.dialog { background: var(--karta); color: var(--tusz); border: 3px solid var(--tusz); border-radius: 10px; max-width: 460px; width: 100%; padding: 16px 18px; box-shadow: 0 6px 24px rgba(0,0,0,.4); }
+.dialog h2 { margin: 0 0 8px; font: 600 19px var(--font-szyld); text-transform: uppercase; letter-spacing: .04em; display: flex; gap: 8px; align-items: center; }
+.dialog p { margin: 0 0 14px; }
+.dialog .przyciski { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+.dialog .ostrz { color: var(--uwaga); font-weight: 700; }
+.dialog .przycisk.niebezp { background: var(--akcent); color: var(--papier); border-color: var(--tusz); font-weight: 700; }
+.sr { position: absolute; left: -9999px; }
+@media (max-width: 760px) {
+  main { grid-template-columns: 1fr; grid-template-rows: 1fr 42%; }
+  aside { order: 2; border-right: 0; border-top: 2px solid var(--tusz); }
+  .mapa-box { order: 1; }
+  h1 small { display: none; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>LUKRUM <small>edytor rozmieszczenia żetonów</small></h1>
+  <div class="pasek" role="toolbar" aria-label="Działania">
+    <button class="przycisk" id="cofnij" disabled title="Ctrl+Z">Cofnij</button>
+    <button class="przycisk" id="ponow" disabled title="Ctrl+Y">Ponów</button>
+    <button class="przycisk" id="oryginal" disabled>Przywróć oryginał</button>
+    <button class="przycisk" id="rozprosz">Zaproponuj bardziej rozproszone ustawienie</button>
+    <button class="przycisk glowny" id="kopiuj">Kopiuj zmiany</button>
+    <span class="licznik" id="licznik" aria-live="polite">Przesunięto: 0</span>
+  </div>
+</header>
+<main>
+  <aside>
+    <div class="szukaj">
+      <input type="search" id="szukaj" placeholder="Szukaj po nazwie…" aria-label="Szukaj żetonu po nazwie" autocomplete="off">
+      <select id="filtr" aria-label="Filtr po rodzaju"></select>
+    </div>
+    <div class="legenda" aria-label="Legenda">
+      <span><svg class="ikona" viewBox="-10 -10 20 20"><circle r="7" fill="var(--akcent-2)" stroke="var(--tusz)" stroke-width="2"/></svg> swobodny</span>
+      <span><svg class="ikona" viewBox="-10 -10 20 20"><rect x="-7" y="-7" width="14" height="14" rx="3" fill="var(--tusz)"/><rect x="-3.5" y="-.5" width="7" height="5" rx="1" fill="var(--papier)"/><path d="M-2 -.5V-2.5a2 2 0 0 1 4 0V-.5" fill="none" stroke="var(--papier)" stroke-width="1.4"/></svg> kłódka: realny adres</span>
+      <span><svg class="ikona" viewBox="-10 -10 20 20"><circle r="8" fill="none" stroke="var(--akcent)" stroke-width="2.5" stroke-dasharray="3 2.5"/><circle r="4" fill="var(--akcent-2)"/></svg> przesunięty (Δ)</span>
+    </div>
+    <ul class="lista" id="lista"></ul>
+    <div class="karta-wybor" id="wybor" hidden></div>
+  </aside>
+  <div class="mapa-box" id="skrzynka">
+    <svg id="mapa" role="application" aria-label="Mapa Lublina z żetonami budynków">
+      <g id="swiat"></g>
+      <g id="napisy"></g>
+      <g id="duchy"></g>
+      <g id="zetony"></g>
+    </svg>
+    <div class="zoom">
+      <button class="przycisk" id="zoom-plus" aria-label="Przybliż">+</button>
+      <button class="przycisk" id="zoom-minus" aria-label="Oddal">−</button>
+      <button class="przycisk" id="zoom-caly" aria-label="Pokaż całe miasto" title="Całe miasto">⌂</button>
+    </div>
+    <div class="podglad" id="podglad" role="region" aria-label="Podgląd rozproszenia">
+      <h2>Podgląd: rozproszone ustawienie</h2>
+      <label>Najmniejsza odległość swobodnych żetonów (m): <input type="number" id="odleglosc" value="170" min="30" max="600" step="10"></label>
+      <div id="podglad-opis"></div>
+      <div class="pasek">
+        <button class="przycisk glowny" id="podglad-ok">Zatwierdź</button>
+        <button class="przycisk" id="podglad-nie">Odrzuć</button>
+      </div>
+    </div>
+    <div class="kopiuj-box" id="kopiuj-box" role="region" aria-label="Zmiany do skopiowania">
+      <div class="stan" id="kopiuj-stan" aria-live="polite"></div>
+      <textarea id="kopiuj-tekst" readonly aria-label="Zmiany w formacie JSON"></textarea>
+      <div class="pasek"><button class="przycisk" id="kopiuj-zaznacz">Zaznacz tekst</button><button class="przycisk" id="kopiuj-zamknij">Zamknij</button></div>
+    </div>
+  </div>
+</main>
+<div class="tlo-dialog" id="tlo-dialog"><div class="dialog" id="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-tytul"></div></div>
+<script>
+"use strict";
+const DANE = /*DANE*/null;
+const NS = "http://www.w3.org/2000/svg";
+const R = DANE.mapa.rzut;
+const K_LON = R.m_na_stopien * R.cos0;
+const naXY = (lat, lon) => [(lon - R.lon0) * K_LON, -(lat - R.lat0) * R.m_na_stopien];
+const naGeo = (x, y) => ({ lat: +(R.lat0 - y / R.m_na_stopien).toFixed(5), lon: +(R.lon0 + x / K_LON).toFixed(5) });
+const $ = (id) => document.getElementById(id);
+const el = (nazwa, atr = {}, rodzic) => { const e = document.createElementNS(NS, nazwa); for (const k in atr) e.setAttribute(k, atr[k]); if (rodzic) rodzic.appendChild(e); return e; };
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const NAZWY_RODZAJOW = { bank: "bank", biuro: "biuro", urzad: "urząd", poczta: "poczta", nieruchomosci: "nieruchomości", praca: "agencja pracy", dostawca: "dostawca", sklep: "sklep", szkola: "szkoła", reklama: "reklama", uczelnia: "uczelnia", media: "media", park: "park", woda: "woda", lichwiarz: "lichwiarz", ubezpieczenia: "ubezpieczyciel", detektyw: "detektyw", gielda: "giełda", zespol: "zespół budynków", lokal: "lokal gracza" };
+const rodzajNazwa = (r) => NAZWY_RODZAJOW[r] || r;
+
+/* ---------- stan ---------- */
+const Z = DANE.zetony;
+const POR = new Map(Z.map((z) => [z.id, z]));
+const ORIG = Object.fromEntries(Z.map((z) => [z.id, { lat: z.lat, lon: z.lon }]));
+let poz = JSON.parse(JSON.stringify(ORIG));       // bieżące pozycje
+let cofnij = [], ponow = [];                       // stosy migawek
+const zgoda = new Set();                           // zablokowane żetony, które potwierdzono w tej sesji
+let wybrany = null, podglad = null;                // podglad: {id: {lat, lon}} proponowane pozycje
+const przesuniety = (id) => poz[id].lat !== ORIG[id].lat || poz[id].lon !== ORIG[id].lon;
+const ilePrzesunietych = () => Z.filter((z) => przesuniety(z.id)).length;
+
+/* ---------- dialog własny ---------- */
+let dialogWyjscie = null;
+function dialog({ tytul, tresc, tak = "OK", nie = "Anuluj", niebezp = false }) {
+  return new Promise((rozwiaz) => {
+    const d = $("dialog"), tlo = $("tlo-dialog");
+    const poprzedni = document.activeElement;
+    d.innerHTML = `<h2 id="dialog-tytul">${tytul}</h2><p>${tresc}</p><div class="przyciski"><button class="przycisk" id="d-nie">${esc(nie)}</button><button class="przycisk ${niebezp ? "niebezp" : "glowny"}" id="d-tak">${esc(tak)}</button></div>`;
+    tlo.classList.add("pokaz");
+    const koniec = (w) => { tlo.classList.remove("pokaz"); dialogWyjscie = null; d.innerHTML = ""; if (poprzedni && poprzedni.focus) poprzedni.focus(); rozwiaz(w); };
+    dialogWyjscie = koniec;
+    $("d-tak").onclick = () => koniec(true);
+    $("d-nie").onclick = () => koniec(false);
+    $("d-nie").focus();
+    d.onkeydown = (e) => { if (e.key === "Tab") { const b = [$("d-nie"), $("d-tak")]; const i = b.indexOf(document.activeElement); e.preventDefault(); b[(i + (e.shiftKey ? 1 : 1) + b.length) % b.length].focus(); } };
+  });
+}
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && dialogWyjscie) dialogWyjscie(false);
+  else if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA" && (e.ctrlKey || e.metaKey)) {
+    if (e.key === "z" || e.key === "Z") { e.preventDefault(); wstecz(); }
+    if (e.key === "y" || e.key === "Y") { e.preventDefault(); naprzod(); }
+  }
+});
+
+/* ---------- mapa: warstwa świata ---------- */
+const svg = $("mapa"), swiat = $("swiat"), warNapisy = $("napisy"), warDuchy = $("duchy"), warZetony = $("zetony");
+const M = DANE.mapa;
+const kanwa = document.createElement("canvas").getContext("2d");
+const ZIELEN = M.zielen.map((z) => z.d).join("");
+el("path", { class: "m-miasto", d: M.dzielnice.map((d) => d.d).join("") }, swiat);
+el("path", { class: "m-zielen", d: ZIELEN }, swiat);
+for (const w of M.woda) el("path", { class: w.rzeka ? "m-rzeka" : "m-woda", d: w.d }, swiat);
+for (const kl of ["lokalna", "zbiorcza", "glowna", "ekspresowa"]) {
+  el("path", { class: "m-droga " + kl, d: M.drogi.filter((d) => d.klasa === kl).map((d) => d.d).join("") }, swiat);
+}
+el("path", { class: "m-dzielnica", d: M.dzielnice.map((d) => d.d).join("") }, swiat);
+const SCIEZKI = M.dzielnice.map((d) => new Path2D(d.d));
+const dzielnicaXY = (x, y) => SCIEZKI.findIndex((p) => kanwa.isPointInPath(p, x, y));
+const napisyDz = M.dzielnice.map((d) => { const t = el("text", { class: "napis-dz" }, warNapisy); t.textContent = d.nazwa; return t; });
+
+/* ---------- widok: przybliżanie i przesuwanie ---------- */
+const Z0 = M.zasieg;   // [xmin, ymin, xmax, ymax]
+const W = { k: 0.05, cx: (Z0[0] + Z0[2]) / 2, cy: (Z0[1] + Z0[3]) / 2, w: 800, h: 600 };
+const K_MAX = 3;
+let K_MIN = 0.02;
+const doEkranu = (x, y) => [(x - W.cx) * W.k + W.w / 2, (y - W.cy) * W.k + W.h / 2];
+const doSwiata = (sx, sy) => [(sx - W.w / 2) / W.k + W.cx, (sy - W.h / 2) / W.k + W.cy];
+function rozmiar() {
+  const r = svg.getBoundingClientRect(); W.w = r.width || 800; W.h = r.height || 600;
+  K_MIN = Math.min(W.w / (Z0[2] - Z0[0]), W.h / (Z0[3] - Z0[1])) * 0.95;
+  W.k = Math.max(W.k, K_MIN);
+}
+function calaMapa() { rozmiar(); W.k = K_MIN; W.cx = (Z0[0] + Z0[2]) / 2; W.cy = (Z0[1] + Z0[3]) / 2; rysujWidok(); }
+function zoomWokol(sx, sy, mnoznik) {
+  const [wx, wy] = doSwiata(sx, sy);
+  W.k = Math.min(K_MAX, Math.max(K_MIN, W.k * mnoznik));
+  W.cx = wx - (sx - W.w / 2) / W.k; W.cy = wy - (sy - W.h / 2) / W.k;
+  rysujWidok();
+}
+function rysujWidok() {
+  swiat.setAttribute("transform", `translate(${W.w / 2 - W.cx * W.k} ${W.h / 2 - W.cy * W.k}) scale(${W.k})`);
+  M.dzielnice.forEach((d, i) => { const [sx, sy] = doEkranu(d.srodek[0], d.srodek[1]); napisyDz[i].setAttribute("x", sx); napisyDz[i].setAttribute("y", sy); napisyDz[i].style.display = W.k < 0.3 ? "" : "none"; });
+  ustawZetony();
+}
+
+/* ---------- żetony ---------- */
+const WEZLY = new Map();
+const ETYKIETY_OD = 0.22;
+for (const z of Z) {
+  const g = el("g", { class: "zeton" + (z.zablokowany ? " zablokowany" : ""), tabindex: 0, role: "button", "data-id": z.id }, warZetony);
+  el("circle", { class: "trafienie", r: 18 }, g);
+  el("circle", { class: "pierscien", r: 14 }, g);
+  if (z.zablokowany) {
+    el("rect", { class: "korpus", x: -9, y: -9, width: 18, height: 18, rx: 4 }, g);
+    el("rect", { class: "klodka", x: -4.5, y: -.5, width: 9, height: 6.5, rx: 1.2 }, g);
+    el("path", { class: "klodka-lacznik", d: "M-2.6 -.5V-2.8a2.6 2.6 0 0 1 5.2 0V-.5" }, g);
+  } else {
+    el("circle", { class: "korpus", r: 9 }, g);
+  }
+  const dl = el("text", { class: "delta", x: 11, y: -9 }, g); dl.textContent = "Δ";
+  const et = el("text", { class: "etykieta", x: 13, y: 4 }, g); et.textContent = z.nazwa;
+  const tyt = el("title", {}, g); tyt.textContent = z.nazwa + " (" + rodzajNazwa(z.rodzaj) + (z.zablokowany ? ", zablokowany" : "") + ")";
+  WEZLY.set(z.id, { g, et });
+  g.addEventListener("pointerdown", (e) => zacznijPrzeciaganie(e, z.id));
+  g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); wybierz(z.id, true); } });
+}
+let trafione = null;   // zbiór id pasujących do wyszukiwania i filtra
+function ustawZetony() {
+  for (const z of Z) {
+    const w = WEZLY.get(z.id), p = poz[z.id];
+    const [x, y] = naXY(p.lat, p.lon), [sx, sy] = doEkranu(x, y);
+    w.g.setAttribute("transform", `translate(${sx.toFixed(1)} ${sy.toFixed(1)})`);
+    const pasuje = !trafione || trafione.has(z.id);
+    w.g.classList.toggle("przygaszony", !pasuje);
+    w.g.classList.toggle("trafiony", !!trafione && pasuje && (szukaj.value.trim() !== ""));
+    w.g.classList.toggle("przesuniety", przesuniety(z.id));
+    w.g.classList.toggle("wybrany", z.id === wybrany);
+    const pokazEt = z.id === wybrany || (pasuje && (W.k >= ETYKIETY_OD || (trafione && szukaj.value.trim() !== "")));
+    w.et.style.display = pokazEt ? "" : "none";
+    w.g.setAttribute("aria-label", z.nazwa + (z.zablokowany ? ", zablokowany" : "") + (przesuniety(z.id) ? ", przesunięty" : ""));
+  }
+  rysujDuchy();
+}
+function rysujDuchy() {
+  warDuchy.replaceChildren();
+  if (!podglad) return;
+  for (const id in podglad) {
+    const [x0, y0] = naXY(poz[id].lat, poz[id].lon), [x1, y1] = naXY(podglad[id].lat, podglad[id].lon);
+    const [a, b] = doEkranu(x0, y0), [c, d] = doEkranu(x1, y1);
+    el("line", { class: "duch-linia", x1: a, y1: b, x2: c, y2: d }, warDuchy);
+    const g = el("g", { class: "zeton duch", transform: `translate(${c} ${d})` }, warDuchy);
+    el("circle", { class: "korpus", r: 9 }, g);
+  }
+}
+
+/* ---------- przeciąganie, przesuwanie mapy, szczypanie ---------- */
+const wskazniki = new Map();   // pointerId → [sx, sy] (tło mapy)
+let szczyp = null, ciag = null;
+function pozycjaEkran(e) { const r = svg.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+svg.addEventListener("pointerdown", (e) => {
+  if (e.target.closest && e.target.closest(".zeton")) return;
+  try { svg.setPointerCapture(e.pointerId); } catch (_) { /* wskaźnik syntetyczny */ }
+  wskazniki.set(e.pointerId, pozycjaEkran(e));
+  svg.classList.add("chwyt");
+  if (wskazniki.size === 2) { const [a, b] = [...wskazniki.values()]; szczyp = { d: Math.hypot(a[0] - b[0], a[1] - b[1]) || 1 }; }
+});
+svg.addEventListener("pointermove", (e) => {
+  if (ciag && ciag.pid === e.pointerId) return przeciagaj(e);
+  if (!wskazniki.has(e.pointerId)) return;
+  const [sx, sy] = pozycjaEkran(e), [px, py] = wskazniki.get(e.pointerId);
+  wskazniki.set(e.pointerId, [sx, sy]);
+  if (wskazniki.size >= 2 && szczyp) {
+    const [a, b] = [...wskazniki.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]) || 1;
+    zoomWokol((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, d / szczyp.d); szczyp.d = d;
+  } else { W.cx -= (sx - px) / W.k; W.cy -= (sy - py) / W.k; rysujWidok(); }
+});
+const koniecTla = (e) => { wskazniki.delete(e.pointerId); if (wskazniki.size < 2) szczyp = null; if (!wskazniki.size) svg.classList.remove("chwyt"); };
+svg.addEventListener("pointerup", (e) => { if (ciag && ciag.pid === e.pointerId) return skonczPrzeciaganie(e); koniecTla(e); });
+svg.addEventListener("pointercancel", (e) => { if (ciag && ciag.pid === e.pointerId) return skonczPrzeciaganie(e, true); koniecTla(e); });
+svg.addEventListener("wheel", (e) => { e.preventDefault(); const [sx, sy] = pozycjaEkran(e); zoomWokol(sx, sy, Math.exp(-e.deltaY * 0.0016)); }, { passive: false });
+
+function zacznijPrzeciaganie(e, id) {
+  if (e.button > 0) return;
+  e.stopPropagation(); e.preventDefault();
+  try { svg.setPointerCapture(e.pointerId); } catch (_) { /* wskaźnik syntetyczny */ }
+  const [sx, sy] = pozycjaEkran(e), [x, y] = naXY(poz[id].lat, poz[id].lon), [ex, ey] = doEkranu(x, y);
+  ciag = { id, pid: e.pointerId, start: [sx, sy], dx: ex - sx, dy: ey - sy, ruszony: false, przed: { ...poz[id] } };
+}
+function przeciagaj(e) {
+  const [sx, sy] = pozycjaEkran(e);
+  if (!ciag.ruszony && Math.hypot(sx - ciag.start[0], sy - ciag.start[1]) < 5) return;
+  ciag.ruszony = true;
+  const [x, y] = doSwiata(sx + ciag.dx, sy + ciag.dy);
+  poz[ciag.id] = naGeo(x, y);
+  ustawZetony();
+}
+async function skonczPrzeciaganie(e, anuluj = false) {
+  const c = ciag; ciag = null;
+  try { svg.releasePointerCapture(e.pointerId); } catch (_) { /* już zwolniony */ }
+  if (!c.ruszony || anuluj) { poz[c.id] = c.przed; ustawZetony(); if (!anuluj) wybierz(c.id, false); return; }
+  const z = POR.get(c.id);
+  if (z.zablokowany && !zgoda.has(c.id)) {
+    const ok = await dialog({
+      tytul: "<span class=\"ostrz\">&#9888;</span> Przenieść zablokowany żeton?",
+      tresc: `Ten budynek ma realny adres: <b>${esc(z.adres || "(brak adresu)")}</b>.<br>„${esc(z.nazwa)}” stoi w prawdziwym miejscu Lublina. Przenieść go mimo to?`,
+      tak: "Przenieś mimo to", nie: "Zostaw na miejscu", niebezp: true });
+    if (!ok) { poz[c.id] = c.przed; ustawZetony(); return; }
+    zgoda.add(c.id);
+  }
+  zatwierdzZmiane(c.id, c.przed);
+}
+function zatwierdzZmiane(id, przed) {
+  const teraz = poz[id]; poz[id] = przed; migawka(); poz[id] = teraz;
+  anulujPodglad(true); wybierz(id, false); odswiez();
+}
+
+/* ---------- historia ---------- */
+function migawka() { cofnij.push(JSON.stringify(poz)); if (cofnij.length > 200) cofnij.shift(); ponow = []; }
+function wstecz() { if (!cofnij.length) return; ponow.push(JSON.stringify(poz)); poz = JSON.parse(cofnij.pop()); anulujPodglad(true); odswiez(); }
+function naprzod() { if (!ponow.length) return; cofnij.push(JSON.stringify(poz)); poz = JSON.parse(ponow.pop()); anulujPodglad(true); odswiez(); }
+$("cofnij").onclick = wstecz; $("ponow").onclick = naprzod;
+$("oryginal").onclick = async () => {
+  if (!ilePrzesunietych()) return;
+  const ok = await dialog({ tytul: "Przywrócić oryginał?", tresc: `Wszystkie przesunięcia (${ilePrzesunietych()}) wrócą na pierwotne miejsca. Można to cofnąć przyciskiem „Cofnij”.`, tak: "Przywróć oryginał", nie: "Anuluj", niebezp: true });
+  if (!ok) return;
+  migawka(); poz = JSON.parse(JSON.stringify(ORIG)); anulujPodglad(true); odswiez();
+};
+
+/* ---------- lista, wyszukiwarka, filtr ---------- */
+const szukaj = $("szukaj"), filtr = $("filtr");
+const rodzaje = [...new Set(Z.map((z) => z.rodzaj))].sort((a, b) => rodzajNazwa(a).localeCompare(rodzajNazwa(b), "pl"));
+filtr.innerHTML = `<option value="">Wszystkie rodzaje (${Z.length})</option><option value="@zablokowane">Zablokowane – realny adres (${Z.filter((z) => z.zablokowany).length})</option><option value="@swobodne">Swobodne (${Z.filter((z) => !z.zablokowany).length})</option><option value="@przesuniete">Przesunięte</option>`
+  + rodzaje.map((r) => `<option value="${r}">${esc(rodzajNazwa(r))} (${Z.filter((z) => z.rodzaj === r).length})</option>`).join("");
+const bezOgonkow = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ł/g, "l");
+function przelicz() {
+  const q = bezOgonkow(szukaj.value.trim()), f = filtr.value;
+  trafione = new Set(Z.filter((z) =>
+    (!q || bezOgonkow(z.nazwa + " " + z.id + " " + (z.adres || "")).includes(q)) &&
+    (!f || (f === "@zablokowane" ? z.zablokowany : f === "@swobodne" ? !z.zablokowany : f === "@przesuniete" ? przesuniety(z.id) : z.rodzaj === f))).map((z) => z.id));
+  if (!q && !f) trafione = null;
+}
+function rysujListe() {
+  const ul = $("lista"); ul.replaceChildren();
+  const ikona = (z) => z.zablokowany
+    ? `<svg class="ikona" viewBox="-10 -10 20 20" aria-hidden="true"><rect x="-8" y="-8" width="16" height="16" rx="3.5" fill="var(--tusz)"/><rect x="-4" y="-.5" width="8" height="6" rx="1" fill="var(--papier)"/><path d="M-2.3 -.5V-2.5a2.3 2.3 0 0 1 4.6 0V-.5" fill="none" stroke="var(--papier)" stroke-width="1.5"/></svg>`
+    : `<svg class="ikona" viewBox="-10 -10 20 20" aria-hidden="true"><circle r="7.5" fill="var(--akcent-2)" stroke="var(--tusz)" stroke-width="2"/></svg>`;
+  const lista = Z.filter((z) => !trafione || trafione.has(z.id)).sort((a, b) => a.nazwa.localeCompare(b.nazwa, "pl"));
+  for (const z of lista) {
+    const li = document.createElement("li"); if (z.id === wybrany) li.className = "wybrany";
+    li.innerHTML = `<button type="button" data-id="${z.id}">${ikona(z)}<span class="nazwa">${esc(z.nazwa)}<br><span class="rodzaj">${esc(rodzajNazwa(z.rodzaj))}</span></span>${z.zablokowany ? '<span class="znaczek">kłódka</span>' : ""}${przesuniety(z.id) ? '<span class="znaczek przes">Δ przesunięty</span>' : ""}</button>`;
+    ul.appendChild(li);
+  }
+  if (!lista.length) ul.innerHTML = "<li style=\"padding:10px\">Brak żetonów pasujących do wyszukiwania.</li>";
+}
+$("lista").addEventListener("click", (e) => { const b = e.target.closest("button[data-id]"); if (b) wybierz(b.dataset.id, true); });
+szukaj.addEventListener("input", odswiez); filtr.addEventListener("change", odswiez);
+
+function wybierz(id, przesun) {
+  wybrany = id;
+  if (przesun) {
+    const [x, y] = naXY(poz[id].lat, poz[id].lon);
+    if (W.k < 0.3) W.k = 0.3;
+    W.cx = x; W.cy = y;
+  }
+  odswiez(); rysujWidok();
+}
+function rysujWybor() {
+  const b = $("wybor");
+  if (!wybrany) { b.hidden = true; return; }
+  const z = POR.get(wybrany), p = poz[wybrany], o = ORIG[wybrany];
+  b.hidden = false;
+  b.innerHTML = `<b>${esc(z.nazwa)}</b><span>${esc(rodzajNazwa(z.rodzaj))} · ${z.zablokowany ? "zablokowany (kłódka)" : "swobodny"}${z.adres ? " · " + esc(z.adres) : ""}</span>
+    <span>Położenie: ${p.lat}, ${p.lon}</span>${przesuniety(wybrany) ? `<span>Oryginał: ${o.lat}, ${o.lon}</span><button class="przycisk" id="przywroc-jeden">Przywróć ten żeton</button>` : ""}`;
+  const bt = $("przywroc-jeden");
+  if (bt) bt.onclick = () => { migawka(); poz[wybrany] = { ...ORIG[wybrany] }; anulujPodglad(true); odswiez(); };
+}
+function odswiez() {
+  przelicz(); rysujListe(); rysujWybor(); ustawZetony();
+  const n = ilePrzesunietych();
+  $("licznik").textContent = "Przesunięto: " + n;
+  $("cofnij").disabled = !cofnij.length; $("ponow").disabled = !ponow.length; $("oryginal").disabled = !n;
+  if ($("kopiuj-box").classList.contains("pokaz")) pokazKopie(false);
+}
+
+/* ---------- rozproszenie ---------- */
+function proponujRozproszenie(D) {
+  const MAKS = 700;   // m: o tyle najdalej wolno przesunąć żeton od oryginału
+  const pt = {};
+  for (const z of Z) { const [x, y] = naXY(poz[z.id].lat, poz[z.id].lon); const [x0, y0] = naXY(ORIG[z.id].lat, ORIG[z.id].lon); pt[z.id] = { x, y, x0, y0, dz: dzielnicaXY(x, y), z }; }
+  const wolne = Z.filter((z) => !z.zablokowany).map((z) => pt[z.id]);
+  const stale = Z.filter((z) => z.zablokowany).map((z) => pt[z.id]);
+  const pary = () => { let n = 0; const wszystkie = [...wolne, ...stale]; for (let i = 0; i < wszystkie.length; i++) for (let j = i + 1; j < wszystkie.length; j++) { const a = wszystkie[i], b = wszystkie[j]; if (a.dz === b.dz && (!a.z.zablokowany || !b.z.zablokowany) && Math.hypot(a.x - b.x, a.y - b.y) < D) n++; } return n; };
+  const przed = pary();
+  const wewnatrz = (p, x, y) => p.dz < 0 || kanwa.isPointInPath(SCIEZKI[p.dz], x, y);
+  for (let it = 0; it < 120; it++) {
+    let ruch = 0;
+    const dx = new Map(wolne.map((p) => [p, [0, 0]]));
+    for (let i = 0; i < wolne.length; i++) {
+      const a = wolne[i];
+      const sasiedzi = [...wolne.slice(i + 1), ...stale];
+      for (const b of sasiedzi) {
+        if (a.dz !== b.dz) continue;
+        let vx = a.x - b.x, vy = a.y - b.y, d = Math.hypot(vx, vy);
+        if (d >= D) continue;
+        if (d < 0.5) { const kat = (i * 2.399963 + sasiedzi.indexOf(b)) % (2 * Math.PI); vx = Math.cos(kat); vy = Math.sin(kat); d = 1; }
+        const u = (D - d) / d, ba = b.z.zablokowany ? 1 : 0.5;
+        dx.get(a)[0] += vx * u * ba; dx.get(a)[1] += vy * u * ba;
+        if (!b.z.zablokowany) { dx.get(b)[0] -= vx * u * 0.5; dx.get(b)[1] -= vy * u * 0.5; }
+      }
+    }
+    for (const p of wolne) {
+      let [sx, sy] = dx.get(p); sx *= 0.6; sy *= 0.6;
+      for (let t = 0; t < 4; t++) {
+        let nx = p.x + sx, ny = p.y + sy;
+        const o = Math.hypot(nx - p.x0, ny - p.y0);
+        if (o > MAKS) { nx = p.x0 + (nx - p.x0) * MAKS / o; ny = p.y0 + (ny - p.y0) * MAKS / o; }
+        if (wewnatrz(p, nx, ny)) { ruch += Math.hypot(nx - p.x, ny - p.y); p.x = nx; p.y = ny; break; }
+        sx /= 2; sy /= 2;
+      }
+    }
+    if (ruch < 0.5) break;
+  }
+  const po = pary();
+  const wynik = {};
+  for (const p of wolne) { const g = naGeo(p.x, p.y); if (g.lat !== poz[p.z.id].lat || g.lon !== poz[p.z.id].lon) wynik[p.z.id] = g; }
+  return { wynik, przed, po };
+}
+function pokazPodglad() {
+  const D = Math.max(30, Math.min(600, +$("odleglosc").value || 170));
+  const { wynik, przed, po } = proponujRozproszenie(D);
+  podglad = wynik;
+  const n = Object.keys(wynik).length;
+  $("podglad-opis").innerHTML = n
+    ? `Do przesunięcia: <b>${n}</b> swobodnych żetonów (zielone przerywane kółka). Pary bliżej niż ${D} m: <b>${przed} → ${po}</b>. Zablokowane (kłódka) zostają w miejscu.`
+    : `Nic do rozsunięcia: swobodne żetony są już dalej od siebie niż ${D} m (pary bliżej: ${przed}).`;
+  $("podglad-ok").disabled = !n;
+  $("podglad").classList.add("pokaz");
+  rysujDuchy();
+}
+function anulujPodglad(cicho) { podglad = null; $("podglad").classList.remove("pokaz"); if (!cicho) rysujDuchy(); else warDuchy.replaceChildren(); }
+$("rozprosz").onclick = pokazPodglad;
+$("odleglosc").onchange = pokazPodglad;
+$("podglad-nie").onclick = () => anulujPodglad(false);
+$("podglad-ok").onclick = () => { if (!podglad) return; migawka(); for (const id in podglad) poz[id] = podglad[id]; anulujPodglad(true); odswiez(); };
+
+/* ---------- kopiowanie zmian ---------- */
+function zmiany() { const w = {}; for (const z of Z) if (przesuniety(z.id)) w[z.id] = { lat: poz[z.id].lat, lon: poz[z.id].lon }; return w; }
+function pokazKopie(proba) {
+  const tekst = JSON.stringify(zmiany(), null, 2), box = $("kopiuj-box"), ta = $("kopiuj-tekst");
+  ta.value = tekst; box.classList.add("pokaz");
+  const stan = $("kopiuj-stan");
+  if (!proba) return;
+  const n = ilePrzesunietych();
+  if (!n) { stan.textContent = "Nic nie przesunięto, więc nie ma czego kopiować."; return; }
+  const zapas = () => { ta.focus(); ta.select(); stan.textContent = "Schowek niedostępny: tekst jest zaznaczony, skopiuj go ręcznie (Ctrl+C)."; };
+  try {
+    navigator.clipboard.writeText(tekst).then(() => { stan.textContent = `Skopiowano do schowka (${n} przesuniętych).`; }, zapas);
+  } catch (_) { zapas(); }
+}
+$("kopiuj").onclick = () => pokazKopie(true);
+$("kopiuj-zamknij").onclick = () => $("kopiuj-box").classList.remove("pokaz");
+$("kopiuj-zaznacz").onclick = () => { $("kopiuj-tekst").focus(); $("kopiuj-tekst").select(); };
+
+/* ---------- start ---------- */
+$("zoom-plus").onclick = () => zoomWokol(W.w / 2, W.h / 2, 1.6);
+$("zoom-minus").onclick = () => zoomWokol(W.w / 2, W.h / 2, 1 / 1.6);
+$("zoom-caly").onclick = calaMapa;
+new ResizeObserver(() => { rozmiar(); rysujWidok(); }).observe($("skrzynka"));
+rozmiar(); calaMapa(); odswiez();
+</script>
+</body>
+</html>
