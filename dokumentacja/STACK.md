@@ -7,7 +7,7 @@ Stan na 13.11.2026.
 ## W skrócie
 | Warstwa | Technologia | Wersja w `.venv` |
 |---|---|---|
-| Język | Python | 3.13 (wymagany ≥ 3.12) |
+| Język | Python | ≥ 3.12 (rozwijane i testowane na 3.13; skrypty startowe wybierają 3.14, 3.13 lub 3.12) |
 | Silnik gry | czysty Python, pydantic (stan, schematy), numpy (popyt, losowość) | pydantic 2.14, numpy 2.5 |
 | Optymalizacja | scipy `linprog` (HiGHS) – plan obsługi klientów w `kuchnia/operacje.py` | scipy 1.18 |
 | Dane gry | YAML (PyYAML), walidowane schematami pydantic | PyYAML 6.0 |

@@ -32,7 +32,7 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 
 ## Uruchomienie
 
-Potrzebny jest Python 3.12 lub nowszy. Na Windows wystarczy kliknąć dwa razy **`start.bat`**. Za pierwszym razem
+Potrzebny jest Python 3.12 lub nowszy (3.12, 3.13, 3.14…; zawsze według `requires-python` w `pyproject.toml`). Na Windows wystarczy kliknąć dwa razy **`start.bat`**, na macOS i Linuksie uruchomić `sh start.sh`. Za pierwszym razem
 skrypt przygotuje środowisko i zainstaluje pakiety, a potem gra otworzy się w przeglądarce pod adresem
 http://127.0.0.1:8765.
 
