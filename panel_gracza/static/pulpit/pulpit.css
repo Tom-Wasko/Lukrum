@@ -1,0 +1,114 @@
+/* Pulpit (seria pulpit, krok 1): mapa na cały ekran, pasek LUKRUM z ⚙ w lewym górnym rogu, portfel przy dolnej krawędzi
+   i zeszyt wujka przy prawej. Kolory i kroje TYLKO ze zmiennych motywy/zmienne.css, więc wszystko działa w trzech paletach
+   (bar, pewex, wysoka) × jasny/ciemny. Stan nigdy samym kolorem: znaki ✓ ! ▼ ▶, przerywana ramka przy niedostępnym.
+   Klasę `pulpit` na <body> ustawia skrypt w gra.html (komputer, bez ?uklad=stary); bez niej obowiązuje stary układ. */
+
+/* --- stary nagłówek, menu i stopka znikają z widoku; nota o fikcyjnych firmach trafia do menu ⚙ -------------------------- */
+body.pulpit { display: block !important; }
+body.pulpit > .naglowek, body.pulpit > .menu, body.pulpit > .stopka, body.pulpit .zadania { display: none !important; }
+/* na ekranach poza mapą (wnętrza, okna decyzji) treść omija pasek, zeszyt i portfel */
+body.pulpit .scena { min-height: 100vh; padding: 20px 64px 96px 76px; }
+
+/* --- mapa na cały ekran ------------------------------------------------------------------------------------------------ */
+body.pulpit.na-mapie { overflow: hidden; }
+body.pulpit.na-mapie .scena { padding: 0; min-height: 0; }
+body.pulpit.na-mapie .karta { position: fixed; top: 10px; left: 170px; right: 80px; z-index: 40; max-width: none; margin: 0; display: flex;
+  flex-direction: column; align-items: flex-start; gap: 8px; background: none; box-shadow: none; border-radius: 0; pointer-events: none; }
+body.pulpit.na-mapie .karta-glowa, body.pulpit.na-mapie .podzakladki { display: none; }
+body.pulpit.na-mapie .tresc { display: contents; }
+body.pulpit.na-mapie .tresc > :not(.lmapa) { position: relative; z-index: 2; pointer-events: auto; max-width: 100%; margin: 0; }
+body.pulpit.na-mapie .lmapa { position: fixed; inset: 0; z-index: 1; height: auto; min-height: 0; border: 0; border-radius: 0; pointer-events: auto; }
+/* nad mapą zostają warstwy (czynsze, popyt, konkurencja) i opinie; paletę i tryb wybiera się w ⚙ */
+body.pulpit .lm-ustawienia { margin: 0; padding: 6px 8px; background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px;
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent); }
+body.pulpit .lm-ustawienia [aria-label="Paleta kolorów"], body.pulpit .lm-ustawienia [aria-label="Tryb"], body.pulpit .lm-ustawienia .lm-stara { display: none; }
+body.pulpit.na-mapie .lm-pasek { left: 70px; }   /* skróty mapy (lokal, banki…) obok paska LUKRUM */
+
+/* --- lewy górny róg ---------------------------------------------------------------------------------------------------- */
+.pp-lewy { position: fixed; left: 10px; top: 10px; z-index: 45; width: 44px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.pp-pasek { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.pp-ust { position: relative; }
+.pp-ik, .pp-ust .ustawienia-przycisk { display: flex; align-items: center; gap: 8px; height: 44px; min-width: 44px; padding: 0 10px; box-sizing: border-box;
+  position: relative; cursor: pointer; color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px;
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent); text-decoration: none; text-transform: uppercase; letter-spacing: .04em;
+  font: calc(14px * var(--skala-tekstu, 1)) var(--font-szyld); }
+.pp-ust .ustawienia-przycisk { justify-content: center; width: 44px; padding: 0; font-size: calc(24px * var(--skala-tekstu, 1)); line-height: 1; }
+.pp-ik svg { flex: none; }
+.pp-ik span { max-width: 0; overflow: hidden; white-space: nowrap; transition: max-width .18s; }
+.pp-pasek:hover .pp-ik span, .pp-pasek:focus-within .pp-ik span { max-width: 240px; }
+.pp-ik:hover, .pp-ik:focus-visible, .pp-ust .ustawienia-przycisk:hover, .pp-ust .ustawienia-przycisk[aria-expanded="true"] { background: var(--akcent); color: var(--papier); }
+.pp-ik:focus-visible, .pp-ust .ustawienia-przycisk:focus-visible, .pp-portfel:focus-visible, .pp-zeszyt:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+.pp-ik[hidden], .pp-znak[hidden] { display: none; }
+.pp-wyszarzona { border-style: dashed; opacity: .7; cursor: not-allowed; }
+.pp-znak { position: absolute; right: -8px; top: -8px; display: grid; place-items: center; min-width: 18px; height: 18px; padding: 0 3px; box-sizing: border-box;
+  font: 700 12px/1 var(--font-tekst); font-style: normal; color: var(--papier); background: var(--tusz); border-radius: 9px; }
+/* szyld: pionowy napis LUKRUM (stos liter) w kolorze akcentu */
+.pp-szyld { width: 44px; padding: 8px 0; box-sizing: border-box; display: grid; place-items: center; color: var(--papier); background: var(--akcent);
+  border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent);
+  font: 700 calc(15px * var(--skala-tekstu, 1))/1.15 var(--font-gruby); writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 0; user-select: none; }
+/* „Tydzień N” – tylko informacja; pod nim nazwa drużyny i stan gry z dawnego nagłówka */
+.pp-tydzien { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: max-content; max-width: 210px; padding: 6px 9px; box-sizing: border-box;
+  color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 40%, transparent);
+  font: calc(13px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .04em; }
+.pp-tydzien b { font-weight: 400; text-transform: uppercase; }
+.pp-tydzien small { max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: calc(12px * var(--skala-tekstu, 1)) var(--font-tekst); letter-spacing: 0; }
+.pp-chip { display: block; font: calc(12px * var(--skala-tekstu, 1))/1.3 var(--font-tekst); letter-spacing: 0; border-top: 1px dashed var(--ramka); padding-top: 3px; white-space: normal; }
+/* menu ⚙: tu nie ma już „Układu menu” (stary układ jest tylko pod ?uklad=stary); nota o fikcyjnych firmach */
+.pp-ust .ustawienia-lista { left: 0; right: auto; z-index: 55; }
+.pp-ust .wybor-motywu:has(select[aria-label="Układ menu"]) { display: none; }
+.pp-nota { margin: 6px 10px 2px; padding-top: 8px; max-width: 260px; border-top: 1px solid var(--ramka); font: calc(11px * var(--skala-tekstu, 1))/1.4 var(--font-tekst); opacity: .85; }
+
+/* --- portfel: plik banknotów przy dolnej krawędzi --------------------------------------------------------------------- */
+.pp-portfel { position: fixed; left: 210px; bottom: -62px; z-index: 45; width: 210px; height: 131px; padding: 0; background: none; cursor: pointer;
+  color: var(--tusz); transition: translate .2s ease; font: inherit; }
+.pp-portfel:hover, .pp-portfel:focus-visible { translate: 0 -52px; }
+.pp-plik { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(2px 3px 0 color-mix(in srgb, var(--tusz) 35%, transparent)); }
+.pp-kwoty { position: absolute; left: calc(100% - 26px); bottom: 66px; display: none; gap: 14px; padding: 8px 12px; white-space: nowrap; text-align: left;
+  color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px; box-shadow: 3px 3px 0 color-mix(in srgb, var(--tusz) 40%, transparent); }
+.pp-portfel:hover .pp-kwoty, .pp-portfel:focus-visible .pp-kwoty { display: flex; }
+.pp-kw { display: flex; flex-direction: column; }
+.pp-kw small { font: calc(12px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .05em; text-transform: uppercase; }
+.pp-kw b { font: 700 calc(17px * var(--skala-tekstu, 1)) var(--font-tekst); font-variant-numeric: tabular-nums; }
+.pp-kw.zle b { color: var(--strata); }
+.pp-debet .pp-plik { outline: 3px dashed var(--strata); outline-offset: -6px; }
+
+/* --- zeszyt wujka przy prawej krawędzi ----------------------------------------------------------------------------------- */
+.pp-zeszyt { position: fixed; right: 0; top: max(76px, min(48vh, calc(100vh - 560px))); z-index: 45; display: flex; width: 340px; padding: 0; border: 0; background: none;
+  text-align: left; cursor: pointer; font: inherit; color: var(--g-czern); translate: calc(100% - 172px) 0; transition: translate .22s ease; rotate: -1.2deg; }
+.pp-zeszyt[hidden] { display: none; }
+.pp-zeszyt:hover, .pp-zeszyt:focus-visible { translate: 0 0; }
+.pp-schowane .pp-zeszyt { translate: calc(100% - 172px) 0; }   /* Esc chowa wysunięte elementy, dopóki wskaźnik nie wyjdzie */
+.pp-schowane .pp-portfel { translate: 0 0; }
+.pp-schowane .pp-kwoty { display: none; }
+.pp-sprezyna { flex: none; width: 26px; border: 2px solid var(--g-czern); border-right: 0; border-radius: 6px 0 0 6px; background-color: var(--g-metal2);
+  background-image: radial-gradient(circle at 50% 50%, var(--g-biel) 0 4px, var(--g-czern) 4.5px 6px, transparent 6.5px); background-size: 100% 24px; background-repeat: repeat-y; }
+.pp-kartka { flex: 1; min-width: 0; display: block; padding: 10px 14px 12px 12px; color: var(--g-czern); border: 2px solid var(--g-czern); border-right: 0;
+  background-color: var(--g-biel); background-image: repeating-linear-gradient(transparent 0 25px, color-mix(in srgb, var(--g-czern) 14%, transparent) 25px 26px);
+  box-shadow: -3px 4px 0 color-mix(in srgb, var(--g-czern) 35%, transparent); }
+.pp-zg { display: block; max-width: 128px; font: calc(12px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .05em; text-transform: uppercase; transition: max-width .22s; }
+.pp-krok { display: block; max-width: 128px; margin-top: 6px; font: 700 calc(17px * var(--skala-tekstu, 1))/1.25 var(--font-tekst); transition: max-width .22s; }
+.pp-krok small { display: block; font: calc(12px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .04em; text-transform: uppercase; opacity: .85; }
+.pp-krok small::before { content: "▶ "; }
+.pp-zrobiony .pp-krok small::before { content: "✓ "; }
+.pp-zeszyt:hover .pp-zg, .pp-zeszyt:focus-visible .pp-zg, .pp-zeszyt:hover .pp-krok, .pp-zeszyt:focus-visible .pp-krok { max-width: 100%; }
+.pp-lista { display: block; margin: 10px 0 0; padding: 8px 0 0; list-style: none; max-height: 0; overflow: hidden; visibility: hidden; opacity: 0;
+  border-top: 1px dashed var(--g-czern); transition: max-height .25s ease, opacity .2s ease, visibility .25s; }
+.pp-zeszyt:hover .pp-lista, .pp-zeszyt:focus-visible .pp-lista { max-height: 420px; visibility: visible; opacity: 1; }
+.pp-schowane .pp-lista { max-height: 0; visibility: hidden; opacity: 0; }
+.pp-lista li { display: flex; gap: 8px; align-items: baseline; padding: 2px 0; font: calc(14px * var(--skala-tekstu, 1))/1.3 var(--font-tekst); }
+.pp-lp { flex: none; width: 1.4em; text-align: center; font-weight: 700; }
+.pp-lista li.ok { text-decoration: line-through; opacity: .7; }
+.pp-lista li.teraz { font-weight: 700; color: var(--g-rudy); }
+.pp-zeszyt .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* wysoka widoczność daje każdemu przyciskowi ramkę (dostepnosc.css) – portfel i zeszyt są rysunkami, więc bez ramki przycisku */
+#pulpit .pp-portfel, #pulpit .pp-zeszyt { border: 0; }
+
+/* --- okna otwierane z pulpitu ---------------------------------------------------------------------------------------- */
+.pp-konto-linki { display: flex; gap: 8px; flex-wrap: wrap; }
+.pp-konto-wyloguj { margin-top: 12px; }
+
+/* ruch tylko dla tych, którzy go nie wyłączyli: reszta dostaje te same stany od razu, bez przejść */
+@media (prefers-reduced-motion: reduce) {
+  .pp-ik span, .pp-portfel, .pp-zeszyt, .pp-zg, .pp-krok, .pp-lista { transition: none; }
+}

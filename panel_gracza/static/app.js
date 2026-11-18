@@ -11,8 +11,9 @@ import { funkcjaZakladki, funkcjeZakladek, oknoFunkcji, oknoUstawienFunkcji, okn
   zakryta as zakrytaF, zakrytaFunkcja, znaczekFunkcji } from "./zakladki/funkcje.js";
 import { aktualneMiejsce, idzDoMiejsca, okruszek, otworzBudynek, ustawMiejsce } from "./swiat/swiat.js";
 import { ustawWybrany } from "./zakladki/lokal_wybor.js";
+import { AKCJE_PULPITU, odswiezPulpit, PULPIT } from "./pulpit/pulpit.js";
 
-const start = () => "dashboard";   // ekran startowy – plan rundy (pulpit); mapa jest w menu
+const start = () => (PULPIT ? "mapa" : "dashboard");   // ekran startowy: pulpit – mapa na cały ekran; stary układ (?uklad=stary) – plan rundy
 const S = { v: null, kat: null, zakladka: null, tryb: "decyzje", runda: null, d: {}, zapis: Promise.resolve(),
   nrZapytania: 0, oczekujace: 0, poleZmiany: null, odliczanie: null, zadania: 0 };
 
@@ -59,6 +60,7 @@ function ustaw(v, { poZapisie = false, lokalnie = null } = {}) {
   if (poZapisie && lokalnie) {   // zmiana tylko we fragmencie zakładki: bez przerysowania całej strony (skoku, utraty przewijania)
     S.zadania = rysujZadania(ctx());
     rysujMenu();
+    odswiezPulpit(ctx());
     lokalnie();
   } else if (poZapisie) rysujPoWyjsciuZPola(); else rysuj();
 }
@@ -114,7 +116,7 @@ const odRundy = (k) => odRundy1(k) ?? (ZAKLADKI[k]?.czesci ? najwczesniej(ZAKLAD
 function dostepna(z) { return !z.odblokowanie || (typeof z.odblokowanie === "function" ? z.odblokowanie(S.v) : odbl(z.odblokowanie)); }
 const maWyniki = (z) => !!(z && z.wyniki && S.v.wyniki && (!z.wynikiOd || S.v.runda >= z.wynikiOd) && (!z.wynikiGdy || z.wynikiGdy(S.v)));
 // dawne zakładki (oferta, dostawcy, …) są częściami zakładek złożonych – link prowadzi do zakładki i jej części
-const docelowa = (k) => (ALIAS[k] && ZAKLADKI[ALIAS[k]] ? ALIAS[k] : k);
+const docelowa = (k) => (PULPIT && k === "dashboard" ? "mapa" : ALIAS[k] && ZAKLADKI[ALIAS[k]] ? ALIAS[k] : k);   // pulpit: plan rundy jest w zeszycie wujka
 function pokazCzesc(k) {
   if (!ALIAS[k]) return;
   const el = document.getElementById(`czesc-${k}`);
@@ -175,7 +177,7 @@ function zamknijUstawienia() {
 }
 
 // v, d i edycja zawsze bieżące – akcja po `await c.zmien(…)` (np. ponowne otwarcie okna) widzi zapisane decyzje
-const ctx = () => ({ get v() { return S.v; }, kat: S.kat, get d() { return S.d; },
+const ctx = () => ({ get v() { return S.v; }, kat: S.kat, get d() { return S.d; }, get zakladka() { return S.zakladka; },
   get edycja() { return S.v.edycja && !S.v.wyslane && !blokada(S.v); }, zmien, api, wczytaj, ustaw, rysuj,
   dostepna: (k) => !!ZAKLADKI[k] && dostepna(ZAKLADKI[k]) && !wylaczonaF(S.v, k), tytulZakladki: (k) => ZAKLADKI[k]?.tytul ?? k,
   zakryta: (k) => zakrytaF(S.v, k), wylaczona: (k) => wylaczonaF(S.v, k),
@@ -351,6 +353,7 @@ function rysuj() {
   // linki do wyłączonych funkcji znikają (plan rundy, „Przejdź: …”); zakryte zostają – otwierają okno „Odsłoń”
   for (const a of karta.querySelectorAll("[data-zakladka-k]")) if (wylaczonaF(v, a.dataset.zakladkaK)) a.remove();
   menuUstawien();
+  odswiezPulpit(c);
   twardeSpacje(karta);
   zwinPodpowiedzi(karta);
   history.replaceState(null, "", `#${z.hash ? z.hash() : S.zakladka}${tryb === "wyniki" ? "/wyniki" : ""}`);
@@ -420,6 +423,7 @@ document.addEventListener("click", async (e) => {
       await przelaczFunkcje(el.dataset.f, el.dataset.o === "1"); return oknoUstawien();
     }
     if (a === "funkcja-zakryj") { await przelaczFunkcje(el.dataset.f, false); return oknoUstawien(); }
+    if (AKCJE_PULPITU[a]) return await AKCJE_PULPITU[a](el, ctx(), e);
     if (AKCJE_ZADAN[a]) return await AKCJE_ZADAN[a](el, ctx(), e);
     for (const z of Object.values(ZAKLADKI)) {
       if (z.akcje && z.akcje[a]) return await z.akcje[a](el, ctx(), e);

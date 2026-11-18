@@ -58,7 +58,7 @@ const BUDYNEK_KROKU = { lokale: "agencja_nieruchomosci", bank: "kamienica_bankow
 // krok → punkt wnętrza (data-k klikalnego miejsca sceny i pozycji listy „Co tu zrobisz”, swiat/miejsca.js: cel)
 const PUNKT_KROKU = { lokale: "lokale", bank: "bank", biuro: "biuro", oferta: "lokal_menu", sprzedaz: "lokal_menu", stanowiska: "wnetrze_sprzet",
   sprzet: "wnetrze_sprzet", zatrudnienie: "lokal_przeglad", rynek_pracy: "rynek_pracy", dostawcy: "zaop_dostawy" };
-function celNaMapie(v, klucz) {
+export function celNaMapie(v, klucz) {
   const id = klucz ? BUDYNEK_KROKU[klucz] || v.stan.lokale?.[0]?.id : null;
   let styl = document.getElementById("lw-cel-styl");
   if (!id || !/^[\w-]+$/.test(id)) { styl?.remove(); return; }
@@ -95,4 +95,19 @@ export function listWujka(v, c) {
     ${list ? `<div class="lw-kartka"><svg class="lw-portret" viewBox="0 0 64 80" aria-hidden="true"><use href="#g-wnetrze-portret-wujka" width="64" height="80"/></svg>
       <div><p class="lw-naglowek">List od wujka · tydzień ${v.runda}</p><h2>${esc(list[0])}</h2><p>${esc(list[1])}</p><p class="lw-podpis">Wasz wujek</p></div></div>` : ""}
     <div class="lw-kroki"><div class="lw-tytul"><span>Do zrobienia w tym tygodniu</span><span>${zrobione} z ${K.length + 1}</span></div><ol>${html}${wyslij}</ol>${nowosci(v, c)}</div></section>`;
+}
+
+// Plan tygodnia dla pulpitu (static/pulpit/pulpit.js): te same kroki co lista wujka, plus „Wyślij decyzje” na końcu.
+// Zwraca { lista: [{klucz, gdzie, co, ok, opis, teraz}], nastepny, zrobione }; `nastepny` – pierwszy niezrobiony krok.
+export function planTygodnia(v) {
+  const K = kroki(v), pierwszy = K.findIndex((k) => !k[3]), wszystko = pierwszy < 0;
+  const lista = K.map(([klucz, gdzie, co, ok, opis], i) => ({ klucz, gdzie, co, ok, opis, teraz: i === pierwszy }));
+  lista.push({ klucz: "wyslij", gdzie: "Poczta", co: "Wyślij decyzje", ok: !!v.wyslane, teraz: !v.wyslane && wszystko,
+    opis: v.wyslane ? "wysłane, do zamknięcia tygodnia można jeszcze poprawiać" : wszystko ? "wszystko gotowe" : "gdy lista wyżej jest odhaczona" });
+  return { lista, nastepny: lista.find((k) => k.teraz) || null, zrobione: lista.filter((k) => k.ok).length };
+}
+// obwódka „teraz” na budynku następnego kroku także poza Planem tygodnia (pulpit: mapa jest ekranem domyślnym)
+export function oznaczCel(v) {
+  const K = kroki(v), pierwszy = K.findIndex((k) => !k[3]);
+  celNaMapie(v, v.wyslane ? null : pierwszy < 0 ? "wyslij" : K[pierwszy][0]);
 }

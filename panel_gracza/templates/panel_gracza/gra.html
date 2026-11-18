@@ -12,11 +12,13 @@
   <link rel="stylesheet" href="{{ statyczne }}motywy/zmienne.css">
   <link rel="stylesheet" href="{{ statyczne }}motywy/dostepnosc.css">
   <link rel="stylesheet" href="{{ statyczne }}motywy/lukrum.css">
+  <link rel="stylesheet" href="{{ statyczne }}pulpit/pulpit.css">
   <script src="{{ statyczne }}motyw.js"></script>
   <script src="{{ statyczne }}lukrum.js"></script>
   <script src="{{ statyczne }}vendor/chart.umd.min.js"></script>
 </head>
 <body>
+  <script>/* pulpit (seria pulpit): mapa na cały ekran; stary układ – ?uklad=stary albo wąski ekran */ if (!/[?&]uklad=stary(&|$)/.test(location.search) && matchMedia("(min-width: 901px)").matches) document.body.classList.add("pulpit");</script>
   <header class="naglowek">
     <div class="logo"><div class="serce"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M8 6h8l-1 4H9z"/><path d="M7.5 10h9l-1 5h-7z"/><path d="M9 15h6l-1 3h-4z"/></svg></div><div>LUKRUM</div><div class="firma" id="nazwa-firmy">{{ firma }}</div></div>
     <div class="konto"><span id="status-gry"></span><a href="/jak-grac" target="_blank" rel="noopener">Jak grać</a><a href="/">Moje gry</a>{% include "konta/_konto.html" %}</div>
