@@ -194,8 +194,9 @@ let _okno = null, _poZamknieciu = null, _teczka = null, _poTeczce = null;
 const FOKUSOWALNE = 'a[href], button:not([disabled]), input:not([disabled]):not([type=hidden]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 const bezTagow = (t) => String(t).replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").trim();
 const zamykacz = (akcja) => `<button type="button" class="x" data-akcja="${akcja}" aria-label="Zamknij okno">✕</button>`;
-function zbudujOkno(tytul, html, { male = false, srednie = false, przyciski = "", klasa = "", akcjaZamknij = "zamknij-okno" } = {}) {
-  return `<div class="okno ${male ? "male" : srednie ? "srednie" : ""} ${klasa}"><div class="og"><span>${tytul}</span>${zamykacz(akcjaZamknij)}</div>
+// `naglowek`: dodatkowe elementy w nagłówku obok ✕ (np. przełącznik Decyzje | Wyniki w teczce)
+function zbudujOkno(tytul, html, { male = false, srednie = false, przyciski = "", klasa = "", akcjaZamknij = "zamknij-okno", naglowek = "" } = {}) {
+  return `<div class="okno ${male ? "male" : srednie ? "srednie" : ""} ${klasa}"><div class="og"><span>${tytul}</span>${naglowek ? `<span class="og-prawa">${naglowek}${zamykacz(akcjaZamknij)}</span>` : zamykacz(akcjaZamknij)}</div>
     <div class="ot">${html}</div>${przyciski ? `<div class="ost">${przyciski}</div>` : ""}</div>`;
 }
 function otworzWarstwe(tresc, tytul, klasa, zamknij) {
@@ -259,8 +260,8 @@ export function zamknijOkno() {
 }
 
 /** Teczka: ekran decyzji (albo wyników) w oknie nad wnętrzem. To samo `tytul` odświeża teczkę w miejscu. */
-export function teczka(tytul, html, { przyciski = "", poZamknieciu = null } = {}) {
-  const tresc = zbudujOkno(tytul, html, { przyciski, klasa: "teczka-okno", akcjaZamknij: "zamknij-teczke" });
+export function teczka(tytul, html, { przyciski = "", poZamknieciu = null, naglowek = "" } = {}) {
+  const tresc = zbudujOkno(tytul, html, { przyciski, naglowek, klasa: "teczka-okno", akcjaZamknij: "zamknij-teczke" });
   if (_teczka && _teczka._tytul === tytul) return odswiezOkno(_teczka, tresc, poZamknieciu, (f) => { _poTeczce = f; });
   zamknijTeczke();
   _teczka = otworzWarstwe(tresc, tytul, "teczka", zamknijTeczke);

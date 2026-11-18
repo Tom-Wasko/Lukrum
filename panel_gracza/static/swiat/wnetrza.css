@@ -74,14 +74,16 @@
 .okno .og button.x:focus-visible { outline: var(--ognisko, 2px solid currentColor); outline-offset: 2px; }
 .zaslona:focus { outline: none; }
 .zaslona.teczka { background: color-mix(in srgb, var(--tusz) 32%, transparent); padding-top: 52px; }
-.teczka-okno { position: relative; margin-top: 14px; border: max(2px, var(--ramka-grubosc, 2px)) solid var(--tusz, currentColor); border-radius: 4px 14px 14px 14px; overflow: visible; }
-.teczka-okno::before { content: ""; position: absolute; left: 22px; top: -14px; width: 120px; height: 14px; border: max(2px, var(--ramka-grubosc, 2px)) solid var(--tusz, currentColor); border-bottom: 0; border-radius: 8px 8px 0 0; background: var(--pom, var(--tusz, currentColor)); }
+.teczka-okno { position: relative; margin-top: 0; border: max(2px, var(--ramka-grubosc, 2px)) solid var(--tusz, currentColor); border-radius: 4px 14px 14px 14px; overflow: visible; }
 .teczka-okno .og { text-transform: none; letter-spacing: .01em; border-radius: 3px 12px 0 0; }
 .teczka-okno .og > span:first-child { display: inline-flex; align-items: center; gap: 10px; }
 .teczka-opis { margin: 0 0 10px; }
-.teczka-tryb { display: inline-flex; gap: 4px; margin: 0 0 12px; }
-.teczka-tryb button { min-height: 38px; padding: 0 16px; cursor: pointer; color: var(--tusz, inherit); background: var(--papier, transparent); border: 2px solid var(--tusz, currentColor); border-radius: 6px; font: inherit; font-weight: 700; }
-.teczka-tryb button.aktywny { color: var(--papier); background: var(--akcent, currentColor); }
+/* przełącznik Decyzje | Wyniki w nagłówku teczki, obok ✕; niedostępna strona jest wyszarzona (przerywana ramka + podpowiedź) */
+.og-prawa { display: inline-flex; align-items: center; gap: 12px; }
+.teczka-tryb { display: inline-flex; gap: 3px; padding: 3px; border-radius: 9px; background: color-mix(in srgb, var(--tusz, currentColor) 28%, transparent); }
+.teczka-tryb button { min-height: 32px; padding: 0 14px; cursor: pointer; color: inherit; background: transparent; border: 2px solid transparent; border-radius: 6px; font: inherit; font-size: 15px; font-weight: 700; text-transform: none; letter-spacing: 0; }
+.teczka-tryb button.aktywny { color: var(--tusz, currentColor); background: var(--papier, Canvas); border-color: var(--papier, Canvas); }
 .teczka-tryb button.aktywny::before { content: "✓ "; }
+.teczka-tryb button.szare { opacity: .55; cursor: not-allowed; border-style: dashed; border-color: currentColor; }
 .teczka-tryb button:focus-visible { outline: var(--ognisko, 2px solid currentColor); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .zaslona { animation: none; } }

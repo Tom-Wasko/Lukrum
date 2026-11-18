@@ -118,41 +118,112 @@ body.pz-otwarty .pp-zeszyt { visibility: hidden; }
 .pp-lista li.teraz { font-weight: 700; color: var(--g-rudy); }
 .pp-zeszyt .sr, .pz .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-/* --- zeszyt na cały ekran (stan 3): tło półprzezroczyste (widać mapę), książka z okładką, szytym grzbietem, kartkami w linię --- */
-.pz { position: fixed; inset: 0; z-index: 48; display: none; place-items: center; padding: 52px 3vw 3vh; box-sizing: border-box; font-family: var(--font-reka);
+/* --- zeszyt na cały ekran (stan 3, krok 5): rozkładówka z grzbietem i szyciem, kartki w linię z marginesem i dziurkami, stos kartek po bokach,
+   zakładki-wstążki, przewracanie kartki (rotateY z cieniem; animowane tylko transform i opacity – zeszyt.js: przewroc). Skóra okładki z zeszyt.js. --- */
+.pz { position: fixed; inset: 0; z-index: 48; display: none; place-items: center; padding: 66px 2.5vw 3vh; box-sizing: border-box; font-family: var(--font-reka);
   background: color-mix(in srgb, var(--papier) 52%, transparent); backdrop-filter: blur(2px); }
 .pz.otwarty { display: grid; animation: pz-wejscie .25s ease-out; }
 @keyframes pz-wejscie { from { opacity: 0; } }
-.pz-ksiazka { position: relative; width: min(1060px, 100%); height: min(86vh, 800px); padding: 14px 14px 14px 34px; box-sizing: border-box; color: var(--g-czern);
-  background: color-mix(in srgb, var(--g-drewno) 80%, var(--g-czern));
-  border: 3px solid var(--g-czern); border-radius: 12px; box-shadow: 8px 10px 0 color-mix(in srgb, var(--g-czern) 30%, transparent); }
-.pz-grzbiet { z-index: 1; position: absolute; left: 0; top: 0; bottom: 0; width: 34px; border-right: 2px solid var(--g-czern); border-radius: 9px 0 0 9px; background: color-mix(in srgb, var(--g-czern) 25%, transparent); }
-.pz-grzbiet::after { content: ""; position: absolute; left: 14px; top: 12px; bottom: 12px; border-left: 3px dashed var(--g-biel); opacity: .8; }   /* szycie */
-.pz-karta { position: relative; height: 100%; display: flex; flex-direction: column; background: var(--g-biel); border: 2px solid var(--g-czern); border-radius: 4px; overflow: hidden;
-  box-shadow: inset 8px 0 14px -8px color-mix(in srgb, var(--g-czern) 45%, transparent); }
-.pz-stronicowanie { position: relative; flex: 1; min-height: 0; perspective: 2400px; }
-.pz-strona { position: absolute; inset: 0; overflow: auto; padding: 22px 40px 18px 78px; box-sizing: border-box; color: var(--g-czern); font-size: calc(19px * var(--skala-tekstu, 1)); line-height: 34px;
-  background: linear-gradient(90deg, transparent 64px, color-mix(in srgb, var(--g-rudy) 55%, transparent) 64px 66px, transparent 66px),
-    radial-gradient(circle at 88% 12%, transparent 0 26px, color-mix(in srgb, var(--g-drewno2) 24%, transparent) 27px 31px, transparent 32px),
+.pz-ksiazka { position: relative; width: min(1180px, 100%); height: min(82vh, 800px); padding: 16px 34px 20px; box-sizing: border-box; color: var(--g-czern);
+  background: color-mix(in srgb, var(--g-drewno) 80%, var(--g-czern)); border: 3px solid var(--g-czern); border-radius: 14px; box-shadow: 8px 10px 0 color-mix(in srgb, var(--g-czern) 30%, transparent); }
+.pz-blok { position: relative; height: 100%; }
+/* stos kartek po bokach: im dalej w zeszycie, tym grubszy po lewej i cieńszy po prawej (skala = transform, płynnie) */
+.pz-stos { position: absolute; top: 5px; bottom: -5px; width: 24px; z-index: 0; border: 2px solid var(--g-czern); border-radius: 3px;
+  background: repeating-linear-gradient(90deg, var(--g-biel) 0 2px, color-mix(in srgb, var(--g-czern) 22%, var(--g-biel)) 2px 3px); transition: transform .8s cubic-bezier(.45, .05, .2, 1); }
+.pz-stos-l { right: calc(100% - 4px); transform-origin: right center; transform: scaleX(var(--stos-l, .5)); border-radius: 6px 0 0 6px; }
+.pz-stos-p { left: calc(100% - 4px); transform-origin: left center; transform: scaleX(var(--stos-p, .5)); border-radius: 0 6px 6px 0; }
+.pz-rozkladowka { position: relative; z-index: 1; height: 100%; display: grid; grid-template-columns: 1fr 1fr; perspective: 2600px; perspective-origin: 50% 45%;
+  background: var(--g-biel); border: 2px solid var(--g-czern); border-radius: 5px; box-shadow: 0 4px 0 -1px color-mix(in srgb, var(--g-czern) 22%, var(--g-biel)), 0 6px 0 -1px var(--g-czern); }
+.pz-str { position: relative; grid-row: 1; min-width: 0; min-height: 0; overflow: hidden; color: var(--g-czern); background: var(--g-biel); }
+.pz-str-l { grid-column: 1; border-radius: 4px 0 0 4px; }
+.pz-str-p { grid-column: 2; border-radius: 0 4px 4px 0; }
+.pz-strona { position: absolute; inset: 0; overflow: auto; padding: 22px 36px 46px 72px; box-sizing: border-box; font-size: calc(18px * var(--skala-tekstu, 1)); line-height: 34px;
+  background: linear-gradient(90deg, transparent 56px, color-mix(in srgb, var(--g-rudy) 55%, transparent) 56px 58px, transparent 58px) local,
     repeating-linear-gradient(transparent 0 33px, color-mix(in srgb, var(--g-czern) 14%, transparent) 33px 34px) local, var(--g-biel); }
 .pz-strona:focus-visible { outline: var(--ognisko); outline-offset: -4px; }
-.pz-kartka { z-index: 3; pointer-events: none; transform-origin: left center; backface-visibility: hidden; overflow: hidden; box-shadow: 10px 0 26px color-mix(in srgb, var(--g-czern) 40%, transparent); }
-.pz-kartka.wprzod { animation: pz-wprzod .7s ease-in forwards; }
-.pz-kartka.wstecz { animation: pz-wstecz .7s ease-out forwards; }
-@keyframes pz-wprzod { 0% { transform: rotateY(0); opacity: 1; } 55% { transform: rotateY(-92deg); opacity: 1; } 100% { transform: rotateY(-178deg); opacity: 0; } }
-@keyframes pz-wstecz { 0% { transform: rotateY(-178deg); opacity: 0; } 45% { transform: rotateY(-92deg); opacity: 1; } 100% { transform: rotateY(0); opacity: 1; } }
-.pz-stopka { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 18px; border-top: 2px solid var(--g-czern); background: color-mix(in srgb, var(--g-biel) 90%, var(--g-drewno2)); }
-.pz-numer { font-size: calc(16px * var(--skala-tekstu, 1)); }
-.pz-btn, .pz-zamknij, .pz-zakladka { font: calc(17px * var(--skala-tekstu, 1)) var(--font-reka); color: var(--g-czern); background: var(--g-biel); border: 2px solid var(--g-czern); border-radius: 6px; cursor: pointer; }
-.pz-btn { padding: 4px 14px; min-height: 40px; }
-.pz-btn:disabled { opacity: .45; cursor: default; border-style: dashed; }
-.pz-btn:not(:disabled):hover, .pz-zakladka:hover, .pz-zamknij:hover { background: var(--g-rudy); color: var(--g-biel); }
-.pz-btn:focus-visible, .pz-zakladka:focus-visible, .pz-zamknij:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
-.pz-zamknij { position: absolute; left: 34px; top: -42px; padding: 4px 14px; min-height: 38px; }
+/* dziurki po zewnętrznej stronie kartki i cień przy grzbiecie */
+.pz-str::before { content: ""; position: absolute; top: 0; bottom: 0; width: 34px; z-index: 2; pointer-events: none;
+  background: radial-gradient(circle at 17px 16%, color-mix(in srgb, var(--g-drewno) 70%, var(--g-czern)) 0 6px, color-mix(in srgb, var(--g-czern) 45%, transparent) 6.500px 8px, transparent 8.500px),
+    radial-gradient(circle at 17px 50%, color-mix(in srgb, var(--g-drewno) 70%, var(--g-czern)) 0 6px, color-mix(in srgb, var(--g-czern) 45%, transparent) 6.500px 8px, transparent 8.500px),
+    radial-gradient(circle at 17px 84%, color-mix(in srgb, var(--g-drewno) 70%, var(--g-czern)) 0 6px, color-mix(in srgb, var(--g-czern) 45%, transparent) 6.500px 8px, transparent 8.500px); }
+.pz-str-l::before { left: 0; }
+.pz-str-p::before { right: 0; }
+.pz-str::after { content: ""; position: absolute; top: 0; bottom: 0; width: 70px; z-index: 2; pointer-events: none; }
+.pz-str-l::after { right: 0; background: linear-gradient(to left, color-mix(in srgb, var(--g-czern) 30%, transparent), transparent); }
+.pz-str-p::after { left: 0; background: linear-gradient(to right, color-mix(in srgb, var(--g-czern) 30%, transparent), transparent); }
+.pz-nr-str { position: absolute; bottom: 8px; z-index: 3; font-size: calc(17px * var(--skala-tekstu, 1)); opacity: .75; pointer-events: none; }
+.pz-str-l .pz-nr-str { left: 74px; }
+.pz-str-p .pz-nr-str { right: 52px; }
+/* grzbiet: wgniecenie, szycie nicią */
+.pz-grzbiet { position: absolute; left: calc(50% - 16px); width: 32px; top: 0; bottom: 0; z-index: 3; pointer-events: none;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--g-czern) 34%, transparent) 50%, transparent); }
+.pz-grzbiet::before { content: ""; position: absolute; left: 14px; top: 16px; bottom: 16px; border-left: 3px dashed var(--g-siwy); }
+.pz-grzbiet::after { content: ""; position: absolute; left: 4px; right: 4px; top: 16px; bottom: 16px; background: repeating-linear-gradient(transparent 0 26px, color-mix(in srgb, var(--g-siwy) 80%, transparent) 26px 28px); }
+/* strony pustej okładki: tytuł albo miejsce na notatki */
+.pz-pusta .pz-strona { overflow: hidden; }
+.pz-tytul, .pz-koniec { display: grid; justify-items: center; gap: 2px; padding-top: 28px; text-align: center; }
+.pz-t1 { margin: 6px 0 0; font-size: 2.1em; font-weight: 700; line-height: 46px; rotate: -2deg; }
+.pz-t2 { margin: 0; font-size: 1.1em; }
+.pz-t3 { margin: 0; font-size: .95em; opacity: .8; }
+/* kartka w locie: dwa lica (przód i tył), cień i połysk – tylko transform i opacity */
+.pz-lisc { position: absolute; top: 0; bottom: 0; width: 50%; z-index: 5; transform-style: preserve-3d; will-change: transform; pointer-events: none; }
+.pz-lisc.wprzod { left: 50%; transform-origin: left center; }
+.pz-lisc.wstecz { left: 0; transform-origin: right center; }
+.pz-lico { position: absolute; inset: 0; overflow: hidden; background: var(--g-biel); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.pz-lico.tyl { transform: rotateY(180deg); }
+.pz-lico .pz-str { position: absolute; inset: 0; }
+.pz-polysk { position: absolute; inset: 0; z-index: 6; opacity: 0; pointer-events: none; background: linear-gradient(to right, color-mix(in srgb, var(--g-czern) 55%, transparent), color-mix(in srgb, var(--g-czern) 10%, transparent)); }
+.pz-lisc.wprzod .pz-lico.tyl .pz-polysk { background: linear-gradient(to left, color-mix(in srgb, var(--g-czern) 55%, transparent), color-mix(in srgb, var(--g-czern) 10%, transparent)); }
+.pz-cien { position: absolute; inset: 0; z-index: 4; opacity: 0; pointer-events: none;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--g-czern) 26%, transparent), transparent 46%, transparent 54%, color-mix(in srgb, var(--g-czern) 26%, transparent)); }
+/* rogi kartki: klik przewraca; przy najechaniu odgina się narożnik (podpowiedź) */
+.pz-rog { position: absolute; bottom: 0; z-index: 7; width: 132px; height: 72px; padding: 0; color: var(--g-czern); background: none; border: 0; cursor: pointer; font: 700 calc(18px * var(--skala-tekstu, 1)) var(--font-reka); }
+.pz-rog-l { left: 0; }
+.pz-rog-p { right: 0; }
+.pz-rog span { position: absolute; bottom: 9px; padding: 0 6px; background: color-mix(in srgb, var(--g-biel) 82%, transparent); border-radius: 4px; }
+.pz-rog-l span { left: 40px; }
+.pz-rog-p span { right: 40px; }
+.pz-rog::before { content: ""; position: absolute; bottom: 0; width: 50px; height: 50px; transform: scale(.35); transition: transform .28s cubic-bezier(.3, .8, .3, 1); background: var(--g-skora2); }
+.pz-rog-p::before { right: 0; transform-origin: right bottom; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+.pz-rog-l::before { left: 0; transform-origin: left bottom; clip-path: polygon(0 0, 0 100%, 100% 100%); }
+.pz-rog::after { content: ""; position: absolute; bottom: 0; width: 50px; height: 50px; transform: scale(.35); transition: transform .28s cubic-bezier(.3, .8, .3, 1); background: linear-gradient(135deg, var(--g-biel), color-mix(in srgb, var(--g-czern) 22%, var(--g-biel))); }
+.pz-rog-p::after { right: 0; transform-origin: right bottom; clip-path: polygon(0 0, 100% 0, 0 100%); }
+.pz-rog-l::after { left: 0; transform-origin: left bottom; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.pz-rog:hover:not(:disabled)::before, .pz-rog:hover:not(:disabled)::after, .pz-rog:focus-visible::before, .pz-rog:focus-visible::after { transform: scale(1); }
+.pz-rog:hover:not(:disabled) span, .pz-rog:focus-visible span { text-decoration: underline; text-underline-offset: 4px; }
+.pz-rog:disabled { cursor: default; }
+.pz-rog:disabled span, .pz-rog:disabled::before, .pz-rog:disabled::after { display: none; }
+.pz-rog:focus-visible { outline: var(--ognisko); outline-offset: -4px; }
+/* wysoka widoczność daje każdemu przyciskowi ramkę (dostepnosc.css) – rogi i wstążki mają kształt, więc bez ramki */
+#pz .pz-rog, #pz .pz-wstega, #pz .pz-wiecej { border: 0; }
+.pz-numer { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); margin: 0; white-space: nowrap; }
+.pz-zamknij { position: absolute; left: 34px; top: -46px; z-index: 2; padding: 4px 14px; min-height: 38px; font: calc(17px * var(--skala-tekstu, 1)) var(--font-reka); color: var(--g-czern); background: var(--g-biel); border: 2px solid var(--g-czern); border-radius: 6px; cursor: pointer; }
 .pz-zamknij small { font-size: .8em; opacity: .8; }
-.pz-zakladki { position: absolute; right: 18px; top: -38px; display: flex; gap: 4px; }
-.pz-zakladka { padding: 4px 12px; min-height: 36px; border-bottom: 0; border-radius: 8px 8px 0 0; background: color-mix(in srgb, var(--g-biel) 82%, var(--g-drewno2)); }
-.pz-zakladka.aktywna { background: var(--g-biel); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; min-height: 40px; }
+.pz-zamknij:hover { background: var(--g-rudy); color: var(--g-biel); }
+.pz-zamknij:focus-visible, .pz-wstega:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+/* zakładki-wstążki: zwisają znad górnej krawędzi zeszytu; wybrana jest wyższa, podkreślona i ze znakiem ▸ (nie samym kolorem) */
+.pz-zakladki { position: absolute; right: 44px; top: -50px; z-index: 2; display: flex; gap: 8px; align-items: flex-start; }
+.pz-wstega { position: relative; height: 62px; padding: 8px 18px 20px; cursor: pointer; color: var(--g-biel); border: 0; font: 700 calc(18px * var(--skala-tekstu, 1))/1.1 var(--font-reka);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 12px), 0 100%); transform: translateY(8px); transition: transform .22s cubic-bezier(.3, .8, .3, 1); }
+.pz-wstega { background: color-mix(in srgb, var(--g-rudy) 82%, var(--g-czern)); }
+.pz-w1 { background: color-mix(in srgb, var(--g-zielen2) 82%, var(--g-czern)); }
+.pz-w2 { background: color-mix(in srgb, var(--g-skora) 40%, var(--g-czern)); }
+.pz-w3 { background: color-mix(in srgb, var(--g-metal2) 70%, var(--g-czern)); }
+.pz-wstega:hover { transform: translateY(2px); }
+.pz-wstega.aktywna { transform: translateY(-4px); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+.pz-wstega.aktywna span::before { content: "▸ "; }
+@media (max-width: 900px) {
+  .pz { padding: 64px 8px 12px; }
+  .pz-ksiazka { height: min(86vh, 800px); padding: 12px 14px 16px; }
+  .pz-stos, .pz-grzbiet, .pz-lisc, .pz-cien { display: none; }
+  .pz-rozkladowka { grid-template-columns: 1fr; }
+  .pz-str-l, .pz-str-p { grid-column: 1; }
+  .pz-str:not(.biezaca) { display: none; }
+  .pz-strona { padding: 18px 22px 46px 64px; }
+  .pz-zakladki { right: 8px; left: 8px; justify-content: flex-end; overflow-x: auto; }
+  .pz-wstega { padding: 8px 10px 20px; font-size: 15px; }
+  .pz-zamknij { left: 14px; }
+}
 /* treść stron: odręczne listy, kroki, spisy */
 .pz-strona :is(h2, h3, b, small, i, u, a, span) { font-family: inherit; }
 .pz-strona h2 { margin: 0 0 6px; font-size: 1.55em; line-height: 40px; }
@@ -308,7 +379,8 @@ body.pz-otwarty .pp-zeszyt { visibility: hidden; }
   .pp-ik span, .pp-portfel, .pp-zeszyt { transition: none; }   /* wysunięcie i prostowanie – od razu, bez animacji */
   .pz.otwarty, .pp-szuflada { animation: none; }
   .pz-wiecej { animation: none; }
-  .pz-kartka { display: none; }   /* bez animacji przewracania strona po prostu się zmienia */
+  .pz-lisc, .pz-cien { display: none; }   /* bez animacji przewracania strona po prostu się zmienia */
+  .pz-stos, .pz-wstega, .pz-rog::before, .pz-rog::after { transition: none; }
 }
 
 /* === Krok 4A: okienka w stylu PRL – paragon, tablica ogłoszeń, koperta ============================================================ */
@@ -379,3 +451,32 @@ body.pz-otwarty .pp-zeszyt { visibility: hidden; }
   .pp-stempel.swiezy { animation: pp-stempel .45s cubic-bezier(.2, .9, .3, 1.2) both; }
 }
 @keyframes pp-stempel { from { scale: 2.2; opacity: 0; } 60% { opacity: 1; } to { scale: 1; opacity: 1; } }
+
+/* === Krok 5 =================================================================================================================== */
+/* „Wyślij decyzje” na dole paska: duży list w kopercie z listem w rogu; po wysłaniu stempel WYSŁANO (stan nie samym kolorem) */
+.pp-list { height: 58px; min-width: 58px; margin-top: 8px; padding: 0 5px; overflow: visible; }
+.pp-list-svg { display: block; width: 46px; height: 36px; flex: none; transform-origin: 30% 80%; transition: transform .2s ease; }
+.pp-list:hover .pp-list-svg, .pp-list:focus-visible .pp-list-svg { transform: rotate(-6deg) scale(1.06); }
+.pp-list-kartka { transition: transform .2s ease; }
+.pp-list:hover .pp-list-kartka, .pp-list:focus-visible .pp-list-kartka { transform: translate(1px, -3px); }
+.pp-list-stempel { position: absolute; left: 4px; bottom: 5px; display: none; padding: 0 4px; rotate: -12deg; pointer-events: none; color: var(--akcent); background: color-mix(in srgb, var(--g-karta) 85%, transparent);
+  border: 2px solid var(--akcent); border-radius: 3px; font: 400 10px/1.5 var(--font-gruby); letter-spacing: .06em; }
+.pp-list.wyslana .pp-list-stempel { display: block; }
+.pp-list:hover { background: var(--g-karta); color: var(--tusz); }
+.pp-list:hover span, .pp-list:focus-visible span { color: var(--tusz); }
+.pp-list:focus-visible { background: var(--g-karta); color: var(--tusz); }
+/* filtr: kategoria bez miejsc (np. brak wydarzeń w tym tygodniu) jest wyszarzona */
+.pp-f.szare { border-style: dashed; opacity: .6; cursor: not-allowed; }
+.pp-f.szare:hover { color: var(--tusz); background: var(--g-karta); }
+/* nazwa gry i firma na mapie leżą nad przyciskiem Legenda; legenda otwiera się nad nimi */
+body.pulpit.na-mapie .pp-druzyna { position: fixed; left: 10px; bottom: 54px; z-index: 31; max-width: 230px; margin: 0; }
+body.pulpit.na-mapie .pp-lewy { z-index: 45; }
+body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
+.pp-gra-n i { font-style: normal; opacity: .75; }
+.pp-gra-n i::after { content: ":"; }
+.pp-firma { border-top: 0; padding-top: 0; }
+/* szuflada Wydarzenia: dwie kolumny (W parkach | W mieście); na wąskim ekranie jedna */
+.pp-szuflada { width: min(820px, calc(100vw - 170px)); }
+.pp-sz-kolumny { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 22px; align-items: start; }
+.pp-sz-kolumny > section { min-width: 0; }
+@media (max-width: 900px) { .pp-sz-kolumny { grid-template-columns: 1fr; } .pp-szuflada { width: min(390px, calc(100vw - 80px)); } }

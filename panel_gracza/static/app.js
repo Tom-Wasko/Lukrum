@@ -213,9 +213,12 @@ function rysujTeczke() {
   }
   const c = ctx(), wyniki = maWyniki(z), decyzje = !!z.decyzje && !(v.koniec && wyniki);
   const tryb = (t.tryb === "wyniki" || v.koniec) && wyniki ? "wyniki" : decyzje ? "decyzje" : "wyniki";
-  const przelacznik = decyzje && wyniki ? `<div class="teczka-tryb" role="group" aria-label="Widok ekranu">
-      <button type="button" data-akcja="teczka-tryb" data-t="decyzje" aria-pressed="${tryb === "decyzje"}" class="${tryb === "decyzje" ? "aktywny" : ""}">Decyzje</button>
-      <button type="button" data-akcja="teczka-tryb" data-t="wyniki" aria-pressed="${tryb === "wyniki"}" class="${tryb === "wyniki" ? "aktywny" : ""}">Wyniki</button></div>` : "";
+  // przełącznik Decyzje | Wyniki w nagłówku teczki (obok ✕): bieżąca runda albo ostatni wynik tej funkcji; niedostępny – wyszarzony z podpowiedzią
+  const bezWynikow = !z.wyniki ? "Ta funkcja nie ma ekranu wyników" : !v.wyniki ? "Wyniki pojawią się po pierwszym przeliczonym tygodniu" : "Na razie brak wyników tej funkcji";
+  const bezDecyzji = !z.decyzje ? "Ta funkcja nie ma ekranu decyzji" : "Gra zakończona – decyzji już nie podejmuje się";
+  const przycisk = (t, napis, aktywny, mozna, opis) => `<button type="button" data-akcja="teczka-tryb" data-t="${t}" aria-pressed="${aktywny}"${mozna ? "" : ` aria-disabled="true" title="${opis}"`}
+      class="${aktywny ? "aktywny" : ""}${mozna ? "" : " szare"}">${napis}</button>`;
+  const przelacznik = z.decyzje || wyniki ? `<div class="teczka-tryb" role="group" aria-label="Widok ekranu">${przycisk("decyzje", "Decyzje", tryb === "decyzje", decyzje, bezDecyzji)}${przycisk("wyniki", "Wyniki", tryb === "wyniki", wyniki, bezWynikow)}</div>` : "";
   const tresc = tryb === "wyniki" ? z.wyniki(c) : z.decyzje(c);
   const podglad = v.koniec ? `<div class="komunikat">Gra zakończona. Tu są wyniki ostatniej rundy (${v.gra.liczba_rund}).</div>`
     : !v.edycja && v.runda < v.gra.runda ? `<div class="komunikat">Podgląd rundy ${v.runda} (${v.miesiac}) – decyzje z tej rundy są tylko do odczytu.</div>` : "";
@@ -223,8 +226,8 @@ function rysujTeczke() {
   const wyslane = !zablokowane && v.edycja && v.wyslane && tryb === "decyzje" && t.k !== "wyslij"
     ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji przyciskiem „Wyślij decyzje” na pasku.</div>` : "";
   const opis = typeof z.info === "function" ? z.info(c, tryb) : z.info;
-  const html = `${przelacznik}${opis ? `<div class="teczka-opis">${kolko(opis)}</div>` : ""}${podglad}${zablokowane}${wyslane}${tresc}`;
-  const okno_ = teczka(`${ikona(IKONY[t.k])} ${z.tytulPelny || z.tytul}`, html, { poZamknieciu: () => { if (S.teczka === t) S.teczka = null; } });
+  const html = `${opis ? `<div class="teczka-opis">${kolko(opis)}</div>` : ""}${podglad}${zablokowane}${wyslane}${tresc}`;
+  const okno_ = teczka(`${ikona(IKONY[t.k])} ${z.tytulPelny || z.tytul}`, html, { naglowek: przelacznik, poZamknieciu: () => { if (S.teczka === t) S.teczka = null; } });
   for (const a of okno_.querySelectorAll("[data-zakladka-k]")) if (wylaczonaF(v, a.dataset.zakladkaK)) a.remove();
   zwinPodpowiedzi(okno_);
   if (z.po) z.po(c, tryb);
@@ -456,7 +459,7 @@ document.addEventListener("click", async (e) => {
   try {
     if (a === "zamknij-okno") return el.closest(".teczka") ? zamknijTeczke() : zamknijOkno();
     if (a === "zamknij-teczke") return zamknijTeczke();
-    if (a === "teczka-tryb") { if (S.teczka) { S.teczka.tryb = el.dataset.t; rysujTeczke(); } return; }
+    if (a === "teczka-tryb") { if (S.teczka && el.getAttribute("aria-disabled") !== "true") { S.teczka.tryb = el.dataset.t; rysujTeczke(); } return; }
     if (a === "runda") return przesunRunde(+el.dataset.d);
     if (a === "runda-idz") return idzDoRundy(+el.dataset.r);
     if (a === "tryb") { S.tryb = el.dataset.t; return rysuj(); }

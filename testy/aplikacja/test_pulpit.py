@@ -68,7 +68,7 @@ def test_ikony_paska_istnieja():
 def test_style_pulpitu_maja_kolory_tylko_ze_zmiennych():
     css = _bez_komentarzy(PULPIT_CSS)
     assert not re.search(r"#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(", css), "kolory tylko przez zmienne z motywy/zmienne.css"
-    zdefiniowane = set(re.findall(r"(--[\w-]+)\s*:", ZMIENNE_CSS)) | set(re.findall(r"(--font-reka)\s*:", PULPIT_CSS))
+    zdefiniowane = set(re.findall(r"(--[\w-]+)\s*:", ZMIENNE_CSS)) | set(re.findall(r"(--font-reka)\s*:", PULPIT_CSS))         | {"--stos-l", "--stos-p", "--pp-gra-h"}   # ustawiane ze skryptu (grubość stosu kartek, wysokość tabliczki z nazwą gry)
     uzyte = set(re.findall(r"var\((--[\w-]+)", css))
     assert uzyte <= zdefiniowane, uzyte - zdefiniowane
     # grafika SVG w skrypcie też używa tylko zmiennych palety
@@ -137,7 +137,7 @@ def test_krok_2_zeszyt_trzy_stany_i_strony():
     assert '"Escape"' in ZESZYT_JS and "pp-zeszyt-zamknij" in ZESZYT_JS and "e.target === o" in ZESZYT_JS
     assert "prefers-reduced-motion: reduce" in ZESZYT_JS and "rotateY" in PULPIT_CSS and "perspective" in PULPIT_CSS
     css = _bez_komentarzy(PULPIT_CSS)
-    assert ".pz-kartka { display: none; }" in css   # bez ruchu strona się tylko zmienia
+    assert ".pz-lisc, .pz-cien { display: none; }" in css   # bez ruchu strona się tylko zmienia
     assert ".pp-zeszyt:hover, .pp-zeszyt:focus-visible { translate: 0 0; rotate: 0deg; }" in css   # stan 2: wysuwa i prostuje
     assert 'role", "dialog"' in ZESZYT_JS and "aria-modal" in ZESZYT_JS
 
@@ -164,7 +164,7 @@ def test_krok_3_ustawienia_wroc_wydarzenia_zeszyt():
     nawigacja = (STATIC / "pulpit" / "nawigacja.js").read_text(encoding="utf-8")
     assert "export function wroc" in nawigacja and "export function zapamietajWidok" in nawigacja and 'id="pp-wroc"' in PULPIT_JS
     assert "mozeWrocic(ostatniC)" in PULPIT_JS and '"Escape"' in PULPIT_JS
-    assert 'id="pz-wiecej"' in ZESZYT_JS and "scrollHeight - s.scrollTop" in ZESZYT_JS and ".pz-wiecej" in PULPIT_CSS
+    assert 'class="pz-wiecej"' in ZESZYT_JS and "scrollHeight - s.scrollTop" in ZESZYT_JS and ".pz-wiecej" in PULPIT_CSS
     assert 'data-akcja="pp-pokaz"' in ZESZYT_JS and 'data-akcja="pp-wejdz"' in ZESZYT_JS and "data-akcja=\"pp-pokaz\"" in PULPIT_JS or 'data-akcja="pp-pokaz"' in PULPIT_JS
     assert "otworzBudynek" in nawigacja and "BUDYNEK_KROKU" in nawigacja and "pokazZnak" in nawigacja
     lublin = (STATIC / "mapa" / "lublin.js").read_text(encoding="utf-8")
@@ -188,16 +188,18 @@ def test_rozpiska_i_kupowanie_uzywaja_istniejacych_budynkow():
 
 # --- krok 4A: filtr w rzędzie, teczka zamiast karty, „Jak grać” w zakładkach, okienka PRL, zeszyt ze skórą i Caveat ------------------
 
-def test_filtr_kategorii_to_rzad_szesciu_grup():
+def test_filtr_kategorii_to_rzad_grup_z_kebabem_i_wydarzeniami():
     blok = re.search(r"const GRUPY = \[(.*?)\];\s+const GRUPA_DOMYSLNA", PULPIT_JS, re.S).group(1)
     grupy = re.findall(r'\["([a-z]+)", "([^"]+)", "([a-z_]+)", \[([^\]]*)\]\]', blok)
     assert [n for _, n, _, _ in grupy] == ["Jedzenie i zaopatrzenie", "Finanse", "Urzędy i prawo", "Praca i ludzie",
-                                          "Reklama i media", "Miasto i rozrywka"]
-    ikony = set(re.findall(r"^  ([a-z_]+): '", IKONY_JS, re.M))
+                                          "Reklama i media", "Kebab", "Wydarzenia"]   # krok 5: bez „Miasto i rozrywka”
+    ikony = set(re.findall(r"^  ([a-z_]+): '", IKONY_JS, re.M)) | set(re.findall(r"IKONY_FILTRA = \{ ([a-z_]+):", PULPIT_JS))
     assert all(ik in ikony for _, _, ik, _ in grupy)
-    # każdy rodzaj żetonu z danych trafia do dokładnie jednej grupy albo do domyślnej „Miasto i rozrywka”
+    # każdy rodzaj żetonu z danych trafia do najwyżej jednej grupy; „Kebab” i „Wydarzenia” dobierane są po klasie lokalu i po id miejsca z wydarzeniem
     rodzaje = [r for _, _, _, lista in grupy for r in re.findall(r'"([a-z_]+)"', lista)]
-    assert len(rodzaje) == len(set(rodzaje)) and {"bank", "dostawca", "urzad", "praca", "reklama", "park"} <= set(rodzaje)
+    assert len(rodzaje) == len(set(rodzaje)) and {"bank", "dostawca", "urzad", "praca", "reklama"} <= set(rodzaje)
+    assert "Miasto i rozrywka" not in PULPIT_JS and "const GRUPA_DOMYSLNA = null" in PULPIT_JS
+    assert '"lm-lokal"' in PULPIT_JS and "miejscaWydarzen" in PULPIT_JS
     assert 'id="pp-filtr"' in PULPIT_JS and 'aria-pressed="${filtr === k}"' in PULPIT_JS and 'aria-label="${nazwa}' in PULPIT_JS
     assert "pp-kat-panel" not in PULPIT_JS and "pp-kat-panel" not in PULPIT_CSS
     assert re.search(r"\.pp-f\.aktywny::after \{ content: \"✓\"", PULPIT_CSS) and re.search(r"\.pp-f\.aktywny \{[^}]*border-width: 4px", PULPIT_CSS)
@@ -260,3 +262,56 @@ def test_skladnia_js_kroku_4a():
             kopia.write_text((STATIC / sciezka).read_text(encoding="utf-8"), encoding="utf-8")
             wynik = subprocess.run(["node", "--check", str(kopia)], capture_output=True, text=True)
             assert wynik.returncode == 0, f"{sciezka}: {wynik.stderr}"
+
+
+# --- krok 5: list na dole paska, przełącznik w nagłówku teczki, rozkładówka zeszytu, szuflada w dwóch kolumnach, biurowiec ---------------------
+
+def test_wyslij_decyzje_to_list_na_dole_paska():
+    assert '["wyslij", "wyslij"' not in PULPIT_JS   # nie jest już zwykłą ikoną w rzędzie
+    assert "LIST_PASKA" in PULPIT_JS and 'id="pp-wyslij" data-akcja="pp-wyslij"' in PULPIT_JS and "pp-list-stempel" in PULPIT_JS
+    assert "${ikonyHtml}${listHtml}</nav>" in PULPIT_JS   # list jest ostatni w pasku
+    assert re.search(r"\.pp-list\.wyslana \.pp-list-stempel \{ display: block; \}", PULPIT_CSS)
+    assert 'classList.toggle("wyslana", sent)' in PULPIT_JS
+
+
+def test_teczka_ma_przelacznik_decyzje_wyniki_w_naglowku_i_bez_jezyczka():
+    wspolne = (STATIC / "zakladki" / "wspolne.js").read_text(encoding="utf-8")
+    assert "og-prawa" in wspolne and "naglowek" in wspolne
+    teczka = APP_JS[APP_JS.index("function rysujTeczke"):APP_JS.index("// --- rysowanie")]
+    assert "naglowek: przelacznik" in teczka and 'aria-disabled="true"' in teczka and "title=" in teczka   # wyszarzony z podpowiedzią
+    assert 'aria-disabled") !== "true"' in APP_JS   # wyszarzony przycisk nic nie robi
+    css = (STATIC / "swiat" / "wnetrza.css").read_text(encoding="utf-8")
+    assert ".teczka-okno::before" not in css   # „języczek” nad nazwą karty usunięty
+    assert ".teczka-tryb button.szare" in css
+
+
+def test_zeszyt_to_rozkladowka_z_przewracaniem_kartki():
+    for slowo in ("pz-grzbiet", "pz-stos", "pz-wstega", "pz-rog", "pz-lisc", "rotateY", "perspective"):
+        assert slowo in ZESZYT_JS + PULPIT_CSS, slowo
+    assert "krokZeszytu" in ZESZYT_JS and "ArrowRight" in ZESZYT_JS and "ArrowLeft" in ZESZYT_JS
+    css = _bez_komentarzy(PULPIT_CSS)
+    assert "repeating-linear-gradient(transparent 0 33px" in css and ".pz-str::before" in css   # linie i dziurki
+    assert "pz-stos-l" in css and "scaleX(var(--stos-l" in css
+    # animacja kartki rusza tylko transform i opacity (z kompozytorem, 60 fps)
+    animacja = ZESZYT_JS[ZESZYT_JS.index("function przewroc"):ZESZYT_JS.index("export function idzDoStrony")]
+    assert not re.search(r"\b(left|top|width|height|margin)\s*:", animacja[animacja.index("lisc.animate"):])
+    assert "bezRuchu()" in ZESZYT_JS and "prefers-reduced-motion: reduce" in ZESZYT_JS
+    assert '"pp-zeszyt-strona": (e, c) =>' in PULPIT_JS and "krokZeszytu(c," in PULPIT_JS
+
+
+def test_szuflada_wydarzen_w_dwoch_kolumnach_a_nazwa_gry_przy_legendzie():
+    assert "pp-sz-kolumny" in PULPIT_JS
+    css = _bez_komentarzy(PULPIT_CSS)
+    assert re.search(r"\.pp-sz-kolumny \{ display: grid; grid-template-columns: 1fr 1fr;", css)
+    assert re.search(r"@media \(max-width: 900px\) \{ \.pp-sz-kolumny \{ grid-template-columns: 1fr; \}", css)   # wąski ekran: jedna kolumna
+    assert "body.pulpit.na-mapie .pp-druzyna { position: fixed;" in css and "--pp-gra-h" in css
+    assert "v.gra?.nazwa" in PULPIT_JS
+
+
+def test_biurowiec_przy_zana_ma_nazwe_i_ikone_wiezowca():
+    import yaml
+    mapa = yaml.safe_load((GRA / "dane" / "mapa" / "budynki.yaml").read_text(encoding="utf-8"))
+    zespol = next(z for z in mapa["zespoly"] if z["id"] == "biurowiec_zana")
+    assert zespol["nazwa"] == "Biurowiec przy Zana" and "Dom reklamy" not in zespol["nazwa"]
+    ikony = (STATIC / "mapa" / "ikony.js").read_text(encoding="utf-8")
+    assert "wiezowiec:" in ikony and 'biurowiec_zana: "wiezowiec"' in ikony

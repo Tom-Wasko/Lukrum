@@ -11,20 +11,19 @@ import { ikona } from "../zakladki/ikony.js";
 import ZAKLADKI from "../zakladki/index.js";
 import { oznaczCel } from "../zakladki/wujek.js";
 import { nazwaStrefy } from "../zakladki/lokale.js";
-import { idzDoStrony, odswiezZeszyt, otworzZeszyt, przewinZeszyt, rysujMalyZeszyt, zamknijZeszyt, zeszytOtwarty } from "./zeszyt.js";
+import { idzDoStrony, krokZeszytu, odswiezZeszyt, otworzZeszyt, przewinZeszyt, rysujMalyZeszyt, zamknijZeszyt, zeszytOtwarty } from "./zeszyt.js";
 import { dokadWroc, mozeWrocic, pokazNaMapie, wejdzDoKroku, wroc, zapamietajWidok } from "./nawigacja.js";
 
 // klasę ustawia skrypt na początku <body> (gra.html), żeby układ nie migał
 export const PULPIT = document.body.classList.contains("pulpit");
 
 const T_WYSLIJ = "Wyślij decyzje", T_FINANSE = "Finanse", T_KONTO = "Konto", T_ZAKUPY = "Zakupy tygodnia";
-const IKONY_PASKA = [   // [klucz, ikona, napis]
-  ["wyslij", "wyslij", "Wyślij decyzje"], ["konto", "osoba", "Konto"], ["jak", "ksiazka", "Jak grać"], ["koszyk", "sprzedaz", "Zakupy"],
+const IKONY_PASKA = [   // klucz, ikona, napis (osobny przycisk „Wyślij decyzje” leży na dole paska: LIST_PASKA)
+  ["konto", "osoba", "Konto"], ["jak", "ksiazka", "Jak grać"], ["koszyk", "sprzedaz", "Zakupy"],
   ["wydarzenia", "zdarzenia", "Wydarzenia"], ["mapa", "mapa", "Mapa miasta"]];
 let filtr = null;   // wybrana kategoria miejsc na mapie (filtr w prawym górnym rogu) albo null
 
 let zamontowany = false, oknoRunda = null, ostatniC = null;
-const zeszytNr = () => Number(document.querySelector(".pz-zakladka.aktywna")?.dataset.n || 0);
 const el = (id) => document.getElementById(id);
 
 // --- budowa elementów (raz) ------------------------------------------------------------------------------------------
@@ -41,10 +40,21 @@ const SVG_PLIK = `<svg class="pp-plik" viewBox="0 0 240 150" aria-hidden="true" 
   <rect x="104" y="14" width="46" height="120" rx="3" transform="rotate(-1 127 74)" style="fill:var(--akcent);stroke:var(--g-czern)" stroke-width="2.5"/>
   <path d="M112 44h30M112 60h30M112 76h30" style="stroke:var(--papier)" stroke-width="3" stroke-linecap="round"/></svg>`;
 
+// „Wyślij decyzje” na dole paska: duży list w kopercie (z listem wystającym w rogu); po wysłaniu dostaje stempel (CSS: .pp-list.wyslana)
+const LIST_PASKA = `<svg class="pp-list-svg" viewBox="0 0 64 48" aria-hidden="true" focusable="false">
+  <g class="pp-list-kartka"><path d="M30 20 L40 3 L58 9 L50 26z" style="fill:var(--papier);stroke:var(--tusz)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M38 9l14 4.600M36 14l14 4.600" fill="none" style="stroke:var(--tusz)" stroke-width="1.400" opacity=".55"/></g>
+  <rect x="4" y="16" width="52" height="29" rx="3" style="fill:var(--papier);stroke:var(--tusz)" stroke-width="2.500"/>
+  <path d="M5 18l25 17l25-17" fill="none" style="stroke:var(--tusz)" stroke-width="2.500" stroke-linejoin="round"/>
+  <path d="M5 44l17-14M55 44L38 30" fill="none" style="stroke:var(--tusz)" stroke-width="1.600" opacity=".6"/>
+  <rect x="42" y="22" width="9" height="11" rx="1" style="fill:var(--akcent);stroke:var(--tusz)" stroke-width="1.400"/></svg>`;
+
 function montuj() {
   if (zamontowany) return;
   zamontowany = true;
   stosujRozmiar(odczytajRozmiar());
+  const listHtml = `<button type="button" class="pp-ik pp-list" id="pp-wyslij" data-akcja="pp-wyslij" aria-label="${T_WYSLIJ}" title="${T_WYSLIJ}">${LIST_PASKA}<span>${T_WYSLIJ}</span>
+    <i class="pp-znak" aria-hidden="true" hidden></i><b class="pp-list-stempel" aria-hidden="true">WYSŁANO</b></button>`;
   const ikonyHtml = IKONY_PASKA.map(([k, ik, napis]) => k === "jak"
     ? `<a class="pp-ik" id="pp-jak" href="/jak-grac" target="_blank" rel="noopener" aria-label="${napis} (nowa karta)" title="${napis}">${ikona(ik, 22)}<span>${napis}</span></a>`
     : `<button type="button" class="pp-ik" id="pp-${k}" data-akcja="pp-${k}" aria-label="${napis}" title="${napis}"${k === "mapa" ? " hidden" : ""}>${ikona(ik, 22)}<span>${napis}</span><i class="pp-znak" aria-hidden="true" hidden></i></button>`).join("");
@@ -52,7 +62,7 @@ function montuj() {
   rys.id = "pulpit";
   rys.className = "pp";
   rys.innerHTML = `<div class="pp-lewy"><div id="pp-ust" class="pp-ust"></div>
-      <nav class="pp-pasek" aria-label="Pasek LUKRUM"><div class="pp-szyld" aria-hidden="true">LUKRUM</div>${ikonyHtml}</nav>
+      <nav class="pp-pasek" aria-label="Pasek LUKRUM"><div class="pp-szyld" aria-hidden="true">LUKRUM</div>${ikonyHtml}${listHtml}</nav>
       <div class="pp-druzyna" id="pp-druzyna"></div></div>
     <button type="button" class="pp-wroc" id="pp-wroc" data-akcja="pp-wroc" hidden>← Wróć <small>(Esc)</small></button>
     <div class="pp-tydzien" id="pp-tydzien" role="status"></div>
@@ -275,8 +285,8 @@ function wydarzenia(c) {
   const kal = c.jestZakladka("kalendarz") && !c.wylaczona("kalendarz") && !c.ukryta("kalendarz")
     ? `<p><button type="button" class="pp-lnk" data-akcja="pp-kalendarz">Kalendarz miejski: cały miesiąc →</button></p>` : "";
   const html = `<div class="pp-sz-gora"><h2>Tablica ogłoszeń · wydarzenia tygodnia</h2><button type="button" class="pp-sz-x" data-akcja="pp-wydarzenia" aria-label="Zamknij wydarzenia">✕</button></div>
-    <section><h3>W parkach</h3>${lista(parki, "W tym tygodniu w parkach spokojnie.")}${dalej.length || trwa.length ? `<ul class="pp-sz-lista">${dalej.concat(trwa).join("")}</ul>` : ""}</section>
-    <section><h3>W mieście</h3>${lista(miasto, "W tym tygodniu nic szczególnego.")}${kal}</section>`;
+    <div class="pp-sz-kolumny"><section><h3>W parkach</h3>${lista(parki, "W tym tygodniu w parkach spokojnie.")}${dalej.length || trwa.length ? `<ul class="pp-sz-lista">${dalej.concat(trwa).join("")}</ul>` : ""}</section>
+    <section><h3>W mieście</h3>${lista(miasto, "W tym tygodniu nic szczególnego.")}${kal}</section></div>`;
   return { html, n: parki.length + miasto.length };
 }
 function odswiezSzuflade(c) {
@@ -295,37 +305,51 @@ function zamknijPodreczne() {
   el("pp-wydarzenia")?.setAttribute("aria-expanded", "false");
 }
 
-// --- filtr kategorii miejsc (rząd ikon wzdłuż górnej krawędzi): 6 grup; podświetla pasujące znaki na mapie, resztę przygasza ---
-// JEDNO miejsce, które mówi, do której grupy należy rodzaj żetonu (`rodzaj` z dane/mapa/*.yaml → klasa lm-r-<rodzaj>). Rodzaj spoza
-// listy (nowy żeton, ulica, kolej…) trafia do grupy „Miasto i rozrywka”.
+// --- filtr kategorii miejsc (rząd ikon wzdłuż górnej krawędzi): 5 grup rodzajów + „Kebab” i „Wydarzenia”; podświetla pasujące znaki, resztę przygasza ---
+// JEDNO miejsce, które mówi, do której grupy należy rodzaj żetonu (`rodzaj` z dane/mapa/*.yaml → klasa lm-r-<rodzaj>). Rodzaj spoza listy
+// (ulica, kolej, punkt orientacyjny…) nie należy do żadnej grupy (przy włączonym filtrze jest przygaszony). „Kebab” = lokale kebab na mapie
+// (własny z ★ i cudze), „Wydarzenia” = miejsca z wydarzeniami tygodnia (parki ze zdarzeniami z widoku gry), bez rodzajów: pasują po id / klasie.
 const GRUPY = [   // [klucz, nazwa, ikona, rodzaje]
   ["jedzenie", "Jedzenie i zaopatrzenie", "dostawcy", ["dostawca", "sklep"]],
   ["finanse", "Finanse", "bank", ["bank", "lichwiarz", "gielda", "ubezpieczenia", "szkody"]],
   ["urzedy", "Urzędy i prawo", "urzad", ["urzad", "poczta", "biuro"]],
   ["ludzie", "Praca i ludzie", "rynek_pracy", ["praca", "pracownik", "szkola", "uczelnia", "klienci", "detektyw"]],
   ["reklama", "Reklama i media", "marketing", ["reklama", "media", "druk", "radio_billboard", "internet"]],
-  ["miasto", "Miasto i rozrywka", "zdarzenia", ["park", "nieruchomosci", "wydarzenia"]]];
-const GRUPA_DOMYSLNA = "miasto";
+  ["kebab", "Kebab", "kebab", []],
+  ["wydarzenia", "Wydarzenia", "kalendarz", []]];
+const GRUPA_DOMYSLNA = null;
 const RODZAJ_NA_GRUPE = Object.fromEntries(GRUPY.flatMap(([k, , , r]) => r.map((x) => [x, k])));
 export const grupaRodzaju = (rodzaj) => RODZAJ_NA_GRUPE[rodzaj] || GRUPA_DOMYSLNA;
-function kategorieZnaku(zn, zespoly) {
+// rożen z mięsem (jak żeton lokalu na mapie), kreskami jak ikony interfejsu 24 × 24
+const IKONY_FILTRA = { kebab: '<path d="M12 2.500v19"/><path d="M7 7h10l-1.800 10H8.800z"/><path d="M8 11h8M8.500 14h7"/><path d="M8 21.500h8"/>' };
+const ikonaFiltra = (nazwa) => (IKONY_FILTRA[nazwa]
+  ? `<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IKONY_FILTRA[nazwa]}</g></svg>` : ikona(nazwa, 22));
+// id miejsc z wydarzeniami w tym tygodniu: parki, w których trwa zdarzenie (widok gry: zdarzenia.aktywne)
+const miejscaWydarzen = (v) => new Set((v.zdarzenia && v.runda >= v.zdarzenia.od_rundy ? v.zdarzenia.aktywne : []).map((s) => s.park).filter(Boolean));
+function kategorieZnaku(zn, zespoly, wydarzenia) {
   const k = new Set();
-  for (const cls of zn.classList) { const m = /^lm-r-(.+)$/.exec(cls); if (m) k.add(grupaRodzaju(m[1])); }
-  if (zn.classList.contains("lm-zespol")) for (const r of zespoly[zn.dataset.id] || []) k.add(grupaRodzaju(r));
-  if (zn.classList.contains("lm-lokal") || zn.classList.contains("lm-miejsce")) k.add(GRUPA_DOMYSLNA);
+  for (const cls of zn.classList) { const m = /^lm-r-(.+)$/.exec(cls); if (m && grupaRodzaju(m[1])) k.add(grupaRodzaju(m[1])); }
+  if (zn.classList.contains("lm-zespol")) for (const r of zespoly[zn.dataset.id] || []) if (grupaRodzaju(r)) k.add(grupaRodzaju(r));
+  if (zn.classList.contains("lm-lokal")) k.add("kebab");
+  if (wydarzenia.has(zn.dataset.id)) k.add("wydarzenia");
   return k;
 }
 function odswiezFiltr(c) {
   const nav = el("pp-filtr"), znaki = [...document.querySelectorAll("#lmapa .lmapa-nakladka > .lm-znak")];
   nav.hidden = c.zakladka !== "mapa" || !znaki.length;
   if (nav.hidden) return;
-  const zespoly = {};
+  const zespoly = {}, wydarzenia = miejscaWydarzen(c.v);
   for (const b of c.kat?.mapa?.budynki || []) if (b.zespol) (zespoly[b.zespol] ||= []).push(b.rodzaj);
   const dostepne = new Set();
-  const dane = znaki.map((zn) => { const k = kategorieZnaku(zn, zespoly); k.forEach((x) => dostepne.add(x)); return [zn, k]; });
+  const dane = znaki.map((zn) => { const k = kategorieZnaku(zn, zespoly, wydarzenia); k.forEach((x) => dostepne.add(x)); return [zn, k]; });
   if (filtr && !dostepne.has(filtr)) filtr = null;
-  nav.innerHTML = GRUPY.filter(([k]) => dostepne.has(k)).map(([k, nazwa, ik]) => `<button type="button" class="pp-f${filtr === k ? " aktywny" : ""}" data-akcja="pp-filtr" data-k="${k}"
-    aria-pressed="${filtr === k}" aria-label="${nazwa}${filtr === k ? " (włączony)" : ""}" title="${nazwa}${filtr === k ? " – kliknij, żeby wyłączyć filtr" : ""}">${ikona(ik, 22)}</button>`).join("");
+  // „Wydarzenia” bez miejsc w tym tygodniu zostaje w rzędzie, ale jest wyszarzone z podpowiedzią
+  nav.innerHTML = GRUPY.filter(([k]) => dostepne.has(k) || k === "wydarzenia").map(([k, nazwa, ik]) => {
+    const brak = !dostepne.has(k), akt = filtr === k;
+    const opis = brak ? `${nazwa}: w tym tygodniu brak wydarzeń w miejscach na mapie` : `${nazwa}${akt ? " – kliknij, żeby wyłączyć filtr" : ""}`;
+    return `<button type="button" class="pp-f${akt ? " aktywny" : ""}${brak ? " szare" : ""}" data-akcja="pp-filtr" data-k="${k}"${brak ? ' aria-disabled="true"' : ""}
+    aria-pressed="${filtr === k}" aria-label="${nazwa}${akt ? " (włączony)" : brak ? " (brak wydarzeń w tym tygodniu)" : ""}" title="${opis}">${ikonaFiltra(ik)}</button>`;
+  }).join("");
   for (const [zn, k] of dane) {
     zn.classList.toggle("pp-pasuje", !!filtr && k.has(filtr));
     zn.classList.toggle("pp-przygaszony", !!filtr && !k.has(filtr));
@@ -344,8 +368,8 @@ export const AKCJE_PULPITU = {
   "pp-portfel": (e, c) => pokaz("finanse", c),
   "pp-zeszyt": (e, c) => { zamknijPodreczne(); otworzZeszyt(c, 0); },
   "pp-zeszyt-zamknij": () => zamknijZeszyt(),
-  "pp-zeszyt-strona": (e, c) => idzDoStrony(c, e.dataset.n != null ? +e.dataset.n : zeszytNr() + +(e.dataset.d || 0)),
-  "pz-dol": () => przewinZeszyt(),
+  "pp-zeszyt-strona": (e, c) => (e.dataset.n != null ? idzDoStrony(c, +e.dataset.n) : krokZeszytu(c, +(e.dataset.d || 0))),
+  "pz-dol": (e) => przewinZeszyt(e),
   // klik w nazwę miejsca (zeszyt, wydarzenia): zeszyt i szuflada się chowają, mapa przelatuje do budynku i go pulsuje
   "pp-pokaz": (e, c) => { zamknijZeszyt(false); zamknijPodreczne(); filtr = null; pokazNaMapie(c, e.dataset.b.split(",")); },
   "pp-dzielnica": (e, c) => { zamknijPodreczne(); if (e.dataset.d) pokazNaMapie(c, null, { dzielnica: e.dataset.d }); },
@@ -364,7 +388,7 @@ export const AKCJE_PULPITU = {
     sz.hidden = false;
     el("pp-wydarzenia").setAttribute("aria-expanded", "true");
   },
-  "pp-filtr": (e, c) => { filtr = filtr === e.dataset.k ? null : e.dataset.k; odswiezFiltr(c); el("pp-filtr").querySelector(`[data-k="${filtr || e.dataset.k}"]`)?.focus({ preventScroll: true }); },
+  "pp-filtr": (e, c) => { if (e.getAttribute("aria-disabled") === "true") return; filtr = filtr === e.dataset.k ? null : e.dataset.k; odswiezFiltr(c); el("pp-filtr").querySelector(`[data-k="${filtr || e.dataset.k}"]`)?.focus({ preventScroll: true }); },
   "pp-wyglad": (e) => {
     const d = e.dataset;
     if (d.rozmiar) stosujRozmiar(d.rozmiar);
@@ -388,6 +412,7 @@ function odswiezPasek(c) {
   const sent = !!v.wyslane, zak = v.gra.zakonczona;
   w.setAttribute("aria-disabled", zak ? "true" : "false");
   w.classList.toggle("pp-wyszarzona", zak);
+  w.classList.toggle("wyslana", sent);
   w.title = zak ? "Gra zakończona" : sent ? "Decyzje wysłane – kliknij, żeby wrócić do poprawiania" : "Wyślij decyzje tygodnia";
   w.setAttribute("aria-label", w.title);
   znak("pp-wyslij", sent ? "✓" : bledy && v.edycja ? "!" : "", sent ? "ok" : "uwaga");
@@ -408,8 +433,11 @@ function odswiezTydzien(c) {
   // termin; bez nazwy gry, składu i salda) zostają przy pasku po lewej
   const chipy = st ? [...st.children].slice(1).filter((x) => !x.querySelector("svg")).map((x) => `<span class="pp-chip">${x.innerHTML}</span>`).join("") : "";
   el("pp-tydzien").innerHTML = `<b title="Tydzień ${v.runda} z ${v.gra.liczba_rund}">Tydzień ${v.runda}${v.runda < v.gra.runda ? " · podgląd" : ""}</b>`;
-  el("pp-druzyna").innerHTML = `<small>${esc(v.dashboard?.nazwa || "")}</small>${chipy}`;
-  el("pp-druzyna").hidden = !(v.dashboard?.nazwa || chipy);
+  // nazwa gry (np. „testowa”) i firma: na mapie leżą nad przyciskiem Legenda (pulpit.css), poza mapą – pod paskiem
+  const gra = v.gra?.nazwa || "", firma = v.dashboard?.nazwa || "";
+  el("pp-druzyna").innerHTML = `${gra ? `<small class="pp-gra-n"><i>Gra</i> ${esc(gra)}</small>` : ""}${firma ? `<span class="pp-chip pp-firma">Firma: ${esc(firma)}</span>` : ""}${chipy}`;
+  el("pp-druzyna").hidden = !(gra || firma || chipy);
+  document.documentElement.style.setProperty("--pp-gra-h", `${el("pp-druzyna").hidden ? 0 : Math.ceil(el("pp-druzyna").getBoundingClientRect().height) + 8}px`);
 }
 
 function odswiezPortfel(c) {
