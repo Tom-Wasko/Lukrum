@@ -1,6 +1,6 @@
 // Powłoka pulpitu (seria pulpit, krok 1; decyzje 18.11.2026): mapa na cały ekran i trzy elementy przy krawędziach.
 // Krok 2: „Tydzień N” na środku u góry, szuflada „Wydarzenia”, ikona „Warstwy” (czynsze, popyt…), rząd ikon kategorii (6 grup) wzdłuż górnej krawędzi, zeszyt w prawym dolnym rogu na trzy stany (zeszyt.js), karta miejsca (karta.js).
-//  - lewy górny róg: ⚙ (ustawienia z motyw.js) nad pionowym paskiem LUKRUM z ikonami: Wyślij decyzje, konto, Jak grać,
+//  - lewy górny róg: ⚙ (ustawienia z motyw.js) nad pionowym paskiem LUKRUM z ikonami: List z decyzjami, konto, Jak grać,
 //    zakupy (tylko do odczytu: co zamówiono i kupiono w tym tygodniu); pod paskiem „Tydzień N” (tylko informacja);
 //  - dół: portfel (plik banknotów) – najechanie pokazuje gotówkę i debet, kliknięcie otwiera okno finansów;
 //  - prawa krawędź: zeszyt wujka – wystaje z brzegu z następnym krokiem, najechanie wysuwa listę, kliknięcie otwiera zeszyt.
@@ -17,8 +17,8 @@ import { dokadWroc, mozeWrocic, pokazNaMapie, wejdzDoKroku, wroc, zapamietajWido
 // klasę ustawia skrypt na początku <body> (gra.html), żeby układ nie migał
 export const PULPIT = document.body.classList.contains("pulpit");
 
-const T_WYSLIJ = "Wyślij decyzje", T_FINANSE = "Finanse", T_KONTO = "Konto", T_ZAKUPY = "Zakupy tygodnia";
-const IKONY_PASKA = [   // klucz, ikona, napis (osobny przycisk „Wyślij decyzje” leży na dole paska: LIST_PASKA)
+const T_WYSLIJ = "List z decyzjami", T_FINANSE = "Finanse", T_KONTO = "Konto", T_ZAKUPY = "Zakupy tygodnia";
+const IKONY_PASKA = [   // klucz, ikona, napis (osobny przycisk „List z decyzjami” leży na dole paska: LIST_PASKA)
   ["konto", "osoba", "Konto"], ["jak", "ksiazka", "Jak grać"], ["koszyk", "sprzedaz", "Zakupy"],
   ["wydarzenia", "zdarzenia", "Wydarzenia"], ["mapa", "mapa", "Mapa miasta"]];
 let filtr = null;   // wybrana kategoria miejsc na mapie (filtr w prawym górnym rogu) albo null
@@ -40,7 +40,7 @@ const SVG_PLIK = `<svg class="pp-plik" viewBox="0 0 240 150" aria-hidden="true" 
   <rect x="104" y="14" width="46" height="120" rx="3" transform="rotate(-1 127 74)" style="fill:var(--akcent);stroke:var(--g-czern)" stroke-width="2.5"/>
   <path d="M112 44h30M112 60h30M112 76h30" style="stroke:var(--papier)" stroke-width="3" stroke-linecap="round"/></svg>`;
 
-// „Wyślij decyzje” na dole paska: duży list w kopercie (z listem wystającym w rogu); po wysłaniu dostaje stempel (CSS: .pp-list.wyslana)
+// „List z decyzjami” na dole paska: duży list w kopercie (z listem wystającym w rogu); po wysłaniu dostaje stempel (CSS: .pp-list.wyslana)
 const LIST_PASKA = `<svg class="pp-list-svg" viewBox="0 0 64 48" aria-hidden="true" focusable="false">
   <g class="pp-list-kartka"><path d="M30 20 L40 3 L58 9 L50 26z" style="fill:var(--papier);stroke:var(--tusz)" stroke-width="2" stroke-linejoin="round"/>
     <path d="M38 9l14 4.600M36 14l14 4.600" fill="none" style="stroke:var(--tusz)" stroke-width="1.400" opacity=".55"/></g>
@@ -54,7 +54,7 @@ function montuj() {
   zamontowany = true;
   stosujRozmiar(odczytajRozmiar());
   const listHtml = `<button type="button" class="pp-ik pp-list" id="pp-wyslij" data-akcja="pp-wyslij" aria-label="${T_WYSLIJ}" title="${T_WYSLIJ}">${LIST_PASKA}<span>${T_WYSLIJ}</span>
-    <i class="pp-znak" aria-hidden="true" hidden></i><b class="pp-list-stempel" aria-hidden="true">WYSŁANO</b></button>`;
+    <i class="pp-znak" aria-hidden="true" hidden></i><b class="pp-list-stempel" aria-hidden="true">NADANO</b></button>`;
   const ikonyHtml = IKONY_PASKA.map(([k, ik, napis]) => k === "jak"
     ? `<a class="pp-ik" id="pp-jak" href="/jak-grac" target="_blank" rel="noopener" aria-label="${napis} (nowa karta)" title="${napis}">${ikona(ik, 22)}<span>${napis}</span></a>`
     : `<button type="button" class="pp-ik" id="pp-${k}" data-akcja="pp-${k}" aria-label="${napis}" title="${napis}"${k === "mapa" ? " hidden" : ""}>${ikona(ik, 22)}<span>${napis}</span><i class="pp-znak" aria-hidden="true" hidden></i></button>`).join("");
@@ -229,7 +229,7 @@ function htmlZakupow(c) {
     <div class="pp-par-zab" aria-hidden="true"></div></div>`;
 }
 
-// --- „Wyślij decyzje” jako koperta: adres, podsumowanie decyzji tygodnia, przycisk Wyślij (z zakładki „wyslij”) i stempel WYSŁANO ----
+// --- „List z decyzjami” jako koperta: adres, podsumowanie decyzji tygodnia, przycisk Wyślij (z zakładki „wyslij”) i stempel NADANO ----
 let bylyWyslane = false;
 function podsumowanieDecyzji(c) {
   const d = c.d || {}, v = c.v, n = (x) => (Array.isArray(x) ? x.length : x && typeof x === "object" ? Object.keys(x).length : 0);
@@ -248,7 +248,7 @@ function htmlKoperty(c) {
   bylyWyslane = !!v.wyslane;
   return `<div class="pp-koperta${v.wyslane ? " wyslana" : ""}"><div class="pp-kop-klapa" aria-hidden="true"></div>
     <p class="pp-kop-adres"><small>Od:</small> ${esc(v.dashboard?.nazwa || "Drużyna")}<br><small>Do:</small> Mistrz gry · tydzień ${v.runda}</p>
-    ${v.wyslane ? `<div class="pp-stempel${swiezo ? " swiezy" : ""}" role="img" aria-label="Stempel: wysłano"><b>✓ WYSŁANO</b><small>tydzień ${v.runda}</small></div>` : ""}
+    ${v.wyslane ? `<div class="pp-stempel${swiezo ? " swiezy" : ""}" role="img" aria-label="Stempel: nadano"><b>✓ NADANO</b><small>tydzień ${v.runda}</small></div>` : ""}
     ${podsumowanieDecyzji(c)}<div class="pp-kop-wyslij">${ZAKLADKI.wyslij.decyzje(c)}</div></div>`;
 }
 
@@ -413,7 +413,7 @@ function odswiezPasek(c) {
   w.setAttribute("aria-disabled", zak ? "true" : "false");
   w.classList.toggle("pp-wyszarzona", zak);
   w.classList.toggle("wyslana", sent);
-  w.title = zak ? "Gra zakończona" : sent ? "Decyzje wysłane – kliknij, żeby wrócić do poprawiania" : "Wyślij decyzje tygodnia";
+  w.title = zak ? "Gra zakończona" : sent ? "Decyzje wysłane – kliknij, żeby wrócić do poprawiania" : "List z decyzjami tygodnia";
   w.setAttribute("aria-label", w.title);
   znak("pp-wyslij", sent ? "✓" : bledy && v.edycja ? "!" : "", sent ? "ok" : "uwaga");
   const n = liczbaZakupow(c), k = el("pp-koszyk");

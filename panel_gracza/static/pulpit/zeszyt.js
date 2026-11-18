@@ -121,7 +121,7 @@ function stronaKupic(c) {
 
 function stronaSamouczek() {
   const kroki = [["Mapa", "Przeciągnięcie przesuwa mapę, kółko myszy (albo przyciski + i −) przybliża. Kliknięcie budynku wchodzi do środka, a kliknięcie lokalu pokazuje, czy jest wolny."],
-    ["Pasek po lewej", "⚙ to ustawienia (wygląd, konto). Poniżej: konto, „Jak grać”, zakupy tygodnia i wydarzenia. Na dole paska leży list: „Wyślij decyzje”."],
+    ["Pasek po lewej", "⚙ to ustawienia (wygląd, konto). Poniżej: konto, „Jak grać”, zakupy tygodnia i wydarzenia. Na dole paska leży list: „List z decyzjami”."],
     ["Filtr kategorii", "Rząd ikon u góry po prawej podświetla jeden rodzaj miejsc, na przykład banki, lokale kebab albo miejsca z wydarzeniami tygodnia. Drugie kliknięcie wyłącza filtr."],
     ["Portfel", "Plik banknotów na dole. Najechanie pokazuje gotówkę i debet, kliknięcie otwiera finanse."],
     ["Zeszyt", "Tu jest lista wujka, rozpiska funkcji i podpowiedzi, gdzie co kupić. Strony przewraca się kliknięciem w róg kartki, zakładkami (wstążkami) albo klawiszami ← i →. Esc zamyka zeszyt."],

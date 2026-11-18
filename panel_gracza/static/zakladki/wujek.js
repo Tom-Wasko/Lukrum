@@ -87,7 +87,7 @@ export function listWujka(v, c) {
     <span class="lw-nr" aria-hidden="true">${ok ? "✓" : i + 1}</span><span class="lw-co"><small>${esc(gdzie)}</small><b>${esc(co)}</b><span>${esc(opis)}</span></span>
     <span class="lw-stan">${ok ? "zrobione" : i === pierwszy ? "teraz →" : ""}</span></a></li>`).join("");
   const wyslij = `<li class="${v.wyslane ? "zrobione" : wszystko ? "teraz" : ""}"><a data-zakladka-k="wyslij" href="#wyslij">
-    <span class="lw-nr" aria-hidden="true">${v.wyslane ? "✓" : K.length + 1}</span><span class="lw-co"><small>Poczta</small><b>Wyślij decyzje</b>
+    <span class="lw-nr" aria-hidden="true">${v.wyslane ? "✓" : K.length + 1}</span><span class="lw-co"><small>Poczta</small><b>List z decyzjami</b>
     <span>${v.wyslane ? "wysłane, do zamknięcia tygodnia można jeszcze poprawiać" : wszystko ? "wszystko gotowe" : "gdy lista wyżej jest odhaczona"}</span></span>
     <span class="lw-stan">${v.wyslane ? "zrobione" : wszystko ? "teraz →" : ""}</span></a></li>`;
   const zrobione = K.filter((k) => k[3]).length + (v.wyslane ? 1 : 0);
@@ -97,12 +97,12 @@ export function listWujka(v, c) {
     <div class="lw-kroki"><div class="lw-tytul"><span>Do zrobienia w tym tygodniu</span><span>${zrobione} z ${K.length + 1}</span></div><ol>${html}${wyslij}</ol>${nowosci(v, c)}</div></section>`;
 }
 
-// Plan tygodnia dla pulpitu (static/pulpit/pulpit.js): te same kroki co lista wujka, plus „Wyślij decyzje” na końcu.
+// Plan tygodnia dla pulpitu (static/pulpit/pulpit.js): te same kroki co lista wujka, plus „List z decyzjami” na końcu.
 // Zwraca { lista: [{klucz, gdzie, co, ok, opis, teraz}], nastepny, zrobione }; `nastepny` – pierwszy niezrobiony krok.
 export function planTygodnia(v) {
   const K = kroki(v), pierwszy = K.findIndex((k) => !k[3]), wszystko = pierwszy < 0;
   const lista = K.map(([klucz, gdzie, co, ok, opis], i) => ({ klucz, gdzie, co, ok, opis, teraz: i === pierwszy }));
-  lista.push({ klucz: "wyslij", gdzie: "Poczta", co: "Wyślij decyzje", ok: !!v.wyslane, teraz: !v.wyslane && wszystko,
+  lista.push({ klucz: "wyslij", gdzie: "Poczta", co: "List z decyzjami", ok: !!v.wyslane, teraz: !v.wyslane && wszystko,
     opis: v.wyslane ? "wysłane, do zamknięcia tygodnia można jeszcze poprawiać" : wszystko ? "wszystko gotowe" : "gdy lista wyżej jest odhaczona" });
   return { lista, nastepny: lista.find((k) => k.teraz) || null, zrobione: lista.filter((k) => k.ok).length };
 }

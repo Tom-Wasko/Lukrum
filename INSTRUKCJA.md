@@ -6,7 +6,7 @@ złotówki na plakat przy dworcu. Drużyny rywalizują ze sobą i z botami – o
 pracowników i te same lokale.
 
 > **W pięciu zdaniach.** Jedna runda to jeden tydzień, gra ma zwykle 18 rund (od września do początku stycznia). W każdej
-> rundzie ogląda się wyniki poprzedniego tygodnia, podejmuje decyzje na następny i klika **Wyślij decyzje**.
+> rundzie ogląda się wyniki poprzedniego tygodnia, podejmuje decyzje na następny i klika **List z decyzjami**.
 > Mistrz gry zamyka rundę, a gra liczy tydzień dzień po dniu: klientów, sprzedaż, koszty i podatki. Wygrywa
 > drużyna z najwyższym **wynikiem gry** (0–1000 pkt). Kapitał na start: **50 000 zł** i nic więcej, więc liczy się
 > każda złotówka.
@@ -31,7 +31,7 @@ działa:
 6. Przy **rożnie** (stanowiska i sprzęt) ustaw stanowiska kuchni i kasy. Każdy pracownik potrzebuje swojego stanowiska.
 7. W **Miasteczku akademickim** (tablica ogłoszeń) zatrudnij kucharza i kasjera.
 8. Otwórz **Listę błędów** w menu – wypisuje, czego jeszcze brakuje. Popraw czerwone pozycje.
-9. Kliknij **Wyślij decyzje**. Decyzje zapisują się same po każdej zmianie i można je poprawiać aż do zamknięcia rundy.
+9. Kliknij **List z decyzjami**. Decyzje zapisują się same po każdej zmianie i można je poprawiać aż do zamknięcia rundy.
 
 Opisy i wyjaśnienia są schowane w **kółkach „i”** obok tytułów, tabel i pól – najedź na kółko (na telefonie:
 dotknij), a pojawi się dymek.
@@ -43,7 +43,7 @@ dotknij), a pojawi się dymek.
 | 1 | Sprawdzenie, jak poszedł poprzedni tydzień | Plan tygodnia, Kurier rankingowy, widoki wyników w miejscach |
 | 2 | Decyzje na nowy tydzień | Mój kebab i pozostałe miejsca |
 | 3 | Sprawdzenie, czy czegoś nie brakuje | Lista błędów |
-| 4 | Wysłanie decyzji | Wyślij decyzje |
+| 4 | Wysłanie decyzji | List z decyzjami |
 | 5 | Czekanie, aż mistrz gry zamknie rundę | – |
 
 Ekrany większości miejsc mają przełącznik **Decyzje / Wyniki**: pierwszy pokazuje, co robi się w bieżącym tygodniu,
@@ -117,8 +117,8 @@ banku albo biura rachunkowego prowadzi najpierw przez fasadę (Pierzeja bankowa,
 Na mapie u góry po prawej jest **rząd ikon kategorii** (Jedzenie i zaopatrzenie, Finanse, Urzędy i prawo, Praca i ludzie,
 Reklama i media, Miasto i rozrywka): kliknięta ikona podświetla pasujące miejsca (aktywną znaczy ✓ i gruba ramka),
 drugie kliknięcie wyłącza filtr. Paski i okienka w rogach mają swój wygląd: **zakupy** to paragon, **wydarzenia** to
-tablica ogłoszeń z kartkami na pinezkach (▲ korzystne, ▼ niekorzystne), a **Wyślij decyzje** to koperta z podsumowaniem
-i stemplem „WYSŁANO” po wysłaniu. **Zeszyt wujka** leży przechylony w prawym dolnym rogu, a po najechaniu wyprostowuje
+tablica ogłoszeń z kartkami na pinezkach (▲ korzystne, ▼ niekorzystne), a **List z decyzjami** to koperta z podsumowaniem
+i stemplem „NADANO” po wysłaniu. **Zeszyt wujka** leży przechylony w prawym dolnym rogu, a po najechaniu wyprostowuje
 się i wysuwa listę kroków.
 
 | Miejsce | Co się tam załatwia |
@@ -139,7 +139,7 @@ się i wysuwa listę kroków.
 | Kurier rankingowy | Wyniki tygodnia, wnioski i ranking drużyn |
 | Lista błędów | Czego brakuje przed wysłaniem decyzji |
 | Zadania | Lista spraw na ten tydzień, także własnych (widzi je cała drużyna; nieodhaczone przechodzą dalej) |
-| Wyślij decyzje | Zatwierdzenie decyzji na rundę |
+| List z decyzjami | Zatwierdzenie decyzji na rundę |
 
 Miejsca, które odblokowują się później, są w menu szare, z kłódką i numerem tygodnia. Koło zębate **⚙** otwiera
 ustawienia: **paleta kolorów** (Bar mleczny, Pewex albo Wysoka widoczność), **tryb jasny lub ciemny** i **układ menu**

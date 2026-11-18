@@ -114,7 +114,7 @@ const NAZWY = {
   wnioski: { tytul: "Porady", tytulPelny: "Kurier rankingowy – dział porad" },
   ranking: { tytul: "Tabela ligowa", tytulPelny: "Kurier rankingowy – tabela ligowa" },
   lista_bledow: { tytul: "Lista błędów", tytulPelny: "Notes księgowej – lista błędów przed wysłaniem" },
-  wyslij: { tytul: "Wyślij decyzje", tytulPelny: "Poczta – wyślij decyzje tygodnia" },
+  wyslij: { tytul: "List z decyzjami", tytulPelny: "Poczta – nadaj list z decyzjami tygodnia" },
   vat: { tytul: "VAT", tytulPelny: "Urząd skarbowy – VAT" },
   podatki: { tytul: "Podatek dochodowy", tytulPelny: "Urząd skarbowy – PIT i ZUS" },
   urzad: { tytul: "Urząd miasta", tytulPelny: "Urząd miasta – sprawy lokalu" },
@@ -164,7 +164,7 @@ export const MENU = [
   { sekcja: "Tydzień" },
   { klucz: "redakcja", tytul: "Kurier rankingowy", ikona: "karta", miejsce: "redakcja", pod: ["karta_wynikow", "wnioski", "ranking"] },
   { klucz: "lista_bledow", tytul: "Lista błędów", ikona: "bledy" },
-  { klucz: "wyslij", tytul: "Wyślij decyzje", ikona: "wyslij", klasa: "wyslij" },
+  { klucz: "wyslij", tytul: "List z decyzjami", ikona: "wyslij", klasa: "wyslij" },
 ];
 ustawEkranyMiejsc(Object.fromEntries(MENU.filter((p) => p.miejsce && p.pod).map((p) => [p.miejsce, p.pod])));
 

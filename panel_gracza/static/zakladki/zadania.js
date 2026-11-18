@@ -79,7 +79,7 @@ export function zadaniaAutomatyczne(v, d, kat, tytul = (k) => k) {
     lista.push({ id: "harpagon", tekst: H.po_terminie > 0 ? "Spłać Harpagona – termin minął!" : "Spłać Harpagona przed terminem",
       gotowe: (d.harpagon_splac || 0) >= H.dlug, cel: "harpagon", opis: `Dług ${zl(H.dlug)}, termin: runda ${H.termin}.` });
   }
-  lista.push({ id: "wyslij", tekst: "Wyślij decyzje", gotowe: !!v.wyslane, cel: "wyslij", opis: "" });
+  lista.push({ id: "wyslij", tekst: "List z decyzjami", gotowe: !!v.wyslane, cel: "wyslij", opis: "" });
   return lista;
 }
 

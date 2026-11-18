@@ -234,7 +234,7 @@ def test_okienka_prl_paragon_tablica_koperta():
     assert "pp-paragon" in PULPIT_JS and "pp-par-suma" in PULPIT_JS and "koszty_decyzji" in PULPIT_JS and ".pp-par-zab" in PULPIT_CSS
     assert "pp-pin" in PULPIT_JS or "pinezka" in PULPIT_JS
     assert ".pp-pin" in PULPIT_CSS and ".pp-ogl" in PULPIT_CSS and "▲" in PULPIT_JS and "▼" in PULPIT_JS
-    assert "pp-koperta" in PULPIT_JS and "pp-stempel" in PULPIT_JS and "WYSŁANO" in PULPIT_JS and "ZAKLADKI.wyslij.decyzje(c)" in PULPIT_JS
+    assert "pp-koperta" in PULPIT_JS and "pp-stempel" in PULPIT_JS and "NADANO" in PULPIT_JS and "ZAKLADKI.wyslij.decyzje(c)" in PULPIT_JS
     assert "prefers-reduced-motion: no-preference" in PULPIT_CSS and ".pp-stempel.swiezy" in PULPIT_CSS
     # stempel i paragon nie mają kolorów wpisanych na sztywno (tylko zmienne palet)
     krok = _bez_komentarzy(PULPIT_CSS[PULPIT_CSS.index("Krok 4A"):])

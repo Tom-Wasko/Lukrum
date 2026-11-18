@@ -427,7 +427,7 @@ body.pz-otwarty .pp-zeszyt { visibility: hidden; }
 [data-paleta="wysoka"] .pp-szuflada { background: var(--papier); border: var(--ramka-grubosc) solid var(--tusz); }
 [data-paleta="wysoka"] .pp-sz-lista .pp-ogl { rotate: 0deg; }   /* w wysokiej widoczności kartki leżą prosto */
 
-/* koperta („Wyślij decyzje”): klapa, adres, podsumowanie, przycisk Wyślij (z zakładki wyslij), stempel WYSŁANO */
+/* koperta („List z decyzjami”): klapa, adres, podsumowanie, przycisk Wyślij (z zakładki wyslij), stempel NADANO */
 .okno.pp-okno-koperta { width: min(700px, 100%); }
 .pp-okno-koperta .ot { padding: 0; }
 .pp-koperta { position: relative; padding: 76px 24px 20px; color: var(--tusz); background: var(--g-karta); font: calc(15px * var(--skala-tekstu, 1))/1.5 var(--font-tekst); }
@@ -453,7 +453,7 @@ body.pz-otwarty .pp-zeszyt { visibility: hidden; }
 @keyframes pp-stempel { from { scale: 2.2; opacity: 0; } 60% { opacity: 1; } to { scale: 1; opacity: 1; } }
 
 /* === Krok 5 =================================================================================================================== */
-/* „Wyślij decyzje” na dole paska: duży list w kopercie z listem w rogu; po wysłaniu stempel WYSŁANO (stan nie samym kolorem) */
+/* „List z decyzjami” na dole paska: duży list w kopercie z listem w rogu; po wysłaniu stempel NADANO (stan nie samym kolorem) */
 .pp-list { height: 58px; min-width: 58px; margin-top: 8px; padding: 0 5px; overflow: visible; }
 .pp-list-svg { display: block; width: 46px; height: 36px; flex: none; transform-origin: 30% 80%; transition: transform .2s ease; }
 .pp-list:hover .pp-list-svg, .pp-list:focus-visible .pp-list-svg { transform: rotate(-6deg) scale(1.06); }

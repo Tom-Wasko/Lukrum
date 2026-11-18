@@ -88,7 +88,7 @@ const terminKrotko = (iso) => new Date(iso).toLocaleString("pl-PL", { weekday: "
 async function zmien(fn, lokalnie = null) {
   if (!S.v.edycja) return toast("Podgląd poprzedniej rundy – decyzji nie można zmieniać.");
   if (blokada(S.v)) return toast(blokada(S.v));
-  if (S.v.wyslane) return toast("Decyzje są wysłane. Wróć do podejmowania decyzji w zakładce „Wyślij decyzje”.");
+  if (S.v.wyslane) return toast("Decyzje są wysłane. Wróć do podejmowania decyzji w zakładce „List z decyzjami”.");
   fn(S.d);
   S.oczekujace++;
   S.zapis = S.zapis.then(async () => {
@@ -224,7 +224,7 @@ function rysujTeczke() {
     : !v.edycja && v.runda < v.gra.runda ? `<div class="komunikat">Podgląd rundy ${v.runda} (${v.miesiac}) – decyzje z tej rundy są tylko do odczytu.</div>` : "";
   const zablokowane = v.edycja && blokada(v) && tryb === "decyzje" ? `<div class="komunikat">${esc(blokada(v))}</div>` : "";
   const wyslane = !zablokowane && v.edycja && v.wyslane && tryb === "decyzje" && t.k !== "wyslij"
-    ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji przyciskiem „Wyślij decyzje” na pasku.</div>` : "";
+    ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji przyciskiem „List z decyzjami” na pasku.</div>` : "";
   const opis = typeof z.info === "function" ? z.info(c, tryb) : z.info;
   const html = `${opis ? `<div class="teczka-opis">${kolko(opis)}</div>` : ""}${podglad}${zablokowane}${wyslane}${tresc}`;
   const okno_ = teczka(`${ikona(IKONY[t.k])} ${z.tytulPelny || z.tytul}`, html, { naglowek: przelacznik, poZamknieciu: () => { if (S.teczka === t) S.teczka = null; } });
@@ -387,7 +387,7 @@ function rysuj() {
     ? `<div class="komunikat">Podgląd rundy ${v.runda} (${v.miesiac}) – decyzje z tej rundy są tylko do odczytu. Wyniki pokazują skutki poprzedniego ${OKRES.dopelniacz}.</div>` : "";
   const zablokowane = v.edycja && blokada(v) && tryb === "decyzje" ? `<div class="komunikat">${esc(blokada(v))}</div>` : "";
   const wyslane = !zablokowane && v.edycja && v.wyslane && tryb === "decyzje" && S.zakladka !== "wyslij"
-    ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji w zakładce „Wyślij decyzje”.</div>` : "";
+    ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji w zakładce „List z decyzjami”.</div>` : "";
   const opis = typeof z.info === "function" ? z.info(c, tryb) : z.info;
   const karta = document.getElementById("karta");
   // wnętrze budynku (swiat/swiat.js) ma własny nagłówek – bez tytułu zakładki i przełącznika Decyzje / Wyniki

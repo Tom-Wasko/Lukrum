@@ -22,7 +22,7 @@ const PALETY = { bar: "Bar mleczny", pewex: "Pewex", wysoka: "Wysoka widocznoś�
 const ODCIEN = { stare_miasto: 1, centrum: 2, akademickie: 3, politechnika: 1, dworzec: 2, zygmuntowskie: 3, lsm_czuby: 4,
   czechow: 4, felin: 3, zemborzyce: 2 };
 const SKROTY = [["lokal", "lokal", "Mój lokal"], ["bank", "bank", "Banki"], ["hurt", "dostawca", "Hurtownie i sklepy"],
-  ["raport", "raport", "Raport rundy"], ["wyslij", "wyslij", "Wyślij decyzje"]];
+  ["raport", "raport", "Raport rundy"], ["wyslij", "wyslij", "List z decyzjami"]];
 
 // punkty orientacyjne widoczne już na widoku całego miasta (reszta pojawia się po przybliżeniu)
 const DALEKO = new Set(["zamek", "arena", "lotnisko", "gorki_czechowskie", "skansen", "dworzec_glowny", "plac_litewski"]);

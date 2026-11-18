@@ -24,7 +24,7 @@ export default function (R) {
       return s;
     },
     punkty: [
-      { x: 434, y: 130, w: 352, h: 306, et: "Nadaj decyzje", stan: "!", opisStanu: "2 rzeczy do poprawy", teczka: { tytul: "Wyślij decyzje tygodnia", okruszek: "okienko nadawcze", wstep: "Podsumowanie wszystkiego, co postanowione w tym tygodniu. Po nadaniu można jeszcze poprawiać, aż mistrz gry zamknie tydzień.",
+      { x: 434, y: 130, w: 352, h: 306, et: "Nadaj list z decyzjami", stan: "!", opisStanu: "2 rzeczy do poprawy", teczka: { tytul: "Nadaj list z decyzjami", okruszek: "okienko nadawcze", wstep: "Podsumowanie wszystkiego, co postanowione w tym tygodniu. Po nadaniu można jeszcze poprawiać, aż mistrz gry zamknie tydzień.",
         pola: [["Decyzje robocze", "14 zmian"], ["Wydatki tygodnia", "1 250 zł"], ["Do poprawy", "! 2", "lista na tablicy z lewej"], ["Nadaj list polecony", "Wyślij"]], ekran: "wyslij" } },
       { x: 44, y: 74, w: 322, h: 242, et: "Do poprawy", stan: "!", opisStanu: "2 błędy czerwone", teczka: { tytul: "Lista błędów", okruszek: "tablica", wstep: "Każdy wiersz prowadzi do miejsca, w którym da się to poprawić.", pola: [["! Brak mięsa na piątek i sobotę", "➜ Selgros"], ["! Kasa bez kasjera w niedzielę", "➜ Mój kebab"]], ekran: "lista_bledow" } },
       { x: 1084, y: 130, w: 122, h: 276, et: "Potwierdzenia", gdzie: "prawy-brzeg", teczka: { tytul: "Wysłane tygodnie", okruszek: "regał", wstep: "Potwierdzenia nadania z poprzednich tygodni.", pola: [["Tydzień 5", "nadano w środę"], ["Tydzień 4", "nadano w czwartek"]], ekran: "wyslij (historia)" } },
