@@ -91,7 +91,7 @@ budynki:
   strefa: stare_miasto
   miejsce: Krakowskie Przedmieście (Śródmieście), w pobliżu pierzei bankowej
   adres: Krakowskie Przedmieście 29
-  geo: {lat: 51.24818, lon: 22.55655}
+  geo: {lat: 51.2412, lon: 22.5571}
   opis: 'Cztery biura rachunkowe pod jednym dachem (J.K.Ś., Józef K., Scrooge i Asteroida 328) i klatka schodowa
     pachnąca tonerem i drożdżówkami. Lokalizacja tymczasowa: adres poda autor.'
   zakladka: biuro
@@ -134,7 +134,7 @@ budynki:
   strefa: centrum
   miejsce: Krakowskie Przedmieście, Poczta Główna (Śródmieście)
   adres: Krakowskie Przedmieście 50
-  geo: {lat: 51.24767, lon: 22.55921}
+  geo: {lat: 51.248, lon: 22.5591}
   opis: Tu wysyłasz decyzje rundy – list polecony do mistrza gry.
   zakladka: wyslij
   mapa:
@@ -162,7 +162,7 @@ budynki:
   strefa: centrum
   miejsce: Miasteczko Akademickie, tablica ogłoszeń (Sławinek / Rury)
   adres: ul. Radziszewskiego 11
-  geo: {lat: 51.24658, lon: 22.54114}
+  geo: {lat: 51.2467, lon: 22.5412}
   opis: Kandydaci do kuchni i na kasę.
   zakladka: rynek_pracy
   mapa:
@@ -176,7 +176,7 @@ budynki:
   strefa: stare_miasto
   miejsce: Stare Miasto
   adres: ul. Grodzka 5
-  geo: {lat: 51.24842, lon: 22.5686}
+  geo: {lat: 51.2484, lon: 22.5696}
   opis: Świeże bułki i pita codziennie rano.
   zakladka: dostawcy
   mapa:
@@ -232,7 +232,7 @@ budynki:
   strefa: zygmuntowskie
   miejsce: al. Witosa (Felin)
   adres: al. Witosa 32
-  geo: {lat: 51.23232, lon: 22.61182}
+  geo: {lat: 51.232, lon: 22.612}
   opis: 'Hipermarket: pełny asortyment, drożej niż w hurtowni, odbiór osobisty. Tu kupuje auto-dostawca.'
   zakladka: dostawcy
   mapa:
@@ -342,7 +342,7 @@ budynki:
   strefa: centrum
   miejsce: Śródmieście, centrum handlowe przy ul. Lipowej
   adres: ul. Lipowa 13
-  geo: {lat: 51.24501, lon: 22.55037}
+  geo: {lat: 51.245, lon: 22.5504}
   opis: Ekspresy, fotele do masażu i inne udogodnienia dla załogi.
   zakladka: udogodnienia
   mapa:
@@ -356,7 +356,7 @@ budynki:
   strefa: politechnika
   miejsce: okolice Politechniki, ul. Nadbystrzycka
   adres: ul. Nadbystrzycka 36
-  geo: {lat: 51.23616, lon: 22.55114}
+  geo: {lat: 51.2362, lon: 22.5511}
   opis: 'Szkolenia: Lubelska Szkoła Kebabu, Rożen i Rozum oraz HACCP w Pięć Minut.'
   zakladka: szkolenia
   mapa:
@@ -411,7 +411,7 @@ budynki:
   strefa: centrum
   miejsce: Śródmieście, poza deptakiem
   adres: ul. Chopina 11
-  geo: {lat: 51.24601, lon: 22.55372}
+  geo: {lat: 51.2459, lon: 22.5539}
   opis: Ranking firm miasta – karta wyników.
   zakladka: karta_wynikow
   mapa:
@@ -493,7 +493,7 @@ budynki:
   rodzaj: park
   strefa: stare_miasto
   miejsce: błonia pod Zamkiem (Stare Miasto)
-  geo: {lat: 51.2503, lon: 22.5758}
+  geo: {lat: 51.2496, lon: 22.5729}
   opis: Park – co tydzień w jednym z parków dzieje się coś dla wszystkich drużyn (kliknij park, żeby zobaczyć jego wydarzenia).
   zakladka: zdarzenia
   mapa:
@@ -520,7 +520,7 @@ budynki:
   strefa: dworzec
   miejsce: Stare Miasto, brama kamienicy
   adres: ul. Rybna 4
-  geo: {lat: 51.24866, lon: 22.56738}
+  geo: {lat: 51.2489, lon: 22.5662}
   opis: Pożyczki od ręki, bez pytań i bez ksiąg. Pytania zadaje się później – i zadaje je Mistrz Jakub.
   zakladka: harpagon
   mapa:
@@ -560,7 +560,7 @@ budynki:
   strefa: centrum
   miejsce: ul. Hipoteczna (Śródmieście), poza deptakiem
   adres: ul. Hipoteczna 4
-  geo: {lat: 51.24667, lon: 22.55332}
+  geo: {lat: 51.2463, lon: 22.5515}
   opis: Polisy na lokal, sprzęt i OC – odszkodowania po wypadkach w lokalu (dane/zdarzenia/losowe.yaml).
   zakladka: ubezpieczenia
   mapa:
@@ -604,7 +604,7 @@ zespoly:
   opis: Kamienica przy deptaku z szyldami sześciu banków. W środku wybiera się bank.
   miejsce: Krakowskie Przedmieście (Śródmieście)
   adres: Krakowskie Przedmieście 37
-  geo: {lat: 51.24825, lon: 22.55783}
+  geo: {lat: 51.2476, lon: 22.5538}
 - id: biurowiec_zana
   nazwa: Dom reklamy (biurowiec przy Zana)
   opis: 'Biurowiec z windą: na parterze portiernia, kampanie i pokój z księgą firmy, wyżej piętra agencji reklamowych (drukarnia, radio i billboardy, festyny i degustacje, internet). Piętro wybiera się w windzie.'
