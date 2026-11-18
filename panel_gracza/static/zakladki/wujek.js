@@ -111,3 +111,9 @@ export function oznaczCel(v) {
   const K = kroki(v), pierwszy = K.findIndex((k) => !k[3]);
   celNaMapie(v, v.wyslane ? null : pierwszy < 0 ? "wyslij" : K[pierwszy][0]);
 }
+
+// List wujka na bieżący tydzień: [tytuł, treść] albo null, gdy wujek już nie pisze (zeszyt pulpitu, strona „Lista wujka”)
+export function listTygodnia(v) {
+  const nr = v.runda - (v.gra.runda_startowa || 1);
+  return (v.runda === v.gra.liczba_rund && nr >= LISTY.length ? OSTATNI : LISTY[nr]) || null;
+}
