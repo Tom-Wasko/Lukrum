@@ -106,7 +106,12 @@ majątek netto, awanse i spadki oraz wykres miejsc w kolejnych rundach.
 Gra to **miejsca**, a nie zakładki. Menu z boku prowadzi do każdego z nich, a **Mapa miasta** to prawdziwy plan
 Lublina: przybliża się go kółkiem myszy (na telefonie – dwoma palcami, a także dwuklikiem albo przyciskami + i −),
 przesuwa przeciąganiem, a kliknięcie budynku otwiera jego wnętrze. W wnętrzu klika się tabliczki i postacie –
-każdy punkt prowadzi do ekranu decyzji.
+każdy punkt prowadzi do ekranu decyzji. Każde miejsce ma własne, narysowane wnętrze: bank, biuro rachunkowe, sklep czy
+urząd wyglądają inaczej i poznaje się je po jednym charakterystycznym przedmiocie. Przy punkcie stoi etykieta z nazwą
+czynności (po najechaniu albo wejściu klawiszem Tab punkt się podświetla, a „!” ostrzega o błędach do poprawy). Etykieta
+z „➜” mówi, że sprawę załatwia się w innym miejscu, a przy zamkniętych punktach jest kłódka i numer tygodnia. Kto tu
+mówi, ten ma dymek (po najechaniu), a pod rysunkiem jest lista tych samych punktów dla czytników ekranu. Wejście do
+banku albo biura rachunkowego prowadzi najpierw przez fasadę (Pierzeja bankowa, Kamienica rachmistrzów).
 
 | Miejsce | Co się tam załatwia |
 |---|---|

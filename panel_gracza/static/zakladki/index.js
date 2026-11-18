@@ -149,19 +149,21 @@ export const MENU = [
   { klucz: "kebab", tytul: "Mój kebab", ikona: "lokale", miejsce: "kebab",
     pod: ["lokal_przeglad", "lokal_menu", "promocje", "zespol", "hr_rozwoj", "zaop_magazyn", "raport", "czas_wlasciciela", "wlasciciel"] },
   { sekcja: "Miasto" },
-  { klucz: "stare_miasto", tytul: "Stare Miasto", ikona: "klucz", miejsce: "stare_miasto", pod: ["lokale", "licytacje", "przejecia", "harpagon", "kasyno"] },
-  { klucz: "hurtownie", tytul: "Hurtownie", ikona: "dostawcy", miejsce: "hurtownie", pod: ["zaop_dostawy", "zaop_przewozy"] },
-  { klucz: "park_handlowy", tytul: "Park handlowy", ikona: "sprzedaz", miejsce: "park_handlowy", pod: ["wnetrze_sprzet", "wnetrze_wyposazenie"] },
-  { klucz: "miasteczko", tytul: "Miasteczko akademickie", ikona: "rynek_pracy", miejsce: "miasteczko", pod: ["rynek_pracy", "klienci", "konkurencja", "kalendarz"] },
-  { klucz: "kamienica_bankowa", tytul: "Kamienica bankowa", ikona: "bank", miejsce: "kamienica_bankowa", pod: ["bank", "gielda"] },
-  { klucz: "biurowiec_zana", tytul: "Biurowiec przy Zana", ikona: "biuro", miejsce: "biurowiec_zana", pod: ["biuro", "kpir", "ubezpieczenia", "agencje", "internet"] },
-  { klucz: "urzedy", tytul: "Urzędy", ikona: "urzad", miejsce: "urzedy", pod: ["urzad", "sanepid", "vat", "podatki"] },
-  { klucz: "handel", tytul: "Bazar", ikona: "handel" },
+  { klucz: "stare_miasto", tytul: "Stare Miasto", ikona: "klucz", miejsce: "agencja_nieruchomosci", miejsca: ["agencja_nieruchomosci", "harpagon"], pod: ["lokale", "licytacje", "przejecia", "harpagon", "kasyno"] },
+  { klucz: "hurtownie", tytul: "Hurtownie", ikona: "dostawcy", miejsce: "makro",
+    miejsca: ["makro", "selgros", "eurocash", "auchan", "biedronka", "lidl", "stokrotka", "rozen", "piekarnia"], pod: ["zaop_dostawy", "zaop_przewozy"] },
+  { klucz: "park_handlowy", tytul: "Park handlowy", ikona: "sprzedaz", miejsce: "park_handlowy", miejsca: ["park_handlowy", "sprzet_gastro", "stolarnia", "galeria"], pod: ["wnetrze_sprzet", "wnetrze_wyposazenie"] },
+  { klucz: "miasteczko", tytul: "Miasteczko akademickie", ikona: "rynek_pracy", miejsce: "agencja_pracy", miejsca: ["agencja_pracy", "akademia", "uczelnia", "detektyw"], pod: ["rynek_pracy", "klienci", "konkurencja", "kalendarz"] },
+  { klucz: "kamienica_bankowa", tytul: "Kamienica bankowa", ikona: "bank", miejsce: "pierzeja_bankowa", miejsca: ["pierzeja_bankowa", "bank", "gielda"], pod: ["bank", "gielda"] },
+  { klucz: "biurowiec_zana", tytul: "Biurowiec przy Zana", ikona: "biuro", miejsce: "kamienica_rachmistrzow",
+    miejsca: ["kamienica_rachmistrzow", "biuro_rachunkowe", "biurowiec_zana", "dom_reklamy", "ubezpieczyciel"], pod: ["biuro", "kpir", "ubezpieczenia", "agencje", "internet"] },
+  { klucz: "urzedy", tytul: "Urzędy", ikona: "urzad", miejsce: "ratusz", miejsca: ["ratusz", "sanepid", "poczta"], pod: ["urzad", "sanepid", "vat", "podatki"] },
+  { klucz: "handel", tytul: "Bazar", ikona: "handel", miejsce: "bazar", pod: ["handel"] },
   { sekcja: "Tydzień" },
   { klucz: "redakcja", tytul: "Kurier rankingowy", ikona: "karta", miejsce: "redakcja", pod: ["karta_wynikow", "wnioski", "ranking"] },
   { klucz: "lista_bledow", tytul: "Lista błędów", ikona: "bledy" },
   { klucz: "wyslij", tytul: "Wyślij decyzje", ikona: "wyslij", klasa: "wyslij" },
 ];
-ustawEkranyMiejsc(Object.fromEntries(MENU.filter((p) => p.miejsce).map((p) => [p.miejsce, p.pod])));
+ustawEkranyMiejsc(Object.fromEntries(MENU.filter((p) => p.miejsce && p.pod).map((p) => [p.miejsce, p.pod])));
 
 export default ZAKLADKI;

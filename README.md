@@ -25,7 +25,7 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 | 1 | Gra pod nową nazwą, nowa dokumentacja | zrobione |
 | 1½ | Wygląd: palety, kroje, grafiki wnętrz | zrobione, do przeglądu autora |
 | 2 | Mapa Lublina z przybliżaniem i wejściem do budynków | zrobione, poprawki w toku |
-| 3 | Wszystkie miejsca gry z własnymi wnętrzami | w toku (pełne wnętrze ma kebab, reszta jest schematyczna) |
+| 3 | Wszystkie miejsca gry z własnymi wnętrzami | w toku (33 wnętrza z makiet wdrożone, punkty otwierają ekrany gry; teczka decyzji w oknie na scenie – dalej) |
 | 4 | Lekcje: scenariusze i tryb lekcyjny | projekt gotowy, bez próby w klasie |
 | 5 | Audyt i publikacja | do zrobienia |
 

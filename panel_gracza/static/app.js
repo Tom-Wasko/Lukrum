@@ -217,7 +217,7 @@ function rysujMenu() {
     if (poz.sekcja !== undefined) return `<div class="sekcja ${poz.sekcja ? "" : "linia"}" data-nazwa="${esc(poz.sekcja)}"></div>`;
     const z = ZAKLADKI[poz.klucz] || {};
     const pod = poz.pod ? `<div class="pod">${poz.pod.map((k) => pozycjaPod(k, 18)).join("")}</div>` : "";
-    const aktywna = poz.klucz === S.zakladka || (poz.pod || []).includes(S.zakladka) || (S.zakladka === "miejsce" && poz.miejsce === aktualneMiejsce());
+    const aktywna = poz.klucz === S.zakladka || (poz.pod || []).includes(S.zakladka) || (S.zakladka === "miejsce" && (poz.miejsca || [poz.miejsce]).includes(aktualneMiejsce()));
     // funkcje gry: grupa szara z okiem dopiero, gdy wszystkie jej podzakładki są zakryte (okno – wszystkie jej funkcje)
     const wszystkie = poz.pod || [poz.klucz], zakryta = wszystkie.every((k) => zakrytaF(S.v, k));
     const funkcje = funkcjeZakladek(S.v, wszystkie.filter((k) => zakrytaF(S.v, k)));
