@@ -66,3 +66,22 @@
 
 /* nawigacja po wnętrzach zagnieżdżonych (z pierzei do banku) */
 .sw-wroc.wn-wroc-wyzej { margin-right: 4px; }
+
+/* --- teczka: ekran decyzji otwarty z punktu wnętrza (app.js: rysujTeczke) – okno nad wnętrzem, które zostaje widoczne pod spodem ---
+   Okna: przycisk ✕ jest prawdziwym przyciskiem (fokus, klawiatura). Kolory tylko ze zmiennych palet. */
+.okno .og button.x { color: inherit; background: none; border: 0; padding: 2px 6px; font: inherit; font-size: 20px; line-height: 1; cursor: pointer; opacity: .85; min-width: 36px; min-height: 36px; }
+.okno .og button.x:hover { opacity: 1; }
+.okno .og button.x:focus-visible { outline: var(--ognisko, 2px solid currentColor); outline-offset: 2px; }
+.zaslona:focus { outline: none; }
+.zaslona.teczka { background: color-mix(in srgb, var(--tusz) 32%, transparent); padding-top: 52px; }
+.teczka-okno { position: relative; margin-top: 14px; border: max(2px, var(--ramka-grubosc, 2px)) solid var(--tusz, currentColor); border-radius: 4px 14px 14px 14px; overflow: visible; }
+.teczka-okno::before { content: ""; position: absolute; left: 22px; top: -14px; width: 120px; height: 14px; border: max(2px, var(--ramka-grubosc, 2px)) solid var(--tusz, currentColor); border-bottom: 0; border-radius: 8px 8px 0 0; background: var(--pom, var(--tusz, currentColor)); }
+.teczka-okno .og { text-transform: none; letter-spacing: .01em; border-radius: 3px 12px 0 0; }
+.teczka-okno .og > span:first-child { display: inline-flex; align-items: center; gap: 10px; }
+.teczka-opis { margin: 0 0 10px; }
+.teczka-tryb { display: inline-flex; gap: 4px; margin: 0 0 12px; }
+.teczka-tryb button { min-height: 38px; padding: 0 16px; cursor: pointer; color: var(--tusz, inherit); background: var(--papier, transparent); border: 2px solid var(--tusz, currentColor); border-radius: 6px; font: inherit; font-weight: 700; }
+.teczka-tryb button.aktywny { color: var(--papier); background: var(--akcent, currentColor); }
+.teczka-tryb button.aktywny::before { content: "✓ "; }
+.teczka-tryb button:focus-visible { outline: var(--ognisko, 2px solid currentColor); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .zaslona { animation: none; } }

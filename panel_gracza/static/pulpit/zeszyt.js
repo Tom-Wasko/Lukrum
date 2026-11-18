@@ -13,6 +13,33 @@ const Z = { nr: 0, otwarty: false, fokus: null };
 const bezRuchu = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 export const zeszytOtwarty = () => Z.otwarty;
 
+// Okładka starego, zjechanego zeszytu: skóra z ziarnem i przetarciami, wzmocnione narożniki, szew i gumka. Same kształty SVG,
+// kolory wyłącznie ze zmiennych palet (--g-*); ziarno i plamy to filtry feTurbulence (bez plików graficznych).
+const skora = (id) => `<svg class="pp-skora" viewBox="0 0 400 430" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="${id}-z" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="11" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 -.32" result="a"/><feFlood style="flood-color:var(--g-czern)"/><feComposite in2="a" operator="in"/></filter>
+    <filter id="${id}-p" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".022 .04" numOctaves="3" seed="4" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.4 -1.05" result="a"/><feFlood style="flood-color:var(--g-skora2)"/><feComposite in2="a" operator="in"/></filter>
+    <filter id="${id}-r"><feGaussianBlur stdDeviation="5"/></filter>
+  </defs>
+  <rect width="400" height="430" style="fill:var(--g-drewno)"/>
+  <rect width="400" height="430" filter="url(#${id}-p)" opacity=".75"/>
+  <ellipse cx="38" cy="22" rx="46" ry="24" filter="url(#${id}-r)" style="fill:var(--g-skora2)" opacity=".7"/>
+  <ellipse cx="372" cy="30" rx="40" ry="18" filter="url(#${id}-r)" style="fill:var(--g-skora2)" opacity=".55"/>
+  <ellipse cx="200" cy="10" rx="120" ry="9" filter="url(#${id}-r)" style="fill:var(--g-skora3)" opacity=".5"/>
+  <ellipse cx="14" cy="230" rx="10" ry="90" filter="url(#${id}-r)" style="fill:var(--g-skora2)" opacity=".45"/>
+  <path d="M120 70c30-10 44 6 78 0M60 120c20 6 30-4 52 2M250 96c22-4 40 8 60 2" fill="none" style="stroke:var(--g-czern)" stroke-width="1.4" opacity=".35" vector-effect="non-scaling-stroke"/>
+  <rect width="400" height="430" filter="url(#${id}-z)" opacity=".8"/>
+  <rect x="11" y="11" width="378" height="430" rx="9" fill="none" style="stroke:var(--g-skora)" stroke-width="2.2" stroke-dasharray="7 6" opacity=".85" vector-effect="non-scaling-stroke"/>
+  <path d="M0 0h64l-64 64z" style="fill:var(--g-drewno2);stroke:var(--g-czern)" stroke-width="2" vector-effect="non-scaling-stroke"/>
+  <path d="M400 0h-64l64 64z" style="fill:var(--g-drewno2);stroke:var(--g-czern)" stroke-width="2" vector-effect="non-scaling-stroke"/>
+  <path d="M14 36l22-22M20 48l32-32" fill="none" style="stroke:var(--g-skora)" stroke-width="2" stroke-dasharray="4 4" opacity=".9" vector-effect="non-scaling-stroke"/>
+  <path d="M386 36l-22-22M380 48l-32-32" fill="none" style="stroke:var(--g-skora)" stroke-width="2" stroke-dasharray="4 4" opacity=".9" vector-effect="non-scaling-stroke"/>
+  <rect x="381" y="-4" width="14" height="440" style="fill:var(--g-czern);stroke:var(--g-metal2)" stroke-width="1.6" opacity=".92" vector-effect="non-scaling-stroke"/>
+  <path d="M385 0v430M391 0v430" fill="none" style="stroke:var(--g-metal2)" stroke-width="1" opacity=".7" vector-effect="non-scaling-stroke"/>
+</svg>`;
+
 // --- mały zeszyt (stany 1 i 2) -----------------------------------------------------------------------------------------
 export function rysujMalyZeszyt(c, btn) {
   let plan = null;
@@ -24,7 +51,7 @@ export function rysujMalyZeszyt(c, btn) {
   btn.classList.toggle("pp-zrobiony", !n);
   const poz = plan.lista.map((k, i) => `<li class="${k.ok ? "ok" : k.teraz ? "teraz" : ""}"><span class="pp-lp" aria-hidden="true">${k.ok ? "✓" : k.teraz ? "▶" : i + 1}</span>
       <span>${esc(k.co)}${k.ok ? '<i class="sr"> (zrobione)</i>' : k.teraz ? '<i class="sr"> (następny krok)</i>' : ""}</span></li>`).join("");
-  btn.innerHTML = `<span class="pp-okladka" aria-hidden="true"></span><span class="pp-kartka">
+  btn.innerHTML = `<span class="pp-okladka" aria-hidden="true">${skora("sk-m")}</span><span class="pp-kartka">
     <span class="pp-zg">Zeszyt wujka · ${plan.zrobione} z ${plan.lista.length}</span>
     <span class="pp-krok"><small>${n ? esc(n.gdzie) : "Gotowe"}</small>${n ? esc(n.co) : "Wszystko odhaczone"}</span>
     <ul class="pp-lista">${poz}</ul></span>`;
@@ -126,7 +153,7 @@ function szkielet() {
   o.setAttribute("role", "dialog");
   o.setAttribute("aria-modal", "true");
   o.setAttribute("aria-label", "Zeszyt wujka");
-  o.innerHTML = `<div class="pz-ksiazka"><div class="pz-grzbiet" aria-hidden="true"></div>
+  o.innerHTML = `<div class="pz-ksiazka"><span class="pz-skora" aria-hidden="true">${skora("sk-d")}</span><div class="pz-grzbiet" aria-hidden="true"></div>
     <div class="pz-karta"><div class="pz-stronicowanie"><div class="pz-strona" id="pz-strona" tabindex="-1" aria-live="polite"></div>
         <button type="button" class="pz-wiecej" id="pz-wiecej" data-akcja="pz-dol" hidden aria-label="Są dalsze treści niżej: przewiń w dół">▾<span>dalej</span></button></div>
       <div class="pz-stopka"><button type="button" class="pz-btn" data-akcja="pp-zeszyt-strona" data-d="-1">‹ Wstecz</button><span class="pz-numer" id="pz-numer"></span>

@@ -47,6 +47,20 @@
     td { padding: 9px 14px; border-top: 1px solid var(--linia); vertical-align: top; }
     tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--ramka) 10%, var(--g-karta)); }
     td:first-child { font-weight: 700; white-space: nowrap; }
+    /* karty rozdziałów (tablist): bez skryptu cała instrukcja jest jedną stroną, ze skryptem – zakładki; w druku i PDF zawsze wszystko */
+    .karty { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 22px; padding: 0 0 10px; border-bottom: 3px solid var(--tusz); }
+    .karty button { min-height: 44px; padding: 6px 16px; cursor: pointer; color: var(--tusz); background: var(--papier); border: 2px solid var(--tusz); border-radius: 8px 8px 0 0; font: 400 15px var(--font-szyld); letter-spacing: .03em; text-transform: uppercase; }
+    .karty button:hover { background: color-mix(in srgb, var(--akcent) 14%, var(--papier)); }
+    .karty button[aria-selected="true"] { color: var(--papier); background: var(--tusz); text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 5px; }
+    .karty button[aria-selected="true"]::before { content: "✓ "; }
+    .karty button:focus-visible, .panel:focus-visible { outline: var(--ognisko); outline-offset: 3px; }
+    .panel[hidden] { display: none; }
+    .panel > h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+    .panel > .przejscie { display: flex; justify-content: space-between; gap: 12px; margin-top: 30px; padding-top: 14px; border-top: 2px solid var(--linia); }
+    .przejscie button { min-height: 44px; padding: 6px 16px; cursor: pointer; color: var(--tusz); background: var(--papier); border: 2px solid var(--tusz); border-radius: 8px; font: inherit; font-size: 15px; }
+    .przejscie button:hover { background: var(--tusz); color: var(--papier); }
+    .przejscie button:focus-visible { outline: var(--ognisko); outline-offset: 3px; }
+    .spis a[aria-current="true"] { font-weight: 700; text-decoration: underline; }
     @media (max-width: 860px) {
       .uklad { grid-template-columns: minmax(0, 1fr); padding-top: 16px; }
       .spis { position: static; }
@@ -57,7 +71,8 @@
     @media print {
       @page { size: A4; margin: 16mm 15mm; }
       body { background: #fff; color: #000; font-size: 11.5pt; }
-      .naglowek, .spis { display: none; }
+      .naglowek, .spis, .karty, .przejscie { display: none; }
+      .panel[hidden] { display: block !important; }
       .uklad { display: block; padding: 0; max-width: none; }
       article { box-shadow: none; padding: 0; }
       h2 { break-after: avoid; }
@@ -75,9 +90,80 @@
     <article>
       <h1>{{ tytul }}<span>.</span></h1>
       <p class="podtytul">Instrukcja dla graczy · symulacja lokalu z kebabem w Lublinie</p>
-      {{ tresc|safe }}
+      <div id="instrukcja">{{ tresc|safe }}</div>
     </article>
   </div>
   <div class="stopka">LUKRUM – gra edukacyjna. Nazwy prawdziwych firm i miejsc oddają realia Lublina, a oferty, ceny i zdarzenia w grze są fikcyjne. Gra nie jest związana z tymi firmami.</div>
+  <script>
+    // Zakładki rozdziałów (wzorzec WAI-ARIA „tabs”, klawiatura: strzałki, Home, End). Treść bierze się z instrukcji: nagłówki h2 są
+    // przydzielane do kart po numerze rozdziału. Bez skryptu cała instrukcja jest jedną stroną.
+    (function () {
+      var KARTY = [
+        ["start", "Start", [1, 13]], ["mapa", "Mapa i wnętrza", [4]], ["decyzje", "Decyzje i runda", [2, 3, 12]],
+        ["rynek", "Rynek i zdarzenia", [5, 6, 7, 10, 11]], ["pieniadze", "Pieniądze", [9]], ["ludzie", "Ludzie", [8]], ["mg", "Dla mistrza gry", []]];
+      var kor = document.getElementById("instrukcja");
+      if (!kor || !kor.querySelector("h2")) return;
+      var numer = function (h) { var m = /^\s*(\d+)\./.exec(h.textContent); return m ? +m[1] : (/mistrza gry/i.test(h.textContent) ? "mg" : null); };
+      var dzieci = Array.prototype.slice.call(kor.childNodes), paneleDla = {}, aktualny;
+      var panele = KARTY.map(function (kt) {
+        var p = document.createElement("section");
+        p.className = "panel"; p.id = "panel-" + kt[0]; p.setAttribute("role", "tabpanel"); p.setAttribute("aria-labelledby", "karta-" + kt[0]); p.tabIndex = 0;
+        return p;
+      });
+      KARTY.forEach(function (kt, j) { kt[2].forEach(function (n) { paneleDla[n] = panele[j]; }); paneleDla.mg = panele[KARTY.length - 1]; });
+      aktualny = panele[0];
+      dzieci.forEach(function (w) {
+        if (w.nodeType === 1 && w.tagName === "H2") { var n = numer(w); if (n !== null && paneleDla[n]) aktualny = paneleDla[n]; }
+        aktualny.appendChild(w);
+      });
+      var pasek = document.createElement("div");
+      pasek.className = "karty"; pasek.setAttribute("role", "tablist"); pasek.setAttribute("aria-label", "Rozdziały instrukcji");
+      var przyciski = KARTY.map(function (kt, j) {
+        var b = document.createElement("button");
+        b.type = "button"; b.id = "karta-" + kt[0]; b.setAttribute("role", "tab"); b.setAttribute("aria-controls", "panel-" + kt[0]); b.textContent = kt[1];
+        b.addEventListener("click", function () { wybierz(j, false); });
+        b.addEventListener("keydown", function (e) {
+          var d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : e.key === "Home" ? "p" : e.key === "End" ? "o" : 0;
+          if (!d) return;
+          e.preventDefault();
+          wybierz(d === "p" ? 0 : d === "o" ? KARTY.length - 1 : (j + d + KARTY.length) % KARTY.length, true);
+        });
+        pasek.appendChild(b);
+        return b;
+      });
+      kor.textContent = "";
+      kor.appendChild(pasek);
+      panele.forEach(function (p, j) {
+        if (j < panele.length - 1) {
+          var pr = document.createElement("div"); pr.className = "przejscie";
+          pr.innerHTML = '<span></span><button type="button">' + KARTY[j + 1][1] + " →</button>";
+          pr.lastChild.addEventListener("click", function () { wybierz(j + 1, true); window.scrollTo(0, 0); });
+          p.appendChild(pr);
+        }
+        kor.appendChild(p);
+      });
+      function wybierz(j, fokus) {
+        przyciski.forEach(function (b, n) { b.setAttribute("aria-selected", String(n === j)); b.tabIndex = n === j ? 0 : -1; panele[n].hidden = n !== j; });
+        if (fokus) przyciski[j].focus();
+        if (history.replaceState) history.replaceState(null, "", "#" + KARTY[j][0]);
+      }
+      // spis treści i adres z kotwicą: przejście do karty, w której jest nagłówek
+      function doKotwicy(h) {
+        var cel = h && document.getElementById(h.replace(/^#/, ""));
+        if (!cel) return false;
+        var p = cel.closest(".panel"), j = panele.indexOf(p);
+        if (j < 0) return false;
+        wybierz(j, false);
+        if (cel !== p) cel.scrollIntoView();
+        return true;
+      }
+      document.querySelectorAll(".spis a").forEach(function (a) {
+        a.addEventListener("click", function (e) { if (doKotwicy(a.getAttribute("href"))) e.preventDefault(); });
+      });
+      var h = decodeURIComponent(location.hash || "");
+      var start = KARTY.findIndex(function (kt) { return "#" + kt[0] === h; });
+      if (start >= 0) wybierz(start, false); else if (!doKotwicy(h)) wybierz(0, false);
+    })();
+  </script>
 </body>
 </html>

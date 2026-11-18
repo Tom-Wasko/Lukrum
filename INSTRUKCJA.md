@@ -106,12 +106,20 @@ majątek netto, awanse i spadki oraz wykres miejsc w kolejnych rundach.
 Gra to **miejsca**, a nie zakładki. Menu z boku prowadzi do każdego z nich, a **Mapa miasta** to prawdziwy plan
 Lublina: przybliża się go kółkiem myszy (na telefonie – dwoma palcami, a także dwuklikiem albo przyciskami + i −),
 przesuwa przeciąganiem, a kliknięcie budynku otwiera jego wnętrze. W wnętrzu klika się tabliczki i postacie –
-każdy punkt prowadzi do ekranu decyzji. Każde miejsce ma własne, narysowane wnętrze: bank, biuro rachunkowe, sklep czy
+każdy punkt otwiera ekran decyzji w oknie, czyli **teczce** nad wnętrzem (wnętrze zostaje widoczne pod spodem;
+Esc albo ✕ zamyka teczkę). Każde miejsce ma własne, narysowane wnętrze: bank, biuro rachunkowe, sklep czy
 urząd wyglądają inaczej i poznaje się je po jednym charakterystycznym przedmiocie. Przy punkcie stoi etykieta z nazwą
 czynności (po najechaniu albo wejściu klawiszem Tab punkt się podświetla, a „!” ostrzega o błędach do poprawy). Etykieta
 z „➜” mówi, że sprawę załatwia się w innym miejscu, a przy zamkniętych punktach jest kłódka i numer tygodnia. Kto tu
 mówi, ten ma dymek (po najechaniu), a pod rysunkiem jest lista tych samych punktów dla czytników ekranu. Wejście do
 banku albo biura rachunkowego prowadzi najpierw przez fasadę (Pierzeja bankowa, Kamienica rachmistrzów).
+
+Na mapie u góry po prawej jest **rząd ikon kategorii** (Jedzenie i zaopatrzenie, Finanse, Urzędy i prawo, Praca i ludzie,
+Reklama i media, Miasto i rozrywka): kliknięta ikona podświetla pasujące miejsca (aktywną znaczy ✓ i gruba ramka),
+drugie kliknięcie wyłącza filtr. Paski i okienka w rogach mają swój wygląd: **zakupy** to paragon, **wydarzenia** to
+tablica ogłoszeń z kartkami na pinezkach (▲ korzystne, ▼ niekorzystne), a **Wyślij decyzje** to koperta z podsumowaniem
+i stemplem „WYSŁANO” po wysłaniu. **Zeszyt wujka** leży przechylony w prawym dolnym rogu, a po najechaniu wyprostowuje
+się i wysuwa listę kroków.
 
 | Miejsce | Co się tam załatwia |
 |---|---|

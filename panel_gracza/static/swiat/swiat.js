@@ -220,7 +220,7 @@ export const miejsce = {
       if (!k) return;
       if (!c.zakryta(k) && !c.dostepna(k)) { const od = c.odRundy(k); return toast(od ? `To otworzy się w tygodniu ${od}.` : "To miejsce jest jeszcze zamknięte."); }
       M.karta = null;
-      c.idz(k);
+      c.teczka(k);   // ekran w oknie nad wnętrzem (teczka), nie osobna karta
       if (el.dataset.szukaj) przewinDo(el.dataset.szukaj);
     },
     "sw-osoba": (el, c) => {

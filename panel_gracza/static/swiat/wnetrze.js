@@ -1,5 +1,5 @@
 // Adapter wnętrz z makiet: scena z sceny/<id>.js (rysunek SVG, klikalne punkty, postacie z dymkami) → { s, h, opis } dla ekranu miejsca
-// (swiat.js) oraz obsługa kliknięcia punktu. Punkt prowadzi do istniejącego ekranu gry (wg pola teczka.ekran z makiety), do innej
+// (swiat.js) oraz obsługa kliknięcia punktu. Punkt otwiera istniejący ekran gry w oknie-teczce nad wnętrzem (wg pola teczka.ekran z makiety), do innej
 // sceny (wejscie), albo otwiera okienko z opisem (odsyla, brak ekranu). Dane „na niby” z makiety (stany, plakietki, liczby w teczkach)
 // nie są pokazywane: stan punktu pochodzi z gry (lista błędów, odblokowanie rundą, zakrycie funkcji).
 import { esc, okno, toast, zamknijOkno } from "../zakladki/wspolne.js";
@@ -93,7 +93,7 @@ const opisPunktu = (p) => (p.odsyla ? goly(p.odsyla.tekst) : p.wejscie ? "Wejśc
 /** Przewija ekran do firmy (po przejściu z drzwi banku, sklepu itd.). */
 export function przewinDo(tekst) {
   setTimeout(() => {
-    const kandydaci = [...document.querySelectorAll("#karta .tresc :is(h2, h3, h4, b, strong, th, .nazwa, summary)")];
+    const kandydaci = [...document.querySelectorAll(".teczka .ot :is(h2, h3, h4, b, strong, th, .nazwa, summary), #karta .tresc :is(h2, h3, h4, b, strong, th, .nazwa, summary)")];
     const el = kandydaci.find((e) => e.textContent.includes(tekst));
     if (el) { el.scrollIntoView({ block: "center" }); el.classList.add("sw-wskazany"); setTimeout(() => el.classList.remove("sw-wskazany"), 2400); }
   }, 60);
@@ -117,7 +117,7 @@ export function kliknijPunkt(i, ctx) {
   const otworz = () => {
     if (o.ekran) {
       if (!c.zakryta(o.ekran) && !c.dostepna(o.ekran)) { const od = c.odRundy(o.ekran); return toast(od ? `To otworzy się w tygodniu ${od}.` : "To miejsce jest jeszcze zamknięte."); }
-      c.idz(o.ekran);
+      c.teczka(o.ekran);   // ekran decyzji w oknie nad wnętrzem (teczka), nie osobna karta
       // dostawca albo firma, której drzwi kliknięto (bank, biuro rachunkowe): ekran przewija się do jej nazwy
       const szukaj = p.teczka?.dostawca ? ctx.def.tytul : ["bank", "biuro_rachunkowe"].includes(ctx.def.id) ? (/„(.+)”/.exec(ctx.def.tytul) || [])[1] : null;
       if (szukaj) przewinDo(szukaj);

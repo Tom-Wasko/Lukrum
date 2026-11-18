@@ -55,7 +55,7 @@ def test_kazda_akcja_pulpitu_ma_obsluge():
     uzyte |= set(re.findall(r'data-akcja="(pz-[a-z-]+)"', ZESZYT_JS))
     assert uzyte <= obslugiwane | {"pp-wyglad"}
     assert obslugiwane >= {"pp-wyslij", "pp-konto", "pp-koszyk", "pp-mapa", "pp-portfel", "pp-zeszyt", "pp-zeszyt-zamknij", "pp-zeszyt-strona",
-                           "pp-wydarzenia", "pp-filtr", "pp-wroc", "pp-pokaz", "pp-wejdz", "pp-kat", "pp-wyglad", "pz-dol"}
+                           "pp-wydarzenia", "pp-filtr", "pp-wroc", "pp-pokaz", "pp-wejdz", "pp-wyglad", "pz-dol"}
     assert 'akcja = "pp-wyglad"' in PULPIT_JS
 
 
@@ -138,7 +138,7 @@ def test_krok_2_zeszyt_trzy_stany_i_strony():
     assert "prefers-reduced-motion: reduce" in ZESZYT_JS and "rotateY" in PULPIT_CSS and "perspective" in PULPIT_CSS
     css = _bez_komentarzy(PULPIT_CSS)
     assert ".pz-kartka { display: none; }" in css   # bez ruchu strona się tylko zmienia
-    assert ".pp-zeszyt:hover, .pp-zeszyt:focus-visible { translate: 0 0; }" in css   # stan 2
+    assert ".pp-zeszyt:hover, .pp-zeszyt:focus-visible { translate: 0 0; rotate: 0deg; }" in css   # stan 2: wysuwa i prostuje
     assert 'role", "dialog"' in ZESZYT_JS and "aria-modal" in ZESZYT_JS
 
 
@@ -147,7 +147,7 @@ def test_krok_2_interfejs_pulpitu():
     assert "Wydarzenia tygodnia" in PULPIT_JS and "kalendarz_miasta" in PULPIT_JS
     assert "body.pulpit.na-mapie .tresc > .zd-parki { display: none; }" in PULPIT_CSS
     assert "pp-warstwy" not in PULPIT_JS and "body.pulpit .lm-ustawienia { display: none !important;" in PULPIT_CSS
-    assert 'aria-pressed="${filtr === k}"' in PULPIT_JS and ".pp-f.aktywny" in PULPIT_CSS and 'id="pp-kat-btn"' in PULPIT_JS
+    assert 'aria-pressed="${filtr === k}"' in PULPIT_JS and ".pp-f.aktywny" in PULPIT_CSS and "GRUPY" in PULPIT_JS
     assert re.search(r"\.pp-tydzien \{ position: fixed; left: 50%; top: 10px;", PULPIT_CSS)
     assert "pokazKarte" in KARTA_JS and "pk-wejdz" in KARTA_JS and "aria-modal" in KARTA_JS
     assert "pokazKarte" in (STATIC / "zakladki" / "mapa.js").read_text(encoding="utf-8")
@@ -184,3 +184,79 @@ def test_rozpiska_i_kupowanie_uzywaja_istniejacych_budynkow():
     nieznane = {x for x in uzyte if x not in zetony and x not in {"zaop_dostawy", "wnetrze_sprzet", "wnetrze_wyposazenie", "rynek_pracy", "szkolenia",
                                                                     "agencje", "ubezpieczenia", "bank"}}
     assert not nieznane, nieznane
+
+
+# --- krok 4A: filtr w rzędzie, teczka zamiast karty, „Jak grać” w zakładkach, okienka PRL, zeszyt ze skórą i Caveat ------------------
+
+def test_filtr_kategorii_to_rzad_szesciu_grup():
+    blok = re.search(r"const GRUPY = \[(.*?)\];\s+const GRUPA_DOMYSLNA", PULPIT_JS, re.S).group(1)
+    grupy = re.findall(r'\["([a-z]+)", "([^"]+)", "([a-z_]+)", \[([^\]]*)\]\]', blok)
+    assert [n for _, n, _, _ in grupy] == ["Jedzenie i zaopatrzenie", "Finanse", "Urzędy i prawo", "Praca i ludzie",
+                                          "Reklama i media", "Miasto i rozrywka"]
+    ikony = set(re.findall(r"^  ([a-z_]+): '", IKONY_JS, re.M))
+    assert all(ik in ikony for _, _, ik, _ in grupy)
+    # każdy rodzaj żetonu z danych trafia do dokładnie jednej grupy albo do domyślnej „Miasto i rozrywka”
+    rodzaje = [r for _, _, _, lista in grupy for r in re.findall(r'"([a-z_]+)"', lista)]
+    assert len(rodzaje) == len(set(rodzaje)) and {"bank", "dostawca", "urzad", "praca", "reklama", "park"} <= set(rodzaje)
+    assert 'id="pp-filtr"' in PULPIT_JS and 'aria-pressed="${filtr === k}"' in PULPIT_JS and 'aria-label="${nazwa}' in PULPIT_JS
+    assert "pp-kat-panel" not in PULPIT_JS and "pp-kat-panel" not in PULPIT_CSS
+    assert re.search(r"\.pp-f\.aktywny::after \{ content: \"✓\"", PULPIT_CSS) and re.search(r"\.pp-f\.aktywny \{[^}]*border-width: 4px", PULPIT_CSS)
+
+
+def test_punkt_wnetrza_otwiera_teczke_a_nie_karte():
+    wnetrze = (STATIC / "swiat" / "wnetrze.js").read_text(encoding="utf-8")
+    swiat = (STATIC / "swiat" / "swiat.js").read_text(encoding="utf-8")
+    wspolne = (STATIC / "zakladki" / "wspolne.js").read_text(encoding="utf-8")
+    assert "c.teczka(o.ekran)" in wnetrze and "c.idz(o.ekran)" not in wnetrze
+    assert "c.teczka(k)" in swiat and "c.idz(k)" not in swiat
+    assert "teczka: (k, tryb) => otworzTeczke(k, tryb)" in APP_JS and "function rysujTeczke" in APP_JS
+    # teczka nie zmienia S.zakladka: zamyka się, gdy gracz opuszcza wnętrze
+    teczka = APP_JS[APP_JS.index("function otworzTeczke"):APP_JS.index("// --- rysowanie")]
+    assert "S.zakladka =" not in teczka and 'S.zakladka !== "miejsce"' in teczka
+    # okna: rola dialog, fokus, Esc i pułapka Tab
+    assert 'setAttribute("role", "dialog")' in wspolne and "aria-modal" in wspolne and "e.key === \"Escape\"" in wspolne
+    assert 'type="button" class="x"' in wspolne
+
+
+def test_jak_grac_ma_zakladki_z_klawiatura():
+    szablon = (GRA / "panel_gracza" / "templates" / "panel_gracza" / "jak_grac.html").read_text(encoding="utf-8")
+    assert 'role", "tablist"' in szablon and 'role", "tab"' in szablon and 'role", "tabpanel"' in szablon
+    assert "ArrowRight" in szablon and "ArrowLeft" in szablon and '"Home"' in szablon and '"End"' in szablon
+    assert "aria-selected" in szablon and "@media print" in szablon and ".panel[hidden] { display: block !important; }" in szablon
+    for nazwa in ["Start", "Mapa i wnętrza", "Decyzje i runda", "Pieniądze", "Ludzie", "Dla mistrza gry"]:
+        assert f'"{nazwa}"' in szablon
+    assert "<script src=" not in szablon.replace('<script src="{{ statyczne }}lukrum.js">', "")   # bez zewnętrznych bibliotek
+
+
+def test_okienka_prl_paragon_tablica_koperta():
+    assert "pp-paragon" in PULPIT_JS and "pp-par-suma" in PULPIT_JS and "koszty_decyzji" in PULPIT_JS and ".pp-par-zab" in PULPIT_CSS
+    assert "pp-pin" in PULPIT_JS or "pinezka" in PULPIT_JS
+    assert ".pp-pin" in PULPIT_CSS and ".pp-ogl" in PULPIT_CSS and "▲" in PULPIT_JS and "▼" in PULPIT_JS
+    assert "pp-koperta" in PULPIT_JS and "pp-stempel" in PULPIT_JS and "WYSŁANO" in PULPIT_JS and "ZAKLADKI.wyslij.decyzje(c)" in PULPIT_JS
+    assert "prefers-reduced-motion: no-preference" in PULPIT_CSS and ".pp-stempel.swiezy" in PULPIT_CSS
+    # stempel i paragon nie mają kolorów wpisanych na sztywno (tylko zmienne palet)
+    krok = _bez_komentarzy(PULPIT_CSS[PULPIT_CSS.index("Krok 4A"):])
+    assert not re.search(r"#[0-9a-fA-F]{3,8}", krok), "kolory w kroku 4A tylko ze zmiennych"
+
+
+def test_zeszyt_skorzany_przechylony_i_czcionka_caveat():
+    css = _bez_komentarzy(PULPIT_CSS)
+    assert re.search(r"\.pp-zeszyt \{[^}]*rotate: -(?:[6-9]|10)deg", css)   # schowany – przechylony
+    assert "rotate: 0deg" in css and "rotate .38s" in css                     # wysunięty – prosty, płynnie
+    assert "feTurbulence" in ZESZYT_JS and "vector-effect" in ZESZYT_JS and "var(--g-" in ZESZYT_JS
+    assert "'Caveat'" in PULPIT_CSS and '[data-paleta="wysoka"] .pp-zeszyt' in PULPIT_CSS
+    fonty = STATIC / "fonty"
+    assert (fonty / "caveat-400-700-latin.woff2").stat().st_size > 20_000
+    assert "font-family: 'Caveat'" in (fonty / "fonty.css").read_text(encoding="utf-8")
+    licencja = (fonty / "OFL.txt").read_text(encoding="utf-8")
+    assert "===== caveat" in licencja and "SIL Open Font License" in licencja[licencja.index("===== caveat"):]
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="brak Node.js")
+def test_skladnia_js_kroku_4a():
+    for sciezka in ["app.js", "zakladki/wspolne.js", "swiat/wnetrze.js", "swiat/swiat.js", "pulpit/pulpit.js", "pulpit/zeszyt.js"]:
+        with tempfile.TemporaryDirectory() as tmp:
+            kopia = Path(tmp) / "t.mjs"
+            kopia.write_text((STATIC / sciezka).read_text(encoding="utf-8"), encoding="utf-8")
+            wynik = subprocess.run(["node", "--check", str(kopia)], capture_output=True, text=True)
+            assert wynik.returncode == 0, f"{sciezka}: {wynik.stderr}"
