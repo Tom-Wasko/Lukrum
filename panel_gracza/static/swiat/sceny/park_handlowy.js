@@ -1,12 +1,12 @@
 // Scena wnętrza „park_handlowy” (wdrożenie z makiet: archiwum/fable-17.11/fable-wnetrza). Układ i opis: projekt.md, sceny/park_handlowy.md.
 // TYTUL: Park handlowy (pasaż: wyposażenie lokalu i „Meblościanka”) | Park handlowy
 // KOLEJNOSC: 60
-// Pasaż z dwiema witrynami: witryna = punkt, towar widać za szybą (krytyka P1). Stoliki i ogródek = wyposażenie, wystrój = dekor.
+// Pasaż z dwiema witrynami i drogowskazem do hali ze sprzętem (jedyne miejsce kupna sprzętu): witryna = punkt, towar widać za szybą (krytyka P1). Stoliki i ogródek = wyposażenie, wystrój = dekor.
 export default function (R) {
   const YP = 420;
   const fotel = (x, y, kol) => `<path class="k" d="M${x} ${y}v-50q0-14 14-14h52q14 0 14 14v50z" fill="${kol}"/><rect class="k" x="${x - 10}" y="${y - 34}" width="18" height="34" rx="6" fill="${kol}"/><rect class="k" x="${x + 72}" y="${y - 34}" width="18" height="34" rx="6" fill="${kol}"/>`;
   return {
-    id: "park_handlowy", tytul: "Park handlowy", adres: "Węglin Południowy", opis: "Pasaż handlowy z dwiema witrynami: po lewej wyposażenie lokalu (stolik z parasolem, telewizor, kiosk), po prawej sklep meblowy Meblościanka.",
+    id: "park_handlowy", tytul: "Park handlowy", adres: "Węglin Południowy (lokalizacja tymczasowa)", opis: "Pasaż handlowy z dwiema witrynami: po lewej wyposażenie lokalu (stolik z parasolem, telewizor, kiosk), po prawej sklep meblowy Meblościanka.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana2)", YP) + R.podloga("plytki", YP) + [200, 610, 1020].map((x) => R.swietlowka(x - 80, 10, 160)).join("");
       // lewa witryna: wyposażenie lokalu
@@ -35,7 +35,7 @@ export default function (R) {
         pola: [["Stoły i ławy z jasnego drewna", "3 100 zł"], ["Ogródek z parasolami", "6 000 zł", "utrzymanie 120 zł miesięcznie"], ["Ekran z transmisją meczów Motoru Lublin", "2 900 zł", "utrzymanie 120 zł miesięcznie"], ["Kiosk do zamówień", "9 000 zł", "utrzymanie 150 zł miesięcznie"], ["Toaleta dla gości", "5 500 zł", "utrzymanie 80 zł miesięcznie"]], decyzje: ["wyposazenie_kup", "wyposazenie_sprzedaj"], ekran: "wnetrze_wyposazenie", funkcja: "wyposazenie" } },
       { x: 654, y: 40, w: 532, h: 386, et: "Wystrój", teczka: { tytul: "Meblościanka: wystrój lokalu", okruszek: "witryna z prawej", zakladki: ["Ściany i podłoga", "Szyld i neon", "Dodatki", "Meble"], wstep: "Styl przyciąga określonych gości. Kupiony styl zostaje na zawsze, aktywny można zmieniać za darmo.",
         pola: [["Ściany i podłoga: styl ▾", "2 400 zł"], ["Szyld i neon: styl ▾", "1 800 zł"], ["PRL", "turyści, imprezowicze"], ["Nowoczesny", "biurowi, podróżni"]], decyzje: ["dekor_kup", "dekor_ustaw"], ekran: "dekor", funkcja: "wyposazenie" } },
-      { x: 568, y: 150, w: 84, h: 276, et: "Sprzęt", gdzie: "wewn", odsyla: { kto: "Drogowskaz w pasażu", tekst: "Rożny, frytownice i kasy są w hali obok, w hurtowni sprzętu gastronomicznego.", stan: "Kuchnia w lokalu: rożen ★★, frytownica ★", miejsce: "Hurtownia sprzętu" } },
+      { x: 568, y: 150, w: 84, h: 276, et: "Sprzęt", gdzie: "wewn", cichy: true, nazwa: "Hala ze sprzętem gastronomicznym", wejscie: "sprzet_gastro.html" },
     ],
     osoby: [{ x: 1130, stopy: 606, s: 0.85, imie: "Sprzedawca", tekst: "Goście jedzą też oczami. Styl dobiera się do tych, którzy mają przychodzić.", powitanie: true, strona: "lewo" }],
   };

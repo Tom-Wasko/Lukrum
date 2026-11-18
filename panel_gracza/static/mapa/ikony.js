@@ -140,7 +140,7 @@ const Z = {
 };
 
 // id budynku albo miejsca → pionek; potem rodzaj; na końcu zwykły dom (nieznane rzeczy też dostają budynek)
-const WG_ID = { kamienica_bankowa: "monety", biurowiec_zana: "kalkulator", sanepid: "lista", agencja_nieruchomosci: "klucz", agencja_pracy: "czapka",
+const WG_ID = { kamienica_bankowa: "monety", biurowiec_zana: "megafon", kamienica_rachmistrzow: "kalkulator", park_handlowy: "meble", sanepid: "lista", agencja_nieruchomosci: "klucz", agencja_pracy: "czapka",
   piekarnia: "chleb", makro: "paleta", selgros: "paleta", eurocash: "paleta", rozen: "szynka", sprzet_gastro: "frytki", market_budowlany: "meble",
   stolarnia: "pila", galeria: "kawa", drukarnia: "plakat", agencja_lajk: "smartfon", fala_koziolka: "radio", kozi_grod_events: "balony",
   akademia: "dyplom", uczelnia: "biret", ubezpieczyciel: "parasol", ogrod_botaniczny: "szklarnia", zalew: "woda",

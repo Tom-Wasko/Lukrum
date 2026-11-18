@@ -178,7 +178,7 @@ uklad:
     - '..............................'
   polowa_szerokosci: {ekspresowa: 0.45, aleja: 0.18, ulica: 0.14, deptak: 0.17, kolej: 0.25, rzeka: 0.25}
   pola:   # id lokalu albo budynku → [x, y] lewego górnego pola
-    biura: [17, 8]
+    kamienica_rachmistrzow: [17, 8]
     piekarnia: [19, 8]
     kozi_grod_events: [19, 9]
     ratusz: [18, 10]

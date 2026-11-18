@@ -21,7 +21,7 @@ export default function (R) {
     : `<path class="k bez" d="M1030 560l40-150M1110 560l-40-150M1070 410v150" stroke-width="5"/><path class="k3" d="M1010 360l130 60-14 22-130-60z" fill="var(--g-metal2)"/><circle class="k" cx="1000" cy="352" r="16" fill="var(--g-szklo)"/>`
       + `<path class="k" d="M500 286a22 30 0 0 1 44 0v14h-44z" fill="var(--g-szklo)" opacity=".6"/><path class="k1" d="M522 300v-22" stroke="var(--g-zielen2)" stroke-width="2.5"/><circle cx="522" cy="272" r="6" fill="var(--akcent)" class="k1"/>`;
   return {
-    id: "biuro_rachunkowe", tytul: `Biuro rachunkowe „${f.nazwa}”`, adres: "Kamienica rachmistrzów, ul. Zana", wroc: "Kamienica", wrocDo: "kamienica_rachmistrzow.html",
+    id: "biuro_rachunkowe", tytul: `Biuro rachunkowe „${f.nazwa}”`, adres: "Kamienica rachmistrzów, Krakowskie Przedmieście", wroc: "Kamienica", wrocDo: "kamienica_rachmistrzow.html",
     opis: `Gabinet biura ${f.nazwa}: biurko, regał z segregatorami, cennik pakietów na ścianie.`,
     rysuj: (R) => {
       const noc = id === "asteroida_328";

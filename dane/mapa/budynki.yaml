@@ -85,15 +85,15 @@ budynki:
     y: 9
     szer: 1
     gl: 1
-- id: biura
-  nazwa: Biura rachunkowe
+- id: kamienica_rachmistrzow
+  nazwa: Kamienica rachmistrzów
   rodzaj: biuro
   strefa: stare_miasto
-  miejsce: biurowce przy ul. Zana (Rury)
-  zespol: biurowiec_zana
-  opis: 'Cztery biura rachunkowe pod jednym dachem (J.K.Ś., Józef K., Scrooge i Asteroida 328)
-    i pokój z biurkiem dla tych, którzy księgują sami. Na klatce schodowej
-    pachnie tonerem i drożdżówkami.'
+  miejsce: Krakowskie Przedmieście (Śródmieście), w pobliżu pierzei bankowej
+  adres: Krakowskie Przedmieście 29
+  geo: {lat: 51.24818, lon: 22.55655}
+  opis: 'Cztery biura rachunkowe pod jednym dachem (J.K.Ś., Józef K., Scrooge i Asteroida 328) i klatka schodowa
+    pachnąca tonerem i drożdżówkami. Lokalizacja tymczasowa: adres poda autor.'
   zakladka: biuro
   mapa:
     x: 13
@@ -301,8 +301,7 @@ budynki:
   rodzaj: sklep
   strefa: felin
   miejsce: park handlowy na Węglinie (Węglin Południowy), obok sklepu meblowego
-  adres: al. Kraśnicka 152
-  geo: {lat: 51.22635, lon: 22.47342}
+  zespol: park_handlowy
   opis: Rożny, frytownice, lodówki i kasy fiskalne.
   zakladka: sprzet
   mapa:
@@ -315,8 +314,7 @@ budynki:
   rodzaj: sklep
   strefa: lsm_czuby
   miejsce: park handlowy na Węglinie (Węglin Południowy), sklep meblowy
-  adres: al. Kraśnicka 150
-  geo: {lat: 51.2265, lon: 22.47371}
+  zespol: park_handlowy
   opis: Meble, stoliki, telewizor z meczami i materiały do urządzenia sali – kupione wyposażenie jest od razu w lokalu.
   zakladka: wyposazenie
   mapa:
@@ -370,9 +368,8 @@ budynki:
   nazwa: Drukarnia „Papier Przyjmie”
   rodzaj: reklama
   strefa: akademickie
-  miejsce: Miasteczko Akademickie
-  adres: ul. Akademicka 15
-  geo: {lat: 51.24396, lon: 22.54238}
+  miejsce: biurowiec przy ul. Zana 39, piętro 1 (Rury)
+  zespol: biurowiec_zana
   opis: Ulotki za wycieraczki i plakaty na słupach (dane/mapa/reklama.yaml).
   zakladka: agencje
   mapa:
@@ -609,8 +606,14 @@ zespoly:
   adres: Krakowskie Przedmieście 37
   geo: {lat: 51.24825, lon: 22.55783}
 - id: biurowiec_zana
-  nazwa: Biurowiec przy Zana
-  opis: Biurowiec z holem i tablicą firm – biura rachunkowe oraz agencje reklamowe (internet, radio i billboardy, festyny i degustacje).
+  nazwa: Dom reklamy (biurowiec przy Zana)
+  opis: 'Biurowiec z windą: na parterze portiernia, kampanie i pokój z księgą firmy, wyżej piętra agencji reklamowych (drukarnia, radio i billboardy, festyny i degustacje, internet). Piętro wybiera się w windzie.'
   miejsce: biurowce przy ul. Zana (Rury)
   adres: ul. Tomasza Zana 39
   geo: {lat: 51.23807, lon: 22.52733}
+- id: park_handlowy
+  nazwa: Park handlowy
+  opis: Hala ze sprzętem gastronomicznym i sklep meblowy w jednym miejscu – tu kupuje się rożny, kasy, stoliki i wystrój lokalu. Lokalizacja tymczasowa (adres poda autor).
+  miejsce: obrzeża Lublina, park handlowy na Węglinie (Węglin Południowy)
+  adres: al. Kraśnicka 150 (adres tymczasowy)
+  geo: {lat: 51.2265, lon: 22.47371}

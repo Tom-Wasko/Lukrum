@@ -366,7 +366,7 @@ const PRZEPISY = {
       + luk(T.L, 0.2, 28, 35, 0.12, "#5b6b7a") + dachNamiotowy(g, tx - 0.03, ty - 0.03, 0.46, 0.46, 46, 12, MIEDZ);
     return html + maszt(g, tx + 0.2, ty + 0.2, 58, 8, true);
   },
-  biura: (g, x, y, s, l) => kamienica(g, x, y, s, l, { h: 30, kolor: FASADY[0], szyld: ["BIURO RACHUNKOWE", "#2f5d62", "#fff"] }),
+  kamienica_rachmistrzow: (g, x, y, s, l) => kamienica(g, x, y, s, l, { h: 30, kolor: FASADY[0], szyld: ["BIURO RACHUNKOWE", "#2f5d62", "#fff"] }),
   poczta(g, x, y, s, l) {   // Poczta Główna przy Krakowskim Przedmieściu
     const html = kamienica(g, x, y, s, l, { h: 28, kolor: "#efe3c8", dach: "dwuspadowy", szyld: ["POCZTA", "#f2b705", "#c8102e"] });
     const [a, b] = g.p(x + 0.25, y + l + 0.08);
