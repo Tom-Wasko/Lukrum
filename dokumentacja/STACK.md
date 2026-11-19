@@ -60,6 +60,9 @@ przeglądarka ── HTML (szablony) ──▶ panel_gracza / panel_mg / konta
 ### Dane gry (`dane/`)
 - Pliki główne: `zalozenia.yaml` (każdy parametr ma postać `{wartosc, pewnosc, zrodlo}`), `uslugi.yaml` (dania),
   `zasoby.yaml`, `sprzet.yaml`, `dostawcy.yaml`, `kandydaci.yaml`, `katalog.yaml`, `boty.yaml` i `podatki_2026.yaml`.
+- `zeszyt.yaml`: treść zeszytu wujka (listy, zadania tygodni, strony „Gdzie co kupić”). `api/zeszyt.py` składa z niej
+  `v.zeszyt`, warunki odhaczenia liczy `panel_gracza/static/pulpit/zeszyt-warunki.js`, a wizyty we wnętrzach zapisuje
+  `api/wizyty.py` (`Runda.zeszyt`).
 - Katalogi: `mapa/` (strefy, budynki, lokale, popyt, menu, banki, biura, Harpagon, promocje, reklama),
   `kalendarz/` (kalendarz miejski Lublina) i `zdarzenia/` (eventy w parkach, losowe, handel, kasyno, urząd…).
 - **Żadnych liczb gry w kodzie silnika.** Pilnuje tego test `test_w_kodzie_silnika_nie_ma_liczb_gry`.

@@ -6,7 +6,7 @@
 // i przewracaniem kartki (rotateY z cieniem; tylko transform i opacity). Bez animacji przy prefers-reduced-motion.
 // Kolory tylko ze zmiennych palet (wygląd: pulpit.css).
 import { esc } from "../zakladki/wspolne.js";
-import { BUDYNEK_KROKU, listTygodnia, planTygodnia } from "../zakladki/wujek.js";
+import { budynekZadania, listTygodnia, planTygodnia } from "../zakladki/wujek.js";
 import ZAKLADKI, { MENU } from "../zakladki/index.js";
 import { MIEJSCA } from "../swiat/swiat.js";
 
@@ -55,7 +55,7 @@ export function rysujMalyZeszyt(c, btn) {
       <span>${esc(k.co)}${k.ok ? '<i class="sr"> (zrobione)</i>' : k.teraz ? '<i class="sr"> (następny krok)</i>' : ""}</span></li>`).join("");
   btn.innerHTML = `<span class="pp-okladka" aria-hidden="true">${skora("sk-m")}</span><span class="pp-kartka">
     <span class="pp-zg">Zeszyt wujka · ${plan.zrobione} z ${plan.lista.length}</span>
-    <span class="pp-krok"><small>${n ? esc(n.gdzie) : "Gotowe"}</small>${n ? esc(n.co) : "Wszystko odhaczone"}</span>
+    <span class="pp-krok"><small>${n ? esc(n.gdzie) : "Gotowe"}</small>${n ? esc(n.kartka || n.co) : "Wszystko odhaczone"}</span>
     <ul class="pp-lista">${poz}</ul></span>`;
 }
 
@@ -71,11 +71,12 @@ function stronaLista(c) {
   try { plan = planTygodnia(v); } catch (e) { console.error(e); }
   const kroki = (plan?.lista || []).map((k, i) => `<li class="${k.ok ? "ok" : k.teraz ? "teraz" : ""}"><button type="button" class="pz-wiersz" data-akcja="pp-wejdz" data-k="${esc(k.klucz)}">
     <span class="pz-nr" aria-hidden="true">${k.ok ? "✓" : k.teraz ? "▶" : i + 1}</span><span><small>${esc(k.gdzie)}</small><b>${esc(k.co)}</b> <i>${esc(k.opis)}</i></span>
-    <span class="pz-stan">${k.ok ? "zrobione" : k.teraz ? "teraz" : ""}</span></button>${naMapie(BUDYNEK_KROKU[k.klucz])}</li>`).join("");
-  return `<h2>List od wujka · tydzień ${v.runda}</h2>
-    ${list ? `<p class="pz-list"><b>${esc(list[0])}</b> ${esc(list[1])} <span class="pz-podpis">– Wasz wujek</span></p>` : ""}
-    <h3>Do zrobienia w tym tygodniu${plan ? ` <small>${plan.zrobione} z ${plan.lista.length}</small>` : ""}</h3>
-    <p class="pz-opis">Kliknięcie kroku prowadzi od razu do właściwego miejsca; „⌖ na mapie” pokazuje budynek na mapie.</p><ol class="pz-kroki">${kroki}</ol>`;
+    <span class="pz-stan">${k.ok ? "zrobione" : k.teraz ? "teraz" : k.szare ? "robi to gra" : ""}</span></button>${naMapie(budynekZadania(v, k))}</li>`).join("");
+  return `<h2>List od wujka · tydzień ${v.zeszyt?.tydzien ?? v.runda}</h2>
+    ${list ? `<p class="pz-list"><b>${esc(list.tytul)}</b> ${esc(list.tresc)} <span class="pz-podpis">– Wasz wujek</span></p>` : ""}
+    <h3>Do zrobienia w tym tygodniu${plan ? ` <small>${plan.zrobione} z ${plan.razem}</small>` : ""}</h3>
+    <p class="pz-opis">Kliknięcie kroku prowadzi od razu do właściwego miejsca; „⌖ na mapie” pokazuje budynek na mapie.</p><ol class="pz-kroki">${kroki}</ol>
+    ${v.zeszyt?.dopisek ? `<p class="pz-opis"><i>${esc(v.zeszyt.dopisek)}</i></p>` : ""}`;
 }
 
 // Rozpiska: grupy z dawnego menu (budynki na mapie) i to, co się w nich załatwia (pełne tytuły ekranów); kebab – punkty sceny
@@ -101,20 +102,17 @@ function stronaRozpiska(c) {
     <h3>Poza budynkami</h3><ul class="pz-punkty">${poza.map(([n, o]) => `<li><b>${n}</b> – ${o}</li>`).join("")}</ul>`;
 }
 
-// co kupić → gdzie: nazwa miejsca, żetony na mapie, ekran i tydzień, od którego jest dostępny (z widoku gry)
-const ZAKUPY = [["Składniki do kuchni: mięso, bułki, warzywa", "Hurtownie (Makro, Selgros, Biedronka…)", ["makro", "selgros", "eurocash", "auchan", "biedronka", "lidl", "stokrotka"], "zaop_dostawy"],
-  ["Rożen, ladę i kasę fiskalną (sprzęt kuchenny)", "Hurtownia sprzętu gastronomicznego", ["sprzet_gastro"], "wnetrze_sprzet"],
-  ["Stoliki, klimatyzację, telewizor i wystrój sali", "Park handlowy, Stolarnia, Galeria", ["market_budowlany", "stolarnia", "galeria"], "wnetrze_wyposazenie"],
-  ["Ludzi do pracy (zatrudnienie)", "Agencja pracy „Ręce do Rożna”", ["agencja_pracy"], "rynek_pracy"],
-  ["Szkolenia dla zespołu", "Lubelska Szkoła Kebabu", ["akademia"], "szkolenia"],
-  ["Ulotki, radio i reklamę w internecie", "Biurowiec przy Zana", ["agencja_lajk", "fala_koziolka", "drukarnia"], "agencje"],
-  ["Ubezpieczenie lokalu", "TUW „Pod Koziołkiem”", ["ubezpieczyciel"], "ubezpieczenia"], ["Konto, kredyt, lokatę albo leasing", "Pierzeja bankowa", ["kamienica_bankowa"], "bank"]];
+// Gdzie co kupić: strony z v.zeszyt.gdzie_kupic (dane/zeszyt.yaml; liczby z bieżących danych gry wstawia serwer)
+const zl = (n) => Number(n).toLocaleString("pl-PL");
+const JAKOSCI = ["★", "★★", "★★★"];
+function tabelaSprzetu(w) {
+  const kom = (o, q) => (o?.[q] == null ? "–" : `${zl(o[q])} zł`);
+  return `<table class="pz-tabela" style="grid-column: 1 / -1"><caption>Sprzęt: cena, utrzymanie miesięcznie i koszt całego sezonu</caption><thead><tr><th>Sprzęt</th>${JAKOSCI.map((j) => `<th>${j} cena</th><th>${j} serwis/mies.</th><th>${j} sezon</th>`).join("")}</tr></thead>
+    <tbody>${w.map((x) => `<tr><th scope="row">${esc(x.nazwa)}</th>${[1, 2, 3].map((q) => `<td>${kom(x.ceny, q)}</td><td>${kom(x.utrzymanie, q)}</td><td>${kom(x.sezon, q)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
 function stronaKupic(c) {
-  const wiersze = ZAKUPY.filter(([, , , cel]) => c.jestZakladka(cel) && !c.wylaczona(cel) && !c.ukryta(cel)).map(([co, miejsce, ids, cel]) => {
-    const od = !c.zakryta(cel) && !c.dostepna(cel) ? c.odRundy(cel) : null;
-    const stan = c.zakryta(cel) ? "robi to gra" : od ? `od tygodnia ${od}` : !c.dostepna(cel) ? "jeszcze zamknięte" : "";
-    return `<li class="${stan ? "szare" : ""}"><b>${esc(co)}</b><span class="pz-strzalka" aria-hidden="true">→</span><span>${naMapie(ids, esc(miejsce), "pz-miejsce")}${stan ? `<i> (${esc(stan)})</i>` : ""}</span></li>`;
-  }).join("");
+  const lista = c.v.zeszyt?.gdzie_kupic || [];
+  const wiersze = lista.map((s) => `<li><b>${esc(s.tytul)}</b><span class="pz-strzalka" aria-hidden="true">→</span><span>${naMapie(s.zeton, esc(s.gdzie), "pz-miejsce")}<br>${esc(s.tekst)}</span>${s.tabela ? tabelaSprzetu(s.tabela) : ""}</li>`).join("");
   return `<h2>Gdzie co kupić</h2><p class="pz-opis">Wujek podpowiada, do którego budynku iść po co. Nazwa miejsca pokazuje je na mapie. Zakupy tygodnia widać pod ikoną koszyka na pasku.</p>
     <ul class="pz-kupic">${wiersze}</ul>`;
 }

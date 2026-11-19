@@ -4,7 +4,7 @@
 //  - wejdzDoKroku: krok z listy wujka → wnętrze właściwego budynku (z teczką ekranu, gdy krok nie ma budynku na mapie),
 //  - historia i „← Wróć”: powrót do poprzedniego widoku albo mapy (przycisk w stałym miejscu i Esc).
 import { aktualneMiejsce, aktualneQ, idzDoMiejsca, otworzBudynek } from "../swiat/swiat.js";
-import { BUDYNEK_KROKU } from "../zakladki/wujek.js";
+import { zadanieZeszytu } from "../zakladki/wujek.js";
 import { nowaMapa } from "../mapa/lublin.js";
 
 let puls = null, pulsCzas = 0;
@@ -31,25 +31,25 @@ export function pokazNaMapie(c, id, { dzielnica = null } = {}) {
   setTimeout(() => szukaj(12), 60);
 }
 
-// kroki z listy wujka bez własnego budynku na mapie: wnętrze, w którym się je robi, i od razu teczka z ekranem
-// (decyzja 16.11: menu i sprzedaż w kebabie, stanowiska w stolarni Parku handlowego, zatrudnianie w Miasteczku)
+// zadania zeszytu, których ekran jest teczką wnętrza (żeton → scena): własny lokal to kebab (menu, ceny, zespół, magazyn),
+// stanowiska są w stolarni Parku handlowego (decyzja 16.11), a zatrudnianie w agencji pracy
 const BANKI = [["kmicic", "kmicic"], ["wokulski", "wokulski"], ["ziemia", "ziemia"], ["rzecki", "rzecki"], ["soplicowo", "soplicowo"], ["solaris", "solaris"]];
-const WNETRZE_KROKU = { oferta: "kebab", sprzedaz: "kebab", stanowiska: "stolarnia", zatrudnienie: "agencja_pracy" };
+const WNETRZE_KROKU = { lokal: "kebab", stolarnia: "stolarnia", agencja_pracy: "agencja_pracy" };
 
-/** Krok z listy wujka: od razu wnętrze budynku (dostawcy → konkretna hurtownia) albo wnętrze z teczką ekranu. Zwraca true, gdy obsłużony. */
-export function wejdzDoKroku(c, klucz) {
-  if (klucz === "wyslij") return false;   // okno wysyłki obsługuje pulpit.js
-  if (WNETRZE_KROKU[klucz]) {
-    if (idzDoMiejsca(c, WNETRZE_KROKU[klucz])) c.teczka(klucz); else c.idz(klucz);
+/** Zadanie z zeszytu (id z v.zeszyt.zadania): od razu wnętrze budynku z teczką ekranu albo sam ekran. Zwraca true, gdy obsłużone. */
+export function wejdzDoKroku(c, id) {
+  const z = zadanieZeszytu(c.v, id);
+  if (!z || z.punkt === "wyslij") return false;   // okno wysyłki obsługuje pulpit.js
+  if (WNETRZE_KROKU[z.zeton]) {
+    if (idzDoMiejsca(c, WNETRZE_KROKU[z.zeton])) c.teczka(z.punkt); else c.idz(z.punkt);
     return true;
   }
-  if (klucz === "bank") {   // drużyna ma już bank: od razu jego sala operacyjna, bez wyboru banku w pierzei
-    const nazwa = String(c.v.stan?.bank || "").toLowerCase(), id = BANKI.find(([k]) => nazwa.includes(k))?.[1];
-    if (id && idzDoMiejsca(c, "bank", `b=${id}`)) return true;
+  if (z.punkt === "bank") {   // drużyna ma już bank: od razu jego sala operacyjna, bez wyboru banku w pierzei
+    const nazwa = String(c.v.stan?.bank || "").toLowerCase(), b = BANKI.find(([k]) => nazwa.includes(k))?.[1];
+    if (b && idzDoMiejsca(c, "bank", `b=${b}`)) return true;
   }
-  const b = BUDYNEK_KROKU[klucz];
-  if (b && otworzBudynek(c, b)) return true;
-  c.idz(klucz);
+  if (z.zeton === "bazar" ? idzDoMiejsca(c, "bazar") : otworzBudynek(c, z.zeton)) return true;   // bazar nie ma żetonu na mapie (czeka na majstra)
+  c.idz(z.punkt);
   return true;
 }
 

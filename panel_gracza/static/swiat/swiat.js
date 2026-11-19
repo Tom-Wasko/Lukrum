@@ -248,7 +248,18 @@ export function idzDoMiejsca(c, id, q = "") {
   if (!ustawMiejsce(id, q)) return false;
   c.idz("miejsce");
   window.scrollTo({ top: 0 });
+  zapiszWizyte(c, id);
   return true;
+}
+
+// Zeszyt wujka odhacza „idźcie do …” po wizycie zapisanej przez serwer (api/wizyty.py). Zapis w tle: błąd sieci nie przeszkadza w grze.
+async function zapiszWizyte(c, id) {
+  try {
+    if (c.v?.tylko_odczyt || !c.v?.zeszyt || c.v.zeszyt.wizyty.includes(id)) return;
+    c.v.zeszyt.wizyty = [...c.v.zeszyt.wizyty, id];   // od razu w widoku, serwer potwierdzi listę
+    const o = await c.api(`/api/gry/${GRA}/zeszyt/${encodeURIComponent(FIRMA)}/wizyta`, { method: "POST", body: JSON.stringify({ miejsce: id }) });
+    if (o?.wizyty && c.v?.zeszyt) c.v.zeszyt.wizyty = o.wizyty;
+  } catch (e) { console.warn("zeszyt: nie zapisano wizyty", e); }
 }
 
 /** Mapa prosi o wnętrze budynku (lukrum.otworzWnetrze): własny lokal, miejsce albo ekran. Zwraca true, gdy obsłużone. */
