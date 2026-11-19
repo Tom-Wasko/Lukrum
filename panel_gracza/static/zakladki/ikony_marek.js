@@ -90,7 +90,6 @@ const WLASNE = {
   "Ziemia Obiecana": BANK,
   "Oszczędności Rzeckiego": BANK,
   Soplicowo: BANK,
-  Solaris: BANK,
   IKEA: DOM,
   OBI: MLOTEK,
   Castorama: MLOTEK,

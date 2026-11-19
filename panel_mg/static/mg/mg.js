@@ -146,6 +146,10 @@ function decyzje() {
     // poprawki 2 (sprawa 6): headhunter – oferty dla pracowników innych drużyn i kontroferty
     ["Podkupywanie pracowników innych drużyn", `${gra.podkupywanie !== false ? "dozwolone" : "wyłączone"}${gra.zakonczona ? ""
       : ` <a data-akcja="podkupywanie">${gra.podkupywanie !== false ? "wyłącz" : "pozwól"}</a>`}`],
+    // klub „Nocna 13” (decyzja autora 18.11.2026): mistrz gry może go zablokować w tej grze
+    ...(gra.klub ? [["Klub „Nocna 13”", !gra.klub.serwer ? "wyłączony na serwerze (LUKRUM_KASYNO=0)"
+      : `${gra.klub.wlaczone ? "otwarty" : "zablokowany"}${gra.zakonczona ? ""
+        : ` <a data-akcja="klub">${gra.klub.wlaczone ? "zablokuj" : "otwórz"}</a>`}`]] : []),
     // TYMCZASOWE, usunąć przed oficjalną wersją: włączanie i wyłączanie form zatrudnienia (umowa o pracę zawsze)
     ...(gra.formy_wszystkie ? [["Formy zatrudnienia (test)", Object.entries(gra.formy_wszystkie).map(([u, n]) => {
       const wl = gra.formy_zatrudnienia.includes(u);
@@ -411,6 +415,12 @@ async function wykonaj(akcja, el) {
     const wlacz = !S.p.gra.podpowiedzi;
     await api(`${URL_GRY}/prowadzenie`, "POST", { podpowiedzi: wlacz });
     toast(wlacz ? "Drużyny widzą na Planie tygodnia 3 rzeczy do sprawdzenia (pierwsze 3 rundy)." : "Podpowiedzi wyłączone.");
+    return wczytaj();
+  }
+  if (akcja === "klub") {
+    const otworz = !S.p.gra.klub.wlaczone;
+    await api(`${URL_GRY}/prowadzenie`, "POST", { klub: otworz });
+    toast(otworz ? "Klub „Nocna 13” jest otwarty dla drużyn." : "Klub zablokowany – drużyny go nie widzą, zakłady z tej rundy przepadły.");
     return wczytaj();
   }
   if (akcja === "podkupywanie") {

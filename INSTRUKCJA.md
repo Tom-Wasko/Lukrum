@@ -221,10 +221,14 @@ powodzenia.
 - Cena jest **brutto**. Za droga – klienci idą obok, za tania – sprzedaż ze stratą.
 - Aby danie trafiło do klienta, potrzebne są **cztery rzeczy naraz**: sprzęt na stanowisku, pracownik (kucharz gotuje,
   kasjer sprzedaje), składniki w magazynie i cena. Sanepid musi też **odebrać lokal** przed pierwszą sprzedażą (Urzędy)
-  – bez porządnego sprzątania odbioru nie będzie.
+  – bez porządnego sprzątania odbioru nie będzie. Rezygnację ze sprzątania gra każe potwierdzić, bo kontrola sanepidu
+  kończy się wtedy prawie na pewno mandatem.
+- **Sprzęt kasy** ma znaczenie: kasa fiskalna, lada i tablica menu ★★★ przyspieszają obsługę (jeden kasjer sprzeda
+  więcej w szczycie), a ★ ją spowalniają.
 
 ## 7. Dostawcy i świeżość
 
+- Dostawcy i sprzęt w Parku handlowym są dostępni **od pierwszego tygodnia**.
 - **Hurtownie** dowożą w swoje dni (za darmo od progu zamówienia), **piekarnia** – codziennie, **producent mięsa** ma
   minimalne zamówienie, a w **dyskoncie** kupuje się samemu: taniej przy małych ilościach, ale kosztuje to czas
   właściciela.
@@ -232,7 +236,8 @@ powodzenia.
 - Składniki mają **termin przydatności**: bułka wytrzyma dwa dni, mięso cztery, mrożonki – miesiące. Do dań idą
   najpierw partie z najkrótszym terminem, a po terminie towar wieczorem ląduje w koszu.
 - Chłodnia ma ograniczoną pojemność. Nadmiar jedzie do wynajętej chłodni (płaci się za litr), a dużo towaru w wynajmie
-  i jedzenie w koszu przyciągają **sanepid** (kontrole od tygodnia 4). Mandat obniża też popyt na kilka tygodni.
+  i jedzenie w koszu przyciągają **sanepid** (kontrole od tygodnia 4). Szafa chłodnicza ★★★ trzyma towar o dzień dłużej
+  niż słabsza (liczy się najsłabsza szafa w firmie). Mandat obniża też popyt na kilka tygodni.
 - Każdy lokal zamawia **do siebie**. Progi darmowej dostawy i minimum producenta mięsa liczą się razem dla całej firmy.
   Towar można **przewieźć** do innego własnego lokalu (od tygodnia 2): kurs kosztuje 30 zł i 1 godzinę właściciela,
   a partia traci 1 dzień terminu. Pracowników przenosić się nie da.
@@ -299,7 +304,8 @@ powodzenia.
   50% jest niebieski (mało pracy), od 50 do 85% zielony, powyżej 85% pomarańczowy (przeciążenie – spada zadowolenie,
   a przy 100% klienci odchodzą bez kebaba).
 - **Szkolenia** (8 rodzajów, trzy firmy szkoleniowe różnej ceny) obejmują całą załogę. Cenę płaci się raz, a szkolenie
-  działa przez 4 tygodnie. Szkolenia działające naraz się sumują.
+  działa przez 4 tygodnie. Lepiej oceniana firma szkoleniowa działa mocniej: najlepsza daje pełny efekt, słabsze – mniejszy,
+  w proporcji do swojej oceny. Szkolenia działające naraz się sumują.
 - **Niezadowoleni odchodzą.** Kto ma zadowolenie poniżej progu, dostaje ostrzeżenie na liście błędów, a tydzień
   później może złożyć wypowiedzenie. Ratuje podwyżka, lepszy sprzęt albo odciążenie.
 - **Każdy ma charakter** (np. lojalność, materializm, optymizm), a w kółku „i” widać, jak wpływa on na zadowolenie.
@@ -323,15 +329,15 @@ stanowisku (najpierw kasa, potem kuchnia). Licznik jest w Moim kebabie (biurko).
 
 ### Konto, bank i debet
 
-W **Kamienicy bankowej** działa sześć banków o różnych specjalizacjach: Kmicic (szybki, drogi kredyt na start),
-Wokulski i S-ka (kredyt inwestycyjny), Ziemia Obiecana (leasing sprzętu), Oszczędności Rzeckiego (najlepsze lokaty),
-Soplicowo (najtańsze konto i terminal) i Solaris (największy debet). Konto firmowe jest w jednym banku i tylko tam
+W **Kamienicy bankowej** działa pięć banków o różnych specjalizacjach: Kmicic (szybki, drogi kredyt na start),
+Wokulski i S-ka (kredyt inwestycyjny), Ziemia Obiecana (leasing sprzętu), Oszczędności Rzeckiego (najlepsze lokaty)
+i Soplicowo (najtańsze konto i terminal, a do tego największy debet). Konto firmowe jest w jednym banku i tylko tam
 można brać lokaty, kredyty i leasing, więc wybór banku to wybór oferty. Kredyty obrotowe wymagają kilku tygodni
 historii firmy. Kredyt inwestycyjny spłaca się w ratach, a zabezpieczeniem może być kupiony lokal albo budynek (hipoteka) albo sprzęt (zastaw);
 gdy raty zalegają kilka tygodni, bank zabiera zastaw.
 
 **Debet** to zgoda banku na to, żeby konto zeszło poniżej zera. Nie działa sam – włącza się go w banku konta, a limit
-zależy od banku (od 5 000 zł w Oszczędnościach Rzeckiego do 40 000 zł w Solarisie). Liczy się saldo na **koniec tygodnia**:
+zależy od banku (od 5 000 zł w Oszczędnościach Rzeckiego do 20 000 zł w Soplicowie). Liczy się saldo na **koniec tygodnia**:
 chwilowy minus w trakcie tygodnia nic nie kosztuje. Tydzień zakończony na minusie za zgodą to opłata i odsetki (nie
 wyższe niż odsetki maksymalne, art. 359 § 2¹ KC). Bez zgody (albo ponad limit) jest drożej: stała opłata, odsetki karne
 (art. 481 § 2¹ KC) i **alarm** – w następnym tygodniu bank blokuje inwestycje, nowe kredyty, leasing i lokaty. Alarm to
@@ -587,7 +593,6 @@ polskiego). Dla prowadzących:
 | Józio (bywalec) | „Ferdydurke” | Witold Gombrowicz |
 | bank Ziemia Obiecana | „Ziemia obiecana” | Władysław Reymont |
 | bank Soplicowo | „Pan Tadeusz” | Adam Mickiewicz |
-| bank Solaris | „Solaris” | Stanisław Lem |
 | biuro Józef K. | „Proces” | Franz Kafka |
 | biuro Scrooge | „Opowieść wigilijna” | Charles Dickens |
 | biuro Asteroida 328 | „Mały Książę” | Antoine de Saint-Exupéry |

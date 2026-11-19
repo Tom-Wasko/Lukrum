@@ -150,7 +150,7 @@ strategie:
   zrownowazony:
     nazwa: Kebab u Zrównoważonego
     min_kuchnia: 2               # planujący bot (poziom średni i trudny): najmniej miejsc w kuchni lokalu
-    cena: 0.92
+    cena: 1.05   # decyzja autora 18.11.2026 (dziura D2: cena +20% od bota dawała przewagę); było 0,92
     jakosc: 2
     uslugi: 6
     dania_specjalne: [kebab_specjalny_1]   # sprawa 4 (Poprawki 3): dania specjalne strefy – dokłada po odblokowaniu, ponad uslugi

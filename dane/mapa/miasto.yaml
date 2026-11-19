@@ -201,7 +201,6 @@ uklad:
     bank_3: [13, 11]
     bank_4: [11, 12]
     bank_5: [12, 12]
-    bank_6: [13, 12]
     ubezpieczyciel: [14, 12]
     centrum_1: [15, 9]
     centrum_2: [16, 9]

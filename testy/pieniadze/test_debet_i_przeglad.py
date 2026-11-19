@@ -57,7 +57,7 @@ def test_koniec_tygodnia_na_minusie_za_zgoda_i_bez_zgody():
     d = dane_domyslne()
     u, wyniki = bk.ustawienia(d), {}
     for zgoda in (True, False):
-        f = Firma(nazwa="A", gotowka=0, bank="Soplicowo", debet_wlaczony=zgoda)
+        f = Firma(nazwa="A", gotowka=0, bank="Kmicic", debet_wlaczony=zgoda)   # Soplicowo: duży debet, wyższa opłata
         f.gotowka = -2000.0
         ks, rach = Ksiega(), Rachunek()
         wyrownaj_gotowke(f, rach)

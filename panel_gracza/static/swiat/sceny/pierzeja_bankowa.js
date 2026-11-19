@@ -3,13 +3,13 @@
 // KOLEJNOSC: 10
 // Fasada: pięć wąskich kamienic przy Krakowskim Przedmieściu, każda to jeden bank. Klik w kamienicę = wejście do banku.
 export default function (R) {
-  // dane banków: dane/mapa/banki.yaml (nazwa, specjalizacja, konto, lokaty, debet, kredyty). Solaris pominięty (5 zamiast 6 – pytanie do szefa).
+  // dane banków: dane/mapa/banki.yaml (nazwa, specjalizacja, konto, lokaty, debet, kredyty). Pięć banków (decyzja autora 18.11.2026: Solaris usunięty, debet ma Soplicowo).
   const BANKI = [
     { id: "kmicic", nazwa: "Kmicic", haslo: "kredyt na start", znak: "K", mur: "color-mix(in srgb, var(--g-rudy) 55%, var(--g-sciana))", marka: "var(--akcent)", tk: "var(--papier)", szyld: "wstega", szczyt: "schodki", liczba: "kredyt 14,9%" },
     { id: "wokulski", nazwa: "Wokulski i S-ka", haslo: "kredyt inwestycyjny", znak: "W", mur: "var(--g-biel)", marka: "var(--g-tablica)", szyld: "prostokat", szczyt: "attyka", liczba: "kredyt 6,9%" },
     { id: "ziemia", nazwa: "Ziemia Obiecana", haslo: "leasing sprzętu", znak: "Z", mur: "color-mix(in srgb, var(--g-mieso) 50%, var(--g-sciana))", marka: "var(--g-drewno)", szyld: "luk", szczyt: "pila", liczba: "leasing 7,5%" },
     { id: "rzecki", nazwa: "Oszczędności Rzeckiego", haslo: "najlepsze lokaty", znak: "R", mur: "var(--g-sciana2)", marka: "var(--akcent-2)", tk: "var(--papier)", szyld: "owal", szczyt: "trojkat", liczba: "lokata 4,2%" },
-    { id: "soplicowo", nazwa: "Soplicowo", haslo: "tanie konto", znak: "S", mur: "color-mix(in srgb, var(--g-zielen) 35%, var(--g-biel))", marka: "var(--g-zielen2)", szyld: "prostokat", szczyt: "dworek", liczba: "konto 0 zł" },
+    { id: "soplicowo", nazwa: "Soplicowo", haslo: "tanie konto, debet", znak: "S", mur: "color-mix(in srgb, var(--g-zielen) 35%, var(--g-biel))", marka: "var(--g-zielen2)", szyld: "prostokat", szczyt: "dworek", liczba: "konto 0 zł" },
   ];
   const X0 = 22, SZ = 235.2, ZIEMIA = 548;
   const top = [96, 62, 118, 84, 132];
@@ -55,7 +55,7 @@ export default function (R) {
     punkty: () => BANKI.map((b, i) => ({ x: X0 + i * SZ + 6, y: top[i] - 20, w: SZ - 12, h: ZIEMIA - top[i] + 20, et: "Wejdź", nazwa: `Bank „${b.nazwa}”`, cichy: true, gdzie: "wewn", wejscie: `bank.html?b=${b.id}` }))
       .concat([{ x: 548, y: ZIEMIA - 54, w: 124, h: 114, et: "Porównaj banki", gdzie: "srodek", teczka: { tytul: "Spis banków", okruszek: "słup ogłoszeniowy", wstep: "Jedna liczba na bank: to, czym się wyróżnia. Lokaty, kredyty i leasing bierze się tylko w banku, w którym firma ma konto.",
         pola: [["Kmicic: kredyt na start, bez historii firmy", "14,9%", "do 60 000 zł, konto 35 zł miesięcznie"], ["Wokulski i S-ka: kredyt inwestycyjny pod zastaw", "6,9%", "do 400 000 zł, konto 25 zł"], ["Ziemia Obiecana: leasing sprzętu ★ Twoje konto", "7,5%", "wpłata własna 5%, konto 25 zł"],
-          ["Oszczędności Rzeckiego: lokata na 13 tygodni", "4,2%", "lokata tygodniowa 2,0%, konto 20 zł"], ["Soplicowo: konto firmowe i terminal", "0 zł", "prowizja od kart 0,79%"]], ekran: "bank (porównanie)", decyzje: ["bank"] } }]),
+          ["Oszczędności Rzeckiego: lokata na 13 tygodni", "4,2%", "lokata tygodniowa 2,0%, konto 20 zł"], ["Soplicowo: konto firmowe i terminal", "0 zł", "prowizja od kart 0,79%, debet do 20 000 zł"]], ekran: "bank (porównanie)", decyzje: ["bank"] } }]),
     osoby: [{ x: 918, stopy: 606, s: 0.62, imie: "Pan Ignacy", tekst: "Pieniądz lubi porządek. Proszę najpierw porównać, potem wchodzić." }],
   };
 }

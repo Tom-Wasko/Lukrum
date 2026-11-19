@@ -33,7 +33,7 @@ export function pokazNaMapie(c, id, { dzielnica = null } = {}) {
 
 // zadania zeszytu, których ekran jest teczką wnętrza (żeton → scena): własny lokal to kebab (menu, ceny, zespół, magazyn),
 // stanowiska są w stolarni Parku handlowego (decyzja 16.11), a zatrudnianie w agencji pracy
-const BANKI = [["kmicic", "kmicic"], ["wokulski", "wokulski"], ["ziemia", "ziemia"], ["rzecki", "rzecki"], ["soplicowo", "soplicowo"], ["solaris", "solaris"]];
+const BANKI = [["kmicic", "kmicic"], ["wokulski", "wokulski"], ["ziemia", "ziemia"], ["rzecki", "rzecki"], ["soplicowo", "soplicowo"]];
 const WNETRZE_KROKU = { lokal: "kebab", stolarnia: "stolarnia", agencja_pracy: "agencja_pracy" };
 
 /** Zadanie z zeszytu (id z v.zeszyt.zadania): od razu wnętrze budynku z teczką ekranu albo sam ekran. Zwraca true, gdy obsłużone. */

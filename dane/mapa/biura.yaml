@@ -75,10 +75,12 @@ biura:
     za liczbę dokumentów. Drogo, ale spokojnie.'
   cecha: dokładne i drogie, z OC, kadry do sześciu osób w cenie, bez limitu dokumentów (nigdy dopłaty za dokumenty)
   bez_limitu: true   # decyzja autora 14.11.2026: przewaga nad J.K.Ś. – pakiety bez dopłat za dokumenty ponad limit
+  # balans-katalogi (decyzja autora 18.11.2026): o ok. 20% taniej (było 590 / 990 / 1500), żeby bez limitu, OC i kadry
+  # do 6 osób opłacały się wobec J.K.Ś. (M 690) przy większej liczbie dokumentów
   pakiety:
-    S: {cena: 590, dokumenty: 60, doplata: 0.0}
-    M: {cena: 990, dokumenty: 120, doplata: 0.0}
-    L: {cena: 1500, dokumenty: 200, doplata: 0.0}
+    S: {cena: 470, dokumenty: 60, doplata: 0.0}
+    M: {cena: 790, dokumenty: 120, doplata: 0.0}
+    L: {cena: 1190, dokumenty: 200, doplata: 0.0}
   kadry: {w_cenie: 6, etat: 36.9, zlecenie: 18.45}
   ryzyko_bledu: 0
   oc: true

@@ -105,7 +105,8 @@ i po co istnieją?
 - **Uproszczenia gry**, o których warto powiedzieć: zlecenie bez składek pracodawcy, przejęcie debetu przez nowy bank,
   stałe godziny otwarcia. Są opisane w instrukcji przy odpowiednich mechanikach.
 - **„Nocna 13”** (klub z grami losowymi ukryty na Starym Mieście) to element o ryzyku, a nie zachęta. Jeśli nie pasuje
-  do klasy, wyłącz go przed uruchomieniem serwera zmienną środowiskową `LUKRUM_KASYNO=0`.
+  do klasy, zablokuj go w panelu mistrza gry (*Decyzje* → ustawienia gry → Klub „Nocna 13” → *zablokuj*, tylko w tej
+  grze) albo dla całego serwera zmienną środowiskową `LUKRUM_KASYNO=0` przed jego uruchomieniem.
 - **Dymki gości** (opinie, plotki, zaczepki z WOS) włącza i wyłącza się w panelu gry.
 - **Ocena pracy uczniów:** lepiej oceniać uzasadnienie decyzji (pole „co zmieniamy i dlaczego” przy wysyłaniu decyzji)
   niż miejsce w tabeli.

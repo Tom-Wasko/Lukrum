@@ -99,15 +99,16 @@ def sprawdz_firme(request, id_: str, g: GraSilnika, firma: str) -> None:
         raise BladZapytania("To nie jest firma Twojej drużyny.", 403)
 
 
-def _bez_klubu(request) -> bool:
+def _bez_klubu(request, g: GraSilnika | None = None) -> bool:
     """Klub z silnik/pieniadze/kasyno.py (hasło „koziol”) widzi każdy, także mistrz gry;
-    LUKRUM_KASYNO=0 wyłącza go na serwerze. Bez klubu są tylko zestawienia mistrza gry."""
-    return not settings.LUKRUM_KASYNO
+    LUKRUM_KASYNO=0 wyłącza go na serwerze, a mistrz gry – w jednej grze (`klub: false`
+    w konfiguracji, decyzja autora 18.11.2026). Bez klubu są tylko zestawienia mistrza gry."""
+    return not settings.LUKRUM_KASYNO or (g is not None and g.konfiguracja.get("klub") is False)
 
 
-def _dla(request, v: dict) -> dict:
+def _dla(request, v: dict, g: GraSilnika | None = None) -> dict:
     """Widok firmy bez klubu przy wyłączonym klubie (portfel właściciela zostaje)."""
-    return kas.ukryj(v, portfel=False) if _bez_klubu(request) else v
+    return kas.ukryj(v, portfel=False) if _bez_klubu(request, g) else v
 
 
 def _bez_klubu_w_decyzjach(decyzje: dict) -> dict:
@@ -212,6 +213,9 @@ def _przeglad(id_: str) -> dict:
     p["prowadzenie"]["poziomy"] = {k: v["nazwa"] for k, v in poziomy.items()
                                    if not v.get("tylko_pomiar") or k in uzywane}
     p["prowadzenie"]["odblokowanie"] = hm.widok(g.dane, g.runda)
+    # klub z hasłem: wyłączony na serwerze (LUKRUM_KASYNO=0) albo przez mistrza gry w tej grze
+    p["gra"]["klub"] = {"serwer": bool(settings.LUKRUM_KASYNO),
+                        "wlaczone": not _bez_klubu(request=None, g=g)}
     p["funkcje"] = funkcje_gry(g, None)   # stany funkcji (tylko do odczytu) i kto co odsłonił
     return p
 
@@ -226,6 +230,8 @@ def api_prowadzenie(request, id_):
     w Dostawcach), {"refleksja": "wylaczona" | "opcjonalna" | "wymagana"},
     {"podpowiedzi": bool} (rady na Dashboardzie w pierwszych rundach),
     {"podkupywanie": bool} (czy wolno podkupywać pracowników innych drużyn),
+    {"klub": bool} (klub z hasłem w tej grze; wyłączony – drużyny go nie widzą, zakłady
+    przepadają z decyzji),
     {"lekcje": {"rundy_na_zywo", "termin_dni"} | null} (tryb lekcyjny; null – na żywo)
     albo {"inwestor": {"firma", "kwota"}} (inwestor ratunkowy, kwota 0 odwołuje)."""
     d = cialo(request)
@@ -262,6 +268,14 @@ def api_prowadzenie(request, id_):
     if "podkupywanie" in d:   # poprawki 2 (sprawa 6): headhunter, podkupienia i kontroferty
         with serwisy.zmiana(id_) as g:
             g.konfiguracja["podkupywanie"] = bool(d["podkupywanie"])
+    if "klub" in d:   # decyzja autora 18.11.2026: mistrz gry blokuje klub w swojej grze
+        with serwisy.zmiana(id_) as g:
+            if d["klub"]:
+                g.konfiguracja.pop("klub", None)
+            else:
+                g.konfiguracja["klub"] = False
+                for f, dec in g.decyzje.get(g.runda, {}).items():   # zakłady z tej rundy przepadają
+                    g.decyzje[g.runda][f] = kas.ukryj_decyzje(dec)
     # TYMCZASOWE, usunąć przed oficjalną wersją (test form zatrudnienia)
     if "formy_zatrudnienia" in d:
         lista = d["formy_zatrudnienia"]
@@ -395,7 +409,7 @@ def api_widok(request, id_, firma):
 def _z_druzyna(request, v: dict, id_: str, g: GraSilnika, firma: str) -> dict:
     """Do widoku firmy: skład drużyny, kto ostatnio zapisał / wysłał decyzje, pauza i termin
     zamknięcia rundy, wgląd mistrza gry tylko do odczytu."""
-    v = zo.ukryj(_dla(request, v), g.dane)   # charakter osób jawnie, bez surowej cechy i opisu
+    v = zo.ukryj(_dla(request, v, g), g.dane)   # charakter osób jawnie, bez surowej cechy i opisu
     sklad = druzyny.sklad(id_).get(firma, [])
     v["druzyna"] = {"sklad": sklad, "autorzy": druzyny.autorzy(g, firma)}
     for f, wersja in druzyny.loga(id_).items():
@@ -490,7 +504,7 @@ def api_decyzje(request, id_, firma):
             raise BladZapytania("Decyzje są wysłane – najpierw wróć do podejmowania decyzji.")
         _moze_zmieniac(request, id_, firma)
         _sprawdz_wersje(request, g, firma)
-        if _bez_klubu(request):
+        if _bez_klubu(request, g):
             d = kas.ukryj_decyzje(d)
         if "zadania_wlasne" in d:   # własne zadania drużyny (lista zadań w panelu)
             d["zadania_wlasne"] = _zadania_wlasne(d["zadania_wlasne"])

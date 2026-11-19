@@ -117,13 +117,13 @@ def test_kazdy_lokal_ma_polozenie_w_lublinie():
 
 
 def test_budynek_w_zespole_wskazuje_istniejacy_zespol(tmp_path):
-    """Kamienica bankowa (sześć banków), Biurowiec przy Zana (drukarnia i trzy firmy od reklamy) i Park handlowy (hurtownia sprzętu i sklep meblowy): zespół musi być na liście zespoly.
+    """Kamienica bankowa (pięć banków, Solaris usunięty 18.11.2026), Biurowiec przy Zana (drukarnia i trzy firmy od reklamy) i Park handlowy (hurtownia sprzętu i sklep meblowy): zespół musi być na liście zespoly.
     Ubezpieczyciel i parkiet maklerski są osobnymi budynkami (zmiana strony [mapa] 15.11)."""
     d = Dane()
     zespoly = {z["id"] for z in d.mapa["zespoly"]}
     assert zespoly == {"kamienica_bankowa", "biurowiec_zana", "park_handlowy"}
     w_zespole = {b["id"]: b["zespol"] for b in d.mapa["budynki"] if b.get("zespol")}
-    assert {b for b, z in w_zespole.items() if z == "kamienica_bankowa"} == {f"bank_{i}" for i in range(1, 7)}
+    assert {b for b, z in w_zespole.items() if z == "kamienica_bankowa"} == {f"bank_{i}" for i in range(1, 6)}
     assert {b for b, z in w_zespole.items() if z == "biurowiec_zana"} == {"drukarnia", "agencja_lajk", "fala_koziolka", "kozi_grod_events"}
     assert {b for b, z in w_zespole.items() if z == "park_handlowy"} == {"sprzet_gastro", "market_budowlany"}
     assert "kamienica_rachmistrzow" in {b["id"] for b in d.mapa["budynki"]} and "kamienica_rachmistrzow" not in w_zespole

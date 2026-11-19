@@ -8,7 +8,7 @@ export default function (R) {
   const BIURA = [
     { id: "jks", nazwa: "J.K.Ś.", pod: "pakiet S 390 zł · OC", x: 90, pietro: 0 },
     { id: "scrooge", nazwa: "Scrooge", pod: "pakiet S 190 zł", x: 1000, pietro: 0 },
-    { id: "asteroida_328", nazwa: "Asteroida 328", pod: "pakiet S 590 zł · OC", x: 200, pietro: 1 },
+    { id: "asteroida_328", nazwa: "Asteroida 328", pod: "pakiet S 470 zł · OC", x: 200, pietro: 1 },
     { id: "jozef_k", nazwa: "Józef K.", pod: "pakiet S 250 zł", x: 890, pietro: 1 },
   ];
   const dy = (b) => (b.pietro ? PIETRO : DOL) - 190;
@@ -44,7 +44,7 @@ export default function (R) {
     punkty: () => BIURA.map((b) => ({ x: b.x - 22, y: dy(b) - 62, w: 174, h: 254, et: "Wejdź", nazwa: `Biuro „${b.nazwa}”`, cichy: true, gdzie: "wewn", wejscie: `biuro_rachunkowe.html?f=${b.id}` }))
       .concat([{ x: 240, y: DOL - 176, w: 180, h: 142, et: "Porównaj biura", gdzie: "gora", teczka: { tytul: "Spis lokatorów: porównanie biur", okruszek: "tablica w sieni", wstep: "Ceny brutto za miesiąc (pakiet M: 120 dokumentów). Zmiana biura kosztuje tydzień pakietu nowego biura.",
         pola: [["J.K.Ś. ★ Twoje biuro: dokładne, z ubezpieczeniem OC", "690 zł", "dopłata 5,50 zł za dokument ponad limit; kadry do 4 osób w cenie; nie myli się"], ["Scrooge: najtańsze, w tygodniu ze świętem zamknięte", "360 zł", "dopłata 3,30 zł; pomyłka w 2 tygodniach na 100, mandat 200 zł płacisz Ty"],
-          ["Asteroida 328: bez limitu dokumentów, z OC", "990 zł", "żadnych dopłat za dokumenty; kadry do 6 osób w cenie; nie myli się"], ["Józef K.: tanie, ale zmiana pakietu trwa 2 tygodnie", "450 zł", "dopłata 4,30 zł; pomyłka w 4 tygodniach na 100, bez OC"]], ekran: "biuro (porównanie)" } },
+          ["Asteroida 328: bez limitu dokumentów, z OC", "790 zł", "żadnych dopłat za dokumenty; kadry do 6 osób w cenie; nie myli się"], ["Józef K.: tanie, ale zmiana pakietu trwa 2 tygodnie", "450 zł", "dopłata 4,30 zł; pomyłka w 4 tygodniach na 100, bez OC"]], ekran: "biuro (porównanie)" } },
       { x: 814, y: DOL - 158, w: 170, h: 64, et: "Poczta z urzędu", stan: "!", opisStanu: "nowe pismo", gdzie: "gora", teczka: { tytul: "Skrzynka: pisma z urzędu", okruszek: "skrzynki na listy", wstep: "Pisma o błędach w deklaracjach i mandatach. Biuro z OC oddaje mandat w tym samym tygodniu.", pola: [["Tydzień 5: deklaracja VAT bez uwag", "✓"], ["Tydzień 4: pismo z urzędu skarbowego", "! mandat 200 zł", "oddany przez biuro z OC"]], ekran: "biuro (historia błędów)" } }]),
     osoby: [{ x: 700, stopy: 604, s: 0.68, imie: "Dozorczyni", tekst: "Do rachmistrzów? Porządni ludzie, tylko ten z piętra każe na wszystko czekać. Buty wytrzeć!", powitanie: true }],
   };

@@ -271,7 +271,7 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         wyrownaj_gotowke(f, rach)   # saldo końca tygodnia: przychody spłacają debet z wydatków, opłata tylko od reszty
         bank_koniec = bk.koniec_rundy(dane, f, r, ks, rach, {b.id: n[1] for b in f.budynki if (n := pr.najem(s.firmy, b.id))})
         info[nazwa]["harpagon_odsetki"] = lw.koniec_rundy(dane, f, r)   # doliczone do długu, poza KPiR
-        if not podglad:   # zaproszenie do klubu na następną rundę
+        if not podglad and konfiguracja.get("klub") is not False:   # zaproszenie do klubu (MG może zablokować klub)
             info[nazwa]["zaproszenie"] = kas.zaproszenie(dane, f, r, ziarno, konfiguracja["liczba_rund"],
                                                          bool(konfiguracja.get("kasyno_botow")))
         if f.biuro in bo.biura(dane):   # biura z mapy albo samodzielna księgowość (silnik/ksiegowosc/biuro.py)

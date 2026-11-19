@@ -34,6 +34,15 @@ def procent(f: Firma, runda: int) -> float:
     return sum(s.procent / 100 for s in aktywne(f, runda))
 
 
+def procent_firmy(oferta: dict, p: dict, firma_szkoleniowa: str) -> float:
+    """Procent oczekujących szkolenia `p` w danej firmie szkoleniowej: przy `skutecznosc_z_oceny` (katalog.yaml)
+    procent × ocena firmy / najwyższa ocena (lepsza szkoła – mocniejszy efekt), bez tego – procent pozycji."""
+    if not oferta.get("skutecznosc_z_oceny"):
+        return p["procent"]
+    oceny = {f["nazwa"]: f["zadowoleni_klienci"] for f in oferta["firmy"]}
+    return round(p["procent"] * oceny[firma_szkoleniowa] / max(oceny.values()), 1)
+
+
 def nazwy(p: dict) -> set[str]:
     """Nazwa pozycji katalogu razem z dawnymi nazwami (sprawa 8 poprawek 3)."""
     return {p["nazwa"], *p.get("dawne", [])}

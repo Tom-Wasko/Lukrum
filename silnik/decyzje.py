@@ -562,15 +562,16 @@ def zastosuj(dane: Dane, firma: Firma, d: dict, runda: int, pula: list[dict], ce
             if p is not None and s.get("firma") in firmy and p["nazwa"] not in wybrane:
                 wybrane.add(p["nazwa"])
                 cena = p["ceny"][firmy.index(s["firma"])]   # ceny w danych – miesięczne
-                wpis = {"szkolenie": p["nazwa"], "firma": s["firma"], "procent": p["procent"]}
+                wpis = {"szkolenie": p["nazwa"], "firma": s["firma"],
+                        "procent": szk.procent_firmy(oferta_szk, p, s["firma"])}
                 if szk_rund:
                     if (t := szk.trwa(firma, p["nazwa"], runda, p.get("dawne", ()))) is not None:
                         info.setdefault("szkolenia_trwaja", []).append({**wpis, "firma": t.firma, "do_rundy": t.do_rundy})
                         continue
-                    wpis["do_rundy"] = szk.kup(dane, firma, p["nazwa"], s["firma"], p["procent"], runda).do_rundy
+                    wpis["do_rundy"] = szk.kup(dane, firma, p["nazwa"], s["firma"], wpis["procent"], runda).do_rundy
                 else:
                     cena = dane.na_runde(cena)
-                    info["szkolenia_procent"] += p["procent"] / 100
+                    info["szkolenia_procent"] += wpis["procent"] / 100
                 koszty[s["firma"]] = koszty.get(s["firma"], 0) + cena
                 info.setdefault("szkolenia", []).append({**wpis, "koszt": cena})
         for f, kwota in koszty.items():

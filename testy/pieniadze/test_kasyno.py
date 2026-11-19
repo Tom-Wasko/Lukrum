@@ -243,3 +243,32 @@ def test_haslo_otwiera_drzwi_bez_zaproszenia(monkeypatch):
     Z = s.wyniki[2]["A"]["kasyno"]["gry"]
     assert not Z["odrzucone"] and Z["stawki"] == 100 and not s.firmy["A"].zaproszenia
     assert not (s.wyniki[2]["Bot"].get("kasyno") or {}).get("gry")   # bot bez zaproszenia nie gra
+
+
+@pytest.mark.django_db
+def test_mistrz_gry_blokuje_klub_w_grze(client, uczen, zawsze_zaproszenie):
+    """decyzja autora 18.11.2026: mistrz gry zamyka klub w swojej grze (bez zmiany ustawień serwera)."""
+    firmy = [{"nazwa": DRUZYNA, "bot": None}, {"nazwa": "Bot tani", "bot": "tani"}]
+    gra = client.post("/api/gry", {"nazwa": "Klasa", "ziarno": "7", "liczba_rund": 4, "firmy": firmy},
+                      content_type=JSON).json()["id"]
+    ala = uczen("ala")
+    client.post(f"/api/gry/{gra}/druzyny/{DRUZYNA}", {"dodaj": "ala"}, content_type=JSON)
+    ala.post(f"/api/gry/{gra}/wyslij/{DRUZYNA}", {}, content_type=JSON)
+    v = ala.get(f"/api/gry/{gra}/widok/{DRUZYNA}").json()
+    assert v["kasyno"]["otwarte"]
+    assert client.get(f"/api/gry/{gra}/mg").json()["gra"]["klub"] == {"serwer": True, "wlaczone": True}
+    automat = next(k for k, x in v["kasyno"]["gry"].items() if x["typ"] == "automat")
+    wersja = v["druzyna"]["autorzy"]["wersja"]
+    ala.put(f"/api/gry/{gra}/decyzje/{DRUZYNA}?wersja={wersja}",
+            {**v["decyzje"], "kasyno": [{"gra": automat, "stawka": 100}]}, content_type=JSON)
+    assert client.post(f"/api/gry/{gra}/prowadzenie", {"klub": False}, content_type=JSON).status_code == 200
+    v = ala.get(f"/api/gry/{gra}/widok/{DRUZYNA}").json()
+    assert "kasyno" not in v and "wlasciciel" in v and "kasyno" not in v["decyzje"]
+    p = client.get(f"/api/gry/{gra}/mg")
+    assert p.json()["gra"]["klub"]["wlaczone"] is False and '"kasyno"' not in p.content.decode("utf-8")
+    ala.post(f"/api/gry/{gra}/wyslij/{DRUZYNA}", {}, content_type=JSON)
+    v = ala.get(f"/api/gry/{gra}/widok/{DRUZYNA}").json()
+    assert v["gra"]["runda"] == 3 and "kasyno" not in v
+    # zablokowany klub nie wysyła zaproszeń; otwarty ponownie – opcja wraca (klucz znika z konfiguracji)
+    assert client.post(f"/api/gry/{gra}/prowadzenie", {"klub": True}, content_type=JSON).status_code == 200
+    assert client.get(f"/api/gry/{gra}/mg").json()["gra"]["klub"]["wlaczone"] is True
