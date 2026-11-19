@@ -1,6 +1,6 @@
 // Scena wnętrza „winda_zana”: widok ze środka windy w Domu reklamy (biurowiec przy ul. Zana 39). Decyzja szefa 18.11.2026:
 // jak kamienica bankowa, ale zamiast widoku z zewnątrz – panel z guzikami pięter; każde piętro to osobna scena.
-// TYTUL: Dom reklamy: winda (guziki pięter) | Reklama
+// TYTUL: Biurowiec przy Zana: winda (guziki pięter) | Reklama
 // KOLEJNOSC: 20
 // SYMBOLE: postacie-bywalec-zagloba
 // Parter = portiernia, „Twoje kampanie” i pokój z księgą firmy; 1 drukarnia, 2 radio, 3 eventy, 4 internet (zamknięty do tygodnia z harmonogramu).
@@ -25,7 +25,7 @@ export default function (R) {
       + (zamk ? `<path class="k" d="M${X0 + 240} ${y + 14}l8 8m0-8l-8 8" stroke="var(--strata)" stroke-width="3"/>` : "");
   };
   return {
-    id: "winda_zana", tytul: "Dom reklamy: winda", adres: "ul. Zana 39", opis: "Wnętrze windy w biurowcu przy Zana: drzwi kabiny, lustro i panel z guzikami pięter. Parter to portiernia, wyżej drukarnia, radio, eventy i internet.",
+    id: "winda_zana", tytul: "Biurowiec przy Zana: winda", adres: "ul. Zana 39", opis: "Wnętrze windy w biurowcu przy Zana: drzwi kabiny, lustro i panel z guzikami pięter. Parter to portiernia, wyżej drukarnia, radio, eventy i internet.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana2)", 548) + `<rect x="0" y="0" width="1220" height="40" fill="var(--g-metal2)"/>` + R.podloga("lastryko", 548, "var(--g-podloga2)");
       s += R.swietlowka(430, 40, 360) + `<path class="k1" d="M0 548h1220" /><rect x="0" y="520" width="1220" height="28" fill="var(--g-drewno2)" opacity=".5"/>`;

@@ -1,7 +1,7 @@
 // Scena wnętrza „park” (wdrożenie z makiet: archiwum/fable-17.11/fable-wnetrza). Układ i opis: projekt.md, sceny/park.md.
 // TYTUL: Parki i zalew (wzór dla 7 miejsc, parametr ?p=) | Miasto
 // KOLEJNOSC: 95
-// Jedyna scena plenerowa. Jeden szablon; wariant różni obiekt w tle. Zdarzenia tego miejsca i odsyłacz do stoiska (Dom reklamy, piętro 3).
+// Jedyna scena plenerowa. Jeden szablon; wariant różni obiekt w tle. Zdarzenia tego miejsca i odsyłacz do stoiska (Biurowiec przy Zana, piętro 3).
 export default function (R) {
   const YP = 440, P = {
     ogrod_saski: { nazwa: "Ogród Saski", adres: "Śródmieście", ob: "muszla" }, park_ludowy: { nazwa: "Park Ludowy", adres: "nad Bystrzycą", ob: "karuzela" },
@@ -34,7 +34,7 @@ export default function (R) {
     },
     punkty: [
       { x: 130, y: 166, w: 300, h: 290, et: "Co się tu dzieje", stan: "!", opisStanu: "wydarzenie w tym tygodniu", teczka: { tytul: `Wydarzenia: ${p.nazwa}`, okruszek: "tablica ogłoszeń", wstep: "Kiedy i ile ludzi przyjdzie. Tłum w parku to więcej gości w lokalach w okolicy.", pola: [["Festyn osiedlowy", "sobota · tłum"], ["Bieg parkowy", "niedziela 10:00"], ["Kino pod chmurką", "za 2 tygodnie"]], ekran: "kalendarz (filtr: miejsce)", funkcja: "analiza" } },
-      { x: 994, y: 310, w: 202, h: 186, et: "Stoisko", gdzie: "prawy-brzeg", odsyla: { kto: "Tabliczka", tekst: "Stoisko albo degustację na festynie zamawia się w agencji „Kozi Gród Events”, Dom reklamy, piętro 3.", stan: "Najbliższy festyn: sobota", miejsce: "Dom reklamy" } },
+      { x: 994, y: 310, w: 202, h: 186, et: "Stoisko", gdzie: "prawy-brzeg", odsyla: { kto: "Tabliczka", tekst: "Stoisko albo degustację na festynie zamawia się w agencji „Kozi Gród Events”, Biurowiec przy Zana, piętro 3.", stan: "Najbliższy festyn: sobota", miejsce: "Biurowiec przy Zana" } },
     ],
     osoby: [{ x: 760, stopy: 602, s: 0.78, imie: "Spacerowicz", tekst: "W sobotę będzie tu pół miasta. Kto ma stoisko, ten ma kolejkę.", powitanie: true }],
   };

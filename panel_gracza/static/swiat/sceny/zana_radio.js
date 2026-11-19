@@ -26,7 +26,7 @@ export default function (R) {
         + R.swietlowka(130, 26, 170) + R.swietlowka(530, 26, 170) + R.swietlowka(930, 26, 170);
       s += `<rect class="k" x="12" y="60" width="130" height="186" fill="var(--g-sciana2)" opacity=".5"/>` + R.okno(40, 86, 150, 130, { zaluzje: true })
         + R.szyld(660, 52, 470, 56, "„Fala Koziołka”", { tlo: "var(--g-tablica)", tekst: "var(--g-biel)", r: 22 }) + R.t(660, 132, "radio · billboardy", 15, { f: "tekst", bez: true, op: .85 })
-        + R.tabliczka(1120, 70, 150, "Piętro 2", "Dom reklamy · Zana 39");
+        + R.tabliczka(1120, 70, 150, "Piętro 2", "Biurowiec przy Zana · ul. Zana 39");
       s += `<g transform="translate(${TX} ${TY}) scale(${K})">` + pokoj() + `</g>`;
       s += R.osoba("bywalec-papkin", 400, 600, 0.85, "zwykla") + R.fikus(70, 590, 0.9);
       return s;

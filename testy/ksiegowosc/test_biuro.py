@@ -214,5 +214,5 @@ def test_brak_deklaracji_na_liscie_bledow_mowi_co_zrobic_i_ile_kosztuje_biuro():
     assert zl == min(bo.oplata(g.dane, x, len(dk["dokumenty"]), etat, zlecenie,
                                bo.najlepszy_pakiet(g.dane, x, len(dk["dokumenty"]), etat, zlecenie))["razem"]
                      for x in bo.biura(g.dane).values())
-    assert len(b) == 1 and "Biurowiec przy Zana ▸ Biuro rachunkowe" in b[0]["tekst"] and f"({nazwa}) kosztuje ok. {zl:.0f} zł" in b[0]["tekst"]
+    assert len(b) == 1 and "Kamienica rachmistrzów ▸ Biuro rachunkowe" in b[0]["tekst"] and f"({nazwa}) kosztuje ok. {zl:.0f} zł" in b[0]["tekst"]
     assert zl < bo.ustawienia(g.dane)["samodzielna"]["kara_brak"]

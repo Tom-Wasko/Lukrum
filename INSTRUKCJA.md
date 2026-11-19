@@ -132,7 +132,7 @@ się i wysuwa listę kroków.
 | Miasteczko akademickie | Rynek pracy, klienci w strefach, konkurencja („Sokole Oko”) i kalendarz miasta (juwenalia, mecze, jarmarki) |
 | Kamienica bankowa | Sześć banków (konto, kredyty, lokaty, leasing, debet) i giełda właściciela |
 | Kamienica rachmistrzów | Cztery biura rachunkowe (klatka schodowa z drzwiami do biur) |
-| Dom reklamy (biurowiec przy Zana) | Winda z guzikami pięter: parter (portiernia, „Twoje kampanie”, pokój z księgą firmy – KPiR), 1 drukarnia, 2 radio „Fala Koziołka”, 3 eventy, 4 internet „Lajk i Spółka” |
+| Biurowiec przy Zana | Winda z guzikami pięter: parter (portiernia, „Twoje kampanie”, pokój z księgą firmy – KPiR), 1 drukarnia, 2 radio „Fala Koziołka”, 3 eventy, 4 internet „Lajk i Spółka” |
 | TUW „Pod Koziołkiem” | Ubezpieczenia lokalu, sprzętu i OC |
 | Urzędy | Urząd miasta (rejestracja i odbiory lokalu), sanepid, urząd skarbowy (VAT i podatek dochodowy) |
 | Bazar | Handel między drużynami: ogłoszenia i licytacje towaru i sprzętu |
@@ -376,7 +376,7 @@ ostatnie – już tak. Przed zmianą warto policzyć, czy oszczędność na doku
   wolne ręce. Po wyłączeniu zostaje część przyciągania, co tydzień mniejsza. Każdy rodzaj sprawdza się w innej sytuacji:
   „2 za 1” mocno przyciąga, ale szybko się nudzi; happy hours zapełnia słabsze dni; karta stałego klienta rozkręca się
   z każdym tygodniem; zniżka studencka działa tylko na studentów; zestaw podnosi rachunek.
-- **Agencje reklamowe** (Dom reklamy przy Zana: drukarnia, radio, eventy, internet) – kampanie w strefach: ulotki i plakaty (od tygodnia 5),
+- **Agencje reklamowe** (Biurowiec przy Zana: drukarnia, radio, eventy, internet) – kampanie w strefach: ulotki i plakaty (od tygodnia 5),
   billboard i radio (od tygodnia 8), degustacje i Noc Kebaba (od tygodnia 10). Kampanię zamawia się na **jedną rundę**:
   wybiera się kanał, strefę i **liczbę emisji**. Cena emisji zależy od kanału i strefy, a od progów dochodzi rabat.
   Efekt się nasyca – pierwsze emisje dają najwięcej, a dalsze kosztują i prawie nic nie dodają. Kampanie się sumują, ale
