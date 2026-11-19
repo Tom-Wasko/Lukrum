@@ -163,7 +163,7 @@ def wnioski(dane: Dane, w: dict | None, wp: dict | None = None, runda: int | Non
     # księgowość
     if ks.get("kara"):
         poprawa.append(_rada("Mandat za deklaracje", f"Urząd naliczył {zl(ks['kara'])} mandatu.",
-                             "W Biurowiec przy Zana ▸ Biuro rachunkowe (wyniki) widać, która deklaracja się nie zgadzała. Nad tabelą "
+                             "Ekran Kamienica rachmistrzów ▸ Biuro rachunkowe (wyniki) pokazuje, która deklaracja się nie zgadzała. Nad tabelą "
                              "dokumentów jest instrukcja krok po kroku – albo powierzcie księgowość biuru.", "biuro"))
     blad_biura = (w.get("biuro") or {}).get("blad")
     if blad_biura and not blad_biura.get("oc"):

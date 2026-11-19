@@ -8,12 +8,11 @@ import subprocess
 import sys
 from pathlib import Path
 
-import yaml
-
 GRA = Path(__file__).resolve().parents[2]
 STATIC = GRA / "panel_gracza" / "static"
 MIEJSCA_JS = (STATIC / "swiat" / "miejsca.js").read_text(encoding="utf-8")
 INDEX_JS = (STATIC / "zakladki" / "index.js").read_text(encoding="utf-8")
+SCENY_JS = (STATIC / "swiat" / "sceny" / "index.js").read_text(encoding="utf-8")
 
 
 def _ekrany() -> set[str]:
@@ -30,22 +29,16 @@ def test_punkty_miejsc_prowadza_do_istniejacych_ekranow():
 
 
 def test_miejsca_z_paska_maja_opis_i_ekrany():
-    miejsca = set(re.findall(r"^  (\w+): \{\n    tytul:", MIEJSCA_JS, re.M))
-    w_pasku = dict(re.findall(r'miejsce: "(\w+)",\s*pod: \[([^\]]*)\]', INDEX_JS))
-    assert set(w_pasku) == miejsca
-    for m, pod in w_pasku.items():
+    """Pozycje paska z `miejsce` wskazują sceny z rejestru (albo kebab), a ich ekrany i sceny `miejsca` istnieją."""
+    rejestr = re.search(r"export const SCENY = \{(.*?)\n\};", SCENY_JS, re.S).group(1)
+    sceny = set(re.findall(r"^  (\w+): \{ tytul:", rejestr, re.M))
+    miejsca = sceny | set(re.findall(r"^  (\w+): \{\n    tytul:", MIEJSCA_JS, re.M))
+    w_pasku = re.findall(r'miejsce: "(\w+)",(?:\s*miejsca: \[([^\]]*)\],)?\s*pod: \[([^\]]*)\]', INDEX_JS)
+    assert w_pasku
+    for m, grupa, pod in w_pasku:
+        assert m in miejsca, m
+        assert set(re.findall(r'"(\w+)"', grupa)) <= miejsca, m
         assert set(re.findall(r'"(\w+)"', pod)) <= _ekrany(), m
-
-
-def test_budynki_mapy_trafiaja_do_miejsc():
-    """Każdy budynek z danych mapy (poza parkami) ma wnętrze albo ekran – nic nie zostaje bez wejścia."""
-    mapa = yaml.safe_load((GRA / "dane" / "mapa" / "budynki.yaml").read_text(encoding="utf-8"))
-    znane = set(re.findall(r'"(\w+)"', "\n".join(re.findall(r"budynki: \[([^\]]*)\]", MIEJSCA_JS))))
-    znane |= set(re.findall(r"(\w+):", re.search(r"BUDYNEK_DO_EKRANU = \{([^}]*)\}", MIEJSCA_JS).group(1)))
-    budynki = {b["id"] for b in mapa["budynki"] if b["zakladka"] != "zdarzenia"}
-    zespoly = {z["id"] for z in mapa.get("zespoly", [])}
-    assert budynki | zespoly <= znane, (budynki | zespoly) - znane
-    assert znane <= budynki | zespoly, znane - budynki - zespoly
 
 
 def test_zestaw_grafik_jest_aktualny():

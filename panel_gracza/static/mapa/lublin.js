@@ -8,6 +8,7 @@
 import { esc, kolorFirmy, marka, nazwaFirmy, okno, toast, zamknijOkno } from "../zakladki/wspolne.js";
 import { ikona, zeton } from "./ikony.js";
 import { utworzWidok } from "./widok.js";
+import { pokazKarte } from "../pulpit/karta.js";
 import { nakladkaPory, naGodzine, terazMinuty, wysokoscSlonca } from "./slonce.js";
 
 const ADRES = (plik) => new URL(plik, import.meta.url).href;
@@ -21,7 +22,7 @@ const PALETY = { bar: "Bar mleczny", pewex: "Pewex", wysoka: "Wysoka widocznoś�
 const ODCIEN = { stare_miasto: 1, centrum: 2, akademickie: 3, politechnika: 1, dworzec: 2, zygmuntowskie: 3, lsm_czuby: 4,
   czechow: 4, felin: 3, zemborzyce: 2 };
 const SKROTY = [["lokal", "lokal", "Mój lokal"], ["bank", "bank", "Banki"], ["hurt", "dostawca", "Hurtownie i sklepy"],
-  ["raport", "raport", "Raport rundy"], ["wyslij", "wyslij", "Wyślij decyzje"]];
+  ["raport", "raport", "Raport rundy"], ["wyslij", "wyslij", "List z decyzjami"]];
 
 // punkty orientacyjne widoczne już na widoku całego miasta (reszta pojawia się po przybliżeniu)
 const DALEKO = new Set(["zamek", "arena", "lotnisko", "gorki_czechowskie", "skansen", "dworzec_glowny", "plac_litewski"]);
@@ -452,6 +453,21 @@ export const nowaMapa = {
     widok = utworzWidok(ramka, { zasieg: DANE.zasieg, start, stan: WIDOK, naZmiane });
   },
 
+  /** Pulpit: przelot mapy do znaku (budynek, zespół, lokal) o danym id; zwraca element znaku albo null. */
+  pokazZnak(id, k = 0.9) {
+    const zn = [...document.querySelectorAll("#lmapa .lmapa-nakladka > .lm-znak")].find((e) => e.dataset.id === id);
+    if (!zn || !widok) return null;
+    widok.lecDo(+zn.dataset.x, +zn.dataset.y, k);
+    return zn;
+  },
+  /** Pulpit: przelot do nazwy dzielnicy (strefy gry) widocznej na mapie; zwraca true, gdy znaleziona. */
+  pokazDzielnice(nazwa, k = 0.3) {
+    const n = [...document.querySelectorAll("#lmapa .lm-strefa-napis")].find((e) => e.firstChild?.textContent.trim() === nazwa);
+    if (!n || !widok) return false;
+    widok.lecDo(+n.dataset.x, +n.dataset.y, k);
+    return true;
+  },
+
   akcje: {
     "lmapa-zoom": (el) => { const z = +el.dataset.z; if (z) widok?.przybliz(z); else widok?.calosc(); },
     "lmapa-pora-teraz": (el) => {
@@ -471,7 +487,7 @@ export const nowaMapa = {
     },
     "lmapa-punkt": (el) => {
       const m = (DANE.dodatkowe || []).find((x) => x.id === el.dataset.id);
-      if (m) okno(esc(m.nazwa), `<p>${esc(m.opis)}</p><p class="podpowiedz">Punkt orientacyjny na mapie Lublina – nie wpływa na grę.</p>`);
+      if (m) pokazKarte({ rodzaj: "Punkt orientacyjny", tytul: m.nazwa, adres: m.adres || "Lublin", opis: m.opis, uwaga: "Nie wpływa na grę." });
     },
     "lmapa-firma": (el, c) => { zamknijOkno(); P.akcje["mapa-budynek"](el, c); },
     "lmapa-wyglad": (el) => window.lukrum.wyglad.ustaw({ paleta: el.dataset.paleta, tryb: el.dataset.tryb }),

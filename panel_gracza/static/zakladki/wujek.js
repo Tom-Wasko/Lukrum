@@ -53,12 +53,12 @@ function nowosci(v, c) {
 
 // Krok „teraz” na mapie miasta: budynek, do którego trzeba pójść, dostaje obwódkę i plakietkę „teraz”. Mapa (strona
 // [mapa]) nie jest zmieniana: wystarcza reguła CSS po atrybucie data-id znacznika, więc działa też po przerysowaniu mapy.
-const BUDYNEK_KROKU = { lokale: "agencja_nieruchomosci", bank: "kamienica_bankowa", biuro: "biurowiec_zana", rynek_pracy: "agencja_pracy",
+export const BUDYNEK_KROKU = { lokale: "agencja_nieruchomosci", bank: "kamienica_bankowa", biuro: "kamienica_rachmistrzow", rynek_pracy: "agencja_pracy",
   dostawcy: "makro", sprzet: "sprzet_gastro", wyslij: "poczta" };
 // krok → punkt wnętrza (data-k klikalnego miejsca sceny i pozycji listy „Co tu zrobisz”, swiat/miejsca.js: cel)
 const PUNKT_KROKU = { lokale: "lokale", bank: "bank", biuro: "biuro", oferta: "lokal_menu", sprzedaz: "lokal_menu", stanowiska: "wnetrze_sprzet",
   sprzet: "wnetrze_sprzet", zatrudnienie: "lokal_przeglad", rynek_pracy: "rynek_pracy", dostawcy: "zaop_dostawy" };
-function celNaMapie(v, klucz) {
+export function celNaMapie(v, klucz) {
   const id = klucz ? BUDYNEK_KROKU[klucz] || v.stan.lokale?.[0]?.id : null;
   let styl = document.getElementById("lw-cel-styl");
   if (!id || !/^[\w-]+$/.test(id)) { styl?.remove(); return; }
@@ -87,7 +87,7 @@ export function listWujka(v, c) {
     <span class="lw-nr" aria-hidden="true">${ok ? "✓" : i + 1}</span><span class="lw-co"><small>${esc(gdzie)}</small><b>${esc(co)}</b><span>${esc(opis)}</span></span>
     <span class="lw-stan">${ok ? "zrobione" : i === pierwszy ? "teraz →" : ""}</span></a></li>`).join("");
   const wyslij = `<li class="${v.wyslane ? "zrobione" : wszystko ? "teraz" : ""}"><a data-zakladka-k="wyslij" href="#wyslij">
-    <span class="lw-nr" aria-hidden="true">${v.wyslane ? "✓" : K.length + 1}</span><span class="lw-co"><small>Poczta</small><b>Wyślij decyzje</b>
+    <span class="lw-nr" aria-hidden="true">${v.wyslane ? "✓" : K.length + 1}</span><span class="lw-co"><small>Poczta</small><b>List z decyzjami</b>
     <span>${v.wyslane ? "wysłane, do zamknięcia tygodnia można jeszcze poprawiać" : wszystko ? "wszystko gotowe" : "gdy lista wyżej jest odhaczona"}</span></span>
     <span class="lw-stan">${v.wyslane ? "zrobione" : wszystko ? "teraz →" : ""}</span></a></li>`;
   const zrobione = K.filter((k) => k[3]).length + (v.wyslane ? 1 : 0);
@@ -95,4 +95,25 @@ export function listWujka(v, c) {
     ${list ? `<div class="lw-kartka"><svg class="lw-portret" viewBox="0 0 64 80" aria-hidden="true"><use href="#g-wnetrze-portret-wujka" width="64" height="80"/></svg>
       <div><p class="lw-naglowek">List od wujka · tydzień ${v.runda}</p><h2>${esc(list[0])}</h2><p>${esc(list[1])}</p><p class="lw-podpis">Wasz wujek</p></div></div>` : ""}
     <div class="lw-kroki"><div class="lw-tytul"><span>Do zrobienia w tym tygodniu</span><span>${zrobione} z ${K.length + 1}</span></div><ol>${html}${wyslij}</ol>${nowosci(v, c)}</div></section>`;
+}
+
+// Plan tygodnia dla pulpitu (static/pulpit/pulpit.js): te same kroki co lista wujka, plus „List z decyzjami” na końcu.
+// Zwraca { lista: [{klucz, gdzie, co, ok, opis, teraz}], nastepny, zrobione }; `nastepny` – pierwszy niezrobiony krok.
+export function planTygodnia(v) {
+  const K = kroki(v), pierwszy = K.findIndex((k) => !k[3]), wszystko = pierwszy < 0;
+  const lista = K.map(([klucz, gdzie, co, ok, opis], i) => ({ klucz, gdzie, co, ok, opis, teraz: i === pierwszy }));
+  lista.push({ klucz: "wyslij", gdzie: "Poczta", co: "List z decyzjami", ok: !!v.wyslane, teraz: !v.wyslane && wszystko,
+    opis: v.wyslane ? "wysłane, do zamknięcia tygodnia można jeszcze poprawiać" : wszystko ? "wszystko gotowe" : "gdy lista wyżej jest odhaczona" });
+  return { lista, nastepny: lista.find((k) => k.teraz) || null, zrobione: lista.filter((k) => k.ok).length };
+}
+// obwódka „teraz” na budynku następnego kroku także poza Planem tygodnia (pulpit: mapa jest ekranem domyślnym)
+export function oznaczCel(v) {
+  const K = kroki(v), pierwszy = K.findIndex((k) => !k[3]);
+  celNaMapie(v, v.wyslane ? null : pierwszy < 0 ? "wyslij" : K[pierwszy][0]);
+}
+
+// List wujka na bieżący tydzień: [tytuł, treść] albo null, gdy wujek już nie pisze (zeszyt pulpitu, strona „Lista wujka”)
+export function listTygodnia(v) {
+  const nr = v.runda - (v.gra.runda_startowa || 1);
+  return (v.runda === v.gra.liczba_rund && nr >= LISTY.length ? OSTATNI : LISTY[nr]) || null;
 }

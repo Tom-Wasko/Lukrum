@@ -135,7 +135,7 @@ function planRundy(v, kat) {
   const html = punkty.filter(([k]) => !ukryta(v, k)).map(([k, n, ok, opis]) => `<a data-zakladka-k="${k}"><span class="st ${ok ? "ok" : "nie"}">${ok ? "✓" : "!"}</span>
     <span>${n}<small>${esc(opis)}</small></span></a>`).join("");
   return `<div class="sekcja-tytul">Plan rundy ${r} (${esc(String(v.miesiac).replace(/^[^(]*\((.*)\)$/, "$1"))})</div><div class="plan">${html}
-    <a data-zakladka-k="wyslij"><span class="st ${v.wyslane ? "ok" : "inf"}">${v.wyslane ? "✓" : "→"}</span><span>Wyślij decyzje<small>${v.wyslane ? "wysłane" : "gdy wszystko gotowe"}</small></span></a></div>`;
+    <a data-zakladka-k="wyslij"><span class="st ${v.wyslane ? "ok" : "inf"}">${v.wyslane ? "✓" : "→"}</span><span>List z decyzjami<small>${v.wyslane ? "wysłane" : "gdy wszystko gotowe"}</small></span></a></div>`;
 }
 
 // tryb podpowiedzi (włącza mistrz gry) – 3 rzeczy do sprawdzenia w pierwszych rundach
@@ -190,7 +190,7 @@ export const dashboard = {
         ${rynek ? `<div class="podpowiedz">${rynek}</div>` : ""}</div>`)}
       ${kafel("Dochód netto", "wykres", d.dochod_netto == null && v.ksiegowosc?.ukryte   // ukryty do złożenia deklaracji
         ? `<div class="maly-tekst">Księgujesz samodzielnie – dochód tej rundy poznasz po złożeniu deklaracji albo wybierz biuro.</div>
-           <button class="btn jasny maly" data-akcja="popraw" data-z="biuro">Biurowiec przy Zana ▸ Biuro rachunkowe</button>`
+           <button class="btn jasny maly" data-akcja="popraw" data-z="biuro">Kamienica rachmistrzów ▸ Biuro rachunkowe</button>`
         : `<span class="${d.dochod_netto < 0 ? "minus" : ""}">${zl(d.dochod_netto)}</span>`)}
       ${kafel("Saldo konta", "portfel", zl(d.saldo))}
     </div><details class="lw-stawki"><summary>Stawki i przepisy: płaca minimalna, czas pracy, amortyzacja, podatki</summary><div class="dash">
@@ -382,7 +382,7 @@ function refleksjaHtml(v) {
 }
 
 export const wyslij = {
-  tytul: "Wyślij decyzje", ikona: "✉", odblokowanie: (v) => !v.gra.zakonczona,
+  tytul: "List z decyzjami", ikona: "✉", odblokowanie: (v) => !v.gra.zakonczona,
   decyzje({ v }) {
     const czerwone = v.lista_bledow.filter((b) => b.poziom === "czerwony").length;
     const ludzie = v.gra.firmy.filter((f) => !f.bot);
@@ -407,7 +407,7 @@ export const wyslij = {
            (boty decydują same).${(v.druzyna?.sklad || []).length > 1 ? " Decyzje wysyła jedna osoba za całą drużynę." : ""}</p>
            ${v.druzyna?.autorzy?.zapisal ? `<p class="podpowiedz">Ostatni zapis decyzji${kto(v.druzyna.autorzy.zapisal, ":")}.</p>` : ""}
            ${refleksjaHtml(v)}
-           <button class="btn zielony" data-akcja="wyslij">Wyślij decyzje</button>`}
+           <button class="btn zielony" data-akcja="wyslij">List z decyzjami</button>`}
       ${skladDruzyny(v)}
       ${ludzie.length > 1 ? `<div class="tabela-tytul">Drużyny</div><div class="tab-wrap"><table class="t">${stan}</table></div>` : ""}
       ${window.MG ? `${ludzie.length > 1 ? `<p><button class="btn jasny" data-akcja="wymus">Przelicz rundę bez czekania (brakujące drużyny: zapisane decyzje)</button></p>` : ""}

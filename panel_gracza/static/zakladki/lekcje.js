@@ -16,7 +16,7 @@ export function krokiKpir(K, otwarta) {
      VAT do zapłaty = należny − naliczony − nadwyżka z poprzedniej rundy, zaliczka PIT od dochodu narastająco minus zaliczki już wpłacone,
      składka zdrowotna od dochodu (najmniej minimalna).`,
     `<b>6. Wpisz kwoty w deklaracjach do urzędu.</b> Przepisz je ręcznie albo przyciskiem „Przepisz kwoty wyliczone z zapisów”.`,
-    `<b>7. Wyślij decyzje rundy.</b> Deklaracje idą razem z nimi. Przy przeliczeniu urząd je sprawdzi: różnicę dopłacisz
+    `<b>7. Nadaj list z decyzjami rundy.</b> Deklaracje idą razem z nimi. Przy przeliczeniu urząd je sprawdzi: różnicę dopłacisz
      albo odzyskasz, a za każdą pomyloną deklarację zapłacisz mandat ${zl(K.samodzielna.kara_blad)}. Co poszło nie tak –
      zakładka z wynikami biura w następnej rundzie.`,
   ]);

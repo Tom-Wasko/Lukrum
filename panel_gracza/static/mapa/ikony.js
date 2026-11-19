@@ -66,6 +66,9 @@ const Z = {
   biret: D("M9 18v9c0 5 22 5 22 0v-9", "c") + P("20,5 39,12.5 20,20 1,12.5", "n") + D("M20 12.5L32 16.5v8.5") + R(30.5, 24, 3.2, 8, "u", 1.2),
   gazeta: R(3, 3, 34, 33, "m", 1.5) + R(6.5, 6.5, 27, 7, "d") + D("M6.5 16.5h27") + R(6.5, 19.5, 12, 9.5, "w")
     + R(21.5, 19.5, 12, 2.6, "c", 1) + R(21.5, 24, 12, 2.6, "c", 1) + R(6.5, 31.5, 27, 2.4, "c", 1),
+  // wieżowiec (biurowiec przy Zana): wysoka bryła z rzędami okien, dach z masztem i wejście
+  wiezowiec: R(9, 6, 22, 29, "m") + R(7, 4.5, 26, 3, "d") + D("M20 4.500V0.800", "x") + R(9, 33, 22, 2.500, "d")
+    + [10.500, 15.500, 20.500, 25.500].map((y) => R(12, y, 4.500, 3, "w") + R(23.500, y, 4.500, 3, "w")).join("") + R(17.500, 28, 5, 7, "c"),
   megafon: R(2, 14, 9, 12, "j", 1.5) + P("11,14 30,4 30,36 11,26", "d") + R(30, 2.5, 5, 35, "c", 2) + D("M13 26l2.5 10h6l-2-8.5", "j")
     + R(15, 17.5, 9, 5, "m", 1),
   plakat: R(10, 9, 20, 26, "m") + P("7,9 33,9 29,4 11,4", "d") + C(20, 2.5, 2, "d") + R(7.5, 34, 25, 3, "d", 1)
@@ -140,7 +143,7 @@ const Z = {
 };
 
 // id budynku albo miejsca → pionek; potem rodzaj; na końcu zwykły dom (nieznane rzeczy też dostają budynek)
-const WG_ID = { kamienica_bankowa: "monety", biurowiec_zana: "kalkulator", sanepid: "lista", agencja_nieruchomosci: "klucz", agencja_pracy: "czapka",
+const WG_ID = { kamienica_bankowa: "monety", biurowiec_zana: "wiezowiec", kamienica_rachmistrzow: "kalkulator", park_handlowy: "meble", sanepid: "lista", agencja_nieruchomosci: "klucz", agencja_pracy: "czapka",
   piekarnia: "chleb", makro: "paleta", selgros: "paleta", eurocash: "paleta", rozen: "szynka", sprzet_gastro: "frytki", market_budowlany: "meble",
   stolarnia: "pila", galeria: "kawa", drukarnia: "plakat", agencja_lajk: "smartfon", fala_koziolka: "radio", kozi_grod_events: "balony",
   akademia: "dyplom", uczelnia: "biret", ubezpieczyciel: "parasol", ogrod_botaniczny: "szklarnia", zalew: "woda",
@@ -172,7 +175,7 @@ const KATEGORIA = {};
 [["pieniadze", "monety worek wykres parasol lupa"],
   ["urzedy", "pieczatka lista koperta trybunal ratusz"],
   ["handel", "paleta koszyk chleb szynka frytki meble pila kawa"],
-  ["praca", "kalkulator czapka klucz dzialka gazeta megafon plakat smartfon radio balony"],
+  ["praca", "wiezowiec kalkulator czapka klucz dzialka gazeta megafon plakat smartfon radio balony"],
   ["nauka", "dyplom biret uczelnia"],
   ["zielen", "park szklarnia woda gorki cmentarz"],
   ["kultura", "teatr klasztor katedra kosciol zamek brama_krakowska brama_grodzka wieza ruiny fontanna wiatrak most"],

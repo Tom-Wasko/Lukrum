@@ -712,8 +712,8 @@ def lista_bledow(dane: Dane, firma: Firma, d: dict, runda: int, poprzednia_ofert
             dodaj("pomaranczowy", "sprzet", f"Sprzęt, wyposażenie i stanowiska tańsze niż {prog} zł od razu idą "
                   f"w koszty: ten zakup obniży dochód tej rundy o ok. {zl} zł (bez VAT), a tym samym punkty działu "
                   "Finanse. Wartość zakupu zostaje w majątku firmy i liczy się do jej rozwoju."
-                  + (" Zamiast tego możesz je amortyzować (koszt rozłożony na lata) – wybór w "
-                     "Biurowiec przy Zana ▸ Biuro rachunkowe." if st_trwale.wybor_niskocennych(dane) else ""))
+                  + (" Zamiast tego możesz je amortyzować (koszt rozłożony na lata) – wybór: "
+                     "Kamienica rachmistrzów ▸ Biuro rachunkowe." if st_trwale.wybor_niskocennych(dane) else ""))
         # przekroczenia odrzuca zapis decyzji (API), a przeliczenie przycina – tu czerwone są w uwagach rynku pracy i lokali
         lim = lm.stan_limitow(dane, firma, d, runda)
         if lim["pracownicy"]["nowi"] == lim["pracownicy"]["limit"]:

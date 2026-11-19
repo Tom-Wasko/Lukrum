@@ -1,0 +1,188 @@
+/* LUKRUM – jednolity szablon kart (seria pulpit, krok 6): wszystkie okna gry (okno(), teczka, karta miejsca) mają tę samą budowę
+   i jeden z 4 stylów. Przypisanie ekranów do stylów: pulpit/karty-style.js (jedno miejsce).
+
+   Budowa DOM (js: zakladki/wspolne.js zbudujOkno, pulpit/karta.js):
+     .szk.karta--s1…s4
+       .og   nagłówek: .og-t (small.k-ok okruszek + strong.k-tyt tytuł) i .og-prawa (przełącznik Decyzje | Wyniki, przycisk ✕)
+       .ot   treść
+       .ost  stopka akcji (przyciski)
+   Style: s1 teczka kartonowa (gumka, zakładki) · s2 akta urzędowe (druk, numer sprawy, §) · s3 czysta apka · s4 kartka w kratkę.
+   Zasady: kolory tylko ze zmiennych motywy/zmienne.css (3 palety × jasny/ciemny); stan nigdy samym kolorem (✓ przy aktywnym
+   przełączniku, przerywana ramka przy niedostępnym i wyłączonym); ruch wyłączany przez prefers-reduced-motion; fokus: --ognisko.
+   Ładowany PO styl.css i pulpit.css. */
+
+.szk {
+  --font-masz: 'Courier New', 'Cascadia Mono', monospace;
+  --font-reka: 'Caveat', 'Segoe Print', 'Ink Free', 'Bradley Hand', cursive;
+  --siatka: linear-gradient(color-mix(in srgb, var(--akcent-2) 16%, transparent) 1px, transparent 1px),
+            linear-gradient(90deg, color-mix(in srgb, var(--akcent-2) 16%, transparent) 1px, transparent 1px);
+  --arkusz: var(--g-karta);
+  --kr: max(2px, var(--ramka-grubosc, 1px));
+  position: relative; box-sizing: border-box; overflow: visible; color: var(--tusz); font-family: var(--font-tekst);
+  background: none; border: 0; border-radius: 0; box-shadow: none; padding: 0;
+}
+[data-paleta="wysoka"] .szk { --font-masz: var(--font-tekst); --font-reka: var(--font-tekst); --siatka: none; }
+.szk :focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+.szk .og-t { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0; flex: 1 1 auto; }
+.szk .og-prawa { display: contents; }
+.szk .og .k-tyt { display: inline-flex; align-items: center; gap: 10px; font: 700 1.3em/1.2 var(--font-gruby); text-transform: none; letter-spacing: 0; }
+.szk .og .k-ok { font: .8em var(--font-szyld); letter-spacing: .08em; text-transform: uppercase; opacity: .9; }
+.szk .og { color: var(--tusz); text-transform: none; font-weight: 400; text-align: left; }
+.szk .og button.x { cursor: pointer; flex: none; width: 40px; height: 40px; min-width: 40px; min-height: 40px; padding: 0; font-size: 1.1em; line-height: 1; opacity: 1;
+  color: var(--tusz); background: transparent; border: var(--kr) solid var(--tusz); border-radius: 6px; }
+.szk .og button.x:hover { background: var(--tusz); color: var(--papier); }
+.szk .ost { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; align-items: center; }
+.szk .ost > button:not(.btn) { min-height: 40px; padding: .4em 1em; cursor: pointer; font: inherit; font-weight: 700; color: var(--tusz); background: var(--g-karta);
+  border: var(--kr) solid var(--tusz); border-radius: 6px; }
+.szk .ost > button:not(.btn):hover, .szk .ost > .pk-wejdz { background: var(--akcent); color: var(--papier); border-color: var(--akcent); }
+.szk .ost .pk-zamknij:hover { background: var(--tusz); color: var(--papier); }
+.szk .ost > button:disabled { opacity: .7; cursor: not-allowed; border-style: dashed; background: transparent; color: var(--tusz); }
+.szk .ot { min-width: 0; }
+
+/* --- przełącznik Decyzje | Wyniki (w nagłówku, obok ✕) – wspólne zasady; wygląd w stylach ------------------------------------- */
+.szk .teczka-tryb { display: inline-flex; gap: 4px; padding: 0; background: none; border-radius: 0; }
+.szk .teczka-tryb button { min-height: 38px; padding: 0 1.1em; cursor: pointer; font: inherit; font-weight: 700; color: var(--tusz); background: transparent; border: var(--kr) solid var(--tusz); border-radius: 6px; }
+.szk .teczka-tryb button.aktywny { color: var(--papier); background: var(--tusz); border-color: var(--tusz); }
+.szk .teczka-tryb button.aktywny::before { content: "✓ "; }
+.szk .teczka-tryb button.szare { opacity: .6; cursor: not-allowed; border-style: dashed; border-color: var(--tusz); color: var(--tusz); background: transparent; }
+.szk .teczka-tryb button:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+
+/* ===== s1: teczka kartonowa z gumką i zakładkami ===== */
+.szk.karta--s1 {
+  --kraft: color-mix(in srgb, var(--papier) 50%, var(--g-drewno2)); --kraft2: color-mix(in srgb, var(--papier) 36%, var(--g-drewno2));
+  --ob: color-mix(in srgb, var(--tusz) 55%, var(--g-drewno));
+  background: var(--kraft); border: 2px solid var(--ob); border-radius: 3px 14px 12px 12px; padding: 18px 44px 16px 16px;
+  box-shadow: 0 2px 0 var(--ob), 0 16px 30px -10px color-mix(in srgb, var(--tusz) 50%, transparent);
+}
+[data-paleta="wysoka"] .szk.karta--s1 { --kraft: var(--papier); --kraft2: var(--g-sciana); --ob: var(--tusz); }
+.karta--s1::after { content: ""; position: absolute; top: -2px; bottom: -2px; right: 14px; width: 13px; pointer-events: none;
+  background: color-mix(in srgb, var(--ob) 75%, var(--akcent)); border-inline: 1px solid color-mix(in srgb, var(--tusz) 40%, transparent); }
+[data-paleta="wysoka"] .karta--s1::after { background: var(--tusz); }
+.karta--s1 .og { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin: 0 0 12px; padding: 10px 12px 10px 14px; background: var(--arkusz); border: 1px solid var(--ob); border-radius: 0; }
+.karta--s1 .og .k-ok { color: var(--tusz); }
+.karta--s1 .ot { padding: 16px; background: var(--arkusz); border: 1px solid var(--ob); }
+.karta--s1 .ost { padding: 14px 0 0; }
+.karta--s1 .teczka-tryb { position: absolute; left: 18px; top: -38px; gap: 4px; }
+.karta--s1 .teczka-tryb button { font-family: var(--font-szyld); letter-spacing: .06em; text-transform: uppercase; background: var(--kraft2); border: 2px solid var(--ob); border-bottom: 0; border-radius: 10px 10px 0 0; padding: .45em 1.2em .4em; min-height: 38px; color: var(--tusz); }
+.karta--s1 .teczka-tryb button.aktywny { background: var(--kraft); color: var(--tusz); padding-bottom: .6em; margin-bottom: -2px; position: relative; z-index: 1; }
+.karta--s1 .teczka-tryb button.szare { border-bottom: 0; background: transparent; }
+.karta--s1 .btn { border-color: var(--ob); }
+.karta--s1 .btn.zielony, .karta--s1 .btn.pom { border-color: transparent; }
+
+/* ===== s2: akta urzędowe (druk, numer sprawy, rubryki, §) ===== */
+.szk.karta--s2 { font-family: var(--font-masz); background: var(--arkusz); border: var(--kr) solid var(--tusz); outline: 1px solid var(--tusz); outline-offset: -8px;
+  padding: 24px 28px 18px; box-shadow: 8px 8px 0 color-mix(in srgb, var(--tusz) 35%, transparent); }
+.karta--s2::before { content: "Druk LUK-7 · Nr sprawy: " attr(data-nr); display: flex; justify-content: space-between; font-size: .75em; letter-spacing: .08em; text-transform: uppercase;
+  border-bottom: 1px dashed var(--tusz); padding-bottom: 6px; margin-bottom: 12px; }
+.karta--s2 button, .karta--s2 input, .karta--s2 select, .karta--s2 textarea { font-family: var(--font-masz); }
+.karta--s2 .og { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; align-items: start; background: none; padding: 0; border: 0; border-radius: 0; }
+.karta--s2 .og-t { flex-direction: column-reverse; grid-column: 1; grid-row: 1; }
+.karta--s2 .og .k-tyt { font: 700 1.35em/1.2 var(--font-masz); text-transform: uppercase; letter-spacing: .04em; }
+.karta--s2 .og .k-ok { font-family: var(--font-masz); text-transform: none; letter-spacing: 0; font-size: .85em; }
+.karta--s2 .og button.x { grid-column: 2; grid-row: 1; border-radius: 0; border-width: 2px; }
+.karta--s2 .teczka-tryb { grid-column: 1 / -1; grid-row: 2; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 4px 0 0; }
+.karta--s2 .teczka-tryb::before { content: "Rubryka:"; font-size: .85em; }
+.karta--s2 .teczka-tryb button { border-radius: 0; border-width: 2px; text-transform: uppercase; letter-spacing: .04em; }
+.karta--s2 .teczka-tryb button::before { content: "□ "; }
+.karta--s2 .teczka-tryb button.aktywny::before { content: "■ "; }
+.karta--s2 .ot { counter-reset: par; margin-top: 14px; padding: 14px 0 0; border-top: 2px solid var(--tusz); }
+.karta--s2 .ot h3 { counter-increment: par; font: 700 .95em var(--font-masz); letter-spacing: .02em; text-transform: uppercase; border-bottom: 1px dotted var(--tusz); padding-bottom: 2px; }
+.karta--s2 .ot h3::before { content: "§ " counter(par) ". "; }
+.karta--s2 .ost { margin-top: 18px; padding: 12px 0 0; border-top: 2px solid var(--tusz); }
+.karta--s2 .ost::after { content: "Podpis: ………………………"; flex: 1 0 100%; order: 9; font-size: .8em; opacity: .85; }
+.karta--s2 .btn, .karta--s2 .ost > button:not(.btn), .karta--s2 .ot input, .karta--s2 .ot select, .karta--s2 .ot textarea { border-radius: 0; }
+.karta--s2 .btn { border-width: 2px; }
+
+/* ===== s3: czysta apka (jedna kolumna, duże odstępy) ===== */
+.szk.karta--s3 { background: var(--g-karta); border: var(--kr) solid color-mix(in srgb, var(--tusz) 18%, transparent); border-radius: 24px; padding: 30px 30px 24px; overflow: hidden;
+  box-shadow: 0 28px 60px -22px color-mix(in srgb, var(--tusz) 50%, transparent); }
+[data-paleta="wysoka"] .szk.karta--s3 { border-color: var(--tusz); }
+.karta--s3::before { content: ""; display: block; height: 6px; margin: -30px -30px 24px; background: repeating-linear-gradient(90deg, var(--akcent) 0 18px, transparent 18px 26px); }
+.karta--s3 .og { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start; margin-bottom: 20px; background: none; padding: 0; border-radius: 0; }
+.karta--s3 .og-t { grid-column: 1; grid-row: 1; flex-direction: column-reverse; }
+.karta--s3 .og .k-tyt { font: 800 1.7em/1.15 var(--font-tekst); margin-top: 4px; }
+.karta--s3 .og .k-ok::before { content: "★ "; }
+.karta--s3 .og button.x { grid-column: 2; grid-row: 1; width: 44px; height: 44px; border-radius: 50%; border-color: color-mix(in srgb, var(--tusz) 40%, transparent); }
+.karta--s3 .teczka-tryb { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 14px; background: color-mix(in srgb, var(--tusz) 9%, transparent); }
+.karta--s3 .teczka-tryb button { border: 0; border-radius: 11px; min-height: 44px; }
+.karta--s3 .teczka-tryb button.szare { border: 2px dashed var(--tusz); }
+.karta--s3 .ot { padding: 0; }
+.karta--s3 .ost { margin-top: 28px; padding: 18px 0 0; border-top: 1px solid color-mix(in srgb, var(--tusz) 25%, transparent); }
+.karta--s3 .btn, .karta--s3 .ost > button:not(.btn) { border-radius: 12px; min-height: 46px; padding-inline: 1.3em; }
+
+/* ===== s4: kartka z notatnika z perforacją ===== */
+.szk.karta--s4 { background-color: var(--arkusz); background-image: var(--siatka); background-size: 22px 22px; padding: 24px 26px 18px 74px;
+  border: var(--kr) solid var(--ramka); border-radius: 3px; box-shadow: 0 3px 0 var(--ramka), 0 18px 28px -12px color-mix(in srgb, var(--tusz) 50%, transparent); }
+.karta--s4::before { content: ""; position: absolute; left: 54px; top: 0; bottom: 0; width: 2px; background: color-mix(in srgb, var(--akcent) 65%, transparent); }
+.karta--s4::after { content: ""; position: absolute; left: 14px; top: 18px; bottom: 18px; width: 22px; pointer-events: none;
+  background: radial-gradient(circle at 11px 11px, var(--g-podloga) 0 8px, var(--ramka) 8px 10px, transparent 10px) 0 0 / 22px 56px repeat-y; }
+[data-paleta="wysoka"] .karta--s4::before, [data-paleta="wysoka"] .karta--s4::after { display: none; }
+[data-paleta="wysoka"] .szk.karta--s4 { padding-left: 26px; }
+.karta--s4 .og { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; align-items: start; background: none; padding: 0; border: 0; border-radius: 0; }
+.karta--s4 .og-t { grid-column: 1; grid-row: 1; flex-direction: column-reverse; }
+.karta--s4 .og .k-tyt { font: 700 1.6em/1.2 var(--font-reka); text-decoration: underline wavy var(--akcent); text-decoration-thickness: 2px; text-underline-offset: 7px; align-self: flex-start; }
+.karta--s4 .og .k-ok { font: .9em var(--font-reka); text-transform: none; letter-spacing: 0; margin-top: 8px; }
+.karta--s4 .og button.x { grid-column: 2; grid-row: 1; background: var(--arkusz); border-style: dashed; }
+.karta--s4 .teczka-tryb { grid-column: 1 / -1; grid-row: 2; display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; }
+.karta--s4 .teczka-tryb button { background: var(--arkusz); border: 2px dashed var(--tusz); border-radius: 99px; padding: .3em 1.1em; font-family: var(--font-reka); font-size: 1.1em; }
+.karta--s4 .teczka-tryb button.aktywny { border-style: solid; background: var(--tusz); color: var(--papier); }
+.karta--s4 .ot { margin-top: 12px; padding: 0; }
+.karta--s4 .ost { margin: 22px -26px 0 -74px; padding: 16px 26px 0 74px; border-top: 2px dashed var(--tusz); position: relative; }
+.karta--s4 .ost::before { content: "✂"; position: absolute; top: -.8em; left: 14px; background: var(--arkusz); padding: 0 6px; font-size: 1.1em; }
+[data-paleta="wysoka"] .karta--s4 .ost { margin-left: -26px; padding-left: 26px; }
+.karta--s4 .btn, .karta--s4 .ost > button:not(.btn) { background: var(--arkusz); border-style: dashed; border-width: 2px; }
+.karta--s4 .btn.zielony, .karta--s4 .btn.pom, .karta--s4 .btn.czarny, .karta--s4 .ost > .pk-wejdz { border-style: solid; }
+.karta--s4 .ost > .pk-wejdz { background: var(--akcent); }
+
+/* ===== układ bez powtórzeń (pulpit/uklady.js): a – miniatury, b – nawigacja 1/4, c – tabela porównawcza ===== */
+[data-uk-poz][hidden] { display: none !important; }
+[data-uk-dod], [data-uk-akt] { grid-column: 1 / -1; }
+.uk { margin: 0 0 12px; font-size: .95em; }
+.uk-sr { position: static; }
+.uk button[data-uk] { cursor: pointer; font: inherit; color: var(--tusz); }
+.uk-a p { margin: 0 0 6px; font-size: .9em; }
+.uk-a ul { display: flex; gap: 8px; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; }
+.uk-a button { padding: 4px 12px; min-height: 38px; background: var(--g-karta); border: 1px solid var(--tusz); border-radius: 99px; }
+.uk-a button[aria-pressed="true"] { border-width: 3px; font-weight: 700; }
+.uk-a button[aria-pressed="true"]::before { content: "▶ "; }
+.uk-a small { opacity: .85; }
+.uk-b { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 4px; background: var(--g-karta); border: var(--kr) solid var(--tusz); border-radius: 8px; }
+.uk-b button { min-width: 48px; min-height: 44px; font-size: 1.4em; font-weight: 700; background: var(--g-karta); border: var(--kr) solid var(--tusz); border-radius: 6px; }
+.uk-b button:hover { background: var(--tusz); color: var(--papier); }
+.uk-b .uk-sr { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; flex: 1; min-width: 0; }
+.uk-kropki { display: flex; gap: 6px; }
+.uk-kropki i { display: block; width: 10px; height: 10px; border: 2px solid var(--tusz); border-radius: 50%; }
+.uk-kropki i.on { background: var(--tusz); transform: scale(1.2); }
+.uk-przew { overflow-x: auto; }
+.uk-c table { width: 100%; border-collapse: collapse; background: var(--g-karta); }
+.uk-c th, .uk-c td { border: var(--kr) solid var(--tusz); padding: 6px 8px; text-align: center; vertical-align: middle; }
+.uk-c tbody th { text-align: left; }
+.uk-c thead th { font: .8em var(--font-szyld); letter-spacing: .06em; text-transform: uppercase; }
+.uk-c tr[aria-current="true"] th { background: var(--tusz); color: var(--papier); }
+.szk .uk-c tr[aria-current="true"] th button { color: var(--papier); }
+.uk-c tr[aria-current="true"] th button::before { content: "▶ "; }
+.szk .uk-c th button { background: none; border: 0; box-shadow: none; padding: 0; min-height: 36px; width: auto; text-align: left; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.uk-c th small { display: block; font-weight: 400; }
+.uk-c .uk-akc { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; border: 0; border-top: var(--kr) solid var(--tusz); }
+.uk-c .uk-akc .btn { min-height: 38px; }
+.uk-podp { margin: 6px 0 0; font-size: .9em; }
+.karta--s2 .uk-b, .karta--s2 .uk-b button, .karta--s2 .uk-a button { border-radius: 0; }
+.karta--s3 .uk-b, .karta--s3 .uk-c table { border-radius: 14px; }
+.karta--s4 .uk-b, .karta--s4 .uk-a button { border-style: dashed; }
+
+/* ===== wejście okna (tylko przy otwarciu: klasa .nowa na zasłonie) i ruch ===== */
+@keyframes kartaWej1 { from { opacity: 0; transform: translateY(26px) rotate(-1.2deg); } to { opacity: 1; transform: none; } }
+@keyframes kartaWej2 { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+@keyframes kartaWej3 { from { opacity: 0; transform: translateY(24px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes kartaWej4 { from { opacity: 0; transform: translateY(-28px) rotate(-1.6deg); } to { opacity: 1; transform: none; } }
+.nowa .karta--s1, .pk-tlo .karta--s1 { animation: kartaWej1 .42s cubic-bezier(.2, .8, .2, 1) both; transform-origin: 50% 100%; }
+.nowa .karta--s2, .pk-tlo .karta--s2 { animation: kartaWej2 .3s ease-out both; }
+.nowa .karta--s3, .pk-tlo .karta--s3 { animation: kartaWej3 .38s cubic-bezier(.2, .8, .2, 1) both; }
+.nowa .karta--s4, .pk-tlo .karta--s4 { animation: kartaWej4 .5s cubic-bezier(.25, 1, .4, 1) both; transform-origin: 20% 0; }
+@media (prefers-reduced-motion: reduce) { .szk, .szk * { animation: none !important; transition: none !important; } }
+@media (max-width: 560px) {
+  .szk.karta--s1 { padding-right: 36px; }
+  .szk.karta--s2 { padding: 20px 16px 14px; }
+  .szk.karta--s3 { padding: 22px 18px 18px; }
+  .karta--s3::before { margin: -22px -18px 18px; }
+}

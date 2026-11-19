@@ -1,22 +1,26 @@
 // Świat gry: miejsca (budynki) z wnętrzami zamiast listy zakładek. Wejście: pasek z lewej, mapa (lukrum.otworzWnetrze)
 // albo okruszki nad ekranem decyzji. Wnętrze to scena z klikalnymi miejscami i lista „co tu zrobisz” pod nią.
 // Ekran „miejsce” jest zwykłą zakładką panelu (rejestr: zakladki/index.js), więc korzysta z tego samego stanu gry.
-import { esc, nazwaUslugi, toast, zl } from "../zakladki/wspolne.js";
+import { esc, nazwaUslugi, toast } from "../zakladki/wspolne.js";
 import { ikona } from "../zakladki/ikony.js";
 import { cenyLokalu, lokalWybrany, menuLokalu, mojeLokale, opisLokalu, wieleLokali } from "../zakladki/lokal_wybor.js";
-import { BUDYNEK_DO_EKRANU, BUDYNEK_DO_MIEJSCA, MIEJSCA, miejsceEkranu, ustawEkranyMiejsc } from "./miejsca.js";
-import { scenaBezLokalu, scenaBudowy, scenaHali, scenaHolu, scenaKebabu, scenaOkienek, scenaSurowa, ustawRozmiary } from "./sceny.js";
+import { BUDYNEK_DO_MIEJSCA, BUDYNEK_PARAMETR, MIEJSCA, miejsceEkranu, ustawEkranyMiejsc } from "./miejsca.js";
+import { scenaBezLokalu, scenaBudowy, scenaKebabu, scenaSurowa, ustawRozmiary } from "./sceny.js";
+import { akcjaMapa, kliknijPunkt, listaPunktow, przewinDo, punktySceny, sceneWczytana, wczytajScene, zbudujScene } from "./wnetrze.js";
 
 import { gazeta } from "./kurier.js";
 import { ksiegaGosci } from "./ksiega.js";
 
 // dodatek pod sceną miejsca (np. pierwsza strona gazety w redakcji)
-const DODATKI = { redakcja: gazeta };
-const DODATKI_POD = { kebab: ksiegaGosci };   // pod sceną
+const DODATKI = {};
+const DODATKI_POD = { kebab: ksiegaGosci, redakcja: gazeta };   // pod sceną
 
-const M = { id: "kebab", grafiki: null, wn: {}, wnKlucz: "", karta: null, fokusKarty: false };
+const M = { id: "kebab", q: "", widok: "", def: null, punkty: [], grafiki: null, wn: {}, wnKlucz: "", karta: null, fokusKarty: false };
+// ekrany, do których prowadzą punkty wczytanych scen (okruszek nad ekranem wraca do sceny, z której przyszło się do ekranu)
+const EKRANY_SCEN = {};
 export const aktualneMiejsce = () => M.id;
-export function ustawMiejsce(id) { if (MIEJSCA[id]) { M.id = id; M.karta = null; } return !!MIEJSCA[id]; }
+export const aktualneQ = () => M.q;
+export function ustawMiejsce(id, q = "") { if (MIEJSCA[id]) { M.id = id; M.q = q; M.widok = ""; M.def = null; M.blad = false; M.karta = null; } return !!MIEJSCA[id]; }
 export { MIEJSCA, miejsceEkranu, ustawEkranyMiejsc };
 
 // --- grafiki: jeden plik symboli wklejony do dokumentu (grafiki widzą wtedy zmienne palety) ---------------------------
@@ -120,11 +124,11 @@ function scenaMiejscaKebab(c, m) {
 // --- sceny pozostałych miejsc --------------------------------------------------------------------------------------------
 function scenaMiejsca(c, m) {
   if (m.scena === "kebab") return scenaMiejscaKebab(c, m);
-  const punkty = punktyMiejsca(c, m);
-  const podtytul = m.adres || "";
-  if (m.scena === "hol") return scenaHolu({ tytul: m.tytul, podtytul, styl: m.styl, drzwi: punkty, postac: m.postac });
-  if (m.scena === "okienka") return scenaOkienek({ tytul: m.tytul, podtytul, okienka: punkty });
-  return scenaHali({ tytul: m.tytul, podtytul, stoiska: punkty, postac: m.postac });
+  const def = sceneWczytana(M.id, M.q);
+  M.def = def;
+  M.punkty = punktySceny(c, def, M.widok);
+  EKRANY_SCEN[M.id] = new Set(M.punkty.map((o) => o.ekran && c.docelowa(o.ekran)).filter(Boolean));
+  return zbudujScene(c, def, M.widok, M.punkty);
 }
 
 // --- karty na scenie: zaczepka WOS, propozycja klienta, zdjęcie wujka ---------------------------------------------------
@@ -155,12 +159,14 @@ function kartaHtml(c) {
 const wsk = (etykieta, wartosc) => `<span class="wsk">${etykieta} <b>${wartosc}</b></span>`;
 function naglowek(c, m) {
   const v = c.v, kebab = m.scena === "kebab", lok = kebab ? lokalWybrany(v) : null, o = lok ? opisLokalu(v, lok.id) : null;
-  const tytul = kebab && lok ? `Kebab „${esc(v.dashboard.nazwa)}”` : esc(m.tytul);
-  const adres = kebab ? (o ? `${esc(o.nazwa)}, ${esc(o.adres || "")}` : "") : esc(m.adres || "");
+  const def = m.scena === "makieta" ? sceneWczytana(M.id, M.q) : null;
+  const tytul = kebab && lok ? `Kebab „${esc(v.dashboard.nazwa)}”` : esc(def?.tytul || m.tytul);
+  const adres = kebab ? (o ? `${esc(o.nazwa)}, ${esc(o.adres || "")}` : "") : esc(def?.adres || m.adres || "");
+  const wyzej = def?.wrocDo ? `<button class="sw-wroc wn-wroc-wyzej" data-akcja="sw-wejdz" data-m="${esc(def.wrocDo.replace(/\.html.*/, ""))}" title="Wróć: ${esc(def.wroc || "")}">${ikona("lewo", 18)}<span>${esc(def.wroc || "Wyżej")}</span></button>` : "";
   const ocena = kebab && lok?.ocena ? wsk("Ocena", `${lok.ocena.toFixed(1).replace(".", ",")} ★`) : "";
-  return `<div class="sw-gora"><button class="sw-wroc" data-akcja="sw-mapa" title="Wróć na mapę miasta">${ikona("mapa", 18)}<span>Mapa</span></button>
+  return `<div class="sw-gora">${wyzej}<button class="sw-wroc" data-akcja="sw-mapa" title="Wróć na mapę miasta">${ikona("mapa", 18)}<span>Mapa</span></button>
     <h1>${tytul}</h1><span class="adres">${adres}</span>
-    ${wsk("Tydzień", `${Math.min(v.runda, v.gra.liczba_rund)} z ${v.gra.liczba_rund}`)}${wsk("Kasa", zl(v.dashboard.saldo))}${ocena}</div>`;
+    ${wsk("Tydzień", `${Math.min(v.runda, v.gra.liczba_rund)} z ${v.gra.liczba_rund}`)}${ocena}</div>`;
 }
 
 function lista(c, m) {
@@ -178,23 +184,31 @@ function wyborLokalu(c, m) {
     class="${l.id === akt ? "aktywny" : ""}" data-akcja="wybierz-lokal" data-id="${esc(l.id)}">${esc(opisLokalu(c.v, l.id)?.nazwa || l.id)}</button>`).join("")}</div>`;
 }
 
+const makieta = (m) => m.scena === "makieta";
 export const miejsce = {
   get tytul() { return MIEJSCA[M.id]?.tytul || "Miejsce"; },
   bezGlowy: true,
   hash: () => `miejsce/${M.id}`,
   decyzje(c) {
     const m = MIEJSCA[M.id] || MIEJSCA.kebab;
-    if (!gotoweGrafiki) return `<div class="sw">${naglowek(c, m)}<div class="ladowanie">Wczytywanie wnętrza…</div>${lista(c, m)}</div>`;
+    M.c = c;
+    if (!gotoweGrafiki || (makieta(m) && !sceneWczytana(M.id, M.q))) {
+      return `<div class="sw">${naglowek(c, m)}<div class="ladowanie">${M.blad ? "Nie udało się wczytać wnętrza." : "Wczytywanie wnętrza…"}</div>${makieta(m) ? "" : lista(c, m)}</div>`;
+    }
     const sc = scenaMiejsca(c, m);
     return `<div class="sw">${naglowek(c, m)}${wyborLokalu(c, m)}${DODATKI[M.id] ? DODATKI[M.id](c) : ""}
       <div class="sw-scena-ramka"><div class="sw-scena"><svg viewBox="0 0 1220 612" role="img" aria-label="${esc(sc.opis)}">${sc.s}</svg>
         <div class="sw-nakladka">${sc.h}</div><div id="sw-karta-miejsce">${kartaHtml(c)}</div></div></div>
-      ${DODATKI_POD[M.id] ? DODATKI_POD[M.id](c) : ""}<h2 class="sw-co">Co tu zrobisz</h2>${lista(c, m)}</div>`;
+      ${DODATKI_POD[M.id] ? DODATKI_POD[M.id](c) : ""}<h2 class="sw-co">Co tu zrobisz</h2>${makieta(m) ? listaPunktow(M.punkty) : lista(c, m)}</div>`;
   },
   po(c) {
     const naMiejscu = () => document.querySelector(".sw");
+    const m = MIEJSCA[M.id];
     if (!gotoweGrafiki) wczytajGrafiki().then((ok) => { gotoweGrafiki = !!ok; if (ok && naMiejscu()) c.rysuj(); });
-    else if ((MIEJSCA[M.id] || {}).scena === "kebab" && lokalWybrany(c.v)) wczytajWnetrze(c).then((zmiana) => { if (zmiana && naMiejscu()) c.rysuj(); });
+    else if (m && makieta(m) && !sceneWczytana(M.id, M.q) && !M.blad) {
+      const id = M.id;
+      wczytajScene(id, M.q).then(() => { if (naMiejscu() && M.id === id) c.rysuj(); }).catch((e) => { console.error(e); M.blad = true; if (naMiejscu()) c.rysuj(); });
+    } else if ((MIEJSCA[M.id] || {}).scena === "kebab" && lokalWybrany(c.v)) wczytajWnetrze(c).then((zmiana) => { if (zmiana && naMiejscu()) c.rysuj(); });
     const k = document.querySelector(".sw-karta .zamknij");
     if (k && M.fokusKarty) { k.focus({ preventScroll: true }); M.fokusKarty = false; }
   },
@@ -206,7 +220,7 @@ export const miejsce = {
       if (!k) return;
       if (!c.zakryta(k) && !c.dostepna(k)) { const od = c.odRundy(k); return toast(od ? `To otworzy się w tygodniu ${od}.` : "To miejsce jest jeszcze zamknięte."); }
       M.karta = null;
-      c.idz(k);
+      c.teczka(k);   // ekran w oknie nad wnętrzem (teczka), nie osobna karta
       if (el.dataset.szukaj) przewinDo(el.dataset.szukaj);
     },
     "sw-osoba": (el, c) => {
@@ -221,22 +235,17 @@ export const miejsce = {
       M.wn = await c.api(`/api/gry/${GRA}/wnetrza/${encodeURIComponent(FIRMA)}/odpowiedz`, { method: "POST", body: JSON.stringify({ odpowiedz: el.dataset.o }) });
       c.rysuj();
     },
+    "sw-wn": (el, c) => kliknijPunkt(+el.dataset.i, { c, punkty: M.punkty, def: M.def, wejdz: (id, q) => idzDoMiejsca(c, id, q),
+      ustawWidok: (nazwa) => { M.widok = nazwa; c.rysuj(); } }),
+    "sw-wn-mapa": () => akcjaMapa(),
+    "sw-wejdz": (el, c) => idzDoMiejsca(c, el.dataset.m),
     "sw-mapa": () => window.lukrum.wrocNaMape(),
-    "sw-miejsce": (el, c) => idzDoMiejsca(c, el.dataset.m),
+    "sw-miejsce": (el, c) => idzDoMiejsca(c, el.dataset.m, el.dataset.m === M.id ? M.q : ""),
   },
 };
 
-// po przejściu do ekranu: przewiń do firmy, której drzwi kliknięto (np. bank „Kmicic” na ekranie banków)
-function przewinDo(tekst) {
-  setTimeout(() => {
-    const kandydaci = [...document.querySelectorAll("#karta .tresc :is(h2, h3, h4, b, strong, th, .nazwa, summary)")];
-    const el = kandydaci.find((e) => e.textContent.includes(tekst));
-    if (el) { el.scrollIntoView({ block: "center" }); el.classList.add("sw-wskazany"); setTimeout(() => el.classList.remove("sw-wskazany"), 2400); }
-  }, 60);
-}
-
-export function idzDoMiejsca(c, id) {
-  if (!ustawMiejsce(id)) return false;
+export function idzDoMiejsca(c, id, q = "") {
+  if (!ustawMiejsce(id, q)) return false;
   c.idz("miejsce");
   window.scrollTo({ top: 0 });
   return true;
@@ -246,14 +255,18 @@ export function idzDoMiejsca(c, id) {
 export function otworzBudynek(c, id) {
   const moj = mojeLokale(c.v).find((l) => l.id === id);
   if (moj) { c.wybierzLokal(id); return idzDoMiejsca(c, "kebab"); }
-  if (BUDYNEK_DO_MIEJSCA[id]) return idzDoMiejsca(c, BUDYNEK_DO_MIEJSCA[id]);
-  if (BUDYNEK_DO_EKRANU[id] && c.jestZakladka(BUDYNEK_DO_EKRANU[id])) { c.idz(BUDYNEK_DO_EKRANU[id]); return true; }
+  if (BUDYNEK_DO_MIEJSCA[id]) return idzDoMiejsca(c, BUDYNEK_DO_MIEJSCA[id], BUDYNEK_PARAMETR[id] || "");
   return false;
 }
 
 /** Okruszek nad ekranem decyzji: powrót do wnętrza, w którym jest ten ekran. */
 export function okruszek(k) {
-  const id = miejsceEkranu(k);
+  // ekran otwarty z kebaba wraca do kebaba: z kebaba nie ma przejścia do Parku handlowego (sprzęt kupuje się tylko po wejściu z mapy)
+  const zKebaba = M.id === "kebab" && MIEJSCA.kebab.punkty.some((p) => p.cel === k);
+  const id = zKebaba ? "kebab" : EKRANY_SCEN[M.id]?.has(k) ? M.id : miejsceEkranu(k);
   if (!id) return "";
   return `<a class="sw-okruszek" data-akcja="sw-miejsce" data-m="${id}" title="Wróć do wnętrza: ${esc(MIEJSCA[id].tytul)}">${ikona("lewo", 16)}${esc(MIEJSCA[id].tytul)}</a>`;
 }
+
+// zmiana palety albo trybu: rysunek wnętrza zależy od wyglądu (kroje napisów), więc ekran miejsca rysuje się od nowa
+document.addEventListener("lukrum:wyglad", () => { if (M.c && document.querySelector(".sw-scena")) M.c.rysuj(); });

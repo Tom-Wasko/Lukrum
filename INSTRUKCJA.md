@@ -6,7 +6,7 @@ złotówki na plakat przy dworcu. Drużyny rywalizują ze sobą i z botami – o
 pracowników i te same lokale.
 
 > **W pięciu zdaniach.** Jedna runda to jeden tydzień, gra ma zwykle 18 rund (od września do początku stycznia). W każdej
-> rundzie ogląda się wyniki poprzedniego tygodnia, podejmuje decyzje na następny i klika **Wyślij decyzje**.
+> rundzie ogląda się wyniki poprzedniego tygodnia, podejmuje decyzje na następny i klika **List z decyzjami**.
 > Mistrz gry zamyka rundę, a gra liczy tydzień dzień po dniu: klientów, sprzedaż, koszty i podatki. Wygrywa
 > drużyna z najwyższym **wynikiem gry** (0–1000 pkt). Kapitał na start: **50 000 zł** i nic więcej, więc liczy się
 > każda złotówka.
@@ -25,13 +25,13 @@ działa:
 3. Wejdź w **Mapę miasta** i kliknij biuro **Klucz** na Starym Mieście (menu: Stare Miasto). **Wynajmij lub kup lokal**.
    Wybór strefy to połowa sukcesu: Miasteczko akademickie to studenci, Stare Miasto – turyści i wieczory,
    okolice dworca – podróżni.
-4. W **Kamienicy bankowej** wybierz bank (konto firmowe), a w **Biurowcu przy Zana** – biuro rachunkowe.
+4. W **Kamienicy bankowej** wybierz bank (konto firmowe), a w **Kamienicy rachmistrzów** – biuro rachunkowe.
 5. W **Moim kebabie** kliknij tablicę z menu i ustaw dania oraz ceny. Na start są trzy dania: kebab w bułce, frytki
    i napój.
 6. Przy **rożnie** (stanowiska i sprzęt) ustaw stanowiska kuchni i kasy. Każdy pracownik potrzebuje swojego stanowiska.
 7. W **Miasteczku akademickim** (tablica ogłoszeń) zatrudnij kucharza i kasjera.
 8. Otwórz **Listę błędów** w menu – wypisuje, czego jeszcze brakuje. Popraw czerwone pozycje.
-9. Kliknij **Wyślij decyzje**. Decyzje zapisują się same po każdej zmianie i można je poprawiać aż do zamknięcia rundy.
+9. Kliknij **List z decyzjami**. Decyzje zapisują się same po każdej zmianie i można je poprawiać aż do zamknięcia rundy.
 
 Opisy i wyjaśnienia są schowane w **kółkach „i”** obok tytułów, tabel i pól – najedź na kółko (na telefonie:
 dotknij), a pojawi się dymek.
@@ -43,7 +43,7 @@ dotknij), a pojawi się dymek.
 | 1 | Sprawdzenie, jak poszedł poprzedni tydzień | Plan tygodnia, Kurier rankingowy, widoki wyników w miejscach |
 | 2 | Decyzje na nowy tydzień | Mój kebab i pozostałe miejsca |
 | 3 | Sprawdzenie, czy czegoś nie brakuje | Lista błędów |
-| 4 | Wysłanie decyzji | Wyślij decyzje |
+| 4 | Wysłanie decyzji | List z decyzjami |
 | 5 | Czekanie, aż mistrz gry zamknie rundę | – |
 
 Ekrany większości miejsc mają przełącznik **Decyzje / Wyniki**: pierwszy pokazuje, co robi się w bieżącym tygodniu,
@@ -106,7 +106,20 @@ majątek netto, awanse i spadki oraz wykres miejsc w kolejnych rundach.
 Gra to **miejsca**, a nie zakładki. Menu z boku prowadzi do każdego z nich, a **Mapa miasta** to prawdziwy plan
 Lublina: przybliża się go kółkiem myszy (na telefonie – dwoma palcami, a także dwuklikiem albo przyciskami + i −),
 przesuwa przeciąganiem, a kliknięcie budynku otwiera jego wnętrze. W wnętrzu klika się tabliczki i postacie –
-każdy punkt prowadzi do ekranu decyzji.
+każdy punkt otwiera ekran decyzji w oknie, czyli **teczce** nad wnętrzem (wnętrze zostaje widoczne pod spodem;
+Esc albo ✕ zamyka teczkę). Każde miejsce ma własne, narysowane wnętrze: bank, biuro rachunkowe, sklep czy
+urząd wyglądają inaczej i poznaje się je po jednym charakterystycznym przedmiocie. Przy punkcie stoi etykieta z nazwą
+czynności (po najechaniu albo wejściu klawiszem Tab punkt się podświetla, a „!” ostrzega o błędach do poprawy). Etykieta
+z „➜” mówi, że sprawę załatwia się w innym miejscu, a przy zamkniętych punktach jest kłódka i numer tygodnia. Kto tu
+mówi, ten ma dymek (po najechaniu), a pod rysunkiem jest lista tych samych punktów dla czytników ekranu. Wejście do
+banku albo biura rachunkowego prowadzi najpierw przez fasadę (Pierzeja bankowa, Kamienica rachmistrzów).
+
+Na mapie u góry po prawej jest **rząd ikon kategorii** (Jedzenie i zaopatrzenie, Finanse, Urzędy i prawo, Praca i ludzie,
+Reklama i media, Miasto i rozrywka): kliknięta ikona podświetla pasujące miejsca (aktywną znaczy ✓ i gruba ramka),
+drugie kliknięcie wyłącza filtr. Paski i okienka w rogach mają swój wygląd: **zakupy** to paragon, **wydarzenia** to
+tablica ogłoszeń z kartkami na pinezkach (▲ korzystne, ▼ niekorzystne), a **List z decyzjami** to koperta z podsumowaniem
+i stemplem „NADANO” po wysłaniu. **Zeszyt wujka** leży przechylony w prawym dolnym rogu, a po najechaniu wyprostowuje
+się i wysuwa listę kroków.
 
 | Miejsce | Co się tam załatwia |
 |---|---|
@@ -118,13 +131,15 @@ każdy punkt prowadzi do ekranu decyzji.
 | Park handlowy | Sprzęt gastronomiczny (kupno, wynajem, sprzedaż) i sklep meblowy z wyposażeniem dla gości |
 | Miasteczko akademickie | Rynek pracy, klienci w strefach, konkurencja („Sokole Oko”) i kalendarz miasta (juwenalia, mecze, jarmarki) |
 | Kamienica bankowa | Sześć banków (konto, kredyty, lokaty, leasing, debet) i giełda właściciela |
-| Biurowiec przy Zana | Biura rachunkowe, księga firmy (KPiR), ubezpieczyciel, agencja reklamowa „Fala Koziołka” i internetowa „Lajk i Spółka” |
+| Kamienica rachmistrzów | Cztery biura rachunkowe (klatka schodowa z drzwiami do biur) |
+| Biurowiec przy Zana | Winda z guzikami pięter: parter (portiernia, „Twoje kampanie”, pokój z księgą firmy – KPiR), 1 drukarnia, 2 radio „Fala Koziołka”, 3 eventy, 4 internet „Lajk i Spółka” |
+| TUW „Pod Koziołkiem” | Ubezpieczenia lokalu, sprzętu i OC |
 | Urzędy | Urząd miasta (rejestracja i odbiory lokalu), sanepid, urząd skarbowy (VAT i podatek dochodowy) |
 | Bazar | Handel między drużynami: ogłoszenia i licytacje towaru i sprzętu |
 | Kurier rankingowy | Wyniki tygodnia, wnioski i ranking drużyn |
 | Lista błędów | Czego brakuje przed wysłaniem decyzji |
 | Zadania | Lista spraw na ten tydzień, także własnych (widzi je cała drużyna; nieodhaczone przechodzą dalej) |
-| Wyślij decyzje | Zatwierdzenie decyzji na rundę |
+| List z decyzjami | Zatwierdzenie decyzji na rundę |
 
 Miejsca, które odblokowują się później, są w menu szare, z kłódką i numerem tygodnia. Koło zębate **⚙** otwiera
 ustawienia: **paleta kolorów** (Bar mleczny, Pewex albo Wysoka widoczność), **tryb jasny lub ciemny** i **układ menu**
@@ -361,7 +376,7 @@ ostatnie – już tak. Przed zmianą warto policzyć, czy oszczędność na doku
   wolne ręce. Po wyłączeniu zostaje część przyciągania, co tydzień mniejsza. Każdy rodzaj sprawdza się w innej sytuacji:
   „2 za 1” mocno przyciąga, ale szybko się nudzi; happy hours zapełnia słabsze dni; karta stałego klienta rozkręca się
   z każdym tygodniem; zniżka studencka działa tylko na studentów; zestaw podnosi rachunek.
-- **Agencje reklamowe** (Biurowiec przy Zana, drukarnia) – kampanie w strefach: ulotki i plakaty (od tygodnia 5),
+- **Agencje reklamowe** (Biurowiec przy Zana: drukarnia, radio, eventy, internet) – kampanie w strefach: ulotki i plakaty (od tygodnia 5),
   billboard i radio (od tygodnia 8), degustacje i Noc Kebaba (od tygodnia 10). Kampanię zamawia się na **jedną rundę**:
   wybiera się kanał, strefę i **liczbę emisji**. Cena emisji zależy od kanału i strefy, a od progów dochodzi rabat.
   Efekt się nasyca – pierwsze emisje dają najwięcej, a dalsze kosztują i prawie nic nie dodają. Kampanie się sumują, ale

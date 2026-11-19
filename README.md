@@ -11,7 +11,7 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 
 - **Mapa Lublina** z danych OpenStreetMap, z płynnym przybliżaniem. Budynki to żetony, kliknięcie otwiera wnętrze.
 - **Miejsca zamiast zakładek:** Mój kebab, Stare Miasto, Hurtownie, Park handlowy, Miasteczko akademickie, Kamienica
-  bankowa, Biurowiec przy Zana, Urzędy, redakcja „Kuriera rankingowego”.
+  bankowa, Kamienica rachmistrzów, Biurowiec przy Zana (winda z piętrami, agencje reklamowe), Urzędy, redakcja „Kuriera rankingowego”.
 - **Plan tygodnia z listem od wujka:** lista kroków po kolei, pierwszy niezrobiony ma znacznik „teraz”.
 - **Wynik 0–1000 pkt** w pięciu działach, gazeta „Kurier rankingowy” co tydzień i podium na koniec gry.
 - **Trzy palety** (Bar mleczny, Pewex, wysoka widoczność), każda jasna i ciemna. Stan nigdy samym kolorem (▲ ▼ !).
@@ -25,7 +25,7 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 | 1 | Gra pod nową nazwą, nowa dokumentacja | zrobione |
 | 1½ | Wygląd: palety, kroje, grafiki wnętrz | zrobione, do przeglądu autora |
 | 2 | Mapa Lublina z przybliżaniem i wejściem do budynków | zrobione, poprawki w toku |
-| 3 | Wszystkie miejsca gry z własnymi wnętrzami | w toku (pełne wnętrze ma kebab, reszta jest schematyczna) |
+| 3 | Wszystkie miejsca gry z własnymi wnętrzami | w toku (33 wnętrza z makiet wdrożone, punkty otwierają ekrany gry; teczka decyzji w oknie na scenie – dalej) |
 | 4 | Lekcje: scenariusze i tryb lekcyjny | projekt gotowy, bez próby w klasie |
 | 5 | Audyt i publikacja | do zrobienia |
 

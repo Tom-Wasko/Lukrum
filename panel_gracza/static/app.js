@@ -1,5 +1,5 @@
 // Interfejs gry: menu, nawigacja po rundach, DECYZJE / WYNIKI, zapisywanie roboczych decyzji.
-import { esc, godzina, nazwaRundy, niezatwierdzone, OKRES, okno, przelaczSortowanie, skrotRundy, toast, twardeSpacje, ustawKalendarz, ustawNazwyDan, wyczyscWykresy, zamknijOkno, zapamietajZwiniecie, zl }
+import { esc, godzina, nazwaRundy, niezatwierdzone, OKRES, okno, przelaczSortowanie, skrotRundy, teczka, toast, twardeSpacje, ustawKalendarz, ustawNazwyDan, wyczyscWykresy, zamknijOkno, zamknijTeczke, zapamietajZwiniecie, zl }
   from "./zakladki/wspolne.js";
 import ZAKLADKI, { ALIAS, ELEMENT, IKONY, MENU, OD_RUNDY } from "./zakladki/index.js";
 import { ikona } from "./zakladki/ikony.js";
@@ -9,11 +9,13 @@ import { AKCJE_ZADAN, podepnijZadania, rysujZadania } from "./zakladki/zadania.j
 import { HASLO, HASLO_SZPERACZ, jestSzperaczem, zapamietajHaslo, zapamietajSzperacza } from "./zakladki/kasyno.js";
 import { funkcjaZakladki, funkcjeZakladek, oknoFunkcji, oknoUstawienFunkcji, oknoZakryciaFunkcji, saZakryte, ukryta as ukrytaF, wylaczona as wylaczonaF,
   zakryta as zakrytaF, zakrytaFunkcja, znaczekFunkcji } from "./zakladki/funkcje.js";
-import { aktualneMiejsce, idzDoMiejsca, okruszek, otworzBudynek, ustawMiejsce } from "./swiat/swiat.js";
+import { aktualneMiejsce, aktualneQ, idzDoMiejsca, MIEJSCA, okruszek, otworzBudynek, ustawMiejsce } from "./swiat/swiat.js";
+import { stylEkranu, ukladEkranu } from "./pulpit/karty-style.js";
 import { ustawWybrany } from "./zakladki/lokal_wybor.js";
+import { AKCJE_PULPITU, odswiezPulpit, PULPIT } from "./pulpit/pulpit.js";
 
-const start = () => "dashboard";   // ekran startowy – plan rundy (pulpit); mapa jest w menu
-const S = { v: null, kat: null, zakladka: null, tryb: "decyzje", runda: null, d: {}, zapis: Promise.resolve(),
+const start = () => (PULPIT ? "mapa" : "dashboard");   // ekran startowy: pulpit – mapa na cały ekran; stary układ (?uklad=stary) – plan rundy
+const S = { teczka: null, v: null, kat: null, zakladka: null, tryb: "decyzje", runda: null, d: {}, zapis: Promise.resolve(),
   nrZapytania: 0, oczekujace: 0, poleZmiany: null, odliczanie: null, zadania: 0 };
 
 const postep = document.createElement("div");
@@ -59,6 +61,7 @@ function ustaw(v, { poZapisie = false, lokalnie = null } = {}) {
   if (poZapisie && lokalnie) {   // zmiana tylko we fragmencie zakładki: bez przerysowania całej strony (skoku, utraty przewijania)
     S.zadania = rysujZadania(ctx());
     rysujMenu();
+    odswiezPulpit(ctx());
     lokalnie();
   } else if (poZapisie) rysujPoWyjsciuZPola(); else rysuj();
 }
@@ -68,7 +71,7 @@ function ustaw(v, { poZapisie = false, lokalnie = null } = {}) {
 // od razu).
 function rysujPoWyjsciuZPola() {
   const el = document.activeElement;
-  if (el?.matches?.("#karta select, #karta input") && el !== S.poleZmiany) {
+  if (el?.matches?.("#karta select, #karta input, .teczka select, .teczka input") && el !== S.poleZmiany) {
     el.addEventListener("blur", () => setTimeout(rysujPoWyjsciuZPola), { once: true });
     return;
   }
@@ -86,7 +89,7 @@ const terminKrotko = (iso) => new Date(iso).toLocaleString("pl-PL", { weekday: "
 async function zmien(fn, lokalnie = null) {
   if (!S.v.edycja) return toast("Podgląd poprzedniej rundy – decyzji nie można zmieniać.");
   if (blokada(S.v)) return toast(blokada(S.v));
-  if (S.v.wyslane) return toast("Decyzje są wysłane. Wróć do podejmowania decyzji w zakładce „Wyślij decyzje”.");
+  if (S.v.wyslane) return toast("Decyzje są wysłane. Wróć do podejmowania decyzji w zakładce „List z decyzjami”.");
   fn(S.d);
   S.oczekujace++;
   S.zapis = S.zapis.then(async () => {
@@ -94,7 +97,7 @@ async function zmien(fn, lokalnie = null) {
     try {
       // wersja: ktoś z drużyny zapisał w międzyczasie → 409 i wczytanie jego decyzji (bez nadpisania)
       const wersja = S.v.druzyna?.autorzy?.wersja ?? "";
-      const zakladka = encodeURIComponent(ZAKLADKI[S.zakladka]?.tytul || S.zakladka || "");   // dziennik zapisów (MG)
+      const zakladka = encodeURIComponent(ZAKLADKI[S.teczka?.k || S.zakladka]?.tytul || S.zakladka || "");   // dziennik zapisów (MG)
       const v = await api(`/api/gry/${GRA}/decyzje/${encodeURIComponent(FIRMA)}?wersja=${wersja}&zakladka=${zakladka}`,
         { method: "PUT", body: JSON.stringify(S.d) });
       // w kolejce czeka nowsza zmiana: szkic S.d już ją ma (ustaw by ją skasował) – tylko nowa wersja do zapisu
@@ -114,7 +117,7 @@ const odRundy = (k) => odRundy1(k) ?? (ZAKLADKI[k]?.czesci ? najwczesniej(ZAKLAD
 function dostepna(z) { return !z.odblokowanie || (typeof z.odblokowanie === "function" ? z.odblokowanie(S.v) : odbl(z.odblokowanie)); }
 const maWyniki = (z) => !!(z && z.wyniki && S.v.wyniki && (!z.wynikiOd || S.v.runda >= z.wynikiOd) && (!z.wynikiGdy || z.wynikiGdy(S.v)));
 // dawne zakładki (oferta, dostawcy, …) są częściami zakładek złożonych – link prowadzi do zakładki i jej części
-const docelowa = (k) => (ALIAS[k] && ZAKLADKI[ALIAS[k]] ? ALIAS[k] : k);
+const docelowa = (k) => (PULPIT && k === "dashboard" ? "mapa" : ALIAS[k] && ZAKLADKI[ALIAS[k]] ? ALIAS[k] : k);   // pulpit: plan rundy jest w zeszycie wujka
 function pokazCzesc(k) {
   if (!ALIAS[k]) return;
   const el = document.getElementById(`czesc-${k}`);
@@ -125,7 +128,7 @@ const kluczZakladki = (z) => Object.keys(ZAKLADKI).find((k) => ZAKLADKI[k] === z
 // --- funkcje gry : zakryta – okno „Odsłoń” zamiast zakładki, wyłączona – Pulpit -------------
 function pokazOknoFunkcji(klucze, cel) {
   const [tytul, html, przyciski] = oknoFunkcji(S.v, klucze, cel, { mg: !!S.v.tylko_odczyt });
-  okno(tytul, html, { male: klucze.length === 1, srednie: klucze.length > 1, przyciski });
+  okno(tytul, html, { male: klucze.length === 1, srednie: klucze.length > 1, przyciski, styl: stylEkranu("ustawienia"), okruszek: "Lublin › Funkcje gry" });
 }
 // przejście do zakładki `k` (także dawny klucz) obsłużone tu – true: zakładka się nie otwiera
 function przechwycFunkcje(k) {
@@ -155,18 +158,19 @@ async function przelaczFunkcje(funkcja, odslonieta, cel = "") {
     + (cel && !wejdz && f.od_rundy && f.od_rundy > v.runda ? ` Zakładki od rundy ${f.od_rundy}.` : ""));
   else toast(`${f.nazwa || funkcja}: znów zakryte – od tej rundy gra robi to za Was.`);
 }
-const oknoUstawien = () => okno("Funkcje gry", oknoUstawienFunkcji(S.v, { mg: !!S.v.tylko_odczyt }), { male: true });
+const oknoUstawien = () => okno("Funkcje gry", oknoUstawienFunkcji(S.v, { mg: !!S.v.tylko_odczyt }), { male: true, styl: stylEkranu("ustawienia"), okruszek: "Lublin › Ustawienia" });
 // ⚙ → „Funkcje gry” – tylko gdy mistrz gry coś zakrył (menu ⚙ buduje motyw.js; tu dopisujemy pozycję)
 function menuUstawien() {
   const lista = document.getElementById("ustawienia-lista");
   if (!lista) return;
   let el = document.getElementById("ustawienia-funkcje");
-  if (!saZakryte(S.v)) return el?.remove();
+  const sekcja = document.getElementById("pp-sek-gra");   // pulpit: „Funkcje gry” w sekcji Gra panelu ustawień
+  if (!saZakryte(S.v)) { if (sekcja) sekcja.hidden = true; return el?.remove(); }
   if (el) return;
   el = document.createElement("a");
   Object.assign(el, { id: "ustawienia-funkcje", href: "#", textContent: "Funkcje gry" });
   el.dataset.akcja = "funkcje-gry";
-  lista.insertBefore(el, lista.querySelector(".wybor-motywu"));
+  if (sekcja) { sekcja.hidden = false; sekcja.appendChild(el); } else lista.insertBefore(el, lista.querySelector(".wybor-motywu"));
 }
 function zamknijUstawienia() {
   const lista = document.getElementById("ustawienia-lista");
@@ -175,18 +179,63 @@ function zamknijUstawienia() {
 }
 
 // v, d i edycja zawsze bieżące – akcja po `await c.zmien(…)` (np. ponowne otwarcie okna) widzi zapisane decyzje
-const ctx = () => ({ get v() { return S.v; }, kat: S.kat, get d() { return S.d; },
+const ctx = () => ({ get v() { return S.v; }, kat: S.kat, get d() { return S.d; }, get zakladka() { return S.zakladka; },
   get edycja() { return S.v.edycja && !S.v.wyslane && !blokada(S.v); }, zmien, api, wczytaj, ustaw, rysuj,
   dostepna: (k) => !!ZAKLADKI[k] && dostepna(ZAKLADKI[k]) && !wylaczonaF(S.v, k), tytulZakladki: (k) => ZAKLADKI[k]?.tytul ?? k,
   zakryta: (k) => zakrytaF(S.v, k), wylaczona: (k) => wylaczonaF(S.v, k),
   // świat gry (swiat/swiat.js): stan ekranu, do którego prowadzi klikalne miejsce sceny
   jestZakladka: (k) => !!ZAKLADKI[docelowa(k)], ukryta: (k) => !!ZAKLADKI[docelowa(k)]?.ukryta?.(S.v) || ukrytaF(S.v, k), docelowa,
   odRundy: (k) => odRundy(docelowa(k)), wybierzLokal: ustawWybrany,
+  // teczka: ekran decyzji w oknie nad wnętrzem (zamiast przejścia na osobną kartę); bez zmiany S.zakladka
+  teczka: (k, tryb) => otworzTeczke(k, tryb),
   idz: (k, tryb) => {
     if (przechwycFunkcje(k)) return;
     const cel = docelowa(k);
+    if (S.teczka && S.zakladka === "miejsce" && !["mapa", "miejsce"].includes(cel) && ZAKLADKI[cel]) return otworzTeczke(k, tryb);   // z teczki do kolejnego ekranu – nadal w teczce
     S.zakladka = cel; S.tryb = tryb || (ZAKLADKI[cel].decyzje ? "decyzje" : "wyniki"); rysuj(); pokazCzesc(k);
   } });
+
+// --- teczka: ekran decyzji w oknie nad wnętrzem (punkt sceny nie przenosi na osobną kartę) ---------------------------
+// S.teczka = { k: klucz zakładki, tryb, miejsce: wnętrze, nad którym leży }. Zamyka się razem z opuszczeniem wnętrza.
+function otworzTeczke(k, tryb) {
+  if (przechwycFunkcje(k)) return;
+  const cel = docelowa(k);
+  if (!ZAKLADKI[cel] || !dostepna(ZAKLADKI[cel])) return;
+  S.teczka = { k: cel, tryb: tryb || (ZAKLADKI[cel].decyzje ? (S.v.edycja ? "decyzje" : maWyniki(ZAKLADKI[cel]) ? "wyniki" : "decyzje") : "wyniki"), czesc: k,
+    miejsce: `${aktualneMiejsce()}?${aktualneQ() || ""}` };
+  rysujTeczke();
+  pokazCzesc(k);
+}
+function rysujTeczke() {
+  const t = S.teczka, v = S.v;
+  const z = t && ZAKLADKI[t.k];
+  if (!t || !z || S.zakladka !== "miejsce" || t.miejsce !== `${aktualneMiejsce()}?${aktualneQ() || ""}` || !dostepna(z) || ukrytaF(v, t.k)) {
+    S.teczka = null; zamknijTeczke(); return;
+  }
+  const c = ctx(), wyniki = maWyniki(z), decyzje = !!z.decyzje && !(v.koniec && wyniki);
+  const tryb = (t.tryb === "wyniki" || v.koniec) && wyniki ? "wyniki" : decyzje ? "decyzje" : "wyniki";
+  // przełącznik Decyzje | Wyniki w nagłówku teczki (obok ✕): bieżąca runda albo ostatni wynik tej funkcji; niedostępny – wyszarzony z podpowiedzią
+  const bezWynikow = !z.wyniki ? "Ta funkcja nie ma ekranu wyników" : !v.wyniki ? "Wyniki pojawią się po pierwszym przeliczonym tygodniu" : "Na razie brak wyników tej funkcji";
+  const bezDecyzji = !z.decyzje ? "Ta funkcja nie ma ekranu decyzji" : "Gra zakończona – decyzji już nie podejmuje się";
+  const przycisk = (t, napis, aktywny, mozna, opis) => `<button type="button" data-akcja="teczka-tryb" data-t="${t}" aria-pressed="${aktywny}"${mozna ? "" : ` aria-disabled="true" title="${opis}"`}
+      class="${aktywny ? "aktywny" : ""}${mozna ? "" : " szare"}">${napis}</button>`;
+  const przelacznik = z.decyzje || wyniki ? `<div class="teczka-tryb" role="group" aria-label="Widok ekranu">${przycisk("decyzje", "Decyzje", tryb === "decyzje", decyzje, bezDecyzji)}${przycisk("wyniki", "Wyniki", tryb === "wyniki", wyniki, bezWynikow)}</div>` : "";
+  const tresc = tryb === "wyniki" ? z.wyniki(c) : z.decyzje(c);
+  const podglad = v.koniec ? `<div class="komunikat">Gra zakończona. Tu są wyniki ostatniej rundy (${v.gra.liczba_rund}).</div>`
+    : !v.edycja && v.runda < v.gra.runda ? `<div class="komunikat">Podgląd rundy ${v.runda} (${v.miesiac}) – decyzje z tej rundy są tylko do odczytu.</div>` : "";
+  const zablokowane = v.edycja && blokada(v) && tryb === "decyzje" ? `<div class="komunikat">${esc(blokada(v))}</div>` : "";
+  const wyslane = !zablokowane && v.edycja && v.wyslane && tryb === "decyzje" && t.k !== "wyslij"
+    ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji przyciskiem „List z decyzjami” na pasku.</div>` : "";
+  const opis = typeof z.info === "function" ? z.info(c, tryb) : z.info;
+  const html = `${opis ? `<div class="teczka-opis">${kolko(opis)}</div>` : ""}${podglad}${zablokowane}${wyslane}${tresc}`;
+  const okno_ = teczka(`${ikona(IKONY[t.k])} ${z.tytulPelny || z.tytul}`, html, {
+    naglowek: przelacznik, poZamknieciu: () => { if (S.teczka === t) S.teczka = null; },
+    styl: stylEkranu(t.czesc, t.k), okruszek: `Lublin › ${esc(MIEJSCA[aktualneMiejsce()]?.tytul || "Miejsce")}${tryb === "wyniki" ? " › Wyniki" : ""}`,
+    klucz: t.czesc || t.k, uklad: tryb === "decyzje" ? ukladEkranu(t.czesc, t.k) : null });
+  for (const a of okno_.querySelectorAll("[data-zakladka-k]")) if (wylaczonaF(v, a.dataset.zakladkaK)) a.remove();
+  zwinPodpowiedzi(okno_);
+  if (z.po) z.po(c, tryb);
+}
 
 // --- rysowanie ---------------------------------------------------------------------------------
 const widocznePod = (pod) => pod.filter((k) => !ZAKLADKI[k]?.ukryta?.(S.v) && !wylaczonaF(S.v, k));
@@ -215,7 +264,7 @@ function rysujMenu() {
     if (poz.sekcja !== undefined) return `<div class="sekcja ${poz.sekcja ? "" : "linia"}" data-nazwa="${esc(poz.sekcja)}"></div>`;
     const z = ZAKLADKI[poz.klucz] || {};
     const pod = poz.pod ? `<div class="pod">${poz.pod.map((k) => pozycjaPod(k, 18)).join("")}</div>` : "";
-    const aktywna = poz.klucz === S.zakladka || (poz.pod || []).includes(S.zakladka) || (S.zakladka === "miejsce" && poz.miejsce === aktualneMiejsce());
+    const aktywna = poz.klucz === S.zakladka || (poz.pod || []).includes(S.zakladka) || (S.zakladka === "miejsce" && (poz.miejsca || [poz.miejsce]).includes(aktualneMiejsce()));
     // funkcje gry: grupa szara z okiem dopiero, gdy wszystkie jej podzakładki są zakryte (okno – wszystkie jej funkcje)
     const wszystkie = poz.pod || [poz.klucz], zakryta = wszystkie.every((k) => zakrytaF(S.v, k));
     const funkcje = funkcjeZakladek(S.v, wszystkie.filter((k) => zakrytaF(S.v, k)));
@@ -342,7 +391,7 @@ function rysuj() {
     ? `<div class="komunikat">Podgląd rundy ${v.runda} (${v.miesiac}) – decyzje z tej rundy są tylko do odczytu. Wyniki pokazują skutki poprzedniego ${OKRES.dopelniacz}.</div>` : "";
   const zablokowane = v.edycja && blokada(v) && tryb === "decyzje" ? `<div class="komunikat">${esc(blokada(v))}</div>` : "";
   const wyslane = !zablokowane && v.edycja && v.wyslane && tryb === "decyzje" && S.zakladka !== "wyslij"
-    ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji w zakładce „Wyślij decyzje”.</div>` : "";
+    ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji w zakładce „List z decyzjami”.</div>` : "";
   const opis = typeof z.info === "function" ? z.info(c, tryb) : z.info;
   const karta = document.getElementById("karta");
   // wnętrze budynku (swiat/swiat.js) ma własny nagłówek – bez tytułu zakładki i przełącznika Decyzje / Wyniki
@@ -351,6 +400,8 @@ function rysuj() {
   // linki do wyłączonych funkcji znikają (plan rundy, „Przejdź: …”); zakryte zostają – otwierają okno „Odsłoń”
   for (const a of karta.querySelectorAll("[data-zakladka-k]")) if (wylaczonaF(v, a.dataset.zakladkaK)) a.remove();
   menuUstawien();
+  odswiezPulpit(c);
+  rysujTeczke();
   twardeSpacje(karta);
   zwinPodpowiedzi(karta);
   history.replaceState(null, "", `#${z.hash ? z.hash() : S.zakladka}${tryb === "wyniki" ? "/wyniki" : ""}`);
@@ -391,6 +442,10 @@ document.addEventListener("click", async (e) => {
     if (zak.dataset.funkcje) return pokazOknoFunkcji(zak.dataset.funkcje.split(","), k);   // szara pozycja z okiem
     if (przechwycFunkcje(stary)) return;
     if (!ZAKLADKI[k] || !dostepna(ZAKLADKI[k])) return;
+    if ((zak.closest(".teczka") || (S.zakladka === "miejsce" && !zak.closest("#menu"))) && !["mapa", "miejsce"].includes(k)) {
+      zamknijOkno();   // link we wnętrzu albo w teczce: kolejny ekran też otwiera się w teczce
+      return otworzTeczke(stary);
+    }   // link w teczce: kolejny ekran też w teczce
     S.zakladka = k;
     S.tryb = ZAKLADKI[k].decyzje ? (S.v.edycja ? "decyzje" : maWyniki(ZAKLADKI[k]) ? "wyniki" : "decyzje") : "wyniki";
     zamknijOkno();   // link z okna (np. obsada) przenosi do zakładki – okno nie zostaje na wierzchu
@@ -406,7 +461,9 @@ document.addEventListener("click", async (e) => {
   if (!el) return;
   const a = el.dataset.akcja;
   try {
-    if (a === "zamknij-okno") return zamknijOkno();
+    if (a === "zamknij-okno") return el.closest(".teczka") ? zamknijTeczke() : zamknijOkno();
+    if (a === "zamknij-teczke") return zamknijTeczke();
+    if (a === "teczka-tryb") { if (S.teczka && el.getAttribute("aria-disabled") !== "true") { S.teczka.tryb = el.dataset.t; rysujTeczke(); } return; }
     if (a === "runda") return przesunRunde(+el.dataset.d);
     if (a === "runda-idz") return idzDoRundy(+el.dataset.r);
     if (a === "tryb") { S.tryb = el.dataset.t; return rysuj(); }
@@ -415,11 +472,12 @@ document.addEventListener("click", async (e) => {
     if (a === "funkcja-przelacz") {   // ponowne zakrycie – najpierw ostrzeżenie, co przepada
       if (el.dataset.o !== "1" && S.v.funkcje?.[el.dataset.f]?.odslonieta) {
         const [t, h, p] = oknoZakryciaFunkcji(S.v, el.dataset.f);
-        return okno(t, h, { male: true, przyciski: p });
+        return okno(t, h, { male: true, przyciski: p, styl: stylEkranu("potwierdzenie"), okruszek: "Lublin › Potwierdzenie" });
       }
       await przelaczFunkcje(el.dataset.f, el.dataset.o === "1"); return oknoUstawien();
     }
     if (a === "funkcja-zakryj") { await przelaczFunkcje(el.dataset.f, false); return oknoUstawien(); }
+    if (AKCJE_PULPITU[a]) return await AKCJE_PULPITU[a](el, ctx(), e);
     if (AKCJE_ZADAN[a]) return await AKCJE_ZADAN[a](el, ctx(), e);
     for (const z of Object.values(ZAKLADKI)) {
       if (z.akcje && z.akcje[a]) return await z.akcje[a](el, ctx(), e);
