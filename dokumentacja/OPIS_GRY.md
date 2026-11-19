@@ -18,7 +18,8 @@ decyzji z przekroczeniem jest odrzucony. **Zdarzenia** (`silnik/swiat/zdarzenia.
 od rundy 2 co tydzień w jednym z parków zaczyna się historia, ta sama dla wszystkich drużyn; reakcja kosztuje czas
 właściciela, gotówkę albo porcje, ciąg dalszy przychodzi w kolejnych rundach. **Magazyn** (`silnik/kuchnia/magazyn.py`,
 `dane/zdarzenia/magazyn.yaml`, `zalozenia.yaml` → `magazyn`): w grze z lokalami nie ma kosztu magazynowania ani zwrotów
-do dostawcy – co nie zmieści się w chłodni i zamrażarce lokalu, jedzie do wynajętej chłodni (za litr, krótszy termin);
+do dostawcy – co nie zmieści się w chłodni i zamrażarce lokalu, jedzie do wynajętej chłodni (za litr, krótszy termin), a towar we własnej szafie
+chłodniczej ★★★ ma termin dłuższy o `sprzet.yaml: dluzszy_termin_dni` (liczy się najsłabsza szafa);
 towar w wynajmie i przeterminowane jedzenie zwiększają szansę kontroli sanepidu (mandat poza KPiR, mniej klientów),
 a duży zapas z krótkim terminem może wywołać telefon z banku żywności. **Agencje reklamowe** (`silnik/rynek/reklama.py`,
 `dane/mapa/reklama.yaml`): w grze z lokalami cztery agencje na

@@ -70,20 +70,20 @@ def test_bot_nie_kupuje_dzialki_bez_doplaty_w_banku_konta():
 
 
 def test_bot_finansuje_sprzet_lokalu_niewyposazonego_leasingiem():
-    """Lokal bez zestawu: cały sprzęt 3★ naraz (od tygodnia 2) to więcej, niż bot ma gotówki – najdroższe pozycje
+    """Lokal bez zestawu: cały sprzęt 3★ naraz (od tygodnia 1, decyzja autora 18.11.2026) to więcej, niż bot ma gotówki – najdroższe pozycje
     bierze w leasing (nie liczy się do wskaźnika zadłużenia karty), aż po zakupach i opłatach wstępnych zostanie
     rezerwa (ustawienia.rezerwa_po_sprzecie); bez tego wpadał w debet ponad limit konta."""
-    g, (d1, d2) = _gra({"lokal": {"typy": ["niewyposazony"]}, "jakosc": 3}, rund=2, kapital_startowy=40000)
+    g, (d1,) = _gra({"lokal": {"typy": ["niewyposazony"]}, "jakosc": 3}, kapital_startowy=40000)
     assert _lokal(g, d1["lokal"]["id"])["typ"] == "niewyposazony" and not d1.get("kredyty_wez")
-    przed = g.stan(1).firmy["A"].gotowka
+    przed = g.stan(0).firmy["A"].gotowka
     cena = lambda x: g.dane.sprzet[x["nazwa"]]["ceny"][str(x["jakosc"])]   # noqa: E731
-    lea, kup = d2["leasing_wez"], d2["sprzet_kup"]
-    assert lea and sum(map(cena, lea + kup)) > przed and not d2.get("kredyty_wez")
+    lea, kup = d1["leasing_wez"], d1["sprzet_kup"]
+    assert lea and sum(map(cena, lea + kup)) > przed
     assert min(map(cena, lea)) >= max(map(cena, kup), default=0)   # w leasing najdroższe
     wplata = bk.banki(g.dane)[lea[0]["bank"]]["leasing"]["wplata"]
     zostaje = przed - sum(map(cena, kup)) - wplata * sum(map(cena, lea))
     assert zostaje >= g.dane.boty["ustawienia"]["rezerwa_po_sprzecie"]
-    f = g.stan(2).firmy["A"]
+    f = g.stan(1).firmy["A"]
     assert len(f.leasingi) == len(lea) and not f.kredyty and f.gotowka > 0
 
 
@@ -107,8 +107,8 @@ def test_bot_bierze_lokal_wybranego_typu_i_przebija_cene():
 
 
 def test_bot_z_mala_gotowka_bierze_sprzet_w_leasingu():
-    g, dec = _gra({"lokal": {"typy": ["niewyposazony"]}, "leasing": {"gotowka": 10 ** 6, "rund": 26}}, rund=2)
-    d = dec[1]   # sprzęt odblokowany w rundzie 2, lokal niewyposażony – wszystko do kupienia
+    g, (d,) = _gra({"lokal": {"typy": ["niewyposazony"]}, "leasing": {"gotowka": 10 ** 6, "rund": 26}})
+    # sprzęt odblokowany od rundy 1 (decyzja autora 18.11.2026), lokal niewyposażony – wszystko do kupienia
     assert d["leasing_wez"] and not d["sprzet_kup"]
     assert all(x["rund"] == 26 for x in d["leasing_wez"])
     assert len(g.stan().firmy["A"].leasingi) == len(d["leasing_wez"])

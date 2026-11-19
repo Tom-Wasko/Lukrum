@@ -649,6 +649,9 @@ const trwajaceSzkolenia = (v) => (v.stan_przed?.szkolenia || []).filter((x) => x
 // poprawki 3 (sprawa 8): 8 szkoleń (podobne połączone); pozycja katalogu ma `dawne` – nazwy szkoleń, z których powstała
 // (stare zapisy: decyzja albo trwające szkolenie pod dawną nazwą odnosi się do nowej pozycji – silnik/ludzie/szkolenia.py)
 const toSamoSzkolenie = (p, nazwa) => nazwa === p.nazwa || (p.dawne || []).includes(nazwa);
+// balans-katalogi: przy skutecznosc_z_oceny procent oczekujących × ocena firmy / najwyższa ocena (silnik/ludzie/szkolenia.py)
+const procentFirmy = (s, p, f) => s.skutecznosc_z_oceny
+  ? Math.round(p.procent * f.zadowoleni_klienci / Math.max(...s.firmy.map((x) => x.zadowoleni_klienci)) * 10) / 10 : p.procent;
 
 // sprawa 8 (poprawki 3): wszystkie szkolenia w jednej karcie; w wierszu szkolenia trzy pigułki firm z ceną (wybrana podświetlona)
 function kartaSzkolen(s, wyb, edycja, kat, trwa) {
@@ -657,18 +660,19 @@ function kartaSzkolen(s, wyb, edycja, kat, trwa) {
     const wybrana = wyb.find((x) => toSamoSzkolenie(p, x.szkolenie)), t = trwa.find((x) => toSamoSzkolenie(p, x.szkolenie));
     const pigulki = s.firmy.map((f, i) => {
       const jest = !t && wybrana?.firma === f.nazwa;
-      const tytul = `${f.nazwa}: ${zl(ceny[i])}${ceny[i] === min ? " – najtaniej" : ""} (${f.zadowoleni_klienci}% zadowolonych klientów)`
+      const tytul = `${f.nazwa}: ${zl(ceny[i])}${ceny[i] === min ? " – najtaniej" : ""} (${f.zadowoleni_klienci}% zadowolonych klientów), czeka ${licz(procentFirmy(s, p, f), 1)}% zespołu`
         + (t ? ` – szkolenie jeszcze trwa, ponownie od rundy ${t.do_rundy + 1}` : jest ? " – kliknij, żeby zrezygnować" : "");
       return `<button class="firma-szkolenia${jest ? " wybrana" : ""}${ceny[i] === min ? " najtaniej" : ""}" data-akcja="szkolenie" data-s="${esc(p.nazwa)}"
-        data-f="${esc(f.nazwa)}" title="${esc(tytul)}" ${edycja && !t ? "" : "disabled"}>${jest ? "✓ " : ""}${esc(f.nazwa)} <b>${zl(ceny[i])}</b></button>`;
+        data-f="${esc(f.nazwa)}" title="${esc(tytul)}" ${edycja && !t ? "" : "disabled"}>${jest ? "✓ " : ""}${esc(f.nazwa)} <b>${zl(ceny[i])}</b>${s.skutecznosc_z_oceny ? ` · ${licz(procentFirmy(s, p, f), 1)}%` : ""}</button>`;
     }).join("");
     return `<div class="szkolenie-wiersz${t ? " trwa" : wybrana ? " wybrany" : ""}"><div class="szkolenie-nazwa"><b>${esc(p.nazwa)}</b>
-      <span class="pigulka">czeka ${p.procent}%</span>${t ? ` <span class="pigulka ok">działa do rundy ${t.do_rundy}</span>` : ""}</div>
+      <span class="pigulka">czeka ${s.skutecznosc_z_oceny ? "do " : ""}${p.procent}%</span>${t ? ` <span class="pigulka ok">działa do rundy ${t.do_rundy}</span>` : ""}</div>
       <div class="firmy-szkolen">${pigulki}</div></div>`;
   }).join("");
   const ile = s.pozycje.filter((p) => wyb.some((x) => toSamoSzkolenie(p, x.szkolenie)) && !trwa.some((x) => toSamoSzkolenie(p, x.szkolenie))).length;
   const opis = `Firmy: ${s.firmy.map((f) => `${esc(f.nazwa)} (${f.zadowoleni_klienci}% zadowolonych klientów)`).join(", ")}.
-    Kliknięcie firmy przy szkoleniu wybiera je (najtańsza oferta ma zieloną cenę), drugie kliknięcie – rezygnacja.`;
+    Kliknięcie firmy przy szkoleniu wybiera je (najtańsza oferta ma zieloną cenę), drugie kliknięcie – rezygnacja.${s.skutecznosc_z_oceny
+      ? " Lepiej oceniana szkoła działa mocniej: procent zespołu, który czeka na szkolenie, rośnie z oceną firmy." : ""}`;
   return kartaMarki({ kolor: KOLORY[2], nazwa: "Szkolenia dla zespołu", rodzaj: `${licz(s.pozycje.length)} szkoleń · ${licz(s.firmy.length)} firmy`,
     opis, suma: ile ? `wybrano: <b>${licz(ile)}</b>` : "", znak: "✎", tresc: `<div class="szkolenia-lista">${wiersze}</div>` });
 }

@@ -72,19 +72,6 @@ budynki:
     y: 9
     szer: 1
     gl: 1
-- id: bank_6
-  nazwa: Solaris
-  rodzaj: bank
-  strefa: centrum
-  miejsce: Krakowskie Przedmieście (Śródmieście)
-  zespol: kamienica_bankowa
-  opis: Bank – największy debet (dane/mapa/banki.yaml).
-  zakladka: bank
-  mapa:
-    x: 10
-    y: 9
-    szer: 1
-    gl: 1
 - id: kamienica_rachmistrzow
   nazwa: Kamienica rachmistrzów
   rodzaj: biuro

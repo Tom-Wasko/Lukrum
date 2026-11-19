@@ -87,6 +87,19 @@ def pojemnosc(dane: Dane, firma: Firma) -> dict[str, float]:
     return wynik
 
 
+def dluzszy_termin(dane: Dane, firma: Firma) -> dict[str, int]:
+    """Dni terminu więcej dla towaru we własnej chłodni i zamrażarce (sprzet.yaml: dluzszy_termin_dni) – liczy się
+    najsłabsza sztuka sprzętu tego przechowywania; sprzęt bez pola – 0 dni."""
+    wynik: dict[str, int] = {}
+    for st in firma.stanowiska:
+        for n, q in st.sprzet.items():
+            s = dane.sprzet.get(n) or {}
+            if t := s.get("przechowywanie"):
+                d = int((s.get("dluzszy_termin_dni") or {}).get(str(q), 0))
+                wynik[t] = min(wynik.get(t, d), d)
+    return wynik
+
+
 def na_stanie(firma: Firma, dzien: str | None = None) -> list[Partia]:
     """Partie dostarczone do dnia `dzien` (ISO; None – wszystkie)."""
     return [p for p in firma.partie if dzien is None or p.dostawa <= dzien]
@@ -155,6 +168,7 @@ def przyjmij(dane: Dane, firma: Firma, dzien: str) -> tuple[dict[str, float], li
     poj = pojemnosc(dane, firma)
     zaj = zajete(dane, firma, (date.fromisoformat(dzien) - timedelta(days=1)).isoformat())
     wyn = wynajem(dane)
+    dluzej = dluzszy_termin(dane, firma)
     przyjete, straty, wynajete = {}, [], []
     for p in [p for p in firma.partie if p.dostawa == dzien and not p.poza_lokalem]:
         t = dane.zasoby[p.zasob].get("przechowywanie", "suche")
@@ -171,6 +185,8 @@ def przyjmij(dane: Dane, firma: Firma, dzien: str) -> tuple[dict[str, float], li
                 straty.append(_strata(p, nadmiar, _uszczknij(p, nadmiar), "miejsce", dzien))
                 dostarczone = p.ilosc
             zaj[t] += miejsce(dane, p)
+            if dluzej.get(t) and p.termin and p.ilosc > EPS:   # w lokalu (nadmiar w wynajmie – bez dopłaty dni)
+                p.termin = (date.fromisoformat(p.termin) + timedelta(days=dluzej[t])).isoformat()
         przyjete[p.zasob] = przyjete.get(p.zasob, 0.0) + dostarczone
     uzgodnij(firma, dzien)
     return przyjete, straty, wynajete

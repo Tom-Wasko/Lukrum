@@ -67,6 +67,8 @@ class Sprzet(Schemat):
     utrzymanie: dict[Jakosc, float]
     przechowywanie: Literal["chlodnia", "zamrazarka"] | None = None   # miejsce na składniki (gra z lokalami)
     pojemnosc_l: dict[Jakosc, float] | None = None
+    tempo_obslugi: dict[Jakosc, float] | None = None       # sprzęt kasy: mnożnik godzin kasjera (★★ = 1)
+    dluzszy_termin_dni: dict[Jakosc, int] | None = None    # chłodzenie: dni terminu więcej we własnym sprzęcie
 
     @model_validator(mode="after")
     def _pojemnosc(self):
@@ -336,6 +338,7 @@ class SekcjaUdogodnien(Sekcja):
 
 class SekcjaSzkolen(Sekcja):
     firmy: list[FirmaSzkoleniowa]
+    skutecznosc_z_oceny: bool = False   # procent oczekujących × ocena firmy / najwyższa ocena
     pozycje: list[Szkolenie]
 
     @model_validator(mode="after")

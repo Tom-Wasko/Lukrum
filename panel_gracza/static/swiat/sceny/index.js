@@ -52,7 +52,6 @@ export const BUDYNKI_SCENY = {
   bank_3: "pierzeja_bankowa",
   bank_4: "pierzeja_bankowa",
   bank_5: "pierzeja_bankowa",
-  bank_6: "pierzeja_bankowa",
   kamienica_bankowa: "pierzeja_bankowa",
   gielda: "gielda",
   kamienica_rachmistrzow: "kamienica_rachmistrzow",

@@ -18,12 +18,9 @@ export default function (R) {
     rzecki: { nazwa: "Oszczędności Rzeckiego", znak: "R", marka: "var(--akcent-2)", tk: "var(--papier)", ksztalt: "owal", lamp: "color-mix(in srgb, var(--akcent-2) 28%, var(--g-sciana2))", konto: "20 zł", term: "59 zł + 1,3%", debet: "5 000 zł", debOpl: "55 zł + 15%",
       tab: [["LOKATA 1 TYDZ.", "2,0%"], ["LOKATA 4 TYG.", "3,6%"], ["LOKATA 13 TYG.", "4,2%"], ["KREDYT OBROTOWY", "11,2%"], ["KONTO / MIES.", "20 ZŁ"]], kredyty: [["Kredyt obrotowy (firma z historią 4 tygodni)", "11,2%", "prowizja 2%, do 40 000 zł"]], lok: ["2,0%", "3,6%", "4,2%"],
       doradca: "Grosz do grosza. Co tydzień odłożone to co tydzień policzone." },
-    solaris: { nazwa: "Solaris", znak: "∞", marka: "var(--g-czern)", ksztalt: "prostokat", lamp: "color-mix(in srgb, var(--g-szklo) 45%, var(--g-sciana2))", konto: "25 zł", term: "49 zł + 1,2%", debet: "40 000 zł", debOpl: "90 zł + 15%",
-      tab: [["DEBET DO", "40 000 ZŁ"], ["TYDZIEŃ NA MINUSIE", "90 ZŁ"], ["KREDYT OBROTOWY", "11,2%"], ["LOKATA 13 TYG.", "2,5%"], ["KONTO / MIES.", "25 ZŁ"]], kredyty: [["Kredyt obrotowy (firma z historią 4 tygodni)", "11,2%", "prowizja 2%, do 40 000 zł"]], lok: ["1,0%", "2,0%", "2,5%"],
-      doradca: "Zabraknie gotówki? U nas limit jest jak ocean. Tylko każdy tydzień pod wodą kosztuje." },
-    soplicowo: { nazwa: "Soplicowo", znak: "S", marka: "var(--g-zielen2)", ksztalt: "prostokat", lamp: "color-mix(in srgb, var(--g-zielen) 40%, var(--g-sciana2))", konto: "0 zł", term: "0 zł + 0,79%", debet: "6 000 zł", debOpl: "45 zł + 13%",
-      tab: [["KONTO / MIES.", "0 ZŁ"], ["TERMINAL / MIES.", "0 ZŁ"], ["PROWIZJA OD KART", "0,79%"], ["KREDYT OBROTOWY", "11,8%"], ["LOKATA 13 TYG.", "2,2%"]], kredyty: [["Kredyt obrotowy (firma z historią 4 tygodni)", "11,8%", "prowizja 2,5%, do 40 000 zł"]], lok: ["0,8%", "1,8%", "2,2%"],
-      doradca: "Gość w dom, konto bez opłat. Prosimy, prosimy, tu się nie płaci za samo wejście." },
+    soplicowo: { nazwa: "Soplicowo", znak: "S", marka: "var(--g-zielen2)", ksztalt: "prostokat", lamp: "color-mix(in srgb, var(--g-zielen) 40%, var(--g-sciana2))", konto: "0 zł", term: "0 zł + 0,79%", debet: "20 000 zł", debOpl: "80 zł + 15%",
+      tab: [["KONTO / MIES.", "0 ZŁ"], ["TERMINAL / MIES.", "0 ZŁ"], ["PROWIZJA OD KART", "0,79%"], ["DEBET DO", "20 000 ZŁ"], ["KREDYT OBROTOWY", "11,8%"]], kredyty: [["Kredyt obrotowy (firma z historią 4 tygodni)", "11,8%", "prowizja 2,5%, do 40 000 zł"]], lok: ["0,8%", "1,8%", "2,2%"],
+      doradca: "Gość w dom, konto bez opłat. A zabraknie grosza? Zastaw się, a postaw się – tylko każdy tydzień na minusie kosztuje." },
   };
   const id = B[R.q.get("b")] ? R.q.get("b") : "kmicic", b = B[id];
   const rekwizyt = () => id === "kmicic" ? R.plakat(990, 420, 150, 150, ["KREDYT", "w 5 minut", "bez pytań"]) + `<path class="k bez" d="M1000 570l-14 36M1130 570l14 36" stroke-width="4"/>` + `<path class="k" d="M60 30q130-26 250 4l-4 8q-120-26-244-4z" fill="var(--g-metal)"/><path class="k" d="M52 26l14 14-6 6-14-14z" fill="var(--uwaga)"/>`
@@ -31,13 +28,12 @@ export default function (R) {
     : id === "ziemia" ? `<rect class="k" x="960" y="560" width="200" height="30" fill="var(--g-metal2)"/>` + R.u("wnetrze-rozen-2", 1004, 410, 0.78) + R.kartka(1096, 470, 76, 44, ["W LEASINGU", "od 5% wpłaty"], 6, 11)
     : id === "rzecki" ? `<path class="k" d="M1010 600v-70h70v70" fill="none" stroke-width="4"/><path class="k" d="M1026 540v-90M1046 536v-70M1064 540v-84" stroke-width="4"/><path class="k" d="M1016 452q10-14 20 0M1054 458q10-14 20 0" fill="none" stroke-width="4"/>`
       + `<ellipse class="k" cx="610" cy="314" rx="26" ry="17" fill="var(--g-skora)"/><circle cx="628" cy="308" r="2.5" fill="var(--g-czern)"/><path class="k" d="M604 297h12" stroke-width="3"/><path class="k" d="M596 328v6M622 328v6"/>`
-    : id === "solaris" ? `<rect class="k3" x="966" y="416" width="196" height="132" fill="var(--g-drewno)"/><rect class="k" x="978" y="428" width="172" height="108" fill="var(--g-szklo)"/>` + [0, 1, 2, 3].map((i) => `<path d="M982 ${452 + i * 22}q21-12 42 0t42 0t42 0t42 0" fill="none" stroke="var(--g-biel)" stroke-width="3" opacity="${0.9 - i * 0.15}"/>`).join("") + R.tabliczka(1064, 562, 120, "OCEAN, olej")
     : `<rect class="k" x="990" y="520" width="150" height="12" fill="var(--g-drewno)"/><path class="k" d="M1004 532v70M1126 532v70" stroke-width="5"/><path class="k" d="M1040 520v-22h-10q-6-40 34-44q40 4 34 44h-10v22z" fill="var(--uwaga)"/><rect class="k" x="1052" y="436" width="24" height="18" fill="var(--uwaga)"/><path class="k" d="M1098 500h14v8"/>`
       + `<path class="k bez" d="M70 36q60 50 120 0" stroke-width="8" stroke="var(--g-drewno)"/><path class="k" d="M186 30l22 4-12 16z" fill="var(--uwaga)"/>`;
   return {
     id: "bank", tytul: `Bank „${b.nazwa}”`, adres: "Pierzeja bankowa, Krakowskie Przedmieście", wroc: "Pierzeja", wrocDo: "pierzeja_bankowa.html",
     opis: `Sala operacyjna banku ${b.nazwa}: tablica oprocentowania, okienko kasy, okienko kredytów, skarbiec.`,
-    warianty: [["b=kmicic", "Kmicic (kredyt na start)"], ["b=wokulski", "Wokulski i S-ka (kredyt inwestycyjny)"], ["b=ziemia", "Ziemia Obiecana (leasing, Twoje konto)"], ["b=rzecki", "Oszczędności Rzeckiego (lokaty)"], ["b=soplicowo", "Soplicowo (tanie konto)"], ["b=solaris", "Solaris (debet, tylko przy 6 bankach)"]],
+    warianty: [["b=kmicic", "Kmicic (kredyt na start)"], ["b=wokulski", "Wokulski i S-ka (kredyt inwestycyjny)"], ["b=ziemia", "Ziemia Obiecana (leasing, Twoje konto)"], ["b=rzecki", "Oszczędności Rzeckiego (lokaty)"], ["b=soplicowo", "Soplicowo (tanie konto, debet)"]],
     rysuj: (R) => {
       let s = R.sciana() + R.lamperia(250, 400, b.lamp, true) + R.podloga("lastryko", 400) + R.kula(250, 20, 18) + R.kula(960, 20, 18);
       s += R.literki(40, 56, 300, 178, "OPROCENTOWANIE", b.tab, 15) + R.zegar(388, 96, 30, 10, 12);

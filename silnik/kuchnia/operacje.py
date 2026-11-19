@@ -66,6 +66,14 @@ def kasjerzy(dane: Dane, firma: Firma) -> list[Stanowisko]:
             and all(n in s.sprzet for n in dane.sprzet_kasy)]
 
 
+def tempo_kasy(dane: Dane, s: Stanowisko) -> float:
+    """Mnożnik godzin kasjera ze sprzętu kasy: średnia `tempo_obslugi` kasy, lady i tablicy (sprzet.yaml);
+    sprzęt bez tego pola (stare dane) – 1, czyli gwiazdki kasy nie zmieniają tempa."""
+    t = [dane.sprzet[n]["tempo_obslugi"][str(q)] for n, q in s.sprzet.items()
+         if (dane.sprzet.get(n) or {}).get("tempo_obslugi")]
+    return float(np.mean(t)) if t else 1.0
+
+
 def jakosc_uslugi(dane: Dane, firma: Firma, usluga: str) -> tuple[float, float, float] | None:
     """(gwiazdki pracowników, sprzętu, zasobów) dla usługi; None, gdy nie da się jej prowadzić."""
     st = stanowiska_uslugi(dane, firma, usluga)
@@ -232,7 +240,7 @@ def obsluz(dane: Dane, firma: Firma, popyt: dict[str, int], ziarno, runda: int,
     # recepcja – po zużyciu zasobów: klienci utraceni przez brak recepcji zużyli już zasoby
     # (pomiary: zużycie napoju = popyt + ok. 0,5%, a nie sprzedaż)
     rec = kasjerzy(dane, firma)
-    godz_rec = sum(firma.godziny_stanowiska(s, pelny_etat, dane) for s in rec) * skala_godzin
+    godz_rec = sum(firma.godziny_stanowiska(s, pelny_etat, dane) * tempo_kasy(dane, s) for s in rec) * skala_godzin
     potrzebne_rec = sum(obsluzeni[u] * dane.uslugi[u]["godziny_kasy"] for u in popyt)
     if potrzebne_rec > godz_rec + EPS:
         skala = godz_rec / potrzebne_rec if potrzebne_rec else 0.0
@@ -264,6 +272,8 @@ def obsluz(dane: Dane, firma: Firma, popyt: dict[str, int], ziarno, runda: int,
                     klucz = f"{s.nr}|{nazwa}"
                     sprzet_godz[klucz] = sprzet_godz.get(klucz, 0.0) + godz_u / len(maja)
     zajete_rec = sum(obsluzeni[u] * dane.uslugi[u]["godziny_kasy"] for u in obsluzeni)
+    if rec:   # szybszy sprzęt kasy – mniej godzin pracy kasjera na tych samych klientów (średnie tempo kas)
+        zajete_rec /= float(np.mean([tempo_kasy(dane, s) for s in rec]))
 
     return {
         "obsluzeni": obsluzeni,
@@ -315,4 +325,4 @@ def _zuzyj(dane: Dane, firma: Firma, zuzycie: dict[str, float], dzien: str | Non
     return wynik
 
 
-__all__ = ["obsluz", "jakosc_uslugi", "stanowiska_uslugi", "kasjerzy"]
+__all__ = ["obsluz", "jakosc_uslugi", "stanowiska_uslugi", "kasjerzy", "tempo_kasy"]

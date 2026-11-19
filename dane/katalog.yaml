@@ -20,9 +20,9 @@ rundy:
     - finanse_bank
     - finanse_biuro
     - hr_zatrudnienie
-    '2':
     - inwestycje_sprzet
     - dostawcy
+    '2':
     - sprzedaz
     '3':
     - karta_wynikow
@@ -39,7 +39,8 @@ rundy:
   harmonogram_lokali:
     zrodlo: 'gra z lokalami: tydzień, od którego działa zakładka – mistrz gry może go zmienić dla gry; terminy
       elementów mapy (kanały rekrutacji, agencje, promocje, parki, handel…) są w ich danych. Domyślnie:
-      tydzień 1 to przygotowanie lokalu (bez ofert dostawców i sprzedaży), ustalenia autora – karta skumulowana
+      tydzień 1 to przygotowanie lokalu (bez sprzedaży; sprzęt w Parku handlowym i dostawcy od tygodnia 1 – decyzja autora
+      18.11.2026, zeszyt wujka prowadzi krok po kroku), ustalenia autora – karta skumulowana
       od 4 (dostawcy i pracuj.pl od 1); zatrudnianie od tygodnia 1 (decyzja autora
       3.11.2026: pierwszy tydzień sprzedaży nie startuje z rekrutacją)'
     zakladki:
@@ -47,9 +48,9 @@ rundy:
       misja: {nazwa: Misja, tydzien: 1}
       oferta: {nazwa: Menu, tydzien: 1}
       inwestycje_stanowiska: {nazwa: Stanowiska, tydzien: 1}
-      inwestycje_sprzet: {nazwa: Sprzęt i leasing, tydzien: 2}
+      inwestycje_sprzet: {nazwa: Sprzęt i leasing, tydzien: 1}
       sprzedaz: {nazwa: Ceny dań, tydzien: 2}
-      dostawcy: {nazwa: Dostawcy, tydzien: 2}
+      dostawcy: {nazwa: Dostawcy, tydzien: 1}
       hr_zatrudnienie: {nazwa: Zatrudnienie, tydzien: 1}
       finanse_bank: {nazwa: Bank, tydzien: 1}
       finanse_biuro: {nazwa: Biuro rachunkowe, tydzien: 1}
@@ -308,7 +309,8 @@ wyposazenie:
     utrzymanie: 300
     od_rundy: 8
 szkolenia:
-  zrodlo: 'Tor A (14.11.2026): własne firmy szkoleniowe i ceny – kursy branżowe w Lublinie 2026 (HACCP i higiena ok. 250–400 zł od osoby, szkolenia zespołowe 800–2 000 zł); założenie autora: HR – szkolenia, % pracowników oczekujących; oceny firm szkoleniowych (zadowoleni_klienci 87 / 79 / 74) – własne wartości fikcyjnych firm: wyższa dla szkoły o węższej, kebabowej specjalizacji; nazwy firm i szkoleń – gastronomia; ceny przeliczone od zera 15.11.2026 (decyzja autora 14.11: priorytet ma rozgrywka): firma o najwyższej ocenie (Lubelska Szkoła Kebabu) jest zawsze o ok. 20% droższa niż Rożen i Rozum, a HACCP w Pięć Minut o ok. 10% tańsza – wcześniej trzecia firma bywała droższa od drugiej przy niższej ocenie (pozycja zdominowana), wybór firmy to teraz cena kontra ocena „zadowolonych klientów”; poprawki 3 (sprawa 8, 8.11.2026): 12 → 8 szkoleń – podobne połączone, cena połączonego ≈ 80% sumy cen (zaokr. do 50 zł), procent – zaokrąglony maks. łączonych; `dawne` – dawne nazwy (stare zapisy gier)'
+  skutecznosc_z_oceny: true   # balans-katalogi (decyzja autora 18.11.2026): lepsza szkoła – mocniejszy efekt
+  zrodlo: 'Seria balans-katalogi (18.11.2026): procent oczekujących × ocena firmy / najwyższa ocena (87 → 100%, 79 → ok. 91%, 74 → ok. 85%), wcześniej ocena nie miała efektu i zawsze opłacała się najtańsza firma; Tor A (14.11.2026): własne firmy szkoleniowe i ceny – kursy branżowe w Lublinie 2026 (HACCP i higiena ok. 250–400 zł od osoby, szkolenia zespołowe 800–2 000 zł); założenie autora: HR – szkolenia, % pracowników oczekujących; oceny firm szkoleniowych (zadowoleni_klienci 87 / 79 / 74) – własne wartości fikcyjnych firm: wyższa dla szkoły o węższej, kebabowej specjalizacji; nazwy firm i szkoleń – gastronomia; ceny przeliczone od zera 15.11.2026 (decyzja autora 14.11: priorytet ma rozgrywka): firma o najwyższej ocenie (Lubelska Szkoła Kebabu) jest zawsze o ok. 20% droższa niż Rożen i Rozum, a HACCP w Pięć Minut o ok. 10% tańsza – wcześniej trzecia firma bywała droższa od drugiej przy niższej ocenie (pozycja zdominowana), wybór firmy to teraz cena kontra ocena „zadowolonych klientów”; poprawki 3 (sprawa 8, 8.11.2026): 12 → 8 szkoleń – podobne połączone, cena połączonego ≈ 80% sumy cen (zaokr. do 50 zł), procent – zaokrąglony maks. łączonych; `dawne` – dawne nazwy (stare zapisy gier)'
   firmy:
   - nazwa: Lubelska Szkoła Kebabu
     zadowoleni_klienci: 87

@@ -11,7 +11,7 @@ export default function (R) {
       tekst: "Zmiana pakietu? Naturalnie. Wniosek w trzech egzemplarzach, odpowiedź za dwa tygodnie." },
     scrooge: { nazwa: "Scrooge", kto: "Pan Scrooge", postac: "bywalec-zagloba", sciana: "color-mix(in srgb, var(--g-sciana2) 70%, var(--g-metal2))", cennik: [["S · 60 DOK.", "190 ZŁ"], ["M · 120 DOK.", "360 ZŁ"], ["L · 200 DOK.", "560 ZŁ"], ["W ŚWIĘTA", "ZAMKNIĘTE"]], kadry: "73,80 zł za etat", ryzyko: "pomyłka w 2 tygodniach na 100; bez OC",
       tekst: "Święta to wymysł kasjerów. W tygodniu ze świętem dokumenty poczekają, z dopłatą." },
-    asteroida_328: { nazwa: "Asteroida 328", kto: "Pan Bankier", postac: "bywalec-papkin", sciana: "color-mix(in srgb, var(--g-sciana) 70%, var(--akcent-2))", cennik: [["S · BEZ LIMITU", "590 ZŁ"], ["M · BEZ LIMITU", "990 ZŁ"], ["L · BEZ LIMITU", "1 500 ZŁ"], ["DOPŁATY", "ŻADNYCH"]], kadry: "do 6 osób w cenie, potem 36,90 zł za etat", ryzyko: "nie myli się; ubezpieczenie OC",
+    asteroida_328: { nazwa: "Asteroida 328", kto: "Pan Bankier", postac: "bywalec-papkin", sciana: "color-mix(in srgb, var(--g-sciana) 70%, var(--akcent-2))", cennik: [["S · BEZ LIMITU", "470 ZŁ"], ["M · BEZ LIMITU", "790 ZŁ"], ["L · BEZ LIMITU", "1 190 ZŁ"], ["DOPŁATY", "ŻADNYCH"]], kadry: "do 6 osób w cenie, potem 36,90 zł za etat", ryzyko: "nie myli się; ubezpieczenie OC",
       tekst: "Proszę nie przeszkadzać, liczę. Każdy dokument sprawdzam trzy razy, więc dopłat nie będzie." },
   };
   const id = F[R.q.get("f")] ? R.q.get("f") : "jks", f = F[id];

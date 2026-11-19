@@ -1,4 +1,4 @@
-# Banki w LUKRUM (silnik/pieniadze/banki.py) – sześć fikcyjnych banków z nazwami z lektur, każdy z inną specjalizacją
+# Banki w LUKRUM (silnik/pieniadze/banki.py) – pięć fikcyjnych banków z nazwami z lektur, każdy z inną specjalizacją
 # Sprawdzenie: python -m silnik.dane sprawdz
 opis: 'Konto firmowe (opłata miesięczna, terminal: abonament miesięczny + prowizja od płatności kartą), lokaty
   (okres w rundach → oprocentowanie roczne), debet (włączany decyzją: limit, opłata i odsetki za tydzień,
@@ -7,7 +7,7 @@ opis: 'Konto firmowe (opłata miesięczna, terminal: abonament miesięczny + pro
   tylko w banku, w którym firma ma konto firmowe. Banki są fikcyjne (nazwy z lektur, bez przedrostka „Bank”); prawdziwe
   banki na mapie miasta to tło.'
 zrodlo: 'Własna oferta LUKRUM (13.11.2026, tor A): każdy bank opłaca się innej strategii (kredyt na start, kredyt
-  inwestycyjny, leasing, lokaty, tanie konto, duży debet). Liczby – rząd wielkości rynku 2026 przy stopie
+  inwestycyjny, leasing, lokaty, tanie konto i duży debet – od 18.11.2026 pięć banków, Solaris usunięty). Liczby – rząd wielkości rynku 2026 przy stopie
   referencyjnej NBP ok. 4% (kredyty obrotowe dla firm ok. 9–12%, lokaty 1–4%, konta firmowe 0–35 zł miesięcznie),
   dobrane pomiarami botów (raport mechaniki-a); nazwy – plan przebudowy, rozdz. 11'
 udzial_kart: 0.7          # część sprzedaży płacona kartą (prowizja terminala)
@@ -87,24 +87,15 @@ banki:
   - {produkt: obrotowy, nazwa: Kredyt obrotowy, oprocentowanie: 0.112, prowizja: 0.02, maks_kwota: 40000, maks_rund: 52,
      historia: true}
 - nazwa: Soplicowo
-  specjalizacja: tanie konto firmowe
+  specjalizacja: tanie konto firmowe i największy debet
   opis: 'Konto bez opłaty i terminal bez abonamentu z najniższą prowizją – gość nie płaci za gościnność. Nawiązanie:
-    Soplicowo z „Pana Tadeusza” Mickiewicza – dworek, w którym każdy gość jest mile widziany.'
+    Soplicowo z „Pana Tadeusza” Mickiewicza – dworek, w którym każdy gość jest mile widziany. Debet też po szlachecku
+    – „zastaw się, a postaw się”: największy limit, ale każdy tydzień na minusie słono kosztuje.'
   konto: 0
   terminal: {abonament: 0, prowizja: 0.0079}
   lokaty: {1: 0.008, 4: 0.018, 13: 0.022}
-  debet: {limit: 6000, oplata: 45, oprocentowanie: 0.13}
+  # balans-katalogi (decyzja autora 18.11.2026: 5 banków, Solaris znika, debet przejmuje Soplicowo); było 6 000 / 45 / 13%
+  debet: {limit: 20000, oplata: 80, oprocentowanie: 0.15}
   kredyty:
   - {produkt: obrotowy, nazwa: Kredyt obrotowy, oprocentowanie: 0.118, prowizja: 0.025, maks_kwota: 40000, maks_rund: 52,
-     historia: true}
-- nazwa: Solaris
-  specjalizacja: największy debet
-  opis: 'Największy limit debetu – otwiera się jak ocean, gdy zabraknie gotówki, ale za każdy tydzień na minusie
-    pobiera wysoką opłatę. Nawiązanie: „Solaris” Lema – bezkresny ocean, który trudno przewidzieć.'
-  konto: 25
-  terminal: {abonament: 49, prowizja: 0.012}
-  lokaty: {1: 0.01, 4: 0.02, 13: 0.025}
-  debet: {limit: 40000, oplata: 90, oprocentowanie: 0.15}
-  kredyty:
-  - {produkt: obrotowy, nazwa: Kredyt obrotowy, oprocentowanie: 0.112, prowizja: 0.02, maks_kwota: 40000, maks_rund: 52,
      historia: true}

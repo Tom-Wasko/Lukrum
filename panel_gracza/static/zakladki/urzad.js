@@ -1,7 +1,9 @@
 // Urzędy: urząd i sanepid (gra z lokalami, silnik/ksiegowosc/urzad.py): rejestracja firmy, odbiór lokali przez sanepid i higiena.
 // Decyzja `higiena: poziom` trwa do zmiany; poziom zmienia szansę i wynik kontroli sanepidu (silnik/kuchnia/magazyn.py).
-import { brakWynikow, esc, kafelkiLiczb, kafelOferty, kartaMarki, naOkres, podsumowanie, proc, tabela, zl, zl2, zwinTabela } from "./wspolne.js";
+import { brakWynikow, esc, kafelkiLiczb, kafelOferty, kartaMarki, naOkres, okno, podsumowanie, proc, tabela, zamknijOkno, zl, zl2, zwinTabela } from "./wspolne.js";
 
+// ile mniej kosztuje poziom `p` od najtańszego poziomu, z którym sanepid odbiera lokal
+const oszczednosc = (poziomy, p) => Math.max(0, Math.min(...poziomy.filter((x) => x.odbior).map((x) => x.koszt_rundy)) - p.koszt_rundy);
 const rund = (n) => `${n} ${n === 1 ? "rundę" : n < 5 ? "rundy" : "rund"}`;
 
 function skutkiPoziomu(p) {
@@ -108,6 +110,17 @@ export const sanepid = {
       + (U ? `<p class="podpowiedz">Od początku gry: higiena ${zl2(U.koszt_razem)}, mandaty sanepidu ${zl2(U.mandaty_razem)} (poza KPiR).</p>` : "");
   },
   akcje: {
-    "urz-higiena": (el, c) => c.zmien((d) => { d.higiena = el.dataset.p; }),
+    // „brak” higieny tylko po potwierdzeniu (decyzja autora 18.11.2026): gracz widzi, czym grozi kontrola
+    "urz-higiena": (el, c) => {
+      const p = c.v.urzad?.poziomy.find((x) => x.id === el.dataset.p);
+      if (!p || p.odbior) return c.zmien((d) => { d.higiena = el.dataset.p; });
+      okno("Bez sprzątania?", `<p>Jeśli sanepid odwiedzi lokal, kontrola prawie na pewno skończy się mandatem
+        (+${zl2(p.mandat)} do kary). Nowego lokalu sanepid w ogóle nie odbierze, więc nie ruszy ze sprzedażą.</p>
+        <p class="podpowiedz">Oszczędność: ${zl2(oszczednosc(c.v.urzad.poziomy, p))} za lokal${naOkres()} wobec najtańszego
+        sprzątania. Poziom można zmienić w każdej rundzie.</p>`,
+      { male: true, przyciski: `<button class="btn jasny" data-akcja="zamknij-okno">Zostaw sprzątanie</button>
+        <button class="btn czarny" data-akcja="urz-higiena-tak" data-p="${esc(p.id)}">! Rezygnuję ze sprzątania</button>` });
+    },
+    "urz-higiena-tak": (el, c) => { zamknijOkno(); return c.zmien((d) => { d.higiena = el.dataset.p; }); },
   },
 };
