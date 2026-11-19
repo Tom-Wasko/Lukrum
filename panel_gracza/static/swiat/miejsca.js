@@ -3,7 +3,9 @@
 // (swiat/sceny/<id>.js, rejestr sceny/index.js), których punkty podaje sama scena. Ekrany budynku (pasek nad treścią) są w MENU
 // (zakladki/index.js: pod). `budynki` – żetony z dane/mapa/budynki.yaml (także zespołów), po których mapa trafia tu przez lukrum.otworzWnetrze(id).
 // Punkt: { cel: klucz ekranu, nazwa, podpis (krótko na tabliczce), opis (zdanie na liście pod sceną), szukaj?: nazwa firmy,
-//          do której ekran ma się przewinąć, postac?: plik z grafiki/postacie }.
+//          do której ekran ma się przewinąć, postac?: plik z grafiki/postacie, miejsce?: scena, do której punkt odsyła
+//          (decyzja 16.11: kebab odsyła sprzęt i wystrój do Parku, klientów do Pracowni Analiz, szkolenia do Akademii),
+//          odsyla?: zdanie w komunikacie po przejściu }.
 
 import { BUDYNKI_SCENY, SCENY } from "./sceny/index.js";
 
@@ -20,15 +22,19 @@ export const MIEJSCA = {
     punkty: [
       { klucz: "menu", cel: "lokal_menu", nazwa: "Tablica: menu i ceny", opis: "Dania, ceny i prognoza sprzedaży." },
       { klucz: "lada", cel: "lokal_przeglad", nazwa: "Lada: lokal i sprzedaż", opis: "Stan lokalu, obsada stanowisk, sprzedaż z poprzedniego tygodnia." },
-      { klucz: "kuchnia", cel: "wnetrze_sprzet", nazwa: "Rożen: stanowiska i sprzęt", opis: "Stanowiska kuchni i kasy, kupno i wynajem sprzętu." },
+      { klucz: "kuchnia", cel: "wnetrze_sprzet", miejsce: "sprzet_gastro", odsyla: "Sprzęt kupuje się w Parku handlowym, w hurtowni sprzętu gastronomicznego.",
+        nazwa: "Rożen: sprzęt (Park handlowy)", opis: "Sprzęt i stanowiska kupuje się w Parku handlowym – przejście do hurtowni sprzętu." },
       { klucz: "zaplecze", cel: "zespol", nazwa: "Zaplecze: zespół i grafik", opis: "Umowy, pensje, grafik i nastroje pracowników." },
       { klucz: "pracownik", cel: "zespol", nazwa: "Pracownik", opis: "", tylkoScena: true },
       { klucz: "kasa", cel: "raport", nazwa: "Kasa: wyniki finansowe", opis: "Przychody, koszty i dochód tygodnia." },
-      { klucz: "stoliki", cel: "wnetrze_wyposazenie", nazwa: "Sala: wyposażenie", opis: "Stoliki, ogródek i inne rzeczy dla gości." },
-      { klucz: "okno", cel: "klienci", nazwa: "Okno: ulica i klienci", opis: "Kto chodzi po okolicy i ile jest gotów zapłacić." },
+      { klucz: "stoliki", cel: "wnetrze_wyposazenie", miejsce: "park_handlowy", odsyla: "Stoliki, ogródek i wystrój kupuje się w Parku handlowym.",
+        nazwa: "Sala: wyposażenie (Park handlowy)", opis: "Stoliki, ogródek i inne rzeczy dla gości – przejście do Parku handlowego." },
+      { klucz: "okno", cel: "klienci", miejsce: "uczelnia", odsyla: "Badania klientów robi Pracownia Analiz w Miasteczku akademickim.",
+        nazwa: "Okno: ulica i klienci (Pracownia Analiz)", opis: "Kto chodzi po okolicy i ile jest gotów zapłacić – przejście do Pracowni Analiz." },
       { klucz: "szyld", cel: "promocje", nazwa: "Szyld: promocje", opis: "Promocje i rabaty, które ściągają gości." },
       { klucz: "chlodnia", cel: "zaop_magazyn", nazwa: "Chłodnia: magazyn i świeżość", opis: "Co leży w chłodni i co się kończy.", tylkoLista: true },
-      { klucz: "szkolenia", cel: "hr_rozwoj", nazwa: "Pokój socjalny: szkolenia i udogodnienia", opis: "Rozwój i zadowolenie zespołu.", tylkoLista: true },
+      { klucz: "szkolenia", cel: "hr_rozwoj", miejsce: "akademia", odsyla: "Szkolenia prowadzi Lubelska Szkoła Kebabu w Miasteczku akademickim.",
+        nazwa: "Pokój socjalny: szkolenia (Szkoła Kebabu)", opis: "Rozwój i zadowolenie zespołu – przejście do szkoły.", tylkoLista: true },
       { klucz: "czas", cel: "czas_wlasciciela", nazwa: "Biurko: czas właściciela", opis: "Na co idzie Twój tydzień.", tylkoLista: true },
       { klucz: "portfel", cel: "wlasciciel", nazwa: "Szuflada: portfel właściciela", opis: "Wypłaty z firmy i dopłaty do niej.", tylkoLista: true },
     ],

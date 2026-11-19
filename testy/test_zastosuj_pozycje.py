@@ -24,18 +24,19 @@ def _wiersze(p: Path) -> list[str]:
 def test_przenosi_jeden_zeton_i_nic_wiecej(tmp_path):
     dane = _kopia(tmp_path)
     przed = _wiersze(dane / "budynki.yaml")
-    w = zp.zastosuj({"park_handlowy": {"lat": 51.2301, "lon": 22.4801}}, dane)
+    # biurowiec przy Zana ma adres tymczasowy, więc przesuwa się bez ostrzeżenia (park handlowy ma od 19.11 realny adres)
+    w = zp.zastosuj({"biurowiec_zana": {"lat": 51.2301, "lon": 22.4801}}, dane)
     assert len(w["zmiany"]) == 1 and not w["odrzucone"] and not w["ostrzezenia"]
     po = _wiersze(dane / "budynki.yaml")
     zmienione = [(a, b) for a, b in zip(przed, po, strict=True) if a != b]
     assert len(przed) == len(po) and len(zmienione) == 1
     assert zmienione[0][1].strip() == "geo: {lat: 51.2301, lon: 22.4801}"
-    assert zmienione[0][0].startswith("  geo: {lat: 51.2265")   # wcięcie i reszta wiersza zachowane
+    assert zmienione[0][0].startswith("  geo: {lat: 51.23807")   # wcięcie i reszta wiersza zachowane
     assert _wiersze(dane / "lokale.yaml") == _wiersze(REPO / "dane" / "mapa" / "lokale.yaml")
     wczytane = yaml.safe_load((dane / "budynki.yaml").read_text(encoding="utf8"))
     geo = {b["id"]: b.get("geo") for b in wczytane["zespoly"]}
-    assert geo["park_handlowy"] == {"lat": 51.2301, "lon": 22.4801}
-    assert geo["biurowiec_zana"] == {"lat": 51.23807, "lon": 22.52733}
+    assert geo["biurowiec_zana"] == {"lat": 51.2301, "lon": 22.4801}
+    assert geo["park_handlowy"] == {"lat": 51.23079, "lon": 22.48355}
 
 
 def test_lokal_z_lokale_yaml(tmp_path):

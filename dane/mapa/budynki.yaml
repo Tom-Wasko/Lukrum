@@ -613,7 +613,7 @@ zespoly:
   geo: {lat: 51.23807, lon: 22.52733}
 - id: park_handlowy
   nazwa: Park handlowy
-  opis: Hala ze sprzętem gastronomicznym i sklep meblowy w jednym miejscu – tu kupuje się rożny, kasy, stoliki i wystrój lokalu. Lokalizacja tymczasowa (adres poda autor).
-  miejsce: obrzeża Lublina, park handlowy na Węglinie (Węglin Południowy)
-  adres: al. Kraśnicka 150 (adres tymczasowy)
-  geo: {lat: 51.2265, lon: 22.47371}
+  opis: Hala ze sprzętem gastronomicznym i sklep meblowy w jednym miejscu – tu kupuje się rożny, kasy, stoliki i wystrój lokalu.
+  miejsce: obrzeża Lublina, park handlowy przy al. Kraśnickiej na Węglinie (Węglin Południowy)
+  adres: al. Kraśnicka 128
+  geo: {lat: 51.23079, lon: 22.48355}

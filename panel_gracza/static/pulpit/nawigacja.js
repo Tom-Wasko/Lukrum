@@ -1,7 +1,7 @@
 // Nawigacja pulpitu (seria pulpit, krok 3): jedno miejsce, które mówi, DOKĄD prowadzi klik z zeszytu, wydarzeń i kategorii.
 // Zasada: klik prowadzi od razu do celu (wnętrze konkretnego budynku, konkretny ekran), a nie do pośredniego wyboru.
 //  - pokazNaMapie: przelot mapy do budynku/dzielnicy i pulsowanie znaku (to samo robi filtr kategorii),
-//  - wejdzDoKroku: krok z listy wujka → wnętrze właściwego budynku (albo ekran w kebabie),
+//  - wejdzDoKroku: krok z listy wujka → wnętrze właściwego budynku (z teczką ekranu, gdy krok nie ma budynku na mapie),
 //  - historia i „← Wróć”: powrót do poprzedniego widoku albo mapy (przycisk w stałym miejscu i Esc).
 import { aktualneMiejsce, aktualneQ, idzDoMiejsca, otworzBudynek } from "../swiat/swiat.js";
 import { BUDYNEK_KROKU } from "../zakladki/wujek.js";
@@ -31,14 +31,18 @@ export function pokazNaMapie(c, id, { dzielnica = null } = {}) {
   setTimeout(() => szukaj(12), 60);
 }
 
-// kroki z listy wujka, które dzieją się w kebabie, mają własny ekran (bez budynku na mapie)
+// kroki z listy wujka bez własnego budynku na mapie: wnętrze, w którym się je robi, i od razu teczka z ekranem
+// (decyzja 16.11: menu i sprzedaż w kebabie, stanowiska w stolarni Parku handlowego, zatrudnianie w Miasteczku)
 const BANKI = [["kmicic", "kmicic"], ["wokulski", "wokulski"], ["ziemia", "ziemia"], ["rzecki", "rzecki"], ["soplicowo", "soplicowo"], ["solaris", "solaris"]];
-const W_KEBABIE = ["oferta", "stanowiska", "zatrudnienie", "sprzedaz"];
+const WNETRZE_KROKU = { oferta: "kebab", sprzedaz: "kebab", stanowiska: "stolarnia", zatrudnienie: "agencja_pracy" };
 
-/** Krok z listy wujka: od razu wnętrze budynku (dostawcy → konkretna hurtownia) albo ekran w kebabie. Zwraca true, gdy obsłużony. */
+/** Krok z listy wujka: od razu wnętrze budynku (dostawcy → konkretna hurtownia) albo wnętrze z teczką ekranu. Zwraca true, gdy obsłużony. */
 export function wejdzDoKroku(c, klucz) {
   if (klucz === "wyslij") return false;   // okno wysyłki obsługuje pulpit.js
-  if (W_KEBABIE.includes(klucz)) { c.idz(klucz); return true; }
+  if (WNETRZE_KROKU[klucz]) {
+    if (idzDoMiejsca(c, WNETRZE_KROKU[klucz])) c.teczka(klucz); else c.idz(klucz);
+    return true;
+  }
   if (klucz === "bank") {   // drużyna ma już bank: od razu jego sala operacyjna, bez wyboru banku w pierzei
     const nazwa = String(c.v.stan?.bank || "").toLowerCase(), id = BANKI.find(([k]) => nazwa.includes(k))?.[1];
     if (id && idzDoMiejsca(c, "bank", `b=${id}`)) return true;

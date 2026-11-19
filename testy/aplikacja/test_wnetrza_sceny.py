@@ -85,14 +85,16 @@ def _budynki_mapy():
     return yaml.safe_load((GRA / "dane" / "mapa" / "budynki.yaml").read_text(encoding="utf-8"))
 
 
-def test_kamienica_i_park_handlowy_maja_zetony_z_tymczasowa_lokalizacja():
-    """Decyzja szefa 18.11: kamienica rachmistrzów i Park handlowy są na mapie, adresy tymczasowe do czasu wskazania miejsc."""
+def test_kamienica_i_park_handlowy_maja_zetony_na_mapie():
+    """Decyzja szefa 18.11: kamienica rachmistrzów i Park handlowy są na mapie. Kamienica ma adres tymczasowy, Park
+    od 19.11 realny (park handlowy przy al. Kraśnickiej 128, wybrany przez lidera na polecenie szefa)."""
     mapa = _budynki_mapy()
     kam = next(b for b in mapa["budynki"] if b["id"] == "kamienica_rachmistrzow")
     park = next(z for z in mapa["zespoly"] if z["id"] == "park_handlowy")
     for zeton in (kam, park):
         assert zeton["geo"] and zeton["adres"]
-        assert "tymczasow" in (zeton["opis"] + zeton["adres"]).lower()
+    assert "tymczasow" in (kam["opis"] + kam["adres"]).lower()
+    assert park["adres"] == "al. Kraśnicka 128" and "tymczasow" not in (park["opis"] + park["adres"]).lower()
     assert _budynki_sceny()["kamienica_rachmistrzow"] == "kamienica_rachmistrzow"
     assert _budynki_sceny()["park_handlowy"] == "park_handlowy"
 
@@ -116,5 +118,7 @@ def test_park_handlowy_prowadzi_do_hali_sprzetu_a_kebab_nie_do_parku():
     assert 'wejscie: "sprzet_gastro.html"' in park
     swiat = (GRA / "panel_gracza" / "static" / "swiat" / "swiat.js").read_text(encoding="utf-8")
     assert 'M.id === "kebab" && MIEJSCA.kebab.punkty.some' in swiat   # ekran z kebaba wraca do kebaba, nie do Parku
-    kebab = (GRA / "panel_gracza" / "static" / "swiat" / "miejsca.js").read_text(encoding="utf-8")
-    assert "park_handlowy" not in kebab.split("kebab: {", 1)[1]
+    kebab = (GRA / "panel_gracza" / "static" / "swiat" / "miejsca.js").read_text(encoding="utf-8").split("kebab: {", 1)[1]
+    # decyzja 16.11: kebab odsyła sprzęt i wystrój do Parku – tylko jawnym odsyłaczem (miejsce + komunikat), nie okruszkiem
+    assert kebab.count("park_handlowy") == kebab.count('miejsce: "park_handlowy", odsyla:')
+    assert 'miejsce: "sprzet_gastro", odsyla:' in kebab

@@ -21,8 +21,9 @@ MAPA = REPO / "panel_gracza" / "static" / "mapa" / "lublin.json"
 SZABLON = Path(__file__).with_name("edytor_szablon.html")
 DOMYSLNY = REPO.parent / "edytor-mapy" / "index.html"
 
-# Swobodne (bez ostrzeżenia): lokale gracza oraz te trzy budynki zbiorcze/tymczasowe.
-SWOBODNE = {"kamienica_rachmistrzow", "park_handlowy", "biurowiec_zana"}
+# Swobodne (bez ostrzeżenia): lokale gracza oraz budynki zbiorcze o adresie tymczasowym.
+# Park handlowy ma od 19.11 realny adres (al. Kraśnicka 128, park handlowy na Węglinie).
+SWOBODNE = {"kamienica_rachmistrzow", "biurowiec_zana"}
 # Rodzaje bez adresu, ale stojące w realnym miejscu Lublina (park, zalew).
 REALNE_BEZ_ADRESU = {"park", "woda"}
 

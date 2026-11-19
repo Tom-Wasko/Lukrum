@@ -173,7 +173,7 @@ function lista(c, m) {
   const punkty = punktyMiejsca(c, m).filter((p) => !p.tylkoScena);
   const widziane = new Set();
   const poz = punkty.filter((p) => { const k = `${p.cel}|${p.nazwa}`; if (widziane.has(k)) return false; widziane.add(k); return true; });
-  return `<ul class="sw-lista">${poz.map((p) => `<li><button data-akcja="sw-hot" data-k="${esc(p.cel)}"${p.szukaj ? ` data-szukaj="${esc(p.szukaj)}"` : ""} class="${p.zablokowane ? "zablokowane" : ""}">
+  return `<ul class="sw-lista">${poz.map((p) => `<li><button data-akcja="sw-hot" data-k="${esc(p.cel)}"${p.miejsce ? ` data-m="${esc(p.miejsce)}"` : ""}${p.miejsce && p.odsyla ? ` data-odsyla="${esc(p.odsyla)}"` : ""}${p.szukaj ? ` data-szukaj="${esc(p.szukaj)}"` : ""} class="${p.zablokowane ? "zablokowane" : ""}">
     <b>${esc(p.nazwa)}</b><span>${esc(p.opis || p.podpis || "")}</span>${p.stan ? `<i class="stan ${p.klasaStanu || ""}">${esc(p.stan)}</i>` : ""}</button></li>`).join("")}</ul>`;
 }
 
@@ -215,7 +215,7 @@ export const miejsce = {
   akcje: {
     "sw-hot": (el, c) => {
       if (el.dataset.karta) { M.karta = el.dataset.karta; M.fokusKarty = true; return c.rysuj(); }
-      if (el.dataset.m) return idzDoMiejsca(c, el.dataset.m);
+      if (el.dataset.m) { if (el.dataset.odsyla) toast(el.dataset.odsyla); return idzDoMiejsca(c, el.dataset.m); }
       const k = el.dataset.k;
       if (!k) return;
       if (!c.zakryta(k) && !c.dostepna(k)) { const od = c.odRundy(k); return toast(od ? `To otworzy się w tygodniu ${od}.` : "To miejsce jest jeszcze zamknięte."); }

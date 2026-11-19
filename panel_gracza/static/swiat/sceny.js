@@ -31,7 +31,7 @@ const napisW = (x, y, t, rozm, szer, kolor, font, extra = "") => {
 /** Klikalne miejsce. p: { cel?, miejsce?, karta?, szukaj?, etykieta, stan?, klasaStanu?, zablokowane? } – jedno z cel / miejsce / karta. */
 export function hot(p, x, y, w, h) {
   const dane = (p.cel ? ` data-k="${esc(p.cel)}"` : "") + (p.miejsce ? ` data-m="${esc(p.miejsce)}"` : "") + (p.karta ? ` data-karta="${esc(p.karta)}"` : "")
-    + (p.szukaj ? ` data-szukaj="${esc(p.szukaj)}"` : "");
+    + (p.szukaj ? ` data-szukaj="${esc(p.szukaj)}"` : "") + (p.miejsce && p.odsyla ? ` data-odsyla="${esc(p.odsyla)}"` : "");
   const stan = p.stan ? `<span class="stan ${p.klasaStanu || ""}">${esc(p.stan)}</span>` : "";
   return `<button class="hot${y < 60 ? " podpis-dol" : ""}${p.zablokowane ? " zablokowane" : ""}" data-akcja="sw-hot"${dane} aria-label="${esc(p.etykieta)}${p.stan ? ` (${esc(p.stan)})` : ""}"
     style="${pos(x, y, w, h)}"><span class="podpis" aria-hidden="true">${esc(p.etykieta)}</span>${stan}</button>`;

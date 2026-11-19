@@ -125,11 +125,11 @@ się i wysuwa listę kroków.
 |---|---|
 | Plan tygodnia | Podsumowanie firmy i lista spraw do zrobienia w tej rundzie. Wraca się tu, klikając logo LUKRUM |
 | Mapa miasta | Wszystkie budynki Lublina: lokale, banki, hurtownie, urzędy, parki. Kliknięty lokal pokazuje czynsz, cenę i strefę |
-| Mój kebab | Wnętrze lokalu. Tablica: menu i ceny; lada: stan lokalu, obsada i sprzedaż; rożen: stanowiska i sprzęt; zaplecze: zespół i grafik; kasa: wyniki finansowe; stoliki: wyposażenie; okno: klienci na ulicy; szyld: promocje. Pod sceną: magazyn, szkolenia, czas właściciela i portfel |
+| Mój kebab | Wnętrze lokalu. Tablica: menu i ceny; lada: stan lokalu, obsada i sprzedaż; zaplecze: zespół i grafik; kasa: wyniki finansowe; szyld: promocje. Rożen i stoliki odsyłają do Parku handlowego (tam kupuje się sprzęt i wyposażenie), okno – do Pracowni Analiz, szkolenia – do Szkoły Kebabu w Miasteczku akademickim. Pod sceną: magazyn, czas właściciela i portfel |
 | Stare Miasto | Biuro „Klucz” (lokale do wynajęcia lub kupna), sala licytacji, notariusz (kupno budynku z najemcą) i kantor „U Harpagona” (droga pożyczka) |
 | Hurtownie | Zamówienia u dostawców i przewozy towaru między własnymi lokalami |
-| Park handlowy | Sprzęt gastronomiczny (kupno, wynajem, sprzedaż) i sklep meblowy z wyposażeniem dla gości |
-| Miasteczko akademickie | Rynek pracy, klienci w strefach, konkurencja („Sokole Oko”) i kalendarz miasta (juwenalia, mecze, jarmarki) |
+| Park handlowy (al. Kraśnicka, Węglin) | Sprzęt gastronomiczny (kupno, wynajem, sprzedaż) i sklep meblowy z wyposażeniem dla gości |
+| Miasteczko akademickie | Rynek pracy, szkolenia, klienci w strefach, konkurencja („Sokole Oko”) i kalendarz miasta (juwenalia, mecze, jarmarki) |
 | Kamienica bankowa | Sześć banków (konto, kredyty, lokaty, leasing, debet) i giełda właściciela |
 | Kamienica rachmistrzów | Cztery biura rachunkowe (klatka schodowa z drzwiami do biur) |
 | Biurowiec przy Zana | Winda z guzikami pięter: parter (portiernia, „Twoje kampanie”, pokój z księgą firmy – KPiR), 1 drukarnia, 2 radio „Fala Koziołka”, 3 eventy, 4 internet „Lajk i Spółka” |
