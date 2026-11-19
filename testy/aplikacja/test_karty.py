@@ -69,7 +69,7 @@ def test_uklady_bez_powtorzen_z_tabeli():
 def test_karty_css_ma_4_style_i_wspolna_budowe():
     css = _bez_komentarzy(KARTY_CSS)
     for s in ("karta--s1", "karta--s2", "karta--s3", "karta--s4"):
-        assert f".karta.{s}" in css, s
+        assert f".szk.{s}" in css, s
     for czesc in (".og", ".ot", ".ost", ".k-ok", ".k-tyt", ".teczka-tryb", ".x"):
         assert czesc in css, czesc
     assert "styl.css" in KARTY_CSS and "pulpit/karty.css" in SZABLON
@@ -94,7 +94,7 @@ def test_karty_css_ruch_fokus_i_stan_nie_kolorem():
 
 
 def test_okno_i_teczka_przyjmuja_styl_i_uklad():
-    assert "styl" in WSPOLNE_JS and "karta karta--s" in WSPOLNE_JS and "og-t" in WSPOLNE_JS and "k-ok" in WSPOLNE_JS
+    assert "styl" in WSPOLNE_JS and "szk karta--s" in WSPOLNE_JS and "og-t" in WSPOLNE_JS and "k-ok" in WSPOLNE_JS
     assert "zastosujUklad" in WSPOLNE_JS and "STYL_DOMYSLNY" in WSPOLNE_JS
     teczka = APP_JS[APP_JS.index("function rysujTeczke"):APP_JS.index("// --- rysowanie")]
     assert "stylEkranu(" in teczka and "ukladEkranu(" in teczka and "okruszek" in teczka

@@ -25,7 +25,7 @@ export function pokazKarte({ rodzaj = "", tytul, adres = "", opis = "", uwaga = 
   t.id = "pk";
   t.className = "pk-tlo";
   // wspólna budowa kart (karty.css): nagłówek `.og` (okruszek, tytuł, ✕), treść `.ot`, stopka akcji `.ost`
-  t.innerHTML = `<div class="pk karta karta--s${stylEkranu("karta_miejsca")}" data-styl="${stylEkranu("karta_miejsca")}" data-nr="LUK/MAPA" role="dialog" aria-modal="true" aria-labelledby="pk-tytul">
+  t.innerHTML = `<div class="pk szk karta--s${stylEkranu("karta_miejsca")}" data-styl="${stylEkranu("karta_miejsca")}" data-nr="LUK/MAPA" role="dialog" aria-modal="true" aria-labelledby="pk-tytul">
     <div class="og"><span class="og-t"><small class="k-ok">Lublin${rodzaj ? ` › ${esc(rodzaj)}` : ""}</small><strong class="k-tyt" id="pk-tytul">${esc(tytul)}</strong></span>
       <span class="og-prawa"><button type="button" class="x pk-x" aria-label="Zamknij kartę">✕</button></span></div>
     <div class="ot">${adres ? `<p class="pk-adres">${esc(adres)}</p>` : ""}${opis ? `<p class="pk-opis">${esc(opis)}</p>` : ""}${uwaga ? `<p class="pk-uwaga">${esc(uwaga)}</p>` : ""}</div>

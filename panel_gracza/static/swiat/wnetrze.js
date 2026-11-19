@@ -4,6 +4,7 @@
 // nie są pokazywane: stan punktu pochodzi z gry (lista błędów, odblokowanie rundą, zakrycie funkcji).
 import { esc, okno, toast, zamknijOkno } from "../zakladki/wspolne.js";
 import { stylEkranu } from "../pulpit/karty-style.js";
+import { wybierzPozycje } from "../pulpit/uklady.js";
 import { R, ustawWyglad } from "./rysunek.js";
 import { SCENY } from "./sceny/index.js";
 
@@ -93,6 +94,7 @@ const opisPunktu = (p) => (p.odsyla ? goly(p.odsyla.tekst) : p.wejscie ? "Wejśc
 // --- kliknięcie punktu ------------------------------------------------------------------------------------------------------------
 /** Przewija ekran do firmy (po przejściu z drzwi banku, sklepu itd.). */
 export function przewinDo(tekst) {
+  wybierzPozycje(document.querySelector(".zaslona.teczka"), tekst);   // układ bez powtórzeń: scena wskazuje pozycję w karcie
   setTimeout(() => {
     const kandydaci = [...document.querySelectorAll(".teczka .ot :is(h2, h3, h4, b, strong, th, .nazwa, summary), #karta .tresc :is(h2, h3, h4, b, strong, th, .nazwa, summary)")];
     const el = kandydaci.find((e) => e.textContent.includes(tekst));

@@ -9,9 +9,10 @@ const STAN = new Map();   // „<ekran>:<numer grupy>” → numer pokazywanej p
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]);
 const tekst = (el) => (el?.textContent || "").replace(/\s+/g, " ").trim();
 
-const nazwaPozycji = (el, i) => tekst(el.querySelector(".agencja-opis > b, .kg")?.firstChild) || tekst(el.querySelector(".agencja-opis > b, .kg")).replace(/\s*(Twoje|Twój|wybran).*$/i, "") || `Pozycja ${i + 1}`;
-const wybrana = (el) => el.classList.contains("wybrany") || !!el.querySelector(".wybrany, button.zielony") || /(^|\s)(Twoje|Twój|Wybrano|W lokalu|✓)/i.test(tekst(el.querySelector(".pigulka")));
-const stanPozycji = (el) => tekst(el.querySelector(".pigulka:not(:first-child), .kg .pigulka")) || (wybrana(el) ? "✓ wybrane" : "");
+const nazwaPozycji = (el, i) => el.matches("tr") ? [...el.cells].slice(0, 2).map(tekst).filter(Boolean).join(" – ") || `Pozycja ${i + 1}` : tekst(el.querySelector(".agencja-opis > b, .kg")?.firstChild) || tekst(el.querySelector(".agencja-opis > b, .kg")).replace(/\s*(Twoje|Twój|wybran).*$/i, "") || `Pozycja ${i + 1}`;
+const WYBOR = /^\s*(Twoje biuro|Twój wybór|Twoja|Wybrano|W lokalu|✓)/i;   // znaczniki „to jest wybrane” w pigułkach i przyciskach kart
+const wybrana = (el) => el.classList.contains("wybrany") || !!el.querySelector(".wybrany") || [...el.querySelectorAll(".pigulka, button")].some((e) => WYBOR.test(tekst(e)));
+const stanPozycji = (el) => (wybrana(el) ? tekst([...el.querySelectorAll(".pigulka")].find((e) => WYBOR.test(tekst(e)))) || "✓ wybrane" : "");
 
 function wskazniki(el) {   // kolumny porównania: nazwa → wartość (duża liczba z podpisem albo wiersze „etykieta – wartość”)
   const w = new Map();
@@ -58,18 +59,37 @@ function tabela(grupa, poz, i0) {   // c
     ${i0 < 0 ? `<p class="uk-podp">Kliknij nazwę w tabeli, aby zobaczyć szczegóły pozycji.</p>` : ""}</div>`;
 }
 
-/** Przerabia listy opcji w oknie. korzen: element okna; cfg: { uklad: "a"|"b"|"c", pozycje?: selektor }; klucz: ekran (pamięć wyboru). */
-export function zastosujUklad(korzen, cfg, klucz) {
-  if (!korzen || !cfg) return;
-  czysc(korzen);
+function grupyPozycji(korzen, cfg) {
   const grupy = new Map();
   for (const el of korzen.querySelectorAll(cfg.pozycje || ".agencja")) {
     const r = el.parentElement;
     if (!grupy.has(r)) grupy.set(r, []);
     grupy.get(r).push(el);
   }
+  return cfg.pierwsza ? new Map([...grupy].slice(0, 1)) : grupy;   // `pierwsza`: tylko pierwsza lista w oknie (np. oferty na giełdzie)
+}
+
+/** Scena wskazuje pozycję (np. kliknięte drzwi banku): pokazuje w oknie pozycję o tej nazwie. Zwraca true, gdy znalazła. */
+export function wybierzPozycje(korzen, nazwa) {
+  const u = korzen?._uklad;
+  if (!u || !nazwa) return false;
+  let nr = 0, ok = false;
+  for (const poz of grupyPozycji(korzen, u.cfg).values()) {
+    if (poz.length < 2) continue;
+    const i = poz.findIndex((el, k) => nazwaPozycji(el, k).includes(nazwa) || nazwa.includes(nazwaPozycji(el, k)));
+    if (i >= 0) { STAN.set(`${u.klucz}:${nr}`, i); ok = true; }
+    nr++;
+  }
+  if (ok) zastosujUklad(korzen, u.cfg, u.klucz);
+  return ok;
+}
+
+/** Przerabia listy opcji w oknie. korzen: element okna; cfg: { uklad: "a"|"b"|"c", pozycje?: selektor }; klucz: ekran (pamięć wyboru). */
+export function zastosujUklad(korzen, cfg, klucz) {
+  if (!korzen || !cfg) return;
+  czysc(korzen);
   let nr = 0;
-  for (const [rodzic, poz] of grupy) {
+  for (const poz of grupyPozycji(korzen, cfg).values()) {
     if (poz.length < 2) continue;
     const grupa = `${klucz}:${nr++}`;
     let i0 = STAN.has(grupa) ? STAN.get(grupa) : poz.findIndex(wybrana);
@@ -80,7 +100,8 @@ export function zastosujUklad(korzen, cfg, klucz) {
     const tpl = document.createElement("template");
     tpl.innerHTML = html.trim();
     const dod = tpl.content.firstElementChild;
-    poz[0].before(dod);   // miniatury, nawigacja i tabela stoją nad pozycją
+    const tab = poz[0].matches("tr") ? poz[0].closest("table") : null;   // pozycje-wiersze: pasek stoi nad tabelą
+    (tab || poz[0]).before(dod);   // miniatury, nawigacja i tabela porównawcza stoją nad pozycją
   }
   korzen._uklad = { cfg, klucz };
   if (korzen._ukladOk) return;

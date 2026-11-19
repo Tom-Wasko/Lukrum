@@ -12,6 +12,8 @@ export const STYL_EKRANU = {
   oferta: 1, lokal_menu: 1, lokal_przeglad: 1, zatrudnienie: 1, zespol: 4, udogodnienia: 4, szkolenia: 4, hr_rozwoj: 4,
   stanowiska: 1, sprzet: 1, wnetrze_sprzet: 1, wyposazenie: 1, wnetrze_wyposazenie: 1, dostawcy: 1, swiezosc: 4, przewozy: 4,
   promocje: 1, czas_wlasciciela: 4,
+  // klucze zakładek złożonych i dawne klucze z punktów wnętrz (ALIAS w zakladki/index.js)
+  zaop_dostawy: 1, zaop_magazyn: 4, zaop_przewozy: 4, lokal_dostawy: 1, lokal_sprzet: 1, srodki_trwale: 4,
   // reklama i rynek
   agencje: 1, internet: 1, klienci: 3, konkurencja: 2, handel: 1, rynek_pracy: 4,
   // pieniądze, banki, księgowość
@@ -41,11 +43,17 @@ export function stylEkranu(...klucze) {
 
 // „Układ bez powtórzeń” – okna, w których scena pokazuje te same opcje co karta:
 //   a – jedna pozycja pełna + miniatury pozostałych; b – nawigacja 1/4 (jedna pozycja naraz); c – tabela porównawcza.
-// `pozycje`: selektor jednej opcji w karcie (domyślnie karta marki `.agencja`).
+// `pozycje`: selektor jednej opcji w karcie (domyślnie karta marki `.agencja`); `pierwsza`: tylko pierwsza lista w oknie.
 export const UKLAD_EKRANU = {
-  sprzet: { uklad: "b" }, wnetrze_sprzet: { uklad: "b" }, dostawcy: { uklad: "b" }, handel: { uklad: "b" },
+  sprzet: { uklad: "b" }, wnetrze_sprzet: { uklad: "b" }, lokal_sprzet: { uklad: "b" },
+  dostawcy: { uklad: "b" }, zaop_dostawy: { uklad: "b" }, lokal_dostawy: { uklad: "b" },
+  handel: { uklad: "b", pozycje: "table tbody tr", pierwsza: true },   // oferty na giełdzie to wiersze tabeli – jeden naraz
   bank: { uklad: "a" }, agencje: { uklad: "a" },
   biuro: { uklad: "c" }, ubezpieczenia: { uklad: "c", pozycje: ".kafel.kanal" },
 };
 
-export const ukladEkranu = (...klucze) => { for (const k of klucze) if (UKLAD_EKRANU[k]) return UKLAD_EKRANU[k]; return null; };
+/** Układ okna dla klucza (pierwszy znany klucz rozstrzyga: część „stanowiska” złożonego ekranu nie dostaje układu ze „sprzętu”). */
+export const ukladEkranu = (...klucze) => {
+  for (const k of klucze) if (k in STYL_EKRANU || k in UKLAD_EKRANU) return UKLAD_EKRANU[k] || null;
+  return null;
+};

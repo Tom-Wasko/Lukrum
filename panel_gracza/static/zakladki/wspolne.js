@@ -208,7 +208,7 @@ function zbudujOkno(tytul, html, { male = false, srednie = false, przyciski = ""
     return `<div class="okno ${rozm} ${klasa}"><div class="og"><span>${tytul}</span>${naglowek ? `<span class="og-prawa">${naglowek}${x}</span>` : x}</div>
     <div class="ot">${html}</div>${przyciski ? `<div class="ost">${przyciski}</div>` : ""}</div>`;
   }
-  return `<div class="okno karta karta--s${s} ${rozm} ${klasa}" data-styl="${s}" data-nr="${nrSprawy(bezTagow(tytul))}"><div class="og"><span class="og-t">${okruszek ? `<small class="k-ok">${okruszek}</small>` : ""}<strong class="k-tyt">${tytul}</strong></span><span class="og-prawa">${naglowek || ""}${x}</span></div>
+  return `<div class="okno szk karta--s${s} ${rozm} ${klasa}" data-styl="${s}" data-nr="${nrSprawy(bezTagow(tytul))}"><div class="og"><span class="og-t">${okruszek ? `<small class="k-ok">${okruszek}</small>` : ""}<strong class="k-tyt">${tytul}</strong></span><span class="og-prawa">${naglowek || ""}${x}</span></div>
     <div class="ot">${html}</div>${przyciski ? `<div class="ost">${przyciski}</div>` : ""}</div>`;
 }
 function otworzWarstwe(tresc, tytul, klasa, zamknij) {
