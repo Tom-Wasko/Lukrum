@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUKRUM – nagrania w radiu</title>
+  <link rel="stylesheet" href="{{ statyczne }}fonty/fonty.css">
+  <link rel="stylesheet" href="{{ statyczne }}motywy/zmienne.css">
+  <link rel="stylesheet" href="{{ statyczne }}motywy/dostepnosc.css">
+  <script src="{{ statyczne }}lukrum.js"></script>
+  <style>
+    /* Spis nagrań radia „Fala Koziołka” (seria radio, 19.11.2026): dane z dane/radio.yaml, kolory tylko ze zmiennych */
+    :root { --szary: color-mix(in srgb, var(--tusz) 62%, var(--papier)); --linia: color-mix(in srgb, var(--ramka) 45%, var(--papier)); }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--papier); color: var(--tusz); font: 16px/1.6 var(--font-tekst); }
+    .naglowek { display: flex; align-items: center; gap: 14px; padding: 14px 24px; background: var(--tusz); color: var(--papier); }
+    .naglowek b { font: 400 18px var(--font-gruby); }
+    .naglowek a { margin-left: auto; color: var(--papier); font-weight: 600; }
+    main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 56px; }
+    h1 { margin: 0 0 4px; font: 400 34px/1.15 var(--font-gruby); }
+    h1 span { color: var(--akcent); }
+    .podtytul { margin: 0 0 18px; color: var(--szary); }
+    h2 { margin: 34px 0 6px; font: 400 22px var(--font-szyld); text-transform: uppercase; letter-spacing: .03em; }
+    h2 small { font: 400 15px var(--font-tekst); text-transform: none; letter-spacing: 0; color: var(--szary); }
+    .ramka { margin: 14px 0 18px; padding: 12px 16px; border-left: 5px solid var(--akcent); background: color-mix(in srgb, var(--akcent) 10%, var(--g-karta)); border-radius: 10px; }
+    .ramka ul { margin: 6px 0 0; padding-left: 22px; }
+    .tabela { overflow-x: auto; border: 1px solid var(--linia); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14.5px; background: var(--g-karta); }
+    th { padding: 8px 12px; text-align: left; font: 400 13px var(--font-szyld); color: var(--papier); background: var(--tusz); }
+    td { padding: 8px 12px; border-top: 1px solid var(--linia); vertical-align: top; }
+    td.czas { white-space: nowrap; font-variant-numeric: tabular-nums; }
+    a { color: var(--akcent-2); }
+    a:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+    .pusta { color: var(--szary); font-style: italic; }
+    @media print { .naglowek { display: none; } body { background: #fff; color: #000; } th { color: #000; background: #fff; border-bottom: 2px solid #000; } }
+  </style>
+</head>
+<body>
+  <header class="naglowek"><b>LUKRUM</b><span>Radio „{{ nadawca.nazwa }}”</span><a href="/">← Moje gry</a></header>
+  <main>
+    <h1>Nagrania w radiu<span>.</span></h1>
+    <p class="podtytul">{{ nadawca.opis }} Razem {{ liczba }} nagrań, około {{ godziny }} h. Radio gra tylko dla nastroju i nie wpływa na wynik gry.</p>
+    <div class="ramka"><b>Dlaczego te nagrania można odtwarzać w szkole</b>
+      <ul>{% for p in podstawa %}<li>{{ p }}</li>{% endfor %}</ul></div>
+    {% for s in stacje %}
+    <h2 id="{{ s.id }}">{{ s.nazwa }} <small>· {{ s.fala }} MHz · {{ s.opis }}</small></h2>
+    {% if s.nagrania %}
+    <div class="tabela"><table>
+      <thead><tr><th scope="col">Nr</th><th scope="col">Tytuł</th><th scope="col">Autor utworu</th><th scope="col">Wykonanie</th><th scope="col">Rok nagrania</th><th scope="col">Czas</th><th scope="col">Licencja i źródło</th></tr></thead>
+      <tbody>{% for n in s.nagrania %}<tr><td>{{ forloop.counter }}</td><td>{{ n.tytul }}</td><td>{{ n.autor }}</td><td>{{ n.wykonawca }}</td>
+        <td>{{ n.rok|default:"–" }}</td><td class="czas">{{ n.czas }}</td><td>{{ n.licencja }} · <a href="{{ n.zrodlo }}" rel="noopener" target="_blank">źródło</a></td></tr>{% endfor %}</tbody>
+    </table></div>
+    {% else %}<p class="pusta">Bez nagrań: szum eteru powstaje w przeglądarce na bieżąco.</p>{% endif %}
+    {% endfor %}
+  </main>
+</body>
+</html>

@@ -14,6 +14,7 @@ import { oznaczCel, zadanieZeszytu } from "../zakladki/wujek.js";
 import { nazwaStrefy } from "../zakladki/lokale.js";
 import { idzDoStrony, krokZeszytu, odswiezZeszyt, otworzZeszyt, przewinZeszyt, rysujMalyZeszyt, zamknijZeszyt, zeszytOtwarty } from "./zeszyt.js";
 import { dokadWroc, mozeWrocic, pokazNaMapie, wejdzDoKroku, wroc, zapamietajWidok } from "./nawigacja.js";
+import { AKCJE_RADIA, przelaczRadio, radioOtwarte, zamknijRadio } from "./radio.js";
 
 // klasę ustawia skrypt na początku <body> (gra.html), żeby układ nie migał
 export const PULPIT = document.body.classList.contains("pulpit");
@@ -21,7 +22,7 @@ export const PULPIT = document.body.classList.contains("pulpit");
 const T_WYSLIJ = "List z decyzjami", T_FINANSE = "Finanse", T_KONTO = "Konto", T_ZAKUPY = "Zakupy tygodnia";
 const IKONY_PASKA = [   // klucz, ikona, napis (osobny przycisk „List z decyzjami” leży na dole paska: LIST_PASKA)
   ["konto", "osoba", "Konto"], ["jak", "ksiazka", "Jak grać"], ["koszyk", "sprzedaz", "Zakupy"],
-  ["wydarzenia", "zdarzenia", "Wydarzenia"], ["mapa", "mapa", "Mapa miasta"]];
+  ["wydarzenia", "zdarzenia", "Wydarzenia"], ["radio", "radio", "Radio"], ["mapa", "mapa", "Mapa miasta"]];
 let filtr = null;   // wybrana kategoria miejsc na mapie (filtr w prawym górnym rogu) albo null
 
 let zamontowany = false, oknoRunda = null, ostatniC = null;
@@ -69,6 +70,7 @@ function montuj() {
     <div class="pp-tydzien" id="pp-tydzien" role="status"></div>
     <nav class="pp-filtr" id="pp-filtr" aria-label="Filtr kategorii miejsc na mapie" hidden></nav>
     <aside class="pp-szuflada" id="pp-szuflada" aria-label="Wydarzenia tygodnia" hidden></aside>
+    <aside class="pp-szuflada pp-radio" id="pp-radio-panel" aria-label="Radio" hidden></aside>
     <button type="button" class="pp-portfel" id="pp-portfel" data-akcja="pp-portfel">${SVG_PLIK}<span class="pp-kwoty" id="pp-kwoty"></span></button>
     <button type="button" class="pp-zeszyt" id="pp-zeszyt" data-akcja="pp-zeszyt"></button>`;
   document.body.appendChild(rys);
@@ -89,12 +91,12 @@ function montuj() {
   });
   rys.addEventListener("pointerleave", () => rys.classList.remove("pp-schowane"));
   document.addEventListener("click", (e) => {   // klik poza szufladą i kategoriami je zamyka
-    if (!e.target.closest("#pp-szuflada, #pp-wydarzenia")) zamknijPodreczne();
+    if (!e.target.closest("#pp-szuflada, #pp-wydarzenia, #pp-radio-panel, #pp-radio, .ustawienia-lista")) zamknijPodreczne();
   });
 }
 
 // --- ustawienia (⚙): sekcje zamiast długiej listy. Menu ⚙ buduje motyw.js (do nagłówka), a pulpit przenosi je w lewy górny róg
-// i składa od nowa: Wygląd (kolory, tryb, rozmiar pisma), Mapa (warstwy), Dźwięk (radio – na razie nieaktywne), Konto, Gra.
+// i składa od nowa: Wygląd (kolory, tryb, rozmiar pisma), Mapa (warstwy), Dźwięk (radio: radio.js), Konto, Gra.
 const PALETY = [["bar", "Bar mleczny"], ["pewex", "Pewex"], ["wysoka", "Wysoki kontrast"]];
 const TRYBY = [["jasny", "Jasny"], ["ciemny", "Ciemny"]];
 const ROZMIARY = [["normalny", "Normalny"], ["duzy", "Duży"], ["najwiekszy", "Największy"]];
@@ -122,8 +124,8 @@ function budujUstawienia(ust) {
       <p class="pp-et">Tryb</p>${seg("Tryb jasny albo ciemny", TRYBY, "tryb")}<p class="pp-et">Rozmiar pisma</p>${seg("Rozmiar pisma", ROZMIARY, "rozmiar")}</section>
     <section class="pp-us"><h3>Mapa</h3><p class="pp-et">Warstwa mapy</p>${seg("Warstwa mapy", WARSTWY, "w", "mapa-warstwa")}
       <button type="button" class="pp-opcja pp-opinie" data-akcja="mapa-opinie" aria-pressed="false">★ Oceny klientów przy lokalach</button></section>
-    <section class="pp-us"><h3>Dźwięk</h3><button type="button" class="pp-opcja" disabled aria-disabled="true">Radio: wkrótce</button>
-      <p class="pp-nota">Tu pojawi się radio z muzyką z epoki.</p></section>
+    <section class="pp-us"><h3>Dźwięk</h3><button type="button" class="pp-opcja" data-akcja="pp-radio-ust">Radio „Fala Koziołka”: otwórz odbiornik</button>
+      <p class="pp-nota">Muzyka z epoki, „Lalka” Prusa i szum eteru. Tylko dla nastroju, bez wpływu na grę. <a href="/nagrania-w-radiu" target="_blank" rel="noopener">Nagrania w radiu</a></p></section>
     <section class="pp-us" id="pp-sek-konto"><h3>Konto</h3></section>
     <section class="pp-us" id="pp-sek-gra" hidden><h3>Gra</h3></section>
     ${stopka ? `<p class="pp-nota pp-o-grze">${esc(stopka.textContent.trim())}</p>` : ""}`;
@@ -299,10 +301,11 @@ function odswiezSzuflade(c) {
   b.title = w.n ? `Wydarzenia tygodnia: ${w.n}` : "Wydarzenia tygodnia";
   b.setAttribute("aria-label", b.title);
 }
-const podreczneOtwarte = () => !el("pp-szuflada").hidden;
+const podreczneOtwarte = () => !el("pp-szuflada").hidden || radioOtwarte();
 function zamknijPodreczne() {
   const sz = el("pp-szuflada");
   if (sz) sz.hidden = true;
+  zamknijRadio();
   el("pp-wydarzenia")?.setAttribute("aria-expanded", "false");
 }
 
@@ -358,6 +361,14 @@ function odswiezFiltr(c) {
 }
 
 export const AKCJE_PULPITU = {
+  ...AKCJE_RADIA,
+  "pp-radio": () => { if (!radioOtwarte()) zamknijPodreczne(); return przelaczRadio(); },
+  "pp-radio-ust": () => {   // z ustawień (⚙): menu się zamyka, odbiornik otwiera
+    const l = el("ustawienia-lista");
+    if (l) { l.hidden = true; document.querySelector(".pp-ust .ustawienia-przycisk")?.setAttribute("aria-expanded", "false"); }
+    zamknijPodreczne();
+    return przelaczRadio();
+  },
   "pp-wyslij": (e, c) => {
     if (c.v.gra.zakonczona) return toast("Gra zakończona – nie ma już decyzji do wysłania.");
     pokaz("wyslij", c);

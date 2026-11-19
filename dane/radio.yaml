@@ -1,0 +1,447 @@
+# Radio „Fala Koziołka” (seria radio, decyzje szefa 19.11.2026; notatki/Serie/radio/radio – lista nagrań.md).
+# Tylko nastrój: silnik tego pliku nie czyta (panel_gracza/radio.py → /radio.json i strona /nagrania-w-radiu).
+# Pliki: panel_gracza/static/radio/<plik>. Każde nagranie: tytul, autor (utworu), wykonawca, rok (nagrania),
+# zrodlo (strona z plikiem), licencja (dozwolone: domena publiczna, CC0, CC BY, CC BY-SA, Licencja Wolnej Sztuki 1.3),
+# plik, sekundy. Nowe nagranie: najpierw sprawdzić licencję i zapisać podstawę, potem dopisać tutaj (pilnuje test).
+# Teksty prowadzącego: neutralne płciowo, bez cytatów z innych gier; {stacja} {fala} w powitaniach, {tytul} {wykonawca} w zapowiedziach.
+opis: 'Radio „Fala Koziołka” na pulpicie gracza: stacje, nagrania z opisem licencji i teksty prowadzącego. Tylko nastrój, bez wpływu na wynik.'
+zrodlo: 'Decyzje szefa 19.11.2026 (notatki/Decyzje.md, radio); źródło i licencja każdego nagrania w polach zrodlo i licencja.'
+nadawca:
+  nazwa: Fala Koziołka
+  opis: Radio z ul. Zana 39 (2. piętro) w grze. Gra stare płyty i nagrania z wolnych licencji.
+podstawa:
+- 'Nagrania z płyt i wałków sprzed 1926 r.: w USA są w domenie publicznej, a w Polsce prawa do tak starych nagrań i wykonań dawno wygasły (trwały
+  50 lat).'
+- 'Utwory: kompozytorzy i autorzy tekstów zmarli przed 1956 r. (prawa autorskie trwają 70 lat po śmierci), a pieśni bez znanego autora są utworami
+  anonimowymi, których prawa wygasły 70 lat po pierwszym rozpowszechnieniu (art. 36 pkt 2 ustawy o prawie autorskim).'
+- 'Muzyka klasyczna: nowe nagrania organizacji Musopen, które jej autorzy oddali do domeny publicznej (CC0 albo znak domeny publicznej 1.0, Internet
+  Archive).'
+- '„Lalka”: audiobook Fundacji Wolne Lektury na Licencji Wolnej Sztuki 1.3 – wolno go odtwarzać i rozpowszechniać z podaniem autora, wykonawcy
+  i licencji.'
+- Pliki są przerobione na mono MP3, żeby paczka była mała i gra działała bez internetu. Treść nagrań się nie zmienia.
+- Teksty prowadzącego napisano dla LUKRUM, a czyta je syntezator mowy przeglądarki.
+prowadzacy:
+  co_ile: 2
+  powitania:
+  - Tu Fala Koziołka, program {stacja}, {fala} megaherca.
+  - 'Jeśli ktoś nas słyszy: tu {stacja} na fali {fala}. Lublin nadaje, rożny się kręcą.'
+  - Halo, halo, tu Fala Koziołka. Nadajemy z ulicy Zana, z drugiego piętra, dopóki starczy prądu.
+  - Dzień dobry wszystkim przy odbiornikach. Tu {stacja}, Fala Koziołka.
+  wtracenia:
+  - 'Komunikat dla wszystkich lokali w mieście: list z decyzjami nie wyśle się sam.'
+  - 'Wujek prosił przekazać: następny krok jest w zeszycie.'
+  - 'Prognoza dla handlu: jutro też będzie dzień, a ludzie też będą głodni.'
+  - 'Przypominamy: gotówka w szufladzie to jeszcze nie zysk. Zysk liczy się po kosztach.'
+  - Na antenie spokojnie, w kuchni gorąco. Pozdrawiamy wszystkich za ladą.
+  - 'Ostrzeżenie dla przedsiębiorców: debet w banku trzeba kiedyś oddać, i to z odsetkami.'
+  - 'Z redakcji przy Zana: czajnik działa, gramofon działa, antena trzyma się na słowo honoru.'
+  - Kto słucha nas w przerwie między zamówieniami, temu dedykujemy następną płytę.
+  - Na zewnątrz miasto, w eterze trzaski. Nie przełączajcie się.
+  - Ceny w hurtowni się zmieniają, a stare płyty brzmią tak samo. To pociesza.
+  - Rachunki z hurtowni warto zachować. Urząd skarbowy ma dobrą pamięć.
+  - Słychać nas od Starego Miasta po Felin. Dalej już tylko szum, ale też miły.
+  - Zespół Fali Koziołka życzy wszystkim pełnej sali i szybkiej obsługi.
+  - Mówi Fala Koziołka. Prąd jest, płyty są, nadajemy dalej.
+  zapowiedzi:
+  - 'Teraz: {tytul}. Wykonanie: {wykonawca}.'
+  - 'Z naszej płytoteki: {tytul}.'
+  - 'Posłuchajmy: {tytul}.'
+  - 'Kolejna płyta z szafy: {tytul}, {wykonawca}.'
+stacje:
+- id: polska
+  nazwa: Program Polski
+  fala: 66,9
+  rodzaj: muzyka
+  opis: Pieśni, mazury i fortepian z polskich płyt sprzed stu lat.
+  nagrania:
+  - tytul: Halka – pieśń
+    autor: Stanisław Moniuszko (zm. 1872), libretto Włodzimierz Wolski (zm. 1882)
+    wykonawca: Marcella Sembrich
+    rok: 1907
+    zrodlo: https://archive.org/details/loc-jukebox-125605-halka-polish-song
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/01-halka-piesn.mp3
+    sekundy: 249
+  - tytul: Hrabina – polonez
+    autor: Stanisław Moniuszko (zm. 1872)
+    wykonawca: Henryk Adamus
+    rok: 1903
+    zrodlo: https://archive.org/details/loc-jukebox-1064141-hrabina-polonez
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/02-hrabina-polonez.mp3
+    sekundy: 205
+  - tytul: Jeszcze Polska nie zginęła
+    autor: Józef Wybicki (zm. 1822), melodia ludowa
+    wykonawca: Chopin Conservatory Mixed Quartet
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-187338-jeszce-polska-nie-zgineta
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/03-jeszcze-polska-nie-zginela.mp3
+    sekundy: 135
+  - tytul: Witaj, majowa jutrzenko
+    autor: Rajnold Suchodolski (zm. 1831)
+    wykonawca: Chopin Conservatory Mixed Quartet
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-130649-witaj-majowa-jutrzenko
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/04-witaj-majowa-jutrzenko.mp3
+    sekundy: 116
+  - tytul: Idzie Maciek
+    autor: pieśń bez wskazanego autora
+    wykonawca: Chopin Conservatory Quintette
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-130641-idzie-maciek-idzie
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/05-idzie-maciek.mp3
+    sekundy: 183
+  - tytul: Hej, te góry
+    autor: pieśń bez wskazanego autora
+    wykonawca: Chopin Conservatory Male Quartet
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-130637-hej-te-g-ry
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/06-hej-te-gory.mp3
+    sekundy: 138
+  - tytul: Mazur
+    autor: Michał Kleofas Ogiński (zm. 1833)
+    wykonawca: Orkiestra B. Rybowiaka
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-224703-mazur
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/07-mazur.mp3
+    sekundy: 177
+  - tytul: Wójt – mazur
+    autor: Leopold Lewandowski (zm. 1896)
+    wykonawca: B. Rybowiak
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-224698-w-jt-mazur
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/08-wojt-mazur.mp3
+    sekundy: 137
+  - tytul: Piękna nasza Polska cała
+    autor: pieśń ludowa
+    wykonawca: B. Rybowiak
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-224694-pi-kna-nasza-polska-cala
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/09-piekna-nasza-polska-cala.mp3
+    sekundy: 141
+  - tytul: Wiązanka melodyi ludowych
+    autor: melodie ludowe
+    wykonawca: Orkiestra B. Rybowiaka
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-224702-wi-zanka-melodyi-ludowych
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/10-wiazanka-melodyi-ludowych.mp3
+    sekundy: 191
+  - tytul: Polak nie sługa
+    autor: pieśń bez wskazanego autora
+    wykonawca: Chopin Conservatory Mixed Quartet
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-130650-polak-nie-s-uga
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/11-polak-nie-sluga.mp3
+    sekundy: 155
+  - tytul: Modlitwa przed bitwą
+    autor: pieśń bez wskazanego autora
+    wykonawca: Chopin Conservatory Mixed Quartet
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-130651-modlitwa-przed-bitwa
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/12-modlitwa-przed-bitwa.mp3
+    sekundy: 166
+  - tytul: Marsz Sokołów
+    autor: marsz bez wskazanego autora
+    wykonawca: S. Kuźniewicz, R. Kiolbassa-Kwasigroch (fortepian)
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-130660-marsz-soko-ow
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/13-marsz-sokolow.mp3
+    sekundy: 150
+  - tytul: Marsz żałobny
+    autor: Fryderyk Chopin (zm. 1849)
+    wykonawca: Royal Guards Band
+    rok: 1909
+    zrodlo: https://archive.org/details/loc-jukebox-761759-chopin-s-funeral-march
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/14-marsz-zalobny.mp3
+    sekundy: 250
+  - tytul: Nokturn Es-dur
+    autor: Fryderyk Chopin (zm. 1849)
+    wykonawca: Victor Sorlin (wiolonczela)
+    rok: 1910
+    zrodlo: https://archive.org/details/loc-jukebox-129301-nocturne-in-e-flat
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/15-nokturn-es-dur.mp3
+    sekundy: 241
+  - tytul: Fantazja-impromptu
+    autor: Fryderyk Chopin (zm. 1849)
+    wykonawca: Xaver Scharwenka (fortepian)
+    rok: 1910
+    zrodlo: https://archive.org/details/loc-jukebox-762513-fantasie-impromptu
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/16-fantazja-impromptu.mp3
+    sekundy: 262
+  - tytul: Menuet G-dur
+    autor: Ignacy Jan Paderewski (zm. 1941)
+    wykonawca: Victor Orchestra
+    rok: 1910
+    zrodlo: https://archive.org/details/loc-jukebox-128505-minuet-in-g-major-op-14-no-1
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: polska/17-menuet-g-dur.mp3
+    sekundy: 237
+- id: jazz
+  nazwa: Synkopa
+  fala: 68,3
+  rodzaj: muzyka
+  opis: Ragtime i wczesny jazz z płyt szelakowych.
+  nagrania:
+  - tytul: Too Much Mustard
+    autor: Cecil Macklin (zm. 1944)
+    wykonawca: Europe's Society Orchestra
+    rok: 1913
+    zrodlo: https://archive.org/details/loc-jukebox-134232-too-much-mustard
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: jazz/01-too-much-mustard.mp3
+    sekundy: 228
+  - tytul: Temptation Rag
+    autor: Henry Lodge (zm. 1933)
+    wykonawca: Arthur Pryor's Band
+    rok: 1910
+    zrodlo: https://archive.org/details/loc-jukebox-129052-temptation-rag
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: jazz/02-temptation-rag.mp3
+    sekundy: 152
+  - tytul: Red Pepper
+    autor: Henry Lodge (zm. 1933)
+    wykonawca: Fred Van Eps (banjo)
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-131253-red-pepper
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: jazz/03-red-pepper.mp3
+    sekundy: 133
+  - tytul: Dill Pickles Rag
+    autor: Charles L. Johnson (zm. 1950)
+    wykonawca: Arthur Pryor's Band
+    rok: 1909
+    zrodlo: https://archive.org/details/loc-jukebox-127191-dill-pickles-rag
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: jazz/04-dill-pickles-rag.mp3
+    sekundy: 146
+  - tytul: That Flying Rag
+    autor: Louis-Philippe Laurendeau (zm. 1916)
+    wykonawca: Arthur Pryor's Band
+    rok: 1911
+    zrodlo: https://archive.org/details/loc-jukebox-131075-that-flying-rag
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: jazz/05-that-flying-rag.mp3
+    sekundy: 175
+  - tytul: Desecration Rag
+    autor: Felix Arndt (zm. 1918)
+    wykonawca: Felix Arndt (fortepian)
+    rok: 1914
+    zrodlo: https://archive.org/details/loc-jukebox-134701-desecration-rag-a-classic-nightmare
+    licencja: domena publiczna – Public Domain Mark 1.0 (Library of Congress, National Jukebox)
+    plik: jazz/06-desecration-rag.mp3
+    sekundy: 184
+  - tytul: Shreveport Stomp
+    autor: Jelly Roll Morton (zm. 1941)
+    wykonawca: Jelly Roll Morton (fortepian)
+    rok: 1924
+    zrodlo: https://archive.org/details/shreveport-stomp-jelly-roll-morton-1924
+    licencja: domena publiczna – Public Domain Mark 1.0 (Internet Archive)
+    plik: jazz/07-shreveport-stomp.mp3
+    sekundy: 171
+  - tytul: Maple Leaf Rag
+    autor: Scott Joplin (zm. 1917)
+    wykonawca: Vess L. Ossman's Banjo Orchestra
+    rok: 1907
+    zrodlo: https://archive.org/details/1907-USA-Archives-1907-00-00-Vess-L-Ossmans-Banjo-Orch-Maple-Leaf-Rag
+    licencja: domena publiczna z mocy prawa (nagranie z 1907 r., autor utworu zm. 1917 r.)
+    plik: jazz/08-maple-leaf-rag.mp3
+    sekundy: 160
+  - tytul: Snake Rag
+    autor: Joe „King” Oliver (zm. 1938)
+    wykonawca: King Oliver's Creole Jazz Band
+    rok: 1923
+    zrodlo: https://archive.org/details/1923-USA-Archives-1923-04-06-King-Olivers-Creole-Jazz-Band-Snake-Rag-
+    licencja: domena publiczna z mocy prawa (nagranie z 1923 r., autor utworu zm. 1938 r.)
+    plik: jazz/09-snake-rag.mp3
+    sekundy: 180
+  - tytul: Zulu's Ball
+    autor: Joe „King” Oliver (zm. 1938)
+    wykonawca: King Oliver's Creole Jazz Band
+    rok: 1923
+    zrodlo: https://archive.org/details/78_zulus-ball_king-olivers-creole-jazz-band_gbia0366412a
+    licencja: domena publiczna z mocy prawa (nagranie z 1923 r., autor utworu zm. 1938 r.)
+    plik: jazz/10-zulu-s-ball.mp3
+    sekundy: 154
+  - tytul: Working Man Blues
+    autor: Joe „King” Oliver (zm. 1938)
+    wykonawca: King Oliver's Creole Jazz Band
+    rok: 1923
+    zrodlo: https://archive.org/details/78_working-man-blues_king-olivers-creole-jazz-band_gbia0553119a
+    licencja: domena publiczna z mocy prawa (nagranie z 1923 r., autor utworu zm. 1938 r.)
+    plik: jazz/11-working-man-blues.mp3
+    sekundy: 147
+  - tytul: London Café Blues
+    autor: Jelly Roll Morton (zm. 1941)
+    wykonawca: King Oliver's Creole Jazz Band
+    rok: 1923
+    zrodlo: https://archive.org/details/78_london-cafe-blues_king-olivers-creole-jazz-band_gbia0553146a
+    licencja: domena publiczna z mocy prawa (nagranie z 1923 r., autor utworu zm. 1941 r.)
+    plik: jazz/12-london-cafe-blues.mp3
+    sekundy: 178
+  - tytul: Davenport Blues
+    autor: Bix Beiderbecke (zm. 1931)
+    wykonawca: Bix Beiderbecke and His Rhythm Jugglers
+    rok: 1925
+    zrodlo: https://archive.org/details/1925-USA-Archives-1925-01-26-Bix-Beiderbecke-Rhythm-Jugglers-Davenport-Blues
+    licencja: domena publiczna z mocy prawa (nagranie z 1925 r., autor utworu zm. 1931 r.)
+    plik: jazz/13-davenport-blues.mp3
+    sekundy: 168
+- id: klasyczna
+  nazwa: Filharmonia
+  fala: 70,1
+  rodzaj: muzyka
+  opis: Chopin, Mozart, Bach, Beethoven i Brahms.
+  nagrania:
+  - tytul: Chopin – Polonez A-dur op. 40 nr 1 „Wojskowy”
+    autor: Fryderyk Chopin (zm. 1849)
+    wykonawca: Aya Higuchi
+    rok: null
+    zrodlo: https://archive.org/details/musopen-chopin-complete-works-flac
+    licencja: CC0 (Musopen, Internet Archive)
+    plik: klasyczna/01-chopin-polonez-a-dur-op-40-nr-1-wojskowy.mp3
+    sekundy: 314
+  - tytul: Chopin – Etiuda c-moll op. 10 nr 12 „Rewolucyjna”
+    autor: Fryderyk Chopin (zm. 1849)
+    wykonawca: Edward Neeman
+    rok: null
+    zrodlo: https://archive.org/details/musopen-chopin-complete-works-flac
+    licencja: CC0 (Musopen, Internet Archive)
+    plik: klasyczna/02-chopin-etiuda-c-moll-op-10-nr-12-rewoluc.mp3
+    sekundy: 165
+  - tytul: Chopin – Nokturn Es-dur op. 9 nr 2
+    autor: Fryderyk Chopin (zm. 1849)
+    wykonawca: Frank Levy
+    rok: null
+    zrodlo: https://archive.org/details/musopen-chopin-complete-works-flac
+    licencja: CC0 (Musopen, Internet Archive)
+    plik: klasyczna/03-chopin-nokturn-es-dur-op-9-nr-2.mp3
+    sekundy: 272
+  - tytul: Chopin – Mazurek a-moll op. 17 nr 4
+    autor: Fryderyk Chopin (zm. 1849)
+    wykonawca: Luke Faulkner
+    rok: null
+    zrodlo: https://archive.org/details/musopen-chopin-complete-works-flac
+    licencja: CC0 (Musopen, Internet Archive)
+    plik: klasyczna/04-chopin-mazurek-a-moll-op-17-nr-4.mp3
+    sekundy: 272
+  - tytul: Chopin – Fantazja-impromptu cis-moll op. 66
+    autor: Fryderyk Chopin (zm. 1849)
+    wykonawca: Frank Levy
+    rok: null
+    zrodlo: https://archive.org/details/musopen-chopin-complete-works-flac
+    licencja: CC0 (Musopen, Internet Archive)
+    plik: klasyczna/05-chopin-fantazja-impromptu-cis-moll-op-66.mp3
+    sekundy: 327
+  - tytul: Chopin – Walc As-dur op. 64 nr 3
+    autor: Fryderyk Chopin (zm. 1849)
+    wykonawca: Diana Hughes
+    rok: null
+    zrodlo: https://archive.org/details/musopen-chopin-complete-works-flac
+    licencja: CC0 (Musopen, Internet Archive)
+    plik: klasyczna/06-chopin-walc-as-dur-op-64-nr-3.mp3
+    sekundy: 184
+  - tytul: Chopin – Polonez As-dur op. 53 „Heroiczny”
+    autor: Fryderyk Chopin (zm. 1849)
+    wykonawca: Luke Faulkner
+    rok: null
+    zrodlo: https://archive.org/details/musopen-chopin-complete-works-flac
+    licencja: CC0 (Musopen, Internet Archive)
+    plik: klasyczna/07-chopin-polonez-as-dur-op-53-heroiczny.mp3
+    sekundy: 439
+  - tytul: Chopin – Etiuda E-dur op. 10 nr 3
+    autor: Fryderyk Chopin (zm. 1849)
+    wykonawca: Edward Neeman
+    rok: null
+    zrodlo: https://archive.org/details/musopen-chopin-complete-works-flac
+    licencja: CC0 (Musopen, Internet Archive)
+    plik: klasyczna/08-chopin-etiuda-e-dur-op-10-nr-3.mp3
+    sekundy: 276
+  - tytul: Mozart – „Wesele Figara”, uwertura
+    autor: Wolfgang Amadeus Mozart (zm. 1791)
+    wykonawca: orkiestra Musopen
+    rok: null
+    zrodlo: https://archive.org/details/musopen-dvd-in-lossless-flac-format
+    licencja: domena publiczna (znak PD 1.0; Musopen, Internet Archive)
+    plik: klasyczna/09-mozart-wesele-figara-uwertura.mp3
+    sekundy: 241
+  - tytul: Mozart – „Czarodziejski flet”, uwertura
+    autor: Wolfgang Amadeus Mozart (zm. 1791)
+    wykonawca: orkiestra Musopen
+    rok: null
+    zrodlo: https://archive.org/details/musopen-dvd-in-lossless-flac-format
+    licencja: domena publiczna (znak PD 1.0; Musopen, Internet Archive)
+    plik: klasyczna/10-mozart-czarodziejski-flet-uwertura.mp3
+    sekundy: 401
+  - tytul: Bach – Wariacje Goldbergowskie, aria
+    autor: Johann Sebastian Bach (zm. 1750)
+    wykonawca: fortepian, nagranie Musopen
+    rok: null
+    zrodlo: https://archive.org/details/musopen-dvd-in-lossless-flac-format
+    licencja: domena publiczna (znak PD 1.0; Musopen, Internet Archive)
+    plik: klasyczna/11-bach-wariacje-goldbergowskie-aria.mp3
+    sekundy: 292
+  - tytul: Beethoven – III Symfonia „Eroica”, cz. III
+    autor: Ludwig van Beethoven (zm. 1827)
+    wykonawca: orkiestra Musopen
+    rok: null
+    zrodlo: https://archive.org/details/musopen-dvd-in-lossless-flac-format
+    licencja: domena publiczna (znak PD 1.0; Musopen, Internet Archive)
+    plik: klasyczna/12-beethoven-iii-symfonia-eroica-cz-iii.mp3
+    sekundy: 349
+  - tytul: Brahms – III Symfonia F-dur, cz. III
+    autor: Johannes Brahms (zm. 1897)
+    wykonawca: orkiestra Musopen
+    rok: null
+    zrodlo: https://archive.org/details/musopen-dvd-in-lossless-flac-format
+    licencja: domena publiczna (znak PD 1.0; Musopen, Internet Archive)
+    plik: klasyczna/13-brahms-iii-symfonia-f-dur-cz-iii.mp3
+    sekundy: 370
+- id: lalka
+  nazwa: Teatr przy mikrofonie
+  fala: 71,6
+  rodzaj: sluchowisko
+  opis: „Lalka” Bolesława Prusa, tom I, rozdziały I–III, po kolei.
+  nagrania:
+  - tytul: 'Lalka, tom I, rozdział I: Jak wygląda firma J. Mincel i S. Wokulski przez szkło butelek'
+    autor: Bolesław Prus (zm. 1912)
+    wykonawca: czyta Albert Osik, reżyseria Dominik Lehman
+    rok: 2020
+    zrodlo: https://wolnelektury.pl/katalog/lektura/lalka-tom-pierwszy/
+    licencja: Licencja Wolnej Sztuki 1.3 (© 2020 Fundacja Wolne Lektury, http://artlibre.org/licence/lal/pl/)
+    plik: lalka/01-lalka-tom-i-rozdzial-i-jak-wyglada-firma.mp3
+    sekundy: 659
+  - tytul: 'Lalka, tom I, rozdział II: Rządy starego subiekta'
+    autor: Bolesław Prus (zm. 1912)
+    wykonawca: czyta Albert Osik, reżyseria Dominik Lehman
+    rok: 2020
+    zrodlo: https://wolnelektury.pl/katalog/lektura/lalka-tom-pierwszy/
+    licencja: Licencja Wolnej Sztuki 1.3 (© 2020 Fundacja Wolne Lektury, http://artlibre.org/licence/lal/pl/)
+    plik: lalka/02-lalka-tom-i-rozdzial-ii-rzady-starego-su.mp3
+    sekundy: 1191
+  - tytul: 'Lalka, tom I, rozdział III: Pamiętnik starego subiekta'
+    autor: Bolesław Prus (zm. 1912)
+    wykonawca: czyta Albert Osik, reżyseria Dominik Lehman
+    rok: 2020
+    zrodlo: https://wolnelektury.pl/katalog/lektura/lalka-tom-pierwszy/
+    licencja: Licencja Wolnej Sztuki 1.3 (© 2020 Fundacja Wolne Lektury, http://artlibre.org/licence/lal/pl/)
+    plik: lalka/03-lalka-tom-i-rozdzial-iii-pamietnik-stare.mp3
+    sekundy: 1923
+- id: szum
+  nazwa: Między stacjami
+  fala: 73,4
+  rodzaj: szum
+  opis: Sam szum eteru, bez muzyki i bez głosu.

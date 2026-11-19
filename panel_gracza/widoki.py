@@ -4,7 +4,7 @@ import secrets
 from urllib.parse import quote
 
 from django.core.exceptions import PermissionDenied
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -14,6 +14,7 @@ from gry.models import Gra
 from konta.druzyny import CIASTKO_URZADZENIA
 from konta.role import firmy_ucznia, jest_mg, moze_firme
 
+from . import radio as radio_dane
 from .instrukcja import instrukcja
 
 
@@ -36,6 +37,16 @@ def jak_grac(request):
     """Instrukcja dla graczy (INSTRUKCJA.md) – bez logowania, do przeczytania przed grą."""
     kontekst = instrukcja() | {"powrot": "/", "powrot_tekst": "Moje gry"}
     return render(request, "panel_gracza/jak_grac.html", kontekst)
+
+
+def radio_json(request):
+    """Stacje i nagrania radia „Fala Koziołka” dla odbiornika (static/pulpit/radio.js)."""
+    return JsonResponse(radio_dane.dla_odbiornika())
+
+
+def nagrania_w_radiu(request):
+    """Spis nagrań radia: autor, wykonawca, rok, źródło i licencja każdego pliku (bez logowania)."""
+    return render(request, "panel_gracza/nagrania_w_radiu.html", radio_dane.dla_strony())
 
 
 @never_cache

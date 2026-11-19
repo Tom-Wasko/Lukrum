@@ -476,3 +476,32 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
 .pp-sz-kolumny { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 22px; align-items: start; }
 .pp-sz-kolumny > section { min-width: 0; }
 @media (max-width: 900px) { .pp-sz-kolumny { grid-template-columns: 1fr; } .pp-szuflada { width: min(390px, calc(100vw - 80px)); } }
+
+/* --- radio „Fala Koziołka” (radio.js): drewniana skrzynka, kremowa skala UKF z wskazówką, czarne napisy na skali ---------- */
+.pp-radio { width: min(400px, calc(100vw - 170px)); }
+.pp-radio-adres { margin: 0 0 8px; color: var(--g-biel); font-size: .88em; }
+.pp-radio-skala { position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(68px, 1fr)); gap: 4px; padding: 18px 6px 6px; color: var(--g-czern);
+  background: repeating-linear-gradient(90deg, var(--g-czern) 0 1px, transparent 1px 12px) 0 4px / 100% 8px no-repeat, var(--g-biel); border: 3px solid var(--g-czern); border-radius: 4px; }
+.pp-radio-st { display: flex; flex-direction: column; align-items: center; gap: 1px; min-height: 52px; padding: 4px 2px; cursor: pointer; color: var(--g-czern); background: none; border: 2px solid transparent; border-radius: 4px; font: calc(12px * var(--skala-tekstu, 1))/1.15 var(--font-tekst); text-align: center; }
+.pp-radio-st b { font: 400 calc(15px * var(--skala-tekstu, 1)) var(--font-gruby); }
+.pp-radio-st:hover { border-color: var(--g-czern); }
+.pp-radio-st.aktywny { border-color: var(--g-czern); background: color-mix(in srgb, var(--g-rudy) 22%, var(--g-biel)); box-shadow: inset 0 -4px 0 var(--g-rudy); }
+.pp-radio-st.aktywny b::before { content: "▼ "; font-size: .7em; }
+.pp-radio-st:focus-visible, .pp-radio-wl:focus-visible, .pp-radio-gl input:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+.pp-radio-gora { display: flex; align-items: center; gap: 12px; margin: 10px 0 8px; }
+.pp-radio-wl { min-width: 104px; min-height: 44px; padding: 0 14px; cursor: pointer; color: var(--g-czern); background: var(--g-biel); border: 3px solid var(--g-czern); border-radius: 22px; font: 400 calc(15px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .04em; }
+.pp-radio-wl.aktywny { color: var(--g-biel); background: var(--g-czern); }
+.pp-radio-gl { display: flex; flex: 1; align-items: center; gap: 8px; color: var(--g-biel); font-size: .9em; }
+.pp-radio-gl input { flex: 1; min-width: 0; min-height: 32px; accent-color: var(--g-rudy); }
+.pp-radio-ekran { min-height: 48px; padding: 8px 10px; color: var(--g-czern); background: var(--g-biel); border: 2px solid var(--g-czern); border-radius: 3px; }
+.pp-radio-ekran p { margin: 0; }
+.pp-radio-ekran small { display: block; font: 400 calc(11px * var(--skala-tekstu, 1)) var(--font-szyld); letter-spacing: .08em; text-transform: uppercase; }
+.pp-radio-napis { margin-top: 6px !important; padding-top: 6px; border-top: 1px dashed var(--g-czern); font-style: italic; }
+.pp-radio-napis::before { content: "» "; font-style: normal; font-weight: 700; }
+.pp-radio-dol { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.pp-radio-dol .pp-lnk { color: var(--g-czern); background: var(--g-biel); border-color: var(--g-czern); text-decoration: none; }
+.pp-radio-dol .pp-lnk:hover { color: var(--g-biel); background: var(--g-rudy); }
+.pp-radio-dol [hidden] { display: none; }
+[data-paleta="wysoka"] .pp-radio-adres, [data-paleta="wysoka"] .pp-radio-gl { color: var(--tusz); }
+[data-paleta="wysoka"] .pp-radio-skala { background: var(--g-biel); }
+[data-paleta="wysoka"] .pp-radio-st.aktywny { background: var(--g-biel); text-decoration: underline; text-decoration-thickness: 3px; }
