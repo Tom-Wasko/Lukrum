@@ -334,10 +334,11 @@ export function lokalBudynek(g, x, y, { h, kolor, wolny, wBudowie }) {
   return html;
 }
 
-// banki przy Krakowskim Przedmieściu – kolor i krótka nazwa na fryzie
+// banki przy Krakowskim Przedmieściu – kolor i krótka nazwa na fryzie; fikcyjne banki gry (banki.yaml),
+// bez prawdziwych marek i ich kolorów (decyzja autora 19.11.2026)
 const BANKI = {
-  bank_1: ["#00866b", "CRÉDIT AGR."], bank_2: ["#003574", "PKO BP"], bank_3: ["#c8102e", "PEKAO"],
-  bank_4: ["#ff6200", "ING"], bank_5: ["#1d1d1b", "mBank"], bank_6: ["#ec0000", "SANTANDER"],
+  bank_1: ["#7a3b2e", "KMICIC"], bank_2: ["#3d4f6b", "WOKULSKI"], bank_3: ["#5b6b2f", "Z. OBIECANA"],
+  bank_4: ["#8a6a2a", "RZECKI"], bank_5: ["#4e3a5e", "SOPLICOWO"],
 };
 const HALE = {
   makro: { tlo: "#ffd200", tekst: "#0b3d91", nazwa: "MAKRO", sciana: "#2d5aa6", h: 15 },
@@ -482,8 +483,7 @@ export function rysujBudynek(g, b) {
       case "bank_2": return bank(g, X, Y, S, L, { kolor, nazwa, h: 28, sciana: "#efe6d2" })
         + walec(g, X + S / 2, Y + L / 2, 0.16, 28, 33, "#efe6d2") + kopula(g, X + S / 2, Y + L / 2, 0.16, 33, MIEDZ) + maszt(g, X + S / 2, Y + L / 2, 47, 4);
       case "bank_4": return biurowiec(g, X, Y, S, L, { h: 36, sciana: "#ffffff", szklo: "#f7b98c", szyld: [nazwa, kolor] });
-      case "bank_5": return biurowiec(g, X, Y, S, L, { h: 32, sciana: "#2b2f36", szklo: "#7f9fbf", szyld: [nazwa, "#e4002b"], co: 4.5 });
-      case "bank_6": return kamienica(g, X, Y, S, L, { h: 27, kolor: FASADY[5], dach: "dwuspadowy", szyld: [nazwa, kolor] });
+      case "bank_5": return biurowiec(g, X, Y, S, L, { h: 32, sciana: "#2b2f36", szklo: "#7f9fbf", szyld: [nazwa, kolor], co: 4.5 });
       default: return bank(g, X, Y, S, L, { kolor, nazwa, h: 31, sciana: "#e6e3d6" });
     }
   }
