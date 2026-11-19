@@ -166,7 +166,7 @@ def test_krok_3_ustawienia_wroc_wydarzenia_zeszyt():
     assert "mozeWrocic(ostatniC)" in PULPIT_JS and '"Escape"' in PULPIT_JS
     assert 'class="pz-wiecej"' in ZESZYT_JS and "scrollHeight - s.scrollTop" in ZESZYT_JS and ".pz-wiecej" in PULPIT_CSS
     assert 'data-akcja="pp-pokaz"' in ZESZYT_JS and 'data-akcja="pp-wejdz"' in ZESZYT_JS and "data-akcja=\"pp-pokaz\"" in PULPIT_JS or 'data-akcja="pp-pokaz"' in PULPIT_JS
-    assert "otworzBudynek" in nawigacja and "BUDYNEK_KROKU" in nawigacja and "pokazZnak" in nawigacja
+    assert "otworzBudynek" in nawigacja and "WNETRZE_KROKU" in nawigacja and "pokazZnak" in nawigacja
     lublin = (STATIC / "mapa" / "lublin.js").read_text(encoding="utf-8")
     assert "pokazZnak(" in lublin and "pokazDzielnice(" in lublin
     assert "menuUstawien" in APP_JS and "pp-sek-gra" in APP_JS
@@ -177,12 +177,11 @@ def test_rozpiska_i_kupowanie_uzywaja_istniejacych_budynkow():
     import yaml
     mapa = yaml.safe_load((GRA / "dane" / "mapa" / "budynki.yaml").read_text(encoding="utf-8"))
     zetony = {b["id"] for b in mapa["budynki"]} | {z["id"] for z in mapa.get("zespoly", [])}
-    blok = re.search(r"const ZAKUPY = \[(.*?)\];\nfunction stronaKupic", ZESZYT_JS, re.S).group(1)
-    uzyte = {x for lista in re.findall(r"\[((?:\"[a-z_]+\",? ?)+)\]", blok) for x in re.findall(r"\"([a-z_]+)\"", lista)}
-    assert uzyte, "brak żetonów w ZAKUPY"
-    assert {"makro", "sprzet_gastro", "kamienica_bankowa", "ubezpieczyciel"} <= uzyte
-    nieznane = {x for x in uzyte if x not in zetony and x not in {"zaop_dostawy", "wnetrze_sprzet", "wnetrze_wyposazenie", "rynek_pracy", "szkolenia",
-                                                                    "agencje", "ubezpieczenia", "bank"}}
+    strony = yaml.safe_load((GRA / "dane" / "zeszyt.yaml").read_text(encoding="utf-8"))["gdzie_kupic"]
+    uzyte = {x["zeton"] for x in strony}
+    assert {"makro", "sprzet_gastro", "kamienica_bankowa"} <= uzyte, "strony „Gdzie co kupić” są w danych (dane/zeszyt.yaml)"
+    assert "ZAKUPY" not in ZESZYT_JS and "v.zeszyt?.gdzie_kupic" in ZESZYT_JS or "zeszyt?.gdzie_kupic" in ZESZYT_JS
+    nieznane = uzyte - zetony
     assert not nieznane, nieznane
 
 

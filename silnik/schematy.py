@@ -1836,6 +1836,106 @@ class PlikFunkcji(Plik):
         return self
 
 
+# --- zeszyt.yaml ---
+
+
+class TydzienZeszytu(Schemat):
+    wartosc: int = Field(ge=1)
+    pewnosc: Literal["potwierdzone", "skalibrowane", "zalozenie"]
+    zrodlo: str = Zrodlo
+
+
+WarunekZadania = str | dict[str, str]   # nazwa z `warunki` albo {nazwa: parametr}
+
+
+class Warunek(Schemat):
+    rodzaj: Literal["stan", "decyzja", "wizyta", "wyslane"]
+    parametr: str | None = None
+    opis: str = Field(min_length=3)
+
+
+class ZastepstwoZadania(Schemat):
+    tekst: str = Field(min_length=3)
+    warunek: WarunekZadania
+
+
+class ZadanieZeszytu(Schemat):
+    id: str = Field(pattern=r"^[a-z0-9_]+$")
+    tekst: str = Field(min_length=3)
+    kartka: str = Field(min_length=3)
+    zeton: str
+    punkt: str
+    warunek: WarunekZadania
+    czemu: str | None = None
+    element: str | None = None
+    funkcja: str | None = None
+    zastepstwo: ZastepstwoZadania | None = None
+    od_tygodnia: TydzienZeszytu | None = None
+
+    @field_validator("kartka")
+    @classmethod
+    def _krotka_kartka(cls, v: str) -> str:
+        if len(v.split()) > 6:
+            raise ValueError("kartka ma najwyżej 6 słów")
+        return v
+
+    @field_validator("warunek")
+    @classmethod
+    def _jeden_warunek(cls, v):
+        if isinstance(v, dict) and len(v) != 1:
+            raise ValueError("warunek to nazwa albo {nazwa: parametr}")
+        return v
+
+
+Zadania = list[ZadanieZeszytu]
+
+
+class StaleZeszytu(Schemat):
+    od_tygodnia: TydzienZeszytu
+    zadania: Zadania = Field(min_length=1)
+
+
+class TydzienStrony(Schemat):
+    tytul: str = Field(min_length=3)
+    list_: str | None = Field(default=None, alias="list")   # zdanie wujka na górze strony (klucz `list`)
+    zadania: Zadania = Field(min_length=1)
+
+
+class StronaKupic(Schemat):
+    tytul: str = Field(min_length=3)
+    tekst: str = Field(min_length=3)
+    zeton: str
+    od_tygodnia: TydzienZeszytu | None = None
+    wczesniej: str | None = None
+    tabela: Literal["sprzet"] | None = None
+
+
+class PlikZeszytu(Plik):
+    warunki: dict[str, Warunek]
+    stale: StaleZeszytu
+    tygodnie: dict[int | Literal["ostatni"], TydzienStrony]
+    gdzie_kupic: list[StronaKupic]
+    dopiski: list[str] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def _spojnosc(self):
+        if "ostatni" not in self.tygodnie:
+            raise ValueError("brak strony `ostatni` w `tygodnie`")
+        zadania = [z for t in self.tygodnie.values() for z in t.zadania] + self.stale.zadania
+        zastepcze = [z.zastepstwo for z in zadania if z.zastepstwo]
+        for w in [z.warunek for z in zadania] + [z.warunek for z in zastepcze]:
+            nazwa, param = next(iter(w.items())) if isinstance(w, dict) else (w, None)
+            if nazwa not in self.warunki:
+                raise ValueError(f"warunek {nazwa}: nie ma w słowniku `warunki`")
+            if param is not None and self.warunki[nazwa].parametr is None:
+                raise ValueError(f"warunek {nazwa}: nie przyjmuje parametru ({param!r})")
+        for t in self.tygodnie.values():
+            ids = [z.id for z in t.zadania]
+            if len(ids) != len(set(ids)):
+                raise ValueError(f"powtórzone id zadania w tygodniu {t.tytul!r}")
+        return self
+
+
 SCHEMATY: dict[str, type[BaseModel]] = {
     "uslugi.yaml": PlikUslug,
     "sprzet.yaml": PlikSprzetu,
@@ -1846,6 +1946,7 @@ SCHEMATY: dict[str, type[BaseModel]] = {
     "boty.yaml": PlikBotow,
     "podatki_2026.yaml": PlikPodatkow,
     "funkcje.yaml": PlikFunkcji,
+    "zeszyt.yaml": PlikZeszytu,
 }
 # dane bez lokali nie mają podatków JDG; bez funkcje.yaml – gra bez funkcji (wszystko odkryte)
-OPCJONALNE = {"podatki_2026.yaml", "funkcje.yaml"}
+OPCJONALNE = {"podatki_2026.yaml", "funkcje.yaml", "zeszyt.yaml"}   # bez zeszyt.yaml – bez zeszytu wujka

@@ -159,6 +159,8 @@ class Dane:
         self.podatki: dict | None = _wartosci(p["podatki_2026.yaml"]) if "podatki_2026.yaml" in p else None   # JDG
         # funkcje gry – zakryte i wyłączone (silnik/funkcje.py); brak pliku – wszystko odkryte
         self.funkcje: dict | None = {k: v for k, v in p["funkcje.yaml"].items() if k not in ("opis", "zrodlo")}             if "funkcje.yaml" in p else None
+        # zeszyt wujka (api/zeszyt.py) – treść stron i zadań; brak pliku – gra bez zeszytu
+        self.zeszyt: dict | None = p.get("zeszyt.yaml")
         # widok danych gry z lokalami (silnik/harmonogram.py: dla_gry) – harmonogram zakładek i tygodnie mistrza gry
         self.odblokowanie_rund: dict[str, list[str]] | None = None
         self.nadpisane_rundy: dict[str, int] = {}
@@ -396,6 +398,8 @@ def sprawdz(katalog: Path | None = None) -> list[str]:
                 brak(u, f"boty.yaml: {s}.dania_specjalne", "danie", "uslugi.yaml")
     if d.funkcje:
         bledy += _sprawdz_funkcje(d)
+    if d.zeszyt:
+        bledy += _sprawdz_zeszyt(d)
     if d.kalendarz_miasta and not d.mapa:
         bledy.append("kalendarz/: kalendarz miejski wymaga mapy (dane/mapa/)")
     if d.mapa:
@@ -423,6 +427,51 @@ def _sprawdz_funkcje(d: Dane) -> list[str]:
         for w in f.get("elementy", []):
             if el and not any(fnmatchcase(e, w) for e in el):
                 bledy.append(f"funkcje.yaml: {k}.elementy: {w} – nie ma takiego elementu harmonogramu")
+    return bledy
+
+
+def _sprawdz_zeszyt(d: Dane) -> list[str]:
+    """zeszyt.yaml: żetony są w mapie, elementy w harmonogramie, funkcje w funkcje.yaml, szablony „gdzie kupić”
+    (zasoby, dostawcy, banki, biura, pola) wskazują istniejące dane."""
+    import re
+
+    from .harmonogram import elementy
+    z, bledy = d.zeszyt, []
+    el = elementy(d)
+    zetony = ({b["id"] for b in d.mapa["budynki"]} | {z["id"] for z in d.mapa.get("zespoly", [])}
+              | {"lokal", "bazar"}) if d.mapa else None
+    zadania = [(f"tydzien {t}", x) for t, w in z["tygodnie"].items() for x in w["zadania"]]
+    zadania += [("stale", x) for x in z["stale"]["zadania"]]
+    for gdzie, x in zadania:
+        g = f"zeszyt.yaml: {gdzie}.{x['id']}"
+        if zetony is not None and x["zeton"] not in zetony:
+            bledy.append(f"{g}.zeton: {x['zeton']} – nie ma w mapa/budynki.yaml")
+        if x.get("element") and el and x["element"] not in el:
+            bledy.append(f"{g}.element: {x['element']} – nie ma takiego elementu harmonogramu")
+        if x.get("funkcja") and d.funkcje and x["funkcja"] not in d.funkcje["funkcje"]:
+            bledy.append(f"{g}.funkcja: {x['funkcja']} – nie ma w funkcje.yaml")
+    for st in z["gdzie_kupic"]:
+        if zetony is not None and st["zeton"] not in zetony:
+            bledy.append(f"zeszyt.yaml: gdzie_kupic.{st['tytul']}.zeton: {st['zeton']} – nie ma w mapa/budynki.yaml")
+        banki = {b["nazwa"] for b in ((d.mapa or {}).get("banki") or {}).get("banki", [])}
+        for tekst in (st["tekst"], st.get("wczesniej") or ""):
+            for m in re.findall(r"\{(\w+):([^}]*)\}", tekst):
+                rodzaj, arg = m[0], m[1].split(":")
+                g = f"zeszyt.yaml: gdzie_kupic.{st['tytul']}: {{{rodzaj}:{m[1]}}}"
+                dost = {"najtanszy": [], "cena": arg[:1], "roznica": arg[:2], "dostawca": arg[:1]}.get(rodzaj)
+                zasob = {"najtanszy": arg[:1], "cena": arg[1:2], "roznica": arg[2:3]}.get(rodzaj)
+                if dost is None and rodzaj not in ("bank", "biuro"):
+                    bledy.append(f"{g}: nieznany szablon")
+                for n in dost or []:
+                    if n not in d.dostawcy_info:
+                        brak = f"{g}: dostawca {n} – nie ma w dostawcy.yaml"
+                        bledy.append(brak)
+                if zasob and zasob[0] not in d.zasoby:
+                    bledy.append(f"{g}: zasób {zasob[0]} – nie ma w zasoby.yaml")
+                if rodzaj == "bank" and arg[0] not in banki:
+                    bledy.append(f"{g}: bank {arg[0]} – nie ma w mapa/banki.yaml")
+                if rodzaj == "biuro" and arg[0] not in {b["id"] for b in (d.mapa or {}).get("biura", {}).get("biura", [])}:
+                    bledy.append(f"{g}: biuro {arg[0]} – nie ma w mapa/biura.yaml")
     return bledy
 
 

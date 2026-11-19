@@ -10,7 +10,7 @@ import { esc, kafelkiLiczb, nazwaUslugi, okno, otwarteOkno, toast, zamknijOkno, 
 import { ikona } from "../zakladki/ikony.js";
 import { stylEkranu } from "./karty-style.js";
 import ZAKLADKI from "../zakladki/index.js";
-import { oznaczCel } from "../zakladki/wujek.js";
+import { oznaczCel, zadanieZeszytu } from "../zakladki/wujek.js";
 import { nazwaStrefy } from "../zakladki/lokale.js";
 import { idzDoStrony, krokZeszytu, odswiezZeszyt, otworzZeszyt, przewinZeszyt, rysujMalyZeszyt, zamknijZeszyt, zeszytOtwarty } from "./zeszyt.js";
 import { dokadWroc, mozeWrocic, pokazNaMapie, wejdzDoKroku, wroc, zapamietajWidok } from "./nawigacja.js";
@@ -377,7 +377,7 @@ export const AKCJE_PULPITU = {
   // krok z listy wujka: od razu do właściwego wnętrza albo ekranu
   "pp-wejdz": (e, c) => {
     zamknijZeszyt(false);
-    if (e.dataset.k === "wyslij") return AKCJE_PULPITU["pp-wyslij"](e, c);
+    if (zadanieZeszytu(c.v, e.dataset.k)?.punkt === "wyslij") return AKCJE_PULPITU["pp-wyslij"](e, c);
     wejdzDoKroku(c, e.dataset.k);
   },
   "pp-kalendarz": (e, c) => { zamknijPodreczne(); c.idz("kalendarz"); },

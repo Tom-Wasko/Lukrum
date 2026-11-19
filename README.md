@@ -12,7 +12,9 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 - **Mapa Lublina** z danych OpenStreetMap, z płynnym przybliżaniem. Budynki to żetony, kliknięcie otwiera wnętrze.
 - **Miejsca zamiast zakładek:** Mój kebab, Stare Miasto, Hurtownie, Park handlowy, Miasteczko akademickie, Kamienica
   bankowa, Kamienica rachmistrzów, Biurowiec przy Zana (winda z piętrami, agencje reklamowe), Urzędy, redakcja „Kuriera rankingowego”.
-- **Plan tygodnia z listem od wujka:** lista kroków po kolei, pierwszy niezrobiony ma znacznik „teraz”.
+- **Zeszyt wujka:** list i lista kroków na każdy tydzień (treść w `dane/zeszyt.yaml`), strony „Gdzie co kupić” z liczbami
+  z bieżących danych gry. Kroki odhacza gra: ze stanu firmy, decyzji i wizyt we wnętrzach (zapisuje serwer). Pierwszy
+  niezrobiony krok ma znacznik „teraz”.
 - **Wynik 0–1000 pkt** w pięciu działach, gazeta „Kurier rankingowy” co tydzień i podium na koniec gry.
 - **Trzy palety** (Bar mleczny, Pewex, wysoka widoczność), każda jasna i ciemna. Stan nigdy samym kolorem (▲ ▼ !).
 - **Dla nauczyciela:** panel mistrza gry, zakrywanie funkcji, tryb lekcyjny (pierwsze rundy na żywo, kolejne

@@ -21,7 +21,7 @@ działa:
 1. **Zaloguj się** i otwórz grę drużyny z listy „Moje gry” (login i hasło daje mistrz gry).
 2. Gra otwiera się na **Planie tygodnia**. Leży tam **list od wujka** (kiedyś prowadził w tym miejscu bar mleczny)
    i lista kroków po kolei: każdy mówi, dokąd w mieście pójść i co załatwić. Krok „teraz” jest wyróżniony, a zrobione
-   odhaczają się same. Pod listą widać, co nowego otwiera się w tym tygodniu i za tydzień.
+   odhaczają się same (liczy to gra: ze stanu firmy, zamówień i miejsc, do których drużyna weszła w tym tygodniu). Pod listą widać, co nowego otwiera się w tym tygodniu i za tydzień.
 3. Wejdź w **Mapę miasta** i kliknij biuro **Klucz** na Starym Mieście (menu: Stare Miasto). **Wynajmij lub kup lokal**.
    Wybór strefy to połowa sukcesu: Miasteczko akademickie to studenci, Stare Miasto – turyści i wieczory,
    okolice dworca – podróżni.
@@ -119,7 +119,7 @@ Reklama i media, Miasto i rozrywka): kliknięta ikona podświetla pasujące miej
 drugie kliknięcie wyłącza filtr. Paski i okienka w rogach mają swój wygląd: **zakupy** to paragon, **wydarzenia** to
 tablica ogłoszeń z kartkami na pinezkach (▲ korzystne, ▼ niekorzystne), a **List z decyzjami** to koperta z podsumowaniem
 i stemplem „NADANO” po wysłaniu. **Zeszyt wujka** leży przechylony w prawym dolnym rogu, a po najechaniu wyprostowuje
-się i wysuwa listę kroków.
+się i wysuwa listę kroków; na zamkniętym zeszycie wystaje kartka z następnym krokiem. W środku są list wujka, rozpiska funkcji, strony „Gdzie co kupić” (z aktualnymi cenami i nazwami sklepów) i samouczek.
 
 | Miejsce | Co się tam załatwia |
 |---|---|

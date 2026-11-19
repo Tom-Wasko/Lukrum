@@ -66,6 +66,8 @@ from silnik.swiat import zdarzenia as zd
 from silnik.wyniki import punkty as pk
 from silnik.wyniki.wnioski import dlaczego, tydzien, wnioski
 
+from . import zeszyt
+
 
 def _pip(dane: Dane, f: Firma) -> dict | None:
     """Kontrola PIP (silnik/ludzie/kontrola_pip.py): zasady z danych i osoby na zleceniu, które pracują jak etatowcy –
@@ -527,6 +529,7 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
         v["podatki"]["stan"] = fp.deklaracja["stan_przed"]
         v["podatki"]["stan_przed_deklaracja"] = True
     znaczki_funkcji(v)   # znaczki zakrytych funkcji; cudzy handel tylko po odsłonięciu
+    v["zeszyt"] = zeszyt.widok(gra, firma, runda, v)   # zeszyt wujka: zadania bieżącego tygodnia
     return v
 
 

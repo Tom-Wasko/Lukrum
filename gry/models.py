@@ -29,6 +29,8 @@ class Runda(models.Model):
     wyslane = models.JSONField(default=list)  # firmy, które wysłały decyzje
     autorzy = models.JSONField(default=dict)  # {firma: {zapisal, wyslal, wersja}} – kto z drużyny
     refleksje = models.JSONField(default=dict)  # {firma: tekst} – refleksja drużyny
+    # {firma: [id miejsc]} – wizyty drużyny w tej rundzie (zeszyt wujka)
+    zeszyt = models.JSONField(default=dict)
 
     class Meta:
         verbose_name_plural = "rundy"
