@@ -146,6 +146,13 @@ ustawienia: **paleta kolorów** (Bar mleczny, Pewex albo Wysoka widoczność), *
 (z boku lub u góry). Paleta „Wysoka widoczność” ma mocny kontrast, większe litery, grube ramki i bardzo czytelny krój
 pisma; w każdej palecie zysk jest oznaczony znakiem ▲, a strata ▼.
 
+Na lewym pasku jest też **radio „Fala Koziołka”** (ikona odbiornika; to samo otwiera ⚙ → Dźwięk). Ma pięć stacji:
+Program Polski (pieśni i fortepian z polskich płyt sprzed stu lat), Synkopa (ragtime i wczesny jazz), Filharmonia
+(muzyka klasyczna), Teatr przy mikrofonie („Lalka” Prusa czytana po kolei – radio pamięta, gdzie skończono) i Między
+stacjami (sam szum). Między płytami odzywa się prowadzący (syntezator mowy przeglądarki; można go wyłączyć przyciskiem
+„Głos prowadzącego”). Radio włącza się dopiero przyciskiem **▶ Włącz**, gra bez internetu i nie wpływa na wynik gry. Spis
+nagrań z autorami, źródłami i licencjami jest na stronie **/nagrania-w-radiu**.
+
 **Kurier rankingowy** co tydzień wydaje nowy numer: na pierwszej stronie jest lider ligi, tabela ze zmianami miejsc,
 liczby Twojego tygodnia i jedna rada redakcji. Po ostatnim tygodniu gry Plan tygodnia pokazuje podium i ostatni list
 od wujka.

@@ -16,6 +16,8 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
   z bieżących danych gry. Kroki odhacza gra: ze stanu firmy, decyzji i wizyt we wnętrzach (zapisuje serwer). Pierwszy
   niezrobiony krok ma znacznik „teraz”.
 - **Wynik 0–1000 pkt** w pięciu działach, gazeta „Kurier rankingowy” co tydzień i podium na koniec gry.
+- **Radio „Fala Koziołka”** na pasku: pięć stacji ze starymi nagraniami z domeny publicznej i z wolnych licencji
+  (pliki w repozytorium, gra bez internetu), prowadzący czytany syntezatorem mowy. Spis: **/nagrania-w-radiu**.
 - **Trzy palety** (Bar mleczny, Pewex, wysoka widoczność), każda jasna i ciemna. Stan nigdy samym kolorem (▲ ▼ !).
 - **Dla nauczyciela:** panel mistrza gry, zakrywanie funkcji, tryb lekcyjny (pierwsze rundy na żywo, kolejne
   z terminem), projekt pięciu scenariuszy lekcji.

@@ -30,13 +30,15 @@ def test_zamrozona_kopia_ma_wszystkie_pliki_danych():
     # wszystkie funkcje odkryte, jak w grach sprzed serii; wnetrza/ (silnik/wnetrza/) – bez folderu gra bez wnętrz,
     # a testy wnętrz mają własne dane (testy/wnetrza/dane_testowe/); mapa/dekor.yaml – bez niego nie ma dekoru lokalu
     # (wymaga też mapa/klienci.yaml), testy dekoru czytają dane gry; zeszyt.yaml – treść zeszytu wujka (api/zeszyt.py), opcjonalna
+    # radio.yaml – radio „Fala Koziołka” (panel_gracza/radio.py), silnik go nie czyta
     pliki = {p.relative_to(DANE_GRY) for p in DANE_GRY.rglob("*.yaml")
              if "wnetrza" not in p.relative_to(DANE_GRY).parts} - {Path("mapa/klienci.yaml"),
                                                                            Path("zdarzenia/falafel.yaml"),
                                                                            Path("mapa/miasto.yaml"),
                                                                            Path("funkcje.yaml"),
                                                                            Path("mapa/dekor.yaml"),
-                                                                           Path("zeszyt.yaml")}
+                                                                           Path("zeszyt.yaml"),
+                                                                           Path("radio.yaml")}
     assert pliki <= {p.relative_to(DANE_ZAMROZONE) for p in DANE_ZAMROZONE.rglob("*.yaml")}
 
 

@@ -54,6 +54,8 @@ const P = {
   warstwy: '<path d="M12 3 2 8l10 5 10-5-10-5z"/><path d="M2 13l10 5 10-5"/><path d="M2 17.5l10 5 10-5"/>',
   wczytaj: '<path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/>',
   ksiazka: '<path d="M2 4h7a3 3 0 0 1 3 3v14a2 2 0 0 0-2-2H2zM22 4h-7a3 3 0 0 0-3 3v14a2 2 0 0 1 2-2h8z"/>',
+  // seria „radio” (19.11): stare radio lampowe z anteną, skalą i gałką
+  radio: '<path d="M7 7 17 2.5"/><rect x="2.5" y="7" width="19" height="13.5" rx="2.5"/><circle cx="16.5" cy="14" r="3"/><path d="M5.5 11h6M5.5 14h6M5.5 17h6"/>',
 };
 
 export function ikona(nazwa, rozmiar = 22) {

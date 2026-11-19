@@ -157,7 +157,7 @@ def test_krok_2_interfejs_pulpitu():
 def test_krok_3_ustawienia_wroc_wydarzenia_zeszyt():
     # panel ustawień w sekcjach (Wygląd, Mapa, Dźwięk, Konto), warstwy mapy w ⚙, przycisk „Wróć” + Esc, wskaźnik przewijania zeszytu,
     # klik w nazwę miejsca pokazuje je na mapie, kroki wchodzą od razu do celu, wydarzenia z kalendarza i parków
-    for sekcja in ("<h3>Wygląd</h3>", "<h3>Mapa</h3>", "<h3>Dźwięk</h3>", "<h3>Konto</h3>", "Rozmiar pisma", "Radio: wkrótce"):
+    for sekcja in ("<h3>Wygląd</h3>", "<h3>Mapa</h3>", "<h3>Dźwięk</h3>", "<h3>Konto</h3>", "Rozmiar pisma", "Radio „Fala Koziołka”: otwórz odbiornik"):
         assert sekcja in PULPIT_JS, sekcja
     assert '"mapa-warstwa"' in PULPIT_JS and 'data-akcja="mapa-opinie"' in PULPIT_JS
     assert 'data-rozmiar="duzy"' in PULPIT_CSS or ':root[data-rozmiar="duzy"]' in PULPIT_CSS
