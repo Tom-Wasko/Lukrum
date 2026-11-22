@@ -55,9 +55,11 @@ było na liście plików, ale tam powstają zadania zeszytu), `gra/testy/aplikac
 `node --check` zmienionych modułów → ok. Pełny pytest (uruchomiony przed commitem ab26d4b, ten dotyka tylko zadania.js i testu: 10 passed osobno) → `885 passed in 369.05s`; niestabilny test kasyna nie padł.
 Nie udało się usunąć `_robocze/drobne/` (blokada `rm`); folder jest poza gitem, do skasowania ręcznie.
 **Wyniki pkt po pkt:**
-1. **Nierozstrzygnięte.** Sprawa Haliny (`pani_halina`, bez parku) jest w Mój lokal i po wyborze reakcji celowo
-   zostaje widoczna (inaczej nie dałoby się zmienić wyboru). Nie znalazłem osobnego „listu” na stałe. Potrzebuję od szefa:
-   gdzie dokładnie widać list (scena w lokalu? tablica? poczta?) i czy ma znikać po wyborze, czy po przejściu rundy.
+1. **Zrobione wg decyzji szefa** (`zakladki/zdarzenia.js`, blok na końcu `styl.css`): każda sprawa w lokalu (bez parku),
+   po wyborze reakcji zwija się do paska „✓ Odpowiedziano: <wybór> · zmień”; „zmień” rozwija list, kolejny wybór znów
+   zwija. Stan: znak ✓ i napis, kolory ze zmiennych. Nowa runda: sprawa pochodzi z `v.zdarzenia.aktywne`, a Halina z banku
+   żywności ma w `magazyn.yaml` warunek (zapas ≥ 200 zł z krótkim terminem, szansa 0,4), więc nie wraca bez warunku;
+   serwera nie sprawdzałem w grze. Test: `test_sprawa_w_lokalu_po_wyborze_zwija_sie_do_paska_ze_zmien`. Nie obejrzano w przeglądarce.
 2. Sprawy w lokalu nie tworzą już zadania „Zareaguj: …” w zeszycie (`zadania.js`). Parkowe zostają w zbiorczym
    „Sprawy w parkach (n)”.
 3. Dodano przewijanie kółkiem i klawiaturą (strony zeszytu). Dotyk i wskaźnik „przewiń w dół”: kod bez zmian, realnej
@@ -74,6 +76,6 @@ Nie udało się usunąć `_robocze/drobne/` (blokada `rm`); folder jest poza git
    `jak_grac.html` jest kod zakładek (WAI-ARIA tablist) budowanych skryptem z nagłówków h2, bez skryptu jedna strona.
    Nie uruchamiałem strony, więc nie wiem, czy zakładki faktycznie się pokazują.
 **Decyzje, które podjąłem:** pkt 2 = usunąć zadanie z zeszytu dla spraw lokalnych (nie tylko Haliny); pkt 1 nie ukrywam.
-**Pytania do szefa:** pkt 1 (jak wyżej). Czy sprawy w lokalu mają zniknąć z zeszytu całkiem (zrobione), czy tylko Halina?
+**Pytania do szefa:** brak (pkt 1 i 2 rozstrzygnięte przez szefa).
 **Propozycje (poza zakresem):** obejrzeć 3–8 w grze na `manage.py graj --port 8764` po scaleniu.
 **Commity:** 68aac7f, 929f064, 6604bf7, 1e3bcf6, e0a0782, ab26d4b (oraz commit raportu).

@@ -39,6 +39,14 @@ def test_sprawy_w_lokalu_nie_sa_zadaniem_w_zeszycie():
     assert "if (!s.park) continue;" in zadania
 
 
+def test_sprawa_w_lokalu_po_wyborze_zwija_sie_do_paska_ze_zmien():
+    zd = _tekst("zakladki", "zdarzenia.js")
+    assert "✓ Odpowiedziano:" in zd
+    assert "!s.park && wybor != null && !rozwiniete.has(s.historia)" in zd
+    assert '"zd-zmien"' in zd and 'data-akcja="zd-zmien"' in zd
+    assert ".zd-odpowiedziano" in _tekst("styl.css")
+
+
 def test_zeszyt_przewija_kolkiem_i_klawiatura():
     zeszyt = _tekst("pulpit", "zeszyt.js")
     assert 'roz.addEventListener("wheel"' in zeszyt

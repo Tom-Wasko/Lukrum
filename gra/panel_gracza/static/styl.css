@@ -874,3 +874,6 @@ body .oferta-wiersz .cena { color: var(--tusz); }
 body .oferta-wiersz .pigulka { color: var(--tusz); background: var(--g-karta); border: 1px solid var(--tusz); font-size: 11px; text-transform: none; }
 body .oferta-wiersz .pigulka.nie::before { content: "✕ "; }
 body .oferta-wiersz .pigulka.ok::before { content: "✓ "; }
+/* podróż 02/drobne: zwinięta sprawa w lokalu */
+.zd-odpowiedziano { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 8px 12px; margin: 8px 0; color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 10px; }
+.zd-odpowiedziano small { color: var(--tusz); }
