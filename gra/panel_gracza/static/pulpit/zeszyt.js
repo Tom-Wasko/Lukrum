@@ -32,6 +32,12 @@ const skora = (id) => `<svg class="pp-skora" viewBox="0 0 400 430" preserveAspec
   <ellipse cx="200" cy="10" rx="120" ry="9" filter="url(#${id}-r)" style="fill:var(--g-skora3)" opacity=".5"/>
   <ellipse cx="14" cy="230" rx="10" ry="90" filter="url(#${id}-r)" style="fill:var(--g-skora2)" opacity=".45"/>
   <path d="M120 70c30-10 44 6 78 0M60 120c20 6 30-4 52 2M250 96c22-4 40 8 60 2" fill="none" style="stroke:var(--g-czern)" stroke-width="1.4" opacity=".35" vector-effect="non-scaling-stroke"/>
+  <path d="M70 150l18 22-8 18 20 24M300 260l-14 20 12 16-10 22M180 340l26-10 14 14" fill="none" style="stroke:var(--g-czern)" stroke-width="1.2" opacity=".4" vector-effect="non-scaling-stroke"/>
+  <path d="M40 300l60-8M250 60l50 14M110 392l90 6M330 170l40 6" fill="none" style="stroke:var(--g-skora)" stroke-width="1.6" stroke-linecap="round" opacity=".55" vector-effect="non-scaling-stroke"/>
+  <ellipse cx="300" cy="330" rx="46" ry="30" filter="url(#${id}-r)" style="fill:var(--g-czern)" opacity=".28"/>
+  <ellipse cx="90" cy="380" rx="60" ry="26" filter="url(#${id}-r)" style="fill:var(--g-skora3)" opacity=".4"/>
+  <circle cx="318" cy="96" r="22" fill="none" style="stroke:var(--g-czern)" stroke-width="3" opacity=".22" vector-effect="non-scaling-stroke"/>
+  <path d="M0 360c10-6 14 6 26 0s12 10 20 4M0 430h400" fill="none" style="stroke:var(--g-czern)" stroke-width="1.4" opacity=".35" vector-effect="non-scaling-stroke"/>
   <rect width="400" height="430" filter="url(#${id}-z)" opacity=".8"/>
   <rect x="11" y="11" width="378" height="430" rx="9" fill="none" style="stroke:var(--g-skora)" stroke-width="2.2" stroke-dasharray="7 6" opacity=".85" vector-effect="non-scaling-stroke"/>
   <path d="M0 0h64l-64 64z" style="fill:var(--g-drewno2);stroke:var(--g-czern)" stroke-width="2" vector-effect="non-scaling-stroke"/>
@@ -69,13 +75,20 @@ function stronaLista(c) {
   const v = c.v, list = listTygodnia(v);
   let plan = null;
   try { plan = planTygodnia(v); } catch (e) { console.error(e); }
-  const kroki = (plan?.lista || []).map((k, i) => `<li class="${k.ok ? "ok" : k.teraz ? "teraz" : ""}"><button type="button" class="pz-wiersz" data-akcja="pp-wejdz" data-k="${esc(k.klucz)}">
+  // Z5: klik w pozycję przelatuje mapą do budynku (przybliżenie + pulsowanie, pulpit.js: pp-pokaz); bez budynku na mapie
+  // (bazar, wysyłka, ekran bez żetonu) – jak dawniej od razu do wnętrza albo ekranu. „wejdź →” zawsze prowadzi do wnętrza.
+  const kroki = (plan?.lista || []).map((k, i) => {
+    const b = budynekZadania(v, k), naMapieB = b && b !== "bazar" && k.punkt !== "wyslij";
+    const akcja = naMapieB ? `data-akcja="pp-pokaz" data-b="${esc(b)}"` : `data-akcja="pp-wejdz" data-k="${esc(k.klucz)}"`;
+    const wejdz = naMapieB ? `<button type="button" class="pz-mapa pz-wejdz" data-akcja="pp-wejdz" data-k="${esc(k.klucz)}" aria-label="Wejdź do środka: ${esc(k.co)}">wejdź →</button>` : "";
+    return `<li class="${k.ok ? "ok" : k.teraz ? "teraz" : ""}"><button type="button" class="pz-wiersz" ${akcja}${naMapieB ? ' title="Pokaż na mapie"' : ""}>
     <span class="pz-nr" aria-hidden="true">${k.ok ? "✓" : k.teraz ? "▶" : i + 1}</span><span><small>${esc(k.gdzie)}</small><b>${esc(k.co)}</b> <i>${esc(k.opis)}</i></span>
-    <span class="pz-stan">${k.ok ? "zrobione" : k.teraz ? "teraz" : k.szare ? "robi to gra" : ""}</span></button>${naMapie(budynekZadania(v, k))}</li>`).join("");
+    <span class="pz-stan">${k.ok ? "zrobione" : k.teraz ? "teraz" : k.szare ? "robi to gra" : ""}</span></button>${wejdz}</li>`;
+  }).join("");
   return `<h2>List od wujka · tydzień ${v.zeszyt?.tydzien ?? v.runda}</h2>
     ${list ? `<p class="pz-list"><b>${esc(list.tytul)}</b> ${esc(list.tresc)} <span class="pz-podpis">– Wasz wujek</span></p>` : ""}
     <h3>Do zrobienia w tym tygodniu${plan ? ` <small>${plan.zrobione} z ${plan.razem}</small>` : ""}</h3>
-    <p class="pz-opis">Kliknięcie kroku prowadzi od razu do właściwego miejsca; „⌖ na mapie” pokazuje budynek na mapie.</p><ol class="pz-kroki">${kroki}</ol>
+    <p class="pz-opis">Kliknięcie kroku pokazuje budynek na mapie (mapa się przybliża, a budynek pulsuje); „wejdź →” prowadzi od razu do środka.</p><ol class="pz-kroki">${kroki}</ol>
     ${v.zeszyt?.dopisek ? `<p class="pz-opis"><i>${esc(v.zeszyt.dopisek)}</i></p>` : ""}`;
 }
 

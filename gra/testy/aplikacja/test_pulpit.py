@@ -345,3 +345,13 @@ def test_mapa_w_ruchu_nie_chowa_linii():
         assert all("/ var(--k))" in w for w in re.findall(r"stroke-width: ([^;]+);", tr)), sel
     lublin = (STATIC / "mapa" / "lublin.js").read_text(encoding="utf-8")
     assert 'setProperty("--k"' in lublin and "ustawK" in lublin and "utworzZdjecie" in lublin
+
+
+def test_zeszyt_03_lista_prowadzi_na_mape_a_okladka_jest_zniszczona():
+    # Z5: pozycja listy pokazuje budynek na mapie (przelot, przybliżenie, pulsowanie), „wejdź →” prowadzi do wnętrza
+    assert 'data-akcja="pp-pokaz" data-b=' in ZESZYT_JS and "pz-wejdz" in ZESZYT_JS and 'data-akcja="pp-wejdz"' in ZESZYT_JS
+    css = PULPIT_CSS
+    assert "animation: pp-puls" in css and "@media (prefers-reduced-motion: no-preference)" in css   # bez ruchu: tylko stała obwódka
+    # Z35: pożółkły papier i dodatkowe zniszczenia, w wysokiej widoczności zwykły papier
+    assert "pożółkły papier" in css and '[data-paleta="wysoka"] .pp-kartka' in css
+    assert ZESZYT_JS.count("vector-effect") > 8
