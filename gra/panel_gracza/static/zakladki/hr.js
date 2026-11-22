@@ -89,7 +89,7 @@ export const zatrudnienie = {
     for (const typ of TYPY) {
       const st = stanowiskaLokalu(v, v.stan.stanowiska).filter((s) => s.typ === typ);
       html += `<div class="pasek">${esc(kat.oferty.stanowiska.typy[typ].nazwa)}${idWybranego(v) ? ` – ${esc(nazwaLokalu(v, idWybranego(v)))}` : ""}</div>`;
-      if (!st.length) { html += `<p class="podpowiedz">Brak stanowisk – uruchom je w Parku handlowym ▸ Stanowiska i sprzęt.</p>`; continue; }
+      if (!st.length) { html += `<p class="podpowiedz">Brak stanowisk – uruchom je na mapie: Park handlowy ▸ Stanowiska i sprzęt.</p>`; continue; }
       html += `<div class="siatka waska">${st.map((s) => {
         const p = v.stan.pracownicy.find((x) => x.id === s.pracownik);
         const wl = v.wlasciciel_stanowisko;   // właściciel staje sam na pustym stanowisku (silnik/ludzie/czas_wlasciciela.py)
