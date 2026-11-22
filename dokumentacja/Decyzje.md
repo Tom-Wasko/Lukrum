@@ -7,6 +7,16 @@
 - 2026-11-22 · Stary warsztat (zespół agentów, panel) do `_archiwum/warsztat`; panel na claude.ai zostaje, nieodświeżany.
 - 2026-11-22 · Pamięć Claude'a o projekcie: zasady codzienne do `CLAUDE.md`, reszta tutaj; auto-pamięć wyłączona.
 - 2026-11-22 · Wiadomość dla majstra o nowym układzie pisze Archi (`wiedza/wspolpraca.md`), wysyła szef.
+- 2026-11-22 · Uwagi szefa i majstra z gier testowych 20 i 22.11 dotyczą obecnej wersji: rzeczy zrobione 18–19.11,
+  które nadal działają źle, idą do poprawy (Z29–Z36).
+- 2026-11-22 · Reklama zostaje w **jednym** biurowcu przy Zana (bez drugiego budynku); drukarnia zostaje piętrem,
+  bez osobnego żetonu; poprawiamy windę i piętra.
+- 2026-11-22 · Parki: **każdy park ma własny wygląd** (ten sam układ: postać i wydarzenie); przycisk prowadzi do
+  wydarzenia, nie do kalendarza (zmienia „jeden wzór sceny” z 18.11).
+- 2026-11-22 · Wskazówki w wydarzeniach: **kierunek i siła** (▲▲, ▼ przy wskaźnikach), bez dokładnych liczb.
+- 2026-11-22 · Nowe okienka zakupów, wydarzeń i listu z decyzjami: najpierw makiety 2–3 wariantów na claude.ai, szef wybiera.
+- 2026-11-22 · „Czyste wyniki” = jeden prosty ekran wyników tygodnia w kebabie (sprzedaż, koszty, zysk, miejsce).
+- 2026-11-22 · W kolejnych rundach gra daje za mało do zrobienia (majster w rundzie 2 kupił tylko bułki): do poprawy.
 
 
 ### Decyzje 13–19.11 (z dawnych notatek, tematami)
@@ -246,3 +256,4 @@ Wygląd tych elementów: [Wygląd](Wyglad.md). Kolejność prac: [Zadania](Zadan
 ## Archiego
 - 2026-11-22 · Archiwum lokalne to `_archiwum/` (folder już istniał), nie `archiwum/`; jest w `.gitignore`.
 - 2026-11-22 · `gra/AGENTS.md` zostaje jako przewodnik po kodzie (dla narzędzi majstra), `CLAUDE.md` go importuje.
+- 2026-11-22 · Uwagi z gier testowych podzielone na 8 zadań tematycznych (Z29–Z36), a nie jedno, bo szef kazał je posortować według wagi.
