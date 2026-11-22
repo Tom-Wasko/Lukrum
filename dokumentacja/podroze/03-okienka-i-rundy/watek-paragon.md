@@ -37,3 +37,20 @@
 - **Dokumenty:** README i INSTRUKCJA, jeśli opisują zakupy.
 
 ## Raport
+**Zrobione** (commit 065eb26 + poprawka INSTRUKCJI):
+- `zakladki/dostawcy.js`: `oknoSklepu` przebudowane na paragon (nagłówek LUKRUM, sklep, dział, data; pozycje nazwa ★ / ilość × cena / kwota; wiersz na dzień dostawy; ✓ przy pozycji w koszyku; „w magazynie”; SUMA PLN; próg minimum/dowozu tekstem ✓/!). Logika `zamowienia` bez zmian.
+- Nowy przycisk „Kupuję · suma” → paragon potwierdzenia (tylko do odczytu, „Wróć do sklepu” / „Gotowe”). Obsługa przez `data-par` na oknie, bez nowych akcji globalnych.
+- `zakladki/inwestycje.js`: `oknoSprzetu` (hurtownia sprzętu, kupno i komis) jako paragon, suma kupna/odsprzedaży.
+- Sceny sklepów nie wymagały zmian (wszystkie otwierają `otworzSklep` przez teczki `R.zamow`/`R.koszyk`).
+- Style: blok `podróż 03/paragon` na końcu `swiat/swiat.css`; baza `.pp-paragon` z pulpit.css (tylko użyta, nie zmieniana). Kolory tylko `--g-biel`/`--g-czern`.
+- Test: `zakladki_zachowanie.mjs` + `test_wnetrza_sceny.py` (paragon oferty i potwierdzenia).
+- INSTRUKCJA: wiersz „Hurtownie i sklepy”. README bez opisu zakupów, bez zmian. Notatki `funkcje/Paragon.md` nie pisałem (nie ma szablonu w folderze podróży do sprawdzenia) – do rozważenia.
+
+**Dowód:** `pytest -q` (cały) → `899 passed in 368.48s`; `ruff check .` → `All checks passed!`; `node --check` dostawcy.js, inwestycje.js → OK.
+
+**Nie zrobione / do uwagi:**
+- Zrzutów ekranu (3 palety × jasny/ciemny) brak: w środowisku nie ma playwright ani przeglądarki sterowanej z CLI. Wygląd oparty na kolorach papieru paragonu (`--g-biel`/`--g-czern`), jak istniejący paragon na pulpicie; wymaga oka szefa.
+- Okno hurtowni sprzętu nie ma testu Node (złożone dane stanowisk); sprawdzone tylko składniowo.
+- „Co już kupione w tej rundzie” zinterpretowałem jako pozycje w koszyku (✓), bo zamówienia są zapisywane w decyzjach bieżącej rundy; osobnej historii zakupów nie ma.
+
+**Propozycja:** notatka `dokumentacja/funkcje/Paragon.md`.
