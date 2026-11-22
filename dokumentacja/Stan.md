@@ -10,7 +10,7 @@ Plan: `podroze/02-poprawki-po-grze/plan.md`.
 | 02/sklepy | wyko-lukrum-02-sklepy (672af4e2) | w toku |
 | 02/mapa | wyko-lukrum-02-mapa (77b1d612) | w toku |
 | 02/drobne | wyko-lukrum-02-drobne (17acac30) | w toku |
-| 02/makiety | Archi | makiety na claude.ai (link w planie), czeka na wybór szefa |
+| 02/makiety | Archi | wybór szefa: zakupy A, wydarzenia A, list B w kopercie A; wdrożenie w następnej podróży |
 
 ## Czeka na szefa
 Pytania przeniesione z dawnego „Do decyzji” (stan 17.11). Przegląd prawny z 16.11 to ćwiczenie, nie porada prawna.

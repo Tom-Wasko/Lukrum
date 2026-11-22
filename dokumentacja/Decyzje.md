@@ -17,6 +17,7 @@
 - 2026-11-22 · Nowe okienka zakupów, wydarzeń i listu z decyzjami: najpierw makiety 2–3 wariantów na claude.ai, szef wybiera.
 - 2026-11-22 · „Czyste wyniki” = jeden prosty ekran wyników tygodnia w kebabie (sprzedaż, koszty, zysk, miejsce).
 - 2026-11-22 · W kolejnych rundach gra daje za mało do zrobienia (majster w rundzie 2 kupił tylko bułki): do poprawy.
+- 2026-11-22 · Okienka (makiety https://claude.ai/artifact/YKpg6woJrPqaHFZE59vqjk): zakupy = **A** (paragon kasowy); wydarzenia = **A** (tablica korkowa ze wskazówkami ▲▼); list = **rubryki decyzji z B** (kwoty, ✓ ! ○, odnośnik „popraw”) **w kopercie z A** (list wysuwa się z koperty, stempel po nadaniu).
 
 
 ### Decyzje 13–19.11 (z dawnych notatek, tematami)

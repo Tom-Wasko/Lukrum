@@ -35,8 +35,8 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
   rundzie (m: w rundzie 2 tylko bułki); łączy się z Z15
 - Z33 · wydarzenia i parki: wskazówki skutków decyzji ▲▼ z siłą, bez liczb (9); każdy park własny wygląd, przycisk
   prowadzi do wydarzenia, nie do kalendarza (m)
-- Z34 · nowe okienka zakupów (paragon, też jego format, m), wydarzeń i listu z decyzjami: makiety 2–3 wariantów
-  na claude.ai, wybór szefa, wdrożenie (5)
+- Z34 · nowe okienka według wyboru szefa 22.11 (`Decyzje.md`): zakupy A (paragon kasowy, też format paragonu, m), wydarzenia A
+  (tablica korkowa ▲▼), list: rubryki z B w kopercie z A; makiety: https://claude.ai/artifact/YKpg6woJrPqaHFZE59vqjk (5)
 - Z35 · zeszyt: stary, zniszczony, skórzana okładka, schowany przechylony, lepiej pasująca odręczna czcionka
   na wolnej licencji (6)
 - Z36 · wyniki tygodnia w kebabie: jeden prosty ekran (sprzedaż, koszty, zysk, miejsce w rankingu), łatwy do znalezienia
