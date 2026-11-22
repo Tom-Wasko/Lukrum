@@ -317,6 +317,23 @@ def historia_rankingu(dane, stan, do_rundy: int, liczba_rund: int) -> dict:
             "ostatnia": dane.nazwa_rundy(rundy[-1]) if rundy else ""}
 
 
+def wyniki_tygodnia(dane, poprzedni, firma: str, runda: int, ranking: dict | None) -> dict | None:
+    """Ekran „Wyniki tygodnia” (Mój kebab): sprzedaż, koszty, zysk i miejsce w rankingu za ostatni przeliczony tydzień
+    razem z poprzednim (znaki ▲▼). None – żaden tydzień nie jest jeszcze przeliczony (runda 1)."""
+    ostatni = poprzedni.wyniki.get(runda - 1, {}).get(firma)
+    if not ostatni:
+        return None
+
+    def liczby(w):
+        k = (w or {}).get("kpir") or {}
+        return {"sprzedaz": k.get("przychody"), "koszty": k.get("koszty"), "zysk": k.get("dochod_netto")} if k else {}
+    miejsca_r = (ranking or {}).get("miejsca") or {}
+    return {"tydzien": dane.nazwa_rundy(runda - 1), "teraz": liczby(ostatni),
+            "przed": liczby(poprzedni.wyniki.get(runda - 2, {}).get(firma)),
+            "miejsce": miejsca_r.get(runda - 1, {}).get(firma), "miejsce_przed": miejsca_r.get(runda - 2, {}).get(firma),
+            "liczba_firm": len(poprzedni.firmy)}
+
+
 def miejsca(skum: dict) -> dict[str, int]:
     """Miejsca firm w rankingu: wynik gry (punkty z tygodni z wagami) – pulpit drużyny i mistrz gry."""
     ranking = sorted(skum, key=lambda n: -skum[n]["punkty"])
@@ -443,6 +460,7 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
                           "dochod_netto": poprzedni.wyniki[r][firma]["kpir"]["dochod_netto"],
                           "gotowka": poprzedni.wyniki[r][firma]["gotowka"]}
                          for r in range(1, runda) if r in poprzedni.wyniki]
+        v["wyniki_tygodnia"] = wyniki_tygodnia(dane, poprzedni, firma, runda, v["ranking"])
     v["dashboard"] = _dashboard(gra, firma, runda, poprzedni, v.get("karta_skumulowana") or {})
     v["lokale"] = _lokale(gra, firma, runda, f, poprzedni, stan, info if edycja else None)
     zk = ((poprzedni.wyniki.get(runda - 1) or {}).get(firma, {}).get("karta") or {}).get("wskazniki", {}).get("zadowolenie_klientow")

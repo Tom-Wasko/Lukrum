@@ -27,13 +27,14 @@ import { konkurencja } from "./konkurencja.js";
 import { stan_lokalu, zlozona } from "./lokal.js";
 import { gielda } from "./gielda.js";
 import { dekor } from "./dekor.js";
+import { wyniki_tygodnia } from "./wyniki.js";
 import { ustawAliasy } from "./funkcje.js";
 import { miejsce, ustawEkranyMiejsc } from "../swiat/swiat.js";
 
 const ZAKLADKI = { dashboard, mapa, karta_wynikow, wnioski, ranking, lokale, licytacje, przejecia, urzad, sanepid, klienci, kalendarz, konkurencja, oferta,
   stanowiska, sprzet, wyposazenie, dekor, zatrudnienie, zespol, rynek_pracy, udogodnienia, szkolenia, dostawcy, swiezosc, przewozy,
   czas_wlasciciela, sprawy, agencje, internet, promocje, sprzedaz, handel, raport, kpir, vat, podatki, bank, harpagon, biuro, ubezpieczenia,
-  wlasciciel, gielda, kasyno, lista_bledow, wyslij, miejsce };
+  wlasciciel, gielda, kasyno, wyniki_tygodnia, lista_bledow, wyslij, miejsce };
 
 // nazwa ikony (zakladki/ikony.js) dla każdej zakładki
 export const IKONY = { hr_rozwoj: "szkolenia", lokal_przeglad: "lokale", lokal_menu: "oferta", zaop_dostawy: "dostawcy", zaop_magazyn: "swiezosc", zaop_przewozy: "dostawcy",
@@ -43,7 +44,7 @@ export const IKONY = { hr_rozwoj: "szkolenia", lokal_przeglad: "lokale", lokal_m
   wyposazenie: "wyposazenie", dekor: "wyposazenie", zatrudnienie: "zatrudnienie", zespol: "zatrudnienie", rynek_pracy: "rynek_pracy",
   udogodnienia: "udogodnienia", szkolenia: "szkolenia", dostawcy: "dostawcy", swiezosc: "swiezosc", przewozy: "dostawcy", czas_wlasciciela: "zegar",
   sprawy: "zdarzenia", agencje: "tradycyjny", internet: "marketing", promocje: "procent", sprzedaz: "sprzedaz", handel: "handel", raport: "raport", kpir: "kpir",
-  vat: "procent", podatki: "podatki", bank: "bank", harpagon: "harpagon", biuro: "biuro", ubezpieczenia: "tarcza", wlasciciel: "portfel",
+  vat: "procent", podatki: "podatki", bank: "bank", harpagon: "harpagon", biuro: "biuro", ubezpieczenia: "tarcza", wlasciciel: "portfel", wyniki_tygodnia: "wykres",
   gielda: "wykres", kasyno: "klucz", lista_bledow: "bledy", wyslij: "wyslij", miejsce: "lokale" };
 
 // od której rundy zakładka jest dostępna (w menu: szara pozycja z kłódką i „od rundy N”)
@@ -148,7 +149,7 @@ export const MENU = [
   { klucz: "mapa", tytul: "Mapa miasta", ikona: "mapa", klasa: "mapa" },
   { sekcja: "Twoja firma" },
   { klucz: "kebab", tytul: "Mój kebab", ikona: "lokale", miejsce: "kebab",
-    pod: ["lokal_przeglad", "lokal_menu", "promocje", "zespol", "zaop_magazyn", "raport", "czas_wlasciciela", "wlasciciel"] },
+    pod: ["lokal_przeglad", "wyniki_tygodnia", "lokal_menu", "promocje", "zespol", "zaop_magazyn", "raport", "czas_wlasciciela", "wlasciciel"] },
   { sekcja: "Miasto" },
   { klucz: "stare_miasto", tytul: "Stare Miasto", ikona: "klucz", miejsce: "agencja_nieruchomosci", miejsca: ["agencja_nieruchomosci", "harpagon"], pod: ["lokale", "licytacje", "przejecia", "harpagon", "kasyno"] },
   { klucz: "hurtownie", tytul: "Hurtownie", ikona: "dostawcy", miejsce: "makro",

@@ -78,6 +78,10 @@ export function scenaKebabu(d) {
   if (lada[0]) s += osobaSvg("obsluga-kasjerka", 775, 424, 0.88, lada[0].mina);
   s += u(`wnetrze-rozen-${p}`, 955, 140) + u(`wnetrze-lada-${p}`, 625, 300) + u(`wnetrze-kasa-${p}`, 640, 276);
   s += u(`dekor-meble-${dk.meble}`, 40, 452);
+  // tablica wyników tygodnia (podróż 03/wyniki): wyraźny przycisk między zdjęciami a ladą
+  s += `<rect x="610" y="204" width="132" height="50" rx="6" fill="var(--g-tablica)" stroke="var(--g-czern)" stroke-width="2"/>`
+    + napis(676, 226, "WYNIKI", 17, "var(--g-biel)", "gruby", 'text-anchor="middle" letter-spacing="2"')
+    + napis(676, 245, "▲▼ tydzień", 12, "var(--g-biel)", "szyld", 'text-anchor="middle" opacity=".9"');
   // goście: najwyżej trzech mówiących, do tego wujek przy ważnych okazjach
   const osoby = [];
   let g = 0;
@@ -93,7 +97,7 @@ export function scenaKebabu(d) {
   let h = "";
   const dodaj = (k, x, y, w, hh) => { if (P[k]) h += hot(P[k], x, y, w, hh); };
   dodaj("okno", 30, 104, 260, 200); dodaj("szyld", 296, 56, 268, 74); dodaj("wujek", 306, 146, 72, 88); dodaj("dodatki", 388, 136, 186, 104);
-  dodaj("menu", 676, 40, 268, 148); dodaj("kasa", 636, 270, 118, 72); dodaj("lada", 762, 346, 308, 110); dodaj("kuchnia", 951, 136, 128, 206);
+  dodaj("menu", 676, 40, 268, 148); dodaj("kasa", 636, 270, 118, 72); dodaj("wyniki", 610, 204, 132, 50); dodaj("lada", 762, 346, 308, 110); dodaj("kuchnia", 951, 136, 128, 206);
   dodaj("zaplecze", 1096, 136, 118, 246); dodaj("stoliki", 36, 474, 228, 132);
   if (lada[0] && P.pracownik) h += hot({ ...P.pracownik, etykieta: `${lada[0].imie}: lada` }, 742, 204, 66, 74);
   if (kuchnia[0] && P.pracownik) h += hot({ ...P.pracownik, etykieta: `${kuchnia[0].imie}: kuchnia` }, 866, 196, 68, 100);

@@ -22,6 +22,7 @@ export const MIEJSCA = {
     punkty: [
       { klucz: "menu", cel: "lokal_menu", nazwa: "Tablica: menu i ceny", opis: "Dania, ceny i prognoza sprzedaży." },
       { klucz: "lada", cel: "lokal_przeglad", nazwa: "Lada: lokal i sprzedaż", opis: "Stan lokalu, obsada stanowisk, sprzedaż z poprzedniego tygodnia." },
+      { klucz: "wyniki", cel: "wyniki_tygodnia", nazwa: "Tablica wyników: tydzień w liczbach", opis: "Sprzedaż, koszty, zysk i miejsce w rankingu za ostatni tydzień." },
       { klucz: "kuchnia", cel: "sprzet", nazwa: "Rożen: sprzęt w lokalu", opis: "Jaki sprzęt już stoi w kuchni i w jakim jest stanie. Dokupuje się go w Parku handlowym." },
       { klucz: "zaplecze", cel: "zespol", nazwa: "Zaplecze: zespół i grafik", opis: "Umowy, pensje, grafik i nastroje pracowników." },
       { klucz: "pracownik", cel: "zespol", nazwa: "Pracownik", opis: "", tylkoScena: true },
