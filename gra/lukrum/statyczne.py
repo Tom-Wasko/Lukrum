@@ -1,28 +1,44 @@
 """Pliki statyczne bez starych wersji w pamięci przeglądarki.
 
-Strony wczytują pliki z `/static/v<wersja>/…`, gdzie wersja to skrót czasów zmian wszystkich plików
-statycznych. Po zmianie zakładki adres jest nowy, więc przeglądarka (i Cloudflare przy `hostuj`) nie
-może podać starego modułu – a moduły importowane względnie (`./zakladki/…`) dziedziczą tę wersję.
-Odpowiedzi mają dodatkowo `no-cache`. `graj` i `hostuj` uruchamiają serwer bez wbudowanej obsługi
-/static/, żeby szła tędy. Nagrania radia (`radio/*.mp3`) idą też kawałkami (nagłówek Range), żeby
-odtwarzacz mógł wrócić do miejsca, w którym przerwano słuchowisko.
+Strony wczytują pliki z `/static/v<wersja>/…`, gdzie wersja to skrót czasów zmian wszystkich
+plików statycznych. Po zmianie zakładki adres jest nowy, więc przeglądarka (i Cloudflare przy
+`hostuj`) nie może podać starego modułu – a moduły importowane względnie (`./zakladki/…`)
+dziedziczą tę wersję. Adresy z wersją dostają `max-age=31536000, immutable` (przeglądarka nie pyta
+o nie przy kolejnych wejściach), adresy bez wersji `no-cache`. `graj` i `hostuj` uruchamiają
+serwer bez wbudowanej obsługi /static/, żeby szła tędy. Nagrania radia (`radio/*.mp3`) idą też
+kawałkami (nagłówek Range), żeby odtwarzacz mógł wrócić do miejsca, w którym przerwano
+słuchowisko.
 """
 
 import hashlib
 import re
 
+from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.views import serve
 from django.http import HttpResponse
 from django.utils.cache import patch_cache_control
 
+_pamiec: dict = {}
 
-def wersja() -> str:
+
+def _policz_wersje() -> str:
     skrot = hashlib.sha1()
     for finder in finders.get_finders():
         for sciezka, magazyn in finder.list([]):
             skrot.update(f"{sciezka}:{magazyn.get_modified_time(sciezka).timestamp()}".encode())
     return skrot.hexdigest()[:10]
+
+
+def wersja() -> str:
+    """Skrót czasów zmian plików statycznych. Przy `DEBUG` liczony za każdym razem (zmiany plików
+    widać od razu), inaczej raz na proces (serwer `hostuj`: pliki nie zmieniają się w trakcie)."""
+    if settings.DEBUG:
+        return _policz_wersje()
+    klucz = tuple(str(s) for s in settings.STATICFILES_DIRS)
+    if _pamiec.get("klucz") != klucz:
+        _pamiec.update(klucz=klucz, wersja=_policz_wersje())
+    return _pamiec["wersja"]
 
 
 def kontekst(request):
@@ -57,5 +73,9 @@ def widok(request, path):
     odp = _kawalek(request, path) or serve(request, path, insecure=True)
     if path.endswith(".mp3"):
         odp["Accept-Ranges"] = "bytes"
-    patch_cache_control(odp, no_cache=True)
+    if re.match(r"^/static/v[0-9a-f]+/", request.path):
+        # adres z wersją zmienia się razem z plikami, więc przeglądarka może go trzymać bez pytania
+        patch_cache_control(odp, max_age=31536000, immutable=True)
+    else:
+        patch_cache_control(odp, no_cache=True)
     return odp

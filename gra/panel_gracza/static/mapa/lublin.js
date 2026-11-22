@@ -31,7 +31,7 @@ const DALEKO = new Set(["zamek", "arena", "lotnisko", "gorki_czechowskie", "skan
 let CZAS = null, zegar = 0;
 let DANE = null, BLAD = null, WIDOK = null, widok = null, C = null, P = null, ZNAKI = [], poziom = 0, ulice = false;
 const krycie = {};
-let ostatniZanik = "", ostatnieK = 0, ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0, czysta = false, ULICE = [];
+let ostatniZanik = "", ostatnieK = 0, ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0, koniecRuchu = 0, czysta = false, ULICE = [];
 
 // --- style i dane (raz) ---
 (function podlaczStyle() {
@@ -117,9 +117,8 @@ function znakiBudynkow(c) {
   const M = c.kat.mapa, widoczne = P.budynkiGry(c.v, M.budynki), sprawy = P.parkiZeSprawa(c.v), html = [];
   for (const z of M.zespoly || []) {
     if (!z.geo || !widoczne.some((b) => b.zespol === z.id)) continue;
-    const n = widoczne.filter((b) => b.zespol === z.id).length;
     html.push(znak(...xy(z.geo), "lm-budynek lm-zespol", "lmapa-wejdz", z.id, z.nazwa, `${z.opis} Kliknij, żeby wejść.`,
-      `<span class="lm-kafel">${zeton(z.id, null, "przedmiot")}<i class="lm-ile" aria-hidden="true">${n}</i></span>`, 4));
+      `<span class="lm-kafel">${zeton(z.id, null, "przedmiot")}</span>`, 4));   // bez licznika firm: plakietka znaczy tylko prawdziwą sprawę
   }
   for (const b of widoczne) {
     if (b.zespol || !b.geo) continue;
@@ -212,6 +211,10 @@ function naZmiane(s) {
   WIDOK = s;
   const ramka = document.getElementById("lmapa");
   if (!ramka) return;
+  // w ruchu (przesuwanie, przybliżanie) znikają najdroższe cienkie linie (granice, kolej, ulice), po 150 ms ciszy wracają
+  if (!ramka.classList.contains("lm-ruch")) ramka.classList.add("lm-ruch");
+  clearTimeout(koniecRuchu);
+  koniecRuchu = setTimeout(() => ramka.classList.remove("lm-ruch"), 150);
   const macierz = `matrix(${s.k} 0 0 ${s.k} ${s.x} ${s.y})`;
   ramka.querySelector("#lmapa-swiat")?.setAttribute("transform", macierz);
   ramka.querySelector("#lmapa-lampy")?.setAttribute("transform", macierz);
@@ -435,7 +438,7 @@ export const nowaMapa = {
     const ramka = document.getElementById("lmapa");
     if (!ramka || !DANE) return;
     widok?.zniszcz();
-    poziom = 0; ulice = false; delete ramka.dataset.ul; for (const n in krycie) delete krycie[n];
+    poziom = 0; ulice = false; ostatniZanik = ""; ostatnieK = 0; czysta = false; delete ramka.dataset.ul; for (const n in krycie) delete krycie[n];
     ULICE = [...ramka.querySelectorAll(".lm-ulica-napis")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, kx: +el.dataset.kx, ky: +el.dataset.ky, n: +el.dataset.n }));
     ZNAKI = [...ramka.querySelectorAll(".lmapa-nakladka > [data-x]")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, dx: 0, dy: 0, ox: 0, oy: 0,
       napis: el.querySelector(".lm-podpis"), waznosc: waznosc(el) }));

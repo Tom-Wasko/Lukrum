@@ -309,3 +309,6 @@
   50% { scale: 1.22; filter: drop-shadow(0 0 7px var(--uwaga, #ffc864)) drop-shadow(0 0 3px var(--uwaga, #ffc864)); }
 }
 @media (prefers-reduced-motion: reduce) { .lm-swieci .lm-kafel { animation: none; scale: 1.18; filter: drop-shadow(0 0 6px var(--uwaga, #ffc864)); } }
+
+/* podróż 02/mapa: w ruchu mapy znikają najdroższe do rysowania linie (pomiar: czas zadań 6,3 s → 2,4 s na 14 krokach zoomu) */
+.lmapa.lm-ruch :is(.lm-granice, .lm-kolej, .lm-kolej-obrys, #lmapa-ulice, .lm-ulice-napisy) { display: none; }
