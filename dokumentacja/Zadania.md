@@ -1,5 +1,5 @@
 # Zadania
-Następny numer: Z37
+Następny numer: Z38
 
 Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej ważne. Zrobione dawniej:
 `historia/postep.md`. Pytania do zadań: `Stan.md`, „Czeka na szefa”. Uwagi z gier testowych 20 i 22.11 (szef,
@@ -51,6 +51,8 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ### Mniej ważne
 - Z12 · pora dnia zgodna z prawdziwą godziną także we wnętrzu i za oknem (m), niezależna od trybu jasny/ciemny
+- Z37 · wydajność dalej: moduły JS w jeden plik albo `modulepreload` (dziś ok. 80 żądań); obrysy mapy bez
+  `non-scaling-stroke`, żeby granice i kolej zostały widoczne w ruchu (raport `podroze/02-poprawki-po-grze/watek-mapa.md`)
 - Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie
 - Z7 · mapa: położenia lokali w `lokale.yaml: geo` zamiast w `lublin.json`; odsyłacze dla twórców usunąć z `budynki.yaml`; opisy 11 punktów orientacyjnych i położenia Auchan/błonia/Lidl sprawdzić w źródłach; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html`
 - Z8 · boty i billboardy na mapie; przycisk „Stara mapa” do zdjęcia po teście z klasą
