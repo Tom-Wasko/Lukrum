@@ -2,6 +2,12 @@
 import { brakWynikow, esc, kafelkiLiczb, kafelOferty, kartaMarki, kolorFirmy, KOLORY, licz, nazwaFirmy, nazwaOgolna, nazwaUslugi, podsumowanie, proc, tabela, wykres, zl, zl2, zwin, zwinTabela } from "./wspolne.js";
 import { igReklama } from "./infografiki.js";
 import { znakMarki } from "./wspolne.js";
+import { aktualneMiejsce } from "../swiat/swiat.js";
+
+// podróż 02/sklepy: piętro biurowca pokazuje tylko swoją agencję (filtr ważny tylko w tym wnętrzu, w którym go ustawiono)
+let FILTR = null;
+export const filtrAgencji = (id, nazwa = "") => { FILTR = id ? { id, nazwa, miejsce: aktualneMiejsce() } : null; };
+const aktywnyFiltr = () => (FILTR && FILTR.miejsce === aktualneMiejsce() ? FILTR : null);
 
 const RODZAJ = { druk: "druk", internet: "internet", radio_billboard: "radio i billboardy", wydarzenia: "wydarzenia" };
 // kolor agencji (znak i pasek karty) według rodzaju
@@ -10,7 +16,7 @@ const znakAgencji = (nazwa) => znakMarki(nazwa);   // poprawki 3: ikona agencji 
 const odmiana = (n, [jeden, kilka, wiele]) => (n === 1 ? jeden : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? kilka : wiele);
 const FAZA = { trwa: "trwa", narasta: "narasta", wygasa: "wygasa" };
 // agencje jednego rodzaju (internetowe albo tradycyjne – widok bez znacznika to same tradycyjne)
-const tylko = (R, internet) => ({ ...R, agencje: R.agencje.filter((a) => !!a.internet === internet) });
+const tylko = (R, internet) => ({ ...R, agencje: R.agencje.filter((a) => !!a.internet === internet && (internet || !aktywnyFiltr() || a.id === aktywnyFiltr().id)) });
 const zamowioneW = (v, R) => (v.decyzje.kampanie || []).filter((x) => x.emisje > 0 && R.agencje.some((a) => a.id === x.agencja));
 // „35% → 70% → 100%, potem −20% co rundę”
 const profilInternetu = (mi) => `${mi.narastanie.map((x) => proc(x, 0)).join(" → ")}, potem −${proc(1 - mi.trwalosc, 0)} co rundę`;
@@ -129,7 +135,7 @@ function podsumowanieKampanii(lista, gdzie) {
 }
 
 export const agencje = {
-  tytul: "Agencje reklamowe", tytulPelny: "Marketing – agencje reklamowe", ikona: "tradycyjny",
+  tytul: "Agencje reklamowe", get tytulPelny() { const f = aktywnyFiltr(); return f ? `Agencja ${f.nazwa}` : "Marketing – agencje reklamowe"; }, ikona: "tradycyjny",
   odblokowanie: (v) => !!v.reklama && v.runda >= (v.harmonogram?.reklama ?? 1), ukryta: (v) => !v.reklama,
   info: ({ v } = {}) => `Zamów kampanię w jednej z agencji na mieście: wybierz kanał, strefę i liczbę emisji w tej rundzie (emisja to paczka ulotek,
     post, spot w radiu…). Im więcej emisji, tym taniej za sztukę (progi rabatów każdego kanału), ale efekt się nasyca: pierwsze emisje działają
@@ -141,7 +147,7 @@ export const agencje = {
     if (!v.reklama) return `<p class="podpowiedz">Agencje reklamowe działają w grze z lokalami.</p>`;
     const R = tylko(v.reklama, false);
     let html = `<div class="pasek ciemny" data-rek-pasek>${pasekHtml(v, R, false)}</div>`;
-    html += trwajaceHtml(v, R.trwajace.filter((x) => x.od_rundy < v.runda && !x.internet), "Twoje kampanie z poprzednich rund – jeszcze wygasają w tej rundzie");
+    html += trwajaceHtml(v, R.trwajace.filter((x) => x.od_rundy < v.runda && !x.internet && (!aktywnyFiltr() || R.agencje.some((a) => a.nazwa === x.agencja_nazwa))), "Twoje kampanie z poprzednich rund – jeszcze wygasają w tej rundzie");
     if (R.model?.maks_przyciagania) html += `<p class="podpowiedz">Sufit reklamy: przyciąganie wszystkich Twoich kampanii w jednej strefie
       nasyca się do +${proc(R.model.maks_przyciagania, 0)} (to ok. +30% popytu), poszerzenie puli strefy – do +${proc(R.model.maks_puli, 0)}.
       Pierwsze kampanie działają prawie w pełni, każda kolejna – coraz słabiej.</p>`;

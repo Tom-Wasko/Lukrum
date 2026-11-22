@@ -7,6 +7,7 @@ import { stylEkranu } from "../pulpit/karty-style.js";
 import { wybierzPozycje } from "../pulpit/uklady.js";
 import { R, ustawWyglad } from "./rysunek.js";
 import { SCENY } from "./sceny/index.js";
+import { filtrAgencji } from "../zakladki/marketing.js";
 import { dostawcaSceny, otworzSklep } from "../zakladki/dostawcy.js";
 import { otworzSprzet } from "../zakladki/inwestycje.js";
 
@@ -126,6 +127,7 @@ export function kliknijPunkt(i, ctx) {
         const dost = dostawcaSceny(c.v, ctx.def.tytul);
         if (dost) return otworzSklep(c, { dost, dzialy: p.teczka.dzialy, widok: p.teczka.widok, tytul: `${ctx.def.tytul}: ${p.et}` });
       }
+      filtrAgencji(p.teczka?.agencja, p.teczka?.tytul);
       if (p.teczka?.sprzet) return otworzSprzet(c, { ...p.teczka.sprzet, tytul: `${ctx.def.tytul}: ${p.et}` });   // hurtownia sprzętu: tylko ta grupa
       c.teczka(o.ekran);   // ekran decyzji w oknie nad wnętrzem (teczka), nie osobna karta
       // firma, której drzwi kliknięto (bank, biuro rachunkowe): ekran przewija się do jej nazwy

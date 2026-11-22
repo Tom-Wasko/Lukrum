@@ -27,13 +27,13 @@ export default function (R) {
       s += `<rect class="k" x="12" y="60" width="130" height="186" fill="var(--g-sciana2)" opacity=".5"/>` + R.okno(40, 86, 150, 130, { zaluzje: true })
         + R.szyld(660, 52, 470, 56, "„Kozi Gród Events”", { tlo: "var(--akcent-2)", tekst: "var(--g-biel)", r: 22 }) + R.t(660, 132, "festyny · degustacje", 15, { f: "tekst", bez: true, op: .85 })
         + R.tabliczka(1120, 70, 150, "Piętro 3", "Biurowiec przy Zana · ul. Zana 39");
-      s += `<g transform="translate(${TX} ${TY}) scale(${K})">` + pokoj() + `</g>`;
+      s += `<g transform="translate(${TX} ${TY}) scale(${K})">` + pokoj() + `</g>`; s += R.zanaDekor("eventy");
       s += R.osoba("gosc-student", 400, 600, 0.85, "zwykla") + R.paprotka(70, 580, 0.9);
       return s;
     },
     punkty: () => [{ x: 8, y: by(0) + 4, w: 1204, h: Math.round(104 * K) - 8, et: "Eventy", gdzie: "gora", 
       teczka: { tytul: "„Kozi Gród Events”", okruszek: "piętro 3", wstep: "Kampania = kanał × strefa × liczba emisji. Działa od następnego tygodnia.",
-        pola: [["Degustacja na festynie osiedlowym", "strefa ▾"], ["Noc Kebaba na otrzęsinach", "Miasteczko akademickie"]], decyzje: ["kampanie"], ekran: "agencje", funkcja: "marketing" } }],
+        pola: [["Degustacja na festynie osiedlowym", "strefa ▾"], ["Noc Kebaba na otrzęsinach", "Miasteczko akademickie"]], decyzje: ["kampanie"], ekran: "agencje", agencja: "kozi_grod", funkcja: "marketing" } }],
     osoby: [{ x: 400, stopy: 600, s: 0.85, imie: "Organizator", tekst: "Festyn bez kebaba to jak wesele bez wujka. Zamawiamy namiot?", powitanie: true }],
   };
 }
