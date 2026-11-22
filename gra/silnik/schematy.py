@@ -1723,6 +1723,27 @@ class PlikDetektywa(Plik):
         return self
 
 
+class Wskaznik(Schemat):
+    """Jeden wskaźnik wskazówek ▲▼: nazwa dla gracza i progi siły (pierwszy – jedna strzałka, drugi – dwie)."""
+    nazwa: str = Field(min_length=2)
+    progi: tuple[float, float]
+
+    @model_validator(mode="after")
+    def _rosnace(self):
+        if not 0 < self.progi[0] < self.progi[1]:
+            raise ValueError("progi: [mały, duży], 0 < mały < duży")
+        return self
+
+
+class PlikWskazowek(Plik):
+    """dane/zdarzenia/wskazowki.yaml: wskazówki skutków przy opcjach wydarzeń (api/prezentacja.py: wskazowki_zdarzen)."""
+    kasa: Wskaznik       # zł: skutki gotówkowe minus koszt (gotówka, porcje)
+    goscie: Wskaznik     # popyt: (mnożnik − 1) × liczba rund
+    czas: Wskaznik       # godziny właściciela: koszt reakcji i skutki czasowe (więcej godzin = ▼)
+    kontrola: Wskaznik   # szansa kontroli sanepidu × liczba rund (▼)
+    kadra: Wskaznik      # liczba kandydatów do pracy
+
+
 SCHEMATY_ZDARZEN: dict[str, type[BaseModel]] = {
     "parki.yaml": PlikParkow,
     "magazyn.yaml": PlikMagazynu,
@@ -1733,8 +1754,9 @@ SCHEMATY_ZDARZEN: dict[str, type[BaseModel]] = {
     "handel.yaml": PlikHandlu,
     "detektyw.yaml": PlikDetektywa,
     "falafel.yaml": PlikFalafela,
+    "wskazowki.yaml": PlikWskazowek,
 }
-ZDARZENIA_OPCJONALNE = {"falafel.yaml"}   # bez pliku – bez tej historii (np. zamrożona kopia danych testów)
+ZDARZENIA_OPCJONALNE = {"falafel.yaml", "wskazowki.yaml"}   # bez pliku – bez tej historii (np. zamrożona kopia danych testów)
 
 
 # --- kalendarz/kalendarz.yaml ---

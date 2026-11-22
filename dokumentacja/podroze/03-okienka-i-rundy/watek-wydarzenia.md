@@ -31,4 +31,26 @@
   - Pełne testy są zielone.
   - W `dokumentacja/funkcje/` jest notatka o wskazówkach.
 
-## Raport
+## Raport (wyko, 22.11)
+**Zrobione**
+- Wskazówki ▲▼ (Z33): `api/prezentacja.py` (`wskazowki_opcji`, `wskazowki_zdarzen`) liczy kierunek i siłę z kosztu i skutków opcji;
+  progi i nazwy wskaźników (Kasa, Goście, Czas, Kontrola, Kadra) w nowym `dane/zdarzenia/wskazowki.yaml` (schemat `PlikWskazowek`,
+  plik opcjonalny). Opcja ma też `ciag` („ciąg dalszy…”). Wskazówki są też przy sprawach w lokalu.
+- Tablica korkowa (Z34, wariant A): `zakladki/zdarzenia.js` (`oknoParku` owija wydarzenia w tablicę z nagłówkiem i licznikiem,
+  kartki na pinezkach, `wskazowkiHtml`), style w bloku „podróż 03/wydarzenia” w `styl.css` (tylko zmienne motywu).
+- Wygląd parków: nowy `swiat/parki_wyglad.js` – 7 parków, każdy ma własne godło, hasło i wzór tła.
+- Przycisk parku: `swiat/sceny/park.js` (`parkId`) + `swiat/wnetrze.js` (jedna linia i import) otwiera `oknoParku`, nie kalendarz.
+- Licznik zgodny z widokiem „Zareaguj” – logika list nietknięta.
+- Notatka `dokumentacja/funkcje/wskazowki-skutkow-tablica-wydarzen.md`; `gra/INSTRUKCJA.md` (akapit Parki).
+**Dowody**
+- `pytest testy/swiat/test_wskazowki.py test_zdarzenia.py` → 13 passed; `test_parki_wyglad.py` → 2 passed.
+- Pełne testy: 903 passed, 1 failed (`test_zamrozona_kopia_ma_wszystkie_pliki_danych` – nowy opcjonalny plik); po dopisaniu
+  wyjątku w teście: `test_dane_zamrozone.py` → 5 passed. Pełnego przebiegu po tej poprawce nie powtarzałem (6 min).
+- `ruff check .` → All checks passed; `silnik.dane sprawdz` → Dane w porządku; `node --check` na 4 zmienionych modułach → ok.
+- Zrzuty (okno parku, bar jasny i pewex ciemny, makieta danych w prawdziwym CSS): `C:/Users/PC/Pulpit/lukrum/_robocze/03-wydarzenia/`.
+**Uwagi**
+- Zmiana cudzego pliku spoza listy: `testy/rdzen/test_dane_zamrozone.py` (jeden wyjątek dla opcjonalnego pliku) i `swiat/wnetrze.js`.
+- Zrzuty zrobiłem na stronie próbnej z danymi udawanymi (nie w żywej grze); nie sprawdzałem ręcznie palety „wysoka”.
+- Statyczny serwer `http.server` na porcie 8782 został uruchomiony; zatrzymanie było zablokowane – proszę zamknąć (niegroźny).
+- „Opinia” z przykładu szefa nazwałem „Goście” (to popyt w lokalach); do zmiany w `wskazowki.yaml`.
+**Propozycje:** kalibracja progów po lekcjach; zrzuty w wysokiej widoczności.

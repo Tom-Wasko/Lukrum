@@ -1,0 +1,12 @@
+opis: >-
+  Wskazówki skutków przy opcjach wydarzeń (tablica korkowa w oknie parku). Każda opcja pokazuje kierunek i siłę
+  zmiany wskaźnika: ▲ albo ▼ (mała zmiana), ▲▲ albo ▼▼ (duża). Bez dokładnych liczb – gracz ocenia, czy warto.
+  Siłę liczy api/prezentacja.py z danych skutków opcji (parki.yaml); tu są tylko nazwy i progi: [mały, duży].
+zrodlo: >-
+  decyzja autora (22.11.2026, Decyzje.md: wydarzenia wariant A, wskazówki ▲▼ z siłą bez liczb); progi – założenie
+  autora, do kalibracji po lekcjach (zakres kwot w parki.yaml: 40–1200 zł, popyt +1–3% przez 1–3 rundy)
+kasa: {nazwa: Kasa, progi: [20, 200]}               # zł (przychód minus koszt reakcji)
+goscie: {nazwa: Goście, progi: [0.005, 0.06]}       # (mnożnik popytu − 1) × rundy: +1% przez rundę = 0,01
+czas: {nazwa: Czas, progi: [0.5, 3]}                # godziny właściciela (koszt reakcji i późniejsze straty)
+kontrola: {nazwa: Kontrola, progi: [0.01, 0.1]}     # dodatek do szansy kontroli × rundy
+kadra: {nazwa: Kadra, progi: [1, 2]}                # kandydaci do pracy

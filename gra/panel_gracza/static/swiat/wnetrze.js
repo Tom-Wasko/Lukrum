@@ -10,6 +10,7 @@ import { SCENY } from "./sceny/index.js";
 import { filtrAgencji } from "../zakladki/marketing.js";
 import { dostawcaSceny, otworzAuto, otworzSklep } from "../zakladki/dostawcy.js";
 import { otworzSprzet } from "../zakladki/inwestycje.js";
+import { oknoParku } from "../zakladki/zdarzenia.js";
 
 const pos = (x, y, w, h) => `left:${(x / 12.2).toFixed(2)}%;top:${(y / 6.12).toFixed(2)}%;width:${(w / 12.2).toFixed(2)}%;height:${(h / 6.12).toFixed(2)}%`;
 const goly = (t) => String(t || "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
@@ -119,6 +120,7 @@ export function kliknijPunkt(i, ctx) {
   if (!o) return;
   const { p } = o, c = ctx.c;
   if (p.widok) { ctx.ustawWidok(p.widok); return; }
+  if (p.parkId) return oknoParku(c, p.parkId);   // tablica ogłoszeń parku: okienko wydarzeń nad wnętrzem (03/wydarzenia)
   if (p.wejscie) { const w = cel(p.wejscie); if (w && SCENY[w.id]) return ctx.wejdz(w.id, w.q); }
   const otworz = () => {
     if (o.ekran) {

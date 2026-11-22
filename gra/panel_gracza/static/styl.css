@@ -877,3 +877,36 @@ body .oferta-wiersz .pigulka.ok::before { content: "✓ "; }
 /* podróż 02/drobne: zwinięta sprawa w lokalu */
 .zd-odpowiedziano { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 8px 12px; margin: 8px 0; color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 10px; }
 .zd-odpowiedziano small { color: var(--tusz); }
+
+/* podróż 03/wydarzenia: tablica korkowa z kartkami i wskazówkami ▲▼; każdy park ma własny wzór tła i godło */
+.zd-tablica { --wz: color-mix(in srgb, var(--g-karta) 16%, transparent); background-color: var(--g-drewno); background-image: var(--wzor, none);
+  border: 8px solid var(--g-czern); border-radius: 10px; padding: 14px; color: var(--tusz); display: flex; flex-direction: column; gap: 12px; }
+.zd-tablica-glowa { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--g-karta); color: var(--tusz);
+  border: 2px solid var(--tusz); border-radius: 4px; padding: 8px 12px; }
+.zd-tablica-glowa > div { display: flex; flex-direction: column; flex: 1; min-width: 140px; }
+.zd-tablica-tytul { font-size: 20px; }
+.zd-tablica-glowa span { font-size: 13px; }
+.zd-tablica-glowa .zd-tablica-licznik { background: var(--papier); padding: 2px 8px; border: 2px solid var(--tusz); border-radius: 4px; flex: none; }
+.zd-godlo { flex: none; color: var(--tusz); }
+.zd-tablica .podpowiedz, .zd-tablica .sekcja-tytul { background: var(--g-karta); color: var(--tusz); padding: 6px 10px; border-radius: 4px; margin: 0; }
+.zd-tablica .zd-czas, .zd-tablica .zd-zakonczone { background: var(--g-karta); color: var(--tusz); padding: 10px 12px; border-radius: 4px; }
+.zd-kartka { position: relative; background: var(--g-karta); color: var(--tusz); padding: 16px; border: 2px solid var(--tusz); border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.3); transform: rotate(-.6deg); }
+.zd-kartka::before { content: ""; position: absolute; top: -9px; left: 50%; width: 16px; height: 16px; border-radius: 50%; background: var(--czerwony); border: 2px solid var(--tusz); }
+.zd-kartka .zd-opcje { display: grid; gap: 8px; }
+.zd-kartka .zd-opcja { background: var(--papier); color: var(--tusz); border: 2px solid var(--tusz); text-align: left; }
+.zd-kartka .zd-opcja.wybrany { box-shadow: 0 0 0 3px var(--zielony) inset; }
+.zd-kartka .zd-opcja .kt { font-weight: 700; display: flex; flex-direction: column; gap: 6px; }
+.zd-wsk { font-size: 13px; font-weight: 700; }
+.zd-w.gora { color: var(--zielony); }
+.zd-w.dol { color: var(--czerwony); }
+.zd-w.ciag { font-weight: 400; font-style: italic; }
+/* wzory tła parków */
+.zd-wz-kratka { --wzor: linear-gradient(var(--wz) 1px, transparent 1px), linear-gradient(90deg, var(--wz) 1px, transparent 1px); background-size: 24px 24px; }
+.zd-wz-kropki { --wzor: radial-gradient(var(--wz) 3px, transparent 4px); background-size: 22px 22px; }
+.zd-wz-listki { --wzor: radial-gradient(ellipse 10px 5px at 50% 50%, var(--wz) 98%, transparent); background-size: 30px 30px; }
+.zd-wz-pasy { --wzor: repeating-linear-gradient(90deg, var(--wz) 0 8px, transparent 8px 24px); }
+.zd-wz-fale { --wzor: radial-gradient(circle at 50% 100%, transparent 10px, var(--wz) 11px 13px, transparent 14px); background-size: 28px 14px; }
+.zd-wz-cegly { --wzor: linear-gradient(var(--wz) 2px, transparent 2px), linear-gradient(90deg, var(--wz) 2px, transparent 2px); background-size: 48px 20px; }
+.zd-wz-zygzak { --wzor: repeating-linear-gradient(135deg, var(--wz) 0 3px, transparent 3px 14px); }
+@media (max-width: 600px) { .zd-tablica { padding: 10px; border-width: 5px; } .zd-kartka { transform: none; } }

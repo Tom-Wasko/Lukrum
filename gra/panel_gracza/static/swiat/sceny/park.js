@@ -33,7 +33,8 @@ export default function (R) {
       return s;
     },
     punkty: [
-      { x: 130, y: 166, w: 300, h: 290, et: "Co się tu dzieje", stan: "!", opisStanu: "wydarzenie w tym tygodniu", teczka: { tytul: `Wydarzenia: ${p.nazwa}`, okruszek: "tablica ogłoszeń", wstep: "Kiedy i ile ludzi przyjdzie. Tłum w parku to więcej gości w lokalach w okolicy.", pola: [["Festyn osiedlowy", "sobota · tłum"], ["Bieg parkowy", "niedziela 10:00"], ["Kino pod chmurką", "za 2 tygodnie"]], ekran: "kalendarz (filtr: miejsce)", funkcja: "analiza" } },
+      // przycisk parku otwiera okienko wydarzeń tego parku (tablica korkowa z kartkami), nie kalendarz – obsługa: swiat/wnetrze.js (parkId)
+      { x: 130, y: 166, w: 300, h: 290, et: "Co się tu dzieje", parkId: id, teczka: { tytul: `Wydarzenia: ${p.nazwa}`, okruszek: "tablica ogłoszeń", wstep: "Wydarzenia w tym parku w tym tygodniu: wybierz reakcję. Przy każdej opcji strzałki pokazują, co zyskasz, a co stracisz.", ekran: "–" } },
       { x: 994, y: 310, w: 202, h: 186, et: "Stoisko", gdzie: "prawy-brzeg", odsyla: { kto: "Tabliczka", tekst: "Stoisko albo degustację na festynie zamawia się w agencji „Kozi Gród Events”, Biurowiec przy Zana, piętro 3.", stan: "Najbliższy festyn: sobota", miejsce: "Biurowiec przy Zana" } },
     ],
     osoby: [{ x: 760, stopy: 602, s: 0.78, imie: "Spacerowicz", tekst: "W sobotę będzie tu pół miasta. Kto ma stoisko, ten ma kolejkę.", powitanie: true }],
