@@ -60,8 +60,10 @@ Podział i role: [Plan](../Plan.md), P11–P12. Tu tylko gałęzie w `Tom-Wasko/
 - **Wejście do środka** (14.11, `static/lukrum.js`): mapa woła `lukrum.otworzWnetrze(id)` → zdarzenie `lukrum:wnetrze`
   `{id}`; dla zespołu id zespołu. Wnętrze woła `lukrum.wrocNaMape()` → zdarzenie `lukrum:mapa`. Wnętrze rysuje się
   w tym samym oknie, bez długiej animacji.
-- **Pole `obsluzone`** (w użyciu od 16.11, do formalnego potwierdzenia): słuchacz wnętrz ustawia
-  `e.detail.obsluzone = true`. Gdy nikt tego nie zrobi, mapa otwiera zastępczo dotychczasowe okno.
+- **Pole `obsluzone`** (kontrakt od 16.11, potwierdzony 22.11): słuchacz wnętrz (`app.js`) ustawia
+  `e.detail.obsluzone = true` **synchronicznie**, w trakcie obsługi `lukrum:wnetrze`, gdy budynek ma wnętrze albo
+  ekran. Mapa (`mapa/lublin.js`) sprawdza pole w następnym takcie (`setTimeout`); gdy nikt go nie ustawił, otwiera
+  zastępczo dotychczasowe okno budynku. Nowy słuchacz, który obsługuje budynek, też musi ustawić pole.
 - **Wygląd** (14.11, `static/motywy/zmienne.css`): atrybuty na `<html>` `data-paleta` (`bar` | `pewex` | `wysoka`) i
   `data-tryb` (`jasny` | `ciemny`), ustawiane przez `lukrum.wyglad.ustaw({paleta, tryb})`, zapis w przeglądarce, zdarzenie
   `lukrum:wyglad` (mapa przerysowuje kolory). Lista zmiennych i zasady: [Wygląd](../Wyglad.md), „Zmienne wyglądu”.

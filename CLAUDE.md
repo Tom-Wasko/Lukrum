@@ -36,7 +36,7 @@ PY -X utf8 manage.py graj --port <PORT> --bez-przegladarki    # serwer w tle; po
   stan nigdy samym kolorem. Inspiracje wnętrz: tylko pomysł, bez kopiowania. Szczegóły: `dokumentacja/Wyglad.md`.
 - Nie commituj `gra/db.sqlite3`, `gra/lokalne.json`, `zapisy/`, `*.log`, zrzutów ekranu ani `_archiwum/`.
 - README aktualny w tym samym commicie, który zmienia to, co widzi gracz, albo sposób uruchomienia.
-- Pełne testy raz na koniec wątku; `test_kasyno.py::test_mistrz_gry_nie_widzi_klubu` bywa niestabilny (zgłoś).
+- Pełne testy raz na koniec wątku; `test_kasyno.py::test_mistrz_gry_widzi_klub` bywał niestabilny (zgłoś, jeśli wróci).
 
 ## Compact instructions
 Zachowaj: bieżącą podróż i wątki (stan, sesje wyko), decyzje szefa z tej sesji (są w `Decyzje.md`), pliki w toku,

@@ -76,6 +76,6 @@ Po pracy zatrzymaj uruchomiony serwer.
 | wszystko inne (raport, plan, decyzje, zadania) | `../dokumentacja/`, według briefu |
 
 ## 8. Pułapki
-- `testy/pieniadze/test_kasyno.py::test_mistrz_gry_nie_widzi_klubu` bywa niestabilny w pełnym przebiegu (osobno
+- `testy/pieniadze/test_kasyno.py::test_mistrz_gry_widzi_klub` bywał niestabilny w pełnym przebiegu (osobno
   przechodzi). Zgłoś, nie naprawiaj na siłę.
 - Windows: uruchamiaj Pythona z `-X utf8`. Ścieżki z polskimi znakami bierz w cudzysłów.

@@ -49,7 +49,7 @@ def elementy(dane: Dane) -> dict[str, dict]:
     h = dane.katalog_ofert["rundy"].get("harmonogram_lokali")
     if not h or not dane.mapa:
         return {}
-    el = {k: {"nazwa": z["nazwa"], "grupa": "Zakładki", "tydzien": z["tydzien"], "sciezki": []}
+    el = {k: {"nazwa": z["nazwa"], "grupa": "Lokal i firma", "tydzien": z["tydzien"], "sciezki": []}
           for k, z in h["zakladki"].items()}
 
     def dodaj(klucz: str, nazwa: str, grupa: str, sciezki: list[Sciezka]) -> None:
@@ -59,7 +59,7 @@ def elementy(dane: Dane) -> dict[str, dict]:
     dodaj("licytacje", "Licytacje lokali (przebijanie ceny wywoławczej)", "Lokale", [("mapa", "zasady", "licytacje_od_rundy")])
     dodaj("przejecia", "Kupno budynku z najemcą", "Lokale", [("mapa", "zasady", "przejecia_od_rundy")])
     for n, k in dane.rynek_pracy["agencja"]["kanaly"].items():
-        dodaj(f"rekrutacja_{n}", k["nazwa"], "HR", [("rynek_pracy", "agencja", "kanaly", n, "od_rundy")])
+        dodaj(f"rekrutacja_{n}", k["nazwa"], "Zatrudnianie", [("rynek_pracy", "agencja", "kanaly", n, "od_rundy")])
     pozniejsi: dict[str, list[str]] = {}
     for d, i in dane.dostawcy_info.items():
         if i.get("od_rundy", dw.DOMYSLNE["od_rundy"]) > 1:

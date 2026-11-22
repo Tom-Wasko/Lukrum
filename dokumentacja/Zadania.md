@@ -7,9 +7,6 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ## W toku
 Podróż 03-okienka-i-rundy:
-- Z9 · strona startowa: „Nowe w tej rundzie” starymi nazwami („Zakładki”, „HR”)
-- Z28 · mapa: `e.detail.obsluzone` opisane w kontraktach zdarzeń
-- Z26 · niestabilny test `test_kasyno.py::test_mistrz_gry_nie_widzi_klubu` w pełnym przebiegu
 - Z32 · więcej do zrobienia w kolejnych rundach: zeszyt wujka i wydarzenia dają kilka sensownych zadań w każdej
   rundzie (m: w rundzie 2 tylko bułki); łączy się z Z15
 - Z33 · wydarzenia i parki: wskazówki skutków decyzji ▲▼ z siłą, bez liczb (9); każdy park własny wygląd, przycisk
@@ -56,3 +53,4 @@ Podróż 03-okienka-i-rundy:
 - Z24 · nazwa w UPRP i znaki towarowe (zwłaszcza poza szkołami), publikacja za zgodą szefa
 
 ## Odłożone
+- Z26 · niestabilny test kasyna (dziś `test_mistrz_gry_widzi_klub`): 22.11 nie powtórzył się w 2 pełnych przebiegach; wrócić, gdy się pojawi

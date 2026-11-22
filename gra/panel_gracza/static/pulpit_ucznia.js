@@ -68,7 +68,7 @@ function nowe(g) {
     `<li><span class="nr">${i + 1}</span><span><b>${esc(p.nazwa)}</b><small>${esc(p.opis)}</small></span></li>`).join("")}</ol></div>`;
   const lista = n.pozycje.length ? `<ul class="lista-nowe">${n.pozycje.map((p) =>
     `<li><span class="nr nowe">+</span><span><b>${esc(p.nazwa)}</b> <span class="grupa">${esc(p.grupa)}</span></span></li>`).join("")}</ul>`
-    : `<p class="podpowiedz" style="font-size:13px;margin:0">W tej rundzie nie ma nowych zakładek – ta sama gra, nowe decyzje.</p>`;
+    : `<p class="podpowiedz" style="font-size:13px;margin:0">W tej rundzie nie ma nowości – ta sama gra, nowe decyzje.</p>`;
   return `<div><div class="blok-tytul">${ikona("zdarzenia", 16)}Nowe w tej rundzie</div>${lista}</div>`;
 }
 
