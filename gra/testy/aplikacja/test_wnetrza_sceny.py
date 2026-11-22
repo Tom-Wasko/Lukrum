@@ -269,3 +269,11 @@ def test_panel_laduje_sie_a_sklep_bez_oferty_nie_otwiera_ogolnego_ekranu_dostawc
     assert w["okno_sklepu"]["ekrany"] == []
     tresc = w["okno_sklepu"]["tresc"]
     assert "Napój" in tresc and "Bułka" not in tresc and "Sos" not in tresc
+    # podróż 03/paragon: okno sklepu jest paragonem (sklep w nagłówku, pozycja ilość × cena, suma), cena tylko z tego sklepu i działu
+    of = w["paragon_sklepu"]["oferta"]
+    assert "pp-paragon" in of and "LIDL" in of and "SUMA PLN" in of and "× 200,00" in of
+    assert 'data-zmiana="ilosc"' in of and "Kupuję" in of and "Bułka" not in of and "Sos" not in of
+    assert "✓" in of   # pozycja w koszyku oznaczona znakiem, nie samym kolorem
+    pot = w["paragon_sklepu"]["potwierdzenie"]
+    assert "POTWIERDZENIE ZAKUPU" in pot and "Napój" in pot and "Sos" in pot and "SUMA PLN" in pot and "Dziękujemy" in pot
+    assert 'data-zmiana="ilosc"' not in pot   # potwierdzenie tylko do odczytu

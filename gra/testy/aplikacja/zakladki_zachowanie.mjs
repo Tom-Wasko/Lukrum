@@ -45,4 +45,18 @@ await sprawdz("okno_sklepu", () => {
   return { ekrany, tresc: ZAPIS.splice(0).join(" ") };
 });
 
+// podróż 03/paragon: okno sklepu to paragon (nagłówek ze sklepem, pozycje ilość × cena, suma), a po zakupie paragon potwierdzenia
+await sprawdz("paragon_sklepu", () => {
+  const ceny = { Lidl: { Bułka: { 1: 100 }, Napój: { 1: 200 }, Sos: { 1: 300 } } };
+  const zas = { typ_opakowania: "karton", opakowanie: 10, jednostka: "szt." };
+  const v = v0(ceny, { decyzje: { zamowienia: [{ dostawca: "Lidl", zasob: "Napój", jakosc: 1, ilosc: 3 }, { dostawca: "Lidl", zasob: "Sos", jakosc: 1, ilosc: 1 }] } });
+  const kat = { zasoby: { Bułka: zas, Napój: zas, Sos: zas } };
+  const otworz = (extra) => {
+    ZAPIS.length = 0; const c = kontekst(v, []); c.kat = kat; c.edycja = true;
+    D.otworzSklep(c, { dost: "Lidl", dzialy: ["Napoje"], widok: "dzial", tytul: "Lidl: Napoje", ...extra });
+    return ZAPIS.splice(0).join(" ");
+  };
+  return { oferta: otworz({}), potwierdzenie: otworz({ potwierdzenie: true }) };
+});
+
 console.log(JSON.stringify({ wynik, bledy }));
