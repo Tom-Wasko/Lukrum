@@ -13,7 +13,7 @@
   - Istnieją już (napisał Archi): `dokumentacja/Stan.md`, `Zadania.md` (pusty, `Następny numer: Z1`),
     `Decyzje.md` (5 decyzji szefa i 2 Archiego z 2026-11-22), `podroze/01-migracja/plan.md`, `wiedza/.gitkeep`.
   - Nazwy plików: bez ogonków i spacji w nazwach folderów; w nazwach plików `.md` ogonki zamień (np. `Wyglad.md`,
-    `nawiazania.md`), treść zostaje po polsku z ogonkami. Linki wewnętrzne Obsidiana (`[[...]]`) zamień na zwykłe
+    `nawiazania.md`), treść zostaje po polsku z ogonkami. Linki wewnętrzne Obsidiana (w podwójnych nawiasach kwadratowych) zamień na zwykłe
     linki Markdown do nowych ścieżek (względne).
   - Pliki `.docx` przenieś bez zmian (binarnie) do `dokumentacja/wiedza/analizy/`.
 
@@ -39,7 +39,7 @@
 
 - **Fakty z pamięci → `Decyzje.md` (sekcja Szefa).** Pliki pamięci (czytaj, nie zmieniaj):
   `C:/Users/PC/.claude/projects/C--Users-PC-Pulpit-lukrum/memory/*.md` i
-  `C:/Users/PC/.claude/projects/C--Users-PC-Pulpit-Levas-lukrum/memory/*.md`.
+  `C:/Users/PC/.claude/projects/C--Users-PC-Pulpit-<stary-folder>-lukrum/memory/*.md`.
   Każdy fakt, który nie jest już w `CLAUDE.md` repo ani w `Decyzje.md`, dopisz jako decyzję z datą z pliku
   (lista kontrolna, co tam jest): commity tylko Tom-Wasko (13.11); push bez pytania, bez --force, nowe repo
   i usuwanie zdalnych gałęzi pytać (17.11); notatki funkcji z szablonu (13.11); majster robi mapę na `maciex`
@@ -54,7 +54,7 @@
   Pomiń fakty o starym zespole agentów i warsztacie (nieaktualne) i opisz to w raporcie.
 
 - **Zakaz wzmianek o innych grach:** w repo nie może być nazw innych gier biznesowych. W notatkach dotyczy to
-  plików `Serie/porzadki/porzadki – {plan,recenzja,stan}.md` (słowa „Revas”/„Levas”). Przy przenoszeniu przepisz
+  plików `Serie/porzadki/porzadki – {plan,recenzja,stan}.md` (słowa nazwy starej gry i starego folderu). Przy przenoszeniu przepisz
   te zdania neutralnie („poprzednia wersja projektu”) albo usuń, jeśli bez nazwy nie mają sensu.
 
 - **Decyzje szefa:** `dokumentacja/Decyzje.md`, wpisy z 2026-11-22 (całe `notatki/` do `dokumentacja/`;
@@ -67,7 +67,7 @@
   1. Każdy plik z `notatki/` (oprócz `.obsidian/`) ma miejsce; w raporcie tabela plik → miejsce (lista z
      `find C:/Users/PC/Pulpit/lukrum/notatki -type f -not -path '*/.obsidian/*'`).
   2. `Zadania.md` ma numery Z1… bez luk, licznik = następny wolny.
-  3. `git ls-files | grep -iE "revas|levas"` → pusto i `git grep -iE "revas|levas" -- dokumentacja` → pusto.
+  3. grep nazw starej gry i starego folderu (w treści i w nazwach plików) → pusto.
   4. `git grep -n "\[\[" -- dokumentacja` → pusto (brak linków Obsidiana).
   5. Commity z `git -c user.name=Tom-Wasko commit` (bez dopisków o AI), drzewo czyste.
 - **Zrzuty ekranu:** nie.
