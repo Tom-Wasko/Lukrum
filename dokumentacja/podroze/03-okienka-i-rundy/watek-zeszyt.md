@@ -34,3 +34,23 @@
   - Pełne testy są zielone.
 
 ## Raport
+
+### Zrobione (gałąź `worktree-podroz-03-zeszyt`)
+- **Z5:** pozycja listy wujka (`pulpit/zeszyt.js: stronaLista`) używa istniejącej akcji `pp-pokaz`: zeszyt się zamyka, mapa przelatuje
+  do budynku z przybliżeniem (`pokazZnak`, k=0,9), budynek pulsuje; przy `prefers-reduced-motion` stała obwódka z napisem „tu” (CSS już był).
+  Obok przycisk „wejdź →” do wnętrza (`pp-wejdz`). Pozycje bez budynku na mapie (bazar, wysyłka) działają jak dawniej.
+  `mapa/` i `pulpit.js` nie ruszane.
+- **Z35:** okładka z dodatkowymi zniszczeniami (pęknięcia, otarcia, plamy), pożółkły papier z zabrudzonymi brzegami i zagiętym rogiem,
+  wewnętrzny cień okładki pełnego zeszytu; w palecie wysokiej papier zwykły. Schowany zeszyt dalej przechylony (-8°).
+- Test: `testy/aplikacja/test_pulpit.py::test_zeszyt_03_lista_prowadzi_na_mape_a_okladka_jest_zniszczona`.
+
+### Dowód
+- `pytest -q -p no:cacheprovider` → `900 passed in 379.75s`; `ruff check .` → `All checks passed!`; `node --check zeszyt.js` → ok.
+
+### Czego nie zrobiłem
+- **Nowa czcionka (Z35):** brak sieci, a w repo/na dysku nie ma innej odręcznej czcionki OFL (jest Caveat z polskimi znakami). Zostaje Caveat.
+  Decyzja: czy pobrać inną (np. Patrick Hand, Kalam, Marck Script; sprawdzić polskie znaki) do `fonty/` z licencją w `OFL.txt` i `fonty.css`.
+- **Zrzuty ekranu:** brak przeglądarki w środowisku (brak playwright), wyglądu nie oglądałem. Potrzebny rzut oka w 3 paletach × jasny/ciemny.
+
+### Propozycje
+- `pokazZnak` z k zależnym od bieżącego przybliżenia (nie oddalać, gdy mapa już jest bliżej).
