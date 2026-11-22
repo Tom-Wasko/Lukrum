@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-22 17:30 · wszystkie wątki 02 scalone, czekam na grę sprawdzającą szefa
+Archi żył: 2026-11-22 16:36 · wszystkie wątki 02 scalone, czekam na grę sprawdzającą szefa
 
 ## Podróż
 02-poprawki-po-grze (start 2026-11-22, tryb nadzorowany, scalanie do `main`): Z29, Z30, Z1, Z31, Z34.
