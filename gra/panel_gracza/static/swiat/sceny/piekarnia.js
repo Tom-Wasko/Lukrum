@@ -26,9 +26,9 @@ export default function (R) {
     },
     punkty: () => [
       { x: 612, y: 240, w: 396, h: 216, et: "Pieczywo", teczka: R.zamow(ID, "Pieczywo", "lada") },
-      { x: 616, y: 110, w: 376, h: 104, et: "Ile na który dzień", gdzie: "dol", teczka: { tytul: "Dostawy na każdy dzień", okruszek: "kalendarz dostaw", wstep: "Pieczywo przyjeżdża codziennie rano i szybko czerstwieje, więc zamawia się osobną ilość na każdy dzień tygodnia.", pola: [["Bułki: poniedziałek–środa", "4 opak."], ["Bułki: czwartek", "5 opak."], ["Bułki: piątek–niedziela", "7 · 8 · 6 opak.", "prognoza sprzedaży: weekend to o połowę więcej gości"]], decyzje: ["zamowienia"], ekran: "zaop_dostawy (dzień po dniu)", funkcja: "zaopatrzenie" } },
+      { x: 616, y: 110, w: 376, h: 104, et: "Ile na który dzień", gdzie: "dol", teczka: R.dowoz(ID, "kalendarz dostaw") },
       { x: 70, y: 440, w: 150, h: 156, et: "Koszyk tygodnia", gdzie: "gora", teczka: R.koszyk(ID, "skrzynki dowozowe") },
-      { x: 34, y: 84, w: 312, h: 320, et: "Jakość wypieku", teczka: { tytul: "Jakość pieczywa", okruszek: "piec", wstep: "Trzy jakości tego samego pieczywa. Lepsza bułka podnosi ocenę dania, tańsza obniża koszt.", pola: [["Bułka ★", "35,97 zł"], ["Bułka ★★", "42,32 zł"], ["Bułka ★★★", "55,86 zł"]], ekran: "zaop_dostawy (jakość)", funkcja: "zaopatrzenie" } },
+      { x: 34, y: 84, w: 312, h: 320, et: "Jakość wypieku", teczka: { tytul: "Jakość pieczywa", okruszek: "piec", wstep: "Trzy jakości tego samego pieczywa. Lepsza bułka podnosi ocenę dania, tańsza obniża koszt. Jakość wybierasz przy zamawianiu pieczywa na ladzie.", pola: [["Bułka ★", "35,97 zł"], ["Bułka ★★", "42,32 zł"], ["Bułka ★★★", "55,86 zł"]], ekran: "–" } },
     ],
     osoby: [{ x: 800, stopy: 470, s: 1.05, h: 130, imie: "Piekarz", tekst: "Wstaję o trzeciej, dowożę o wpół do szóstej. Proszę tylko powiedzieć, ile na który dzień.", powitanie: true }],
   };

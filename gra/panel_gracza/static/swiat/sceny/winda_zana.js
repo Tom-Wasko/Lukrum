@@ -28,7 +28,7 @@ export default function (R) {
     id: "winda_zana", tytul: "Biurowiec przy Zana: winda", adres: "ul. Zana 39", opis: "Wnętrze windy w biurowcu przy Zana: drzwi kabiny, lustro i panel z guzikami pięter. Parter to portiernia, wyżej drukarnia, radio, eventy i internet.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana2)", 548) + `<rect x="0" y="0" width="1220" height="40" fill="var(--g-metal2)"/>` + R.podloga("lastryko", 548, "var(--g-podloga2)");
-      s += R.swietlowka(430, 40, 360) + `<path class="k1" d="M0 548h1220" /><rect x="0" y="520" width="1220" height="28" fill="var(--g-drewno2)" opacity=".5"/>`;
+      s += R.swietlowka(60, 40, 240) + R.swietlowka(880, 40, 240) + `<path class="k1" d="M0 548h1220" /><rect x="0" y="520" width="1220" height="28" fill="var(--g-drewno2)" opacity=".5"/>`;
       // lamperia ze szczeblami i poręcz po lewej ścianie
       s += `<rect x="0" y="330" width="250" height="190" fill="var(--g-drewno2)" opacity=".7"/><path class="k" d="M0 330h250" stroke-width="3"/>`
         + `<path class="k3 bez" d="M18 360h214" stroke="var(--g-metal)" stroke-width="9"/><path class="k" d="M30 352v16M220 352v16"/>`;

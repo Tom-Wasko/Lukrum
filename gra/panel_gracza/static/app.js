@@ -12,6 +12,7 @@ import { funkcjaZakladki, funkcjeZakladek, oknoFunkcji, oknoUstawienFunkcji, okn
 import { aktualneMiejsce, aktualneQ, idzDoMiejsca, MIEJSCA, okruszek, otworzBudynek, ustawMiejsce } from "./swiat/swiat.js";
 import { stylEkranu, ukladEkranu } from "./pulpit/karty-style.js";
 import { ustawWybrany } from "./zakladki/lokal_wybor.js";
+import { zlozona } from "./zakladki/lokal.js";
 import { AKCJE_PULPITU, odswiezPulpit, PULPIT } from "./pulpit/pulpit.js";
 
 const start = () => (PULPIT ? "mapa" : "dashboard");   // ekran startowy: pulpit – mapa na cały ekran; stary układ (?uklad=stary) – plan rundy
@@ -197,18 +198,28 @@ const ctx = () => ({ get v() { return S.v; }, kat: S.kat, get d() { return S.d; 
 
 // --- teczka: ekran decyzji w oknie nad wnętrzem (punkt sceny nie przenosi na osobną kartę) ---------------------------
 // S.teczka = { k: klucz zakładki, tryb, miejsce: wnętrze, nad którym leży }. Zamyka się razem z opuszczeniem wnętrza.
+// Punkt sceny wskazuje jedną sprawę (np. „wyposazenie” albo „dekor”), a dawny klucz przez ALIAS prowadzi do zakładki złożonej z kilku
+// części. Okno nad wnętrzem pokazuje wtedy tylko wskazaną część (z kafelkami wyboru lokalu), nie całą złożoną zakładkę (podróż 02/sklepy).
+const SAME_CZESCI = {};
+function zakladkaOkna(k, cel) {
+  const zl_ = ZAKLADKI[cel], czesc = ZAKLADKI[k];
+  if (!zl_?.czesci || zl_.czesci.length < 2 || k === cel || !zl_.czesci.includes(k) || !czesc) return zl_;
+  return SAME_CZESCI[k] || (SAME_CZESCI[k] = zlozona({ tytul: czesc.tytul, tytulPelny: czesc.tytulPelny, info: czesc.info, czesci: { [k]: czesc },
+    odRundy: (v, kk) => v.harmonogram?.[ELEMENT[kk]] ?? OD_RUNDY[kk] }));
+}
 function otworzTeczke(k, tryb) {
   if (przechwycFunkcje(k)) return;
   const cel = docelowa(k);
   if (!ZAKLADKI[cel] || !dostepna(ZAKLADKI[cel])) return;
-  S.teczka = { k: cel, tryb: tryb || (ZAKLADKI[cel].decyzje ? (S.v.edycja ? "decyzje" : maWyniki(ZAKLADKI[cel]) ? "wyniki" : "decyzje") : "wyniki"), czesc: k,
+  const zak = zakladkaOkna(k, cel);
+  S.teczka = { k: cel, zak, tryb: tryb || (zak.decyzje ? (S.v.edycja ? "decyzje" : maWyniki(zak) ? "wyniki" : "decyzje") : "wyniki"), czesc: k,
     miejsce: `${aktualneMiejsce()}?${aktualneQ() || ""}` };
   rysujTeczke();
   pokazCzesc(k);
 }
 function rysujTeczke() {
   const t = S.teczka, v = S.v;
-  const z = t && ZAKLADKI[t.k];
+  const z = t && (t.zak || ZAKLADKI[t.k]);
   if (!t || !z || S.zakladka !== "miejsce" || t.miejsce !== `${aktualneMiejsce()}?${aktualneQ() || ""}` || !dostepna(z) || ukrytaF(v, t.k)) {
     S.teczka = null; zamknijTeczke(); return;
   }

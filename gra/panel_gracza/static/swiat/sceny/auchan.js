@@ -28,7 +28,7 @@ export default function (R) {
       { x: 504, y: 100, w: 232, h: 306, et: "Warzywa i sosy", teczka: R.zamow(ID, ["Warzywa", "Sosy i dodatki"], "alejka 3") },
       { x: 740, y: 100, w: 232, h: 306, et: "Napoje i opakowania", teczka: R.zamow(ID, ["Napoje", "Opakowania"], "alejka 4") },
       { x: 990, y: 100, w: 210, h: 306, et: "Zakupy z dowozem", teczka: { tytul: "Zakupy z dowozem (auto-dostawy)", okruszek: "stanowisko obsługi", wstep: "Zostaw stałą listę: sklep sam kupi składniki na prognozowaną sprzedaż i dowiezie do lokalu. Wygodne, ale z prowizją i bez szukania okazji.",
-        pola: [["Auto-dostawy dla lokalu przy Narutowicza", "włączone ▾"], ["Jakość składników", "★★ ▾"], ["Zapas ponad prognozę", "20%"]], decyzje: ["auto_dostawy"], ekran: "zaop_dostawy (auto-dostawy)", funkcja: "zaopatrzenie" } },
+        pola: [["Auto-dostawy dla lokalu przy Narutowicza", "włączone ▾"], ["Jakość składników", "★★ ▾"], ["Zapas ponad prognozę", "20%"]], decyzje: ["auto_dostawy"], ekran: "zaop_dostawy (auto-dostawy)", auto: true, funkcja: "zaopatrzenie" } },
       { x: 140, y: 420, w: 730, h: 186, et: "Koszyk tygodnia", gdzie: "wewn", teczka: R.koszyk(ID, "kasy") },
     ],
     osoby: [{ x: 1090, stopy: 420, s: 0.95, h: 110, imie: "Obsługa", tekst: "Mamy wszystko, tylko trochę drożej. Możemy też kupować za Państwa co tydzień.", powitanie: true, strona: "lewo" }],

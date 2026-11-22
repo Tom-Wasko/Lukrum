@@ -20,7 +20,8 @@ for (const f of fs.readdirSync(kat).filter((x) => x.endsWith(".mjs") && x !== "i
     const w = S.widoki ? Object.values(S.widoki) : [S];
     wynik[id] = w.flatMap((x) => (typeof x.punkty === "function" ? x.punkty(R) : x.punkty || [])).map((p) => ({
       et: p.et, ekran: p.teczka ? String(p.teczka.ekran || "").split(/[^a-z0-9_]/i)[0] : "", odsyla: !!p.odsyla, wejscie: p.wejscie || "", dostawca: p.teczka?.dostawca || "", dzialy: p.teczka?.dzialy || [],
-      widok: p.teczka?.widok || "", agencja: p.teczka?.agencja || "", sprzet: p.teczka?.sprzet?.nazwy || null }));
+      widok: p.teczka?.widok || "", agencja: p.teczka?.agencja || "", sprzet: p.teczka?.sprzet ? { nazwy: p.teczka.sprzet.nazwy || [], widok: p.teczka.sprzet.widok || "" } : null,
+      pelny: p.teczka ? String(p.teczka.ekran || "") : "", tytul: p.teczka?.tytul || "", tryb: p.teczka?.tryb || "", auto: !!p.teczka?.auto }));
   } catch (e) { bledy.push(`${id}: ${e.message}`); }
 }
 console.log(JSON.stringify({ wynik, bledy }));

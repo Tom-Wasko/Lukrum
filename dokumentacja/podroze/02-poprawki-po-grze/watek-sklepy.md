@@ -93,3 +93,165 @@
 **Uwaga:** w `_robocze/sklepy/` zostały zrzuty (poza gitem), a serwer `http.server 8771` mógł zostać uruchomiony;
 nie udało się ich usunąć/zatrzymać (odmowa uprawnień). Do ręcznego sprzątnięcia.
 **Commity:** e92977b, d390857, c18b56c, 6dbeee5, 3a7021f (+ commit z tym raportem).
+
+## Raport: poprawka po usterce Parku (okienka punktów)
+**Przyczyna:** w `zakladki/index.js` klucze części (`wyposazenie`, `dekor`, `sprzet`, `stanowiska`, `szkolenia`, `udogodnienia`) mają alias na zakładkę złożoną, więc każdy punkt otwierał całą zakładkę (`wnetrze_wyposazenie` = „Instalacje i wyposażenie” + „Sklep meblowy”, itd.).
+**Poprawka:** `app.js` (`zakladkaOkna`): klucz części otwiera okno tylko tej części; sceny przestawione na klucze części. Punkty informacyjne bez własnego ekranu dostają dymek (`ekran: "–"`). `wnetrze.js` przekazuje `teczka.tryb` (np. „Dyplomy” = wyniki szkoleń). Auchan „Zakupy z dowozem” otwiera tylko sekcję auto-dostawcy (`otworzAuto` w `dostawcy.js`). Nowe działy `Surówki` i `Falafel i pita` (Stokrotka, Lidl), bo dwa punkty jednej sceny otwierały to samo.
+**Poprawione punkty:** park_handlowy (Stoliki i ogródek → część `wyposazenie`, Wystrój → część `dekor`), stolarnia (Nowe stanowiska → `stanowiska`, Cennik i terminy → dymek), akademia (Kursy → `szkolenia`, Dyplomy → `szkolenia` [wyniki]), galeria (Udogodnienia → `udogodnienia`), piekarnia (Ile na który dzień → dowóz sklepu, Jakość wypieku → dymek), auchan (Zakupy z dowozem → samo auto-dostawy), stokrotka (Surówki), lidl (Falafel i pita), kebab (Rożen → `sprzet`).
+**Neon w windzie:** świetlówka przeniesiona z pod napisu „DOM REKLAMY” na boki sufitu (`winda_zana.js`).
+**Wyjątki jawne (test `TEN_SAM_EKRAN`):** 14 scen z jednym ekranem jednej sprawy i kilkoma punktami (bank, bazar, giełda, poczta…): ekran prostej zakładki, nie złożonej. Kebab „Lada” → `lokal_przeglad` zamierzony („Mój lokal”).
+**Poza listą briefu:** `app.js`, `swiat/swiat.js`, `testy/aplikacja/test_pulpit.py` (asercja pod `teczka.tryb`), `swiat/sceny/{auchan,akademia,galeria,lidl,stokrotka,piekarnia}.js` w zakresie `sceny/*.js`.
+**Dowód:** `pytest testy/aplikacja testy/swiat` → 243 passed (po poprawce test_pulpit); `test_wnetrza_sceny.py` → 11 passed; `ruff check .` → All checks passed!; `node --check` OK. Nie sprawdzałem klików w żywej aplikacji.
+
+### Tabela: scena → punkt → co otwiera
+| scena | punkt | co otwiera |
+|---|---|---|
+| agencja_nieruchomosci | Lokale do wzięcia | ekran: lokale |
+| agencja_nieruchomosci | Licytacje | ekran: licytacje |
+| agencja_nieruchomosci | Notariusz | ekran: przejecia |
+| agencja_nieruchomosci | Twoje klucze | ekran: lokale |
+| agencja_pracy | Kandydaci | ekran: rynek_pracy |
+| agencja_pracy | Twoje ogłoszenia | ekran: rynek_pracy |
+| agencja_pracy | Agencja | ekran: rynek_pracy |
+| agencja_pracy | Headhunter | ekran: rynek_pracy |
+| agencja_pracy | Grafik i pensje | odesłanie (informacja) |
+| akademia | Kursy | ekran: szkolenia |
+| akademia | Dyplomy | ekran: szkolenia [wyniki] |
+| akademia | Udogodnienia | odesłanie (informacja) |
+| auchan | Pieczywo | sklep: auchan / dzial / Pieczywo |
+| auchan | Mięso i mrożonki | sklep: auchan / dzial / Mięso, Mrożonki |
+| auchan | Warzywa i sosy | sklep: auchan / dzial / Warzywa, Sosy i dodatki |
+| auchan | Napoje i opakowania | sklep: auchan / dzial / Napoje, Opakowania |
+| auchan | Zakupy z dowozem | auto-dostawy (samo okno) |
+| auchan | Koszyk tygodnia | sklep: auchan / koszyk / kasy |
+| bank | Konto i debet | ekran: bank |
+| bank | Kredyty | ekran: bank |
+| bank | Lokaty | ekran: bank |
+| bank | Porównaj banki | wejście: pierzeja_bankowa.html |
+| bazar | Okazje | ekran: handel |
+| bazar | Twój stragan | ekran: handel |
+| bazar | Zakończone | ekran: handel |
+| biedronka | Pieczywo | sklep: biedronka / dzial / Pieczywo |
+| biedronka | Warzywa | sklep: biedronka / dzial / Warzywa |
+| biedronka | Sosy i dodatki | sklep: biedronka / dzial / Sosy i dodatki |
+| biedronka | Napoje | sklep: biedronka / dzial / Napoje |
+| biedronka | Frytki | sklep: biedronka / dzial / Mrożonki |
+| biedronka | Gazetka | sklep: biedronka / gazetka |
+| biedronka | Koszyk tygodnia | sklep: biedronka / koszyk |
+| biedronka | Mięso | odesłanie (informacja) |
+| biuro_rachunkowe | Umowa i pakiet | ekran: biuro |
+| biuro_rachunkowe | Cennik | ekran: biuro |
+| biuro_rachunkowe | Twoje dokumenty | ekran: biuro |
+| biuro_rachunkowe | Księguj samodzielnie | odesłanie (informacja) |
+| detektyw | Zleć śledztwo | ekran: konkurencja |
+| detektyw | Kto jest kim | ekran: konkurencja |
+| detektyw | Raporty | ekran: konkurencja |
+| eurocash | Warzywa | sklep: eurocash / dzial / Warzywa |
+| eurocash | Sosy i dodatki | sklep: eurocash / dzial / Sosy i dodatki |
+| eurocash | Pozostały towar | sklep: eurocash / dzial / Mięso, Mrożonki, Pieczywo, Napoje, Opakowania |
+| eurocash | Koszyk tygodnia | sklep: eurocash / koszyk / biurko zamówień |
+| eurocash | Dni dostaw | sklep: eurocash / dowoz |
+| galeria | Udogodnienia | ekran: udogodnienia |
+| galeria | Szkolenia | odesłanie (informacja) |
+| gielda | Notowania | ekran: gielda |
+| gielda | Kup albo sprzedaj | ekran: gielda |
+| gielda | Portfel właściciela | odesłanie (informacja) |
+| gielda | Wiadomości | ekran: gielda |
+| harpagon | Pożyczka od ręki | ekran: harpagon |
+| harpagon | Twój dług | ekran: harpagon |
+| harpagon | Kredyt w banku | odesłanie (informacja) |
+| harpagon | Zapukaj | ekran: kasyno |
+| kamienica_rachmistrzow | Wejdź | wejście: biuro_rachunkowe.html?f=jks |
+| kamienica_rachmistrzow | Wejdź | wejście: biuro_rachunkowe.html?f=scrooge |
+| kamienica_rachmistrzow | Wejdź | wejście: biuro_rachunkowe.html?f=asteroida_328 |
+| kamienica_rachmistrzow | Wejdź | wejście: biuro_rachunkowe.html?f=jozef_k |
+| kamienica_rachmistrzow | Porównaj biura | ekran: biuro |
+| kamienica_rachmistrzow | Poczta z urzędu | ekran: biuro |
+| lidl | Pieczywo | sklep: lidl / dzial / Pieczywo |
+| lidl | Warzywa i sosy | sklep: lidl / dzial / Warzywa, Sosy i dodatki |
+| lidl | Falafel i pita | sklep: lidl / dzial / Falafel i pita |
+| lidl | Napoje | sklep: lidl / dzial / Napoje |
+| lidl | Mrożonki | sklep: lidl / dzial / Mrożonki |
+| lidl | Gazetka | sklep: lidl / gazetka |
+| lidl | Koszyk tygodnia | sklep: lidl / koszyk |
+| makro | Pieczywo i warzywa | sklep: makro / dzial / Pieczywo, Warzywa |
+| makro | Sosy i napoje | sklep: makro / dzial / Sosy i dodatki, Napoje |
+| makro | Mięso i mrożonki | sklep: makro / dzial / Mięso, Mrożonki |
+| makro | Opakowania | sklep: makro / dzial / Opakowania |
+| makro | Koszyk tygodnia | sklep: makro / koszyk / stanowisko obsługi |
+| makro | Dni dostaw | sklep: makro / dowoz |
+| park | Co się tu dzieje | ekran: kalendarz |
+| park | Stoisko | odesłanie (informacja) |
+| park_handlowy | Stoliki i ogródek | ekran: wyposazenie |
+| park_handlowy | Wystrój | ekran: dekor |
+| park_handlowy | Sprzęt | wejście: sprzet_gastro.html |
+| piekarnia | Pieczywo | sklep: piekarnia / dzial / Pieczywo |
+| piekarnia | Ile na który dzień | sklep: piekarnia / dowoz / kalendarz dostaw |
+| piekarnia | Koszyk tygodnia | sklep: piekarnia / koszyk / skrzynki dowozowe |
+| piekarnia | Jakość wypieku | dymek z wstępem |
+| pierzeja_bankowa | Wejdź | wejście: bank.html?b=kmicic |
+| pierzeja_bankowa | Wejdź | wejście: bank.html?b=wokulski |
+| pierzeja_bankowa | Wejdź | wejście: bank.html?b=ziemia |
+| pierzeja_bankowa | Wejdź | wejście: bank.html?b=rzecki |
+| pierzeja_bankowa | Wejdź | wejście: bank.html?b=soplicowo |
+| pierzeja_bankowa | Porównaj banki | ekran: bank |
+| poczta | Nadaj list z decyzjami | ekran: wyslij |
+| poczta | Do poprawy | ekran: lista_bledow |
+| poczta | Potwierdzenia | ekran: wyslij |
+| pokoj_ksiegi | Księga firmy | ekran: kpir |
+| pokoj_ksiegi | Dokumenty | ekran: kpir |
+| pokoj_ksiegi | Terminy | odesłanie (informacja) |
+| pokoj_ksiegi | Oddaj księgi biuru | odesłanie (informacja) |
+| ratusz | Sprawy lokalu | ekran: urzad |
+| ratusz | VAT | ekran: vat |
+| ratusz | Podatek dochodowy | ekran: podatki |
+| ratusz | Higiena | odesłanie (informacja) |
+| redakcja | Wyniki tygodnia | ekran: karta_wynikow |
+| redakcja | Tabela ligowa | ekran: ranking |
+| redakcja | Dział porad | ekran: wnioski |
+| redakcja | Archiwum | ekran: raport |
+| rozen | Mięso na rożen | sklep: rozen / dzial / Mięso |
+| rozen | Mięso mrożone | sklep: rozen / dzial / Mrożonki |
+| rozen | Koszyk tygodnia | sklep: rozen / koszyk / biuro zbytu |
+| rozen | Dni dostaw | sklep: rozen / dowoz |
+| sanepid | Poziom higieny | ekran: sanepid |
+| sanepid | Kontrole | ekran: sanepid |
+| sanepid | Świeżość towaru | odesłanie (informacja) |
+| selgros | Pieczywo, warzywa, sosy | sklep: selgros / dzial / Pieczywo, Warzywa, Sosy i dodatki |
+| selgros | Mięso | sklep: selgros / dzial / Mięso |
+| selgros | Mrożonki | sklep: selgros / dzial / Mrożonki |
+| selgros | Napoje | sklep: selgros / dzial / Napoje |
+| selgros | Opakowania | sklep: selgros / dzial / Opakowania |
+| selgros | Koszyk tygodnia | sklep: selgros / koszyk |
+| sprzet_gastro | Rożny i grille | sprzęt: Rożen |
+| sprzet_gastro | Frytownice i chłodzenie | sprzęt: Frytownica, Lodówka na napoje, Szafa chłodnicza, Zamrażarka |
+| sprzet_gastro | Kasy | sprzęt: Kasa fiskalna, Lada z witryną, Tablica menu |
+| sprzet_gastro | Komis | sprzęt:  |
+| sprzet_gastro | Leasing | odesłanie (informacja) |
+| stokrotka | Pieczywo, sosy, napoje | sklep: stokrotka / dzial / Pieczywo, Sosy i dodatki, Napoje |
+| stokrotka | Surówki | sklep: stokrotka / dzial / Surówki |
+| stokrotka | Warzywa | sklep: stokrotka / dzial / Warzywa |
+| stokrotka | Frytki | sklep: stokrotka / dzial / Mrożonki |
+| stokrotka | Gazetka | sklep: stokrotka / gazetka |
+| stokrotka | Koszyk tygodnia | sklep: stokrotka / koszyk / lada |
+| stolarnia | Nowe stanowiska | ekran: stanowiska |
+| stolarnia | Cennik i terminy | dymek z wstępem |
+| stolarnia | Sprzęt | odesłanie (informacja) |
+| ubezpieczyciel | Kup polisę | ekran: ubezpieczenia |
+| ubezpieczyciel | Co grozi | ekran: ubezpieczenia |
+| ubezpieczyciel | Twoje polisy | ekran: ubezpieczenia |
+| uczelnia | Klienci w strefach | ekran: klienci |
+| uczelnia | Kalendarz miasta | ekran: kalendarz |
+| uczelnia | Prognoza popytu | ekran: klienci |
+| uczelnia | Konkurencja | odesłanie (informacja) |
+| winda_zana | Piętro 4: internet | wejście: zana_internet.html |
+| winda_zana | Piętro 3: eventy | wejście: zana_eventy.html |
+| winda_zana | Piętro 2: radio | wejście: zana_radio.html |
+| winda_zana | Piętro 1: drukarnia | wejście: zana_drukarnia.html |
+| winda_zana | Parter: portiernia | wejście: zana_portiernia.html |
+| zana_drukarnia | Ulotki i plakaty | agencja: papier_przyjmie |
+| zana_eventy | Eventy | agencja: kozi_grod |
+| zana_internet | Internet | ekran: internet |
+| zana_portiernia | Twoje kampanie | ekran: agencje |
+| zana_portiernia | Pokój 12: księga firmy | wejście: pokoj_ksiegi.html |
+| zana_radio | Radio i billboard | agencja: fala_koziolka |

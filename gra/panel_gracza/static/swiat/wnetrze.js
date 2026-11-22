@@ -8,7 +8,7 @@ import { wybierzPozycje } from "../pulpit/uklady.js";
 import { R, ustawWyglad } from "./rysunek.js";
 import { SCENY } from "./sceny/index.js";
 import { filtrAgencji } from "../zakladki/marketing.js";
-import { dostawcaSceny, otworzSklep } from "../zakladki/dostawcy.js";
+import { dostawcaSceny, otworzAuto, otworzSklep } from "../zakladki/dostawcy.js";
 import { otworzSprzet } from "../zakladki/inwestycje.js";
 
 const pos = (x, y, w, h) => `left:${(x / 12.2).toFixed(2)}%;top:${(y / 6.12).toFixed(2)}%;width:${(w / 12.2).toFixed(2)}%;height:${(h / 6.12).toFixed(2)}%`;
@@ -127,9 +127,10 @@ export function kliknijPunkt(i, ctx) {
         const dost = dostawcaSceny(c.v, ctx.def.tytul);
         if (dost) return otworzSklep(c, { dost, dzialy: p.teczka.dzialy, widok: p.teczka.widok, tytul: `${ctx.def.tytul}: ${p.et}` });
       }
+      if (p.teczka?.auto) return otworzAuto(c, { tytul: `${ctx.def.tytul}: ${p.et}`, sklep: ctx.def.tytul });   // auto-dostawy: tylko ta sekcja
       filtrAgencji(p.teczka?.agencja, p.teczka?.tytul);
       if (p.teczka?.sprzet) return otworzSprzet(c, { ...p.teczka.sprzet, tytul: `${ctx.def.tytul}: ${p.et}` });   // hurtownia sprzętu: tylko ta grupa
-      c.teczka(o.ekran);   // ekran decyzji w oknie nad wnętrzem (teczka), nie osobna karta
+      c.teczka(o.ekran, p.teczka?.tryb);   // ekran decyzji (albo wyników: teczka.tryb) w oknie nad wnętrzem; klucz części otwiera tylko tę część
       // firma, której drzwi kliknięto (bank, biuro rachunkowe): ekran przewija się do jej nazwy
       const szukaj = ["bank", "biuro_rachunkowe"].includes(ctx.def.id) ? (/„(.+)”/.exec(ctx.def.tytul) || [])[1] : null;
       if (szukaj) przewinDo(szukaj);

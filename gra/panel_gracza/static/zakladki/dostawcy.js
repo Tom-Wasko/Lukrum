@@ -214,10 +214,22 @@ function sekcjaAuto(v, kat, edycja) {
   return html;
 }
 
+// okno samych auto-dostaw (punkt „Zakupy z dowozem” w sklepie): sekcja Auto-dostawca bez reszty ekranu zamówień (podróż 02/sklepy)
+let AUTO = null;
+export function otworzAuto(c, s) { AUTO = { ...s, zmieniono: false }; oknoAuto(c, AUTO); }
+function oknoAuto(c, s, { poZapisie = false } = {}) {
+  if (poZapisie) s.zmieniono = true;
+  if (poZapisie && !otwarteOkno(s.tytul)) return c.rysuj();
+  const tresc = sekcjaAuto(c.v, c.kat, c.edycja) || `<p class="podpowiedz">Auto-dostawy nie są dostępne w tej grze.</p>`;
+  okno(s.tytul, tresc, { przyciski: `<button class="btn pom" data-akcja="zamknij-okno">Gotowe</button>`, okruszek: `Lublin › ${esc(s.sklep || "Sklep")}`,
+    poZamknieciu: () => { const z = s.zmieniono; AUTO = null; if (z) c.rysuj(); } });
+}
+const poAuto = (c) => (AUTO ? () => oknoAuto(c, AUTO, { poZapisie: true }) : undefined);
+
 function zapiszPozycje(c, zmiana) {
   const a = autoDecyzja(c.v) || {};
   const poz = zmiana((a.pozycje || []).map((x) => ({ ...x })));
-  return c.zmien((d) => { zapiszWLokalu(d, c.v, "auto_dostawy", { ...a, pozycje: poz }); });
+  return c.zmien((d) => { zapiszWLokalu(d, c.v, "auto_dostawy", { ...a, pozycje: poz }); }, poAuto(c));
 }
 function ustawPozycje(lista, z, zmiany, v) {
   let p = lista.find((x) => x.zasob === z);
@@ -316,7 +328,7 @@ export const dostawcy = {
         && lokalZam(c.v, y) === lokalZam(c.v, x);
       return c.zmien((d) => { d.zamowienia = (d.zamowienia || []).filter((y) => !ta(y)); });
     },
-    "zam-wyczysc": (el, c) => c.zmien((d) => { d.zamowienia = (d.zamowienia || []).filter((x) => !tenLokal(c.v, x)); }),
+    "zam-wyczysc": (el, c) => c.zmien((d) => { d.zamowienia = (d.zamowienia || []).filter((x) => !tenLokal(c.v, x)); }, poAuto(c)),
     "auto-prognoza": (el, c) => {
       const zapas = +document.getElementById("auto-ad-zapas").value, pot = zapotrzebowanie(c.v, c.kat), ceny = cenyAuto(c.v);
       if (!Object.values(pot).some((p) => p > 0)) return toast("Najpierw wpisz prognozę popytu dań w zakładce Menu i ceny.");
@@ -337,7 +349,7 @@ export const dostawcy = {
     },
   },
   zmiany: {
-    "auto-wl": (el, c) => c.zmien((d) => { zapiszWLokalu(d, c.v, "auto_dostawy", el.checked ? { pozycje: [] } : null); }),
+    "auto-wl": (el, c) => c.zmien((d) => { zapiszWLokalu(d, c.v, "auto_dostawy", el.checked ? { pozycje: [] } : null); }, poAuto(c)),
     "auto-ilosc": (el, c) => zapiszPozycje(c, (l) => ustawPozycje(l, el.dataset.z, { ilosc: Math.max(0, Math.round(+el.value || 0)) }, c.v)),
     "auto-jakosc": (el, c) => zapiszPozycje(c, (l) => ustawPozycje(l, el.dataset.z, { jakosc: +el.value }, c.v)),
     // po zapisie odświeża się tylko okno bazy (w miejscu – wspolne.js: okno), karta pod nim – po zamknięciu okna
@@ -359,7 +371,9 @@ export const DZIALY = {
   Pieczywo: ["Bułka", "Tortilla", "Pita"],
   Mięso: ["Mięso kebab"],
   Mrożonki: ["Pita mrożona", "Mięso kebab mrożone", "Frytki mrożone", "Falafel mrożony"],
+  "Falafel i pita": ["Pita mrożona", "Falafel mrożony"],
   Warzywa: ["Warzywa", "Surówki"],
+  Surówki: ["Surówki"],
   "Sosy i dodatki": ["Sos", "Hummus", "Ser i dodatki"],
   Napoje: ["Napój"],
   Opakowania: ["Opakowanie", "Box"],

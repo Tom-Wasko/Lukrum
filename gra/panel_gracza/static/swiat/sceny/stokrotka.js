@@ -21,7 +21,7 @@ export default function (R) {
     },
     punkty: () => [
       { x: 334, y: 114, w: 320, h: 240, et: "Pieczywo, sosy, napoje", gdzie: "gora", teczka: R.zamow(ID, ["Pieczywo", "Sosy i dodatki", "Napoje"], "półki za ladą") },
-      { x: 674, y: 262, w: 262, h: 194, et: "Surówki", stan: "✓", klasa: "zy", opisStanu: "tylko tutaj i w hurtowniach", teczka: R.zamow(ID, "Warzywa", "lada chłodnicza") },
+      { x: 674, y: 262, w: 262, h: 194, et: "Surówki", stan: "✓", klasa: "zy", opisStanu: "tylko tutaj i w hurtowniach", teczka: R.zamow(ID, "Surówki", "lada chłodnicza") },
       { x: 44, y: 190, w: 216, h: 284, et: "Warzywa", teczka: R.zamow(ID, "Warzywa", "skrzynki") },
       { x: 52, y: 510, w: 196, h: 94, et: "Frytki", gdzie: "gora", teczka: R.zamow(ID, "Mrożonki", "zamrażarka") },
       { x: 810, y: 470, w: 140, h: 130, et: "Gazetka", stan: "✓", klasa: "zy", opisStanu: "2 okazje w tym tygodniu", gdzie: "prawo", teczka: R.gazetka(ID) },

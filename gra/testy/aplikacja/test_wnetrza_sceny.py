@@ -147,7 +147,7 @@ def test_sklepy_pokazuja_tylko_swoje_dzialy_i_istniejacy_sprzet():
                 assert p["dzialy"], (scena, p["et"])
                 assert set(p["dzialy"]) <= dzialy, (scena, p["et"], p["dzialy"])
             if p["sprzet"]:
-                assert set(p["sprzet"]) <= sprzet, (scena, p["et"], p["sprzet"])
+                assert set(p["sprzet"]["nazwy"]) <= sprzet, (scena, p["et"], p["sprzet"])
 
 
 def test_pietra_biurowca_maja_filtr_agencji():
@@ -156,3 +156,53 @@ def test_pietra_biurowca_maja_filtr_agencji():
     for pietro in ("zana_drukarnia", "zana_radio", "zana_eventy"):
         assert [p["agencja"] for p in punkty[pietro]] and all(p["agencja"] in agencje for p in punkty[pietro]), pietro
     assert len({p["agencja"] for k in ("zana_drukarnia", "zana_radio", "zana_eventy") for p in punkty[k]}) == 3
+
+
+# zakładki złożone z kilku części: punkt nie może prowadzić do nich wprost (klucz części otwiera okno jednej sprawy)
+ZLOZONE = {"lokal_przeglad", "wnetrze_sprzet", "wnetrze_wyposazenie", "hr_rozwoj", "zaop_dostawy", "zaop_magazyn",
+           "zaop_przewozy", "lokal_menu"}
+# jawne wyjątki: (scena, ekran) → powód, dla którego kilka punktów sceny otwiera ten sam ekran
+_JEDNA_SPRAWA = "ekran jednej sprawy (jedna zakładka gry, nie złożona z kilku); punkty to różne stoły tej samej usługi"
+TEN_SAM_EKRAN: dict[tuple[str, str], str] = {(s, e): _JEDNA_SPRAWA for s, e in [
+    ("agencja_nieruchomosci", "lokale"), ("agencja_pracy", "rynek_pracy"), ("bank", "bank"), ("bazar", "handel"),
+    ("biuro_rachunkowe", "biuro"), ("detektyw", "konkurencja"), ("gielda", "gielda"), ("harpagon", "harpagon"),
+    ("kamienica_rachmistrzow", "biuro"), ("poczta", "wyslij"), ("pokoj_ksiegi", "kpir"), ("sanepid", "sanepid"),
+    ("ubezpieczyciel", "ubezpieczenia"), ("uczelnia", "klienci")]}
+
+
+def test_zaden_punkt_nie_otwiera_zlozonego_ekranu_ani_tej_samej_zawartosci():
+    """Usterka z gier testowych: każdy punkt otwierał ten sam złożony ekran (np. „Instalacje i wyposażenie” + „Sklep
+    meblowy”). Punkt otwiera okno jednej sprawy: dostawca z działem, pozycje sprzętu, auto-dostawy, agencja albo ekran
+    (część zakładki). Punkty o różnych etykietach w jednej scenie nie otwierają identycznej zawartości."""
+    kolizje: list[str] = []
+    for scena, punkty in _punkty_scen().items():
+        klucze: dict[tuple, str] = {}
+        for p in punkty:
+            zwykly = not (p["dostawca"] or p["sprzet"] or p["agencja"] or p["auto"])
+            if zwykly:
+                assert p["ekran"] not in ZLOZONE, f"{scena}: „{p['et']}” otwiera złożony ekran {p['ekran']}"
+            if p["dostawca"]:
+                klucz = ("sklep", p["dostawca"], p["widok"], tuple(p["dzialy"]))
+            elif p["sprzet"]:
+                klucz = ("sprzet", tuple(p["sprzet"]["nazwy"]), p["sprzet"]["widok"])
+            elif p["agencja"]:
+                klucz = ("agencja", p["agencja"], p["ekran"])
+            elif p["auto"]:
+                klucz = ("auto",)
+            elif p["ekran"]:
+                klucz = ("ekran", p["ekran"], p["tryb"])
+            else:
+                continue   # odesłanie, wejście albo dymek z własnym wstępem
+            if klucz in klucze and (scena, p["ekran"]) not in TEN_SAM_EKRAN:
+                kolizje.append(f"{scena}: „{p['et']}” i „{klucze[klucz]}” otwierają to samo: {klucz}")
+            klucze.setdefault(klucz, p["et"])
+    assert not kolizje, "\n".join(kolizje)
+
+
+def test_kebab_prowadzi_do_zlozonych_ekranow_tylko_przez_jawny_wyjatek():
+    miejsca = (GRA / "panel_gracza" / "static" / "swiat" / "miejsca.js").read_text(encoding="utf-8")
+    cele = re.findall(r'cel: "(\w+)"', miejsca.split("kebab: {", 1)[1])
+    # wyjątek jawny: „Lada” otwiera „Mój lokal” (przegląd), „Tablica” menu i ceny, „Chłodnia” magazyn: to ekrany jednej sprawy
+    # lokalu; stoliki i szkolenia to odesłania (bez okna)
+    assert {c for c in cele if c in ZLOZONE} <= {"lokal_przeglad", "lokal_menu", "zaop_magazyn", "wnetrze_wyposazenie", "hr_rozwoj"}
+    assert "wnetrze_sprzet" not in cele
