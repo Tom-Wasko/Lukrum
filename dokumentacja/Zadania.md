@@ -7,6 +7,9 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ## W toku
 Podróż 03-okienka-i-rundy:
+- Z37 · wydajność dalej: moduły JS w jeden plik albo `modulepreload` (dziś ok. 80 żądań)
+- Z16 · przepisanie opisów w grze pod nowe mechaniki
+- Z25 · dług w dokumentacji: `gra/dokumentacja/OPIS_GRY.md` (zakładki, 40 000 zł), `STACK.md` (testy, motywy, `swiat/`, `mapa/`), martwe odsyłacze
 - Z32 · więcej do zrobienia w kolejnych rundach: zeszyt wujka i wydarzenia dają kilka sensownych zadań w każdej
   rundzie (m: w rundzie 2 tylko bułki); łączy się z Z15
 - Z33 · wydarzenia i parki: wskazówki skutków decyzji ▲▼ z siłą, bez liczb (9); każdy park własny wygląd, przycisk
@@ -36,19 +39,16 @@ Podróż 03-okienka-i-rundy:
 
 ### Mniej ważne
 - Z12 · pora dnia zgodna z prawdziwą godziną także we wnętrzu i za oknem (m), niezależna od trybu jasny/ciemny
-- Z37 · wydajność dalej: moduły JS w jeden plik albo `modulepreload` (dziś ok. 80 żądań)
 - Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie
 - Z7 · mapa: położenia lokali w `lokale.yaml: geo` zamiast w `lublin.json`; odsyłacze dla twórców usunąć z `budynki.yaml`; opisy 11 punktów orientacyjnych i położenia Auchan/błonia/Lidl sprawdzić w źródłach; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html`
 - Z8 · boty i billboardy na mapie; przycisk „Stara mapa” do zdjęcia po teście z klasą
 - Z15 · harmonogram odblokowań prowadzony listami wujka zamiast numerów rund
-- Z16 · przepisanie opisów w grze pod nowe mechaniki
 - Z21 · dane wnętrz: podpiąć skutki wskaźników (`wyposazenie`, `tlok`)
 - Z13 · wizyty wujka przy ladzie w ważnych momentach
 - Z14 · nastrój zespołu na twarzach, wydarzenia dla filii, popyt z mapy
 - Z11 · dźwięk: lekkie dźwięki domyślnie (dzwonek, skwierczenie, gwar, stempel), łatwe wyciszenie, MG wycisza klasę; bez muzyki z syntezatora
 - Z10 · kolejne nawiązania literackie, zdarzenia z lektur w parkach
 - Z22 · niezależny przegląd całości (kod, dane, teksty, zrzuty)
-- Z25 · dług w dokumentacji: `gra/dokumentacja/OPIS_GRY.md` (zakładki, 40 000 zł), `STACK.md` (testy, motywy, `swiat/`, `mapa/`), martwe odsyłacze
 - Z27 · wersja na telefon (układ razem z majstrem) i pilot w szkole do maja 2027
 - Z24 · nazwa w UPRP i znaki towarowe (zwłaszcza poza szkołami), publikacja za zgodą szefa
 
