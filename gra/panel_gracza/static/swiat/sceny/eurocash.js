@@ -6,7 +6,7 @@ export default function (R) {
   const ID = "eurocash", YP = 420;
   const wiadro = (x, y, kol) => `<path class="k" d="M${x} ${y - 44}h44l-5 44h-34z" fill="${kol}"/><path class="k bez" d="M${x + 2} ${y - 44}q20-22 40 0"/><rect class="k1" x="${x + 10}" y="${y - 30}" width="24" height="14" fill="var(--g-biel)"/>`;
   return {
-    id: ID, tytul: "Eurocash", adres: "ul. Łęczyńska, Bronowice", opis: "Prosty magazyn hurtowni: stosy skrzynek z warzywami i waga, regał z wiadrami sosów, okienko biura zamówień i rampa.",
+    id: ID, dostawca: "Eurocash", tytul: "Eurocash", adres: "ul. Łęczyńska, Bronowice", opis: "Prosty magazyn hurtowni: stosy skrzynek z warzywami i waga, regał z wiadrami sosów, okienko biura zamówień i rampa.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana)", YP) + R.lamperia(300, YP, "var(--g-sciana2)") + R.podloga("beton", YP) + R.lampa(240, 30) + R.lampa(640, 30) + R.lampa(1010, 30);
       s += R.szyld(150, 40, 220, 42, "EUROCASH", { tlo: "var(--g-zielen2)", tekst: "var(--g-biel)", r: 24 });

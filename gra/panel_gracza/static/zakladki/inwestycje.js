@@ -127,7 +127,7 @@ export const sprzet = {
         const uslugi = typ === "kuchnia" ? Object.entries(kat.uslugi).filter(([, u]) => u.sprzet.every((n) => n in s.sprzet)).map(([k]) => nazwaUslugi(kat, k)) : [];
         return `<div class="kafel"><div class="kg">Stanowisko nr ${s.nr}<span class="podpowiedz">${p ? esc(p.imie_nazwisko) : "bez pracownika"}</span></div>
           <div class="kt">${lista}${uslugi.length ? `<p class="podpowiedz">Można przygotować: ${uslugi.map(esc).join(", ")}</p>` : ""}</div>
-          <div class="kd"><button class="btn czarny" data-akcja="kup-sprzet" data-t="${typ}" data-n="${s.nr}" ${edycja ? "" : "disabled"}>Kup sprzęt</button>
+          <div class="kd"><button class="btn czarny" data-akcja="kup-sprzet" data-t="${typ}" data-n="${s.nr}" ${edycja ? "" : "disabled"}>${Object.keys(przed).length ? "Dokup sprzęt" : "Kup sprzęt"}</button>
           ${Object.keys(przed).length ? `<button class="btn pom" data-akcja="sprzedaj-sprzet" data-t="${typ}" data-n="${s.nr}" ${edycja ? "" : "disabled"}>Sprzedaj sprzęt</button>` : ""}</div></div>`;
       }).join("")}</div>`;
     }
@@ -155,7 +155,7 @@ export const sprzet = {
         d.sprzet_kup = (d.sprzet_kup || []).filter((x) => !(x.typ === t && x.nr === +n && x.nazwa === nazwa));
         if (q !== "0") d.sprzet_kup.push({ typ: t, nr: +n, nazwa, jakosc: +q });
       });
-      oknoZakupu(c, t, +n);
+      return SPRZET ? oknoSprzetu(c, SPRZET) : oknoZakupu(c, t, +n);
     },
     "kup-komplet": async (el, c) => {
       const { t, n } = el.dataset;
@@ -174,10 +174,46 @@ export const sprzet = {
         const jest = l.some((x) => x.typ === t && x.nr === +n && x.nazwa === nazwa);
         d.sprzet_sprzedaj = jest ? l.filter((x) => !(x.typ === t && x.nr === +n && x.nazwa === nazwa)) : [...l, { typ: t, nr: +n, nazwa }];
       });
-      oknoSprzedazy(c, t, +n);
+      return SPRZET ? oknoSprzetu(c, SPRZET) : oknoSprzedazy(c, t, +n);
     },
   },
 };
+
+// --- okno hurtowni sprzętu: tylko wybrana grupa sprzętu (podróż 02/sklepy) ----------------------------------------------------------
+// s: { nazwy: [sprzęt z kat.sprzet], tytul, widok?: "kup" | "komis" }. Te same decyzje co na ekranie „Sprzęt” (sprzet_kup, sprzet_sprzedaj),
+// ale z listą pozycji tej grupy i z tym, co stanowiska już mają (kupiony sprzęt nie jest oferowany drugi raz).
+let SPRZET = null;
+export function otworzSprzet(c, s) { SPRZET = s; oknoSprzetu(c, s); }
+
+function oknoSprzetu(c, s) {
+  const { v, kat, edycja } = c, komis = s.widok === "komis";
+  const typy = komis ? TYPY : [...new Set(s.nazwy.map((n) => kat.sprzet[n]?.dla).filter(Boolean))];
+  const stanowiska_ = stanowiskaLokalu(v, v.stan.stanowiska).filter((x) => typy.includes(x.typ));
+  const przyciski = `<button class="btn pom" data-akcja="zamknij-okno">Gotowe</button>`;
+  let html = "";
+  for (const st of stanowiska_) {
+    const { przed, teraz } = sprzetStanowiska(v, st.typ, st.nr), kto = kat.oferty.stanowiska.typy[st.typ].nazwa;
+    const wiersze = [];
+    if (komis) {
+      const sprzedawane = (v.decyzje.sprzet_sprzedaj || []).filter((x) => x.typ === st.typ && x.nr === st.nr).map((x) => x.nazwa);
+      for (const [n, q] of Object.entries(przed)) wiersze.push([esc(n), gw(q), zl2(v.ceny_sprzedazy_sprzetu[n][q]),
+        `<button class="btn ${sprzedawane.includes(n) ? "zielony" : "pom"} maly" data-akcja="sprzedaj-poz" data-t="${st.typ}" data-n="${st.nr}" data-nazwa="${esc(n)}" ${edycja ? "" : "disabled"}>${sprzedawane.includes(n) ? "✓ Sprzedane" : "Sprzedaj"}</button>`]);
+    } else for (const n of s.nazwy.filter((x) => kat.sprzet[x]?.dla === st.typ)) {
+      if (n in przed) { wiersze.push([esc(n), gw(przed[n]), "–", "–", `<span class="pigulka ok">masz już: ${gw(przed[n])}</span>`]); continue; }
+      for (const q of [1, 2, 3]) {
+        const kupione = (v.decyzje.sprzet_kup || []).some((x) => x.typ === st.typ && x.nr === st.nr && x.nazwa === n && x.jakosc === q);
+        wiersze.push([esc(n), gw(q), zl2(kat.sprzet[n].ceny[q]), zl2(naRunde(kat.sprzet[n].utrzymanie[q])),
+          kupione ? `<button class="btn zielony maly" data-akcja="kup-poz" data-t="${st.typ}" data-n="${st.nr}" data-nazwa="${esc(n)}" data-q="0" ${edycja ? "" : "disabled"}>✓ W koszyku</button>`
+            : `<button class="btn pom maly" data-akcja="kup-poz" data-t="${st.typ}" data-n="${st.nr}" data-nazwa="${esc(n)}" data-q="${q}" ${edycja && !(n in teraz) ? "" : "disabled"}>Kup</button>`]);
+      }
+    }
+    if (!wiersze.length) continue;
+    html += tabela(`${esc(kto)}, stanowisko nr ${st.nr}`, komis ? ["Sprzęt", "Jakość", "Cena odsprzedaży", ""] : ["Sprzęt", "Jakość", "Cena", `Utrzymanie${naOkres()}`, ""], wiersze, { klasy: ["l"] });
+  }
+  if (!html) html = `<p class="podpowiedz">${komis ? "Żadne stanowisko nie ma jeszcze sprzętu do odsprzedania."
+    : stanowiska_.length ? "Wszystkie stanowiska mają już ten sprzęt." : "Najpierw uruchom stanowisko w stolarni. Dopiero potem kupisz do niego sprzęt."}</p>`;
+  okno(s.tytul, html, { przyciski, okruszek: "Lublin › Hurtownia sprzętu", poZamknieciu: () => { SPRZET = null; } });
+}
 
 function oknoZakupu(c, typ, nr) {
   const { v, kat } = c;

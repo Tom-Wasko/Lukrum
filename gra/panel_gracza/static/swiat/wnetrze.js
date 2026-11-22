@@ -7,6 +7,9 @@ import { stylEkranu } from "../pulpit/karty-style.js";
 import { wybierzPozycje } from "../pulpit/uklady.js";
 import { R, ustawWyglad } from "./rysunek.js";
 import { SCENY } from "./sceny/index.js";
+import { filtrAgencji } from "../zakladki/marketing.js";
+import { dostawcaSceny, otworzAuto, otworzSklep } from "../zakladki/dostawcy.js";
+import { otworzSprzet } from "../zakladki/inwestycje.js";
 
 const pos = (x, y, w, h) => `left:${(x / 12.2).toFixed(2)}%;top:${(y / 6.12).toFixed(2)}%;width:${(w / 12.2).toFixed(2)}%;height:${(h / 6.12).toFixed(2)}%`;
 const goly = (t) => String(t || "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
@@ -120,9 +123,21 @@ export function kliknijPunkt(i, ctx) {
   const otworz = () => {
     if (o.ekran) {
       if (!c.zakryta(o.ekran) && !c.dostepna(o.ekran)) { const od = c.odRundy(o.ekran); return toast(od ? `To otworzy się w tygodniu ${od}.` : "To miejsce jest jeszcze zamknięte."); }
-      c.teczka(o.ekran);   // ekran decyzji w oknie nad wnętrzem (teczka), nie osobna karta
-      // dostawca albo firma, której drzwi kliknięto (bank, biuro rachunkowe): ekran przewija się do jej nazwy
-      const szukaj = p.teczka?.dostawca ? ctx.def.tytul : ["bank", "biuro_rachunkowe"].includes(ctx.def.id) ? (/„(.+)”/.exec(ctx.def.tytul) || [])[1] : null;
+      if (p.teczka?.dostawca) {   // sklep, hurtownia: okienko z ofertą tylko tego sklepu i działu (nie ogólny ekran dostawców)
+        // dostawca z jawnego pola sceny (klucz z dane/dostawcy.yaml); bez oferty (runda 1, sklep otwarty później) – tylko krótka informacja,
+        // nigdy ogólny ekran dostawców
+        const dost = dostawcaSceny(c.v, ctx.def.dostawca);
+        if (dost) return otworzSklep(c, { dost, dzialy: p.teczka.dzialy, widok: p.teczka.widok, tytul: `${ctx.def.tytul}: ${p.et}` });
+        const od = c.v.auto_dostawca?.zasady?.od_rundy;   // sklep z późniejszym startem (Auchan po przebudowie)
+        return dymek(ctx.def.tytul, "Obsługa", od && c.v.runda < od ? `Ten sklep otworzy się w tygodniu ${od}.`
+          : "Ten sklep nie ma dziś oferty dla firm. Zajrzyj tu w jednym z następnych tygodni.");
+      }
+      if (p.teczka?.auto) return otworzAuto(c, { tytul: `${ctx.def.tytul}: ${p.et}`, sklep: ctx.def.tytul });   // auto-dostawy: tylko ta sekcja
+      filtrAgencji(p.teczka?.agencja, p.teczka?.tytul);
+      if (p.teczka?.sprzet) return otworzSprzet(c, { ...p.teczka.sprzet, tytul: `${ctx.def.tytul}: ${p.et}` });   // hurtownia sprzętu: tylko ta grupa
+      c.teczka(o.ekran, p.teczka?.tryb);   // ekran decyzji (albo wyników: teczka.tryb) w oknie nad wnętrzem; klucz części otwiera tylko tę część
+      // firma, której drzwi kliknięto (bank, biuro rachunkowe): ekran przewija się do jej nazwy
+      const szukaj = ["bank", "biuro_rachunkowe"].includes(ctx.def.id) ? (/„(.+)”/.exec(ctx.def.tytul) || [])[1] : null;
       if (szukaj) przewinDo(szukaj);
       return;
     }

@@ -5,8 +5,9 @@ import path from "path";
 import { pathToFileURL } from "url";
 const kat = process.argv[2];
 const Z = { ekran: "zaop_dostawy" };
+const sklep = (widok) => (id, dzialy) => ({ ...Z, dostawca: id, dzialy: [].concat(dzialy || []), widok });
 const atrapa = () => new Proxy({ q: new URLSearchParams(), sk: 1, pal: "bar", esc: (x) => x, KOL: [], gra: { tydzien: 1, odRundy: () => 0 },
-  zamow: () => Z, koszyk: () => Z, dowoz: () => Z, gazetka: () => Z }, { get: (t, k) => (k in t ? t[k] : () => "") });
+  zamow: sklep("dzial"), koszyk: sklep("koszyk"), dowoz: sklep("dowoz"), gazetka: sklep("gazetka") }, { get: (t, k) => (k in t ? t[k] : () => "") });
 global.document = { querySelector: () => null, getElementById: () => null };
 const wynik = {}, bledy = [];
 for (const f of fs.readdirSync(kat).filter((x) => x.endsWith(".mjs") && x !== "index.mjs")) {
@@ -18,7 +19,9 @@ for (const f of fs.readdirSync(kat).filter((x) => x.endsWith(".mjs") && x !== "i
     S.rysuj(R);
     const w = S.widoki ? Object.values(S.widoki) : [S];
     wynik[id] = w.flatMap((x) => (typeof x.punkty === "function" ? x.punkty(R) : x.punkty || [])).map((p) => ({
-      et: p.et, ekran: p.teczka ? String(p.teczka.ekran || "").split(/[^a-z0-9_]/i)[0] : "", odsyla: !!p.odsyla, wejscie: p.wejscie || "" }));
+      et: p.et, ekran: p.teczka ? String(p.teczka.ekran || "").split(/[^a-z0-9_]/i)[0] : "", odsyla: !!p.odsyla, wejscie: p.wejscie || "", dostawca: p.teczka?.dostawca || "", dzialy: p.teczka?.dzialy || [],
+      widok: p.teczka?.widok || "", agencja: p.teczka?.agencja || "", sprzet: p.teczka?.sprzet ? { nazwy: p.teczka.sprzet.nazwy || [], widok: p.teczka.sprzet.widok || "" } : null,
+      pelny: p.teczka ? String(p.teczka.ekran || "") : "", tytul: p.teczka?.tytul || "", tryb: p.teczka?.tryb || "", auto: !!p.teczka?.auto }));
   } catch (e) { bledy.push(`${id}: ${e.message}`); }
 }
 console.log(JSON.stringify({ wynik, bledy }));

@@ -27,7 +27,7 @@ export default function (R) {
     },
     punkty: [
       { x: 34, y: 34, w: 412, h: 392, et: "Udogodnienia", stan: "▼", klasa: "st", opisStanu: "nastrój zespołu spada", teczka: { tytul: "Udogodnienia dla zespołu", okruszek: "witryna „Dla zespołu”", zakladki: ["Kup", "Masz"], wstep: "Zadowoleni ludzie pracują szybciej i rzadziej odchodzą. Część udogodnień kosztuje co miesiąc.",
-        pola: [["Kącik socjalny z czajnikiem i mikrofalą", "480 zł", "utrzymanie 10 zł miesięcznie"], ["Szafki z zamkiem", "900 zł"], ["Pokój socjalny z kanapą i telewizorem", "3 300 zł", "utrzymanie 25 zł miesięcznie"], ["Ekspres do kawy ziarnistej dla zespołu", "3 400 zł", "utrzymanie 320 zł miesięcznie"], ["Posiłki pracownicze", "400 zł", "utrzymanie 120 zł miesięcznie"]], decyzje: ["udogodnienia_kup", "udogodnienia_sprzedaj"], ekran: "hr_rozwoj (udogodnienia)", funkcja: "rozwoj" } },
+        pola: [["Kącik socjalny z czajnikiem i mikrofalą", "480 zł", "utrzymanie 10 zł miesięcznie"], ["Szafki z zamkiem", "900 zł"], ["Pokój socjalny z kanapą i telewizorem", "3 300 zł", "utrzymanie 25 zł miesięcznie"], ["Ekspres do kawy ziarnistej dla zespołu", "3 400 zł", "utrzymanie 320 zł miesięcznie"], ["Posiłki pracownicze", "400 zł", "utrzymanie 120 zł miesięcznie"]], decyzje: ["udogodnienia_kup", "udogodnienia_sprzedaj"], ekran: "udogodnienia", funkcja: "rozwoj" } },
       { x: 470, y: 180, w: 290, h: 246, et: "Szkolenia", gdzie: "dol", odsyla: { kto: "Sprzedawczyni", tekst: "Szkolenia są w Lubelskiej Szkole Kebabu przy Nadbystrzyckiej. U nas rzeczy na zaplecze.", miejsce: "Lubelska Szkoła Kebabu" } },
     ],
     osoby: [{ x: 830, stopy: 606, s: 0.86, imie: "Sprzedawczyni", tekst: "Wypoczęty kucharz kroi szybciej. Pokój socjalny zwraca się w nastrojach.", powitanie: true }],

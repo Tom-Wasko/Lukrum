@@ -169,9 +169,41 @@ R.alejka = (x, y, nr, txt, w = 150) => `<path class="k1" d="M${x + 20} 0v${y}M${
 R.widlak = (x, y, s = 1) => `<g transform="translate(${x} ${y}) scale(${s})"><path class="k" d="M0-28h96v-30h-36l-10-34h-40v64z" fill="var(--uwaga)"/><path class="k bez" d="M14-92v-20h44l6 20" stroke-width="4"/><circle class="k" cx="22" cy="-14" r="15" fill="var(--g-czern)"/><circle class="k" cx="80" cy="-14" r="12" fill="var(--g-czern)"/><path class="k" d="M100-124v124M108-124v124" stroke-width="4"/><path class="k" d="M108-10h62v6h-62z" fill="var(--g-metal2)"/></g>`;
 R.KOL = KOL4;
 
-// ---------- teczki sklepów i hurtowni: w grze to przejście do ekranu zamówień (liczby i ceny pokazuje sam ekran) ----------
+// ---------- teczki sklepów i hurtowni: klik otwiera okienko tego sklepu (zakladki/dostawcy.js: otworzSklep) z jego ofertą ----------
+// `dostawca` – scena (nazwa sklepu bierze się z tytułu sceny), `dzialy` – działy z tej alejki, `widok` – dział | koszyk | dowóz | gazetka.
+// `ekran` zostaje tylko po to, by gra wiedziała, czy funkcja zaopatrzenia jest dostępna (punkt zamknięty/wyłączony razem z nią).
 const ZAMOWIENIA = { ekran: "zaop_dostawy", funkcja: "zaopatrzenie", decyzje: ["zamowienia"] };
-R.zamow = (id, dzialy, okruszek) => ({ tytul: `Zamów: ${[].concat(dzialy).join(", ").toLowerCase()}`, okruszek, dostawca: id, ...ZAMOWIENIA });
-R.koszyk = (id, okruszek = "kasa") => ({ tytul: "Koszyk tygodnia", okruszek, dostawca: id, ...ZAMOWIENIA });
-R.dowoz = (id, okruszek = "rampa") => ({ tytul: "Dowóz do lokalu", okruszek, dostawca: id, ...ZAMOWIENIA });
-R.gazetka = (id) => ({ tytul: "Gazetka tygodnia", okruszek: "stojak z gazetką", dostawca: id, ...ZAMOWIENIA });
+R.zamow = (id, dzialy, okruszek) => ({ tytul: `Zamów: ${[].concat(dzialy).join(", ").toLowerCase()}`, okruszek, dostawca: id, dzialy: [].concat(dzialy), widok: "dzial", ...ZAMOWIENIA });
+R.koszyk = (id, okruszek = "kasa") => ({ tytul: "Koszyk tygodnia", okruszek, dostawca: id, widok: "koszyk", ...ZAMOWIENIA });
+R.dowoz = (id, okruszek = "rampa") => ({ tytul: "Dowóz do lokalu", okruszek, dostawca: id, widok: "dowoz", ...ZAMOWIENIA });
+R.gazetka = (id) => ({ tytul: "Gazetka tygodnia", okruszek: "stojak z gazetką", dostawca: id, widok: "gazetka", ...ZAMOWIENIA });
+
+// podróż 02/sklepy: wnętrza pięter biurowca przy Zana – wypełnienie ściany nad pokojem i pierwszego planu, osobne dla każdej agencji.
+// Pokój z makiety zajmuje pas y 306–455; tu rysujemy resztę sceny (ściana y 130–300, lada i podłoga y 470–600).
+R.zanaDekor = (wariant) => {
+  const lada = `<rect class="k3" x="300" y="500" width="620" height="80" fill="var(--g-drewno2)"/><rect class="k" x="290" y="488" width="640" height="16" fill="var(--g-drewno)"/>`;
+  let s = "";
+  if (wariant === "drukarnia") {
+    s += `<path class="k1 bez" d="M230 168q200 30 420 0M720 168q220 30 470 0"/>`
+      + [0, 1, 2, 3, 4, 5].map((i) => `<rect class="k1" x="${250 + i * 66}" y="${176 + (i % 2) * 6}" width="48" height="64" fill="${R.KOL[i % 4]}"/>`).join("")
+      + [0, 1, 2, 3, 4].map((i) => `<rect class="k1" x="${760 + i * 84}" y="${176 + (i % 2) * 6}" width="60" height="78" fill="${R.KOL[(i + 1) % 4]}"/>`).join("")
+      + `<rect class="k3" x="20" y="262" width="190" height="200" fill="var(--g-drewno2)"/>` + [0, 1, 2].map((i) => `<rect class="k1" x="30" y="${272 + i * 62}" width="170" height="52" fill="var(--g-biel)"/><path class="k1" d="M30 ${286 + i * 62}h170M30 ${300 + i * 62}h170"/>`).join("")
+      + R.t(115, 252, "RYZY PAPIERU", 13, { fill: "var(--g-czern)", f: "gruby" })
+      + lada + [0, 1, 2, 3].map((i) => `<rect class="k1" x="${340 + i * 70}" y="${470 - (i % 2) * 8}" width="56" height="${18 + (i % 2) * 8}" fill="var(--g-biel)"/>`).join("")
+      + R.cenowka(660, 520, "ULOTKA 0,10 zł", 120);
+  } else if (wariant === "radio") {
+    s += [0, 1, 2, 3, 4, 5, 6].map((i) => `<rect class="k1" x="${40 + i * 14}" y="270" width="10" height="${150 - (i % 3) * 8}" fill="var(--g-czern)"/>`).join("")
+      + `<rect class="k" x="30" y="420" width="116" height="8" fill="var(--g-drewno2)"/>` + R.t(88, 262, "PŁYTY", 13, { fill: "var(--g-czern)", f: "gruby" })
+      + `<path class="k" d="M1120 300v-170M1120 150l-34 24M1120 150l34 24M1120 190l-26 18M1120 190l26 18" stroke-width="4"/><circle class="k" cx="1120" cy="126" r="8" fill="var(--akcent)"/>`
+      + R.plakat(260, 170, 150, 100, ["KONCERT", "Zespół „Pilsner”"], "var(--akcent-2)", 14) + R.plakat(450, 180, 130, 90, ["TOP 10", "Lublina"], "var(--akcent)", 14)
+      + lada + `<rect class="k" x="330" y="470" width="260" height="22" fill="var(--g-tablica)"/>` + [0, 1, 2, 3, 4, 5].map((i) => `<circle class="k1" cx="${352 + i * 42}" cy="481" r="7" fill="var(--g-biel)"/>`).join("")
+      + `<path class="k" d="M780 488v-34l26-14" stroke-width="4" fill="none"/><rect class="k" x="800" y="428" width="14" height="24" rx="7" fill="var(--g-metal)"/>`;
+  } else if (wariant === "eventy") {
+    s += `<path class="k1 bez" d="M0 150q300 60 600 0t620 0"/>` + Array.from({ length: 24 }, (_, i) => `<path class="k1" d="M${24 + i * 50} ${150 + Math.sin(i / 2) * 18}l11 18 11-18z" fill="${R.KOL[i % 4]}"/>`).join("")
+      + [0, 1, 2, 3, 4].map((i) => `<path class="k1 bez" d="M${1010 + i * 36} 300q4-30 -6-62"/><ellipse class="k1" cx="${1004 + i * 36}" cy="${222 - (i % 2) * 14}" rx="17" ry="21" fill="${R.KOL[i % 4]}"/>`).join("")
+      + `<path class="k3" d="M190 300l86-110 86 110z" fill="var(--uwaga)"/><path class="k" d="M276 190v-30l24 8-24 8" fill="var(--akcent)"/>` + R.t(276, 292, "NAMIOT", 13, { fill: "var(--g-czern)", f: "gruby" })
+      + lada + `<rect class="k" x="330" y="470" width="260" height="18" fill="var(--g-biel)"/>` + [0, 1, 2, 3].map((i) => `<path class="k1" d="M${352 + i * 62} 470h30l-6-22h-18z" fill="var(--g-mieso)"/>`).join("")
+      + R.skrzynka(30, 520, 120, 70, "var(--g-drewno2)", "KRZESŁA") + R.skrzynka(160, 540, 100, 50, "var(--g-drewno2)", "KABEL");
+  }
+  return s;
+};

@@ -208,7 +208,7 @@ def test_punkt_wnetrza_otwiera_teczke_a_nie_karte():
     wnetrze = (STATIC / "swiat" / "wnetrze.js").read_text(encoding="utf-8")
     swiat = (STATIC / "swiat" / "swiat.js").read_text(encoding="utf-8")
     wspolne = (STATIC / "zakladki" / "wspolne.js").read_text(encoding="utf-8")
-    assert "c.teczka(o.ekran)" in wnetrze and "c.idz(o.ekran)" not in wnetrze
+    assert "c.teczka(o.ekran, p.teczka?.tryb)" in wnetrze and "c.idz(o.ekran)" not in wnetrze
     assert "c.teczka(k)" in swiat and "c.idz(k)" not in swiat
     assert "teczka: (k, tryb) => otworzTeczke(k, tryb)" in APP_JS and "function rysujTeczke" in APP_JS
     # teczka nie zmienia S.zakladka: zamyka się, gdy gracz opuszcza wnętrze

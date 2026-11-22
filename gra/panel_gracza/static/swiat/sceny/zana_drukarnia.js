@@ -26,13 +26,13 @@ export default function (R) {
       s += `<rect class="k" x="12" y="60" width="130" height="186" fill="var(--g-sciana2)" opacity=".5"/>` + R.okno(40, 86, 150, 130, { zaluzje: true })
         + R.szyld(660, 52, 470, 56, "Drukarnia „Papier Przyjmie”", { tlo: "var(--g-tablica)", tekst: "var(--g-biel)", r: 22 }) + R.t(660, 132, "ulotki · plakaty · gazeta", 15, { f: "tekst", bez: true, op: .85 })
         + R.tabliczka(1120, 70, 150, "Piętro 1", "Biurowiec przy Zana · ul. Zana 39");
-      s += `<g transform="translate(${TX} ${TY}) scale(${K})">` + pokoj() + `</g>`;
+      s += `<g transform="translate(${TX} ${TY}) scale(${K})">` + pokoj() + `</g>`; s += R.zanaDekor("drukarnia");
       s += R.osoba("sprzedawca", 400, 600, 0.85) + R.paprotka(70, 580, 0.9);
       return s;
     },
     punkty: () => [{ x: 8, y: by(0) + 4, w: 1204, h: Math.round(104 * K) - 8, et: "Ulotki i plakaty", gdzie: "gora", 
       teczka: { tytul: "Drukarnia „Papier Przyjmie”", okruszek: "piętro 1", wstep: "Kampania = kanał × strefa × liczba emisji. Działa od następnego tygodnia.",
-        pola: [["Ulotki za wycieraczki", "strefa ▾ · emisje 1–4"], ["Plakaty na słupach ogłoszeniowych", "strefa ▾ · emisje"], ["Ogłoszenie w „Gazecie Pana Cogito”", "całe miasto"]], decyzje: ["kampanie"], ekran: "agencje", funkcja: "marketing" } }],
+        pola: [["Ulotki za wycieraczki", "strefa ▾ · emisje 1–4"], ["Plakaty na słupach ogłoszeniowych", "strefa ▾ · emisje"], ["Ogłoszenie w „Gazecie Pana Cogito”", "całe miasto"]], decyzje: ["kampanie"], ekran: "agencje", agencja: "papier_przyjmie", funkcja: "marketing" } }],
     osoby: [{ x: 400, stopy: 600, s: 0.85, imie: "Pan Zdzisław", tekst: "Wydrukuję wszystko, co da się złożyć na pół. Z literówkami gratis.", powitanie: true }],
   };
 }

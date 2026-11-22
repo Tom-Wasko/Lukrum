@@ -25,8 +25,8 @@ export default function (R) {
     },
     punkty: [
       { x: 886, y: 104, w: 312, h: 302, et: "Nowe stanowiska", gdzie: "prawy-brzeg", teczka: { tytul: "Zamów stanowiska", okruszek: "gotowe stanowiska", wstep: "Stanowisko to miejsce pracy jednej osoby: blat w kuchni albo lada z kasą. Bez stanowiska nie postawisz sprzętu ani nie zatrudnisz człowieka.",
-        pola: [["Stanowiska kuchni", "+1 ▾", "wolne miejsca w lokalu: 1"], ["Stanowiska kasy", "+0 ▾", "wolne miejsca w lokalu: 0"]], decyzje: ["stanowiska"], ekran: "wnetrze_sprzet (stanowiska)" } },
-      { x: 334, y: 74, w: 242, h: 222, et: "Cennik i terminy", teczka: { tytul: "Cennik stolarni", okruszek: "tablica z narzędziami", wstep: "Ile kosztuje stanowisko i kiedy będzie gotowe.", pola: [["Stanowisko kuchni", "wg katalogu"], ["Stanowisko kasy", "wg katalogu"], ["Montaż", "od następnego tygodnia"]], ekran: "wnetrze_sprzet (informacja)" } },
+        pola: [["Stanowiska kuchni", "+1 ▾", "wolne miejsca w lokalu: 1"], ["Stanowiska kasy", "+0 ▾", "wolne miejsca w lokalu: 0"]], decyzje: ["stanowiska"], ekran: "stanowiska" } },
+      { x: 334, y: 74, w: 242, h: 222, et: "Cennik i terminy", teczka: { tytul: "Cennik stolarni", okruszek: "tablica z narzędziami", wstep: "Ile kosztuje stanowisko i kiedy będzie gotowe: cena i termin są na ekranie „Nowe stanowiska”, przy zamawianiu.", pola: [["Stanowisko kuchni", "wg katalogu"], ["Stanowisko kasy", "wg katalogu"], ["Montaż", "od następnego tygodnia"]], ekran: "–" } },
       { x: 390, y: 240, w: 480, h: 170, et: "Sprzęt", odsyla: { kto: "Stolarz", tekst: "Ja robię ladę i blat. Rożen i kasę na nie kupuje się w Parku handlowym.", stan: "W lokalu: 1 stanowisko kuchni, 1 kasy", miejsce: "Hurtownia sprzętu" } },
     ],
     osoby: [{ x: 820, stopy: 606, s: 0.9, imie: "Stolarz", tekst: "Lada na wymiar, w tydzień. Tylko proszę najpierw policzyć, ilu ludzi ma przy niej stanąć.", powitanie: true }],

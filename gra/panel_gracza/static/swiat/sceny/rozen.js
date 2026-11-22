@@ -7,7 +7,7 @@ export default function (R) {
   const ID = "rozen", YP = 420;
   const stozek = (x, y, h, kol = "var(--g-mieso)") => `<path class="k bez" d="M${x} ${y}v14"/><path class="k" d="M${x - 26} ${y + 14}h52l-14 ${h}h-24z" fill="${kol}"/>` + [0.25, 0.5, 0.75].map((f) => `<path d="M${x - 26 + 14 * f} ${y + 14 + h * f}h${52 - 28 * f}" stroke="var(--tusz)" opacity=".3"/>`).join("");
   return {
-    id: ID, tytul: "Zakłady Mięsne „Rożen”", adres: "ul. Turystyczna, wylot na Łęczną", opis: "Zakład mięsny: otwarta chłodnia z wiszącymi stożkami kebaba, waga platformowa, okienko biura zbytu i rampa.",
+    id: ID, dostawca: "Zakłady Mięsne „Rożen” z Łęcznej", tytul: "Zakłady Mięsne „Rożen”", adres: "ul. Turystyczna, wylot na Łęczną", opis: "Zakład mięsny: otwarta chłodnia z wiszącymi stożkami kebaba, waga platformowa, okienko biura zbytu i rampa.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-biel)", YP) + Array.from({ length: 10 }, (_, i) => `<path d="M0 ${i * 42}h1220" stroke="var(--tusz)" opacity=".1"/>`).join("") + Array.from({ length: 30 }, (_, i) => `<path d="M${i * 42} 0v${YP}" stroke="var(--tusz)" opacity=".1"/>`).join("") + R.podloga("plytki", YP, "var(--g-podloga)") + R.swietlowka(200, 14, 200) + R.swietlowka(760, 14, 200);
       s += R.szyld(250, 40, 420, 46, "Zakłady Mięsne „Rożen”", { tlo: "var(--g-rudy)", tekst: "var(--g-biel)", r: 22 });

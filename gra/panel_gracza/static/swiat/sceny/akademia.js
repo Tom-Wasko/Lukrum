@@ -27,8 +27,8 @@ export default function (R) {
     },
     punkty: [
       { x: 244, y: 44, w: 732, h: 242, et: "Kursy", teczka: { tytul: "Zapisz na szkolenie", okruszek: "tablica", zakladki: ["Kursy", "Trwają"], wstep: "Szkolenie działa tydzień po tygodniu. Pracownik na kursie pracuje normalnie, a po kursie robi to samo lepiej.",
-        pola: [["Kto", "Staszek B., kucharz ▾"], ["Kurs", "Szybki nóż ▾", "2 tygodnie; cena z katalogu szkoleń"], ["Higiena i HACCP dla całego zespołu", "zapisz wszystkich"]], decyzje: ["szkolenia"], ekran: "hr_rozwoj (szkolenia)", funkcja: "rozwoj" } },
-      { x: 34, y: 60, w: 182, h: 276, et: "Dyplomy", teczka: { tytul: "Ukończone szkolenia", okruszek: "gablota", wstep: "Kto z zespołu co ukończył.", pola: [["Ola W.: Obsługa gościa", "✓ tydzień 8"], ["Staszek B.: Higiena i HACCP", "✓ tydzień 7"]], ekran: "hr_rozwoj (historia)", funkcja: "rozwoj" } },
+        pola: [["Kto", "Staszek B., kucharz ▾"], ["Kurs", "Szybki nóż ▾", "2 tygodnie; cena z katalogu szkoleń"], ["Higiena i HACCP dla całego zespołu", "zapisz wszystkich"]], decyzje: ["szkolenia"], ekran: "szkolenia", funkcja: "rozwoj" } },
+      { x: 34, y: 60, w: 182, h: 276, et: "Dyplomy", teczka: { tytul: "Ukończone szkolenia", okruszek: "gablota", wstep: "Kto z zespołu co ukończył.", pola: [["Ola W.: Obsługa gościa", "✓ tydzień 8"], ["Staszek B.: Higiena i HACCP", "✓ tydzień 7"]], ekran: "szkolenia (historia)", tryb: "wyniki", funkcja: "rozwoj" } },
       { x: 1000, y: 150, w: 190, h: 236, et: "Udogodnienia", gdzie: "prawy-brzeg", odsyla: { kto: "Wykładowca", tekst: "Kanapę i czajnik dla zespołu kupuje się w Galerii „Pod Zegarem”. U nas tylko wiedza.", miejsce: "Galeria „Pod Zegarem”" } },
     ],
     osoby: [{ x: 460, stopy: 440, s: 0.86, imie: "Wykładowca", tekst: "Kebab kroi się nożem, ale zarabia się głową. Zapraszam na kurs, miejsca są.", powitanie: true }],

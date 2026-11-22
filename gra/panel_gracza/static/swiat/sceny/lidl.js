@@ -6,7 +6,7 @@
 export default function (R) {
   const ID = "lidl", YP = 400, MARKA = "var(--akcent-2)";
   return {
-    id: ID, tytul: "Lidl", adres: "ul. Romantyczna, Czuby", opis: "Dyskont z wyspą tematyczną pośrodku: tydzień śródziemnomorski z falafelem i pitą; z lewej piec i półki z pieczywem, z prawej zamrażarki i kasa.",
+    id: ID, dostawca: "Lidl", tytul: "Lidl", adres: "ul. Romantyczna, Czuby", opis: "Dyskont z wyspą tematyczną pośrodku: tydzień śródziemnomorski z falafelem i pitą; z lewej piec i półki z pieczywem, z prawej zamrażarki i kasa.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana)", YP) + R.podloga("plytki", YP) + [100, 520, 940].map((x) => R.swietlowka(x, 12, 180)).join("");
       s += R.szyld(130, 44, 150, 44, "LIDL", { tlo: MARKA, tekst: "var(--papier)", r: 26 });
@@ -28,7 +28,7 @@ export default function (R) {
     punkty: () => [
       { x: 44, y: 100, w: 316, h: 306, et: "Pieczywo", teczka: R.zamow(ID, "Pieczywo", "wypiek na miejscu") },
       { x: 384, y: 156, w: 212, h: 250, et: "Warzywa i sosy", teczka: R.zamow(ID, ["Warzywa", "Sosy i dodatki"], "regał") },
-      { x: 624, y: 140, w: 332, h: 296, et: "Falafel i pita", stan: "✓", klasa: "zy", opisStanu: "w gazetce w tym tygodniu", teczka: R.zamow(ID, "Mrożonki", "wyspa tygodnia") },
+      { x: 624, y: 140, w: 332, h: 296, et: "Falafel i pita", stan: "✓", klasa: "zy", opisStanu: "w gazetce w tym tygodniu", teczka: R.zamow(ID, "Falafel i pita", "wyspa tygodnia") },
       { x: 994, y: 156, w: 192, h: 250, et: "Napoje", teczka: R.zamow(ID, "Napoje", "regał") },
       { x: 412, y: 504, w: 406, h: 100, et: "Mrożonki", gdzie: "gora", teczka: R.zamow(ID, "Mrożonki", "zamrażarki") },
       { x: 54, y: 446, w: 112, h: 160, et: "Gazetka", stan: "✓", klasa: "zy", opisStanu: "3 okazje w tym tygodniu", gdzie: "prawo", teczka: R.gazetka(ID) },

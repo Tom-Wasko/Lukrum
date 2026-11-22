@@ -1,7 +1,7 @@
 // Świat gry: miejsca (budynki) z wnętrzami zamiast listy zakładek. Wejście: pasek z lewej, mapa (lukrum.otworzWnetrze)
 // albo okruszki nad ekranem decyzji. Wnętrze to scena z klikalnymi miejscami i lista „co tu zrobisz” pod nią.
 // Ekran „miejsce” jest zwykłą zakładką panelu (rejestr: zakladki/index.js), więc korzysta z tego samego stanu gry.
-import { esc, nazwaUslugi, toast } from "../zakladki/wspolne.js";
+import { esc, nazwaUslugi, okno, toast } from "../zakladki/wspolne.js";
 import { ikona } from "../zakladki/ikony.js";
 import { cenyLokalu, lokalWybrany, menuLokalu, mojeLokale, opisLokalu, wieleLokali } from "../zakladki/lokal_wybor.js";
 import { BUDYNEK_DO_MIEJSCA, BUDYNEK_PARAMETR, MIEJSCA, miejsceEkranu, ustawEkranyMiejsc } from "./miejsca.js";
@@ -215,7 +215,12 @@ export const miejsce = {
   akcje: {
     "sw-hot": (el, c) => {
       if (el.dataset.karta) { M.karta = el.dataset.karta; M.fokusKarty = true; return c.rysuj(); }
-      if (el.dataset.m) { if (el.dataset.odsyla) toast(el.dataset.odsyla); return idzDoMiejsca(c, el.dataset.m); }
+      if (el.dataset.m) {
+        // odesłanie: tylko informacja i „Pokaż na mapie”, bez przejścia prosto do innego budynku
+        if (!el.dataset.odsyla) return idzDoMiejsca(c, el.dataset.m);
+        return okno("To załatwisz gdzie indziej", `<div class="wn-info"><p>${esc(el.dataset.odsyla)}</p></div>`,
+          { male: true, przyciski: `<button data-akcja="sw-wn-mapa" class="gl">Wróć na mapę</button><button data-akcja="zamknij-okno">Zostaję</button>`, okruszek: `Lublin › ${esc((MIEJSCA[M.id] || {}).tytul || "Miejsce")}` });
+      }
       const k = el.dataset.k;
       if (!k) return;
       if (!c.zakryta(k) && !c.dostepna(k)) { const od = c.odRundy(k); return toast(od ? `To otworzy się w tygodniu ${od}.` : "To miejsce jest jeszcze zamknięte."); }

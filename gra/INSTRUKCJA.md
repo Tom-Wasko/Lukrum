@@ -125,14 +125,14 @@ się i wysuwa listę kroków; na zamkniętym zeszycie wystaje kartka z następny
 |---|---|
 | Plan tygodnia | Podsumowanie firmy i lista spraw do zrobienia w tej rundzie. Wraca się tu, klikając logo LUKRUM |
 | Mapa miasta | Wszystkie budynki Lublina: lokale, banki, hurtownie, urzędy, parki. Kliknięty lokal pokazuje czynsz, cenę i strefę |
-| Mój kebab | Wnętrze lokalu. Tablica: menu i ceny; lada: stan lokalu, obsada i sprzedaż; zaplecze: zespół i grafik; kasa: wyniki finansowe; szyld: promocje. Rożen i stoliki odsyłają do Parku handlowego (tam kupuje się sprzęt i wyposażenie), okno – do Pracowni Analiz, szkolenia – do Szkoły Kebabu w Miasteczku akademickim. Pod sceną: magazyn, czas właściciela i portfel |
+| Mój kebab | Wnętrze lokalu. Tablica: menu i ceny; lada: stan lokalu, obsada i sprzedaż; zaplecze: zespół i grafik; kasa: wyniki finansowe; szyld: promocje. Rożen pokazuje sprzęt, który już stoi w kuchni (nowy kupuje się w Parku handlowym). Stoliki odsyłają do Parku informacją z przyciskiem „Pokaż na mapie”, okno – do Pracowni Analiz, szkolenia – do Szkoły Kebabu w Miasteczku akademickim. Pod sceną: magazyn, czas właściciela i portfel |
 | Stare Miasto | Biuro „Klucz” (lokale do wynajęcia lub kupna), sala licytacji, notariusz (kupno budynku z najemcą) i kantor „U Harpagona” (droga pożyczka) |
-| Hurtownie | Zamówienia u dostawców i przewozy towaru między własnymi lokalami |
+| Hurtownie i sklepy | Każdy sklep pokazuje w okienku tylko swoją ofertę: towary klikniętego działu, ceny tego sklepu, ilości do zamówienia, koszyk i magazyn. Porównanie sklepów jest w zeszycie wujka |
 | Park handlowy (al. Kraśnicka, Węglin) | Sprzęt gastronomiczny (kupno, wynajem, sprzedaż) i sklep meblowy z wyposażeniem dla gości |
 | Miasteczko akademickie | Rynek pracy, szkolenia, klienci w strefach, konkurencja („Sokole Oko”) i kalendarz miasta (juwenalia, mecze, jarmarki) |
 | Kamienica bankowa | Sześć banków (konto, kredyty, lokaty, leasing, debet) i giełda właściciela |
 | Kamienica rachmistrzów | Cztery biura rachunkowe (klatka schodowa z drzwiami do biur) |
-| Biurowiec przy Zana | Winda z guzikami pięter: parter (portiernia, „Twoje kampanie”, pokój z księgą firmy – KPiR), 1 drukarnia, 2 radio „Fala Koziołka”, 3 eventy, 4 internet „Lajk i Spółka” |
+| Biurowiec przy Zana | Winda z guzikami pięter: parter (portiernia, „Twoje kampanie”, pokój z księgą firmy – KPiR), 1 drukarnia, 2 radio „Fala Koziołka”, 3 eventy, 4 internet „Lajk i Spółka”. Piętro pokazuje ofertę tylko swojej agencji |
 | TUW „Pod Koziołkiem” | Ubezpieczenia lokalu, sprzętu i OC |
 | Urzędy | Urząd miasta (rejestracja i odbiory lokalu), sanepid, urząd skarbowy (VAT i podatek dochodowy) |
 | Bazar | Handel między drużynami: ogłoszenia i licytacje towaru i sprzętu |

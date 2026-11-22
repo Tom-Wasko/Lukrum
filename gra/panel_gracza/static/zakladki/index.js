@@ -129,6 +129,7 @@ const NAZWY = {
   kalendarz: { tytul: "Kalendarz miasta", tytulPelny: "Kalendarz miasta – wydarzenia i święta" },
 };
 for (const [k, nazwy] of Object.entries(NAZWY)) Object.assign(ZAKLADKI[k], nazwy);
+ZAKLADKI.hr_rozwoj.bezLokali = true;   // zakładka całej firmy: okno jednej jej części też nie pokazuje wyboru lokalu (app.js: zakladkaOkna)
 
 
 // dawny klucz zakładki → zakładka, w której jest teraz (linki, „Popraw” z listy błędów, adres #…, budynki mapy)
