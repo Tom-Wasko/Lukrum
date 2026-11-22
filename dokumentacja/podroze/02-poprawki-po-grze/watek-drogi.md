@@ -69,3 +69,19 @@
 **Pytania do szefa:** czy kreskowanie granic i kolei zamieniające się w ruchu w pełną linię oraz napisy ulic pojawiające się po zatrzymaniu to akceptowalna cena za płynność? (Wariant bez tych uproszczeń: zoom ok. 60 ms na klatkę.)
 **Propozycje (poza zakresem):** w ruchu zoomu zostaje ok. 100 ms układu na krok (`Layout`, układanie żetonów `uloz`/`zmierz`): kolejne miejsce do przyspieszenia, niezwiązane z liniami.
 **Commity:** jeden commit wątku na gałęzi `worktree-podroz-02-drogi` (`git log -1`).
+
+## Zdjęcie mapy w ruchu
+**Co zrobiono:** nowy moduł `mapa/zdjecie.js`. W ruchu (`lm-ruch`) rysunek SVG jest schowany (`display: none`), a pokazuje się zdjęcie: canvas po każdej warstwie SVG (świat, poświata lamp w nocy), 30% większy z każdej strony, w rozdzielczości `devicePixelRatio` (limit 16 mln px), przesuwany i skalowany `transform` (GPU). Zdjęcie rysuje się z obliczonych stylów tych samych elementów (`getComputedStyle`: kolor, grubość, kreski, krycie przodków), więc palety i tryb jasny/ciemny działają bez zmian; napisy ulic idą znak po znaku wzdłuż toru. Zdjęcie jest gotowe zawczasu: robi się po zatrzymaniu mapy w bezczynności, po zmianie palety/pory dnia/fontów i w ruchu, gdy widok wyjdzie poza zdjęcie albo powiększenie przekroczy 2,4× (co najwyżej co 350 ms). Bez zdjęcia (błąd) rysują się wektory.
+**Usunięte uproszczenia:** skalowanie grubości przez `--k` w ruchu (`--k` ustawia się tylko po zatrzymaniu i przed zdjęciem), zamiana kreskowania w pełną linię, chowanie napisów. Żadne nie było potrzebne.
+**Liczby (Edge headless, 1400×850, poziom 3, ten sam skrypt):**
+
+| wariant | przesuwanie med / p95 | zoom kółkiem med / p95 |
+|---|---|---|
+| C: wszystko wektorowo | 6,1 / 18,3 ms | 97,1 / 145,6 ms |
+| poprzedni (`1e97220`, uproszczenia) | 6,1 / 6,2 ms | 18,2 / 24,3 ms |
+| **zdjęcie** | 6,1 / 6,2 ms | **6,1 / 12,0 ms** |
+
+Zoom przyciskami (6 kliknięć co 0,5 s): med 6,1 / p95 18,1 ms, max 218 ms (jedna klatka z ponownym zdjęciem w ruchu). Czas zrobienia zdjęcia: poziom 1 ok. 5 ms, poziom 2 ok. 20–55 ms, poziom 3 ok. 11–36 ms (pierwsze po rozgrzaniu). Zrzut w ruchu wygląda jak w spoczynku (kreski, napisy, grubości).
+**Decyzje:** napisy w zdjęciu rysowane bez kerningu (różnica niewidoczna); poświata lamp ma krycie per ścieżka, nie per grupa (różnica pomijalna). Pomiar zoomu przyciskami dla starych wariantów nie powtórzony.
+**Dowód:** `pytest testy/aplikacja testy/swiat` → `262 passed in 136.77s`; `ruff check .` → `All checks passed!`; `node --check` lublin.js, zdjecie.js → ok. Serwer 8764 zatrzymany. Test `test_mapa_w_ruchu_nie_chowa_linii` dostosowany (zdjęcie, brak `visibility`/kreskowania w `lm-ruch`).
+**Stan:** gotowe. Nie sprawdziłem każdej palety na zrzutach (tylko Bar nocą z lampami).

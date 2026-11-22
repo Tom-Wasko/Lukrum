@@ -8,6 +8,7 @@
 import { esc, kolorFirmy, marka, nazwaFirmy, okno, toast, zamknijOkno } from "../zakladki/wspolne.js";
 import { ikona, zeton } from "./ikony.js";
 import { utworzWidok } from "./widok.js";
+import { utworzZdjecie } from "./zdjecie.js";
 import { pokazKarte } from "../pulpit/karta.js";
 import { nakladkaPory, naGodzine, terazMinuty, wysokoscSlonca } from "./slonce.js";
 
@@ -31,7 +32,7 @@ const DALEKO = new Set(["zamek", "arena", "lotnisko", "gorki_czechowskie", "skan
 let CZAS = null, zegar = 0;
 let DANE = null, BLAD = null, WIDOK = null, widok = null, C = null, P = null, ZNAKI = [], poziom = 0, ulice = false;
 const krycie = {};
-let ostatniZanik = "", ostatnieK = 0, ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0, koniecRuchu = 0, ustalonoK = 0, czysta = false, ULICE = [];
+let ostatniZanik = "", ostatnieK = 0, ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0, koniecRuchu = 0, ustalonoK = 0, czysta = false, ULICE = [], zdj = null;
 
 // --- style i dane (raz) ---
 (function podlaczStyle() {
@@ -207,24 +208,35 @@ function zakresWartosci(wart) {
   return x.length ? [Math.min(...x), Math.max(...x)] : [0, 0];
 }
 
-// Grubość linii (CSS: N px / --k) i wielkość napisów ulic liczą się z --k. W ruchu --k zostaje bez zmian, więc linie skalują się
-// razem z mapą (tanio, nic nie znika); po 150 ms ciszy --k dostaje prawdziwą skalę i linie wracają do swojej grubości.
+// Grubość linii (CSS: N px / --k) i wielkość napisów ulic liczą się z --k, ustawianego tylko wtedy, gdy mapa stoi (wektory są wtedy widoczne).
 function ustawK(ramka, k) {
   ustalonoK = k;
   for (const svg of ramka.querySelectorAll(".lmapa-svg")) svg.style.setProperty("--k", k);
+}
+
+function ustawMacierz(ramka, s) {
+  const macierz = `matrix(${s.k} 0 0 ${s.k} ${s.x} ${s.y})`;
+  ramka.querySelector("#lmapa-swiat")?.setAttribute("transform", macierz);
+  ramka.querySelector("#lmapa-lampy")?.setAttribute("transform", macierz);
+}
+
+// Koniec ruchu (150 ms bez zmiany widoku): wracają ostre wektory, a zdjęcie na następny ruch robi się w czasie bezczynności (zdjecie.js).
+function koniecRuchuMapy(ramka) {
+  ustawK(ramka, WIDOK.k);
+  ustawMacierz(ramka, WIDOK);
+  ramka.classList.remove("lm-ruch", "lm-z-zdjeciem");
+  zdj?.koniec(WIDOK);
 }
 
 function naZmiane(s) {
   WIDOK = s;
   const ramka = document.getElementById("lmapa");
   if (!ramka) return;
-  if (!ustalonoK) ustawK(ramka, s.k);
-  else if (!ramka.classList.contains("lm-ruch")) ramka.classList.add("lm-ruch");   // w ruchu: bez kreskowania i napisów ulic (mapa.css)
+  const pierwszy = !ustalonoK;
+  if (pierwszy) { ustawK(ramka, s.k); ustawMacierz(ramka, s); }
+  else ramka.classList.add("lm-ruch");   // w ruchu rysunek mapy zastępuje jego zdjęcie (mapa.css, zdjecie.js)
   clearTimeout(koniecRuchu);
-  koniecRuchu = setTimeout(() => { const r = document.getElementById("lmapa"); if (r === ramka) { ustawK(r, WIDOK.k); r.classList.remove("lm-ruch"); } }, 150);
-  const macierz = `matrix(${s.k} 0 0 ${s.k} ${s.x} ${s.y})`;
-  ramka.querySelector("#lmapa-swiat")?.setAttribute("transform", macierz);
-  ramka.querySelector("#lmapa-lampy")?.setAttribute("transform", macierz);
+  koniecRuchu = setTimeout(() => { const r = document.getElementById("lmapa"); if (r === ramka) koniecRuchuMapy(r); }, 150);
   for (const z of ZNAKI) z.el.style.transform = `translate(${(z.x * s.k + s.x + z.dx + z.ox).toFixed(1)}px, ${(z.y * s.k + s.y + z.dy + z.oy).toFixed(1)}px)`;
   // przy oddalaniu żetony bledną; na pełnym oddaleniu zostają nazwy dzielnic i własny lokal
   const zanik = Math.min(1, Math.max(0, (s.k - ZANIK[0]) / (ZANIK[1] - ZANIK[0])));
@@ -258,6 +270,11 @@ function naZmiane(s) {
   clearTimeout(czekaUlozenie);
   if (!przesuniecie && teraz - ostatnieUlozenie > 160) { ostatnieUlozenie = teraz; uloz(s, ramka); }
   else czekaUlozenie = setTimeout(() => { ostatnieUlozenie = performance.now(); uloz(WIDOK, ramka); }, 110);
+  if (pierwszy) return;
+  // zdjęcie musi powstać po ustawieniu poziomu i ulic powyżej; bez zdjęcia (błąd canvas) rysujemy wektory jak zwykle
+  const zeZdjeciem = !!zdj?.ruch(s);
+  ramka.classList.toggle("lm-z-zdjeciem", zeZdjeciem);
+  if (!zeZdjeciem) { ustawK(ramka, s.k); ustawMacierz(ramka, s); }
 }
 
 // --- układanie napisów: żaden szyld nie zasłania żetonu ani innego szyldu; ważniejsze wybierają miejsce pierwsze ---
@@ -404,6 +421,7 @@ function ustawPore(ramka) {
   const lampy = Math.min(1, Math.max(0, (4 - h) / 10));   // zapalają się przy zachodzie, pełne od −6°
   ramka.classList.toggle("lm-lampy", lampy > 0);
   ramka.querySelector("#lmapa-lampy")?.style.setProperty("--lampy", lampy.toFixed(2));
+  zdj?.uniewaznij();   // poświata lamp jest na zdjęciu mapy
   const ciemny = document.documentElement.dataset.tryb === "ciemny";   // w trybie ciemnym mapa i tak jest ciemna
   noc.style.background = kolor;
   noc.style.opacity = (krycie * (ciemny ? 0.6 : 1)).toFixed(3);
@@ -452,6 +470,9 @@ export const nowaMapa = {
     // na początku widać strefy gry (od Czechowa po Zalew), a nie całe granice miasta
     const p = [...ramka.querySelectorAll(".lm-strefa-napis")].map((el) => [+el.dataset.x, +el.dataset.y]);
     const start = p.length ? [Math.min(...p.map((q) => q[0])) - 3200, Math.min(...p.map((q) => q[1])) - 2600, Math.max(...p.map((q) => q[0])) + 3200, Math.max(...p.map((q) => q[1])) + 1800] : null;
+    zdj?.zniszcz();
+    zdj = utworzZdjecie(ramka, { przygotuj: (w) => ustawK(ramka, w.k), widok: () => WIDOK });
+    document.fonts?.ready.then(() => { if (ramka.isConnected) zdj?.uniewaznij(); });
     ustawPore(ramka);
     clearInterval(zegar);
     zegar = setInterval(() => { if (!ramka.isConnected) return clearInterval(zegar); if (CZAS == null) { ustawPore(ramka); const w = ramka.querySelector(".lm-slonce input"); if (w) { w.value = terazMinuty(); w.nextElementSibling.textContent = naGodzine(+w.value); } } }, 60000);

@@ -310,7 +310,8 @@
 @media (prefers-reduced-motion: reduce) { .lm-swieci .lm-kafel { animation: none; scale: 1.18; filter: drop-shadow(0 0 6px var(--uwaga, #ffc864)); } }
 
 
-/* w ruchu mapy (klasa lm-ruch z lublin.js: do 150 ms po ostatniej zmianie widoku) rysujemy taniej, ale nic nie znika:
-   granice i kolej tracą kreskowanie (pełna cienka linia), napisy ulic czekają na zatrzymanie (to tekst, nie linia) */
-.lmapa.lm-ruch :is(.lm-granice, .lm-kolej) { stroke-dasharray: none; }
-.lmapa.lm-ruch .lm-ulice-napisy { visibility: hidden; }
+/* zdjęcie mapy w ruchu (zdjecie.js): w czasie przesuwania i przybliżania zamiast rysunku SVG pokazujemy jego zdjęcie (canvas), które
+   przeglądarka przesuwa i skaluje na GPU; lm-ruch ustawia lublin.js do 150 ms po ostatniej zmianie widoku, lm-z-zdjeciem tylko gdy zdjęcie jest */
+.lmapa-snimek { position: absolute; display: none; transform-origin: 0 0; will-change: transform; pointer-events: none; }
+.lmapa.lm-ruch .lmapa-snimek:not([hidden]) { display: block; }
+.lmapa.lm-ruch.lm-z-zdjeciem > .lmapa-svg { display: none; }
