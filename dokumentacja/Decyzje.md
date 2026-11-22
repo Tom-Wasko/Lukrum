@@ -23,6 +23,8 @@
 - 2026-11-22 · Mapa w ruchu: uproszczenia (skalowanie grubości linii, kreski → pełna linia, chowanie napisów) odrzucone po obejrzeniu w grze; najbardziej razi zmiana grubości. Do sprawdzenia „zdjęcie mapy w ruchu” (statyczne warstwy jako jeden obraz na czas ruchu, wygląd jak w spoczynku).
 - 2026-11-22 · Kebab: punkt „Lada” zostaje jednym ekranem „Mój lokal” (przegląd lokalu); pozostałe punkty wnętrz otwierają po jednej sprawie.
 - 2026-11-22 · Biurowiec przy Zana: „Portiernia” ma być spisem pięter (agencja → piętro, przejście do windy); „Internet” zostaje ekranem reklamy w sieci.
+- 2026-11-22 · Więcej do zrobienia w rundach (Z32): **cel tygodnia od wujka** (jeden cel z nagrodą, sprawdzany po zamknięciu tygodnia) oraz zadania zeszytu typu „sprawdźcie” zamienione na **konkretne ruchy w grze**, odhaczane, gdy decyzja różni się od poprzedniej rundy (np. „Spłaćcie część debetu albo raty”, „Obniżcie jeden koszt stały”); razem **3–4 na rundę**; tylko z decyzji, które już są w grze. Bez dodatkowych spraw w lokalu.
+- 2026-11-22 · Zeszyt (Z35): czcionka zostaje Caveat.
 
 
 ### Decyzje 13–19.11 (z dawnych notatek, tematami)
