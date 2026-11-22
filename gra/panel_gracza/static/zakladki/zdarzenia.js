@@ -71,8 +71,17 @@ function listaSpraw(Z, wybory, edycja, kat, akt) {
   return `<div class="zd-lista"><div class="zd-lista-tytul">Sprawy w tym tygodniu</div>${poz}${dalej}</div>`;
 }
 
+// sprawy w lokalu po wyborze zwijają się do paska „✓ Odpowiedziano”; „zmień” rozwija list (stan przeglądarki)
+const rozwiniete = new Set();
+
+function paskiOdpowiedzi(s, st, edycja) {
+  return `<div class="zd-odpowiedziano"><span><b>✓ Odpowiedziano:</b> ${esc(st.o.tekst)}</span>
+    <small>${esc(s.tytul)}</small>${edycja ? ` <button type="button" class="btn" data-akcja="zd-zmien" data-h="${esc(s.historia)}">zmień</button>` : ""}</div>`;
+}
+
 function scenaHtml(s, wybor, edycja, kat) {
   const st = stanSprawy(s, wybor, edycja);
+  if (!s.park && wybor != null && !rozwiniete.has(s.historia)) return paskiOdpowiedzi(s, st, edycja);
   const opcje = s.opcje.map((o, i) => {
     const wybrana = st.id === o.id, brak = st.brakNa(o);
     const koszt = o.koszt?.gotowka || o.koszt?.porcje ? kosztTekst({ ...o.koszt, czas: 0 }) : "–";
@@ -173,9 +182,11 @@ export { parkiZeSprawa };
 export const AKCJE_ZDARZEN = {
   "zd-wybierz": async (el, c) => {
     pokazana = el.dataset.h;
+    if (!el.dataset.park) rozwiniete.delete(el.dataset.h);   // po wyborze list zwija się do paska
     await c.zmien((d) => { d.zdarzenia = { ...(d.zdarzenia || {}), [el.dataset.h]: el.dataset.o }; });
     if (el.dataset.park && el.closest(".zaslona")) oknoParku(c, el.dataset.park);
   },
+  "zd-zmien": (el, c) => { rozwiniete.add(el.dataset.h); pokazana = el.dataset.h; c.rysuj(); },
   "zd-pokaz": (el, c) => { pokazana = el.dataset.h; c.rysuj(); },
   "zd-park": (el, c) => oknoParku(c, el.dataset.id),
 };

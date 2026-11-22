@@ -59,10 +59,7 @@ export function zadaniaAutomatyczne(v, d, kat, tytul = (k) => k) {
   if (Z && v.runda >= Z.od_rundy) {
     const parki = {};   // sprawy pogrupowane po parkach
     for (const s of Z.aktywne || []) {
-      if (!s.park) {
-        lista.push({ id: `zd-${s.historia}`, gotowe: wybory[s.historia] != null, cel: "sprawy", tekst: `Zareaguj: ${s.tytul}`, opis: s.tytul });
-        continue;
-      }
+      if (!s.park) continue;   // sprawy w lokalu (np. pani Halina) nie są zadaniem w zeszycie: czeka je reakcja domyślna
       (parki[s.park] = parki[s.park] || []).push(s);
     }
     const wszystkie = Object.values(parki).flat();

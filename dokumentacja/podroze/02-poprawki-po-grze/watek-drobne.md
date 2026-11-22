@@ -46,10 +46,36 @@
 
 ## Raport
 <!-- Pisze wyko na końcu. -->
-**Stan:** gotowe | częściowo | zablokowane
-**Zmienione pliki:**
-**Dowód:** `<komenda>` → `<ostatnie linie wyniku>`
-**Decyzje, które podjąłem:**
-**Pytania do szefa:**
-**Propozycje (poza zakresem):**
-**Commity:**
+**Stan:** częściowo. Kod pkt 2–8 zrobiony; pkt 1 nierozstrzygnięty. **Nic nie sprawdzono w przeglądarce**
+(sesja w tle, brak narzędzi przeglądarkowych) – wymóg „sprawdzone na serwerze” niespełniony, trzeba obejrzeć w grze.
+**Zmienione pliki** (względem `gra/panel_gracza/static/`): `swiat/swiat.js` (5), `pulpit/zeszyt.js` (3),
+`styl.css` (4, blok na końcu), `pulpit/pulpit.js` (6, 7), `swiat/sceny/poczta.js` (7, 8), `zakladki/zadania.js` (2; nie
+było na liście plików, ale tam powstają zadania zeszytu), `gra/testy/aplikacja/test_drobne.py` (nowy, 10 testów).
+**Dowód:** `pytest testy/aplikacja/test_drobne.py` → `10 passed`; `ruff check` na teście → `All checks passed!`;
+`node --check` zmienionych modułów → ok. Pełny pytest (uruchomiony przed commitem ab26d4b, ten dotyka tylko zadania.js i testu: 10 passed osobno) → `885 passed in 369.05s`; niestabilny test kasyna nie padł.
+Nie udało się usunąć `_robocze/drobne/` (blokada `rm`); folder jest poza gitem, do skasowania ręcznie.
+**Wyniki pkt po pkt:**
+1. **Zrobione wg decyzji szefa** (`zakladki/zdarzenia.js`, blok na końcu `styl.css`): każda sprawa w lokalu (bez parku),
+   po wyborze reakcji zwija się do paska „✓ Odpowiedziano: <wybór> · zmień”; „zmień” rozwija list, kolejny wybór znów
+   zwija. Stan: znak ✓ i napis, kolory ze zmiennych. Nowa runda: sprawa pochodzi z `v.zdarzenia.aktywne`, a Halina z banku
+   żywności ma w `magazyn.yaml` warunek (zapas ≥ 200 zł z krótkim terminem, szansa 0,4), więc nie wraca bez warunku;
+   serwera nie sprawdzałem w grze. Test: `test_sprawa_w_lokalu_po_wyborze_zwija_sie_do_paska_ze_zmien`. Nie obejrzano w przeglądarce.
+2. Sprawy w lokalu nie tworzą już zadania „Zareaguj: …” w zeszycie (`zadania.js`). Parkowe zostają w zbiorczym
+   „Sprawy w parkach (n)”.
+3. Dodano przewijanie kółkiem i klawiaturą (strony zeszytu). Dotyk i wskaźnik „przewiń w dół”: kod bez zmian, realnej
+   przyczyny nie ustaliłem bez przeglądarki.
+4. Blok CSS na końcu `styl.css`: wyłączone przyciski i teksty zatrudniania w `--tusz` na tle karty (bez przezroczystości),
+   aktywne „Zatrudnij” ciemne z tekstem `--na-kolorze`; stan też znakami ✓/✕. Kontrast policzony skryptem dla 6 wariantów
+   palet; nie obejrzano.
+5. Przyczyna: przed startem sprzedaży `ceny` są puste → 0 zł. Teraz bierze `cena_preferowana` z kategorii.
+6. Tablica wydarzeń liczy parki (jedna pozycja na park), zgodnie z listą i oknem parku.
+7–8. Poczta czyta dane z widoku gry (`window.lukrum.widok`), tydzień i błędy aktualne co rundę; stempel „NADANO” tylko gdy
+   `v.wyslane` (po stronie serwera w nowej rundzie jest False).
+9. **Bez zmian, tylko opis.** Kategorie mapy: rząd ikon `GRUPY` w `pulpit.js` – 5 grup + „Kebab” + „Wydarzenia”
+   (7 ikon). „Jak grać”: link `/jak-grac` – strona z `INSTRUKCJA.md` (13 rozdziałów + „Dla mistrza gry”); w szablonie
+   `jak_grac.html` jest kod zakładek (WAI-ARIA tablist) budowanych skryptem z nagłówków h2, bez skryptu jedna strona.
+   Nie uruchamiałem strony, więc nie wiem, czy zakładki faktycznie się pokazują.
+**Decyzje, które podjąłem:** pkt 2 = usunąć zadanie z zeszytu dla spraw lokalnych (nie tylko Haliny); pkt 1 nie ukrywam.
+**Pytania do szefa:** brak (pkt 1 i 2 rozstrzygnięte przez szefa).
+**Propozycje (poza zakresem):** obejrzeć 3–8 w grze na `manage.py graj --port 8764` po scaleniu.
+**Commity:** 68aac7f, 929f064, 6604bf7, 1e3bcf6, e0a0782, ab26d4b (oraz commit raportu).
