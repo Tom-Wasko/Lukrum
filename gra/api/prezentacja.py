@@ -184,6 +184,46 @@ def funkcje_widok(gra: Gra, firma: str, runda: int, harmonogram: dict[str, int])
     return w
 
 
+def _sila(wartosc: float, progi) -> int:
+    """Siła zmiany: 0 (poniżej małego progu), 1 albo 2."""
+    return sum(abs(wartosc) >= p for p in progi)
+
+
+def wskazowki_opcji(opcja: dict, wskazniki: dict, koszt_porcji: float) -> list[dict]:
+    """Wskazówki ▲▼ jednej opcji wydarzenia z jej kosztu i skutków (progi w dane/zdarzenia/wskazowki.yaml).
+    Zmiany liczymy z perspektywy gracza: ▲ dobrze, ▼ źle. Nic dokładnego – tylko kierunek i siła."""
+    k, sk = opcja["koszt"], opcja["skutki"]
+    zm = {
+        "kasa": sum((s.get("kwota") or 0) * (-1 if s["typ"] == "szkoda" else 1) for s in sk if s["typ"] in ("gotowka", "szkoda"))
+        - k["gotowka"] - k["porcje"] * koszt_porcji,
+        "goscie": sum((s["mnoznik"] - 1) * s["rund"] for s in sk if s["typ"] == "popyt"),
+        "kadra": sum(1 for s in sk if s["typ"] == "kandydat"),
+        "czas": -(k["czas"] + sum(s["godziny"] * s["rund"] for s in sk if s["typ"] == "czas")),
+        "kontrola": -sum(s["szansa"] * s["rund"] for s in sk if s["typ"] == "kontrola"),
+    }
+    wynik = []
+    for klucz, w in zm.items():
+        sila = _sila(w, wskazniki[klucz]["progi"])
+        if sila:
+            wynik.append({"klucz": klucz, "nazwa": wskazniki[klucz]["nazwa"], "kierunek": 1 if w > 0 else -1, "sila": sila,
+                          "znak": ("▲" if w > 0 else "▼") * sila})
+    return wynik
+
+
+def wskazowki_zdarzen(dane: Dane, z: dict) -> None:
+    """Dopisuje do opcji aktywnych wydarzeń (`v["zdarzenia"]["aktywne"]`) pole `wskazowki` i `ciag` (opcja ma ciąg dalszy).
+    Bez pliku wskazowki.yaml pola są puste."""
+    wskazniki = dane.zdarzenia.get("wskazowki")
+    hs = zd.historie(dane)
+    for s in z["aktywne"]:
+        sceny = (hs.get(s["historia"]) or {}).get("sceny", {})
+        opcje = {o["id"]: o for o in sceny.get(s["scena"], {}).get("opcje", [])}
+        for o in s["opcje"]:
+            zrodlo = opcje.get(o["id"])
+            o["wskazowki"] = wskazowki_opcji(zrodlo, wskazniki, z["koszt_porcji"]) if wskazniki and zrodlo else []
+            o["ciag"] = bool(zrodlo and zrodlo["nastepna"])
+
+
 def _zakryte(v: dict) -> set[str]:
     """Funkcje, które gra robi za drużynę (zakryte przez mistrza gry i nieodsłonięte)."""
     return {k for k, f in (v.get("funkcje") or {}).items() if f["stan"] == "zakryta" and not f["aktywna"]}
@@ -478,6 +518,7 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
                               (v.get("wyniki") or {}).get("przejecia"))
     if dane.zdarzenia:
         v["zdarzenia"] = zd.widok(dane, poprzedni.firmy[firma], runda, gra.konfiguracja["ziarno"], poprzedni.wyniki, firma)
+        wskazowki_zdarzen(dane, v["zdarzenia"])
         wolne = {w["historia"]: w.get("wolne_przed") for w in ((info or {}).get("zdarzenia") or {}).get("sceny", [])}
         for s in v["zdarzenia"]["aktywne"] if edycja else []:   # godziny wolne na tę scenę (po wcześniejszych)
             s["wolne"] = wolne.get(s["historia"])
