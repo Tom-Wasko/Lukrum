@@ -864,3 +864,13 @@ details.szczegoly > summary .kategoria-suma { margin-left: auto; color: var(--po
 .gp-kafel small { color: #8b919e; font-size: 11.5px; }
 .gp-kafel .plus { color: #26a69a; }
 .gp-kafel .minus { color: #ef5350; }
+
+/* podróż 02/drobne: czytelność zatrudniania (kontrast ≥ 4,5:1, w palecie wysokiej ≥ 7:1; stan nie samym kolorem) */
+body .btn[disabled] { opacity: 1; color: var(--tusz); background: var(--g-karta); border: 2px dashed var(--tusz); box-shadow: none; }
+body .btn.pom:not([disabled]) { background: var(--pom-ciemny); color: var(--na-kolorze); }
+[data-paleta="wysoka"] body .btn.pom:not([disabled]), [data-paleta="wysoka"] .btn.pom:not([disabled]) { background: var(--akcent); }
+body .oferta-wiersz .podpowiedz, body .oferta-wiersz .zostaw { color: var(--tusz); font-size: 12px; opacity: 1; }
+body .oferta-wiersz .cena { color: var(--tusz); }
+body .oferta-wiersz .pigulka { color: var(--tusz); background: var(--g-karta); border: 1px solid var(--tusz); font-size: 11px; text-transform: none; }
+body .oferta-wiersz .pigulka.nie::before { content: "✕ "; }
+body .oferta-wiersz .pigulka.ok::before { content: "✓ "; }
