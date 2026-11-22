@@ -19,7 +19,7 @@
 - 2026-11-22 · W kolejnych rundach gra daje za mało do zrobienia (majster w rundzie 2 kupił tylko bułki): do poprawy.
 - 2026-11-22 · Okienka (makiety https://claude.ai/artifact/YKpg6woJrPqaHFZE59vqjk): zakupy = **A** (paragon kasowy); wydarzenia = **A** (tablica korkowa ze wskazówkami ▲▼); list = **rubryki decyzji z B** (kwoty, ✓ ! ○, odnośnik „popraw”) **w kopercie z A** (list wysuwa się z koperty, stempel po nadaniu).
 - 2026-11-22 · Sprawa w lokalu (np. list pani Haliny) po wyborze reakcji zwija się do paska „✓ Odpowiedziano: <wybór> · zmień”; w nowej rundzie znika i wraca tylko, gdy znów zachodzi jej warunek. Sprawy z lokalu nie trafiają do „do zrobienia” w zeszycie (parkowe zostają zbiorczo).
-- 2026-11-22 · Mapa: w czasie przesuwania i przybliżania granice dzielnic, kolej i drobne ulice chwilowo znikają (wracają 0,15 s po ruchu) dla płynności.
+- 2026-11-22 · Mapa: drogi, granice dzielnic i kolej mają być widoczne także w ruchu mapy (szef po grze: znikające drogi nie wyglądają dobrze; wcześniejsze chowanie w ruchu odrzucone). Płynność ma zostać co najmniej taka jak po 02/mapa.
 - 2026-11-22 · Kebab: punkt „Lada” zostaje jednym ekranem „Mój lokal” (przegląd lokalu); pozostałe punkty wnętrz otwierają po jednej sprawie.
 - 2026-11-22 · Biurowiec przy Zana: „Portiernia” ma być spisem pięter (agencja → piętro, przejście do windy); „Internet” zostaje ekranem reklamy w sieci.
 
