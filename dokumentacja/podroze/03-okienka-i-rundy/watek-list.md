@@ -47,3 +47,8 @@ Stan: gotowe do przeglądu (22.11).
 - Przypisanie kwot po prefiksach opisów jest umowne (np. „Koszt zakupu” trafia do sprzętu/wystroju razem). Lepsze byłoby pole `rubryka`
   w pozycjach kosztów (silnik), ale to poza zakresem.
 - Zrzutów ekranu nie zrobiłem (brak przeglądarki w tej sesji); układ sprawdzony tylko testami i `node --check`. Proszę o rzut oka.
+
+**Dowód**
+- `pytest -q -p no:cacheprovider` → `899 passed in 383.90s (0:06:23)`
+- `ruff check .` → `All checks passed!`
+- `node --check pulpit.js` → OK; `testy/aplikacja/test_pulpit.py` → 34 passed
