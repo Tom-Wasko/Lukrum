@@ -4,7 +4,7 @@
    --ramka pomijamy celowo: stary układ panelu (motywy/grafik.css) używa tej samej nazwy. */
 
 .lmapa {
-  --k: 0.06;                       /* px na metr – ustawia lublin.js */
+  --k: 0.06;                       /* px na metr z chwili zatrzymania mapy – ustawia lublin.js; grubość linii = N px / --k */
   --rozm: 30px;                    /* bok znacznika */
   --kreska: color-mix(in srgb, var(--tusz) 55%, var(--papier));
   --blady: color-mix(in srgb, var(--tusz) 22%, var(--papier));
@@ -18,10 +18,9 @@
 .lmapa.przesuwana .lm-znak { pointer-events: none; }
 .lmapa:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
 .lmapa-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.lmapa-svg path, .lmapa-svg circle { vector-effect: non-scaling-stroke; }
 
 /* --- teren --- */
-.lm-miasto { fill: var(--lad); stroke: var(--tusz); stroke-width: 5; stroke-linejoin: round; }
+.lm-miasto { fill: var(--lad); stroke: var(--tusz); stroke-width: calc(5px / var(--k)); stroke-linejoin: round; }
 .lm-tlo { fill: color-mix(in srgb, var(--tusz) 13%, var(--papier)); stroke: none; }   /* dzielnice poza grą – wyszarzone */
 .lm-strefa { stroke: none; }
 .lm-t1 { fill: color-mix(in srgb, var(--akcent) 34%, var(--papier)); }
@@ -30,28 +29,28 @@
 .lm-t3 { fill: color-mix(in srgb, var(--uwaga) 36%, var(--papier)); }
 .lm-t4 { fill: color-mix(in srgb, var(--g-drewno) 38%, var(--papier)); }
 .warstwa .lm-strefa { fill: color-mix(in srgb, var(--akcent) calc(12% + var(--w, 0) * 62%), var(--papier)); }
-.lm-granice { fill: none; stroke: var(--kreska); stroke-width: 1.2; stroke-dasharray: 2 3; }
+.lm-granice { fill: none; stroke: var(--kreska); stroke-width: calc(1.2px / var(--k)); stroke-dasharray: calc(2px / var(--k)) calc(3px / var(--k)); }
 .lm-zielen { stroke: none; }
 .lm-las { fill: color-mix(in srgb, var(--g-zielen2) 34%, var(--papier)); }
 .lm-laka { fill: color-mix(in srgb, var(--g-zielen) 16%, var(--papier)); }
 .lm-park { fill: color-mix(in srgb, var(--g-zielen) 72%, var(--papier)); }
-.lm-woda { fill: var(--g-szklo); stroke: color-mix(in srgb, var(--g-szklo) 60%, var(--tusz)); stroke-width: 1; }
-.lm-rzeka { fill: none; stroke: var(--g-szklo); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.lm-woda { fill: var(--g-szklo); stroke: color-mix(in srgb, var(--g-szklo) 60%, var(--tusz)); stroke-width: calc(1px / var(--k)); }
+.lm-rzeka { fill: none; stroke: var(--g-szklo); stroke-width: calc(4px / var(--k)); stroke-linecap: round; stroke-linejoin: round; }
 
 /* --- drogi i kolej: jasny pas z ciemnym obrysem, szerokość w pikselach ekranu --- */
 .lm-droga, .lm-droga-obrys, .lm-uliczka, .lm-kolej, .lm-kolej-obrys { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .lm-droga { stroke: var(--g-karta); }
 .lm-droga-obrys { stroke: var(--kreska); }
-.lm-ekspresowa.lm-droga { stroke: color-mix(in srgb, var(--uwaga) 30%, var(--g-karta)); stroke-width: 3; }
-.lm-ekspresowa.lm-droga-obrys { stroke-width: 5; }
-.lm-glowna.lm-droga { stroke-width: 2.2; }
-.lm-glowna.lm-droga-obrys { stroke-width: 4; }
+.lm-ekspresowa.lm-droga { stroke: color-mix(in srgb, var(--uwaga) 30%, var(--g-karta)); stroke-width: calc(3px / var(--k)); }
+.lm-ekspresowa.lm-droga-obrys { stroke-width: calc(5px / var(--k)); }
+.lm-glowna.lm-droga { stroke-width: calc(2.2px / var(--k)); }
+.lm-glowna.lm-droga-obrys { stroke-width: calc(4px / var(--k)); }
 .lm-zbiorcza, .lm-lokalna, .lm-uliczka { display: none; }
 /* ulice wyłaniają się stopniowo (krycie ustawia lublin.js: KRYCIE) */
 .lm-zbiorcza { opacity: var(--kr-2, 1); }
 .lm-lokalna, .lm-uliczka { opacity: var(--kr-3, 1); }
-.lm-kolej-obrys { stroke: var(--tusz); stroke-width: 2.4; }
-.lm-kolej { stroke: var(--papier); stroke-width: 1.2; stroke-dasharray: 7 7; stroke-linecap: butt; }
+.lm-kolej-obrys { stroke: var(--tusz); stroke-width: calc(2.4px / var(--k)); }
+.lm-kolej { stroke: var(--papier); stroke-width: calc(1.2px / var(--k)); stroke-dasharray: calc(7px / var(--k)) calc(7px / var(--k)); stroke-linecap: butt; }
 .lm-ulice-napisy { display: none; opacity: var(--kr-2, 1); }
 .lm-ulice-napisy .lm-krotka { opacity: var(--kr-3, 1); }
 .lm-ulica-napis { font: calc(11px * var(--skala-tekstu, 1) / var(--k)) var(--font-szyld); letter-spacing: .04em; text-anchor: middle;
@@ -59,34 +58,34 @@
 
 /* ulice zaczynają się wcześniej niż żetony: data-ul ustawia lublin.js (KRYCIE), szerokości po poziomach niżej */
 [data-ul="2"] .lm-zbiorcza, [data-ul="3"] .lm-zbiorcza { display: inline; }
-[data-ul="2"] .lm-zbiorcza.lm-droga { stroke-width: 1.6; }
-[data-ul="2"] .lm-zbiorcza.lm-droga-obrys { stroke-width: 3; }
+[data-ul="2"] .lm-zbiorcza.lm-droga { stroke-width: calc(1.6px / var(--k)); }
+[data-ul="2"] .lm-zbiorcza.lm-droga-obrys { stroke-width: calc(3px / var(--k)); }
 [data-ul="3"] .lm-lokalna, [data-ul="3"] .lm-uliczka { display: inline; }
-[data-ul="3"] .lm-uliczka { stroke: var(--g-karta); stroke-width: 2.5; }
-[data-ul="3"] .lm-lokalna.lm-droga { stroke-width: 3.5; }
-[data-ul="3"] .lm-lokalna.lm-droga-obrys { stroke-width: 5.5; }
-[data-ul="3"] .lm-zbiorcza.lm-droga { stroke-width: 3; }
-[data-ul="3"] .lm-zbiorcza.lm-droga-obrys { stroke-width: 5; }
-[data-poziom="2"] .lm-zbiorcza.lm-droga { stroke-width: 1.6; }
-[data-poziom="2"] .lm-zbiorcza.lm-droga-obrys { stroke-width: 3; }
-[data-poziom="2"] .lm-glowna.lm-droga { stroke-width: 3.4; }
-[data-poziom="2"] .lm-glowna.lm-droga-obrys { stroke-width: 5.4; }
-[data-poziom="2"] .lm-ekspresowa.lm-droga { stroke-width: 4.5; }
-[data-poziom="2"] .lm-ekspresowa.lm-droga-obrys { stroke-width: 6.5; }
+[data-ul="3"] .lm-uliczka { stroke: var(--g-karta); stroke-width: calc(2.5px / var(--k)); }
+[data-ul="3"] .lm-lokalna.lm-droga { stroke-width: calc(3.5px / var(--k)); }
+[data-ul="3"] .lm-lokalna.lm-droga-obrys { stroke-width: calc(5.5px / var(--k)); }
+[data-ul="3"] .lm-zbiorcza.lm-droga { stroke-width: calc(3px / var(--k)); }
+[data-ul="3"] .lm-zbiorcza.lm-droga-obrys { stroke-width: calc(5px / var(--k)); }
+[data-poziom="2"] .lm-zbiorcza.lm-droga { stroke-width: calc(1.6px / var(--k)); }
+[data-poziom="2"] .lm-zbiorcza.lm-droga-obrys { stroke-width: calc(3px / var(--k)); }
+[data-poziom="2"] .lm-glowna.lm-droga { stroke-width: calc(3.4px / var(--k)); }
+[data-poziom="2"] .lm-glowna.lm-droga-obrys { stroke-width: calc(5.4px / var(--k)); }
+[data-poziom="2"] .lm-ekspresowa.lm-droga { stroke-width: calc(4.5px / var(--k)); }
+[data-poziom="2"] .lm-ekspresowa.lm-droga-obrys { stroke-width: calc(6.5px / var(--k)); }
 [data-ul="2"] .lm-ulice-napisy, [data-ul="3"] .lm-ulice-napisy { display: inline; }
 [data-ul="2"] .lm-ulica-napis.lm-krotka { display: none; }
 .lm-ulica-napis { opacity: .8; }
 
-[data-poziom="3"] .lm-uliczka { stroke: var(--g-karta); stroke-width: 4; }
-[data-poziom="3"] .lm-lokalna.lm-droga { stroke-width: 6; }
-[data-poziom="3"] .lm-lokalna.lm-droga-obrys { stroke-width: 8; }
-[data-poziom="3"] .lm-zbiorcza.lm-droga { stroke-width: 8; }
-[data-poziom="3"] .lm-zbiorcza.lm-droga-obrys { stroke-width: 10; }
-[data-poziom="3"] .lm-glowna.lm-droga { stroke-width: 11; }
-[data-poziom="3"] .lm-glowna.lm-droga-obrys { stroke-width: 13; }
-[data-poziom="3"] .lm-ekspresowa.lm-droga { stroke-width: 13; }
-[data-poziom="3"] .lm-ekspresowa.lm-droga-obrys { stroke-width: 15; }
-[data-poziom="3"] .lm-granice { stroke-width: 2; }
+[data-poziom="3"] .lm-uliczka { stroke: var(--g-karta); stroke-width: calc(4px / var(--k)); }
+[data-poziom="3"] .lm-lokalna.lm-droga { stroke-width: calc(6px / var(--k)); }
+[data-poziom="3"] .lm-lokalna.lm-droga-obrys { stroke-width: calc(8px / var(--k)); }
+[data-poziom="3"] .lm-zbiorcza.lm-droga { stroke-width: calc(8px / var(--k)); }
+[data-poziom="3"] .lm-zbiorcza.lm-droga-obrys { stroke-width: calc(10px / var(--k)); }
+[data-poziom="3"] .lm-glowna.lm-droga { stroke-width: calc(11px / var(--k)); }
+[data-poziom="3"] .lm-glowna.lm-droga-obrys { stroke-width: calc(13px / var(--k)); }
+[data-poziom="3"] .lm-ekspresowa.lm-droga { stroke-width: calc(13px / var(--k)); }
+[data-poziom="3"] .lm-ekspresowa.lm-droga-obrys { stroke-width: calc(15px / var(--k)); }
+[data-poziom="3"] .lm-granice { stroke-width: calc(2px / var(--k)); }
 [data-poziom="3"] .lm-strefa { fill-opacity: .5; }
 
 /* --- napisy na mapie: miejsce i widoczność ustala lublin.js (uloz) – tu tylko wygląd --- */
@@ -286,14 +285,14 @@
 .lm-p { fill: none; stroke: #ffc864; stroke-linecap: round; stroke-linejoin: round; }
 .lm-p2 { stroke-opacity: .08; }
 .lm-p1 { stroke-opacity: .17; }
-.lm-glowna.lm-p2 { stroke-width: 10.5; } .lm-glowna.lm-p1 { stroke-width: 6; }
-.lm-ekspresowa.lm-p2 { stroke-width: 12; } .lm-ekspresowa.lm-p1 { stroke-width: 7.5; }
-.lm-zbiorcza.lm-p2 { stroke-width: 9; } .lm-zbiorcza.lm-p1 { stroke-width: 4.875; }
-.lm-lokalna.lm-p2 { stroke-width: 7.5; } .lm-lokalna.lm-p1 { stroke-width: 4.125; }
-[data-poziom="3"] .lm-lokalna.lm-p2 { stroke-width: 15; } [data-poziom="3"] .lm-lokalna.lm-p1 { stroke-width: 9; }
-[data-poziom="3"] .lm-zbiorcza.lm-p2 { stroke-width: 16.5; } [data-poziom="3"] .lm-zbiorcza.lm-p1 { stroke-width: 10.5; }
-[data-poziom="3"] .lm-glowna.lm-p2 { stroke-width: 19.5; } [data-poziom="3"] .lm-glowna.lm-p1 { stroke-width: 12.75; }
-[data-poziom="3"] .lm-ekspresowa.lm-p2 { stroke-width: 21; } [data-poziom="3"] .lm-ekspresowa.lm-p1 { stroke-width: 14.25; }
+.lm-glowna.lm-p2 { stroke-width: calc(10.5px / var(--k)); } .lm-glowna.lm-p1 { stroke-width: calc(6px / var(--k)); }
+.lm-ekspresowa.lm-p2 { stroke-width: calc(12px / var(--k)); } .lm-ekspresowa.lm-p1 { stroke-width: calc(7.5px / var(--k)); }
+.lm-zbiorcza.lm-p2 { stroke-width: calc(9px / var(--k)); } .lm-zbiorcza.lm-p1 { stroke-width: calc(4.875px / var(--k)); }
+.lm-lokalna.lm-p2 { stroke-width: calc(7.5px / var(--k)); } .lm-lokalna.lm-p1 { stroke-width: calc(4.125px / var(--k)); }
+[data-poziom="3"] .lm-lokalna.lm-p2 { stroke-width: calc(15px / var(--k)); } [data-poziom="3"] .lm-lokalna.lm-p1 { stroke-width: calc(9px / var(--k)); }
+[data-poziom="3"] .lm-zbiorcza.lm-p2 { stroke-width: calc(16.5px / var(--k)); } [data-poziom="3"] .lm-zbiorcza.lm-p1 { stroke-width: calc(10.5px / var(--k)); }
+[data-poziom="3"] .lm-glowna.lm-p2 { stroke-width: calc(19.5px / var(--k)); } [data-poziom="3"] .lm-glowna.lm-p1 { stroke-width: calc(12.75px / var(--k)); }
+[data-poziom="3"] .lm-ekspresowa.lm-p2 { stroke-width: calc(21px / var(--k)); } [data-poziom="3"] .lm-ekspresowa.lm-p1 { stroke-width: calc(14.25px / var(--k)); }
 
 /* tabliczki z nazwami żetonów (lokale, budynki, zespoły, miejsca) pokazują się dopiero po najechaniu albo ustawieniu fokusu */
 .lm-znak .lm-podpis { translate: -50% calc(var(--rozm) * .14 + 4px); }
@@ -310,5 +309,9 @@
 }
 @media (prefers-reduced-motion: reduce) { .lm-swieci .lm-kafel { animation: none; scale: 1.18; filter: drop-shadow(0 0 6px var(--uwaga, #ffc864)); } }
 
-/* podróż 02/mapa: w ruchu mapy znikają najdroższe do rysowania linie (pomiar: czas zadań 6,3 s → 2,4 s na 14 krokach zoomu) */
-.lmapa.lm-ruch :is(.lm-granice, .lm-kolej, .lm-kolej-obrys, #lmapa-ulice, .lm-ulice-napisy) { display: none; }
+
+/* zdjęcie mapy w ruchu (zdjecie.js): w czasie przesuwania i przybliżania zamiast rysunku SVG pokazujemy jego zdjęcie (canvas), które
+   przeglądarka przesuwa i skaluje na GPU; lm-ruch ustawia lublin.js do 150 ms po ostatniej zmianie widoku, lm-z-zdjeciem tylko gdy zdjęcie jest */
+.lmapa-snimek { position: absolute; display: none; transform-origin: 0 0; will-change: transform; pointer-events: none; }
+.lmapa.lm-ruch .lmapa-snimek:not([hidden]) { display: block; }
+.lmapa.lm-ruch.lm-z-zdjeciem > .lmapa-svg { display: none; }

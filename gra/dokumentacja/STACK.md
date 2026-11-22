@@ -90,6 +90,13 @@ przeglądarka ── HTML (szablony) ──▶ panel_gracza / panel_mg / konta
 - Wnętrza (`static/swiat/`): `rysunek.js` to biblioteka cegiełek SVG (kolory tylko ze zmiennych palety), `sceny/<id>.js` to jedna scena
   wnętrza (rysunek, punkty, postacie), `sceny/index.js` to rejestr i tabela żeton budynku → scena, `wnetrze.js` łączy scenę z grą
   (stan punktów z widoku gry), `wnetrza.css` to style. Test `testy/aplikacja/test_wnetrza_sceny.py` pilnuje, że każdy żeton ma scenę.
+- Mapa Lublina (`static/mapa/lublin.js`, `widok.js`, `mapa.css`): świat w SVG, żetony w HTML nad nim. Grubość linii to `N px / --k` (`--k` = px na
+  metr z chwili zatrzymania mapy; bez `vector-effect: non-scaling-stroke`, który jest drogi w każdej klatce). W ruchu (klasa `lm-ruch`,
+  do 150 ms po ostatniej zmianie widoku) rysunek SVG jest schowany, a w jego miejsce działa zdjęcie mapy (`static/mapa/zdjecie.js`): canvas
+  o 30% większy z każdej strony, w rozdzielczości ekranu, rysowany ze stylów obliczonych tych samych elementów (kolory, grubości, kreski,
+  napisy ulic wzdłuż toru), przesuwany i skalowany transformem CSS. Zdjęcie robi się w bezczynności po zatrzymaniu mapy, po zmianie palety,
+  pory dnia i fontów (a w ruchu, gdy widok wyjdzie poza zdjęcie albo powiększenie przekroczy 2,4×). Bez zdjęcia (błąd canvas) rysują się
+  wektory. Test: `test_mapa_w_ruchu_nie_chowa_linii`.
 - `panel_gracza/static/app.js` uruchamia panel. Zakładki to moduły ES w `static/zakladki/*.js` z rejestrem
   w `index.js`. Motywy (`motywy/*.css`, `motyw.js`): klasyczny (menu poziome), „bok” (klasyczny z menu z boku) i grafik.
   Opisy i objaśnienia są w kółkach „i” z dymkiem (`zakladki/dymki.js`).

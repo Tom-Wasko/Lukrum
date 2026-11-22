@@ -324,3 +324,24 @@ def test_mapa_zespoly_bez_licznika_firm_i_odswiezenie_po_rundzie():
     assert re.search(r'poziom = 0; ulice = false; ostatniZanik = ""', lublin)
     # w ruchu znikają najdroższe linie (płynność przesuwania i przybliżania)
     assert "lm-ruch" in lublin and ".lmapa.lm-ruch" in (STATIC / "mapa" / "mapa.css").read_text(encoding="utf-8")
+
+
+def test_mapa_w_ruchu_nie_chowa_linii():
+    # drogi, granice i kolej zostają widoczne w ruchu; grubość linii to N px / --k (--k ustala się po zatrzymaniu mapy)
+    css = _bez_komentarzy((STATIC / "mapa" / "mapa.css").read_text(encoding="utf-8"))
+    assert "vector-effect" not in css
+    for selektor, tresc in re.findall(r"([^{}]*\.lm-ruch[^{}]*)\{([^{}]*)\}", css):
+        # w ruchu rysunek SVG zastępuje zdjęcie (canvas), ale tylko gdy zdjęcie jest (lm-z-zdjeciem); nic innego nie znika
+        if "display: none" in tresc:
+            assert "lm-z-zdjeciem" in selektor and ".lmapa-svg" in selektor, selektor
+        assert "visibility" not in tresc and "stroke-dasharray" not in tresc, selektor   # bez uproszczeń wyglądu w ruchu
+    assert ".lmapa-snimek" in css
+    zdjecie = (STATIC / "mapa" / "zdjecie.js").read_text(encoding="utf-8")
+    assert "export function utworzZdjecie" in zdjecie and "getComputedStyle" in zdjecie
+    mapa = [(sel, tr) for sel, tr in re.findall(r"([^{}]+)\{([^{}]*)\}", css)
+            if re.search(r"lm-(droga|granice|kolej|miasto|rzeka|woda|uliczka|p[12])", sel) and "stroke-width" in tr]
+    assert len(mapa) > 30
+    for sel, tr in mapa:
+        assert all("/ var(--k))" in w for w in re.findall(r"stroke-width: ([^;]+);", tr)), sel
+    lublin = (STATIC / "mapa" / "lublin.js").read_text(encoding="utf-8")
+    assert 'setProperty("--k"' in lublin and "ustawK" in lublin and "utworzZdjecie" in lublin
