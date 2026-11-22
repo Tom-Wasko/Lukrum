@@ -40,3 +40,23 @@
   - Jest notatka `dokumentacja/funkcje/Wyniki-tygodnia.md`.
 
 ## Raport
+
+**Zrobione (commit 77d4f85, gałąź `worktree-podroz-03-wyniki`):**
+- Ekran `wyniki_tygodnia` (`zakladki/wyniki.js`): sprzedaż, koszty, zysk, miejsce w rankingu, każde ze znakiem ▲▼ względem poprzedniego tygodnia. W rundzie 1 komunikat „Wyniki pojawią się po pierwszym tygodniu”.
+- Dane: nowa funkcja `wyniki_tygodnia()` w `api/prezentacja.py` → `v.wyniki_tygodnia` (z KPiR i historii rankingu; bez liczb gry w kodzie).
+- Kebab: tablica „WYNIKI” nad kasą (`swiat/sceny.js`), punkt w `swiat/miejsca.js`, ekran w `MENU` (Mój kebab ▸ pod) i w rejestrze `index.js`. „Lada” zostaje „Mój lokal”.
+- Portiernia: `zana_portiernia.js` ma spis pięter (4 wiersze klikalne na piętra + wiersz „Winda”), bez gabloty kampanii. `winda_zana.js` bez zmian (przejście na piętro już było).
+- Test: `testy/aplikacja/test_wyniki_tygodnia.py` (5 testów). Notatka: `dokumentacja/funkcje/Wyniki-tygodnia.md`. INSTRUKCJA i README poprawione.
+
+**Dowody:**
+- Pełne testy: `pytest -q -p no:cacheprovider` → `904 passed in 377.08s`.
+- `ruff check .` → `All checks passed!`; `node --check` na zmienionych modułach: ok.
+
+**Odstępstwa i uwagi:**
+- Nie dopisałem wpisu w `dane/funkcje.yaml: zakladki`: ekran jest zawsze dostępny, a podobne (Mój lokal, ranking) też nie są funkcją. Test `test_funkcje` przechodzi.
+- Styl okna dla `wyniki_tygodnia` jest domyślny (nie dopisałem do `pulpit/karty-style.js`, bo to zakazany folder). Archi może przypisać styl.
+- Zrzutów ekranu nie zrobiłem (nie uruchamiałem serwera/przeglądarki). Wygląd (tablica w scenie, kafle w 3 paletach) nie jest sprawdzony wzrokowo.
+- Zmieniłem cudzy plik tylko minimalnie: `swiat/swiat.css` (blok `/* podróż 03/wyniki */` na końcu), `index.js`, `miejsca.js`, `sceny.js` (po jednej wstawce).
+
+## Propozycje
+- Przypisać styl okna w `karty-style.js` i sprawdzić tablicę w scenie na zrzutach.
