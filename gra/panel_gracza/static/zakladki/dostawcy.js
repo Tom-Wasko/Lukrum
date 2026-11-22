@@ -200,8 +200,8 @@ function sekcjaAuto(v, kat, edycja) {
     <span style="display:flex;gap:8px;align-items:center">Wpisz wg prognozy
       <select id="auto-ad-zapas" style="width:auto"><option value="1">bez zapasu</option><option value="1.1" selected>+10% zapasu</option><option value="1.2">+20% zapasu</option></select>
       <button class="btn pom maly" data-akcja="auto-prognoza" ${dis}>Wpisz</button></span></div>
-    <p class="podpowiedz">„Wpisz wg prognozy” bierze ilości z prognozy popytu, którą wpisujesz przy daniach w zakładce
-    <a data-zakladka-k="lokal_menu">Menu i ceny</a> (pole „Prognozowany popyt”).</p>`;
+    <p class="podpowiedz">„Wpisz wg prognozy” bierze ilości z prognozy popytu, którą wpisujesz przy daniach na tablicy
+    <a data-zakladka-k="lokal_menu">Menu i ceny</a> w Mój kebab (pole „Prognozowany popyt”).</p>`;
   if (!Object.values(pot).some((p) => p > 0)) html += `<div class="komunikat">Prognoza popytu jest pusta, więc „Wpisz” nic nie wpisze.
     Najpierw wpisz prognozę przy daniach w zakładce <a data-zakladka-k="lokal_menu">Menu i ceny</a>.</div>`;
   html += tabela(`Zakupy auto-dostawcy na ten tydzień – ${esc(lok)} (opakowania)`, ["Składnik", "Opakowanie", "Potrzeba wg prognoz", "Zapas (lokal i u dostawcy)",
@@ -288,7 +288,7 @@ export const dostawcy = {
     html += plan;
     const wyn = v.swiezosc?.wynajem;
     if (wyn) html += `<p class="podpowiedz">Dostawcy nie przyjmują zwrotów. Co nie zmieści się w chłodni lub zamrażarce lokalu,
-      jedzie do wynajętej chłodni (${zl2(wyn.zl_za_litr)} za litr, termin krótszy o ${wyn.skrocenie_dni} dni) – szczegóły w zakładce
+      jedzie do wynajętej chłodni (${zl2(wyn.zl_za_litr)} za litr, termin krótszy o ${wyn.skrocenie_dni} dni) – szczegóły w chłodni:
       <a data-zakladka-k="swiezosc">Świeżość</a>.</p>`;
     html += auto + `<div class="pasek">Dostawcy</div>`;
     const wartoscU = (d) => mojeZam(v).filter((x) => x.dostawca === d).reduce((s, x) => s + (ceny[d]?.[x.zasob]?.[x.jakosc] || 0) * x.ilosc, 0);
@@ -338,7 +338,7 @@ export const dostawcy = {
     "zam-wyczysc": (el, c) => c.zmien((d) => { d.zamowienia = (d.zamowienia || []).filter((x) => !tenLokal(c.v, x)); }, poAuto(c) || poListe(c)),
     "auto-prognoza": (el, c) => {
       const zapas = +document.getElementById("auto-ad-zapas").value, pot = zapotrzebowanie(c.v, c.kat), ceny = cenyAuto(c.v);
-      if (!Object.values(pot).some((p) => p > 0)) return toast("Najpierw wpisz prognozę popytu dań w zakładce Menu i ceny.");
+      if (!Object.values(pot).some((p) => p > 0)) return toast("Najpierw wpisz prognozę popytu dań na tablicy z menu w Mój kebab.");
       return zapiszPozycje(c, (lista) => {
         for (const [z, p] of Object.entries(pot)) if (ceny[z]) ustawPozycje(lista, z, { ilosc: Math.ceil(Math.max(0, p * zapas - zapasLokalu(c.v, z)) - 1e-9) }, c.v);
         return lista;
@@ -346,7 +346,7 @@ export const dostawcy = {
     },
     "auto-zamow": async (el, c) => {
       const q = +document.getElementById("auto-jakosc").value, zapas = +document.getElementById("auto-zapas").value;
-      if (!Object.values(menuLokalu(c.v, lokalWybrany(c.v))).some((p) => p > 0)) return toast("Najpierw wpisz prognozę popytu dań w zakładce Menu – zamówienia liczone są na prognozowanych klientów.");
+      if (!Object.values(menuLokalu(c.v, lokalWybrany(c.v))).some((p) => p > 0)) return toast("Najpierw wpisz prognozę popytu dań na tablicy z menu w Mój kebab – zamówienia liczone są na prognozowanych klientów.");
       const nowe = planZamowien(c, q, zapas);
       if (!nowe.length) return toast("Zapas w magazynie wystarcza na prognozowanych klientów.");
       const id = idWybranego(c.v);   // kilka lokali – zastępuje tylko zamówienia wybranego lokalu

@@ -22,7 +22,7 @@ function czasHtml(C, tytul) {
   return licznikCzasu(C) + `
     <div style="display:flex;height:10px;border-radius:5px;background:var(--tlo-2, #e6e6e6);margin:8px 0;overflow:hidden" title="Zielony – sprawy poza lokalem, niebieski – praca na stanowisku">
       <div style="width:${poza}%;background:${poza >= 100 ? "#e5333f" : "#1e9e5a"}"></div><div style="width:${stan}%;background:#2f7fd6"></div></div>`
-    + tabela(tytul, ["Na co", "Zakładka", "Godziny", "Status"],
+    + tabela(tytul, ["Na co", "Gdzie to ustawić", "Godziny", "Status"],
       C.pozycje.length ? C.pozycje.map((p) => [esc(p.opis), `<a data-zakladka-k="${esc(p.zakladka)}">${esc(ZAKLADKA[p.zakladka] || p.zakladka)}</a>`,
         `${licz(p.godziny, 1)} h`, p.stanowisko ? "stoi na stanowisku" : p.przyjete ? "zaplanowane" : `<span class="minus">odrzucone – brak czasu</span>`])
         : [["Nic nie zużywa czasu właściciela.", "", "", ""]],
@@ -34,7 +34,7 @@ function czasHtml(C, tytul) {
 export const czas_wlasciciela = {
   tytul: "Czas właściciela", tytulPelny: "Czas właściciela", ikona: "zegar", odblokowanie: (v) => !!v.lokale, ukryta: (v) => !v.lokale,
   info: `Właściciel ma w tygodniu pulę godzin. Najpierw schodzą z niej sprawy poza lokalem: każdy dzień zakupów w dyskoncie
-    (odbiór osobisty – zakładka <a data-zakladka-k="dostawcy">Dostawcy</a>), rekrutacja, kursy z towarem między lokalami, eventy w parkach.
+    (odbiór osobisty – <a data-zakladka-k="dostawcy">hurtownie i dyskonty</a> na mapie), rekrutacja, kursy z towarem między lokalami, eventy w parkach.
     Gdy godzin zabraknie, kolejna sprawa nie dojdzie do skutku – zobaczysz to na liście błędów. Godziny, które zostaną,
     właściciel sam spędza na pustym stanowisku w lokalu (pracuje jak pracownik 1★, bez pensji; najwyżej tyle, ile etat). Nie trzeba tego
     ustawiać – im mniej spraw poza lokalem, tym dłużej stoi za ladą.`,

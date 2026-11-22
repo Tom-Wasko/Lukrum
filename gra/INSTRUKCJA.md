@@ -103,7 +103,7 @@ majątek netto, awanse i spadki oraz wykres miejsc w kolejnych rundach.
 
 ## 4. Miejsca w mieście
 
-Gra to **miejsca**, a nie zakładki. Menu z boku prowadzi do każdego z nich, a **Mapa miasta** to prawdziwy plan
+Gra to **miejsca w mieście**. Menu z boku prowadzi do każdego z nich, a **Mapa miasta** to prawdziwy plan
 Lublina: przybliża się go kółkiem myszy (na telefonie – dwoma palcami, a także dwuklikiem albo przyciskami + i −),
 przesuwa przeciąganiem, a kliknięcie budynku otwiera jego wnętrze. W wnętrzu klika się tabliczki i postacie –
 każdy punkt otwiera ekran decyzji w oknie, czyli **teczce** nad wnętrzem (wnętrze zostaje widoczne pod spodem;

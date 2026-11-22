@@ -13,7 +13,7 @@ budynki:
   strefa: centrum
   miejsce: Krakowskie Przedmieście (Śródmieście)
   zespol: kamienica_bankowa
-  opis: Bank – kredyt na start dla firmy bez historii (dane/mapa/banki.yaml).
+  opis: Bank – kredyt na start dla firmy bez historii.
   zakladka: bank
   mapa:
     x: 8
@@ -26,7 +26,7 @@ budynki:
   strefa: centrum
   miejsce: Krakowskie Przedmieście (Śródmieście)
   zespol: kamienica_bankowa
-  opis: Bank – kredyt inwestycyjny pod zastaw (dane/mapa/banki.yaml).
+  opis: Bank – kredyt inwestycyjny pod zastaw.
   zakladka: bank
   mapa:
     x: 9
@@ -39,7 +39,7 @@ budynki:
   strefa: centrum
   miejsce: Krakowskie Przedmieście (Śródmieście)
   zespol: kamienica_bankowa
-  opis: Bank – leasing sprzętu (dane/mapa/banki.yaml).
+  opis: Bank – leasing sprzętu.
   zakladka: bank
   mapa:
     x: 10
@@ -52,7 +52,7 @@ budynki:
   strefa: centrum
   miejsce: Krakowskie Przedmieście (Śródmieście)
   zespol: kamienica_bankowa
-  opis: Bank – najlepsze lokaty (dane/mapa/banki.yaml).
+  opis: Bank – najlepsze lokaty.
   zakladka: bank
   mapa:
     x: 8
@@ -65,7 +65,7 @@ budynki:
   strefa: centrum
   miejsce: Krakowskie Przedmieście (Śródmieście)
   zespol: kamienica_bankowa
-  opis: Bank – najtańsze konto firmowe i terminal (dane/mapa/banki.yaml).
+  opis: Bank – najtańsze konto firmowe i terminal.
   zakladka: bank
   mapa:
     x: 9
@@ -357,7 +357,7 @@ budynki:
   strefa: akademickie
   miejsce: biurowiec przy ul. Zana 39, piętro 1 (Rury)
   zespol: biurowiec_zana
-  opis: Ulotki za wycieraczki i plakaty na słupach (dane/mapa/reklama.yaml).
+  opis: Ulotki za wycieraczki i plakaty na słupach.
   zakladka: agencje
   mapa:
     x: 4
@@ -370,8 +370,7 @@ budynki:
   strefa: akademickie
   miejsce: biurowce przy ul. Zana (Rury)
   zespol: biurowiec_zana
-  opis: Marketing internetowy (od rundy 7) – posty, influencerka, TikTok, wizytówka w mapach, grupa „Lublin Jedzie”
-    (dane/mapa/reklama.yaml, sekcja internet).
+  opis: Marketing internetowy (od rundy 7) – posty, influencerka, TikTok, wizytówka w mapach, grupa „Lublin Jedzie”.
   zakladka: internet
   mapa:
     x: 5
@@ -521,7 +520,7 @@ budynki:
   strefa: centrum
   miejsce: biurowce przy ul. Zana (Rury)
   zespol: biurowiec_zana
-  opis: Spot w radiu na całe miasto i billboardy przy rondach (dane/mapa/reklama.yaml).
+  opis: Spot w radiu na całe miasto i billboardy przy rondach.
   zakladka: agencje
   mapa:
     x: 7
@@ -534,7 +533,7 @@ budynki:
   strefa: stare_miasto
   miejsce: biurowce przy ul. Zana (Rury)
   zespol: biurowiec_zana
-  opis: Degustacje na festynach osiedlowych i Noc Kebaba na otrzęsinach (dane/mapa/reklama.yaml).
+  opis: Degustacje na festynach osiedlowych i Noc Kebaba na otrzęsinach.
   zakladka: agencje
   mapa:
     x: 13
@@ -548,7 +547,7 @@ budynki:
   miejsce: ul. Hipoteczna (Śródmieście), poza deptakiem
   adres: ul. Hipoteczna 4
   geo: {lat: 51.2463, lon: 22.5515}
-  opis: Polisy na lokal, sprzęt i OC – odszkodowania po wypadkach w lokalu (dane/zdarzenia/losowe.yaml).
+  opis: Polisy na lokal, sprzęt i OC – odszkodowania po wypadkach w lokalu.
   zakladka: ubezpieczenia
   mapa:
     x: 7

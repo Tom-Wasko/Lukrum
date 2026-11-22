@@ -111,7 +111,7 @@ export const kpir = {
       + tabela(null, ["", "Kwota"], [["Dochód do opodatkowania", zl2(k.dochod)], ...(R
         ? [["Zaliczka na PIT", zl2(R.zaliczka)], ["Składka zdrowotna", zl2(R.zdrowotna)]]   // JDG – zakładka Podatki
         : [["Podatek", zl2(k.podatek)]]), ["Dochód netto", zl2(k.dochod_netto)]], { klasy: ["l", "r"] })
-      + (R ? `<p class="podpowiedz">Kwoty w KPiR są netto – VAT jest w zakładce Urzędy ▸ VAT.</p>` : "")
+      + (R ? `<p class="podpowiedz">Kwoty w KPiR są netto – VAT jest w urzędzie skarbowym (Urzędy ▸ VAT).</p>` : "")
       + (v.gra.lokale ? amortyzacja(v) : "") + LEKCJA_KPIR;
   },
 };
@@ -384,7 +384,7 @@ function wynikiKsiegowosci({ v }) {
         zle.map((x) => [`${esc(x.typ)}: ${esc(x.opis)}`, zl2(x.brutto), x.bledy.map(esc).join("<br>")]), { klasy: ["l", "r", "l"] });
     }
   }
-  if (W.samodzielnie) html += `<p class="podpowiedz">Dokumenty tej rundy czekają na zaksięgowanie – przełącz tę zakładkę na „Decyzje”.</p>`;
+  if (W.samodzielnie) html += `<p class="podpowiedz">Dokumenty tej rundy czekają na zaksięgowanie – przełącz ekran na „Decyzje”.</p>`;
   if (!html) return `<p class="podpowiedz">Brak rozliczeń w tej rundzie.</p>`;
   const kara = (B?.blad?.kara || 0) + (K && K.tryb !== "podglad" ? K.kara || 0 : 0);
   const lead = podsumowanie([B ? `Biuro ${esc(B.nazwa)} obsłużyło ${B.dokumenty} ${B.dokumenty === 1 ? "dokument" : "dokumentów"} i wystawiło fakturę na <b>${zl(B.razem)}</b>.` : "",

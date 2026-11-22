@@ -18,7 +18,7 @@ export function krokiKpir(K, otwarta) {
     `<b>6. Wpisz kwoty w deklaracjach do urzędu.</b> Przepisz je ręcznie albo przyciskiem „Przepisz kwoty wyliczone z zapisów”.`,
     `<b>7. Nadaj list z decyzjami rundy.</b> Deklaracje idą razem z nimi. Przy przeliczeniu urząd je sprawdzi: różnicę dopłacisz
      albo odzyskasz, a za każdą pomyloną deklarację zapłacisz mandat ${zl(K.samodzielna.kara_blad)}. Co poszło nie tak –
-     zakładka z wynikami biura w następnej rundzie.`,
+     ekran z wynikami biura w następnej rundzie.`,
   ]);
   return otwarta ? html.replace('<details class="lekcja">', '<details class="lekcja" open>') : html;
 }
@@ -45,7 +45,7 @@ export const LEKCJA_KPIR = lekcja("Czym jest KPiR i co z niej wynika", [
    kredytu nie jest kosztem (odsetki są); wypłata pieniędzy przez właściciela też nie jest kosztem.`,
   `<b>Towar to koszt w dniu zakupu</b> – nawet gdy jeszcze leży w chłodni. Na koniec roku robi się spis z natury (remanent),
    który wyrównuje różnicę.`,
-  `<b>Kwoty są netto:</b> VAT żyje w osobnym rejestrze (zakładka VAT).`,
+  `<b>Kwoty są netto:</b> VAT żyje w osobnym rejestrze (ekran VAT w urzędzie skarbowym).`,
 ]);
 
 export const LEKCJA_PIT_ZUS = lekcja("PIT i ZUS przedsiębiorcy – w skrócie", [

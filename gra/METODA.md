@@ -11,7 +11,7 @@ przygotował kolega autora wraz z własnymi narzędziami AI.
 Kod, dane i dokumentację pisze asystent AI (Claude, Anthropic) w ramach zespołu: autor decyduje, asystent-lider
 rozpisuje zadania, pomocnicze agenty je wykonują, a każdą zmianę sprawdzają testy automatyczne (ponad 700) i druga,
 niezależna kontrola. Autor czyta i zatwierdza ustalenia, a wszystkie decyzje zapisane są w notatkach projektu
-(`Decyzje`, `Do decyzji`). Podział pracy opisuje `warsztat/ZESPOL.md`.
+(`Decyzje`, `Do decyzji`). Podział pracy opisuje `CLAUDE.md` w korzeniu repozytorium.
 
 ## Co jest dziełem człowieka, a co AI
 | Obszar | Człowiek | AI |
@@ -28,5 +28,5 @@ blokuje automaty). Czy i jak trzeba ujawniać użycie AI, ustala autor z kapitan
 w `notatki/Analizy/Regulamin ZwzT a AI.md`. Ten plik zostanie dopasowany do odpowiedzi.
 
 ## Dane i prawo
-Mapa pochodzi z OpenStreetMap (licencja ODbL). Nazwy marek, osób i lektur: zasady opisuje `notatki/Decyzje.md`
+Mapa pochodzi z OpenStreetMap (licencja ODbL). Nazwy marek, osób i lektur: zasady opisuje `dokumentacja/Decyzje.md`
 („Marki i prawo”). Gra jest symulacją edukacyjną, nie poradą prawną ani inwestycyjną.

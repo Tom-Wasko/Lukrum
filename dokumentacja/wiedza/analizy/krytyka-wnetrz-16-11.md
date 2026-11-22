@@ -1,7 +1,10 @@
 # Krytyka wyglądu wnętrz LUKRUM (16.11.2026)
 
+> Opis stanu z 16.11.2026. Wymienione tu pliki scen i motywów (hud, okienka, hala, hol…) zostały potem przerobione albo usunięte; makiety są w `_archiwum/` (poza gitem).
+
+
 Recenzja świeżym okiem: jak zobaczy to licealista i nauczyciel. Kopia robocza `krytyka` (detached `main`), gra pokazowa
-zatrzymana na tygodniu 6, okno 1400×900. Zrzuty: `archiwum/krytyka-16.11/zrzuty/` (nazwa pliku = paleta-tryb-miejsce), zrzuty makiet: `archiwum/krytyka-16.11/zrzuty/makiety/`.
+zatrzymana na tygodniu 6, okno 1400×900. Zrzuty: `_archiwum/krytyka-16.11/zrzuty/` (nazwa pliku = paleta-tryb-miejsce), zrzuty makiet: `_archiwum/krytyka-16.11/zrzuty/makiety/`.
 Role: **szef** (autor), **majster** (kolega od mapy), **kapitan** (nauczyciel opiekun), lider (Claude Opus).
 
 Stan pliku: komplet, części (a)–(f).
@@ -196,7 +199,7 @@ Klik w budynek otwiera zwykły ekran, bez sceny. Po decyzji 2 każde potrzebuje 
 
 ## (d) Propozycje projektowe do decyzji szefa 1–6
 
-Makiety: `archiwum/krytyka-16.11/makiety/index.html` (spis). Każda makieta ma u góry przełącznik wariantu, palety i trybu; parametry działają
+Makiety: `_archiwum/krytyka-16.11/makiety/index.html` (spis). Każda makieta ma u góry przełącznik wariantu, palety i trybu; parametry działają
 też w adresie (`?w=A&paleta=pewex&tryb=ciemny`). Rysunki w makietach są własne i uproszczone: pokazują układ, nie
 docelową kreskę (w grze: postacie i symbole z `grafiki/zestaw.svg`). Liczby w makietach są przykładowe.
 
@@ -204,8 +207,8 @@ Wspólna zasada dla wszystkich wnętrz („estrada”): scena na cały ekran, u 
 tydzień, kasa, „Wyślij decyzje”), etykiety punktów widoczne stale, ramka dopiero po najechaniu albo fokusie.
 
 ### Decyzja 1. Mapa na cały ekran, ikony w rogach, lista wujka
-Makieta: `archiwum/krytyka-16.11/makiety/01-mapa-pelny-ekran.html` (klik w pozycję listy przesuwa i przybliża mapę, budynek pulsuje).
-Zrzuty: `archiwum/krytyka-16.11/zrzuty/makiety/01-A-jasny.png`, `01-A-ciemny-pokaz.png`, `01-C-pewex.png`.
+Makieta: `_archiwum/krytyka-16.11/makiety/01-mapa-pelny-ekran.html` (klik w pozycję listy przesuwa i przybliża mapę, budynek pulsuje).
+Zrzuty: `_archiwum/krytyka-16.11/zrzuty/makiety/01-A-jasny.png`, `01-A-ciemny-pokaz.png`, `01-C-pewex.png`.
 
 Układ rogów (wspólny dla wariantów):
 - lewy górny: **Tydzień 6 z 18** (z paskiem postępu sezonu) i **Kasa**;
@@ -230,8 +233,8 @@ Rekomendacja: **A domyślnie, C jako stan zwinięty i jako widok na wąskim ekra
 Do uzgodnienia z majstrem: funkcja mapy „pokaż budynek” (przesuń, przybliż, pulsuj), np. `lukrum.pokazNaMapie(id)`.
 
 ### Decyzja 2. Wnętrza dla wszystkich funkcji, decyzje w okienku nad sceną
-Makiety: `archiwum/krytyka-16.11/makiety/02-okienko-decyzji.html`, `archiwum/krytyka-16.11/makiety/03-idz-gdzie-indziej.html`.
-Zrzuty: `archiwum/krytyka-16.11/zrzuty/makiety/02-A-jasny.png`, `02-B-ciemny.png`, `02-C-wysoka.png`, `03-A-jasny.png`,
+Makiety: `_archiwum/krytyka-16.11/makiety/02-okienko-decyzji.html`, `_archiwum/krytyka-16.11/makiety/03-idz-gdzie-indziej.html`.
+Zrzuty: `_archiwum/krytyka-16.11/zrzuty/makiety/02-A-jasny.png`, `02-B-ciemny.png`, `02-C-wysoka.png`, `03-A-jasny.png`,
 `03-B-pewex-ciemny.png`, `03-C-jasny.png`.
 
 **Okienko decyzji**
@@ -271,7 +274,7 @@ mapie” (ten sam mechanizm co lista wujka). Punkt „tylko do oglądania” ma 
 | Parkiet | Podwórze kamienicy bankowej: tablica kursów z ▲▼, makler. | akcje, obligacje |
 
 ### Decyzja 3. Kamienica bankowa: fasada z szyldami, potem wnętrze banku
-Makieta: `archiwum/krytyka-16.11/makiety/04-kamienica-bankowa.html`. Zrzuty: `archiwum/krytyka-16.11/zrzuty/makiety/04-A-jasny.png`, `04-B-ciemny.png`,
+Makieta: `_archiwum/krytyka-16.11/makiety/04-kamienica-bankowa.html`. Zrzuty: `_archiwum/krytyka-16.11/zrzuty/makiety/04-A-jasny.png`, `04-B-ciemny.png`,
 `04-C-wysoka-ciemny.png`, `04-W-pewex.png`.
 
 | Wariant | Opis | Za | Przeciw |
@@ -288,7 +291,7 @@ dwa okienka (Kasa = konto i debet, Doradca = kredyty i leasing), sejf = lokaty. 
 w banku…”. Punkty otwierają okienka z decyzji 2. Powrót: „◂ Kamienica”.
 
 ### Decyzja 4. Biura rachunkowe w osobnej kamienicy
-Makieta: `archiwum/krytyka-16.11/makiety/05-kamienica-rachmistrzow.html`. Zrzuty: `archiwum/krytyka-16.11/zrzuty/makiety/05-B-jasny.png`, `05-W-ciemny.png`.
+Makieta: `_archiwum/krytyka-16.11/makiety/05-kamienica-rachmistrzow.html`. Zrzuty: `_archiwum/krytyka-16.11/zrzuty/makiety/05-B-jasny.png`, `05-W-ciemny.png`.
 
 | Wariant | Opis | Za | Przeciw |
 |---|---|---|---|
@@ -300,8 +303,8 @@ Rekomendacja: **A ze spisem z B.** „Księga firmy (KPiR)” przestaje być drz
 „Prowadzę sam” tutaj oraz segregatorem na biurku w kebabie. Nazwa „Kamienica rachmistrzów” i adres są propozycją.
 
 ### Decyzja 5. Agencje reklamowe w osobnym biurowcu z windą
-Makieta: `archiwum/krytyka-16.11/makiety/06-biurowiec-winda.html` (w wariancie A winda jeździ po kliknięciu guzika albo piętra).
-Zrzuty: `archiwum/krytyka-16.11/zrzuty/makiety/06-A-jasny.png`, `06-A-wysoka-ciemny.png`, `06-B-pewex.png`, `06-C-ciemny.png`.
+Makieta: `_archiwum/krytyka-16.11/makiety/06-biurowiec-winda.html` (w wariancie A winda jeździ po kliknięciu guzika albo piętra).
+Zrzuty: `_archiwum/krytyka-16.11/zrzuty/makiety/06-A-jasny.png`, `06-A-wysoka-ciemny.png`, `06-B-pewex.png`, `06-C-ciemny.png`.
 
 Piętra (propozycja, nazwy firm z danych gry): **P** portiernia = „Twoje kampanie” (co trwa, co wygasa),
 **1** Drukarnia „Papier Przyjmie” (ulotki, plakaty, gazeta), **2** Radio „Fala Koziołka” (spot, billboard),
@@ -320,7 +323,7 @@ W Biurowcu przy Zana zostają ubezpieczenia: zamiast holu z drzwiami jedno biuro
 (szablon wnętrza firmy z makiet 04/05: tablica z polisami, okienko, szafa pancerna na polisy).
 
 ### Decyzja 6. Miasteczko akademickie
-Makieta: `archiwum/krytyka-16.11/makiety/07-miasteczko-akademickie.html`. Zrzuty: `archiwum/krytyka-16.11/zrzuty/makiety/07-A-jasny.png`, `07-A-wysoka.png`,
+Makieta: `_archiwum/krytyka-16.11/makiety/07-miasteczko-akademickie.html`. Zrzuty: `_archiwum/krytyka-16.11/zrzuty/makiety/07-A-jasny.png`, `07-A-wysoka.png`,
 `07-B-ciemny.png`.
 
 | Wariant | Opis | Za | Przeciw |
@@ -370,16 +373,16 @@ rozbić (fala 0), bo inaczej wszyscy agenci scen pracowaliby w jednym pliku.
 **Fala 0 (jeden agent, przed resztą)**
 | Zadanie | Pliki | Zakres |
 |---|---|---|
-| S0. Rozbicie scen | `swiat/sceny.js` → `swiat/sceny/wspolne.js` (cegiełki: `u`, `napis`, `hot`, `osobaSvg`, lampa, paprotka, lamperia, lastryko), `sceny/kebab.js`, `sceny/hol.js`, `sceny/okienka.js`, `sceny/hala.js`; `sceny.js` tylko reeksportuje | Bez zmiany wyglądu; testy `testy/swiat/` bez zmian. |
+| S0. Rozbicie scen | `swiat/sceny.js` → swiat/sceny/wspolne.js (cegiełki: `u`, `napis`, `hot`, `osobaSvg`, lampa, paprotka, lamperia, lastryko), sceny/kebab.js, sceny/hol.js, sceny/okienka.js, sceny/hala.js; `sceny.js` tylko reeksportuje | Bez zmiany wyglądu; testy `testy/swiat/` bez zmian. |
 
 **Fala 1 (równolegle, fundament)**
 | Zadanie | Pliki | Zakres |
 |---|---|---|
-| F1. Okienko decyzji | `zakladki/wspolne.js` (tylko `okno`, `zamknijOkno`, `odswiezOkno`), nowy `motywy/okienko.css` | Teczka z makiety 02-A: okruszek, zakładki, stopka zapisu, `role="dialog"`, Esc, fokus, ✕ jako przycisk, kolory tylko ze zmiennych. |
-| F2. Punkty sceny | `swiat/sceny/wspolne.js` (tylko `hot`), `swiat/swiat.css` (sekcja `.hot`, `.podpis`, `.stan`) | Etykieta stała, ramka po najechaniu/fokusie, wariant dla palety wysokiej (K1–K3, C5, C10). |
+| F1. Okienko decyzji | `zakladki/wspolne.js` (tylko `okno`, `zamknijOkno`, `odswiezOkno`), nowy motywy/okienko.css | Teczka z makiety 02-A: okruszek, zakładki, stopka zapisu, `role="dialog"`, Esc, fokus, ✕ jako przycisk, kolory tylko ze zmiennych. |
+| F2. Punkty sceny | swiat/sceny/wspolne.js (tylko `hot`), `swiat/swiat.css` (sekcja `.hot`, `.podpis`, `.stan`) | Etykieta stała, ramka po najechaniu/fokusie, wariant dla palety wysokiej (K1–K3, C5, C10). |
 | F3. Wnętrze na cały ekran | `swiat/swiat.js` (`naglowek`, `miejsce.decyzje`, `lista`), `swiat/swiat.css` (sekcje `.sw`, `.sw-gora`, `.sw-lista`) | Belka + scena na całą szerokość; lista „Co tu zrobisz” tylko dla czytników. Zależy od decyzji 1. |
-| F4. Mapa: rogi i lista wujka | nowy `swiat/hud.js`, nowy `motywy/hud.css`, `zakladki/wujek.js` (dodać id budynku do kroków) | Ikony w rogach, kartka wujka (makieta 01-A/C). Funkcję „pokaż budynek” robi majster w `mapa/lublin.js`; uzgodnić nazwę w WSPOLPRACA.md. |
-| F5. Szybka poprawka hurtowni | `swiat/sceny/hala.js` | H1 (podpis na linii podłogi), H5. Można scalić od razu. |
+| F4. Mapa: rogi i lista wujka | nowy swiat/hud.js, nowy motywy/hud.css, `zakladki/wujek.js` (dodać id budynku do kroków) | Ikony w rogach, kartka wujka (makieta 01-A/C). Funkcję „pokaż budynek” robi majster w `mapa/lublin.js`; uzgodnić nazwę w WSPOLPRACA.md. |
+| F5. Szybka poprawka hurtowni | swiat/sceny/hala.js | H1 (podpis na linii podłogi), H5. Można scalić od razu. |
 
 **Fala 2 (po F1–F3; sklejenie)**
 | Zadanie | Pliki | Zakres |
@@ -389,16 +392,16 @@ rozbić (fala 0), bo inaczej wszyscy agenci scen pracowaliby w jednym pliku.
 **Fala 3 (równolegle, po jednej scenie na agenta; każdy dotyka tylko swojego pliku sceny)**
 | Zadanie | Pliki | Zakres |
 |---|---|---|
-| W1. Kebab | `swiat/sceny/kebab.js`, `narzedzia/grafiki/` (nowe symbole) | K5–K8: chłodnia, biurko z szufladą, wujek z lewej, tablica menu. |
-| W2. Fasada z szyldami | nowy `swiat/sceny/fasada.js` | Wspólna funkcja dla banków i rachmistrzów (makiety 04-A, 05-A) + zwijany spis. |
-| W3. Wnętrze firmy | nowy `swiat/sceny/firma.js` | Szablon: tablica z ofertą, okienka, rekwizyt (bank, biuro, TUW). Makiety 04-W, 05-W. |
-| W4. Dom reklamy z windą | nowy `swiat/sceny/winda.js` | Makieta 06-A, animacja kabiny, zamknięte piętro. |
+| W1. Kebab | swiat/sceny/kebab.js, `narzedzia/grafiki/` (nowe symbole) | K5–K8: chłodnia, biurko z szufladą, wujek z lewej, tablica menu. |
+| W2. Fasada z szyldami | nowy swiat/sceny/fasada.js | Wspólna funkcja dla banków i rachmistrzów (makiety 04-A, 05-A) + zwijany spis. |
+| W3. Wnętrze firmy | nowy swiat/sceny/firma.js | Szablon: tablica z ofertą, okienka, rekwizyt (bank, biuro, TUW). Makiety 04-W, 05-W. |
+| W4. Dom reklamy z windą | nowy swiat/sceny/winda.js | Makieta 06-A, animacja kabiny, zamknięte piętro. |
 | W5. Miasteczko akademickie | nowy `swiat/sceny/uczelnia.js` | Makieta 07-A. |
-| W6. Urzędy w stylu PRL | `swiat/sceny/okienka.js` | U1, U2, U4: niższe lady, lamperia, numerki, tablica z literkami. |
-| W7. Park handlowy: witryny | nowy `swiat/sceny/pasaz.js` | P1, P4. |
-| W8. Stare Miasto: sień | `swiat/sceny/hol.js` (styl `brama`) | S1–S3. |
+| W6. Urzędy w stylu PRL | swiat/sceny/okienka.js | U1, U2, U4: niższe lady, lamperia, numerki, tablica z literkami. |
+| W7. Park handlowy: witryny | nowy swiat/sceny/pasaz.js | P1, P4. |
+| W8. Stare Miasto: sień | swiat/sceny/hol.js (styl `brama`) | S1–S3. |
 | W9. Redakcja | `swiat/kurier.js`, nowy `swiat/sceny/redakcja.js` | R1–R3. |
-| W10. Hurtownie | `swiat/sceny/hala.js` (po F5) | H2–H4: rampa, kasa, regał na dostawcę. |
+| W10. Hurtownie | swiat/sceny/hala.js (po F5) | H2–H4: rampa, kasa, regał na dostawcę. |
 | W11. Bazar, poczta, akademia | nowe `swiat/sceny/bazar.js`, `poczta.js`, `akademia.js` | Brakujące wnętrza z tabeli w decyzji 2. |
 
 **Fala 4 (jeden agent, na końcu)**

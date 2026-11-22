@@ -111,7 +111,7 @@ function budynek(g, b, sprawa = false) {
   // dymek po najechaniu: ikonka w kolorze rodzaju i podpowiedź, co da kliknięcie
   const ikona = b.rodzaj === "park" ? "🌳" : b.rodzaj === "woda" ? "💧" : IKONY[b.rodzaj] || "🏢";
   const rada = b.zakladka === "zdarzenia" ? "Kliknij, żeby zobaczyć, co dzieje się w parku"
-    : b.zakladka ? "Kliknij, żeby przejść do jego zakładki" : "Kliknij, żeby przeczytać więcej";
+    : b.zakladka ? "Kliknij, żeby wejść do środka" : "Kliknij, żeby przeczytać więcej";
   const dane = `data-ikona="${ikona}" data-kolor="${BUDYNKI[b.rodzaj]?.[0] || (b.rodzaj === "woda" ? "#5aa6d2" : "#5aa955")}" data-rada="${rada}"`;
   return { klucz: g.glebia(x + s, y + l), html: `<g class="klik" data-akcja="mapa-budynek" data-id="${esc(b.id)}" ${dane}>${tytul}${ksztalt}</g>` };
 }
@@ -452,7 +452,7 @@ const POMOC = { UST, zapiszUst, WARSTWY, wartosciWarstwy, budynkiGry, parkiZeSpr
 export const mapa = {
   tytul: "Mapa miasta", ikona: "mapa",
   get info() { return UST.nowa ? nowaMapa.info : this.infoStarej; },
-  infoStarej: "Mapa Lublina: najedź myszą na budynek, żeby zobaczyć, co to; kliknij budynek, żeby przejść do jego zakładki (bank, ratusz, dostawcy, agencje…), albo lokal, żeby go obejrzeć i wynająć lub kupić. "
+  infoStarej: "Mapa Lublina: najedź myszą na budynek, żeby zobaczyć, co to; kliknij budynek, żeby wejść do jego wnętrza (bank, urząd, hurtownie, agencje…), albo lokal, żeby go obejrzeć i wynająć lub kupić. "
     + "Gwiazdki przy lokalach to ocena z opinii klientów. Przyciski nad mapą pokazują warstwy: czynsze, popyt i konkurencję w strefach. "
     + "Mapę przybliżysz przyciskami +/−, kółkiem myszy z Ctrl, dwuklikiem albo dwoma palcami, a przesuniesz przeciągając. "
     + "Po zachodzie słońca w Lublinie (według zegara Twojego komputera) mapa ciemnieje. Menu po lewej działa jak dotąd.",
@@ -487,7 +487,7 @@ export const mapa = {
       if (b.zakladka === "zdarzenia") return oknoParku(c, b.id);   // parki tylko z mapy
       if (!b.zakladka) return toast(`${b.nazwa}: ${b.opis}`);
       if (c.zakryta(b.zakladka)) return c.idz(b.zakladka);   // funkcje gry: okno „Odsłoń”
-      if (!c.dostepna(b.zakladka)) return toast(`${b.nazwa} – ta zakładka nie jest jeszcze dostępna w tej rundzie.`);
+      if (!c.dostepna(b.zakladka)) return toast(`${b.nazwa} – to miejsce nie jest jeszcze dostępne w tej rundzie.`);
       c.idz(b.zakladka);
     },
     "mapa-miejsce": (el, c) => {

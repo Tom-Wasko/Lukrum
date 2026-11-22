@@ -91,7 +91,7 @@ const terminKrotko = (iso) => new Date(iso).toLocaleString("pl-PL", { weekday: "
 async function zmien(fn, lokalnie = null) {
   if (!S.v.edycja) return toast("Podgląd poprzedniej rundy – decyzji nie można zmieniać.");
   if (blokada(S.v)) return toast(blokada(S.v));
-  if (S.v.wyslane) return toast("Decyzje są wysłane. Wróć do podejmowania decyzji w zakładce „List z decyzjami”.");
+  if (S.v.wyslane) return toast("Decyzje są wysłane. Wróć do podejmowania decyzji przez „List z decyzjami” na poczcie.");
   fn(S.d);
   S.oczekujace++;
   S.zapis = S.zapis.then(async () => {
@@ -157,7 +157,7 @@ async function przelaczFunkcje(funkcja, odslonieta, cel = "") {
   ustaw(v);
   const f = v.funkcje?.[funkcja] || {};
   if (odslonieta) toast(`${f.nazwa || funkcja}: odsłonięte – od teraz decyzje podejmujecie sami.`
-    + (cel && !wejdz && f.od_rundy && f.od_rundy > v.runda ? ` Zakładki od rundy ${f.od_rundy}.` : ""));
+    + (cel && !wejdz && f.od_rundy && f.od_rundy > v.runda ? ` Ta część gry od rundy ${f.od_rundy}.` : ""));
   else toast(`${f.nazwa || funkcja}: znów zakryte – od tej rundy gra robi to za Was.`);
 }
 const oknoUstawien = () => okno("Funkcje gry", oknoUstawienFunkcji(S.v, { mg: !!S.v.tylko_odczyt }), { male: true, styl: stylEkranu("ustawienia"), okruszek: "Lublin › Ustawienia" });
@@ -404,7 +404,7 @@ function rysuj() {
     ? `<div class="komunikat">Podgląd rundy ${v.runda} (${v.miesiac}) – decyzje z tej rundy są tylko do odczytu. Wyniki pokazują skutki poprzedniego ${OKRES.dopelniacz}.</div>` : "";
   const zablokowane = v.edycja && blokada(v) && tryb === "decyzje" ? `<div class="komunikat">${esc(blokada(v))}</div>` : "";
   const wyslane = !zablokowane && v.edycja && v.wyslane && tryb === "decyzje" && S.zakladka !== "wyslij"
-    ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji w zakładce „List z decyzjami”.</div>` : "";
+    ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji przez „List z decyzjami” na poczcie.</div>` : "";
   const opis = typeof z.info === "function" ? z.info(c, tryb) : z.info;
   const karta = document.getElementById("karta");
   // wnętrze budynku (swiat/swiat.js) ma własny nagłówek – bez tytułu zakładki i przełącznika Decyzje / Wyniki

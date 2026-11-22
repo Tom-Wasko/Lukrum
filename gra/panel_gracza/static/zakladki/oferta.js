@@ -51,7 +51,7 @@ function jakPrognoza(v, kat, u, m, nazwaDania = u.nazwa) {
     Lokal przyciąga też klientów z sąsiednich stref – to dodatkowy plus, którego wzór nie liczy.</details>
     <br>5. <b>Rozruch</b> – nowy lokal: ${licz(Math.round(start * 100))}% w 1. tygodniu sprzedaży, +${licz(Math.round(przyrost * 100))} p.p. co tydzień.
     <br><br><i>Przykład (${esc(nazwaDania)}, ${esc(nazwa)}, 1. tydzień sprzedaży):</i> ${licz(u.popyt_roczny)} ÷ ${OKRES.rund_w_roku} × ${licz(sez, 2)} × ${licz(strefa.wielkosc, 2)} × ½ × ${licz(start, 1)} ≈ <b>${licz(wynik)}</b>.
-    <br>Wynik wpisz w pole „Prognozowany popyt”. Z prognozy wychodzą zakupy składników (Mój kebab ▸ ${A("dostawcy")}Dostawy</a>: „Wpisz wg prognozy”) i potrzebna obsada – za mała to utracona sprzedaż, za duża to zmarnowany towar.`;
+    <br>Wynik wpisz w pole „Prognozowany popyt”. Z prognozy wychodzą zakupy składników (${A("dostawcy")}hurtownie i dyskonty</a>: „Wpisz wg prognozy”) i potrzebna obsada – za mała to utracona sprzedaż, za duża to zmarnowany towar.`;
 }
 
 // cena, rabat i podpowiedzi przy wybranym daniu (dawniej osobna część „Sprzedaż”)
@@ -175,7 +175,7 @@ export const oferta = {
         + tabela("Pracownicy", ["Typ", "Zaangażowanie", "Wynagrodzenie ★", "★★", "★★★"], pensje, { klasy: ["l"] })
         + tabela("Składniki na porcję", ["Nazwa", "Zużycie na porcję", "Opakowanie", "Średnia cena ★", "★★", "★★★"], zasoby, { klasy: ["l"] })
         + `<p class="podpowiedz">${esc(kat.oferty.stanowiska.typy.kasa.kto)}: ${u.godziny_kasy} h na klienta, pracownik z kompletem sprzętu
-           (${kat.sprzet_kasy.map(esc).join(", ")}). Dokładne ceny składników są w zakładce Dostawcy.</p>`);
+           (${kat.sprzet_kasy.map(esc).join(", ")}). Dokładne ceny składników są w hurtowniach i dyskontach na mapie.</p>`);
     },
     usluga: async (el, c) => {
       const u = el.dataset.u, r = c.v.runda;
