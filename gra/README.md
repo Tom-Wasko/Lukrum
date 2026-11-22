@@ -66,7 +66,7 @@ szkolnym Microsoft jest opisane w [`dokumentacja/LOGOWANIE_MICROSOFT.md`](dokume
 | [`dokumentacja/STACK.md`](dokumentacja/STACK.md) | technologie i architektura |
 | [`dokumentacja/OPIS_GRY.md`](dokumentacja/OPIS_GRY.md) | mechaniki i budowa gry |
 
-Plan, postęp, decyzje, wygląd, opisy funkcji i raporty serii są w osobnym repozytorium notatek `Tom-Wasko/Lukrum-notatki`.
+Plan, zadania, decyzje, wygląd, opisy funkcji i historia prac są w [`../dokumentacja/`](../dokumentacja/).
 
 ## Zastrzeżenie
 

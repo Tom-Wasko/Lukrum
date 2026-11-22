@@ -1,8 +1,8 @@
 # poza repozytorium (lokalne)
-archiwum/
+_archiwum/
 _robocze/
 notatki/
-warsztat/
 .obsidian/
 .claude/worktrees/
 .claude/settings.local.json
+*.log

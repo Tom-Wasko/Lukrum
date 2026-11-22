@@ -1,4 +1,4 @@
-Zasady zespołu: `warsztat/ZESPOL.md`; role i ścieżki projektu: `CLAUDE.md` w folderze `lukrum/`.
+Zasady projektu i role: `CLAUDE.md` w korzeniu repozytorium (folder `lukrum/`); dokumentacja: `dokumentacja/` w korzeniu.
 
 # LUKRUM – przewodnik po repozytorium gry
 
@@ -25,9 +25,9 @@ testy/          pytest; podfoldery jak w silniku + aplikacja/, swiat/, wnetrza/
 narzedzia/      mapa/ (pobieranie OSM), grafiki/ (generator SVG)
 dokumentacja/   STACK.md, OPIS_GRY.md, SCENARIUSZE_LEKCJI.md, LOGOWANIE_MICROSOFT.md
 ```
-Poza repo, w `lukrum/`: `notatki/` (repo `Tom-Wasko/Lukrum-notatki`), `warsztat/`, `_robocze/`, `archiwum/`.
+Repo obejmuje cały folder `lukrum/`: kod gry w `gra/`, dokumentacja projektu w `dokumentacja/`. Poza gitem: `_robocze/`, `_archiwum/`.
 
-## 3. Polecenia (z korzenia repozytorium, `PY = .venv/Scripts/python`)
+## 3. Polecenia (z folderu `gra/`, `PY = .venv/Scripts/python`)
 ```
 PY -X utf8 -m pytest -q -p no:cacheprovider testy/<plik>.py   # w trakcie: tylko dotknięte testy
 PY -X utf8 -m pytest -q -p no:cacheprovider 2>&1 | tail -5    # raz na koniec, kilka minut
@@ -61,7 +61,7 @@ Po pracy zatrzymaj uruchomiony serwer.
   × jasny/ciemny. Stan nigdy samym kolorem (▲ ▼ !, `dostepnosc.css`). Styl: plansza + czytelna apka + nutka PRL.
 
 ## 6. Git
-- Repo `Tom-Wasko/Lukrum` (prywatne). Gałęzie i kopie robocze (`<seria>-<temat>`): zasady w `warsztat/ZESPOL.md`.
+- Repo `Tom-Wasko/Lukrum` (prywatne). Gałęzie i kopie robocze: według `CLAUDE.md` w korzeniu.
 - Autor commitów to **tylko Tom-Wasko** (`git -c user.name=Tom-Wasko commit`), bez `Co-Authored-By`, `Claude-Session`
   ani „Generated with…”, także w opisach PR. Bez `push --force`.
 - Nie commituj `db.sqlite3`, `lokalne.json`, `zapisy/`, `*.log` ani zrzutów ekranu.
@@ -72,8 +72,8 @@ Po pracy zatrzymaj uruchomiony serwer.
 |---|---|
 | zmiana widoczna dla gracza | `INSTRUKCJA.md` + `README.md` |
 | zmiana mechaniki albo budowy | `dokumentacja/OPIS_GRY.md`, `dokumentacja/STACK.md` |
-| nowa albo przerobiona funkcja gry | notatka `notatki/Funkcje/<Nazwa>.md` wg szablonu (gdy brief każe) |
-| wszystko inne (raport, plan serii, decyzje, postęp) | repozytorium notatek, według briefu |
+| nowa albo przerobiona funkcja gry | notatka `../dokumentacja/funkcje/<Nazwa>.md` wg szablonu (gdy brief każe) |
+| wszystko inne (raport, plan, decyzje, zadania) | `../dokumentacja/`, według briefu |
 
 ## 8. Pułapki
 - `testy/pieniadze/test_kasyno.py::test_mistrz_gry_nie_widzi_klubu` bywa niestabilny w pełnym przebiegu (osobno
