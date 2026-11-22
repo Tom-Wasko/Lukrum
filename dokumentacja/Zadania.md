@@ -10,32 +10,18 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 ## Zaplanowane
 
 ### Lekkie poprawki
-- Z29 · drobne z gier testowych: ikona Kamienicy rachmistrzów widoczna na mapie (4); licznik przy Kamienicy bankowej
-  i Biurowcu przy Zana tylko przy prawdziwym zadaniu (10); po zmianie rundy oddalona mapa nie pokazuje wszystkich
-  ikon (15); list pani Haliny znika po reakcji (16), a reakcja nie trafia do „do zrobienia” w zeszycie (17); kartki
-  zeszytu się przewijają (18); przycisk „Zatrudnij” i teksty w zatrudnianiu czytelne (m); menu w lokalu pokazuje
-  ceny zamiast 0 zł (m); liczba na liście wydarzeń zgodna z tym, co widać po „Zareaguj” (m); Poczta: tablica
-  odświeżana w nowej rundzie, „nadano” kasowane po przejściu rundy (m); sprawdzić w grze: kategorie w rzędzie, ale
-  z mniejszą liczbą ikon (1), „Jak grać” w zakładkach (3)
 - Z9 · strona startowa: „Nowe w tej rundzie” starymi nazwami („Zakładki”, „HR”)
 - Z28 · mapa: `e.detail.obsluzone` opisane w kontraktach zdarzeń
 - Z26 · niestabilny test `test_kasyno.py::test_mistrz_gry_nie_widzi_klubu` w pełnym przebiegu
 
 ### Ważne
-- Z2 · gry testowe: znajomi 20 i 22.11 za nami; dalej 4–6 osób ze stoperem, potem klasa; balans jest dotąd tylko z botów
-- Z30 · sklepy i piętra od nowa: każdy sklep i hurtownia pokazuje tylko swoją ofertę (12; m: w piekarni kupuje się
-  mięso, hurtownia sprzętu kieruje wszystko w jedno miejsce); w sklepie widać, co już kupione (m); klik opcji we
-  wnętrzu zawsze otwiera pop-up, nigdy osobną kartę (2); w Biurowcu przy Zana piętro pokazuje tylko swoje opcje (13),
-  piętra i winda przerysowane (14); rożen w kebabie pokazuje kupiony sprzęt, nie przenosi do innego budynku i nie
-  każe kupować drugi raz (11, m)
-- Z1 · Park handlowy: żeton widoczny na mapie, działające wnętrze, brak przejścia z kebaba prosto do Parku (7, m);
-  sprzęt kupowany tylko tu, kebab pokazuje stan i odsyła
-- Z31 · wydajność: mapa się zacina (8), wolne wczytywanie (m), wolne „usuń zamówione zasoby” (m)
+- Z2 · gry testowe: znajomi 20 i 22.11 za nami; dalej 4–6 osób ze stoperem, potem klasa; balans jest dotąd tylko z botów;
+  w najbliższej grze sprawdzić poprawki z podróży 02 (sklepy, Park, mapa, drobne), kategorie w rzędzie (1) i „Jak grać” w zakładkach (3)
 - Z32 · więcej do zrobienia w kolejnych rundach: zeszyt wujka i wydarzenia dają kilka sensownych zadań w każdej
   rundzie (m: w rundzie 2 tylko bułki); łączy się z Z15
 - Z33 · wydarzenia i parki: wskazówki skutków decyzji ▲▼ z siłą, bez liczb (9); każdy park własny wygląd, przycisk
   prowadzi do wydarzenia, nie do kalendarza (m)
-- Z34 · nowe okienka według wyboru szefa 22.11 (`Decyzje.md`): zakupy A (paragon kasowy, też format paragonu, m), wydarzenia A
+- Z34 · wdrożyć nowe okienka według wyboru szefa 22.11 (`Decyzje.md`): zakupy A (paragon kasowy, też format paragonu, m), wydarzenia A
   (tablica korkowa ▲▼), list: rubryki z B w kopercie z A; makiety: https://claude.ai/artifact/YKpg6woJrPqaHFZE59vqjk (5)
 - Z35 · zeszyt: stary, zniszczony, skórzana okładka, schowany przechylony, lepiej pasująca odręczna czcionka
   na wolnej licencji (6)
@@ -52,8 +38,7 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 ### Mniej ważne
 - Z12 · pora dnia zgodna z prawdziwą godziną także we wnętrzu i za oknem (m), niezależna od trybu jasny/ciemny
 - Z38 · Zana: „Portiernia” jako spis pięter (która agencja na którym piętrze, przejście do windy), zamiast listy wszystkich agencji
-- Z37 · wydajność dalej: moduły JS w jeden plik albo `modulepreload` (dziś ok. 80 żądań); obrysy mapy bez
-  `non-scaling-stroke`, żeby granice i kolej zostały widoczne w ruchu (raport `podroze/02-poprawki-po-grze/watek-mapa.md`)
+- Z37 · wydajność dalej: moduły JS w jeden plik albo `modulepreload` (dziś ok. 80 żądań)
 - Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie
 - Z7 · mapa: położenia lokali w `lokale.yaml: geo` zamiast w `lublin.json`; odsyłacze dla twórców usunąć z `budynki.yaml`; opisy 11 punktów orientacyjnych i położenia Auchan/błonia/Lidl sprawdzić w źródłach; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html`
 - Z8 · boty i billboardy na mapie; przycisk „Stara mapa” do zdjęcia po teście z klasą
