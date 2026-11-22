@@ -256,3 +256,24 @@ nie udało się ich usunąć/zatrzymać (odmowa uprawnień). Do ręcznego sprzą
 | zana_portiernia | Pokój 12: księga firmy | wejście: pokoj_ksiegi.html |
 | zana_radio | Radio i billboard | agencja: fala_koziolka |
 **Z31 (wolne usuwanie zamówień):** `zam-usun` i `zam-wyczysc` w `dostawcy.js` przekazują drugi argument `zmien(fn, lokalnie)`: odświeża się tylko lista zamówień (`[data-lista-zam]`), a w oknie auto-dostaw samo okno. Test `test_usuwanie_zamowien_odswieza_tylko_liste_a_nie_cala_strone` → `test_wnetrza_sceny.py` 12 passed. Okna sklepów (`ilosc`) już odświeżały się lokalnie. Nie mierzyłem czasu w żywej aplikacji. Uwaga: reszta strony (paski kosztów) odświeża się po zamknięciu/zmianie zakładki.
+
+
+## Poprawki po recenzji (commit b1d09aa)
+**Blokujące**
+1. `agencje.tytulPelny` jest zwykłym polem; tytuł z filtrem agencji wylicza `agencje.tytulOkna()` (używa go `rysujTeczke`). Panel znów się ładuje.
+2. Dostawca sceny idzie z jawnego pola `dostawca` w definicji sceny (klucz z `dane/dostawcy.yaml`, 9 scen). `dostawcaSceny(v, klucz)` zwraca klucz tylko, gdy dostawca ma ceny w tej rundzie. Bez oferty `kliknijPunkt` zawsze kończy się okienkiem („Ten sklep otworzy się w tygodniu N” dla Auchan, inaczej „nie ma dziś oferty”) i nie spada do ogólnego ekranu dostawców.
+
+**Drobne**
+1. Filtr agencji zerowany, gdy żadna teczka nie jest otwarta (`rysuj()` → `zdejmijFiltrAgencji`); `wyniki()` agencji też go stosuje.
+2. `zakladkaOkna` przenosi `bezLokali` (hr_rozwoj: szkolenia i udogodnienia bez wyboru lokalu).
+3. `poZamknieciu` sklepu i auto-dostawy zeruje stan tylko dla własnego obiektu.
+4. Lada kebaba zostaje jawnym wyjątkiem (`KEBAB_ZLOZONE` w teście) – **pytanie do szefa**: rozdzielić „Mój lokal” (stan, sprawy, obsada, sprzedaż) na osobne punkty? Wyjątki w teście zawężone do par (scena, punkt) (22 pary) i (punkt, cel) dla kebaba.
+5. Okno odesłania w `swiat.js`: okruszek z tytułu miejsca, przycisk „Wróć na mapę”.
+6. `DZIALY` zostaje w JS; test sprawdza, że każdy zasób z cen dostawców ma dział.
+7. Zana: punkty „internet” i „portiernia” prowadzą do ekranów ogólnych (`internet`, `agencje`) – poza zakresem, do decyzji.
+8. Test zachowania: `testy/aplikacja/zakladki_zachowanie.mjs` (Node + stub DOM) ładuje `zakladki/index.js`, `dostawcy.js`, `wnetrze.js`; sprawdza klik bez oferty i okno sklepu z działem (`test_wnetrza_sceny.py`). `app.js` nie importuję (za dużo DOM).
+9. Serwer 8771 nie działa (brak nasłuchu), `_robocze/sklepy/` usunięty.
+
+**Pliki poza briefem:** `swiat/swiat.js`, `swiat/wnetrze.js`, `swiat/sceny/*.js` (pole `dostawca`), `zakladki/index.js`, `zakladki/marketing.js`, `app.js`, `testy/aplikacja/zakladki_zachowanie.mjs`.
+**Otwarte:** usterka Parku (okienka punktów) – poprawiona wcześniej, bez nowych zgłoszeń.
+**Dowód:** `pytest testy/aplikacja testy/swiat` → 246 passed; `ruff check .` → All checks passed; `node --check` 6 modułów ok.
