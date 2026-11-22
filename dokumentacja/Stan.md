@@ -12,7 +12,7 @@ zatwierdzeniu szefa. Scalanie: do `main` dopóki szef jest, po `/papa` na `podro
 | 03/wydarzenia | Z34 wydarzenia, Z33 | start |
 | 03/list | Z34 list | scalone do main 21:38 (899 passed) |
 | 03/zeszyt | Z35, Z5 | scalone do main 21:38 (900 passed); czcionka zostaje Caveat |
-| 03/wyniki | Z36, Z38 | start |
+| 03/wyniki | Z36, Z38 | scalone do main 21:45 (904 passed) |
 | Archi | Z9, Z28 zrobione; Z26 odłożone | gotowe |
 | 03/rundy | Z32 (szef zatwierdził 21:37) | start 21:40 |
 
