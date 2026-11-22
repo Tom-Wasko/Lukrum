@@ -9,7 +9,7 @@ Plan: `podroze/02-poprawki-po-grze/plan.md`.
 |---|---|---|
 | 02/sklepy | wyko-lukrum-02-sklepy (672af4e2) | w toku |
 | 02/mapa | wyko-lukrum-02-mapa (77b1d612) | w toku |
-| 02/drobne | wyko-lukrum-02-drobne (5b7bb118, kopia po limicie) | w toku: pkt 1 według decyzji szefa |
+| 02/drobne | – | scalone 22.11 (250 testów aplikacja+swiat) |
 | 02/makiety | Archi | wybór szefa: zakupy A, wydarzenia A, list B w kopercie A; wdrożenie w następnej podróży |
 
 ## Czeka na szefa
