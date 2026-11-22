@@ -6,7 +6,7 @@
 export default function (R) {
   const ID = "auchan", YP = 400;
   return {
-    id: ID, tytul: "Auchan", adres: "al. Witosa, Felin", opis: "Hipermarket: cztery długie regały pod wiszącymi tablicami alejek, na pierwszym planie rząd trzech kas i stanowisko zakupów z dowozem.",
+    id: ID, dostawca: "Auchan", tytul: "Auchan", adres: "al. Witosa, Felin", opis: "Hipermarket: cztery długie regały pod wiszącymi tablicami alejek, na pierwszym planie rząd trzech kas i stanowisko zakupów z dowozem.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana)", YP) + R.podloga("plytki", YP) + [80, 380, 680, 980].map((x) => R.swietlowka(x, 14, 160)).join("");
       s += `<rect x="0" y="52" width="1220" height="36" fill="var(--akcent)"/>` + R.t(610, 78, "AUCHAN · wszystko pod jednym dachem", 20, { fill: "var(--papier)", ls: 2 });

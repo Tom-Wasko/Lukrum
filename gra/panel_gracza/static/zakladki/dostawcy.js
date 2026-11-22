@@ -222,7 +222,7 @@ function oknoAuto(c, s, { poZapisie = false } = {}) {
   if (poZapisie && !otwarteOkno(s.tytul)) return c.rysuj();
   const tresc = sekcjaAuto(c.v, c.kat, c.edycja) || `<p class="podpowiedz">Auto-dostawy nie są dostępne w tej grze.</p>`;
   okno(s.tytul, tresc, { przyciski: `<button class="btn pom" data-akcja="zamknij-okno">Gotowe</button>`, okruszek: `Lublin › ${esc(s.sklep || "Sklep")}`,
-    poZamknieciu: () => { const z = s.zmieniono; AUTO = null; if (z) c.rysuj(); } });
+    poZamknieciu: () => { if (AUTO !== s) return; const z = s.zmieniono; AUTO = null; if (z) c.rysuj(); } });
 }
 // „Usuń” i „Usuń wszystkie” (Z31): po zapisie odświeża się tylko lista zamówień, nie cała strona (bez skoku i utraty przewijania)
 function odswiezListe(c) {
@@ -385,8 +385,8 @@ export const DZIALY = {
   Napoje: ["Napój"],
   Opakowania: ["Opakowanie", "Box"],
 };
-/** Nazwa dostawcy w danych gry dla sceny o danym tytule („Zakłady Mięsne „Rożen”” → „Zakłady Mięsne „Rożen” z Łęcznej”). */
-export const dostawcaSceny = (v, tytul) => Object.keys(v.ceny_dostawcow || {}).find((d) => d === tytul || d.startsWith(tytul) || tytul.startsWith(d)) || null;
+/** Klucz dostawcy z jawnego pola sceny (`dostawca`, jak w dane/dostawcy.yaml), jeśli ma ofertę w tej rundzie; inaczej null. */
+export const dostawcaSceny = (v, klucz) => (klucz && Object.prototype.hasOwnProperty.call(v.ceny_dostawcow || {}, klucz) ? klucz : null);
 let SKLEP = null;   // sklep, którego okno jest otwarte: { dost, dzialy, widok, tytul }
 
 /** Otwiera okno sklepu. s: { dost, dzialy?: [nazwy działów], widok?: "dzial" | "koszyk" | "dowoz" | "gazetka", tytul?: napis dla okna }. */
@@ -421,7 +421,7 @@ function oknoSklepu(c, s, { poZapisie = false } = {}) {
   const tresc = koszyk + dowoz + (filtr.size ? bazaNowa(v, kat, dost, ceny, dni, moje, pole, filtr) : "") + gazetka + pusty
     + `<p class="podpowiedz">Ilości wpisujesz w opakowaniach. Kolumna „Magazyn” to to, co już masz; „Wartość” to cena z koszyka.${dni && x.minimalne_zamowienie ? ` Dostawa poniżej ${zl(x.minimalne_zamowienie)} nie zostanie zrealizowana.` : ""}</p>`;
   if (poZapisie && !otwarteOkno(tytul)) return c.rysuj();
-  okno(tytul, tresc, { przyciski, okruszek: `Lublin › ${esc(dost)}`, poZamknieciu: () => { const z = s.zmieniono; SKLEP = null; if (z) c.rysuj(); } });
+  okno(tytul, tresc, { przyciski, okruszek: `Lublin › ${esc(dost)}`, poZamknieciu: () => { if (SKLEP !== s) return; const z = s.zmieniono; SKLEP = null; if (z) c.rysuj(); } });
 }
 
 function oknoBazy(c, dost, { poZapisie = false } = {}) {

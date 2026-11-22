@@ -9,7 +9,7 @@ export default function (R) {
   const stoisko = (x, napis, cena, kol) => R.paleta(x, YP + 60, 170, 2, "var(--g-drewno2)") + [0, 1].map((r) => [0, 1].map((k) => `<rect class="k1" x="${x + 12 + k * 84}" y="${YP + 60 - 12 - (r + 1) * 44 + 12}" width="62" height="26" fill="${R.KOL[(kol + r + k) % 4]}"/>`).join("")).join("")
     + `<path class="k" d="M${x + 85} ${YP - 44}v-40"/>` + `<rect class="k" x="${x + 20}" y="${YP - 150}" width="130" height="66" fill="${MARKA}"/>` + R.t(x + 85, YP - 126, napis, 15, { fill: "var(--g-czern)", w: 118 }) + R.t(x + 85, YP - 96, cena, 24, { fill: "var(--g-czern)", f: "gruby", w: 118 });
   return {
-    id: ID, tytul: "Biedronka", adres: "ul. Nałęczowska, Konstantynów", opis: "Niska sala dyskontu: towar w kartonach prosto na paletach, żółte tablice z cenami, kosz z okazjami, stojak z gazetką i jedna kasa z kolejką.",
+    id: ID, dostawca: "Biedronka", tytul: "Biedronka", adres: "ul. Nałęczowska, Konstantynów", opis: "Niska sala dyskontu: towar w kartonach prosto na paletach, żółte tablice z cenami, kosz z okazjami, stojak z gazetką i jedna kasa z kolejką.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana)", YP) + `<rect x="0" y="0" width="1220" height="70" fill="var(--g-sciana2)"/><path class="k" d="M0 70h1220"/>` + R.podloga("plytki", YP) + [140, 500, 860].map((x) => R.swietlowka(x, 70, 200)).join("");
       s += R.szyld(140, 12, 220, 44, "BIEDRONKA", { tlo: MARKA, tekst: "var(--g-czern)", r: 24 }) + R.t(700, 44, "codziennie niskie ceny · towar przywozisz sam", 15, { f: "tekst", bez: true, op: .85 });

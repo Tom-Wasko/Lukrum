@@ -5,7 +5,7 @@
 export default function (R) {
   const ID = "stokrotka", YP = 400, MARKA = "var(--g-zielen2)";
   return {
-    id: ID, tytul: "Stokrotka", adres: "ul. Braci Wieniawskich, Czechów Południowy", opis: "Mały sklep osiedlowy: lada ze sprzedawczynią i wagą, za nią półki, obok lada chłodnicza z surówkami i skrzynki z warzywami.",
+    id: ID, dostawca: "Stokrotka", tytul: "Stokrotka", adres: "ul. Braci Wieniawskich, Czechów Południowy", opis: "Mały sklep osiedlowy: lada ze sprzedawczynią i wagą, za nią półki, obok lada chłodnicza z surówkami i skrzynki z warzywami.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana)", YP) + R.lamperia(310, YP, "color-mix(in srgb, var(--g-zielen) 30%, var(--g-sciana2))") + R.podloga("lastryko", YP) + R.kula(300, 20, 18) + R.kula(800, 20, 18);
       s += R.szyld(180, 40, 240, 44, "STOKROTKA", { tlo: MARKA, tekst: "var(--g-biel)", r: 24 }) + R.t(180, 104, "sklep osiedlowy · blisko domu", 13, { f: "tekst", bez: true, op: .85 });

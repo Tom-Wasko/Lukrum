@@ -7,6 +7,7 @@ import { aktualneMiejsce } from "../swiat/swiat.js";
 // podróż 02/sklepy: piętro biurowca pokazuje tylko swoją agencję (filtr ważny tylko w tym wnętrzu, w którym go ustawiono)
 let FILTR = null;
 export const filtrAgencji = (id, nazwa = "") => { FILTR = id ? { id, nazwa, miejsce: aktualneMiejsce() } : null; };
+export const zdejmijFiltrAgencji = () => { FILTR = null; };
 const aktywnyFiltr = () => (FILTR && FILTR.miejsce === aktualneMiejsce() ? FILTR : null);
 
 const RODZAJ = { druk: "druk", internet: "internet", radio_billboard: "radio i billboardy", wydarzenia: "wydarzenia" };
@@ -135,7 +136,8 @@ function podsumowanieKampanii(lista, gdzie) {
 }
 
 export const agencje = {
-  tytul: "Agencje reklamowe", get tytulPelny() { const f = aktywnyFiltr(); return f ? `Agencja ${f.nazwa}` : "Marketing – agencje reklamowe"; }, ikona: "tradycyjny",
+  tytul: "Agencje reklamowe", tytulPelny: "Marketing – agencje reklamowe", ikona: "tradycyjny",
+  tytulOkna: () => { const f = aktywnyFiltr(); return f ? `Agencja ${f.nazwa}` : null; },   // okno piętra biurowca: tytuł z filtra (podróż 02/sklepy)
   odblokowanie: (v) => !!v.reklama && v.runda >= (v.harmonogram?.reklama ?? 1), ukryta: (v) => !v.reklama,
   info: ({ v } = {}) => `Zamów kampanię w jednej z agencji na mieście: wybierz kanał, strefę i liczbę emisji w tej rundzie (emisja to paczka ulotek,
     post, spot w radiu…). Im więcej emisji, tym taniej za sztukę (progi rabatów każdego kanału), ale efekt się nasyca: pierwsze emisje działają
@@ -156,7 +158,7 @@ export const agencje = {
   wyniki({ v }) {
     const W = v.wyniki?.reklama_agencje;
     if (!W) return brakWynikow("Wyniki pojawią się po pierwszej rundzie z kampanią.");
-    const kampanie = W.kampanie.filter((x) => !x.internet);
+    const kampanie = W.kampanie.filter((x) => !x.internet && (!aktywnyFiltr() || x.agencja_nazwa === aktywnyFiltr().nazwa || x.agencja === aktywnyFiltr().id));
     let html = podsumowanieKampanii(kampanie, "") + raportyAgencji(kampanie);
     html += trwajaceHtml(v, kampanie, "Twoje kampanie w tej rundzie", true);
     const L = Object.entries(W.laczne || {});

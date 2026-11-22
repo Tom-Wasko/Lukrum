@@ -13,6 +13,7 @@ import { aktualneMiejsce, aktualneQ, idzDoMiejsca, MIEJSCA, okruszek, otworzBudy
 import { stylEkranu, ukladEkranu } from "./pulpit/karty-style.js";
 import { ustawWybrany } from "./zakladki/lokal_wybor.js";
 import { zlozona } from "./zakladki/lokal.js";
+import { zdejmijFiltrAgencji } from "./zakladki/marketing.js";
 import { AKCJE_PULPITU, odswiezPulpit, PULPIT } from "./pulpit/pulpit.js";
 
 const start = () => (PULPIT ? "mapa" : "dashboard");   // ekran startowy: pulpit – mapa na cały ekran; stary układ (?uklad=stary) – plan rundy
@@ -204,7 +205,7 @@ const SAME_CZESCI = {};
 function zakladkaOkna(k, cel) {
   const zl_ = ZAKLADKI[cel], czesc = ZAKLADKI[k];
   if (!zl_?.czesci || zl_.czesci.length < 2 || k === cel || !zl_.czesci.includes(k) || !czesc) return zl_;
-  return SAME_CZESCI[k] || (SAME_CZESCI[k] = zlozona({ tytul: czesc.tytul, tytulPelny: czesc.tytulPelny, info: czesc.info, czesci: { [k]: czesc },
+  return SAME_CZESCI[k] || (SAME_CZESCI[k] = zlozona({ tytul: czesc.tytul, tytulPelny: czesc.tytulPelny, info: czesc.info, czesci: { [k]: czesc }, bezLokali: !!zl_.bezLokali,
     odRundy: (v, kk) => v.harmonogram?.[ELEMENT[kk]] ?? OD_RUNDY[kk] }));
 }
 function otworzTeczke(k, tryb) {
@@ -239,7 +240,7 @@ function rysujTeczke() {
     ? `<div class="komunikat ok">Decyzje tej rundy są wysłane. Aby je zmienić, wróć do podejmowania decyzji przyciskiem „List z decyzjami” na pasku.</div>` : "";
   const opis = typeof z.info === "function" ? z.info(c, tryb) : z.info;
   const html = `${opis ? `<div class="teczka-opis">${kolko(opis)}</div>` : ""}${podglad}${zablokowane}${wyslane}${tresc}`;
-  const okno_ = teczka(`${ikona(IKONY[t.k])} ${z.tytulPelny || z.tytul}`, html, {
+  const okno_ = teczka(`${ikona(IKONY[t.k])} ${z.tytulOkna?.(v) || z.tytulPelny || z.tytul}`, html, {
     naglowek: przelacznik, poZamknieciu: () => { if (S.teczka === t) S.teczka = null; },
     styl: stylEkranu(t.czesc, t.k), okruszek: `Lublin › ${esc(MIEJSCA[aktualneMiejsce()]?.tytul || "Miejsce")}${tryb === "wyniki" ? " › Wyniki" : ""}`,
     klucz: t.czesc || t.k, uklad: tryb === "decyzje" ? ukladEkranu(t.czesc, t.k) : null });
@@ -371,6 +372,7 @@ function znajdzPole(klucz) {
 }
 
 function rysuj() {
+  if (!S.teczka) zdejmijFiltrAgencji();   // filtr piętra biurowca działa tylko w oknie, które go ustawiło
   const fokus = kluczPola(document.activeElement);
   const przewiniecie = window.scrollY;
   wyczyscWykresy();

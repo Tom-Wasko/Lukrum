@@ -6,7 +6,7 @@ export default function (R) {
   const ID = "piekarnia", YP = 400;
   const bochenki = (x, y, n, kol = "var(--g-skora2)") => Array.from({ length: n }, (_, i) => `<ellipse class="k1" cx="${x + i * 34}" cy="${y}" rx="15" ry="9" fill="${kol}"/>`).join("");
   return {
-    id: ID, tytul: "Piekarnia Koziołek", adres: "Stare Miasto", opis: "Piekarnia: ceglany piec z łopatą, wózek z blachami bułek, lada z koszami pity i tortilli, kalendarz dostaw na każdy dzień tygodnia.",
+    id: ID, dostawca: "Piekarnia Koziołek", tytul: "Piekarnia Koziołek", adres: "Stare Miasto", opis: "Piekarnia: ceglany piec z łopatą, wózek z blachami bułek, lada z koszami pity i tortilli, kalendarz dostaw na każdy dzień tygodnia.",
     rysuj: (R) => {
       let s = R.sciana("color-mix(in srgb, var(--g-skora) 35%, var(--g-sciana))", YP) + R.podloga("plytki", YP, "var(--g-podloga)") + R.lampa(520, 30) + R.lampa(900, 30);
       // piec ceglany z łukiem i żarem, łopata piekarska oparta o ścianę

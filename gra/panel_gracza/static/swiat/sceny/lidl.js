@@ -6,7 +6,7 @@
 export default function (R) {
   const ID = "lidl", YP = 400, MARKA = "var(--akcent-2)";
   return {
-    id: ID, tytul: "Lidl", adres: "ul. Romantyczna, Czuby", opis: "Dyskont z wyspą tematyczną pośrodku: tydzień śródziemnomorski z falafelem i pitą; z lewej piec i półki z pieczywem, z prawej zamrażarki i kasa.",
+    id: ID, dostawca: "Lidl", tytul: "Lidl", adres: "ul. Romantyczna, Czuby", opis: "Dyskont z wyspą tematyczną pośrodku: tydzień śródziemnomorski z falafelem i pitą; z lewej piec i półki z pieczywem, z prawej zamrażarki i kasa.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana)", YP) + R.podloga("plytki", YP) + [100, 520, 940].map((x) => R.swietlowka(x, 12, 180)).join("");
       s += R.szyld(130, 44, 150, 44, "LIDL", { tlo: MARKA, tekst: "var(--papier)", r: 26 });

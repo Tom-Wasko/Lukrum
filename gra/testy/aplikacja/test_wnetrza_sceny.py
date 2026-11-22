@@ -161,13 +161,16 @@ def test_pietra_biurowca_maja_filtr_agencji():
 # zakładki złożone z kilku części: punkt nie może prowadzić do nich wprost (klucz części otwiera okno jednej sprawy)
 ZLOZONE = {"lokal_przeglad", "wnetrze_sprzet", "wnetrze_wyposazenie", "hr_rozwoj", "zaop_dostawy", "zaop_magazyn",
            "zaop_przewozy", "lokal_menu"}
-# jawne wyjątki: (scena, ekran) → powód, dla którego kilka punktów sceny otwiera ten sam ekran
+# jawne wyjątki: (scena, etykieta punktu) → powód, dla którego punkt otwiera to samo co wcześniejszy punkt tej sceny
 _JEDNA_SPRAWA = "ekran jednej sprawy (jedna zakładka gry, nie złożona z kilku); punkty to różne stoły tej samej usługi"
-TEN_SAM_EKRAN: dict[tuple[str, str], str] = {(s, e): _JEDNA_SPRAWA for s, e in [
-    ("agencja_nieruchomosci", "lokale"), ("agencja_pracy", "rynek_pracy"), ("bank", "bank"), ("bazar", "handel"),
-    ("biuro_rachunkowe", "biuro"), ("detektyw", "konkurencja"), ("gielda", "gielda"), ("harpagon", "harpagon"),
-    ("kamienica_rachmistrzow", "biuro"), ("poczta", "wyslij"), ("pokoj_ksiegi", "kpir"), ("sanepid", "sanepid"),
-    ("ubezpieczyciel", "ubezpieczenia"), ("uczelnia", "klienci")]}
+TEN_SAM_EKRAN: dict[tuple[str, str], str] = {par: _JEDNA_SPRAWA for par in [
+    ("agencja_nieruchomosci", "Twoje klucze"), ("agencja_pracy", "Twoje ogłoszenia"), ("agencja_pracy", "Agencja"),
+    ("agencja_pracy", "Headhunter"), ("bank", "Kredyty"), ("bank", "Lokaty"), ("bazar", "Twój stragan"),
+    ("bazar", "Zakończone"), ("biuro_rachunkowe", "Cennik"), ("biuro_rachunkowe", "Twoje dokumenty"),
+    ("detektyw", "Kto jest kim"), ("detektyw", "Raporty"), ("gielda", "Kup albo sprzedaj"), ("gielda", "Wiadomości"),
+    ("harpagon", "Twój dług"), ("kamienica_rachmistrzow", "Poczta z urzędu"), ("poczta", "Potwierdzenia"),
+    ("pokoj_ksiegi", "Dokumenty"), ("sanepid", "Kontrole"), ("ubezpieczyciel", "Co grozi"),
+    ("ubezpieczyciel", "Twoje polisy"), ("uczelnia", "Prognoza popytu")]}
 
 
 def test_zaden_punkt_nie_otwiera_zlozonego_ekranu_ani_tej_samej_zawartosci():
@@ -193,7 +196,7 @@ def test_zaden_punkt_nie_otwiera_zlozonego_ekranu_ani_tej_samej_zawartosci():
                 klucz = ("ekran", p["ekran"], p["tryb"])
             else:
                 continue   # odesłanie, wejście albo dymek z własnym wstępem
-            if klucz in klucze and (scena, p["ekran"]) not in TEN_SAM_EKRAN:
+            if klucz in klucze and (scena, p["et"]) not in TEN_SAM_EKRAN:
                 kolizje.append(f"{scena}: „{p['et']}” i „{klucze[klucz]}” otwierają to samo: {klucz}")
             klucze.setdefault(klucz, p["et"])
     assert not kolizje, "\n".join(kolizje)
@@ -207,10 +210,62 @@ def test_usuwanie_zamowien_odswieza_tylko_liste_a_nie_cala_strone():
     assert usun.count("poListe(c)") == 2   # zam-usun i zam-wyczysc: drugi argument zmien
 
 
+
+# jawne wyjątki kebaba: (klucz punktu, cel) → powód. Reszta punktów kebaba nie może otwierać zakładki złożonej z kilku części.
+KEBAB_ZLOZONE = {
+    ("lada", "lokal_przeglad"): "„Mój lokal” (stan, sprawy, obsada, sprzedaż) to jedna lada; do decyzji szefa, czy rozdzielić (raport wątku sklepy)",
+    ("menu", "lokal_menu"): "zakładka złożona z jednej części (menu i ceny)",
+    ("chlodnia", "zaop_magazyn"): "magazyn i świeżość to jedna sprawa chłodni",
+    ("stoliki", "wnetrze_wyposazenie"): "odesłanie do Parku handlowego (bez okna)",
+    ("szkolenia", "hr_rozwoj"): "odesłanie do akademii (bez okna)",
+}
+
+
 def test_kebab_prowadzi_do_zlozonych_ekranow_tylko_przez_jawny_wyjatek():
     miejsca = (GRA / "panel_gracza" / "static" / "swiat" / "miejsca.js").read_text(encoding="utf-8")
-    cele = re.findall(r'cel: "(\w+)"', miejsca.split("kebab: {", 1)[1])
-    # wyjątek jawny: „Lada” otwiera „Mój lokal” (przegląd), „Tablica” menu i ceny, „Chłodnia” magazyn: to ekrany jednej sprawy
-    # lokalu; stoliki i szkolenia to odesłania (bez okna)
-    assert {c for c in cele if c in ZLOZONE} <= {"lokal_przeglad", "lokal_menu", "zaop_magazyn", "wnetrze_wyposazenie", "hr_rozwoj"}
-    assert "wnetrze_sprzet" not in cele
+    pary = re.findall(r'klucz: "(\w+)", cel: "(\w+)"', miejsca.split("kebab: {", 1)[1])
+    zlozone = {(k, c) for k, c in pary if c in ZLOZONE}
+    assert zlozone <= set(KEBAB_ZLOZONE), zlozone - set(KEBAB_ZLOZONE)
+    assert "wnetrze_sprzet" not in {c for _, c in pary}
+
+
+def test_sceny_sklepow_wskazuja_dostawce_z_danych_a_dzialy_pokrywaja_zasoby():
+    """Dostawca idzie z jawnego pola sceny (`dostawca`), a nie z dopasowania tytułu; każdy zasób w cenach ma dział."""
+    dane = yaml.safe_load((GRA / "dane" / "dostawcy.yaml").read_text(encoding="utf-8"))
+    dostawcy = set(dane["dostawcy"])
+    sceny_sklepow = {}
+    for plik in SCENY.glob("*.js"):
+        m = re.search(r'id: ID, dostawca: "([^"]+)"', plik.read_text(encoding="utf-8"))
+        if m:
+            sceny_sklepow[plik.stem] = m.group(1)
+    assert len(sceny_sklepow) == 9, sceny_sklepow   # 3 dyskonty + piekarnia + 3 hurtownie + zakład mięsny + Auchan
+    assert set(sceny_sklepow.values()) <= dostawcy, set(sceny_sklepow.values()) - dostawcy
+    # każdy punkt sklepu (teczka.dostawca) ma scenę z kluczem dostawcy
+    for scena, punkty in _punkty_scen().items():
+        if any(p["dostawca"] for p in punkty):
+            assert scena in sceny_sklepow, f"scena {scena} ma punkty sklepu, ale nie ma pola dostawca"
+    # działy pokrywają wszystkie zasoby, które dostawcy mają w cenach
+    dostawcy_js = (GRA / "panel_gracza" / "static" / "zakladki" / "dostawcy.js").read_text(encoding="utf-8")
+    blok = dostawcy_js.split("export const DZIALY", 1)[1].split("};", 1)[0]
+    w_dzialach = set(re.findall(r'"([^"]+)"', blok.split("=", 1)[1]))
+    zasoby = {z for miesiac in dane["ceny"].values() for ceny in miesiac.values() for z in ceny}
+    assert zasoby <= w_dzialach, f"zasoby bez działu: {zasoby - w_dzialach}"
+
+
+def test_panel_laduje_sie_a_sklep_bez_oferty_nie_otwiera_ogolnego_ekranu_dostawcow():
+    """Zachowanie na prawdziwych modułach (Node ze stubem DOM): zakładki/index.js się ładuje (regresja: getter bez settera),
+    runda 1 / późniejszy sklep to krótka informacja, a okno sklepu pokazuje tylko zasoby z działu."""
+    wyjscie = subprocess.run(
+        ["node", str(Path(__file__).with_name("zakladki_zachowanie.mjs")), str(GRA / "panel_gracza" / "static")],
+        capture_output=True, text=True, encoding="utf-8", check=True).stdout
+    dane = json.loads(wyjscie)
+    assert not dane["bledy"], dane["bledy"]
+    w = dane["wynik"]
+    assert w["index_laduje_sie"] == {"agencje": "string", "hr_rozwoj_bez_lokali": True}
+    assert w["dostawca_sceny"]["pusta_runda"] is None and w["dostawca_sceny"]["bez_klucza"] is None
+    assert w["dostawca_sceny"]["jest"] == "Lidl"
+    assert w["klik_bez_oferty"]["ekrany"] == []   # nie otwiera zaop_dostawy
+    assert "otworzy się w tygodniu 3" in w["klik_bez_oferty"]["tresc"]
+    assert w["okno_sklepu"]["ekrany"] == []
+    tresc = w["okno_sklepu"]["tresc"]
+    assert "Napój" in tresc and "Bułka" not in tresc and "Sos" not in tresc

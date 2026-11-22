@@ -5,7 +5,7 @@
 export default function (R) {
   const ID = "selgros", YP = 430;
   return {
-    id: ID, tytul: "Selgros", adres: "al. Jana Pawła II, Węglin Południowy", opis: "Hala hurtowni z masarnią pośrodku: lada z mięsem, haki, obok ściana zgrzewek z napojami, zamrażarki i kasa.",
+    id: ID, dostawca: "Selgros", tytul: "Selgros", adres: "al. Jana Pawła II, Węglin Południowy", opis: "Hala hurtowni z masarnią pośrodku: lada z mięsem, haki, obok ściana zgrzewek z napojami, zamrażarki i kasa.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana)", YP) + R.podloga("plytki", YP) + R.swietlowka(150, 20, 180) + R.swietlowka(520, 20, 180) + R.swietlowka(890, 20, 180);
       s += R.szyld(130, 40, 200, 42, "SELGROS", { tlo: "var(--akcent)", tekst: "var(--papier)", r: 24 });

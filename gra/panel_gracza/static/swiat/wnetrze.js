@@ -124,8 +124,13 @@ export function kliknijPunkt(i, ctx) {
     if (o.ekran) {
       if (!c.zakryta(o.ekran) && !c.dostepna(o.ekran)) { const od = c.odRundy(o.ekran); return toast(od ? `To otworzy się w tygodniu ${od}.` : "To miejsce jest jeszcze zamknięte."); }
       if (p.teczka?.dostawca) {   // sklep, hurtownia: okienko z ofertą tylko tego sklepu i działu (nie ogólny ekran dostawców)
-        const dost = dostawcaSceny(c.v, ctx.def.tytul);
+        // dostawca z jawnego pola sceny (klucz z dane/dostawcy.yaml); bez oferty (runda 1, sklep otwarty później) – tylko krótka informacja,
+        // nigdy ogólny ekran dostawców
+        const dost = dostawcaSceny(c.v, ctx.def.dostawca);
         if (dost) return otworzSklep(c, { dost, dzialy: p.teczka.dzialy, widok: p.teczka.widok, tytul: `${ctx.def.tytul}: ${p.et}` });
+        const od = c.v.auto_dostawca?.zasady?.od_rundy;   // sklep z późniejszym startem (Auchan po przebudowie)
+        return dymek(ctx.def.tytul, "Obsługa", od && c.v.runda < od ? `Ten sklep otworzy się w tygodniu ${od}.`
+          : "Ten sklep nie ma dziś oferty dla firm. Zajrzyj tu w jednym z następnych tygodni.");
       }
       if (p.teczka?.auto) return otworzAuto(c, { tytul: `${ctx.def.tytul}: ${p.et}`, sklep: ctx.def.tytul });   // auto-dostawy: tylko ta sekcja
       filtrAgencji(p.teczka?.agencja, p.teczka?.tytul);

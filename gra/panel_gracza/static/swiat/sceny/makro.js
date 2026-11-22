@@ -5,7 +5,7 @@
 export default function (R) {
   const ID = "makro", YP = 430;
   return {
-    id: ID, tytul: "Makro", adres: "ul. Chemiczna, Bronowice", opis: "Wysoka hala hurtowni: regały paletowe do sufitu, chłodnia, wózek widłowy, stanowisko obsługi i rampa z ciężarówką.",
+    id: ID, dostawca: "Makro", tytul: "Makro", adres: "ul. Chemiczna, Bronowice", opis: "Wysoka hala hurtowni: regały paletowe do sufitu, chłodnia, wózek widłowy, stanowisko obsługi i rampa z ciężarówką.",
     rysuj: (R) => {
       let s = R.sciana("var(--g-sciana2)", YP) + R.podloga("beton", YP) + `<path class="k" d="M0 34h1220M0 34l100-34M200 34l-100-34M200 34l100-34M400 34l-100-34M400 34l100-34M600 34l-100-34M600 34l100-34M800 34l-100-34M800 34l100-34M1000 34l-100-34M1000 34l100-34M1200 34l-100-34" fill="none" stroke-width="3" opacity=".5"/>`;
       s += R.szyld(610, 44, 190, 42, "MAKRO", { tlo: "var(--akcent-2)", tekst: "var(--papier)", r: 24 });

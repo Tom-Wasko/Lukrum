@@ -219,7 +219,7 @@ export const miejsce = {
         // odesłanie: tylko informacja i „Pokaż na mapie”, bez przejścia prosto do innego budynku
         if (!el.dataset.odsyla) return idzDoMiejsca(c, el.dataset.m);
         return okno("To załatwisz gdzie indziej", `<div class="wn-info"><p>${esc(el.dataset.odsyla)}</p></div>`,
-          { male: true, przyciski: `<button data-akcja="sw-wn-mapa" class="gl">Pokaż na mapie</button><button data-akcja="zamknij-okno">Zostaję</button>`, okruszek: "Lublin › Mój kebab" });
+          { male: true, przyciski: `<button data-akcja="sw-wn-mapa" class="gl">Wróć na mapę</button><button data-akcja="zamknij-okno">Zostaję</button>`, okruszek: `Lublin › ${esc((MIEJSCA[M.id] || {}).tytul || "Miejsce")}` });
       }
       const k = el.dataset.k;
       if (!k) return;
