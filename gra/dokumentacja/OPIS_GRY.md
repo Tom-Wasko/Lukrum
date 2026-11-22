@@ -10,9 +10,10 @@ w nagłówku, dostępna bez logowania) i `INSTRUKCJA.pdf`. Po zmianie instrukcji
 odświeża `.venv\Scripts\python manage.py instrukcja_pdf` (drukuje Edge albo Chrome).
 
 Strona startowa → „Nowa gra”: firmy graczy (na tym komputerze) i boty (zrównoważony, tani, premium,
-agresywny marketing, naśladowca). Zakładki: Oferta (menu) → Inwestycje → HR → Dostawcy → Marketing →
-Sprzedaż → Finanse → Lista błędów → **Wyślij decyzje**. Przełącznik **Decyzje / Wyniki** pokazuje wyniki
-poprzedniej rundy, strzałki ‹ › przełączają podgląd poprzednich rund. Limity (`silnik/limity.py`): najwyżej
+agresywny marketing, naśladowca). Gracz porusza się po **mapie Lublina** i **wnętrzach** budynków (kebab, banki, hurtownie, urzędy, agencje…); każdy
+punkt wnętrza otwiera okienko z decyzją. Typowa runda: menu i ceny w Mój kebab → sprzęt i obsada → zakupy
+w hurtowniach → reklama → **Lista błędów** → **List z decyzjami** na poczcie. Przełącznik **Decyzje / Wyniki**
+pokazuje wyniki poprzedniej rundy, nawigator rund pozwala podejrzeć wcześniejsze tygodnie. Limity (`silnik/limity.py`): najwyżej
 3 nowych pracowników na rundę (zatrudnienia i oferty podkupienia razem) i kolejny lokal co 3 rundy – zapis
 decyzji z przekroczeniem jest odrzucony. **Zdarzenia** (`silnik/swiat/zdarzenia.py`, `dane/zdarzenia/parki.yaml`):
 od rundy 2 co tydzień w jednym z parków zaczyna się historia, ta sama dla wszystkich drużyn; reakcja kosztuje czas
@@ -41,13 +42,13 @@ częściej. **Analiza** liczy przewidywany wynik rundy
 dla zapisanych wariantów decyzji. W treningu można cofnąć ostatnią rundę.
 
 **Panel mistrza gry** – http://127.0.0.1:8765/mg/ (tylko rola mistrza gry): nowa gra
-(drużyny, liczba rund, kapitał startowy, boty tak/nie i które strategie), a w grze zakładki **Decyzje** (które
+(drużyny, liczba rund, kapitał startowy, boty tak/nie i które strategie), a w grze zakładki panelu: **Decyzje** (które
 drużyny wysłały decyzje, *Zamknij rundę* – także bez decyzji wszystkich, *Cofnij rundę*, strona każdej firmy,
 plik gry), **Wyniki** (ranking według średniej karty wyników, dochód netto, gotówka, zadłużenie, wykresy rund)
 i **Drużyny** (skład drużyn, nowe konta uczniów, nowe hasło). Runda zamyka się sama, gdy wszystkie drużyny
 wyślą decyzje. Przy zakładaniu gry każdy bot dostaje poziom (łatwy / średni / trudny / niemożliwy – ten ostatni
 oszukuje: klienci bez powodu wolą jego lokale; albo „jak człowiek” – słaby / średni / dobry: prognozuje tylko z tego,
-co widzi drużyna w zakładkach), poziom można zmienić w trakcie gry (od następnej rundy).
+co widzi drużyna na ekranach gry), poziom można zmienić w trakcie gry (od następnej rundy).
 
 **Prowadzenie gry** (zakładka *Decyzje* panelu mistrza gry):
 
@@ -55,7 +56,7 @@ co widzi drużyna w zakładkach), poziom można zmienić w trakcie gry (od nast�
   (cofnięcie rundy działa); *Wznów grę* liczy następny termin od chwili wznowienia,
 - *Zamykanie rund o stałej porze* – tygodniowe terminy (np. wtorek 8:00 i czwartek 8:00). Runda zamyka się
   w pierwszym terminie po zamknięciu poprzedniej, jak po kliknięciu *Zamknij rundę*; drużyny widzą termin na
-  pasku i w *Wyślij decyzje*. Terminy zamyka komenda uruchamiana co kilka minut:
+  pasku i w liście z decyzjami. Terminy zamyka komenda uruchamiana co kilka minut:
 
   ```
   .venv\Scripts\python manage.py zamykaj_rundy              # raz – np. w Harmonogramie zadań Windows co 5 min
@@ -66,19 +67,19 @@ co widzi drużyna w zakładkach), poziom można zmienić w trakcie gry (od nast�
 - **gra pokazowa** – `.venv\Scripts\python manage.py gra_pokazowa` usuwa starą grę „Pokazowa” i zakłada nową:
   18 rund, 4 boty (poziom średni) i drużyna „Pokazowa”, za którą decyduje dobry bot (zrównoważony, trudny), cała
   rozegrana tak jak przy zamykaniu rund (ok. 10 s). Drużyna jest przypisana do kont mistrzów gry (albo
-  `--konto LOGIN`), więc gra jest w „Twoich grach” – można obejrzeć każdą zakładkę po każdej rundzie. Opcje:
+  `--konto LOGIN`), więc gra jest w „Twoich grach” – można obejrzeć każde miejsce po każdej rundzie. Opcje:
   `--rund`, `--ziarno`, `--strategia`, `--poziom`, `--rywale`. Odtwarzać po każdej większej zmianie gry,
 - strony drużyn uczniów mistrz gry ogląda **tylko do odczytu** (decyzje zmieniają i wysyłają uczniowie);
   drużynę bez uczniów prowadzi sam,
 - *Wyniki* → eksport do arkusza: **Ranking (CSV)** i **Wyniki firm w rundach (CSV)** (średnik, przecinek
   dziesiętny – otwiera się wprost w Excelu),
-- **podpowiedzi** (*Ustawienia gry*, domyślnie wyłączone, eksperyment) – przez 3 pierwsze rundy Dashboard
-  drużyny pokazuje „3 rzeczy do sprawdzenia w tej rundzie” z linkami do zakładek; teksty
-  (`api/prezentacja.py: PODPOWIEDZI`) pochodzą z rad w INSTRUKCJA rozdz. 15,
-- **refleksja drużyn** (*Ustawienia gry*: nieobowiązkowa / wymagana / wyłączona) – przy *Wyślij decyzje*
+- **podpowiedzi** (*Ustawienia gry*, domyślnie wyłączone, eksperyment) – przez 3 pierwsze rundy Plan tygodnia
+  drużyny pokazuje „3 rzeczy do sprawdzenia w tej rundzie” z odnośnikami do miejsc w grze; teksty
+  (`api/prezentacja.py: PODPOWIEDZI`) pochodzą z rad w INSTRUKCJA rozdz. 13,
+- **refleksja drużyn** (*Ustawienia gry*: nieobowiązkowa / wymagana / wyłączona) – przy liście z decyzjami
   drużyna pisze 1–2 zdania „co zmieniamy i dlaczego”; mistrz gry widzi je w tabeli *Refleksje drużyn* obok
   dochodu rundy i w kolumnie CSV wyników,
-- **dziennik zapisów** – link *dziennik* przy statusie decyzji: kto, kiedy i w której zakładce zapisywał
+- **dziennik zapisów** – link *dziennik* przy statusie decyzji: kto i kiedy zapisywał
   decyzje w bieżącej rundzie. Gdy ta sama przeglądarka (ciasteczko ze strony gry, przetrwa przelogowanie)
   zapisuje decyzje dwóch drużyn, panel pokazuje ostrzeżenie (eksperyment – wspólny komputer w pracowni
   też je wywoła).
@@ -134,8 +135,9 @@ wgrywa tam przez FTP z TLS `.htaccess` i `index.html` z przekierowaniem na bież
 gry klawiszami Ctrl+C – stronę „gra wyłączona” (po zamknięciu okna krzyżykiem link prowadzi do martwego tunelu,
 do następnego startu). Na hostingu nie trzeba Pythona. Wyłączenie: `staly_link.bat --usun`.
 
-**Wygląd** (lista w nagłówku): menu z boku (domyślnie), menu u góry, *Grafik zmian* – pliki
-`panel_gracza/static/motywy/*.css`, przełącznik `panel_gracza/static/motyw.js`.
+**Wygląd** (⚙ w nagłówku): układ menu – z boku (domyślnie) albo u góry (`static/motyw.js`); paleta – Bar mleczny,
+Pewex albo Wysoka widoczność – i tryb jasny lub ciemny (`static/motywy/zmienne.css`: zmienne kolorów, `dostepnosc.css`:
+znaki ▲ ▼ ! zamiast samego koloru; `bok.css`, `lukrum.css`: układ menu).
 
 ## Budowa
 
@@ -145,11 +147,11 @@ do następnego startu). Na hostingu nie trzeba Pythona. Wyłączenie: `staly_lin
 | `dane/*.yaml` | dane gry (kebab) i założenia (niepewne parametry), każdy z `zrodlo`; sprawdzenie: `python -m silnik.dane sprawdz` |
 | `lukrum/` | projekt Django (ustawienia, adresy) |
 | `gry/` | modele `Gra`, `Runda`, `Decyzja` (event sourcing: konfiguracja + decyzje, stan liczy silnik) i `serwisy.py` |
-| `api/` | widoki JSON dla zakładek (`widoki.py`) i budowa widoku rundy (`prezentacja.py`) |
-| `panel_gracza/` | strony gracza, zakładki w czystym JS (`static/zakladki/`), Chart.js, komenda `graj` |
+| `api/` | widoki JSON dla panelu gracza (`widoki.py`) i budowa widoku rundy (`prezentacja.py`) |
+| `panel_gracza/` | strony gracza w czystym JS: mapa (`static/mapa/`), wnętrza (`static/swiat/`), ekrany decyzji i wyników (`static/zakladki/`), pulpit z zeszytem wujka (`static/pulpit/`), Chart.js, komenda `graj` |
 | `konta/` | logowanie (django-allauth: własny login, konto Microsoft), role uczeń / mistrz gry (`role.py`), komenda `konto` |
 | `panel_mg/` | panel mistrza gry (`/mg/`): nowa gra, prowadzenie rund, wyniki drużyn; dane z `GET /api/gry/<id>/mg` |
-| `testy/` | pytest w podfolderach jak podpakiety silnika (`rdzen/`, `kuchnia/`…) i `aplikacja/` (API, panele, konta); wspólne funkcje pomocnicze w `pomocnicze.py` |
+| `testy/` | pytest w podfolderach jak podpakiety silnika (`rdzen/`, `kuchnia/`…), `aplikacja/` (API, panele, konta), `swiat/` (zdarzenia w parkach, awarie) i `wnetrza/` (dymki, bywalcy); wspólne funkcje pomocnicze w `pomocnicze.py` |
 
 ### Kalendarz rund
 

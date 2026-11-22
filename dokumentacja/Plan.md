@@ -40,7 +40,7 @@ programowa, serwer, RODO, gra próbna, zgłoszenie do konkursu, nazwa w UPRP) ma
 - **Mechaniki i wnętrza** (silnik gry, dane, balans, ekrany w budynkach, teksty): autor z zespołem agentów.
 - Tablica wymiany między stronami: [WSPOLPRACA](wiedza/wspolpraca.md).
 - **Kapitan:** nauczyciel, opiekun projektu.
-- Role i zasady zespołu (szef, lider, agenci): `../warsztat/ZESPOL.md`, [Dziennik lidera](historia/zespol/dziennik-lidera.md).
+- Role i zasady zespołu (szef, lider, agenci): `CLAUDE.md` w korzeniu repozytorium i zasady w folderze cyberiady (poza tym repo), [Dziennik lidera](historia/zespol/dziennik-lidera.md).
 
 ## 4. Folder projektu
 ```

@@ -1,7 +1,7 @@
 # Sprawozdanie: jak prowadzić zespół agentów (16.11.2026)
 
 Dla szefa. Research zrobił agent Sonnet (18 wyszukiwań, źródła pobrane 16.11), wnioski i decyzje opisał lider.
-Wynik: nowy `AGENTS.md`, protokół lidera `warsztat/LIDER.md` i definicje agentów w `lukrum/.claude/agents/` (kopia generowana z `warsztat/`).
+Wynik: nowy `AGENTS.md`, protokół lidera (dawny plik LIDER w `_archiwum/`) i definicje agentów w `lukrum/.claude/agents/` (kopia generowana z dawnego `warsztat/`).
 
 ## Najważniejsze wnioski ze źródeł
 1. **Agenci są drodzy.** Według Anthropic agent zużywa ok. 4 razy więcej tokenów niż zwykły czat, a system wieloagentowy
@@ -34,7 +34,7 @@ Zastrzeżenie: liczby 4×, 15× i 90% pochodzą z badania Anthropic nad wyszukiw
 
 ## Co znalazłem u nas
 - **W projekcie nie było żadnego `CLAUDE.md`.** Claude Code wczytuje sam tylko `CLAUDE.md`, nie `AGENTS.md`. Dlatego
-  agenci nie znali zasad, dopóki brief ich nie powtórzył, a każdy brief je powtarzał. Teraz `lukrum/CLAUDE.md` dołącza
+  agenci nie znali zasad, dopóki brief ich nie powtórzył, a każdy brief je powtarzał. Teraz `CLAUDE.md` w korzeniu repozytorium dołącza
   `AGENTS.md` automatycznie.
 - Stary `AGENTS.md` był opisem dla każdego, bez zasad „jak wykonać zadanie”. Nowy mówi agentowi: brief to cały zakres,
   nie twórz własnych plików, oddaj dowód, raport w stałym formacie.
@@ -48,7 +48,7 @@ Zastrzeżenie: liczby 4×, 15× i 90% pochodzą z badania Anthropic nad wyszukiw
 po jednym briefie → lider sprawdza dowody i diff, scala po akceptacji szefa → dokumentacja i dziennik.
 Gdy szef jest niedostępny, lider zapisuje pytania w [Dziennik lidera](../../historia/zespol/dziennik-lidera.md) i idzie dalej tylko tam, gdzie da się to łatwo cofnąć.
 
-Szczegóły (od 17.11): `warsztat/ZESPOL.md` i `gra/AGENTS.md` (dla każdego agenta), `warsztat/LIDER.md` (dla lidera).
+Szczegóły (od 17.11): stare pliki warsztatu (ZESPOL, LIDER; dziś w `_archiwum/`) i `gra/AGENTS.md` (dla każdego agenta).
 
 ## Ocena sposobu pracy (recenzent Opus, 16.11) – najważniejsze wnioski
 Pełny tekst: `archiwum/notatki-wycofane/Analizy/Ocena sposobu pracy 16.11.md`. Nierozstrzygnięte propozycje są w [Czeka na szefa](../../Stan.md).
