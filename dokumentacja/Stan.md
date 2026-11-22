@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-22 15:00
+Archi żył: 2026-11-22 16:05 · wznowione 16:00 po limicie 5 h (wyko stały od 13:35)
 
 ## Podróż
 02-poprawki-po-grze (start 2026-11-22, tryb nadzorowany, scalanie do `main`): Z29, Z30, Z1, Z31, Z34.
@@ -9,7 +9,7 @@ Plan: `podroze/02-poprawki-po-grze/plan.md`.
 |---|---|---|
 | 02/sklepy | wyko-lukrum-02-sklepy (672af4e2) | w toku |
 | 02/mapa | wyko-lukrum-02-mapa (77b1d612) | w toku |
-| 02/drobne | wyko-lukrum-02-drobne (17acac30) | w toku |
+| 02/drobne | wyko-lukrum-02-drobne (5b7bb118, kopia po limicie) | w toku: pkt 1 według decyzji szefa |
 | 02/makiety | Archi | wybór szefa: zakupy A, wydarzenia A, list B w kopercie A; wdrożenie w następnej podróży |
 
 ## Czeka na szefa
