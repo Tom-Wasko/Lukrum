@@ -304,3 +304,27 @@
 .wt-opis { font-size: 13px; color: var(--szary); }
 .wt-pusty { padding: 18px 20px; background: var(--karta); border: 2px dashed var(--linia); border-radius: 8px; }
 .wt-pusty p { margin: 8px 0 0; }
+/* podróż 03/paragon: okno zakupów w sklepie jako paragon kasowy (baza: .pp-paragon z pulpit.css) */
+.par-okno { width: min(440px, 100%); }
+.par-okno .ot { max-height: min(72vh, 640px); overflow-y: auto; }
+.par-sklep { font-family: "Courier New", ui-monospace, monospace; font-size: calc(13px * var(--skala-tekstu, 1)); }
+.par-sklep .par-sklep-nazwa { font-size: 1.15em; letter-spacing: .06em; margin-top: 4px; }
+.par-sklep .par-poz { padding: 6px 0; border-bottom: 1px dotted var(--g-czern); }
+.par-sklep .par-poz.wybrany { background: color-mix(in srgb, var(--g-czern) 7%, transparent); }
+.par-sklep .par-wiersz { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.par-sklep .par-nazwa { font-weight: 700; }
+.par-sklep .par-opis { display: block; opacity: .85; font-size: .88em; }
+.par-sklep .par-dzien { font-size: .88em; }
+.par-sklep .par-ile { margin-top: 3px; }
+.par-sklep .par-mnoz { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.par-sklep .par-kwota { white-space: nowrap; text-align: right; }
+.par-sklep .par-rabat { padding: 0 4px; border: 1px solid var(--g-czern); }
+.par-sklep input.par-pole { width: 58px; padding: 2px 4px; text-align: right; font: inherit; color: var(--g-czern); background: var(--g-biel);
+  border: 1px solid var(--g-czern); border-radius: 0; }
+.par-sklep input.par-pole:disabled { opacity: .7; }
+.par-sklep .par-uwaga, .par-sklep .par-podsum, .par-sklep .par-ostrzezenie { margin: 6px 0; font-size: .9em; }
+.par-sklep .par-ostrzezenie { font-weight: 700; }
+.par-sklep .btn.maly { font: inherit; font-size: .9em; padding: 2px 8px; color: var(--g-czern); background: var(--g-biel); border: 1px solid var(--g-czern); border-radius: 0; }
+.par-sklep .btn.maly:disabled { opacity: .6; }
+.par-sklep .pp-par-grupa h3 { margin-top: 10px; }
+@media (max-width: 480px) { .par-sklep .par-ile { flex-wrap: wrap; } }

@@ -392,6 +392,53 @@ let SKLEP = null;   // sklep, którego okno jest otwarte: { dost, dzialy, widok,
 /** Otwiera okno sklepu. s: { dost, dzialy?: [nazwy działów], widok?: "dzial" | "koszyk" | "dowoz" | "gazetka", tytul?: napis dla okna }. */
 export function otworzSklep(c, s) { SKLEP = { ...s, zmieniono: false }; oknoSklepu(c, SKLEP); }
 
+// --- paragon: okno zakupów w sklepie wygląda jak paragon kasowy (podróż 03/paragon) ---------------------------------------
+// Pozycje w kolumnie (nazwa, ilość × cena, kwota), suma na dole, data i nazwa sklepu w nagłówku, krój o stałej szerokości.
+// Dane i zapis zamówień bez zmian (decyzja `zamowienia`); pola ilości te same (`data-zmiana="ilosc"`).
+const dataPl = (iso) => `${+iso.slice(8, 10)}.${iso.slice(5, 7)}.${iso.slice(0, 4)}`;
+const nazwaPoz = (z, q) => `${esc(z)}${gw(+q)}`;
+/** Pozycje paragonu: jeden wpis na składnik i jakość; przy dniach dostaw jeden wiersz na każdy dzień dostawy sklepu. */
+function pozycjeParagonu(v, kat, dost, ceny, dni, moje, pole, filtr) {
+  const dniDost = dni ? moje : [null];
+  const lista = [...filtr].filter((z) => ceny[z] && kat.zasoby[z]);
+  return lista.map((z) => {
+    const zas = kat.zasoby[z], r = rabat(v, dost, z);
+    const opis = `${zas.typ_opakowania} ${licz(zas.opakowanie)} ${zas.jednostka}`;
+    return Object.entries(ceny[z]).map(([q, c]) => {
+      const ile = zamowione(v, dost, z, +q);
+      const wiersze = dniDost.map((i) => {
+        const n = i === null ? ile : zamowione(v, dost, z, +q, i);
+        const dzien = i === null ? "" : `<span class="par-dzien">dostawa ${esc(dni[i].dzien)} ${+dni[i].data.slice(8)}.${dni[i].data.slice(5, 7)}</span>`;
+        return `<div class="par-wiersz par-ile">${dzien}<span class="par-mnoz">${i === null ? pole(z, q, n) : pole(z, q, n, i)} op. × ${zl2(c)}</span>
+          <b class="par-kwota">${n ? zl2(n * c) : "–"}</b></div>`;
+      }).join("");
+      return `<div class="par-poz ${ile ? "wybrany" : ""}"><div class="par-wiersz"><span class="par-nazwa">${ile ? "✓ " : ""}${nazwaPoz(z, q)}${r ? ` <span class="par-rabat">−${Math.round(r * 100)}%</span>` : ""}</span></div>
+        <small class="par-opis">${esc(opis)} · w magazynie: ${ulamek(stan(v, z, +q))}</small>${wiersze}</div>`;
+    }).join("");
+  }).join("");
+}
+const naglowekParagonu = (v, dost, podpis, dni) => `<header class="pp-par-gora"><b class="pp-par-szyld">LUKRUM</b><b class="par-sklep-nazwa">${esc(dost).toUpperCase()}</b>
+  <span>${esc(podpis)}</span><span>${dni?.length ? dataPl(dni[0].data) : esc(v.miesiac || `Tydzień ${v.runda}`)}</span></header>`;
+const zabParagonu = `<div class="pp-par-zab" aria-hidden="true"></div>`;
+
+/** Paragon potwierdzenia po zakupie: wszystko, co jest w koszyku tego sklepu. */
+function paragonPotwierdzenia(c, s) {
+  const { v } = c, dost = s.dost, ceny = v.ceny_dostawcow?.[dost] || {}, dni = dniDostaw(v), x = info(v, dost);
+  const zam = mojeZam(v).filter((y) => y.dostawca === dost && ceny[y.zasob]?.[y.jakosc] !== undefined);
+  const wartosc = zam.reduce((a, y) => a + ceny[y.zasob][y.jakosc] * y.ilosc, 0);
+  const poz = zam.map((y) => {
+    const cena = ceny[y.zasob][y.jakosc], dz = dni && dni[+y.dzien || 0] ? ` · dostawa ${esc(dni[+y.dzien || 0].dzien)}` : "";
+    return `<div class="par-poz"><div class="par-wiersz"><span class="par-nazwa">✓ ${nazwaPoz(y.zasob, y.jakosc)}</span></div>
+      <div class="par-wiersz par-ile"><span class="par-mnoz">${licz(y.ilosc)} op. × ${zl2(cena)}${dz}</span><b class="par-kwota">${zl2(cena * y.ilosc)}</b></div></div>`;
+  }).join("");
+  const prog = x.minimalne_zamowienie || 0;
+  const ostrzez = prog && wartosc < prog ? `<p class="par-ostrzezenie">! Dostawa poniżej ${zl(prog)} nie zostanie zrealizowana (brakuje ${zl(prog - wartosc)}).</p>` : "";
+  return `<div class="pp-paragon par-sklep" role="document">${naglowekParagonu(v, dost, "POTWIERDZENIE ZAKUPU", dni)}
+    ${poz || `<p class="pp-par-pusty">Koszyk w tym sklepie jest pusty.</p>`}
+    <div class="pp-par-suma"><span>SUMA PLN</span><b>${zl2(wartosc)}</b></div>${ostrzez}
+    <p class="pp-par-nota">✓ Zakupy zapisane na ten tydzień. Zmienisz je, wracając do sklepu.<br>Dziękujemy, prosimy o paragon!</p>${zabParagonu}</div>`;
+}
+
 function oknoSklepu(c, s, { poZapisie = false } = {}) {
   const { v, kat, edycja } = c, dost = s.dost;
   if (poZapisie) s.zmieniono = true;
@@ -404,24 +451,44 @@ function oknoSklepu(c, s, { poZapisie = false } = {}) {
   const zam = mojeZam(v).filter((y) => y.dostawca === dost);
   const wartosc = zam.reduce((a, y) => a + (ceny[y.zasob]?.[y.jakosc] || 0) * y.ilosc, 0);
   const wTymDziale = zam.filter((y) => filtr.has(y.zasob)).length;
-  const prog = x.minimalne_zamowienie || x.darmowa_od || 0;
-  const koszyk = `<div class="pasek ciemny"><span>W koszyku (${esc(dost)}): <span class="kwota">${zl2(wartosc)}</span> · ${licz(zam.length)} ${zam.length === 1 ? "pozycja" : "pozycji"}${
-    widok === "dzial" && zam.length > wTymDziale ? `, w tym dziale ${licz(wTymDziale)}` : ""}</span></div>`
-    + (prog ? pasekDo(wartosc, prog, wartosc >= prog ? `próg ${zl(prog)} osiągnięty` : `do ${x.minimalne_zamowienie ? "minimum" : "darmowego dowozu"} brakuje ${zl(prog - wartosc)}`) : "");
-  const dniHtml = `<div class="podpis-progow">Dni dostaw</div><div class="progi dni">${DNI.map((n, i) => `<span class="${x.dni_dostaw.includes(i) ? "tu" : ""}">${n}</span>`).join("")}</div>`;
-  const dowoz = widok === "dowoz" ? `<div class="komunikat">${x.odbior_osobisty ? `Odbiór osobisty: ${licz(x.godziny_odbioru)} h czasu właściciela za dzień zakupów.`
-    : x.koszt_dostawy ? `Dowóz ${zl2(x.koszt_dostawy)} za dostawę${x.darmowa_od ? `, darmowy od ${zl(x.darmowa_od)}` : ""}.` : "Dowóz w cenie."}</div>${dniHtml}` : "";
-  const gazetka = widok === "gazetka" && !filtr.size ? `<p class="podpowiedz">W tym tygodniu ${esc(dost)} nie ma gazetki.</p>` : "";
-  const pusty = !filtr.size && widok !== "gazetka" ? `<p class="podpowiedz">${widok === "koszyk" || widok === "dowoz" ? "Koszyk w tym sklepie jest pusty. Towary dodasz w działach sklepu."
-    : "W tym dziale sklep nie ma dziś towaru."}</p>` : "";
-  const pole = (z, q, ile, dz) => `<input type="number" class="krotkie" min="0" step="1" value="${ile}" data-zmiana="ilosc" data-d="${esc(dost)}" data-z="${esc(z)}" data-q="${q}"
-    ${dz === undefined ? "" : `data-dz="${dz}"`} ${edycja ? "" : "disabled"}>`;
   const tytul = s.tytul || `${dost}`;
-  const przyciski = `<button class="btn pom" data-akcja="zamknij-okno">${widok === "dzial" ? "Gotowe" : "Zamknij"}</button>`;
-  const tresc = koszyk + dowoz + (filtr.size ? bazaNowa(v, kat, dost, ceny, dni, moje, pole, filtr) : "") + gazetka + pusty
-    + `<p class="podpowiedz">Ilości wpisujesz w opakowaniach. Kolumna „Magazyn” to to, co już masz; „Wartość” to cena z koszyka.${dni && x.minimalne_zamowienie ? ` Dostawa poniżej ${zl(x.minimalne_zamowienie)} nie zostanie zrealizowana.` : ""}</p>`;
+  const przyciskiBazowe = `<button class="btn" data-akcja="zamknij-okno">Zamknij</button>`;
+  let tresc, przyciski = przyciskiBazowe;
+  if (s.potwierdzenie) {
+    tresc = paragonPotwierdzenia(c, s);
+    przyciski = `<button class="btn" data-par="wroc">Wróć do sklepu</button><button class="btn pom" data-akcja="zamknij-okno">Gotowe</button>`;
+  } else {
+    const prog = x.minimalne_zamowienie || x.darmowa_od || 0;
+    const progTxt = prog ? (wartosc >= prog ? `✓ próg ${zl(prog)} osiągnięty` : `! do ${x.minimalne_zamowienie ? "minimum" : "darmowego dowozu"} brakuje ${zl(prog - wartosc)}`) : "";
+    const uwagi = [
+      widok === "dowoz" ? (x.odbior_osobisty ? `Odbiór osobisty: ${licz(x.godziny_odbioru)} h czasu właściciela za dzień zakupów.`
+        : x.koszt_dostawy ? `Dowóz ${zl2(x.koszt_dostawy)} za dostawę${x.darmowa_od ? `, darmowy od ${zl(x.darmowa_od)}` : ""}.` : "Dowóz w cenie.") : "",
+      widok === "dowoz" ? `Dni dostaw: ${DNI.filter((n, i) => x.dni_dostaw.includes(i)).join(" ")}` : "",
+      dni && x.minimalne_zamowienie ? `Dostawa poniżej ${zl(x.minimalne_zamowienie)} nie zostanie zrealizowana.` : "",
+    ].filter(Boolean).map((t) => `<p class="par-uwaga">${t}</p>`).join("");
+    const pole = (z, q, ile, dz) => `<input type="number" class="krotkie par-pole" min="0" step="1" value="${ile}" data-zmiana="ilosc" data-d="${esc(dost)}" data-z="${esc(z)}" data-q="${q}"
+      ${dz === undefined ? "" : `data-dz="${dz}"`} aria-label="Ilość opakowań" ${edycja ? "" : "disabled"}>`;
+    const pusty = !filtr.size ? `<p class="pp-par-pusty">${widok === "gazetka" ? `W tym tygodniu ${esc(dost)} nie ma gazetki.`
+      : widok === "koszyk" || widok === "dowoz" ? "Koszyk w tym sklepie jest pusty. Towary dodasz w działach sklepu." : "W tym dziale sklep nie ma dziś towaru."}</p>` : "";
+    const podpis = { dzial: s.dzialy?.length ? s.dzialy.join(", ").toUpperCase() : "OFERTA", koszyk: "KOSZYK TYGODNIA", dowoz: "DOSTAWA", gazetka: "GAZETKA" }[widok] || "OFERTA";
+    tresc = `<div class="pp-paragon par-sklep" role="document">${naglowekParagonu(v, dost, podpis, dni)}${uwagi}
+      ${filtr.size ? pozycjeParagonu(v, kat, dost, ceny, dni, moje, pole, filtr) : ""}${pusty}
+      <div class="pp-par-suma"><span>SUMA PLN</span><b>${zl2(wartosc)}</b></div>
+      <p class="par-podsum">W koszyku: ${licz(zam.length)} ${zam.length === 1 ? "pozycja" : "pozycji"}${widok === "dzial" && zam.length > wTymDziale ? `, w tym dziale ${licz(wTymDziale)}` : ""}${progTxt ? `<br>${progTxt}` : ""}</p>
+      <p class="pp-par-nota">Ilości wpisujesz w opakowaniach. „W magazynie” to to, co już masz.</p>${zabParagonu}</div>`;
+    if (edycja && zam.length) przyciski = `${przyciskiBazowe}<button class="btn pom" data-par="kup">Kupuję · ${zl2(wartosc)}</button>`;
+  }
   if (poZapisie && !otwarteOkno(tytul)) return c.rysuj();
-  okno(tytul, tresc, { przyciski, okruszek: `Lublin › ${esc(dost)}`, poZamknieciu: () => { if (SKLEP !== s) return; const z = s.zmieniono; SKLEP = null; if (z) c.rysuj(); } });
+  const z = okno(tytul, tresc, { przyciski, klasa: "pp-okno-paragon par-okno", styl: 0, poZamknieciu: () => { if (SKLEP !== s) return; const zm = s.zmieniono; SKLEP = null; if (zm) c.rysuj(); } });
+  if (z && !z._paragon) {   // przyciski „Kupuję” / „Wróć”: nasłuch na oknie, bo odświeżenie wymienia tylko jego zawartość
+    z._paragon = true;
+    z.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-par]");
+      if (!b || SKLEP !== s) return;
+      s.potwierdzenie = b.dataset.par === "kup";
+      oknoSklepu(c, s);
+    });
+  }
 }
 
 function oknoBazy(c, dost, { poZapisie = false } = {}) {

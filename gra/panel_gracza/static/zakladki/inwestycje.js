@@ -185,34 +185,49 @@ export const sprzet = {
 let SPRZET = null;
 export function otworzSprzet(c, s) { SPRZET = s; oknoSprzetu(c, s); }
 
+// Okno hurtowni sprzętu jako paragon kasowy (podróż 03/paragon): pozycje w kolumnie (nazwa, 1 × cena, kwota), suma na dole,
+// nazwa hurtowni i data w nagłówku, krój o stałej szerokości. Decyzje bez zmian (sprzet_kup, sprzet_sprzedaj).
 function oknoSprzetu(c, s) {
   const { v, kat, edycja } = c, komis = s.widok === "komis";
   const typy = komis ? TYPY : [...new Set(s.nazwy.map((n) => kat.sprzet[n]?.dla).filter(Boolean))];
   const stanowiska_ = stanowiskaLokalu(v, v.stan.stanowiska).filter((x) => typy.includes(x.typ));
   const przyciski = `<button class="btn pom" data-akcja="zamknij-okno">Gotowe</button>`;
-  let html = "";
+  const dni = v.lokale && v.swiezosc?.dni, data = dni?.length ? `${+dni[0].data.slice(8, 10)}.${dni[0].data.slice(5, 7)}.${dni[0].data.slice(0, 4)}` : esc(v.miesiac || `Tydzień ${v.runda}`);
+  const kupione = (st, n, q) => (v.decyzje.sprzet_kup || []).some((x) => x.typ === st.typ && x.nr === st.nr && x.nazwa === n && (q === undefined || x.jakosc === q));
+  let suma = 0, html = "";
   for (const st of stanowiska_) {
     const { przed, teraz } = sprzetStanowiska(v, st.typ, st.nr), kto = kat.oferty.stanowiska.typy[st.typ].nazwa;
-    const wiersze = [];
+    const poz = [];
+    const wiersz = (nazwa, q, cena, opis, przycisk, wybrane) => `<div class="par-poz ${wybrane ? "wybrany" : ""}"><div class="par-wiersz"><span class="par-nazwa">${wybrane ? "✓ " : ""}${esc(nazwa)}${gw(q)}</span></div>
+      <div class="par-wiersz par-ile"><span class="par-mnoz">1 × ${cena}</span><b class="par-kwota">${przycisk}</b></div>${opis ? `<small class="par-opis">${opis}</small>` : ""}</div>`;
     if (komis) {
       const sprzedawane = (v.decyzje.sprzet_sprzedaj || []).filter((x) => x.typ === st.typ && x.nr === st.nr).map((x) => x.nazwa);
-      for (const [n, q] of Object.entries(przed)) wiersze.push([esc(n), gw(q), zl2(v.ceny_sprzedazy_sprzetu[n][q]),
-        `<button class="btn ${sprzedawane.includes(n) ? "zielony" : "pom"} maly" data-akcja="sprzedaj-poz" data-t="${st.typ}" data-n="${st.nr}" data-nazwa="${esc(n)}" ${edycja ? "" : "disabled"}>${sprzedawane.includes(n) ? "✓ Sprzedane" : "Sprzedaj"}</button>`]);
+      for (const [n, q] of Object.entries(przed)) {
+        const tak = sprzedawane.includes(n), cena = v.ceny_sprzedazy_sprzetu[n][q];
+        if (tak) suma += cena;
+        poz.push(wiersz(n, q, zl2(cena), "", `<button class="btn ${tak ? "zielony" : "pom"} maly" data-akcja="sprzedaj-poz" data-t="${st.typ}" data-n="${st.nr}" data-nazwa="${esc(n)}" ${edycja ? "" : "disabled"}>${tak ? "✓ Sprzedane" : "Sprzedaj"}</button>`, tak));
+      }
     } else for (const n of s.nazwy.filter((x) => kat.sprzet[x]?.dla === st.typ)) {
-      if (n in przed) { wiersze.push([esc(n), gw(przed[n]), "–", "–", `<span class="pigulka ok">masz już: ${gw(przed[n])}</span>`]); continue; }
+      if (n in przed) { poz.push(wiersz(n, przed[n], "–", "już kupione w tym stanowisku", `<span class="pigulka ok">✓ masz już</span>`, true)); continue; }
       for (const q of [1, 2, 3]) {
-        const kupione = (v.decyzje.sprzet_kup || []).some((x) => x.typ === st.typ && x.nr === st.nr && x.nazwa === n && x.jakosc === q);
-        wiersze.push([esc(n), gw(q), zl2(kat.sprzet[n].ceny[q]), zl2(naRunde(kat.sprzet[n].utrzymanie[q])),
-          kupione ? `<button class="btn zielony maly" data-akcja="kup-poz" data-t="${st.typ}" data-n="${st.nr}" data-nazwa="${esc(n)}" data-q="0" ${edycja ? "" : "disabled"}>✓ W koszyku</button>`
-            : `<button class="btn pom maly" data-akcja="kup-poz" data-t="${st.typ}" data-n="${st.nr}" data-nazwa="${esc(n)}" data-q="${q}" ${edycja && !(n in teraz) ? "" : "disabled"}>Kup</button>`]);
+        const tak = kupione(st, n, q), cena = kat.sprzet[n].ceny[q];
+        if (tak) suma += cena;
+        poz.push(wiersz(n, q, zl2(cena), `utrzymanie${naOkres()}: ${zl2(naRunde(kat.sprzet[n].utrzymanie[q]))}`,
+          tak ? `<button class="btn zielony maly" data-akcja="kup-poz" data-t="${st.typ}" data-n="${st.nr}" data-nazwa="${esc(n)}" data-q="0" ${edycja ? "" : "disabled"}>✓ W koszyku</button>`
+            : `<button class="btn pom maly" data-akcja="kup-poz" data-t="${st.typ}" data-n="${st.nr}" data-nazwa="${esc(n)}" data-q="${q}" ${edycja && !(n in teraz) ? "" : "disabled"}>Kup</button>`, tak));
       }
     }
-    if (!wiersze.length) continue;
-    html += tabela(`${esc(kto)}, stanowisko nr ${st.nr}`, komis ? ["Sprzęt", "Jakość", "Cena odsprzedaży", ""] : ["Sprzęt", "Jakość", "Cena", `Utrzymanie${naOkres()}`, ""], wiersze, { klasy: ["l"] });
+    if (!poz.length) continue;
+    html += `<section class="pp-par-grupa"><h3>${esc(kto)}, stanowisko nr ${st.nr}</h3>${poz.join("")}</section>`;
   }
-  if (!html) html = `<p class="podpowiedz">${komis ? "Żadne stanowisko nie ma jeszcze sprzętu do odsprzedania."
+  if (!html) html = `<p class="pp-par-pusty">${komis ? "Żadne stanowisko nie ma jeszcze sprzętu do odsprzedania."
     : stanowiska_.length ? "Wszystkie stanowiska mają już ten sprzęt." : "Najpierw uruchom stanowisko w stolarni. Dopiero potem kupisz do niego sprzęt."}</p>`;
-  okno(s.tytul, html, { przyciski, okruszek: "Lublin › Hurtownia sprzętu", poZamknieciu: () => { SPRZET = null; } });
+  const tresc = `<div class="pp-paragon par-sklep" role="document"><header class="pp-par-gora"><b class="pp-par-szyld">LUKRUM</b><b class="par-sklep-nazwa">HURTOWNIA SPRZĘTU</b>
+    <span>${esc(s.tytul)}</span><span>${data}</span></header>${html}
+    <div class="pp-par-suma"><span>${komis ? "SUMA ODSPRZEDAŻY" : "SUMA PLN"}</span><b>${zl2(suma)}</b></div>
+    <p class="pp-par-nota">${komis ? "Sprzedaż liczy się przy zamknięciu tygodnia." : "✓ oznacza sprzęt w koszyku. Kliknięcie „✓ W koszyku” go usuwa."}<br>Dziękujemy, prosimy o paragon!</p>
+    <div class="pp-par-zab" aria-hidden="true"></div></div>`;
+  okno(s.tytul, tresc, { przyciski, klasa: "pp-okno-paragon par-okno", styl: 0, poZamknieciu: () => { SPRZET = null; } });
 }
 
 function oknoZakupu(c, typ, nr) {
