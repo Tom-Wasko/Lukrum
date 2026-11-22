@@ -470,6 +470,7 @@ export function odswiezPulpit(c) {
   if (!PULPIT) return;
   montuj();
   ostatniC = c;
+  if (window.lukrum) window.lukrum.widok = () => ostatniC?.v;   // widok gry dla scen (poczta), podróż 02/drobne
   zapamietajWidok(c);
   document.body.classList.toggle("na-mapie", c.zakladka === "mapa");
   document.body.classList.toggle("we-wnetrzu-pp", c.zakladka === "miejsce");
