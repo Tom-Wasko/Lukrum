@@ -6,17 +6,10 @@ Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej 
 majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ## W toku
-
-## Zaplanowane
-
-### Lekkie poprawki
+Podróż 03-okienka-i-rundy:
 - Z9 · strona startowa: „Nowe w tej rundzie” starymi nazwami („Zakładki”, „HR”)
 - Z28 · mapa: `e.detail.obsluzone` opisane w kontraktach zdarzeń
 - Z26 · niestabilny test `test_kasyno.py::test_mistrz_gry_nie_widzi_klubu` w pełnym przebiegu
-
-### Ważne
-- Z2 · gry testowe: znajomi 20 i 22.11 za nami; dalej 4–6 osób ze stoperem, potem klasa; balans jest dotąd tylko z botów;
-  w najbliższej grze sprawdzić poprawki z podróży 02 (sklepy, Park, mapa, drobne), kategorie w rzędzie (1) i „Jak grać” w zakładkach (3)
 - Z32 · więcej do zrobienia w kolejnych rundach: zeszyt wujka i wydarzenia dają kilka sensownych zadań w każdej
   rundzie (m: w rundzie 2 tylko bułki); łączy się z Z15
 - Z33 · wydarzenia i parki: wskazówki skutków decyzji ▲▼ z siłą, bez liczb (9); każdy park własny wygląd, przycisk
@@ -26,9 +19,18 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 - Z35 · zeszyt: stary, zniszczony, skórzana okładka, schowany przechylony, lepiej pasująca odręczna czcionka
   na wolnej licencji (6)
 - Z36 · wyniki tygodnia w kebabie: jeden prosty ekran (sprzedaż, koszty, zysk, miejsce w rankingu), łatwy do znalezienia
+- Z5 · lista wujka: kliknięcie pozycji przesuwa i przybliża mapę do budynku, a ten pulsuje
+- Z38 · Zana: „Portiernia” jako spis pięter (która agencja na którym piętrze, przejście do windy), zamiast listy wszystkich agencji
+
+## Zaplanowane
+
+### Lekkie poprawki
+
+### Ważne
+- Z2 · gry testowe: znajomi 20 i 22.11 za nami; dalej 4–6 osób ze stoperem, potem klasa; balans jest dotąd tylko z botów;
+  w najbliższej grze sprawdzić poprawki z podróży 02 (sklepy, Park, mapa, drobne), kategorie w rzędzie (1) i „Jak grać” w zakładkach (3)
 - Z4 · seria `wnetrza`: osobne wnętrze dla każdego żetonu (projekt Fable 17.11, makiety w `_archiwum/fable-17.11/fable-wnetrza/`), PRL w holach, krytyka i poprawki wybrane przez szefa; majster: wnętrza wyglądają źle; podpisy na makietach przed wdrożeniem
 - Z3 · seria `budynki`: pierzeja 5 banków, giełda osobno, redakcja (Kamienica rachmistrzów i reklama w biurowcu przy Zana już są)
-- Z5 · lista wujka: kliknięcie pozycji przesuwa i przybliża mapę do budynku, a ten pulsuje
 - Z17 · lekcja 45 minut ze zmierzonym czasem rundy; gotowe zestawy odsłoniętych funkcji; wygląd pól kreatora trybu lekcyjnego na zrzucie
 - Z18 · przewodnik nauczyciela i zasady oceniania; tabela „mechanika a podstawa programowa” (WOS, biznes i zarządzanie); przegląd nauczyciela, próba w klasie
 - Z19 · serwer dla szkoły (dziś laptop szefa i tunel), osoba od `manage.py zamykaj_rundy`, dane uczniów (RODO) i notka o tym w instrukcji
@@ -37,7 +39,6 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ### Mniej ważne
 - Z12 · pora dnia zgodna z prawdziwą godziną także we wnętrzu i za oknem (m), niezależna od trybu jasny/ciemny
-- Z38 · Zana: „Portiernia” jako spis pięter (która agencja na którym piętrze, przejście do windy), zamiast listy wszystkich agencji
 - Z37 · wydajność dalej: moduły JS w jeden plik albo `modulepreload` (dziś ok. 80 żądań)
 - Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie
 - Z7 · mapa: położenia lokali w `lokale.yaml: geo` zamiast w `lublin.json`; odsyłacze dla twórców usunąć z `budynki.yaml`; opisy 11 punktów orientacyjnych i położenia Auchan/błonia/Lidl sprawdzić w źródłach; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html`
