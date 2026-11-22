@@ -268,10 +268,13 @@ const kierunekOpis = (w) => ({ "▲": "korzystne dla popytu", "▼": "niekorzyst
 const pinezka = (znak, opis) => `<span class="pp-pin" aria-hidden="true"></span><span class="pp-ogl-znak" title="${opis}" role="img" aria-label="${opis}">${znak}</span>`;
 function wydarzenia(c) {
   const v = c.v, Z = v.zdarzenia, K = v.kalendarz_miasta, budynek = (id) => c.kat?.mapa?.budynki?.find((b) => b.id === id);
-  const parki = (Z && v.runda >= Z.od_rundy ? Z.aktywne : []).filter((s) => s.park).map((s) => `<li class="pp-ogl pp-ogl-park">${pinezka("!", "wymaga reakcji")}<b>${esc(s.tytul)}</b>
-    <small>Park: ${esc(budynek(s.park)?.nazwa || s.park)} · w tym tygodniu</small>
-    <span class="pp-sz-akcje"><button type="button" class="pp-lnk" data-akcja="pp-pokaz" data-b="${esc(s.park)}">⌖ Pokaż na mapie</button>
-    <button type="button" class="pp-lnk" data-akcja="zd-park" data-id="${esc(s.park)}">Otwórz i zareaguj</button></span></li>`);
+  // jeden wpis na park (okno parku pokazuje wszystkie sprawy tego parku), żeby licznik, lista i okno się zgadzały
+  const wParkach = new Map();
+  for (const s of (Z && v.runda >= Z.od_rundy ? Z.aktywne : []).filter((x) => x.park)) wParkach.set(s.park, [...(wParkach.get(s.park) || []), s]);
+  const parki = [...wParkach].map(([id, sprawy]) => `<li class="pp-ogl pp-ogl-park">${pinezka("!", "wymaga reakcji")}<b>${sprawy.map((s) => esc(s.tytul)).join(" · ")}</b>
+    <small>Park: ${esc(budynek(id)?.nazwa || id)} · ${sprawy.length === 1 ? "1 sprawa" : `${sprawy.length} ${sprawy.length < 5 ? "sprawy" : "spraw"}`} w tym tygodniu</small>
+    <span class="pp-sz-akcje"><button type="button" class="pp-lnk" data-akcja="pp-pokaz" data-b="${esc(id)}">⌖ Pokaż na mapie</button>
+    <button type="button" class="pp-lnk" data-akcja="zd-park" data-id="${esc(id)}">Otwórz i zareaguj</button></span></li>`);
   const dalej = (Z?.oczekujace || []).map((o) => `<li class="pp-ogl pp-sz-szare">${pinezka("…", "ciąg dalszy")}<b>${esc(o.tytul)}</b> <small>ciąg dalszy w tygodniu ${o.runda}${o.park ? `, park: ${esc(budynek(o.park)?.nazwa || o.park)}` : ""}</small></li>`);
   const trwa = (Z?.efekty || []).map((e) => `<li class="pp-ogl pp-sz-szare">${pinezka("…", "trwa")}<b>${esc(e.opis)}</b> <small>jeszcze trwa, do tygodnia ${e.do_rundy}</small></li>`);
   const strefy = (w) => Object.entries(w.strefy || {}).filter(([k]) => k !== "wszystkie").map(([k, m]) => {
