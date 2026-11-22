@@ -90,6 +90,10 @@ przeglądarka ── HTML (szablony) ──▶ panel_gracza / panel_mg / konta
 - Wnętrza (`static/swiat/`): `rysunek.js` to biblioteka cegiełek SVG (kolory tylko ze zmiennych palety), `sceny/<id>.js` to jedna scena
   wnętrza (rysunek, punkty, postacie), `sceny/index.js` to rejestr i tabela żeton budynku → scena, `wnetrze.js` łączy scenę z grą
   (stan punktów z widoku gry), `wnetrza.css` to style. Test `testy/aplikacja/test_wnetrza_sceny.py` pilnuje, że każdy żeton ma scenę.
+- Mapa Lublina (`static/mapa/lublin.js`, `widok.js`, `mapa.css`): świat w SVG, żetony w HTML nad nim. Grubość linii to `N px / --k` (`--k` = px na
+  metr z chwili zatrzymania mapy; bez `vector-effect: non-scaling-stroke`, który jest drogi w każdej klatce). W ruchu `--k` stoi, więc linie
+  skalują się razem z mapą, a po 150 ms ciszy dostają właściwą grubość. Klasa `lm-ruch` (tylko w ruchu) wyłącza kreskowanie granic i kolei
+  oraz ukrywa napisy ulic; żadna linia nie znika. Test: `test_mapa_w_ruchu_nie_chowa_linii`.
 - `panel_gracza/static/app.js` uruchamia panel. Zakładki to moduły ES w `static/zakladki/*.js` z rejestrem
   w `index.js`. Motywy (`motywy/*.css`, `motyw.js`): klasyczny (menu poziome), „bok” (klasyczny z menu z boku) i grafik.
   Opisy i objaśnienia są w kółkach „i” z dymkiem (`zakladki/dymki.js`).

@@ -324,3 +324,18 @@ def test_mapa_zespoly_bez_licznika_firm_i_odswiezenie_po_rundzie():
     assert re.search(r'poziom = 0; ulice = false; ostatniZanik = ""', lublin)
     # w ruchu znikają najdroższe linie (płynność przesuwania i przybliżania)
     assert "lm-ruch" in lublin and ".lmapa.lm-ruch" in (STATIC / "mapa" / "mapa.css").read_text(encoding="utf-8")
+
+
+def test_mapa_w_ruchu_nie_chowa_linii():
+    # drogi, granice i kolej zostają widoczne w ruchu; grubość linii to N px / --k (--k ustala się po zatrzymaniu mapy)
+    css = _bez_komentarzy((STATIC / "mapa" / "mapa.css").read_text(encoding="utf-8"))
+    assert "vector-effect" not in css
+    for selektor, tresc in re.findall(r"([^{}]*\.lm-ruch[^{}]*)\{([^{}]*)\}", css):
+        assert "display: none" not in tresc, selektor   # w ruchu nic nie znika (napisy ulic to tekst: visibility)
+    mapa = [(sel, tr) for sel, tr in re.findall(r"([^{}]+)\{([^{}]*)\}", css)
+            if re.search(r"lm-(droga|granice|kolej|miasto|rzeka|woda|uliczka|p[12])", sel) and "stroke-width" in tr]
+    assert len(mapa) > 30
+    for sel, tr in mapa:
+        assert all("/ var(--k))" in w for w in re.findall(r"stroke-width: ([^;]+);", tr)), sel
+    lublin = (STATIC / "mapa" / "lublin.js").read_text(encoding="utf-8")
+    assert 'setProperty("--k"' in lublin and "ustawK" in lublin

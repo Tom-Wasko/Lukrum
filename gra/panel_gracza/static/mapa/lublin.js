@@ -31,7 +31,7 @@ const DALEKO = new Set(["zamek", "arena", "lotnisko", "gorki_czechowskie", "skan
 let CZAS = null, zegar = 0;
 let DANE = null, BLAD = null, WIDOK = null, widok = null, C = null, P = null, ZNAKI = [], poziom = 0, ulice = false;
 const krycie = {};
-let ostatniZanik = "", ostatnieK = 0, ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0, koniecRuchu = 0, czysta = false, ULICE = [];
+let ostatniZanik = "", ostatnieK = 0, ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0, koniecRuchu = 0, ustalonoK = 0, czysta = false, ULICE = [];
 
 // --- style i dane (raz) ---
 (function podlaczStyle() {
@@ -207,18 +207,24 @@ function zakresWartosci(wart) {
   return x.length ? [Math.min(...x), Math.max(...x)] : [0, 0];
 }
 
+// Grubość linii (CSS: N px / --k) i wielkość napisów ulic liczą się z --k. W ruchu --k zostaje bez zmian, więc linie skalują się
+// razem z mapą (tanio, nic nie znika); po 150 ms ciszy --k dostaje prawdziwą skalę i linie wracają do swojej grubości.
+function ustawK(ramka, k) {
+  ustalonoK = k;
+  for (const svg of ramka.querySelectorAll(".lmapa-svg")) svg.style.setProperty("--k", k);
+}
+
 function naZmiane(s) {
   WIDOK = s;
   const ramka = document.getElementById("lmapa");
   if (!ramka) return;
-  // w ruchu (przesuwanie, przybliżanie) znikają najdroższe cienkie linie (granice, kolej, ulice), po 150 ms ciszy wracają
-  if (!ramka.classList.contains("lm-ruch")) ramka.classList.add("lm-ruch");
+  if (!ustalonoK) ustawK(ramka, s.k);
+  else if (!ramka.classList.contains("lm-ruch")) ramka.classList.add("lm-ruch");   // w ruchu: bez kreskowania i napisów ulic (mapa.css)
   clearTimeout(koniecRuchu);
-  koniecRuchu = setTimeout(() => ramka.classList.remove("lm-ruch"), 150);
+  koniecRuchu = setTimeout(() => { const r = document.getElementById("lmapa"); if (r === ramka) { ustawK(r, WIDOK.k); r.classList.remove("lm-ruch"); } }, 150);
   const macierz = `matrix(${s.k} 0 0 ${s.k} ${s.x} ${s.y})`;
   ramka.querySelector("#lmapa-swiat")?.setAttribute("transform", macierz);
   ramka.querySelector("#lmapa-lampy")?.setAttribute("transform", macierz);
-  if (s.k >= KRYCIE[2][0]) ramka.style.setProperty("--k", s.k);   // używają go tylko napisy ulic (od poziomu 2)
   for (const z of ZNAKI) z.el.style.transform = `translate(${(z.x * s.k + s.x + z.dx + z.ox).toFixed(1)}px, ${(z.y * s.k + s.y + z.dy + z.oy).toFixed(1)}px)`;
   // przy oddalaniu żetony bledną; na pełnym oddaleniu zostają nazwy dzielnic i własny lokal
   const zanik = Math.min(1, Math.max(0, (s.k - ZANIK[0]) / (ZANIK[1] - ZANIK[0])));
@@ -438,7 +444,7 @@ export const nowaMapa = {
     const ramka = document.getElementById("lmapa");
     if (!ramka || !DANE) return;
     widok?.zniszcz();
-    poziom = 0; ulice = false; ostatniZanik = ""; ostatnieK = 0; czysta = false; delete ramka.dataset.ul; for (const n in krycie) delete krycie[n];
+    poziom = 0; ulice = false; ostatniZanik = ""; ostatnieK = 0; ustalonoK = 0; czysta = false; delete ramka.dataset.ul; for (const n in krycie) delete krycie[n];
     ULICE = [...ramka.querySelectorAll(".lm-ulica-napis")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, kx: +el.dataset.kx, ky: +el.dataset.ky, n: +el.dataset.n }));
     ZNAKI = [...ramka.querySelectorAll(".lmapa-nakladka > [data-x]")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, dx: 0, dy: 0, ox: 0, oy: 0,
       napis: el.querySelector(".lm-podpis"), waznosc: waznosc(el) }));
