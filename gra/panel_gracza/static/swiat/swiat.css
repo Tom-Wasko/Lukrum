@@ -293,3 +293,14 @@
 .lw-stawki { margin: 4px 0 16px; border: var(--ramka-grubosc) solid var(--ramka); border-radius: 6px; padding: 0 12px; background: var(--g-karta); }
 .lw-stawki summary { cursor: pointer; padding: 9px 0; font-family: var(--font-szyld); letter-spacing: .05em; font-size: 14px; }
 .lw-stawki[open] { padding-bottom: 12px; }
+
+/* podróż 03/wyniki: ekran „Wyniki tygodnia” (zakladki/wyniki.js) i spis pięter w portierni (sceny/zana_portiernia.js) */
+.wt-tydzien { margin: 0 0 10px; font-size: 15px; }
+.wt-siatka { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 0 0 16px; }
+.wt-kafel { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; background: var(--karta); border: 2px solid var(--linia); border-radius: 8px; }
+.wt-etykieta { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--szary); }
+.wt-liczba { font-size: 28px; line-height: 1.15; }
+.wt-zmiana { min-height: 20px; font-size: 14px; font-weight: 700; }
+.wt-opis { font-size: 13px; color: var(--szary); }
+.wt-pusty { padding: 18px 20px; background: var(--karta); border: 2px dashed var(--linia); border-radius: 8px; }
+.wt-pusty p { margin: 8px 0 0; }
