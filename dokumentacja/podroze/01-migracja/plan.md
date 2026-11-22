@@ -20,3 +20,6 @@ zasady z pamięci Claude'a w plikach.
 | domkniecie | Archi | — | plan |
 
 ## Podsumowanie
+
+## Podsumowanie
+Zakończona 2026-11-22. Szczegóły i koszt: cyberiada `dokumentacja/podroze/02-migracja-lukrum/plan.md`.
