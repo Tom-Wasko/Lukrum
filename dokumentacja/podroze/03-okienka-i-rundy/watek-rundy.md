@@ -51,3 +51,49 @@
 - **Zrzuty ekranu:** nie ma przeglądarki, więc zrzutów nie robisz.
 
 ## Raport
+
+### Wątek 03/rundy: zrobione (22.11.2026)
+**Co:** każdy tydzień od 2 do ostatniego ma cel od wujka (nowy `silnik/cele.py`, dane w `dane/zeszyt.yaml: cele`
+z `{wartosc, pewnosc, zrodlo}`) oraz 2–3 zadania będące decyzjami (razem 3–4). Dziewięć nowych warunków „zmiana”
+w `zeszyt-warunki.js` (zeszyt odhacza je sam, gdy decyzja różni się od poprzedniej rundy). Cel rozlicza
+`silnik/runda.py` po zamknięciu tygodnia; wynik („✓ osiągnięty”/„✗ nie tym razem”) jest w zeszycie w następnej rundzie
+(`api/zeszyt.py`, `pulpit/zeszyt.js`, styl w `pulpit.css`). Notatka `dokumentacja/funkcje/Cel-tygodnia.md`, README i INSTRUKCJA.
+
+**Tabela tydzień → zadania i cel**
+| Tydz. | Zadania | Cel |
+|---|---|---|
+| 2 | pieczywo, mięso i towar, Pracownia Analiz | sprzedać 150 dań |
+| 3 | mięso u producenta, promocja, coś dla zespołu | sprzedać 300 dań |
+| 4 | zmienić cenę/menu/zespół po tabeli, polisa, higiena | obsłużyć ≥80% chętnych |
+| 5 | ulotki, więcej towaru na wydarzenie, nowa cena dania | więcej dań niż tydzień wcześniej |
+| 6 | bazar, lokata, spłata części długu | tydzień na plusie |
+| 7 | szkolenie, reklama w internecie, podwyżka/umowa | sprzedać 600 dań |
+| 8 | danie specjalne, radio/billboard, detektyw + cena | większy przychód niż tydzień wcześniej |
+| 9 | zmiana najsłabszego dania, drugi lokal?, święto | obsłużyć ≥85% chętnych |
+| 10 | stoisko na festynie, gdzie tłum, więcej towaru | sprzedać 800 dań |
+| 11 | drugie danie specjalne, cena dania, premia/umowa | tydzień na plusie |
+| 12 | obniżyć koszt stały, nowa cena, więcej towaru | więcej dań niż tydzień wcześniej |
+| 13 | odświeżyć reklamę, podwyżka/umowa, zmiana dania | sprzedać 900 dań |
+| 14 | zespół przed grudniem, więcej towaru, koszt stały | obsłużyć ≥90% chętnych |
+| 15 | spłata długu, nowa cena, reklama | większy przychód niż tydzień wcześniej |
+| 16 | mniej towaru na święta, premia/umowa, zmiana dania | sprzedać 1000 dań |
+| 17 | mniej towaru, spłata długu, koszt stały | tydzień na plusie |
+| ostatni | mniej towaru, spłata, koszt stały | obsłużyć ≥85% chętnych |
+
+**Boty `balans.symuluj 12 sredni 7,11,23`, średnia gotówka poziomu średniego:** bez nagrody (mnożnik 1,0) 64 229 zł,
+z nagrodą (1,03) 65 985 zł (+2,7%). Ziarno 7 po zmianie: zrównoważony 100 337, naśladowca 81 395, tani 78 772,
+premium 51 788, agresywny 17 493 (układ sił bez zmian). Nagroda jest mała i nie psuje balansu.
+
+**Dowody:**
+- `silnik.dane sprawdz` → `Dane w porządku: ... (wersja 5f03bce4a321).`
+- `ruff check .` → `All checks passed!`
+- `pytest testy/aplikacja/test_zeszyt.py` → `21 passed`; `testy/rdzen/test_cele.py` → `15 passed`
+- pełne testy → `1 failed, 916 passed in 334.79s`; jedyny fail `test_w_kodzie_silnika_nie_ma_liczb_gry` (liczba 5 w `min_length`
+  schematu celu) naprawiony; po poprawce `test_dane.py` + `test_cele.py` → `32 passed`. `test_kasyno` nie zawiódł.
+
+**Odchylenia od briefu:** nagroda to +3% popytu na 1 tydzień (Efekt „popyt”), nie „opinia ▲” (brak bezpiecznego
+punktu zaczepienia bez nowej mechaniki); widok w `api/zeszyt.py` (osobne funkcje), nie w `prezentacja.py`; w tygodniu 2
+scalono zadania, „wystrój” (t.4) i „wyniki” (t.3) wypadły z listy tygodnia. „Mniej towaru” wymaga zamówienia
+niezerowego i mniejszego od poprzedniego. Bez sprawdzenia w przeglądarce.
+
+**Propozycje:** progi dań dla drużyn z wieloma lokalami (dziś pod jeden lokal); cel „opinia ▲” po decyzji szefa.

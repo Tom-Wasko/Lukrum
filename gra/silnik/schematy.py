@@ -1923,7 +1923,7 @@ class CelTygodnia(Schemat):
     """Cel od wujka na jeden tydzień (silnik/cele.py). `tekst`: {prog} zamienia się na próg."""
     id: str = Field(min_length=2)
     typ: Literal["dania", "wiecej_dan", "realizacja", "dochod_plus", "przychod_wiecej"]
-    tekst: str = Field(min_length=5)
+    tekst: str = Field(min_length=2)
     prog: LiczbaCelu | None = None
 
 
