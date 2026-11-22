@@ -10,8 +10,8 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 ## Co jest w grze
 
 - **Mapa Lublina** z danych OpenStreetMap, z płynnym przybliżaniem. Budynki to żetony, kliknięcie otwiera wnętrze.
-- **Miejsca zamiast zakładek:** Mój kebab, Stare Miasto, Hurtownie, Park handlowy, Miasteczko akademickie, Kamienica
-  bankowa, Kamienica rachmistrzów, Biurowiec przy Zana (winda z piętrami, agencje reklamowe), Urzędy, redakcja „Kuriera rankingowego”.
+- **Miejsca zamiast zakładek:** Mój kebab, Stare Miasto, Hurtownie (okienko oferty jednego sklepu i działu), Park handlowy, Miasteczko akademickie, Kamienica
+  bankowa, Kamienica rachmistrzów, Biurowiec przy Zana (winda z piętrami, piętro = oferta jednej agencji), Urzędy, redakcja „Kuriera rankingowego”.
 - **Zeszyt wujka:** list i lista kroków na każdy tydzień (treść w `dane/zeszyt.yaml`), strony „Gdzie co kupić” z liczbami
   z bieżących danych gry. Kroki odhacza gra: ze stanu firmy, decyzji i wizyt we wnętrzach (zapisuje serwer). Pierwszy
   niezrobiony krok ma znacznik „teraz”.
