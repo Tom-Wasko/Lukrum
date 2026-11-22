@@ -1,8 +1,16 @@
 # Stan
-Archi żył: 2026-11-22 14:00
+Archi żył: 2026-11-22 14:30
 
 ## Podróż
-Brak podróży w toku. Ostatnia: 01-migracja (zakończona 2026-11-22; podsumowanie w cyberiadzie, podróż 02).
+02-poprawki-po-grze (start 2026-11-22, tryb nadzorowany, scalanie do `main`): Z29, Z30, Z1, Z31, Z34.
+Plan: `podroze/02-poprawki-po-grze/plan.md`.
+
+| Wątek | Kto | Stan |
+|---|---|---|
+| 02/sklepy | wyko-lukrum-02-sklepy | start |
+| 02/mapa | wyko-lukrum-02-mapa | start |
+| 02/drobne | wyko-lukrum-02-drobne | start |
+| 02/makiety | Archi | w toku |
 
 ## Czeka na szefa
 Pytania przeniesione z dawnego „Do decyzji” (stan 17.11). Przegląd prawny z 16.11 to ćwiczenie, nie porada prawna.
