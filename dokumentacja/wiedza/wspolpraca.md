@@ -4,7 +4,7 @@ Wspólna tablica dla ludzi i agentów obu stron. **Każdy agent, który pracuje 
 przed pracą.** Dopisuj się z datą i podpisem strony: `[mapa]` albo `[mechaniki]`.
 
 ## Kto co robi
-Podział i role: [Plan](../Plan.md), §3. Tu tylko gałęzie w `Tom-Wasko/Lukrum`: `[mapa]` (majster + jego agenci): `maciex`, `mapa-…`;
+Podział i role: [Plan](../Plan.md), P11–P12. Tu tylko gałęzie w `Tom-Wasko/Lukrum`: `[mapa]` (majster + jego agenci): `maciex`, `mapa-…`;
 `[mechaniki]` (autor + zespół agentów, także wnętrza budynków, goście przy ladzie, teksty): `<seria>`, `<seria>-<temat>`.
 
 ## Zasady
@@ -15,7 +15,7 @@ Podział i role: [Plan](../Plan.md), §3. Tu tylko gałęzie w `Tom-Wasko/Lukrum
 3. **Cudze pliki:** zmianę przez granicę zapowiadamy wpisem w „Pytaniach” albo w Dzienniku. Od 16.11 agenci autora
    mogą zmieniać kod mapy, ale każdą taką zmianę odnotowują w Dzienniku, żeby majster wiedział, co się ruszyło.
 4. **Gdzie są ustalenia:** plan [Plan](../Plan.md), decyzje [Decyzje](../Decyzje.md), wygląd [Wygląd](../Wyglad.md), mapa [Mapa](../Mapa.md), funkcje `Funkcje/`,
-   sprawy otwarte [Do decyzji](../Stan.md).
+   sprawy otwarte [Czeka na szefa](../Stan.md).
 5. Commity w imieniu autora tylko jako Tom-Wasko, bez dopisków o asystentach AI. Majster podpisuje się swoim kontem.
 6. Wygląd: **jasny i ciemny tryb zawsze razem**, kolory tylko przez wspólne zmienne ([Wygląd](../Wyglad.md)).
 7. Nic z innych gier biznesowych. Prawdziwe marki tylko z zastrzeżeniem ([Decyzje](../Decyzje.md), „Marki i prawo”).
@@ -72,7 +72,7 @@ Podział i role: [Plan](../Plan.md), §3. Tu tylko gałęzie w `Tom-Wasko/Lukrum
 
 ## Pytania
 Otwarte pytania obu stron (geo lokali, odsyłacze w opisach, miejsce kamienicy biur i domu reklamy na mapie) są w jednym
-miejscu: [Do decyzji](../Stan.md), §3. Odpowiedzi stron zapisujemy tam albo tu, w „Umowach na granicy”.
+miejscu: [Czeka na szefa](../Stan.md), P11–P12. Odpowiedzi stron zapisujemy tam albo tu, w „Umowach na granicy”.
 
 ## Dziennik
 <!-- Krótko: data, strona, co weszło (gałąź / PR / commit). Najnowsze na górze. Wpisy starsze niż tydzień przenosimy do [Historia](../historia/historia.md). -->
@@ -81,7 +81,7 @@ miejscu: [Do decyzji](../Stan.md), §3. Odpowiedzi stron zapisujemy tam albo tu,
 - 19.11 [mechaniki]: **seria pulpit scalona do `main`** (commit 46cd10c). W obszarze mapy weszło: żetony `kamienica_rachmistrzow`, `park_handlowy`, `biurowiec_zana` (nazwa „Biurowiec przy Zana”, agencje reklamowe na piętrach), zmiany w `mapa/ikony.js`, `mapa/lublin.js` (przelot do znaku i dzielnicy), `mapa/podglad_zetonow.html` oraz nowe `geo:` w `dane/mapa/budynki.yaml` i `lokale.yaml` (3 pozycje od szefa + 21 rozsuniętych, budynki z prawdziwym adresem nie ruszane). Nowe narzędzie: `narzedzia/mapa/zastosuj_pozycje.py` (zmienia tylko linie `geo:`). Majster: `git pull` przed dalszą pracą na `maciex`.
 - 18.11 [mechaniki]: **zmiany w obszarze mapy (gałąź `pulpit-mapa`, od 19.11 w `main`):** nowe żetony `kamienica_rachmistrzow` (zastępuje `biura`) i `park_handlowy` (ukryte `sprzet_gastro`, `market_budowlany`) – **adresy tymczasowe, szef poda właściwe**; reklama jest w istniejącym `biurowiec_zana` (winda, piętra), żeton `drukarnia` znika z mapy; w `mapa/ikony.js` 3 wpisy WG_ID, `mapa/podglad_zetonow.html`; w `mapa/lublin.js` metody przelotu do znaku i dzielnicy (z kroku 3 pulpitu). Majster: sprawdź przed scaleniem.
 - 18.11 [mechaniki]: **giełda to działka majstra:** mechanika i kursy giełdy (uwaga: nazwa „S&P 500” w opisie `budynki.yaml` to znak towarowy – kursy
-  najlepiej fikcyjne albo z jawnej licencji; zob. [Do decyzji](../Stan.md) §1). Żeton `gielda` jest otwarty ze sceną bez decyzji (scena: `archiwum/fable-17.11/`).
+  najlepiej fikcyjne albo z jawnej licencji; zob. [Czeka na szefa](../Stan.md) P2). Żeton `gielda` jest otwarty ze sceną bez decyzji (scena: `archiwum/fable-17.11/`).
 - 17.11 [mechaniki]: **repo gry spłaszczone** (w `main`): wszystko z `gra/` jest teraz
   w korzeniu repo (`silnik/`, `dane/`, `panel_gracza/`, `testy/`, `manage.py`…), `.venv` w korzeniu. Majster: `git pull`, usunąć stare `gra/.venv`, założyć nowe (`start.bat` robi to sam). Ścieżki w
   `narzedzia/mapa/pobierz_osm.py` poprawione (bez członu `gra`). Gałąź `maciex` scalamy do `main` od razu po każdym

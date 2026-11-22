@@ -58,4 +58,4 @@ Pierwszy wybór biura jest bez opłaty, a powrót do dawnego biura zaraz po inny
 J.K.Ś. – biuro z życzenia autora gry; Józef K. – Kafka, „Proces” (biurokracja bez końca); Scrooge – Dickens,
 „Opowieść wigilijna” (skąpiec, w święta zamknięte); Asteroida 328 – Saint-Exupéry, „Mały Książę” (Bankier liczący gwiazdy).
 
-Otwarte sprawy (m.in. sens pakietów M i L Asteroidy): [Do decyzji](../Stan.md).
+Otwarte sprawy (m.in. sens pakietów M i L Asteroidy): [Czeka na szefa](../Stan.md).

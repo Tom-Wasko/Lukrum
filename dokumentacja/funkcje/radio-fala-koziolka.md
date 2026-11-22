@@ -50,4 +50,4 @@ W LUKRUM gra radio z płytami sprzed stu lat, a każde nagranie ma wpisane źró
 „Lalka” Bolesława Prusa na stacji „Teatr przy mikrofonie”: Wokulski też był kupcem, który liczył zysk.
 
 ## Otwarte
-Sprawy do decyzji mają jedno miejsce: [Do decyzji](../Stan.md).
+Sprawy do decyzji mają jedno miejsce: [Czeka na szefa](../Stan.md).

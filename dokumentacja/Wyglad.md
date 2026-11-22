@@ -1,7 +1,7 @@
 # Wygląd LUKRUM
 
 Obowiązujący wygląd gry. Podstawa dla mapy (`[mapa]`) i wnętrz (`[mechaniki]`). Jak powstawał (podglądy 1–4):
-[Historia](historia/historia.md). Sprawy otwarte: [Do decyzji](Stan.md), §6. Co z tego już działa i co jeszcze nie: [Postęp](Zadania.md).
+[Historia](historia/historia.md). Sprawy otwarte: [Czeka na szefa](Stan.md), P24. Co z tego już działa i co jeszcze nie: [Zadania](Zadania.md).
 
 ## Charakter
 - **Ilustrowana plansza + czytelność nowoczesnej apki + sporo PRL-u.** Mapa wygląda jak plansza gry (papier, żetony,
@@ -30,7 +30,7 @@ układu panelu, nie używać go w mapie.
 ## Mapa i pulpit
 - Mapa płaska, widok z góry: dzielnice, Bystrzyca, zieleń, główne ulice, budynki jako żetony. Spis i zasady: [Mapa](Mapa.md).
 - Pulpit (mapa na cały ekran, ikony w rogach, portfel, lista wujka i zeszyt wujka) i układ wnętrz: obowiązująca
-  decyzja jest w [Decyzje](Decyzje.md), „Pulpit i wnętrza”; stan prac w [Postęp](Zadania.md).
+  decyzja jest w [Decyzje](Decyzje.md), „Pulpit i wnętrza”; stan prac w [Zadania](Zadania.md).
 - Kliknięcie budynku: **od razu jesteś w środku**, bez długiego przejścia. Wyjście tak samo szybkie („Wróć na mapę”).
 - Mapa ma swój pasek skrótów (robi `[mapa]`), wnętrza swój (`[mechaniki]`). Pasek wnętrz pokazuje same ikony
   i rozwija się do pełnych nazw.
@@ -56,7 +56,7 @@ Cztery rodzaje: opinie o cenie i smaku, plotki z miasta, propozycje i kłopoty, 
 „Goście i dymki”. Opis funkcji: [Dymki przy ladzie](funkcje/dymki-przy-ladzie.md).
 
 ## Jeszcze niewdrożone z ustalonego
-Lista (dźwięk, pora dnia we wnętrzach, wizyty wujka, pełne wnętrza poza kebabem) jest w [Postęp](Zadania.md), etap 3.
+Lista (dźwięk, pora dnia we wnętrzach, wizyty wujka, pełne wnętrza poza kebabem) jest w [Zadania](Zadania.md), etap 3.
 
 ## Grafiki
 Własne płaskie grafiki SVG bez wpisanych kolorów (zmienne CSS i `currentColor`). Spis i zasady użycia:

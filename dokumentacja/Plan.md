@@ -1,7 +1,7 @@
 # Plan LUKRUM
 
-Cel, etapy i podział ról. Zadania, kolejność prac i stan są w notatce [Postęp](Zadania.md).
-Decyzje: [Decyzje](Decyzje.md). Sprawy otwarte: [Do decyzji](Stan.md). Jak do tego doszliśmy: [Historia](historia/historia.md).
+Cel, etapy i podział ról. Zadania, kolejność prac i stan są w notatce [Zadania](Zadania.md).
+Decyzje: [Decyzje](Decyzje.md). Sprawy otwarte: [Czeka na szefa](Stan.md). Jak do tego doszliśmy: [Historia](historia/historia.md).
 
 ## 1. Cel
 LUKRUM to symulacja biznesowa dla liceów razem z programem i planem zajęć, dzięki którym nauczyciel WOS poprowadzi
@@ -20,7 +20,7 @@ Wymagania:
 
 ## 2. Etapy
 
-| Etap | Co | Stan w skrócie (szczegóły tylko w [Postęp](Zadania.md)) |
+| Etap | Co | Stan w skrócie (szczegóły tylko w [Zadania](Zadania.md)) |
 |---|---|---|
 | 1 | Gra pod nową nazwą, czyste repozytorium, nowa dokumentacja | zrobione 13.11 |
 | 1½ | Wygląd: styl, palety, kroje, grafiki wnętrz | ustalone i wdrożone 14–16.11, przegląd autora |
@@ -29,11 +29,11 @@ Wymagania:
 | 4 | Lekcje: scenariusze, zestawy funkcji, gra testowa w klasie | projekt scenariuszy i tryb lekcyjny gotowe |
 | 5 | Audyt i publikacja | do zrobienia |
 
-**Mechaniki** idą obok etapów (tor A zrobiony, z toru B część). Stan i lista zadań: [Postęp](Zadania.md).
+**Mechaniki** idą obok etapów (tor A zrobiony, z toru B część). Stan i lista zadań: [Zadania](Zadania.md).
 
-**Teraz** i kolejne serie: [Postęp](Zadania.md), „Teraz”. **Czego brakuje** (lekcja 45 minut, przewodnik nauczyciela, podstawa
-programowa, serwer, RODO, gra próbna, zgłoszenie do konkursu, nazwa w UPRP) ma właścicieli: zadania w [Postęp](Zadania.md)
-(etapy 4 i 5), pytania w [Do decyzji](Stan.md) (§1 i §5). Priorytety z analizy SWOT: [Pozew i SWOT – wnioski](wiedza/analizy/pozew-i-swot-wnioski.md).
+**Teraz** i kolejne serie: [Zadania](Zadania.md), „Teraz”. **Czego brakuje** (lekcja 45 minut, przewodnik nauczyciela, podstawa
+programowa, serwer, RODO, gra próbna, zgłoszenie do konkursu, nazwa w UPRP) ma właścicieli: zadania w [Zadania](Zadania.md)
+(etapy 4 i 5), pytania w [Czeka na szefa](Stan.md) (P1–P9, P19–P22). Priorytety z analizy SWOT: [Pozew i SWOT – wnioski](wiedza/analizy/pozew-i-swot-wnioski.md).
 
 ## 3. Kto co robi
 - **Mapa** (dane z OpenStreetMap, silnik mapy, żetony, pasek skrótów): majster ze swoimi agentami.

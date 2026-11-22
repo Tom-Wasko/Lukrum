@@ -6,7 +6,7 @@ rozbieżności). Role: **szef** (autor), **lider** (Claude Opus, główna sesja)
 `warsztat/LIDER.md`.
 
 ## Pytania do szefa
-Wszystkie pytania, także z bieżącej pracy lidera, są w jednym miejscu: [Do decyzji](../../Stan.md) (nowe z nocy Fable: §8; gałąź
+Wszystkie pytania, także z bieżącej pracy lidera, są w jednym miejscu: [Czeka na szefa](../../Stan.md) (nowe z nocy Fable: §8; gałąź
 `fable` w repo notatek i repo `warsztat` na GitHubie: §7). Tu ich nie powtarzamy.
 
 ## Stan prac
@@ -64,11 +64,11 @@ alternatywy szablonu kart, METODA.md (szkic), start gry na Pythonie 3.12+, decyz
   repo i push (bez pytania, zob. Decyzje) → usunięcie `_robocze/krytyka-wyniki/` po Fable → `plan.md` i `STAN.md` do
   `notatki/Serie/porzadki/` → krok 11 (`METODA.md`, regulamin ZwzT a AI).
 - Wyniki nocy Fable (projekt wnętrz, zeszyt wujka, dziury w ekonomii): `archiwum/fable-17.11/fable-wnetrza|fable-zeszyt|fable-dziury/`
-  (po porządkach do `Serie/fable`); pytania w [Do decyzji](../../Stan.md), §8. Prompt do okna Fable z `/loop 15m`:
+  (po porządkach do `Serie/fable`); pytania w [Czeka na szefa](../../Stan.md), §8. Prompt do okna Fable z `/loop 15m`:
   `archiwum/fable-17.11/fable-wnetrza/prompt-okno-fable.md`.
 - Zmiany majstra: `origin/maciex` scalony do `main` gry 17.11 (żetony jako przedmioty); każdą następną serię zaczynamy od
   `git fetch`.
-- Nikt nie pracuje w tle poza bieżącym krokiem. Mapa drogowa serii (kolejność prac po porządkach): [Postęp](../../Zadania.md), „Teraz”.
+- Nikt nie pracuje w tle poza bieżącym krokiem. Mapa drogowa serii (kolejność prac po porządkach): [Zadania](../../Zadania.md), „Teraz”.
 
 ## Decyzje szefa
 **17.11.2026 (nowy lider)**
@@ -87,8 +87,8 @@ Odpowiedzi szefa na ocenę sposobu pracy, plan porządków i krytykę wnętrz 1�
 na miejscu i odsyłacze, portfel, 5 banków w pierzei, giełda osobno, Kamienica rachmistrzów, Dom reklamy, własne wnętrza
 dla żetonów, redakcja, krój odręczny, „Co tu zrobisz”, tylko komputer), układ folderów, terminy, jawność AI i pozostałe
 są w [Decyzje](../../Decyzje.md) (sekcje „Projekt”, „Sposób pracy i repozytoria”, „Pieniądze”, „Biura rachunkowe”, „Katalogi i wystrój”,
-„Mapa i miejsca”, „Pulpit i wnętrza”, „Lekcje”) i w [Wygląd](../../Wyglad.md). Zadania z tych decyzji: [Postęp](../../Zadania.md). Treść krytyki:
-[Krytyka wnętrz 16.11](../../wiedza/analizy/krytyka-wnetrz-16-11.md); wnioski z oceny sposobu pracy: [Sprawozdanie – zespół agentów](../../wiedza/analizy/sprawozdanie-zespol-agentow.md) i [Do decyzji](../../Stan.md), §5.
+„Mapa i miejsca”, „Pulpit i wnętrza”, „Lekcje”) i w [Wygląd](../../Wyglad.md). Zadania z tych decyzji: [Zadania](../../Zadania.md). Treść krytyki:
+[Krytyka wnętrz 16.11](../../wiedza/analizy/krytyka-wnetrz-16-11.md); wnioski z oceny sposobu pracy: [Sprawozdanie – zespół agentów](../../wiedza/analizy/sprawozdanie-zespol-agentow.md) i [Czeka na szefa](../../Stan.md), §5.
 
 **16.11.2026 (dzień)**
 - Nazwy robocze: autor to **szef**, główna sesja to **lider**. Kolega od mapy to **majster**, nauczyciel to **kapitan**.

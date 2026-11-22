@@ -12,7 +12,7 @@ Kronika prac. Tu się nie planuje i nie decyduje: obowiązujący stan jest w [De
   kody dawnych serii w danych zastąpione realiami, nowy pomiar zwrotu z wystroju (10,9 tygodnia). Szczegóły: [Serie](serie/README.md).
 - Zmiany majstra scalane do `main` od razu; push bez pytania ([Decyzje](../Decyzje.md), „Sposób pracy i repozytoria”).
 - Noc 16/17.11: agent Fable przygotował projekt wnętrz, treść zeszytu wujka i raport o dziurach w ekonomii; pytania
-  czekają w [Do decyzji](../Stan.md), §8.
+  czekają w [Czeka na szefa](../Stan.md), P16–P18.
 
 ### 16.11.2026 – nowy sposób pracy
 - Role: autor to **szef**, główna sesja to **lider**, podagenci to **agenci**. Nowy `AGENTS.md`, protokół lidera,

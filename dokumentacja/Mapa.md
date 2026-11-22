@@ -1,7 +1,7 @@
 # Mapa
 
 Co jest na mapie Lublina i jak to działa. Dla majstra (`[mapa]`) i strony mechanik (`[mechaniki]`). Umowy techniczne między
-stronami: [WSPOLPRACA](wiedza/wspolpraca.md). Sprawy otwarte: [Do decyzji](Stan.md), §3. Raport z budowy mapy: [etap2-mapa – raport](historia/serie/etap2-mapa/raport.md).
+stronami: [WSPOLPRACA](wiedza/wspolpraca.md). Sprawy otwarte: [Czeka na szefa](Stan.md), P11–P12. Raport z budowy mapy: [etap2-mapa – raport](historia/serie/etap2-mapa/raport.md).
 Spis odświeżony 17.11.2026 z `dane/mapa/budynki.yaml`, `lokale.yaml`, `miasto.yaml` i `strefy.yaml`. Gdy dane się zmienią,
 poprawiamy ten spis (nie odwrotnie).
 
@@ -39,7 +39,7 @@ Na mapie jest jeden budynek. Po kliknięciu otwiera się hol z szyldami, a potem
 
 | Zespół | Co w środku | Stan |
 |---|---|---|
-| Kamienica bankowa (pierzeja), Krakowskie Przedmieście 37 | **pięć banków** (decyzja 16.11 noc); w danych jeszcze 6: Kmicic, Wokulski i S-ka, Ziemia Obiecana, Oszczędności Rzeckiego, Soplicowo, Solaris. Który znika: [Do decyzji](Stan.md), §8c | w danych jeszcze 6, decyzja: 5 |
+| Kamienica bankowa (pierzeja), Krakowskie Przedmieście 37 | **pięć banków** (decyzja 16.11 noc); w danych jeszcze 6: Kmicic, Wokulski i S-ka, Ziemia Obiecana, Oszczędności Rzeckiego, Soplicowo, Solaris. Który znika: [Czeka na szefa](Stan.md), P6 | w danych jeszcze 6, decyzja: 5 |
 | Biurowiec przy Zana 39 | dziś: biura rachunkowe oraz trzy firmy od reklamy (Lajk, Fala Koziołka, Kozi Gród Events). Docelowo zostaje dla księgi KPiR i reszty firm | jest, do zmiany |
 | Kamienica rachmistrzów | biura rachunkowe z szyldami jak banki: J.K.Ś., Józef K., Scrooge, Asteroida 328 | decyzja 16.11, do zrobienia |
 | Dom reklamy (biurowiec z windą) | parter z portiernią i „Twoimi kampaniami”, piętra: drukarnia, radio, eventy, internet; budynek „drukarnia” znika | decyzja 16.11, do zrobienia |
@@ -71,7 +71,7 @@ W nawiasie `miejsce`, gdy różni się od strefy (⇄). **Plan** = przewidziane,
 - Ogród Saski (park) ⇄ (strefa akademickie)
 - Zabytki: Plac Litewski, Centrum Spotkania Kultur
 - Lokale: Krakowskie Przedmieście 21, Peowiaków 9, Chmielna 4, 3 Maja 12, Okopowa 7 (od rundy 10)
-- **Plan:** bazar przy ul. Ruskiej (tanie warzywa, zaopatrzenie; bez żetonu, [Do decyzji](Stan.md) §8c pyt. 7)
+- **Plan:** bazar przy ul. Ruskiej (tanie warzywa, zaopatrzenie; bez żetonu)
 
 ### Miasteczko Akademickie (`akademickie`, dzielnica Wieniawa)
 - Drukarnia „Papier Przyjmie” (ul. Akademicka 15; ulotki, plakaty, „Gazeta Pana Cogito”), po zmianie: w Domu reklamy

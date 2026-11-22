@@ -75,11 +75,25 @@
 - **Archi:** archi-cyberiada
 
 ## Raport
-<!-- Pisze wyko na końcu. -->
-**Stan:** gotowe | częściowo | zablokowane
-**Zmienione pliki:**
-**Dowód:** `<komenda>` → `<ostatnie linie wyniku>`
-**Decyzje, które podjąłem:**
-**Pytania do szefa:**
-**Propozycje (poza zakresem):**
-**Commity:**
+**Stan:** gotowe (robił Archi; wyko usunięty po dwóch błędach „Autocompact is thrashing”).
+**Mapa plików** (`notatki/` → `dokumentacja/`):
+
+| Z notatek | Do |
+|---|---|
+| Postęp.md | `Zadania.md` (Z1–Z28) + kopia `historia/postep.md` |
+| Do decyzji.md | `Stan.md`, „Czeka na szefa” (P1–P24) |
+| Decyzje.md | `Decyzje.md`, sekcja szefa, „Decyzje 13–19.11” |
+| Plan.md, Mapa.md, Wygląd.md | `Plan.md`, `Mapa.md`, `Wyglad.md` |
+| WSPOLPRACA.md, Nawiązania literackie.md | `wiedza/wspolpraca.md`, `wiedza/nawiazania.md` |
+| Analizy/ (12) | `wiedza/analizy/` |
+| Funkcje/ (18) | `funkcje/` (nazwy bez ogonków i spacji) |
+| Serie/ (14), Historia.md | `historia/serie/`, `historia/historia.md` |
+| Zespół/ (2) | `historia/zespol/` |
+| README.md | zasady → `historia/README.md`, spis → CLAUDE.md „Gdzie co jest” |
+| .gitignore, .obsidian/ | niepotrzebne (zostają w archiwum) |
+
+Pamięć (`memory/*.md`): zasady codzienne w `CLAUDE.md`; decyzje (commity, push, terminy, majster) w `Decyzje.md`;
+o szefie i pytaniach okienkiem w preferencjach cyberiady; reguła „zapisuj do warsztatu” wygasła (warsztat w archiwum).
+**Dowód:** zob. sprawdzenie w commicie (grep nazw i `[[` → pusto).
+**Decyzje, które podjąłem:** stare odnośniki §n zamienione na numery P; dawne decyzje zostają tematami z datą w nawiasie.
+**Pytania do szefa:** brak nowych.

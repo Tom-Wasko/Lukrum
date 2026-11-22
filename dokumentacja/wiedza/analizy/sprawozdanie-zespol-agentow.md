@@ -51,7 +51,7 @@ Gdy szef jest niedostępny, lider zapisuje pytania w [Dziennik lidera](../../his
 Szczegóły (od 17.11): `warsztat/ZESPOL.md` i `gra/AGENTS.md` (dla każdego agenta), `warsztat/LIDER.md` (dla lidera).
 
 ## Ocena sposobu pracy (recenzent Opus, 16.11) – najważniejsze wnioski
-Pełny tekst: `archiwum/notatki-wycofane/Analizy/Ocena sposobu pracy 16.11.md`. Nierozstrzygnięte propozycje są w [Do decyzji](../../Stan.md).
+Pełny tekst: `archiwum/notatki-wycofane/Analizy/Ocena sposobu pracy 16.11.md`. Nierozstrzygnięte propozycje są w [Czeka na szefa](../../Stan.md).
 1. Delegowanie jest dobre (pytania z opcjami, briefy z granicami, dowody, akceptacja szefa); problemem jest, że produkcja przegoniła sprawdzanie przez ludzi: ok. 525 commitów w trzy tygodnie, a nikt poza szefem nie zagrał.
 2. Konkurs ZwzT nagradza przeprowadzone zajęcia, nie jakość aplikacji: pierwsza lekcja z uczniami ważniejsza niż kolejne funkcje i porządki.
 3. Przerostem jest warstwa wokół trójki szef – lider – agenci (pliki o procesie), nie sama trójka. Test: czy rzecz przybliża pierwszą lekcję?

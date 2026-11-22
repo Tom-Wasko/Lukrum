@@ -8,6 +8,241 @@
 - 2026-11-22 · Pamięć Claude'a o projekcie: zasady codzienne do `CLAUDE.md`, reszta tutaj; auto-pamięć wyłączona.
 - 2026-11-22 · Wiadomość dla majstra o nowym układzie pisze Archi (`wiedza/wspolpraca.md`), wysyła szef.
 
+
+### Decyzje 13–19.11 (z dawnych notatek, tematami)
+Data w nawiasie to dzień decyzji. Zmieniona decyzja zostaje z adnotacją „(zmienione dd.mm)”.
+
+### Projekt
+- Nazwa **LUKRUM**. W tekstach się nie odmienia („w LUKRUM”), rodzaj nijaki. (13.11)
+- Gra jest własna: **nic z innych gier biznesowych**, ani nazw, ani mechanik, ani wzmianek. Liczby i wzory mają
+  własne uzasadnienie w polu `zrodlo` (prawo, rynek Lublina, pomiar botami, decyzja autora). (13.11)
+- Na start tylko kebab, ale branża (menu, składniki, sprzęt, klienci) siedzi w danych. (13.11)
+- Nazwy ogólne w kodzie (`usluga`, `zasob`, `prowadzacy`) zostają. (13.11)
+- Repozytoria prywatne. Commity tylko jako Tom-Wasko, bez dopisków o asystentach AI. README zawsze aktualny. (13.11)
+- **Bez terminu.** Do gry trafia tylko to, co przejdzie testy. (16.11)
+- **Terminy zewnętrzne** (słowa szefa 16.11): ZwzT założone, trzeba jeszcze wszystko powypełniać; wkrótce rozmowy
+  z kuratorium i urzędem; nadzieja na spotkanie z „grubymi rybami” w przyszłym roku; do maja 2027 LUKRUM na testach
+  w jakiejś szkole. „Gotowe 17.11 16:00” jest nieaktualne. (16.11)
+- **Jawność AI:** plik `METODA.md` w repo gry („Jak powstał LUKRUM”), rozmowa szefa z kapitanem i sprawdzenie
+  regulaminu ZwzT pod kątem AI. Commity bez zmian. (16.11)
+- Agenci autora mogą zmieniać kod mapy bez ograniczeń. (16.11)
+
+### Sposób pracy i repozytoria
+- **Scalanie** (zmienione 17.11; wcześniej 16.11: „scalenia po akceptacji autora, pull request tylko przy zmianach
+  w plikach majstra”): zmiany majstra z `origin/maciex` lider scala do `main` **od razu** po `git fetch`, bez pytania
+  („scalaj wszystko od majstra od razu”), po sprawdzeniu składni JS i testów mapy. Własne serie scalamy po akceptacji
+  szefa. Pull request tylko gdy zmiana dotyka plików drugiej strony. Majstrowi zostaje wpis w dzienniku [WSPOLPRACA](wiedza/wspolpraca.md).
+- **Push bez pytania** („nie musisz mieć mojej zgody na push”, 17.11; zmienia „push po zgodzie” z 16.11), nadal bez
+  `--force`. Pytać o nowe repo na GitHubie i o usuwanie zdalnych gałęzi. (17.11)
+- (zmienione 22.11: układ cyberiady, zob. wyżej) Sesje startują z folderu `Pulpit\lukrum` (po przeprowadzce 17.11; wcześniej: z folderu projektu na dysku, 16.11),
+  bo wtedy działają `CLAUDE.md` i własne definicje agentów.
+- (zmienione 22.11: układ cyberiady) **Układ folderu `lukrum/`:** `gra/` = repo gry (spłaszczone, tylko gra), `notatki/` = repo notatek (plan, decyzje,
+  `Funkcje/`, `Serie/`, `Analizy/`, `Zespół/`; sejf Obsidiana wspólny z majstrem), `warsztat/` = **osobne repo git bez
+  związku z LUKRUM** (sposób pracy, szablony, definicje agentów, narzędzia), `_archiwum/` bez gita, `_robocze/`
+  tymczasowe. Raporty agentów i plany serii: `notatki/Serie/<seria>/`. Historia repo notatek zostaje. (16.11)
+- Pozew, SWOT i porównania (dokumenty ze starą nazwą) idą do `_archiwum/prawne/`, w notatkach tylko wnioski bez nazw
+  ([Pozew i SWOT – wnioski](wiedza/analizy/pozew-i-swot-wnioski.md)). `testy/dane_zamrozone/` bez zmian. (17.11)
+- Stare kody serii i martwe odsyłacze w danych i kodzie: wyczyścić od razu przy porządkach (źródła na realia),
+  słownik kodów do `_archiwum/`. (16.11)
+- **Majster:** mapa „bez ograniczeń”, ale lider regularnie robi `git fetch` i sprawdza `origin/maciex`. (16.11)
+- (zmienione 22.11: dziennik cyberiady) Panel kontrolny zespołu: tylko strona na claude.ai. Sposób pracy i panel: oba teraz, wbrew zaleceniu oceny. (16.11)
+- Pytania do szefa bez limitu liczby (narzędzie mieści 4 naraz, więc idą rundami); szef czyta wszystko. Pytań
+  sprawdzających rozumienie gry nie zadajemy. Koszt pracy (model, przybliżone zużycie) mierzymy w „Stan prac”. (16.11)
+- Role: **szef**, **lider**, **agenci**, **majster** (mapa), **kapitan** (nauczyciel, opiekun). (16.11)
+
+### Marki i prawo
+- **Prawdziwe nazwy firm i miejsc zostają**, z zastrzeżeniem w grze, instrukcji i README. (13.11)
+- **Uproszczone znaki prawdziwych marek zostają** (np. IKEA, Pewex), jako własne rysunki. (14.11; zmienia „bez logo”
+  z 13.11)
+- Prawdziwej firmie nie przypisujemy złych cech. Oszust, lichwiarz i truciciel to zawsze postacie wymyślone. Firmy
+  o złych cechach (lichwiarz, oszust) są zawsze zmyślone. (13–14.11)
+- Tekst zastrzeżenia (stopka gry, strona startowa, „Jak grać”):
+  > LUKRUM to gra edukacyjna. Nazwy prawdziwych firm i miejsc służą tylko do oddania realiów Lublina. Oferty, ceny,
+  > oprocentowania i zdarzenia w grze są fikcyjne. Gra nie jest związana z tymi firmami ani przez nie wspierana.
+- Wersja dla ucznia: „W grze występują prawdziwe firmy z Lublina, żeby świat był znajomy. Ich oferty, ceny i zdarzenia
+  są wymyślone.” Promocja: „Prawdziwy Lublin: znane miejsca, znane firmy, wymyślone interesy.” Czego uczy: znak
+  towarowy, prawo autorskie, marka, konkurencja; pytanie na lekcję: dlaczego gra może użyć nazwy banku, ale nie jego
+  prawdziwego logo? Gdzie w grze: banki, dostawcy, dyskonty, sklepy. Zrobione 13.11 (commity 26e4a8c, 895d423).
+- **Podatki i przepisy są prawdziwe.** Ceny w katalogach mają służyć rozgrywce: każdy poziom ★ to wybór z kosztem
+  („czy na pewno ★★★, skoro tyle droższe”). (14.11)
+- Uproszczenia prawa są dozwolone, jeśli instrukcja mówi o nich wprost (dziś: zlecenie bez składek pracodawcy,
+  przejęcie debetu przez nowy bank). Ostateczny wybór i reszta spraw prawnych: [Czeka na szefa](Stan.md), P1–P9.
+
+### Klub „Pod Złotym Koziołkiem”
+- Zostaje ukryty. Ekran nazywa się „Nocna 13”. Hasło „koziol” otwiera go zawsze i każdemu, także mistrzowi gry. (13.11)
+- W surowych danych jest zagadka „Rękopis znaleziony w JSON-ie”: hasło „saragossa” daje odznakę Szperacz
+  ([Kasyno Pod Złotym Koziołkiem](funkcje/kasyno-pod-zlotym-koziolkiem.md)). (13.11)
+- Klub jest na mapie. Co z klubem w grze dla niepełnoletnich: [Czeka na szefa](Stan.md).
+
+### Wynik i ranking
+- Wynik tygodnia 0–1000 pkt w pięciu działach po 0–200 (finanse, goście, zespół, rozwój, bezpieczeństwo finansowe),
+  według jawnych progów. Wyjątkowa gra może dać w dziale ponad 200. (13.11)
+- Ranking to suma punktów z tygodni, późniejsze tygodnie ważą więcej. „Wielkie otwarcie” (tydzień 1) waży jak zwykły
+  tydzień, 1,0. Progi tabeli punktów oceniamy po grze testowej. (13.11)
+- Firma, która nic nie robi, dostaje 0–100 pkt. (14.11)
+- Ranking i wyniki rundy pokazuje gazeta **„Kurier rankingowy”** w budynku Redakcji. Wejście do Redakcji pokazuje
+  scenę redakcji z gazetą na biurku na pierwszym planie. (14.11, 16.11)
+
+### Pieniądze
+- Kapitał startowy **50 000 zł**. (13.11)
+- **Debet** włącza się ręcznie i za darmo, płaci się za użycie. Liczy się saldo na koniec tygodnia. Bez zgody banku
+  jest zawsze drożej, do tego alarm i blokada inwestycji. Stopy nie przekraczają odsetek maksymalnych. (13–14.11)
+- Zmiana banku z otwartym debetem: najpierw spłata albo przejęcie przez nowy bank za opłatą. (14.11)
+- **Banki: pierzeja, czyli rząd kamienic, i pięć banków zamiast sześciu**, żeby mieściły się w jednym kadrze; każdy
+  ze specjalizacją, opłacalny dla innej strategii. Kolory marek zostają, ale mogą być inne niż dziś, dobrane do palet.
+  Zmienia „sześć banków w jednej kamienicy” z 13–14.11. (16.11 noc) Stan danych: w `banki.yaml` i `budynki.yaml` jest
+  jeszcze sześć banków (w danych jeszcze 6, decyzja: 5); który znika: Solaris (zob. niżej, 18.11).
+- **Giełda (biuro maklerskie „Byk i Koziołek”) to osobny budynek**, nie część banków; jest już na mapie majstra
+  (`gielda`). (16.11 noc)
+
+### Biura rachunkowe
+- Cztery biura, pakiety S/M/L z limitem dokumentów i dopłatą. (13.11)
+- Scrooge w tygodniu ze świętem jest zamknięty: dokumenty przechodzą na następny tydzień z dopłatą 6 zł (wcześniej 3 zł).
+  (14.11)
+- Asteroida 328 nie ma limitu dokumentów. (14.11)
+- Zmiana biura kosztuje jednorazowo tydzień pakietu nowego biura. (14.11)
+- U Józefa K. nie da się obejść opóźnienia zmiany pakietu. (14.11)
+- Biura rachunkowe mają stać w osobnej kamienicy z szyldami jak banki, o nazwie **„Kamienica rachmistrzów”**.
+  (16.11, nazwa 16.11 noc; do zrobienia)
+- Księga KPiR zostaje w biurowcu przy Zana. (16.11 noc)
+
+### Ludzie
+- Kadry według Kodeksu pracy: okres wypowiedzenia zamiast odprawy, umowa o pracę albo zlecenie. (13.11)
+- Urlop to 10% czasu na umowie o pracę. (13.11)
+- Zlecenie: zadowolenie −0,04 i ryzyko kontroli PIP, gdy zleceniobiorca pracuje jak etatowiec. (14.11)
+- Pensja za okres wypowiedzenia idzie do wynagrodzeń, z ZUS pracodawcy. (14.11)
+- **Pomyłki w szczycie** zamiast reklamacji: częstości 5,2% i 2,8% zostają, ocena po teście gotowej gry. Pomyłka
+  przy pustym magazynie kosztuje klienta. (14.11)
+- Boty kupują tylko tyle wyposażenia, ile ma ich strategia. (14.11)
+
+### Katalogi i wystrój
+- Wszystkie jakości w grze mają 1, 2 albo 3 gwiazdki. Zestaw sprzętu ★★★ jest w danych. (14.11)
+- **Wystrój lokalu:** PRL → turyści, imprezowicze; nowoczesny → biurowi, podróżni; studencki → studenci, uczniowie,
+  imprezowicze; rodzinny → rodziny, uczniowie. Ceny 900–3 200 zł i próg 40% to założenie z celem zwrotu w 8–12
+  tygodni (pomiar 17.11: 10,9 tygodnia). Kupuje się raz i zostaje. (14.11)
+- Sklep meblowy to osobne miejsce z własnym wnętrzem, wózkiem i kasą z paragonem. (14.11)
+- Po budowie na działce stoi pawilon z własnym wnętrzem. (14.11)
+- Stara reklama (tradycyjna i internetowa) jest usunięta. Zostaje model „agencja × kanał”. „Gazeta Pana Cogito”
+  i „Radio Tichy” to kanały drukarni i Fali Koziołka, bez osobnych miejsc. (13–14.11)
+- Agencje reklamowe mają stać w osobnym biurowcu z windą, o nazwie **„Dom reklamy”** (parter z portiernią i „Twoimi
+  kampaniami”, piętra: drukarnia, radio, eventy, internet). **Budynek „drukarnia” na mapie znika.** Biurowiec przy
+  Zana zostaje dla reszty firm i księgi. (16.11, nazwa i układ 16.11 noc; do zrobienia)
+
+### Goście i dymki
+- Cztery rodzaje dymków: opinie o cenie i smaku, plotki z miasta, propozycje i kłopoty, zaczepki WOS. (13.11)
+- **Gracz nie wyłącza dymków.** Rodzaje włącza i wyłącza mistrz gry. (14.11)
+- Propozycja gościa ma 2–3 odpowiedzi z prawdziwym skutkiem. Przed wyborem widać wskazówkę bez liczb i bez szansy.
+  Najwyżej jedna propozycja na kilka rund. (13–14.11)
+- Plotka o parku pojawia się w tej samej rundzie co zdarzenie na mapie. (14.11)
+- Bywalcy mówią po swojemu, z humorem i prawdziwymi cytatami z lektur w domenie publicznej. (13.11)
+- Zaczepki WOS sprawdza w źródłach lider, zatwierdza autor. Gra pokazuje tylko zatwierdzone. Osiem zatwierdzonych
+  jest opisanych w [Dymki przy ladzie](funkcje/dymki-przy-ladzie.md). (13–14.11)
+- Zdarzenia losowe zostają w parkach i pokazuje je mapa. Dopisujemy zdarzenia z lektur. (13.11)
+
+### Mapa i miejsca
+- Mapa własna, rysowana na prawdziwych granicach dzielnic z OpenStreetMap, z płynnym przybliżaniem. (13.11)
+- **10 stref gry**, pozostałe dzielnice to tło. Prawdziwe miejsca, ale bez tłoku na Starym Mieście i Krakowskim
+  Przedmieściu. (14.11)
+- **Majdanka na mapie nie ma.** (8.11)
+- Sanepid w Śródmieściu (ul. Karłowicza). Park handlowy na Węglinie to dwa sklepy obok siebie. (14.11)
+- Kliknięcie budynku wchodzi do środka od razu, bez długiej animacji. (13.11)
+- **Miasteczko, detektyw, hurtownie i sklepy mają własne żetony** (`detektyw`, `gielda`, `akademia`, `makro`, `selgros`,
+  `auchan`, `biedronka`, `lidl`…) i **każdy własne wnętrze**: nie ma wspólnych hal ani holi (Selgros osobno od Lidla).
+  (16.11 noc)
+- Szczegóły i spis elementów: [Mapa](Mapa.md).
+
+### Ekonomia po przeglądzie dziur (18.11.2026)
+- **D1 zmowa na giełdzie handlu:** **bez limitu oferty** („doda trochę śmiechu”); zostaje jako znana ciekawostka, mistrz gry widzi transakcje.
+- **D2:** podnieść cenę bota `zrownowazony` (0,92 → 1,05), potem ponowny pomiar botów.
+- **Higiena „brak”:** okienko z potwierdzeniem w stylu „jeśli sanepid cię odwiedzi, to…” przed wyborem.
+- **Tydzień 1:** sprzęt w Parku i dostawcy odblokowani od tygodnia 1 (zeszyt wujka prowadzi krok po kroku; 150 pkt „Zaopatrzenie” staje się osiągalne).
+- **Sprzęt:** sprzęt gastronomiczny tylko w Parku handlowym; stanowiska zostają w stolarni, udogodnienia w galerii.
+- **Dom reklamy:** wybór piętra **kabiną windy**. **Kamienica rachmistrzów:** klatka schodowa (zgodnie z wcześniejszą decyzją, nie pytać ponownie).
+- **Urzędy skarbowe (VAT, PIT):** okienko w ratuszu przy Szeligowskiego, bez nowego żetonu. **Bazar:** nowy żeton na mapie z wnętrzem (miejsce z majstrem). **Giełda:** żeton **otwarty ze sceną, bez decyzji** (parkiet i tablica kursów, nic do kupienia); **mechanikę giełdy i jej kursy (w tym kwestię S&P 500) robi majster** („to jest działka kolegi”).
+- **Parki:** jeden wzór sceny: okienko i **postać, która mówi do gracza** (event rundy); formę dobieramy po swojemu, bez nawiązań do innych gier.
+- **Zeszyt wujka:** odhaczanie zadań zapisywane w grze (nie w przeglądarce); **bez pojęć z WOS przy zadaniach** („nie ma potrzeby”); wujek poleca sklepy po nazwie. **Sklep ze sprzętem:** „Konstruktorzy T&K”.
+- **Wystrój:** obowiązuje zwrot kompletu **10,9 tygodnia** (pomiar 17.11, cel 8–12). **Serwer lekcji:** rundy zamyka mistrz gry ręcznie (rundy „na żywo” zamykają się też same po wysłaniu przez wszystkie drużyny). **Gra testowa:** termin ustala lider (propozycja: tydzień 23.11). **Historia gita (e-mail):** na razie nic; przepisanie tuż przed publikacją.
+- **Przenośność gry:** gra ma działać po pobraniu z GitHuba na dowolnym Pythonie 3.12+ i na Windows/macOS/Linux (zrobione 18.11: `start.bat`, `start.sh`; Python 3.12 i 3.11 niesprawdzone, bo nie są zainstalowane na komputerze autora).
+- **Banki 6 → 5:** znika **Solaris** (ryzyko autorskie); debet przejmuje Soplicowo albo znika (do ustalenia przy wdrożeniu serii `budynki`). **Wdrożone 19.11 (lider):** debet przejmuje **Soplicowo** – limit 20 000 zł, 80 zł za tydzień na minusie, 15% („zastaw się, a postaw się”), więc każdy bank nadal w czymś wygrywa. **„Wyślij decyzje”:** ikona na pasku wysyła od razu po potwierdzeniu.
+- **Prawo:** znaki marek, opisy cen sieci, numery domów, „Pewex”, zlecenie bez składek, przejęcie debetu i Józio zostają jak w grze, z dopiskami edukacyjnymi w instrukcji; ostateczna ocena przy rozmowie z prawnikiem. **Mapa majstra** (strefa = dzielnica, 7 lokali z nowymi adresami) zostaje.
+- **Drobne mechaniki poprawiamy teraz** (przed grą testową): Asteroida 328, kasa/lada/tablica menu, firmy szkoleniowe, lodówka na napoje, szafy chłodnicze – seria `balans-katalogi`.
+- **Radio w grze** (pasek po lewej, 18.11): **kilka stacji:** jazz, klasyczna, polska muzyka z PRL, „Lalka” (audiobook) i jedna stacja tylko z szumem; audycję **czasem przerywa krótka informacja prowadzącego o grze**. Ma być **własne, lekkie nawiązanie do radia z gier postapokaliptycznych** (klimat, forma stacji i wtrąceń; bez cytatów, nazw, muzyki ani nagrań z tych gier). **Bez muzyki z syntezatora** (szef 18.11): tylko prawdziwe nagrania z wolnych źródeł (domena publiczna, wolne licencje); nagrania z PRL zwykle są jeszcze chronione, więc stacja PRL wymaga wyboru nagrań sprzed ok. 1956 r. albo własnych aranżacji. Czytane nagranie „Lalki” wymaga sprawdzenia licencji konkretnego nagrania (tekst Prusa jest w domenie publicznej). Mechanika: klimat i informacje, bez wpływu na ekonomię.
+- **Wnętrza z makiet Fable wdrażamy do gry od razu** (polecenie 18.11): fundament i sceny na gałęzi `wnetrza-wdrozenie`.
+- **Klub „Nocna 13”:** mistrz gry dostaje w panelu opcję zablokowania kasyna (dziś tylko `LUKRUM_KASYNO=0` na serwerze); hasło zostaje.
+
+### Ustalenia na 19.11 (szef, 18.11 noc)
+- **Radio (19.11):** stacja „PRL” → **polska muzyka sprzed 1956 r.** (nagrania przedwojenne i z początku lat 50. z archiwów cyfrowych, tylko z potwierdzonym statusem); informacje prowadzącego **głosem syntetycznym (TTS)**; dopuszczalne licencje: **domena publiczna, CC0, CC BY, CC BY-SA**, w grze strona „Nagrania w radiu” (autor, źródło, licencja każdego pliku); pliki **w repozytorium, mała paczka** (ok. 40–80 MB, mono, niska jakość), gra działa bez internetu.
+- Merge `pulpit-ui2` do `main` po zielonych testach, bez czekania na oglądanie. Park handlowy: lider wybiera realny adres. Kolejność prac: reszta wnętrz, zeszyt, radio (najpierw pytania), mechanika i gra testowa. Radio: tylko wolne nagrania (domena publiczna/wolne licencje), pliki dopiero po akceptacji listy.
+
+### Pulpit – poprawki po obejrzeniu 4A/4B (18.11.2026, noc)
+- „Wyślij decyzje” zmienia nazwę na **„List z decyzjami”** (okno „Nadaj list z decyzjami”, stempel „NADANO”), **na dole paska po lewej**, wygląda jak **list** (koperta/list). **Decyzje i Wyniki** jako przełącznik w nagłówku każdej teczki, obok ✕.
+- **Biurowiec przy Zana** (z reklamami): wraca nazwa „Biurowiec przy Zana” i ikona wieżowca.
+- **Górny rząd ikon kategorii:** bez „Miasto i rozrywka”, zamiast tego **„Kebab”** i **„Wydarzenia”**. **Wydarzenia** w dwóch kolumnach.
+- **Nazwa gry** (np. „testowa”) przy legendzie mapy.
+- **Style kart (18.11, noc):** szef **akceptuje propozycje stylów** z `Serie/pulpit/pulpit – okna do wyboru stylu.md` (1 teczka, 2 akta, 3 apka, 4 kartka) dla wszystkich okien; okna z własnym stylem: paragon, list, tablica, zeszyt, dymki. **Pozycje żetonów:** szef zmienił `kamienica_rachmistrzow`, `blonia`, `kamienica_bankowa`; reszta rozsunięta przez lidera (nieikoniczne mogą być przesuwane, ikony zostają: ratusz, parki, zalew, kamienica bankowa, uczelnia, giełda).
+- **Wszystkie karty (teczki) dostają jeden nowy, uniwersalny szablon** wybrany z alternatyw na claude.ai; w oknach z powtarzającymi się opcjami (np. Kamienica rachmistrzów) szef prosi o alternatywy układu.
+- **Zeszyt** po otwarciu: nowa, dopracowana wersja, płynniejsze animacje, bardziej jak prawdziwy zeszyt.
+- **Edytor mapy na claude.ai:** przeciąganie ikon, ostrzeżenie przy przenoszeniu budynków z **prawdziwym adresem** (zabytki, urzędy, banki, hurtownie i sklepy sieciowe, parki, uczelnie), swobodne: lokale gracza, kamienica rachmistrzów, park handlowy, biurowiec Zana i fikcyjne; z propozycją bardziej rozproszonego układu.
+
+### Pulpit – poprawki po kroku 3 (18.11.2026, wieczór)
+- **Kategorie mapy:** wracamy do **rzędu ikon wzdłuż górnej krawędzi** (jak w kroku 1), ale **6 grup**: Jedzenie i zaopatrzenie, Finanse, Urzędy i prawo, Praca i ludzie, Reklama i media, Miasto i rozrywka.
+- **Po wejściu do obiektu klik w opcję otwiera pop-up (teczkę), nigdy osobną kartę/ekran.**
+- **„Jak grać”:** zakładki zamiast jednego bloku tekstu.
+- **Okienka w stylu PRL:** zakupy = długi **paragon**, wydarzenia = **tablica ogłoszeń** z przypiętymi kartkami, „Wyślij decyzje” = **koperta** ze stemplem „WYSŁANO”.
+- **Zeszyt:** stary, zniszczony, **skórzana okładka**, schowany **przechylony** (nie równoległy do krawędzi), **pobrana odręczna czcionka** na wolnej licencji (lokalnie w grze).
+- **Reklama w istniejącym biurowcu przy Zana** (zmiana 18.11, **bez nowego budynku**): `biurowiec_zana` staje się domem reklamy z widokiem **ze środka windy**; wybierasz piętro, każde ma własne wnętrze: drukarnia, radio, eventy, internet; parter: portiernia, „Twoje kampanie” i pokój z księgą KPiR. Biura rachunkowe przechodzą do Kamienicy rachmistrzów. **Drukarnia znika z mapy jako osobny budynek, zostaje jako piętro.**
+- **Kamienica rachmistrzów** i **Park handlowy** dostają żeton na mapie; **miejsca wskaże szef** (adresy) – do tego czasu żetony tymczasowe, wpis dla majstra w WSPOLPRACA. Z kebaba **nie ma** bezpośredniego przejścia do Parku handlowego (tylko przez mapę); wnętrze Parku do naprawy.
+
+### Pulpit – nawigacja i układ ekranu (18.11.2026, szkic szefa `_archiwum/szkice-szefa/pulpit-nawigacja-18.11.jpg`)
+- **Mapa na cały ekran.** Lewy górny róg: ⚙ ustawienia nad pionowym paskiem ikon (na szkicu m.in. koszyk) z logiem „Ł”;
+  pod paskiem napis „Tydzień N” to **tylko informacja o rundzie** (nic się nie rozwija).
+- **Ikony paska:** ⚙ ustawienia, „Wyślij decyzje” (okno z podsumowaniem decyzji i przyciskiem Wyślij), konto i „Jak grać”, koszyk. Skróty mapy (lokal, banki, hurtownie, raport) **znikają**.
+- **Koszyk** na pasku **tylko pokazuje, co zamówiono i kupiono w tej rundzie**; niczego przez niego nie zamawia się. **Zeszyt wujka** dostaje też **rozpiskę wszystkich funkcjonalności gry** (spis: co jest gdzie na mapie).
+- Napis **LUKRUM pionowo** na pasku (szyld PRL).
+- **Zeszyt wujka** wystaje z krawędzi ekranu, na kartce widać następny krok („kup mięso”). Najechanie wysuwa listę zadań,
+  kliknięcie otwiera cały zeszyt. W środku **rzeczy podzielone na osobne strony i animacja przewracania stron**; w zeszycie
+  jest też krótki samouczek (tutorial).
+- **Portfel** to plik banknotów przy dolnej krawędzi; wygląda naturalnie. Najechanie pokazuje saldo i debet, kliknięcie
+  otwiera okno finansów (konto, płynność, zobowiązania).
+- **Wnętrza:** układ ekranu (boczek czy pływające panele) – według szkicu panele wystają z krawędzi jak na mapie; szczegóły
+  przy serii `pulpit`.
+- **KPiR:** księga zostaje w **biurowcu przy Zana** (potwierdzone 18.11, bez segregatora w kebabie).
+- **Gałąź `fable`** w repo notatek usunięta z GitHuba (18.11). **Repo `warsztat` zostaje lokalne** („na razie nie”).
+
+### Pulpit i wnętrza (16.11, do zrobienia)
+Wygląd tych elementów: [Wygląd](Wyglad.md). Kolejność prac: [Zadania](Zadania.md).
+- **Pulpit:** mapa na cały ekran. W rogach małe ikony: runda, kasa, „Wyślij decyzje”, lista wujka, ⚙, konto, „Jak
+  grać”. Wyniki rundy ogląda się w budynku Redakcji. Na razie tylko komputer, telefon później. (16.11, 16.11 noc)
+- **Portfel** zawsze z boku (mapa i wnętrza), w zastępstwie ikony „kasa”: skrót gotówki i stanu kebaba. Pełne wyniki
+  rundy zostają w Redakcji. (16.11 noc)
+- **Lista wujka:** kliknięcie pozycji przesuwa i przybliża mapę do budynku, a ten pulsuje. Wejście robi gracz. (16.11)
+- **Zeszyt wujka** (wariant B): w środku lista zadań i rozpisane, gdzie co najlepiej kupić; animacja przewracania
+  stron; zamknięty nie znika, tylko wystaje z brzegu ekranu, a na wystającej kartce widać następny krok. Odręczny krój
+  pisma wujka: tak, licencja OFL, polskie znaki; agent proponuje 2–3, szef wybiera na zrzucie. (16.11 noc)
+- **Okienko decyzji:** teczka na środku, dymki do cen i promocji później. (16.11 noc)
+- **Sprzęt kupuje się tylko w Parku handlowym.** Kebab pokazuje stan sprzętu i odsyła; zeszyt ma ten krok w tygodniu 1. (16.11 noc)
+- **Kebab: na miejscu** menu i ceny, promocje, zespół i grafik, wyniki, magazyn, czas i portfel właściciela;
+  **odsyła:** sprzęt, stoliki i wystrój → Park, zatrudnianie → Miasteczko, szkolenia → Akademia, klienci → Pracownia
+  Analiz. (16.11 noc)
+- Lista „Co tu zrobisz” znika z widoku; zostaje ukryta dla czytników ekranu i jako zastępstwo na wąskim ekranie.
+  (16.11 noc)
+- Nazwy ekranów w duchu mapy, ale bez zgadywania: „Kurier rankingowy”, „Notes błędów księgowej”, „Nadaj decyzje na
+  poczcie”. (14.11)
+- Krytykę wnętrz robi świeży recenzent (zrzuty, oba tryby); lider streszcza, szef wybiera poprawki. (16.11) Odpowiedzi
+  szefa na krytykę 16.11 noc są w pozycjach powyżej i w [Krytyka wnętrz 16.11](wiedza/analizy/krytyka-wnetrz-16-11.md).
+
+### Lekcje
+- Tryb mieszany: pierwsze 2–3 rundy na żywo na lekcji, dalej między lekcjami, rundę zamyka mistrz gry albo termin. (14.11)
+- Zakrywanie funkcji zostaje ręczne. Gotowe zestawy pod lekcje później. (13.11)
+- Gra testowa z ludźmi: nie od razu, może w tygodniu 23.11; funkcji nie zamrażamy. (16.11 noc; zmienia „bez gry
+  próbnej przed nowym wyglądem” z 14.11)
+- 19.11.2026: na starej mapie rysowanej (`?uklad=stary`) fasady banków pokazują fikcyjne banki gry (Kmicic, Wokulski, Ziemia Obiecana, Rzecki, Soplicowo) w kolorach niezwiązanych z markami, zamiast PKO BP, Pekao, ING, mBank, Santander i Crédit Agricole. Wdrożone (lider).
+- **19.11.2026 (szef, okienko):** kolejność prac: 1) lista wolnych nagrań do radia, 2) szyldy i cenniki wnętrz z danych, 3) przygotowanie gry testowej – **lider najpierw powiadamia szefa**, 4) warianty wnętrz `*_alt`. Debet Soplicowa zostaje (20 000 zł, 80 zł/tydz., 15%). **Gra testowa: w niedzielę 22.11 grupa znajomych, potem klasa w szkole.**
+- **19.11.2026 (szef, okienko), radio:** lista [radio – lista nagrań](historia/serie/radio/lista-nagran.md) przyjęta (~3,5 h, ~68 MB w repo, mono MP3).
+  „Lalka” z Wolnych Lektur na Licencji Wolnej Sztuki 1.3 dopuszczona (warunki jak CC BY-SA). Nagrania ≤1925 bez
+  jawnego znaku PD (Great 78, „USA-Archives”) wchodzą z opisem podstawy domeny publicznej. Polskie pozycje z
+  niepotwierdzonym autorem: lider sprawdza, niepotwierdzone odpadają.
+
 ## Archiego
 - 2026-11-22 · Archiwum lokalne to `_archiwum/` (folder już istniał), nie `archiwum/`; jest w `.gitignore`.
 - 2026-11-22 · `gra/AGENTS.md` zostaje jako przewodnik po kodzie (dla narzędzi majstra), `CLAUDE.md` go importuje.

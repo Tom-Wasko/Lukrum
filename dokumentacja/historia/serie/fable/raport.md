@@ -2,7 +2,7 @@
 
 Samodzielna praca agenta Fable na gałęzi `fable`, w 18 tematach (`fable-<temat>`). Całość jest w `main`
 (scalenia 4afdd60 i 9ee8192, 16.11.2026). Przegląd prawny, pomiary i zrzuty z nocy leżą w `archiwum/notatki-wycofane/Analizy/Noc Fable 15-16.11/`
-(przegląd prawny, `pomiary/`, `zrzuty/`); jego otwarte sprawy są w [Do decyzji](../../../Stan.md). Surowe dzienniki nocy: `archiwum/fable-noc-surowe/`.
+(przegląd prawny, `pomiary/`, `zrzuty/`); jego otwarte sprawy są w [Czeka na szefa](../../../Stan.md). Surowe dzienniki nocy: `archiwum/fable-noc-surowe/`.
 
 **Przebieg.** Start 15.11 o 16:55. O 17:25 sesja stanęła na limicie użycia i wznowiła pracę 16.11 o 06:49.
 Koniec 16.11 o 12:47. Mapa majstra (`maciex`) weszła bez zmian w jego plikach.

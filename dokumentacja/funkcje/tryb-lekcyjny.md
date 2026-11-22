@@ -32,4 +32,4 @@ Gra może toczyć się „na żywo” albo w trybie lekcyjnym. W trybie lekcyjny
 Brak.
 
 ## Otwarte
-Kto uruchamia `zamykaj_rundy` na serwerze i ile tygodni gry na cykl lekcji: [Do decyzji](../Stan.md). Wygląd nowych pól kreatora nie był sprawdzony na zrzucie.
+Kto uruchamia `zamykaj_rundy` na serwerze i ile tygodni gry na cykl lekcji: [Czeka na szefa](../Stan.md). Wygląd nowych pól kreatora nie był sprawdzony na zrzucie.

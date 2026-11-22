@@ -52,6 +52,6 @@ Kolumna „Stan” jest wpisana z notatek, a nie z gry. Przy najbliższej pracy 
 Cytaty bywalców są sprawdzone z Wolnymi Lekturami (14.11) i opisane przy zaczepkach: [Dymki przy ladzie](../funkcje/dymki-przy-ladzie.md); w danych pole
 `cytat_zrodlo`. Judym: cytat niepewny w brzmieniu, niewstawiony; Rzecki: tylko aluzja do Napoleonów; Józio: bez cytatów.
 
-## Ryzyka (otwarte w [Do decyzji](../Stan.md))
+## Ryzyka (otwarte w [Czeka na szefa](../Stan.md))
 Józio (Gombrowicz) i bank „Solaris” (Lem) korzystają z utworów jeszcze chronionych: zostają jako aluzje, dopóki autor
 nie zdecyduje inaczej.

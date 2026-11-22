@@ -37,4 +37,4 @@ Zeszyt:
 
 ## Krok 3: radio (nowa funkcja, pasek po lewej) – szkic szefa
 Radio „w stylu” radia z gier postapokaliptycznych, ale z własnymi treściami (PRL, Lublin): stacja z muzyką/jinglami i prowadzącym.
-Pytania o źródło muzyki, stacje i komentarze: [Do decyzji](../../../Stan.md).
+Pytania o źródło muzyki, stacje i komentarze: [Czeka na szefa](../../../Stan.md).
