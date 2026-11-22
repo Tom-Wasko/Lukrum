@@ -541,3 +541,10 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
 [data-paleta="wysoka"] .pp-kartka::after { display: none; }
 .pz-wejdz { margin-left: auto; font-size: calc(14px * var(--skala-tekstu, 1)); }
 .pz-wiersz[data-akcja="pp-pokaz"]::after { content: "⌖"; flex: none; margin-left: 6px; opacity: .7; }   /* znak, że klik pokazuje mapę */
+/* podróż 03/rundy (Z32): cel tygodnia od wujka; wynik oznaczony znakiem ✓ / ✗, nie samym kolorem */
+.pz-cel { margin: 8px 0; padding: 8px 10px; border: 2px dashed var(--tusz); border-radius: 6px; }
+.pz-cel h3 { margin: 0 0 4px; }
+.pz-cel-tekst { margin: 0 0 4px; }
+.pz-cel-wynik { margin: 6px 0 0; padding-top: 6px; border-top: 1px solid var(--tusz); display: flex; flex-direction: column; gap: 2px; }
+.pz-cel-wynik.ok b { color: var(--zysk, var(--tusz)); }
+.pz-cel-wynik.nie b { color: var(--strata, var(--tusz)); }

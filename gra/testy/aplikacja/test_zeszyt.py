@@ -42,7 +42,7 @@ def _warunki(x):
 def test_dane_zeszytu_sa_kompletne():
     z = _dane().zeszyt
     assert sorted(k for k in z["tygodnie"] if isinstance(k, int)) == list(range(1, 18)) and "ostatni" in z["tygodnie"]
-    assert len(z["warunki"]) == 23 and len(_zadania(z)) >= 40
+    assert len(z["warunki"]) == 32 and len(_zadania(z)) >= 40
     assert not any("pojecie" in x for x in _zadania(z)), "pojęcia z WOS usunięte decyzją szefa"
 
 
@@ -178,4 +178,67 @@ def test_warunki_js_licza_odhaczenie_ze_stanu_i_wizyt():
         wynik = subprocess.run(["node", str(glowny)], capture_output=True, text=True, encoding="utf-8", check=True).stdout
     assert json.loads(wynik) == {
         "lokal": True, "bank": True, "biuro": False, "stan": True, "ceny": False, "spec": True, "net": True, "pap": False,
-        "zam": True, "zam2": False, "wiz": True, "wiz2": False, "dlug": True, "nieznany": False, "wyslane": False, "n": 23}
+        "zam": True, "zam2": False, "wiz": True, "wiz2": False, "dlug": True, "nieznany": False, "wyslane": False, "n": 32}
+
+
+SKRYPT_ZMIANY = """
+import { spelniony } from "%s";
+const baza = () => ({ runda: 3, decyzje: {}, zeszyt: { poprzednie_zamowienia: 10 },
+  stan_przed: { ceny: { kebab: { duzy: 20 } }, oferta: { kebab: 1 }, pracownicy: [{ id: "a", pensja: 4000, umowa: "uop" }],
+    kredyty: [{ id: "k", pozostalo: 500 }], debet: 0, pakiet_biura: "M" },
+  stan: { ceny: { kebab: { duzy: 20 } }, oferta: { kebab: 1 }, pracownicy: [{ id: "a", pensja: 4000, umowa: "uop" }],
+    kredyty: [{ id: "k", pozostalo: 500 }], debet: 0, pakiet_biura: "M" } });
+const w = (nazwa, v) => spelniony(v, { warunek: { nazwa } });
+const bez = baza(), cena = baza(), menu = baza(), pensja = baza(), wiecej = baza(), mniej = baza(), splata = baza();
+cena.stan.ceny.kebab.duzy = 22;
+menu.stan.oferta = { kebab: 1, napoj: 1 };
+pensja.stan.pracownicy[0].pensja = 4500; pensja.decyzje.zmiany = { a: { pensja: 4500 } };
+wiecej.decyzje.zamowienia = [{ ilosc: 12 }];
+mniej.decyzje.zamowienia = [{ ilosc: 4 }];
+splata.decyzje.kredyty_splac = ["k"];
+const tanie = baza(); tanie.decyzje.pakiet = "S";
+const bezDlugu = baza(); bezDlugu.stan_przed.kredyty = []; bezDlugu.stan.kredyty = [];
+const det = baza(); det.decyzje.detektyw = "Rywal"; det.stan.ceny.kebab.duzy = 19;
+console.log(JSON.stringify({
+  tabela_bez: w("zmiana_po_tabeli", bez), tabela_cena: w("zmiana_po_tabeli", cena), tabela_menu: w("zmiana_po_tabeli", menu),
+  tabela_zespol: w("zmiana_po_tabeli", pensja), cena: w("zmiana_ceny", cena), cena_bez: w("zmiana_ceny", bez),
+  danie_menu: w("zmiana_dania", menu), danie_bez: w("zmiana_dania", bez),
+  wiecej: w("wiecej_towaru", wiecej), wiecej_tyle: w("wiecej_towaru", mniej), mniej: w("mniej_towaru", mniej),
+  mniej_bez: w("mniej_towaru", bez), splata: w("splata_dlugu", splata), splata_bez: w("splata_dlugu", bez),
+  splata_nie_ma_dlugu: w("splata_dlugu", bezDlugu), umowa: w("zmiana_umowy", pensja), umowa_bez: w("zmiana_umowy", bez),
+  detektyw: w("detektyw_i_cena", det), detektyw_bez_ceny: w("detektyw_i_cena", Object.assign(baza(), { decyzje: { detektyw: "R" } })),
+  koszt_pakiet: w("nizszy_koszt_staly", tanie), koszt_bez: w("nizszy_koszt_staly", bez), koszt_pensja: w("nizszy_koszt_staly", pensja),
+}));
+"""
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="brak Node.js")
+def test_warunki_zmiany_odhaczaja_sie_gdy_decyzja_rozni_sie_od_poprzedniej():
+    with tempfile.TemporaryDirectory() as tmp:
+        kopia = Path(tmp) / "warunki.mjs"
+        kopia.write_text(WARUNKI_JS.read_text(encoding="utf-8"), encoding="utf-8")
+        glowny = Path(tmp) / "test.mjs"
+        glowny.write_text(SKRYPT_ZMIANY % kopia.as_uri(), encoding="utf-8")
+        wynik = subprocess.run(["node", str(glowny)], capture_output=True, text=True, encoding="utf-8", check=True).stdout
+    assert json.loads(wynik) == {
+        "tabela_bez": False, "tabela_cena": True, "tabela_menu": True, "tabela_zespol": True, "cena": True, "cena_bez": False,
+        "danie_menu": True, "danie_bez": False, "wiecej": True, "wiecej_tyle": False, "mniej": True, "mniej_bez": False,
+        "splata": True, "splata_bez": False, "splata_nie_ma_dlugu": True, "umowa": True, "umowa_bez": False,
+        "detektyw": True, "detektyw_bez_ceny": False, "koszt_pakiet": True, "koszt_bez": False, "koszt_pensja": False}
+
+
+def test_od_tygodnia_2_jest_3_do_4_rzeczy_do_zrobienia_z_celem_i_wynikiem_poprzedniego():
+    g = Gra.nowa("t", [("A", "zrownowazony"), ("B", "tani")], 12, 5,
+                 poziomy={"A": "sredni", "B": "sredni"})
+    for _ in range(12):
+        z = widok(g, "A")["zeszyt"]
+        if z["tydzien"] == 1:
+            assert z["cel"] is None
+        else:
+            tygodnia = [x for x in z["zadania"] if not x["stale"]]
+            assert z["cel"] and z["cel"]["tekst"] and "{" not in z["cel"]["tekst"], z["tydzien"]
+            assert 2 <= len(tygodnia) <= 3 and 3 <= len(tygodnia) + 1 <= 4, z["tydzien"]
+            assert z["cel"]["poprzedni"] and z["cel"]["poprzedni"]["tekst"] if z["tydzien"] > 2 else True
+        if g.runda >= g.konfiguracja["liczba_rund"]:
+            break
+        g.przelicz(wymus=True)

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import re
 
+from silnik import cele
 from silnik.dane import Dane
 from silnik.kuchnia.dostawcy import info as info_dostawcy
 from silnik.kuchnia.dostawcy import oferta_rundy
@@ -148,6 +149,25 @@ def _strona(dane: Dane, tydzien: int, ostatni: bool) -> tuple[str, dict]:
     return klucz, tygodnie[klucz]
 
 
+def _poprzednie_zamowienia(gra, firma: str, runda: int) -> float:
+    """Suma zamówionych opakowań w poprzedniej rundzie (do zadań „więcej / mniej towaru”)."""
+    z = gra.decyzje.get(runda - 1, {}).get(firma, {}).get("zamowienia") or []
+    return sum(x.get("ilosc") or 0 for x in z if isinstance(x, dict))
+
+
+def _cel(gra, dane, firma: str, runda: int) -> dict | None:
+    """Cel tygodnia na `runda` i wynik celu z poprzedniej rundy (silnik/cele.py), jeśli już jest."""
+    liczba, start = gra.konfiguracja["liczba_rund"], gra.runda_startowa
+    cel = cele.cel_na_runde(dane, runda, liczba, start)
+    if cel is None:
+        return None
+    nagroda = dane.zeszyt["cele"]["nagroda"]["tekst"]
+    wynik = None
+    if runda > start:
+        wynik = (gra.stan(runda - 1).wyniki.get(runda - 1) or {}).get(firma, {}).get("cel")
+    return {"tekst": cele.tekst(cel), "nagroda": nagroda, "poprzedni": wynik}
+
+
 def widok(gra, firma: str, runda: int, v: dict) -> dict | None:
     """Zeszyt wujka na `runda` (`v` z `funkcje` i `harmonogram`). None – dane bez zeszytu."""
     dane = gra.dane
@@ -182,5 +202,7 @@ def widok(gra, firma: str, runda: int, v: dict) -> dict | None:
     return {"tydzien": tydzien, "ostatni": ostatni, "tytul": strona["tytul"],
             "list": strona.get("list") or "", "zadania": zadania, "dopisek": dopisek,
             "gdzie_kupic": kupic, "wizyty": list(wizyty),
+            "cel": _cel(gra, dane, firma, runda),
+            "poprzednie_zamowienia": _poprzednie_zamowienia(gra, firma, runda),
             "specjalne": sorted(specjalne(dane)),
             "agencje_internetowe": sorted(a for a in agencje(dane) if internetowa(dane, a))}

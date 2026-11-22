@@ -17,6 +17,7 @@ import numpy as np
 
 from . import autopilot as ap
 from . import boty as bt
+from . import cele as cl
 from . import funkcje as fn
 from .dane import KUCHNIA, Dane
 from .decyzje import lista_bledow, zastosuj
@@ -348,6 +349,9 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
             _straty_w_zasobach(w["zasoby"], strefowy["swiezosc"][nazwa]["straty"])
         # wynik punktowy tygodnia – po zebraniu wyników (potrzebuje kontroli, świeżości, zdarzeń i opinii)
         w["karta"] = _karta(dane, f, r, w, info[nazwa], _netto_karty(dane, netto, info[nazwa]))
+        if not podglad:   # cel tygodnia od wujka (silnik/cele.py): wynik w wynikach, nagroda w efektach
+            cl.rozlicz(dane, f, r, konfiguracja["liczba_rund"], w, (s.wyniki.get(r - 1) or {}).get(nazwa),
+                       int((konfiguracja.get("import") or {}).get("runda", 1)))
 
     # giełda handlu: nowe ogłoszenia (drużyny i boty) po tygodniu sprzedaży, licytowane w następnej rundzie
     ogloszenia = hd.zamknij(dane, s.firmy, decyzje, r, wyniki, konfiguracja)
