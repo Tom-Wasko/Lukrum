@@ -169,9 +169,11 @@ R.alejka = (x, y, nr, txt, w = 150) => `<path class="k1" d="M${x + 20} 0v${y}M${
 R.widlak = (x, y, s = 1) => `<g transform="translate(${x} ${y}) scale(${s})"><path class="k" d="M0-28h96v-30h-36l-10-34h-40v64z" fill="var(--uwaga)"/><path class="k bez" d="M14-92v-20h44l6 20" stroke-width="4"/><circle class="k" cx="22" cy="-14" r="15" fill="var(--g-czern)"/><circle class="k" cx="80" cy="-14" r="12" fill="var(--g-czern)"/><path class="k" d="M100-124v124M108-124v124" stroke-width="4"/><path class="k" d="M108-10h62v6h-62z" fill="var(--g-metal2)"/></g>`;
 R.KOL = KOL4;
 
-// ---------- teczki sklepów i hurtowni: w grze to przejście do ekranu zamówień (liczby i ceny pokazuje sam ekran) ----------
+// ---------- teczki sklepów i hurtowni: klik otwiera okienko tego sklepu (zakladki/dostawcy.js: otworzSklep) z jego ofertą ----------
+// `dostawca` – scena (nazwa sklepu bierze się z tytułu sceny), `dzialy` – działy z tej alejki, `widok` – dział | koszyk | dowóz | gazetka.
+// `ekran` zostaje tylko po to, by gra wiedziała, czy funkcja zaopatrzenia jest dostępna (punkt zamknięty/wyłączony razem z nią).
 const ZAMOWIENIA = { ekran: "zaop_dostawy", funkcja: "zaopatrzenie", decyzje: ["zamowienia"] };
-R.zamow = (id, dzialy, okruszek) => ({ tytul: `Zamów: ${[].concat(dzialy).join(", ").toLowerCase()}`, okruszek, dostawca: id, ...ZAMOWIENIA });
-R.koszyk = (id, okruszek = "kasa") => ({ tytul: "Koszyk tygodnia", okruszek, dostawca: id, ...ZAMOWIENIA });
-R.dowoz = (id, okruszek = "rampa") => ({ tytul: "Dowóz do lokalu", okruszek, dostawca: id, ...ZAMOWIENIA });
-R.gazetka = (id) => ({ tytul: "Gazetka tygodnia", okruszek: "stojak z gazetką", dostawca: id, ...ZAMOWIENIA });
+R.zamow = (id, dzialy, okruszek) => ({ tytul: `Zamów: ${[].concat(dzialy).join(", ").toLowerCase()}`, okruszek, dostawca: id, dzialy: [].concat(dzialy), widok: "dzial", ...ZAMOWIENIA });
+R.koszyk = (id, okruszek = "kasa") => ({ tytul: "Koszyk tygodnia", okruszek, dostawca: id, widok: "koszyk", ...ZAMOWIENIA });
+R.dowoz = (id, okruszek = "rampa") => ({ tytul: "Dowóz do lokalu", okruszek, dostawca: id, widok: "dowoz", ...ZAMOWIENIA });
+R.gazetka = (id) => ({ tytul: "Gazetka tygodnia", okruszek: "stojak z gazetką", dostawca: id, widok: "gazetka", ...ZAMOWIENIA });

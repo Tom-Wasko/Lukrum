@@ -7,6 +7,7 @@ import { stylEkranu } from "../pulpit/karty-style.js";
 import { wybierzPozycje } from "../pulpit/uklady.js";
 import { R, ustawWyglad } from "./rysunek.js";
 import { SCENY } from "./sceny/index.js";
+import { dostawcaSceny, otworzSklep } from "../zakladki/dostawcy.js";
 
 const pos = (x, y, w, h) => `left:${(x / 12.2).toFixed(2)}%;top:${(y / 6.12).toFixed(2)}%;width:${(w / 12.2).toFixed(2)}%;height:${(h / 6.12).toFixed(2)}%`;
 const goly = (t) => String(t || "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
@@ -120,9 +121,13 @@ export function kliknijPunkt(i, ctx) {
   const otworz = () => {
     if (o.ekran) {
       if (!c.zakryta(o.ekran) && !c.dostepna(o.ekran)) { const od = c.odRundy(o.ekran); return toast(od ? `To otworzy się w tygodniu ${od}.` : "To miejsce jest jeszcze zamknięte."); }
+      if (p.teczka?.dostawca) {   // sklep, hurtownia: okienko z ofertą tylko tego sklepu i działu (nie ogólny ekran dostawców)
+        const dost = dostawcaSceny(c.v, ctx.def.tytul);
+        if (dost) return otworzSklep(c, { dost, dzialy: p.teczka.dzialy, widok: p.teczka.widok, tytul: `${ctx.def.tytul}: ${p.et}` });
+      }
       c.teczka(o.ekran);   // ekran decyzji w oknie nad wnętrzem (teczka), nie osobna karta
-      // dostawca albo firma, której drzwi kliknięto (bank, biuro rachunkowe): ekran przewija się do jej nazwy
-      const szukaj = p.teczka?.dostawca ? ctx.def.tytul : ["bank", "biuro_rachunkowe"].includes(ctx.def.id) ? (/„(.+)”/.exec(ctx.def.tytul) || [])[1] : null;
+      // firma, której drzwi kliknięto (bank, biuro rachunkowe): ekran przewija się do jej nazwy
+      const szukaj = ["bank", "biuro_rachunkowe"].includes(ctx.def.id) ? (/„(.+)”/.exec(ctx.def.tytul) || [])[1] : null;
       if (szukaj) przewinDo(szukaj);
       return;
     }

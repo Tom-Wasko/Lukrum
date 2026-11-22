@@ -347,10 +347,61 @@ export const dostawcy = {
       return c.zmien((d) => {
         d.zamowienia = (d.zamowienia || []).filter((x) => !(x.dostawca === dost && x.zasob === z && +x.jakosc === +q && tenDzien(x) && tenLokal(c.v, x)));
         if (ilosc > 0) d.zamowienia.push({ dostawca: dost, zasob: z, jakosc: +q, ilosc, ...(dz === undefined ? {} : { dzien: +dz }), ...(id ? { lokal: id } : {}) });
-      }, () => oknoBazy(c, dost, { poZapisie: true }));
+      }, () => (SKLEP && SKLEP.dost === dost ? oknoSklepu(c, SKLEP, { poZapisie: true }) : oknoBazy(c, dost, { poZapisie: true })));
     },
   },
 };
+
+// --- okno sklepu: oferta jednego dostawcy, ograniczona do działu, który kliknięto we wnętrzu (podróż 02/sklepy) -------------
+// Pokazuje tylko towary tego sklepu z wybranych działów, ich ceny, pola ilości (koszyk) i stan magazynu. Porównania z innymi sklepami
+// nie ma (jest w zeszycie wujka). Dane i zapis zamówień są te same co w ekranie „Zamówienia” (decyzja `zamowienia`).
+export const DZIALY = {
+  Pieczywo: ["Bułka", "Tortilla", "Pita"],
+  Mięso: ["Mięso kebab"],
+  Mrożonki: ["Pita mrożona", "Mięso kebab mrożone", "Frytki mrożone", "Falafel mrożony"],
+  Warzywa: ["Warzywa", "Surówki"],
+  "Sosy i dodatki": ["Sos", "Hummus", "Ser i dodatki"],
+  Napoje: ["Napój"],
+  Opakowania: ["Opakowanie", "Box"],
+};
+/** Nazwa dostawcy w danych gry dla sceny o danym tytule („Zakłady Mięsne „Rożen”” → „Zakłady Mięsne „Rożen” z Łęcznej”). */
+export const dostawcaSceny = (v, tytul) => Object.keys(v.ceny_dostawcow || {}).find((d) => d === tytul || d.startsWith(tytul) || tytul.startsWith(d)) || null;
+let SKLEP = null;   // sklep, którego okno jest otwarte: { dost, dzialy, widok, tytul }
+
+/** Otwiera okno sklepu. s: { dost, dzialy?: [nazwy działów], widok?: "dzial" | "koszyk" | "dowoz" | "gazetka", tytul?: napis dla okna }. */
+export function otworzSklep(c, s) { SKLEP = { ...s, zmieniono: false }; oknoSklepu(c, SKLEP); }
+
+function oknoSklepu(c, s, { poZapisie = false } = {}) {
+  const { v, kat, edycja } = c, dost = s.dost;
+  if (poZapisie) s.zmieniono = true;
+  const ceny = v.ceny_dostawcow?.[dost] || {}, dni = dniDostaw(v), moje = dniDostawcy(v, dost) || [], x = info(v, dost), widok = s.widok || "dzial";
+  const dowozone = Object.keys(ceny);
+  const wDziale = (z) => !(s.dzialy || []).length || s.dzialy.some((d) => (DZIALY[d] || []).includes(z));
+  const wKoszyku = (z) => [1, 2, 3].some((q) => zamowione(v, dost, z, q) > 0);
+  const filtr = new Set(dowozone.filter((z) => (widok === "koszyk" || widok === "dowoz" ? wKoszyku(z)
+    : widok === "gazetka" ? !!rabat(v, dost, z) : wDziale(z))));
+  const zam = mojeZam(v).filter((y) => y.dostawca === dost);
+  const wartosc = zam.reduce((a, y) => a + (ceny[y.zasob]?.[y.jakosc] || 0) * y.ilosc, 0);
+  const wTymDziale = zam.filter((y) => filtr.has(y.zasob)).length;
+  const prog = x.minimalne_zamowienie || x.darmowa_od || 0;
+  const koszyk = `<div class="pasek ciemny"><span>W koszyku (${esc(dost)}): <span class="kwota">${zl2(wartosc)}</span> · ${licz(zam.length)} ${zam.length === 1 ? "pozycja" : "pozycji"}${
+    widok === "dzial" && zam.length > wTymDziale ? `, w tym dziale ${licz(wTymDziale)}` : ""}</span></div>`
+    + (prog ? pasekDo(wartosc, prog, wartosc >= prog ? `próg ${zl(prog)} osiągnięty` : `do ${x.minimalne_zamowienie ? "minimum" : "darmowego dowozu"} brakuje ${zl(prog - wartosc)}`) : "");
+  const dniHtml = `<div class="podpis-progow">Dni dostaw</div><div class="progi dni">${DNI.map((n, i) => `<span class="${x.dni_dostaw.includes(i) ? "tu" : ""}">${n}</span>`).join("")}</div>`;
+  const dowoz = widok === "dowoz" ? `<div class="komunikat">${x.odbior_osobisty ? `Odbiór osobisty: ${licz(x.godziny_odbioru)} h czasu właściciela za dzień zakupów.`
+    : x.koszt_dostawy ? `Dowóz ${zl2(x.koszt_dostawy)} za dostawę${x.darmowa_od ? `, darmowy od ${zl(x.darmowa_od)}` : ""}.` : "Dowóz w cenie."}</div>${dniHtml}` : "";
+  const gazetka = widok === "gazetka" && !filtr.size ? `<p class="podpowiedz">W tym tygodniu ${esc(dost)} nie ma gazetki.</p>` : "";
+  const pusty = !filtr.size && widok !== "gazetka" ? `<p class="podpowiedz">${widok === "koszyk" || widok === "dowoz" ? "Koszyk w tym sklepie jest pusty. Towary dodasz w działach sklepu."
+    : "W tym dziale sklep nie ma dziś towaru."}</p>` : "";
+  const pole = (z, q, ile, dz) => `<input type="number" class="krotkie" min="0" step="1" value="${ile}" data-zmiana="ilosc" data-d="${esc(dost)}" data-z="${esc(z)}" data-q="${q}"
+    ${dz === undefined ? "" : `data-dz="${dz}"`} ${edycja ? "" : "disabled"}>`;
+  const tytul = s.tytul || `${dost}`;
+  const przyciski = `<button class="btn pom" data-akcja="zamknij-okno">${widok === "dzial" ? "Gotowe" : "Zamknij"}</button>`;
+  const tresc = koszyk + dowoz + (filtr.size ? bazaNowa(v, kat, dost, ceny, dni, moje, pole, filtr) : "") + gazetka + pusty
+    + `<p class="podpowiedz">Ilości wpisujesz w opakowaniach. Kolumna „Magazyn” to to, co już masz; „Wartość” to cena z koszyka.${dni && x.minimalne_zamowienie ? ` Dostawa poniżej ${zl(x.minimalne_zamowienie)} nie zostanie zrealizowana.` : ""}</p>`;
+  if (poZapisie && !otwarteOkno(tytul)) return c.rysuj();
+  okno(tytul, tresc, { przyciski, okruszek: `Lublin › ${esc(dost)}`, poZamknieciu: () => { const z = s.zmieniono; SKLEP = null; if (z) c.rysuj(); } });
+}
 
 function oknoBazy(c, dost, { poZapisie = false } = {}) {
   const { v, kat, edycja } = c;
@@ -374,7 +425,7 @@ function oknoBazy(c, dost, { poZapisie = false } = {}) {
 // okno „Baza składników”: jedna karta na kategorię (wg miejsca przechowywania, zwijana, w jej kolorze), w środku
 // wspólny nagłówek z dniami dostaw i zwarte wiersze – jeden na jakość (kolumny w stałej siatce CSS, pola ilości pod dniami)
 const KATEGORIE_SKLADNIKOW = [["suche", "Suche", KOLORY[4]], ["chlodnia", "Chłodnia", KOLORY[1]], ["zamrazarka", "Zamrażarka", KOLORY[6]]];
-function bazaNowa(v, kat, dost, ceny, dni, moje, pole) {
+function bazaNowa(v, kat, dost, ceny, dni, moje, pole, filtr = null) {
   const wartoscZ = (z) => Object.entries(ceny[z]).reduce((s, [q, c]) => s + zamowione(v, dost, z, +q) * c, 0);
   const rodzajZ = (z) => kat.zasoby[z].przechowywanie || "suche";
   const dniDost = dni ? moje : [null];
@@ -383,7 +434,7 @@ function bazaNowa(v, kat, dost, ceny, dni, moje, pole) {
     dniDost.map((i) => (i === null ? "<span>opak.</span>" : `<span>${dni[i].dzien}<br>${+dni[i].data.slice(8)}.${dni[i].data.slice(5, 7)}</span>`)).join("")}<span>Wartość</span></div>`;
   let html = "";
   for (const [klucz, nazwa, kolor] of KATEGORIE_SKLADNIKOW) {
-    const lista = Object.keys(ceny).filter((z) => rodzajZ(z) === klucz);
+    const lista = Object.keys(ceny).filter((z) => rodzajZ(z) === klucz && (!filtr || filtr.has(z)));
     if (!lista.length) continue;
     const suma = lista.reduce((s, z) => s + wartoscZ(z), 0);
     const wiersze = lista.map((z) => {
