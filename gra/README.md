@@ -14,7 +14,9 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
   bankowa, Kamienica rachmistrzów, Biurowiec przy Zana (winda z piętrami, piętro = oferta jednej agencji), Urzędy, redakcja „Kuriera rankingowego”.
 - **Zeszyt wujka:** list i lista kroków na każdy tydzień (treść w `dane/zeszyt.yaml`), strony „Gdzie co kupić” z liczbami
   z bieżących danych gry. Kroki odhacza gra: ze stanu firmy, decyzji i wizyt we wnętrzach (zapisuje serwer). Pierwszy
-  niezrobiony krok ma znacznik „teraz”.
+  niezrobiony krok ma znacznik „teraz”. Od tygodnia 2 zeszyt podaje **cel tygodnia** (`silnik/cele.py`, dane w
+  `dane/zeszyt.yaml: cele`): wynik widać w następnym tygodniu, a za udany cel przychodzi +3% gości na tydzień. Zadania
+  tygodnia to konkretne ruchy w grze (zmiana ceny, towar, dług…), odhaczane, gdy decyzja różni się od poprzedniej rundy.
 - **Wynik 0–1000 pkt** w pięciu działach, gazeta „Kurier rankingowy” co tydzień i podium na koniec gry.
 - **Radio „Fala Koziołka”** na pasku: pięć stacji ze starymi nagraniami z domeny publicznej i z wolnych licencji
   (pliki w repozytorium, gra bez internetu), prowadzący czytany syntezatorem mowy. Spis: **/nagrania-w-radiu**.

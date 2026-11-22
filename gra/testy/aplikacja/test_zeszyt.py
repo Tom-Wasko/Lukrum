@@ -225,3 +225,20 @@ def test_warunki_zmiany_odhaczaja_sie_gdy_decyzja_rozni_sie_od_poprzedniej():
         "danie_menu": True, "danie_bez": False, "wiecej": True, "wiecej_tyle": False, "mniej": True, "mniej_bez": False,
         "splata": True, "splata_bez": False, "splata_nie_ma_dlugu": True, "umowa": True, "umowa_bez": False,
         "detektyw": True, "detektyw_bez_ceny": False, "koszt_pakiet": True, "koszt_bez": False, "koszt_pensja": False}
+
+
+def test_od_tygodnia_2_jest_3_do_4_rzeczy_do_zrobienia_z_celem_i_wynikiem_poprzedniego():
+    g = Gra.nowa("t", [("A", "zrownowazony"), ("B", "tani")], 12, 5,
+                 poziomy={"A": "sredni", "B": "sredni"})
+    for _ in range(12):
+        z = widok(g, "A")["zeszyt"]
+        if z["tydzien"] == 1:
+            assert z["cel"] is None
+        else:
+            tygodnia = [x for x in z["zadania"] if not x["stale"]]
+            assert z["cel"] and z["cel"]["tekst"] and "{" not in z["cel"]["tekst"], z["tydzien"]
+            assert 2 <= len(tygodnia) <= 3 and 3 <= len(tygodnia) + 1 <= 4, z["tydzien"]
+            assert z["cel"]["poprzedni"] and z["cel"]["poprzedni"]["tekst"] if z["tydzien"] > 2 else True
+        if g.runda >= g.konfiguracja["liczba_rund"]:
+            break
+        g.przelicz(wymus=True)
