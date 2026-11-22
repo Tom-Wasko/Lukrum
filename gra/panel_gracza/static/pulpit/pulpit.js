@@ -234,25 +234,52 @@ function htmlZakupow(c) {
 
 // --- „List z decyzjami” jako koperta: adres, podsumowanie decyzji tygodnia, przycisk Wyślij (z zakładki „wyslij”) i stempel NADANO ----
 let bylyWyslane = false;
+// Blankiet: rubryki decyzji z kwotami (z v.koszty_decyzji, po prefiksie opisu pozycji) i znakami ✓ (jest) ○ (pusto) ! (do poprawy, z odnośnikiem „popraw”).
+const RUBRYKI = [   // nazwa, klucze decyzji, prefiksy opisów kosztów, czy zawsze pokazywać (○ gdy pusto)
+  ["Zamówienia składników", ["zamowienia"], ["Zakup zasobu", "Koszt dostawy", "Przewóz"], true],
+  ["Ceny dań w menu", ["sprzedaz"], [], true],
+  ["Sprzęt, wyposażenie i wystrój", ["sprzet_kup", "wyposazenie_kup", "udogodnienia_kup", "dekor_kup"], ["Koszt zakupu", "Uruchomienie stanowiska"], true],
+  ["Zatrudnienia", ["zatrudnij"], ["Koszt zatrudnienia"], true],
+  ["Zwolnienia", ["zwolnij"], [], false],
+  ["Reklamy", ["kampanie"], ["Kampania reklamowa", "Materiały promocyjne"], true],
+  ["Szkolenia", ["szkolenia"], ["Szkolenie w firmie"], true],
+  ["Kredyty i lokaty", ["kredyty_wez", "lokaty_zaloz"], [], false]];
+const DOKAD_POPRAW = { finanse_bank: "bank", finanse_biuro: "biuro", hr_zatrudnienie: "zatrudnienie", inwestycje_sprzet: "sprzet" };
+const cel = (c, z) => { const k = DOKAD_POPRAW[z] || z; return k && c.dostepna(k) && !c.wylaczona(k) ? k : null; };
+const liczba = (x) => (Array.isArray(x) ? x.length : x && typeof x === "object" ? Object.keys(x).length : 0);
+const wydatek = (p) => (p.bez_gotowki ? 0 : (p.towary || 0) + (p.wynagrodzenia || 0) + (p.pozostale || 0));
 function podsumowanieDecyzji(c) {
-  const d = c.d || {}, v = c.v, n = (x) => (Array.isArray(x) ? x.length : x && typeof x === "object" ? Object.keys(x).length : 0);
-  const wiersze = [["Zamówienia składników", n(d.zamowienia)], ["Ceny dań w menu", n(d.sprzedaz)], ["Sprzęt do kupienia", n(d.sprzet_kup)],
-    ["Wyposażenie i wystrój", n(d.wyposazenie_kup) + n(d.udogodnienia_kup) + n(d.dekor_kup)], ["Zatrudnienia", n(d.zatrudnij)], ["Zwolnienia", n(d.zwolnij)],
-    ["Reklamy", n(d.kampanie)], ["Szkolenia", n(d.szkolenia)], ["Kredyty i lokaty", n(d.kredyty_wez) + n(d.lokaty_zaloz)]].filter(([, k]) => k > 0);
-  const bledy = (v.lista_bledow || []).filter((b) => b.poziom === "czerwony").length, uwagi = (v.lista_bledow || []).filter((b) => b.poziom === "zolty").length;
-  const kosz = (v.koszty_decyzji || []).reduce((s, p) => s + (p.pozostale || 0), 0);
-  return `<section class="pp-kop-lista" aria-label="Podsumowanie decyzji"><h3>W kopercie: decyzje tygodnia ${v.runda}</h3>
-    ${wiersze.length ? `<ul>${wiersze.map(([nz, k]) => `<li><span>${nz}</span><b>${k}</b></li>`).join("")}</ul>` : `<p class="podpowiedz">Bez zmian względem poprzedniego tygodnia.</p>`}
-    <p class="pp-kop-uwagi">${bledy ? `<span class="pp-kop-znak">! ${bledy} poważnych uwag na liście błędów</span>` : `<span>✓ Brak poważnych uwag</span>`}${uwagi ? ` · <span>▼ ${uwagi} drobnych</span>` : ""}
-      ${kosz ? ` · <span>Koszty decyzji: <b>${zl(kosz)}</b></span>` : ""}</p></section>`;
+  const d = c.d || {}, v = c.v, pozycje = v.koszty_decyzji || [];
+  const razem = pozycje.reduce((s, p) => s + wydatek(p), 0);
+  let przypisane = 0;
+  const rubryki = RUBRYKI.map(([nz, klucze, prefiksy, zawsze]) => {
+    const ile = klucze.reduce((s, k) => s + liczba(d[k]), 0);
+    const kwota = pozycje.filter((p) => prefiksy.some((x) => String(p.opis).startsWith(x))).reduce((s, p) => s + wydatek(p), 0);
+    przypisane += kwota;
+    return { nz, ile, kwota, zawsze };
+  }).filter((r) => r.ile > 0 || r.kwota || r.zawsze);
+  const reszta = Math.round((razem - przypisane) * 100) / 100;
+  if (Math.abs(reszta) >= 0.005) rubryki.push({ nz: "Pozostałe wydatki (czynsz, składki, opłaty)", ile: 1, kwota: reszta });
+  const czerw = (v.lista_bledow || []).filter((b) => b.poziom === "czerwony"), uwagi = (v.lista_bledow || []).filter((b) => b.poziom === "zolty" || b.poziom === "pomaranczowy").length;
+  const wiersz = (znak, opis, kwota, popraw = "") => `<li class="pp-rub ${znak === "!" ? "zle" : znak === "○" ? "pusto" : "ok"}"><span class="pp-rub-znak" aria-hidden="true">${znak}</span>
+    <span class="pp-rub-nazwa">${opis}</span><span class="pp-rub-kwota">${kwota}</span>${popraw}</li>`;
+  const bledy = czerw.map((b) => { const k = cel(c, b.zakladka);
+    return wiersz("!", `${esc(b.tekst)}`, "", k ? `<a href="#" class="pp-rub-popraw" data-akcja="pp-kop-popraw" data-z="${esc(k)}">popraw ➜</a>` : ""); });
+  const wiersze = rubryki.map((r) => wiersz(r.ile || r.kwota ? "✓" : "○", `${r.nz}${r.ile > 1 && r.nz !== "Pozostałe wydatki (czynsz, składki, opłaty)" ? ` (${r.ile})` : ""}`, r.kwota ? zl(r.kwota) : "–"));
+  const konto = v.stan?.gotowka;
+  return `<section class="pp-kop-lista" aria-label="Podsumowanie decyzji"><h3>Blankiet: decyzje tygodnia ${v.runda}</h3>
+    <ul class="pp-rubryki">${bledy.join("")}${wiersze.join("")}</ul>
+    <p class="pp-kop-razem"><b>Razem wydatki</b><b>${zl(razem)}</b></p>
+    ${typeof konto === "number" ? `<p class="pp-kop-konto"><span>Na koncie po wydatkach</span><span>${zl(konto)}</span></p>` : ""}
+    <p class="pp-kop-uwagi">${czerw.length ? `<span class="pp-kop-znak">! ${czerw.length} poważnych uwag: popraw je przed nadaniem</span>` : `<span>✓ Brak poważnych uwag</span>`}${uwagi ? ` · <span>▼ ${uwagi} drobnych</span>` : ""}</p></section>`;
 }
 function htmlKoperty(c) {
   const v = c.v, swiezo = !!v.wyslane && !bylyWyslane;
   bylyWyslane = !!v.wyslane;
   return `<div class="pp-koperta${v.wyslane ? " wyslana" : ""}"><div class="pp-kop-klapa" aria-hidden="true"></div>
-    <p class="pp-kop-adres"><small>Od:</small> ${esc(v.dashboard?.nazwa || "Drużyna")}<br><small>Do:</small> Mistrz gry · tydzień ${v.runda}</p>
+    <div class="pp-kop-list"><p class="pp-kop-adres"><small>Od:</small> ${esc(v.dashboard?.nazwa || "Drużyna")}<br><small>Do:</small> Mistrz gry · tydzień ${v.runda}</p>
     ${v.wyslane ? `<div class="pp-stempel${swiezo ? " swiezy" : ""}" role="img" aria-label="Stempel: nadano"><b>✓ NADANO</b><small>tydzień ${v.runda}</small></div>` : ""}
-    ${podsumowanieDecyzji(c)}<div class="pp-kop-wyslij">${ZAKLADKI.wyslij.decyzje(c)}</div></div>`;
+    ${podsumowanieDecyzji(c)}</div><div class="pp-kop-wyslij">${ZAKLADKI.wyslij.decyzje(c)}</div></div>`;
 }
 
 // --- wydarzenia tygodnia (szuflada na pasku): wszystko, co dzieje się w tym tygodniu, z widoku gry ----------------------
@@ -376,6 +403,7 @@ export const AKCJE_PULPITU = {
     if (c.v.gra.zakonczona) return toast("Gra zakończona – nie ma już decyzji do wysłania.");
     pokaz("wyslij", c);
   },
+  "pp-kop-popraw": (e, c) => { e.preventDefault?.(); zamknijOkno(); c.idz(e.dataset.z, "decyzje"); },
   "pp-konto": (e, c) => pokaz("konto", c),
   "pp-koszyk": (e, c) => pokaz("zakupy", c),
   "pp-mapa": (e, c) => { zamknijOkno(); c.idz("mapa"); },

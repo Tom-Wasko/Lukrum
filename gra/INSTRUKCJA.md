@@ -117,7 +117,7 @@ banku albo biura rachunkowego prowadzi najpierw przez fasadę (Pierzeja bankowa,
 Na mapie u góry po prawej jest **rząd ikon kategorii** (Jedzenie i zaopatrzenie, Finanse, Urzędy i prawo, Praca i ludzie,
 Reklama i media, Miasto i rozrywka): kliknięta ikona podświetla pasujące miejsca (aktywną znaczy ✓ i gruba ramka),
 drugie kliknięcie wyłącza filtr. Paski i okienka w rogach mają swój wygląd: **zakupy** to paragon, **wydarzenia** to
-tablica ogłoszeń z kartkami na pinezkach (▲ korzystne, ▼ niekorzystne), a **List z decyzjami** to koperta z podsumowaniem
+tablica ogłoszeń z kartkami na pinezkach (▲ korzystne, ▼ niekorzystne), a **List z decyzjami** to koperta z blankietem: rubryki decyzji z kwotami i znakami ✓ (jest), ! (do poprawy, z odnośnikiem „popraw”), ○ (pusto),
 i stemplem „NADANO” po wysłaniu. **Zeszyt wujka** leży przechylony w prawym dolnym rogu, a po najechaniu wyprostowuje
 się i wysuwa listę kroków; na zamkniętym zeszycie wystaje kartka z następnym krokiem. W środku są list wujka, rozpiska funkcji, strony „Gdzie co kupić” (z aktualnymi cenami i nazwami sklepów) i samouczek.
 
