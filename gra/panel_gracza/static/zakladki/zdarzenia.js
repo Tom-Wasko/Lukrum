@@ -3,6 +3,7 @@
 // sprawy tylko tej drużyny (bank żywności, wypadki) są częścią „sprawy” zakładki Mój lokal.
 // te same dla wszystkich drużyn (opcje po 2–5 h – czasu właściciela nie starczy na wszystko); każda drużyna wybiera reakcję (decyzja `zdarzenia: {historia: opcja}`). Do tego
 // historie jednej drużyny: bank żywności i wypadki w lokalu (silnik/swiat/awarie.py – szkody i polisy).
+import { wyglad } from "../swiat/parki_wyglad.js";
 import { esc, kartaMarki, KOLORY, licz, okno, podsumowanie, proc, tabela, toast, zl2, zwinTabela } from "./wspolne.js";
 
 function kosztTekst(k) {
@@ -79,6 +80,16 @@ function paskiOdpowiedzi(s, st, edycja) {
     <small>${esc(s.tytul)}</small>${edycja ? ` <button type="button" class="btn" data-akcja="zd-zmien" data-h="${esc(s.historia)}">zmień</button>` : ""}</div>`;
 }
 
+// wskazówki skutków przy opcji: kierunek i siła (▲▲ ▲ ▼ ▼▼), bez liczb; siłę liczy api/prezentacja.py z danych opcji
+export function wskazowkiHtml(o) {
+  const w = o.wskazowki || [];
+  const opis = w.map((x) => `${x.nazwa} ${x.kierunek > 0 ? "rośnie" : "spada"}${x.sila > 1 ? " mocno" : ""}`).join(", ");
+  const cz = w.map((x) => `<span class="zd-w ${x.kierunek > 0 ? "gora" : "dol"}">${esc(x.nazwa)} ${x.znak}</span>`);
+  if (o.ciag) cz.push(`<span class="zd-w ciag">ciąg dalszy…</span>`);
+  if (!cz.length) cz.push(`<span class="zd-w">bez zmian od razu</span>`);
+  return `<div class="zd-wsk" role="group" aria-label="Skutki: ${esc(opis || "bez zmian od razu")}">${cz.join(" · ")}</div>`;
+}
+
 function scenaHtml(s, wybor, edycja, kat) {
   const st = stanSprawy(s, wybor, edycja);
   if (!s.park && wybor != null && !rozwiniete.has(s.historia)) return paskiOdpowiedzi(s, st, edycja);
@@ -87,7 +98,7 @@ function scenaHtml(s, wybor, edycja, kat) {
     const koszt = o.koszt?.gotowka || o.koszt?.porcje ? kosztTekst({ ...o.koszt, czas: 0 }) : "–";
     const tresc = `<div class="kg"><span class="zd-litera">${"ABCDEFG"[i] || i + 1}</span>${o.id === s.domyslna ? `<span class="pigulka inf">domyślna</span>` : ""}
         ${wybrana ? `<span class="pigulka ${brak ? "nie" : "ok"}">${brak ? "brak czasu" : "wybrano"}</span>` : ""}</div>
-      <div class="kt">${esc(o.tekst)}</div>
+      <div class="kt">${esc(o.tekst)}${wskazowkiHtml(o)}</div>
       <div class="kd"><div class="wiersz"><span>Czas</span><span>${o.koszt?.czas ? `${licz(o.koszt.czas, 1)} h` : "–"}</span></div>
         <div class="wiersz"><span>Koszt</span><span>${koszt}</span></div>
         ${brak ? `<small class="minus">Wymaga ${licz(o.koszt.czas, 1)} h, masz wolne ${licz(s.wolne, 1)} h${wybrana
@@ -97,7 +108,7 @@ function scenaHtml(s, wybor, edycja, kat) {
       ? `<button class="${kl}" data-akcja="zd-wybierz" data-h="${esc(s.historia)}" data-o="${esc(o.id)}" data-park="${esc(s.park || "")}">${tresc}</button>`
       : `<div class="${kl}">${tresc}</div>`;
   }).join("");
-  return `<div class="zd-scena"><h3>${esc(s.tytul)} <small>· ${esc(gdzie(s, kat))}</small></h3>
+  return `<div class="zd-scena${s.park ? " zd-kartka" : ""}"><h3>${esc(s.tytul)} <small>· ${esc(gdzie(s, kat))}</small></h3>
     <p class="podpowiedz">${s.nowa ? (s.park ? "Nowe wydarzenie w parku" : s.wypadek ? "Wypadek w lokalu" : "Nowe wydarzenie w lokalu") : "Ciąg dalszy"}</p>
     <p>${esc(s.tekst)}</p><div class="zd-opcje">${opcje}</div>${skutkiHtml(s.skutki)}</div>`;
 }
@@ -157,6 +168,11 @@ export function oknoParku(c, id) {
   if (dawne.length) html += tabela("Historia parku", ["Runda", "Historia", "Reakcja"], dawne.slice().reverse().map((w) =>
     [w.runda, esc(w.tytul), esc(w.opcja_tekst || "–")]), { klasy: ["", "l", "l"] });
   html += `<p class="podpowiedz">Porcja jedzenia kosztuje ${zl2(Z.koszt_porcji)}.</p>`;
+  const w = wyglad(id), czeka = teraz.filter((s) => stanSprawy(s, wybory[s.historia], edycja).wlasny === false).length;
+  html = `<div class="zd-tablica zd-wz-${w.wzor}" data-park="${esc(id)}">
+    <div class="zd-tablica-glowa">${w.godlo}<div><b class="zd-tablica-tytul">${esc(nazwa)}</b><span>${esc(w.haslo)}</span></div>
+      ${teraz.length ? `<span class="zd-tablica-licznik">${czeka ? `${czeka} ${czeka === 1 ? "czeka" : "czekają"} na odpowiedź` : "✓ wszystko odpowiedziane"}</span>` : ""}</div>
+    ${html}</div>`;
   okno(esc(nazwa), html, { przyciski: `<button class="btn pom" data-akcja="zamknij-okno">OK</button>` });
 }
 

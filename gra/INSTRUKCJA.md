@@ -414,7 +414,10 @@ zawsze, a między kupionymi stylami przełącza się za darmo.
 **Parki.** Od tygodnia 2 w parkach Lublina co tydzień dzieje się 3–4 rzeczy naraz – te same dla wszystkich drużyn.
 Wybiera się reakcję, która może kosztować czas właściciela (zwykle 2–5 h), gotówkę albo porcje jedzenia, a skutki bywają
 odłożone w czasie. **Na wszystko nie starczy czasu** (właściciel ma 20 h w tygodniu). Bez wyboru gra stosuje reakcję
-domyślną. Park, w którym coś się dzieje, ma na mapie znak „!”; kliknięcie otwiera okno z opisem i reakcjami A, B, C.
+domyślną. Park, w którym coś się dzieje, ma na mapie znak „!”; kliknięcie otwiera okno z tablicą ogłoszeń: kartka z opisem
+i reakcjami A, B, C. Pod każdą reakcją są **wskazówki**: co rośnie (▲), co spada (▼) i jak mocno (▲▲, ▼▼), np. „Kasa ▼ ·
+Goście ▲▲”. Bez dokładnych liczb – trzeba ocenić, czy warto. Każdy park ma własny wygląd tablicy. Przycisk „Co się tu dzieje”
+na tablicy w parku otwiera te same kartki.
 
 **Wypadki w lokalu.** Czasem coś przytrafia się tylko jednej drużynie – rożen odmawia posłuszeństwa, kot sąsiada wchodzi
 do kuchni. Wypadki kosztują, a **ubezpieczenie** (od tygodnia 4, u ubezpieczyciela przy Zana) zwraca część szkody po
