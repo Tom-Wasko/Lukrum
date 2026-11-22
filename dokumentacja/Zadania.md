@@ -1,5 +1,5 @@
 # Zadania
-Następny numer: Z40
+Następny numer: Z42
 
 Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej ważne. Zrobione dawniej:
 `historia/postep.md`. Pytania do zadań: `Stan.md`, „Czeka na szefa”. Uwagi z gier testowych 20 i 22.11 (szef,
@@ -7,10 +7,6 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ## W toku
 Podróż 03-okienka-i-rundy:
-- Z16 · przepisanie opisów w grze pod nowe mechaniki
-- Z25 · dług w dokumentacji: `gra/dokumentacja/OPIS_GRY.md` (zakładki, 40 000 zł), `STACK.md` (testy, motywy, `swiat/`, `mapa/`), martwe odsyłacze
-- Z32 · więcej do zrobienia w kolejnych rundach: zeszyt wujka i wydarzenia dają kilka sensownych zadań w każdej
-  rundzie (m: w rundzie 2 tylko bułki); łączy się z Z15
 - Z33 · wydarzenia i parki: wskazówki skutków decyzji ▲▼ z siłą, bez liczb (9); każdy park własny wygląd, przycisk
   prowadzi do wydarzenia, nie do kalendarza (m)
 - Z34 · wdrożyć nowe okienka według wyboru szefa 22.11 (`Decyzje.md`): zakupy A (paragon kasowy, też format paragonu, m), wydarzenia A
@@ -22,6 +18,8 @@ Podróż 03-okienka-i-rundy:
 - Z38 · Zana: „Portiernia” jako spis pięter (która agencja na którym piętrze, przejście do windy), zamiast listy wszystkich agencji
 
 ## Zaplanowane
+- Z40 · `silnik/wyniki/wnioski.py:21` mówi graczowi „sprawdźcie zakładki”: zamienić na miejsca na mapie (z 03/opisy)
+- Z41 · opis „40 000 zł” a dane: `inwestor_ratunkowy.max_kwota` 40 000, kapitał startowy 50 000 – sprawdzić, czy to zamierzone (z 03/opisy)
 - Z39 · moduły panelu w jednym pliku (paczka), jeśli preload z 03/wydajnosc nie wystarczy przez hostuj/Cloudflare; najpierw zmierzyć
 
 ### Lekkie poprawki
