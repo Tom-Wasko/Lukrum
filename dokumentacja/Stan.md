@@ -15,7 +15,7 @@ zatwierdzeniu szefa. Scalanie: do `main` dopóki szef jest, po `/papa` na `podro
 | 03/wyniki | Z36, Z38 | scalone do main 21:45 (904 passed) |
 | Archi | Z9, Z28 zrobione; Z26 odłożone | gotowe |
 | 03/rundy | Z32 (szef zatwierdził 21:37) | start 21:40 |
-| 03/wydajnosc | Z37 | start 21:50 (na noc) |
+| 03/wydajnosc | Z37 | scalony 21:56 (preload 71 modułów, 5 pięter żądań → 1) |
 | 03/opisy | Z16, Z25 | start 21:50 (na noc) |
 
 ## Czeka na szefa

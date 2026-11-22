@@ -1,5 +1,5 @@
 # Zadania
-Następny numer: Z39
+Następny numer: Z40
 
 Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej ważne. Zrobione dawniej:
 `historia/postep.md`. Pytania do zadań: `Stan.md`, „Czeka na szefa”. Uwagi z gier testowych 20 i 22.11 (szef,
@@ -7,7 +7,6 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ## W toku
 Podróż 03-okienka-i-rundy:
-- Z37 · wydajność dalej: moduły JS w jeden plik albo `modulepreload` (dziś ok. 80 żądań)
 - Z16 · przepisanie opisów w grze pod nowe mechaniki
 - Z25 · dług w dokumentacji: `gra/dokumentacja/OPIS_GRY.md` (zakładki, 40 000 zł), `STACK.md` (testy, motywy, `swiat/`, `mapa/`), martwe odsyłacze
 - Z32 · więcej do zrobienia w kolejnych rundach: zeszyt wujka i wydarzenia dają kilka sensownych zadań w każdej
@@ -23,6 +22,7 @@ Podróż 03-okienka-i-rundy:
 - Z38 · Zana: „Portiernia” jako spis pięter (która agencja na którym piętrze, przejście do windy), zamiast listy wszystkich agencji
 
 ## Zaplanowane
+- Z39 · moduły panelu w jednym pliku (paczka), jeśli preload z 03/wydajnosc nie wystarczy przez hostuj/Cloudflare; najpierw zmierzyć
 
 ### Lekkie poprawki
 
