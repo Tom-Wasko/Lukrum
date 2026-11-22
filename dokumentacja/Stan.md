@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-22 21:13 · tryb nadzorowany
+Archi żył: 2026-11-22 21:41 · tryb nadzorowany
 Tryb: nadzorowany od 21:13.
 
 ## Podróż
@@ -10,11 +10,11 @@ zatwierdzeniu szefa. Scalanie: do `main` dopóki szef jest, po `/papa` na `podro
 |---|---|---|
 | 03/paragon | Z34 zakupy | start |
 | 03/wydarzenia | Z34 wydarzenia, Z33 | start |
-| 03/list | Z34 list | start |
-| 03/zeszyt | Z35, Z5 | start |
+| 03/list | Z34 list | scalone do main 21:38 (899 passed) |
+| 03/zeszyt | Z35, Z5 | scalone do main 21:38 (900 passed); czcionka zostaje Caveat |
 | 03/wyniki | Z36, Z38 | start |
-| Archi | Z9, Z28, Z26; propozycja Z32 | w toku |
-| 03/rundy | Z32 | czeka na szefa (rano) |
+| Archi | Z9, Z28 zrobione; Z26 odłożone | gotowe |
+| 03/rundy | Z32 (szef zatwierdził 21:37) | start 21:40 |
 
 ## Czeka na szefa
 
