@@ -23,6 +23,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Q
 
 from konta.role import MISTRZ_GRY
+from lukrum.rozgrzewka import rozgrzej_w_tle
 from panel_gracza import staly_link
 
 from .graj import port_zajety
@@ -102,6 +103,7 @@ class Command(BaseCommand):
             )
             if not bez_przegladarki:
                 threading.Timer(1.5, webbrowser.open, [lokalny]).start()
+            rozgrzej_w_tle()  # pierwszy widok gry bez ok. 2 s ładowania silnika
             # /static/ przez lukrum/statyczne.py (wersja w adresie), nie przez runserver
             call_command(
                 "runserver", f"127.0.0.1:{port}", use_reloader=False, use_static_handler=False

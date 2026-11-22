@@ -231,10 +231,36 @@ def test_strony_wczytuja_pliki_statyczne_z_wersja_w_adresie(client, tmp_path, se
     w = statyczne.wersja()
     assert f'href="/static/v{w}/styl.css"' in html and '"/static/styl.css"' not in html
     r = client.get(f"/static/v{w}/zakladki/oferta.js")
-    assert r.status_code == 200 and "no-cache" in r["Cache-Control"]
+    assert r.status_code == 200 and "immutable" in r["Cache-Control"] and "max-age=31536000" in r["Cache-Control"]
     (tmp_path / "nowy.js").write_text("// nowy plik", encoding="utf-8")
     settings.STATICFILES_DIRS = [tmp_path]
     assert statyczne.wersja() != w
+
+
+def test_wersja_liczona_raz_poza_debugiem_i_za_kazdym_razem_w_debugu(settings, monkeypatch):
+    from lukrum import statyczne
+
+    wywolania = []
+    monkeypatch.setattr(statyczne, "_policz_wersje", lambda: wywolania.append(1) or "abc123")
+    monkeypatch.setattr(statyczne, "_pamiec", {})
+    settings.DEBUG = False
+    assert [statyczne.wersja() for _ in range(5)] == ["abc123"] * 5 and len(wywolania) == 1
+    settings.DEBUG = True
+    statyczne.wersja(), statyczne.wersja()
+    assert len(wywolania) == 3   # w DEBUG zmiany plików widać od razu
+
+
+def test_adres_bez_wersji_zostaje_no_cache(client):
+    r = client.get("/static/zakladki/oferta.js")
+    assert "no-cache" in r["Cache-Control"] and "immutable" not in r["Cache-Control"]
+
+
+def test_rozgrzewka_serwera_dziala_i_nie_wywala_serwera(monkeypatch):
+    from lukrum import rozgrzewka
+
+    rozgrzewka.rozgrzej()   # nie rzuca (scipy, widoki, solver)
+    monkeypatch.setattr(rozgrzewka, "rozgrzej", lambda: 1 / 0)
+    rozgrzewka.rozgrzej_w_tle().join(5)   # błąd w wątku jest połknięty
 
 
 def test_pulpit_ucznia_i_mistrza(client, gra):

@@ -85,3 +85,20 @@ granice, kolej i ulice (wracają po 150 ms).
 4. `dostawcy.js`: `zam-usun` i `zam-wyczysc` z drugim argumentem `lokalnie` (wątek `02/sklepy`).
 5. Docelowo obrysy bez `non-scaling-stroke` (stała szerokość przez `--k`), wtedy linie mogłyby zostać w ruchu.
 **Commity:** `git log --oneline -4` na gałęzi `worktree-podroz-02-mapa`
+
+## Dopisek: Z31 (cache statyków i rozgrzewka), po prośbie Archiego
+**Zmienione pliki:** `gra/lukrum/statyczne.py`, nowy `gra/lukrum/rozgrzewka.py`, `gra/panel_gracza/management/commands/graj.py` i `hostuj.py`
+(wywołanie `rozgrzej_w_tle()`), testy w `gra/testy/aplikacja/test_konta.py`.
+**Co:** adresy `/static/v<wersja>/…` dostają `Cache-Control: max-age=31536000, immutable` (adresy bez wersji zostają `no-cache`).
+`wersja()` liczy się raz na proces, gdy `DEBUG` jest wyłączony (`hostuj`); przy `DEBUG` (domyślnie, także `graj`) za każdym razem, żeby zmiany plików
+było widać od razu. Cache jest unieważniany, gdy zmieni się `STATICFILES_DIRS`. Rozgrzewka (wątek-demon przy starcie `graj` i `hostuj`) ładuje
+`api.widoki`, `silnik.kuchnia.operacje`, scipy i robi jedno małe `linprog`; testy i inne komendy jej nie wołają.
+**Pomiary (localhost, Edge, ta sama gra):**
+- Pierwszy widok gry po starcie serwera (Django test client, osobny proces): 2238 ms → 914 ms po rozgrzewce; kolejne widoki bez zmian (ok. 183 ms).
+  Pozostałe ok. 0,7 s to pierwsze wczytanie stanu gry, którego rozgrzewka ogólna nie obejmuje.
+- Ponowne wejście w tę samą stronę (przeglądarka z cache): 848 ms → 447 ms i 631 ms → 374 ms; zapytań z odpowiedzią 304: 89 → 0.
+- Pierwsze wejście w przeglądarce (zimny cache): bez wyraźnej zmiany (1844 ms przed, 2120–2328 ms po; rozrzut pomiarów większy niż różnica).
+  Zysk jest więc przy kolejnych wejściach, nie przy pierwszym.
+**Dowód:** `ruff check .` → `All checks passed!`; testy: `pytest -q -p no:cacheprovider testy/aplikacja` → `222 passed in 126.25s`
+**Uwaga:** w teście `test_strony_wczytuja_pliki_statyczne_z_wersja_w_adresie` zmieniłem oczekiwanie z `no-cache` na `immutable` dla adresu z wersją
+(zamierzona zmiana zachowania); dodane testy: wersja liczona raz poza DEBUG i za każdym razem w DEBUG, adres bez wersji dalej `no-cache`, rozgrzewka nie wywala serwera.

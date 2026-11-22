@@ -8,6 +8,8 @@ from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
 
+from lukrum.rozgrzewka import rozgrzej_w_tle
+
 
 def port_zajety(port: int) -> bool:
     """Czy na 127.0.0.1:port już ktoś słucha. Windows pozwala dwóm serwerom słuchać na tym samym
@@ -35,5 +37,6 @@ class Command(BaseCommand):
         adres = f"http://127.0.0.1:{port}/"
         if not bez_przegladarki:
             threading.Timer(1.5, webbrowser.open, [adres]).start()
+        rozgrzej_w_tle()  # pierwszy widok gry bez ok. 2 s ładowania silnika
         # /static/ przez lukrum/statyczne.py (wersja w adresie), nie przez runserver
         call_command("runserver", f"127.0.0.1:{port}", use_reloader=False, use_static_handler=False)
