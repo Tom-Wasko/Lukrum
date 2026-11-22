@@ -52,7 +52,8 @@
 `styl.css` (4, blok na końcu), `pulpit/pulpit.js` (6, 7), `swiat/sceny/poczta.js` (7, 8), `zakladki/zadania.js` (2; nie
 było na liście plików, ale tam powstają zadania zeszytu), `gra/testy/aplikacja/test_drobne.py` (nowy, 10 testów).
 **Dowód:** `pytest testy/aplikacja/test_drobne.py` → `10 passed`; `ruff check` na teście → `All checks passed!`;
-`node --check` zmienionych modułów → ok. Pełny pytest: wynik w wiadomości do Archiego / poniżej (dopisany po zakończeniu).
+`node --check` zmienionych modułów → ok. Pełny pytest (uruchomiony przed commitem ab26d4b, ten dotyka tylko zadania.js i testu: 10 passed osobno) → `885 passed in 369.05s`; niestabilny test kasyna nie padł.
+Nie udało się usunąć `_robocze/drobne/` (blokada `rm`); folder jest poza gitem, do skasowania ręcznie.
 **Wyniki pkt po pkt:**
 1. **Nierozstrzygnięte.** Sprawa Haliny (`pani_halina`, bez parku) jest w Mój lokal i po wyborze reakcji celowo
    zostaje widoczna (inaczej nie dałoby się zmienić wyboru). Nie znalazłem osobnego „listu” na stałe. Potrzebuję od szefa:
