@@ -1,5 +1,6 @@
 # Stan
-Archi żył: 2026-11-22 16:36 · wszystkie wątki 02 scalone, czekam na grę sprawdzającą szefa
+Archi żył: 2026-11-22 16:44 · tryb autonomiczny
+Tryb: autonomiczny od 16:44, budżet 2 h, koniec najpóźniej 18:44 (nowe kroki do 18:26). Scalenia na gałąź `podroz-02`.
 
 ## Podróż
 02-poprawki-po-grze (start 2026-11-22, tryb nadzorowany, scalanie do `main`): Z29, Z30, Z1, Z31, Z34.
