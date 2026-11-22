@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-22 14:30
+Archi żył: 2026-11-22 15:00
 
 ## Podróż
 02-poprawki-po-grze (start 2026-11-22, tryb nadzorowany, scalanie do `main`): Z29, Z30, Z1, Z31, Z34.
@@ -7,10 +7,10 @@ Plan: `podroze/02-poprawki-po-grze/plan.md`.
 
 | Wątek | Kto | Stan |
 |---|---|---|
-| 02/sklepy | wyko-lukrum-02-sklepy | start |
-| 02/mapa | wyko-lukrum-02-mapa | start |
-| 02/drobne | wyko-lukrum-02-drobne | start |
-| 02/makiety | Archi | w toku |
+| 02/sklepy | wyko-lukrum-02-sklepy (672af4e2) | w toku |
+| 02/mapa | wyko-lukrum-02-mapa (77b1d612) | w toku |
+| 02/drobne | wyko-lukrum-02-drobne (17acac30) | w toku |
+| 02/makiety | Archi | makiety na claude.ai (link w planie), czeka na wybór szefa |
 
 ## Czeka na szefa
 Pytania przeniesione z dawnego „Do decyzji” (stan 17.11). Przegląd prawny z 16.11 to ćwiczenie, nie porada prawna.

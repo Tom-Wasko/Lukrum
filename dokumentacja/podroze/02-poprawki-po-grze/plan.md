@@ -34,10 +34,10 @@ swoje reguły na końcu w osobnym bloku z komentarzem `/* podróż 02/<wątek> *
 
 | Wątek | Kto | Zakres | Pliki (własność) | Stan |
 |---|---|---|---|---|
-| `02/sklepy` | wyko | Z30, Z1 | `swiat/rysunek.js` (R.zamow, R.koszyk…), `swiat/wnetrze.js`, `swiat/sceny/*` (bez `poczta.js`), `zakladki/dostawcy.js`, `marketing.js`, `inwestycje.js`, `swiat/miejsca.js`, `pulpit/karta.js` | plan |
-| `02/mapa` | wyko | Z31 + część Z29 dotycząca mapy (ikony, liczniki, ikony po zmianie rundy) | `mapa/*`, `zakladki/mapa*.js`, `dane/mapa/budynki.yaml` | plan |
-| `02/drobne` | wyko | reszta Z29 | `pulpit/zeszyt.js`, `pulpit/pulpit.js`, `zakladki/hr.js`, `rynek_pracy.js`, `oferta.js`, `lokal.js`, `zdarzenia.js`, `swiat/sceny/poczta.js`, dane listów i zdarzeń | plan |
-| `02/makiety` | Archi | Z34 | artefakt na claude.ai | w toku |
+| `02/sklepy` | wyko | Z30, Z1 | `swiat/rysunek.js` (R.zamow, R.koszyk…), `swiat/wnetrze.js`, `swiat/sceny/*` (bez `poczta.js`), `zakladki/dostawcy.js`, `marketing.js`, `inwestycje.js`, `swiat/miejsca.js`, `pulpit/karta.js` | w toku |
+| `02/mapa` | wyko | Z31 + część Z29 dotycząca mapy (ikony, liczniki, ikony po zmianie rundy) | `mapa/*`, `zakladki/mapa*.js`, `dane/mapa/budynki.yaml` | w toku |
+| `02/drobne` | wyko | reszta Z29 | `pulpit/zeszyt.js`, `pulpit/pulpit.js`, `zakladki/hr.js`, `rynek_pracy.js`, `oferta.js`, `lokal.js`, `zdarzenia.js`, `swiat/sceny/poczta.js`, dane listów i zdarzeń | w toku |
+| `02/makiety` | Archi | Z34 | https://claude.ai/artifact/YKpg6woJrPqaHFZE59vqjk | gotowe, czeka na wybór szefa |
 
 Co ustaliłem przy rozpoznaniu (idzie do briefów):
 - Przyczyna punktu 12: wszystkie sklepy mają wspólną teczkę `ZAMOWIENIA = { ekran: "zaop_dostawy" }` w
