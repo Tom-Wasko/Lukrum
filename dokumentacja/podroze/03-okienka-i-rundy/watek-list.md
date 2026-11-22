@@ -29,3 +29,21 @@
   - Pełne testy są zielone.
 
 ## Raport
+Stan: gotowe do przeglądu (22.11).
+
+**Co zrobione**
+- `pulpit/pulpit.js`: blankiet (rubryki z wariantu B) w kopercie A. Rubryki z tabeli `RUBRYKI` (✓ jest, ○ pusto, ! błąd z odnośnikiem
+  „popraw ➜”), kwoty z `v.koszty_decyzji` przypisane po prefiksie opisu pozycji, reszta jako „Pozostałe wydatki” (suma się zgadza),
+  „Razem wydatki” i „Na koncie po wydatkach” (`v.stan.gotowka`). Nowa akcja `pp-kop-popraw` zamyka okno i robi `c.idz(zakladka, "decyzje")`.
+  Przycisk Wyślij i stempel NADANO bez zmian (stempel pojawia się z `v.wyslane`, więc znika w nowej rundzie jak w 02).
+- `pulpit/pulpit.css`: blok `podróż 03/list`; list wysuwa się z koperty (`pp-list-wysun`, tylko w `prefers-reduced-motion: no-preference`),
+  bez ruchu pojawia się od razu. Tylko zmienne kolorów.
+- `testy/aplikacja/test_pulpit.py`: test `test_list_blankiet_rubryki_popraw_i_animacja`.
+- `INSTRUKCJA.md` (jedno zdanie), notatka `dokumentacja/funkcje/list-z-decyzjami-blankiet.md`.
+
+**Nie zrobione / decyzje własne**
+- `swiat/sceny/poczta.js` i `zakladki/zadania.js` bez zmian: scena pokazuje już „✓ NADANO” z `v.wyslane` (odświeża się co rundę), a
+  podsumowanie decyzji było tylko w `pulpit.js`.
+- Przypisanie kwot po prefiksach opisów jest umowne (np. „Koszt zakupu” trafia do sprzętu/wystroju razem). Lepsze byłoby pole `rubryka`
+  w pozycjach kosztów (silnik), ale to poza zakresem.
+- Zrzutów ekranu nie zrobiłem (brak przeglądarki w tej sesji); układ sprawdzony tylko testami i `node --check`. Proszę o rzut oka.

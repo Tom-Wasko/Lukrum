@@ -505,3 +505,25 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
 [data-paleta="wysoka"] .pp-radio-adres, [data-paleta="wysoka"] .pp-radio-gl { color: var(--tusz); }
 [data-paleta="wysoka"] .pp-radio-skala { background: var(--g-biel); }
 [data-paleta="wysoka"] .pp-radio-st.aktywny { background: var(--g-biel); text-decoration: underline; text-decoration-thickness: 3px; }
+
+/* podróż 03/list: blankiet z rubrykami (✓ ! ○, kwoty, „popraw”) w kopercie; list wysuwa się z koperty, po nadaniu stempel */
+.pp-koperta { overflow: hidden; }
+.pp-kop-list { position: relative; padding: 14px 16px 6px; margin-bottom: 14px; background: var(--papier); border: 2px solid var(--tusz); border-radius: 3px; box-shadow: 0 2px 0 var(--tusz); }
+.pp-rubryki { margin: 0 0 8px; padding: 0; list-style: none; }
+.pp-rub { display: grid; grid-template-columns: 1.6em minmax(0, 1fr) auto auto; gap: 4px 10px; align-items: baseline; padding: 4px 0; border-bottom: 1px dotted var(--tusz); }
+.pp-rub-znak { font-weight: 700; text-align: center; }
+.pp-rub-kwota { text-align: right; font-variant-numeric: tabular-nums; }
+.pp-rub.zle .pp-rub-nazwa { font-weight: 700; color: var(--strata); }
+.pp-rub.zle .pp-rub-znak { color: var(--strata); }
+.pp-rub.pusto { opacity: .8; }
+.pp-rub-popraw { grid-column: 3 / 5; color: var(--tusz); font-weight: 700; text-decoration: underline; white-space: nowrap; min-height: 24px; }
+.pp-rub-popraw:focus-visible { outline: 3px solid var(--akcent); outline-offset: 2px; }
+.pp-kop-razem, .pp-kop-konto { display: flex; justify-content: space-between; gap: 10px; margin: 6px 0 0; }
+.pp-kop-razem { padding-top: 6px; border-top: 2px solid var(--tusz); font-size: 1.1em; }
+.pp-kop-konto { opacity: .85; font-size: .9em; }
+.pp-stempel { top: auto; bottom: 74px; }
+@media (prefers-reduced-motion: no-preference) {
+  .pp-kop-list { animation: pp-list-wysun .55s cubic-bezier(.2, .8, .3, 1) both; }
+}
+@keyframes pp-list-wysun { from { transform: translateY(70px); opacity: 0; } 40% { opacity: 1; } to { transform: none; opacity: 1; } }
+@media (max-width: 520px) { .pp-rub { grid-template-columns: 1.4em minmax(0, 1fr) auto; } .pp-rub-popraw { grid-column: 2 / 4; } }
