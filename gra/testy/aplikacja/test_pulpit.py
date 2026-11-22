@@ -314,3 +314,13 @@ def test_biurowiec_przy_zana_ma_nazwe_i_ikone_wiezowca():
     assert zespol["nazwa"] == "Biurowiec przy Zana" and "Dom reklamy" not in zespol["nazwa"]
     ikony = (STATIC / "mapa" / "ikony.js").read_text(encoding="utf-8")
     assert "wiezowiec:" in ikony and 'biurowiec_zana: "wiezowiec"' in ikony
+
+
+def test_mapa_zespoly_bez_licznika_firm_i_odswiezenie_po_rundzie():
+    # licznik przy zespole (np. 4, 5) sugerował zadanie, a był liczbą firm; plakietka ma znaczyć tylko prawdziwą sprawę
+    lublin = (STATIC / "mapa" / "lublin.js").read_text(encoding="utf-8")
+    assert 'class="lm-ile"' not in lublin
+    # po zmianie rundy mapa rysuje się od nowa: pamięć zaniku żetonów musi się zerować (inaczej oddalona mapa pokazuje wszystko)
+    assert re.search(r'poziom = 0; ulice = false; ostatniZanik = ""', lublin)
+    # w ruchu znikają najdroższe linie (płynność przesuwania i przybliżania)
+    assert "lm-ruch" in lublin and ".lmapa.lm-ruch" in (STATIC / "mapa" / "mapa.css").read_text(encoding="utf-8")
