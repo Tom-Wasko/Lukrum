@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-22 11:57
+Archi żył: 2026-11-22 13:10
 
 ## Podróż
 01-migracja: przeniesienie LUKRUM do układu cyberiady (część podróży 02-migracja-lukrum w cyberiadzie, Z2 tam).
@@ -8,7 +8,7 @@ Plan: `podroze/01-migracja/plan.md`.
 ## Wątki
 | Wątek | Sesja | Gałąź | Stan |
 |---|---|---|---|
-| 01/notatki | Archi (wyko usunięty) | main | w toku |
+| 01/notatki | Archi | main | gotowe (0340624); podróż czeka na koniec w cyberiadzie |
 
 ## Czeka na szefa
 Pytania przeniesione z dawnego „Do decyzji” (stan 17.11). Przegląd prawny z 16.11 to ćwiczenie, nie porada prawna.
