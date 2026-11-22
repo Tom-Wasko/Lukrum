@@ -224,6 +224,13 @@ function oknoAuto(c, s, { poZapisie = false } = {}) {
   okno(s.tytul, tresc, { przyciski: `<button class="btn pom" data-akcja="zamknij-okno">Gotowe</button>`, okruszek: `Lublin › ${esc(s.sklep || "Sklep")}`,
     poZamknieciu: () => { const z = s.zmieniono; AUTO = null; if (z) c.rysuj(); } });
 }
+// „Usuń” i „Usuń wszystkie” (Z31): po zapisie odświeża się tylko lista zamówień, nie cała strona (bez skoku i utraty przewijania)
+function odswiezListe(c) {
+  const el = document.querySelector("[data-lista-zam]");
+  if (!el) return c.rysuj();
+  el.innerHTML = listaZamowien(c.v, c.edycja);
+}
+const poListe = (c) => () => odswiezListe(c);
 const poAuto = (c) => (AUTO ? () => oknoAuto(c, AUTO, { poZapisie: true }) : undefined);
 
 function zapiszPozycje(c, zmiana) {
@@ -276,7 +283,7 @@ export const dostawcy = {
     let html = `<div class="pasek ciemny"><span>Koszt zakupu${idWybranego(v) ? " (ten lokal)" : ""}: <span class="kwota">${zl(koszt)}</span></span>${autoZam}</div>`;
     html += tabela("Zapotrzebowanie na prognozowanych klientów (opakowania)", ["Zasób", "Opakowanie", "Potrzeba wg prognoz", "W magazynie",
       "Zamówione teraz", "Brakuje", "Najtańsze oferty"], wiersze, { klasy: ["l", "l"] });
-    html += listaZamowien(v, edycja);
+    html += `<div data-lista-zam>${listaZamowien(v, edycja)}</div>`;
     if (dniDostaw(v)) html += `<p class="podpowiedz">„Zamów” w grze z lokalami pomija dyskonty (odbiór osobisty, limity) – w nich kupujesz ręcznie w bazie składników.</p>`;
     html += plan;
     const wyn = v.swiezosc?.wynajem;
@@ -326,9 +333,9 @@ export const dostawcy = {
       if (!x) return;
       const ta = (y) => y.dostawca === x.dostawca && y.zasob === x.zasob && +y.jakosc === +x.jakosc && (+y.dzien || 0) === (+x.dzien || 0)
         && lokalZam(c.v, y) === lokalZam(c.v, x);
-      return c.zmien((d) => { d.zamowienia = (d.zamowienia || []).filter((y) => !ta(y)); });
+      return c.zmien((d) => { d.zamowienia = (d.zamowienia || []).filter((y) => !ta(y)); }, poListe(c));
     },
-    "zam-wyczysc": (el, c) => c.zmien((d) => { d.zamowienia = (d.zamowienia || []).filter((x) => !tenLokal(c.v, x)); }, poAuto(c)),
+    "zam-wyczysc": (el, c) => c.zmien((d) => { d.zamowienia = (d.zamowienia || []).filter((x) => !tenLokal(c.v, x)); }, poAuto(c) || poListe(c)),
     "auto-prognoza": (el, c) => {
       const zapas = +document.getElementById("auto-ad-zapas").value, pot = zapotrzebowanie(c.v, c.kat), ceny = cenyAuto(c.v);
       if (!Object.values(pot).some((p) => p > 0)) return toast("Najpierw wpisz prognozę popytu dań w zakładce Menu i ceny.");

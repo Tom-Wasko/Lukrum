@@ -199,6 +199,14 @@ def test_zaden_punkt_nie_otwiera_zlozonego_ekranu_ani_tej_samej_zawartosci():
     assert not kolizje, "\n".join(kolizje)
 
 
+def test_usuwanie_zamowien_odswieza_tylko_liste_a_nie_cala_strone():
+    """Z31: „Usuń” i „Usuń wszystkie” nie przerysowują całej zakładki: zmien(fn, lokalnie) odświeża listę zamówień."""
+    dostawcy = (GRA / "panel_gracza" / "static" / "zakladki" / "dostawcy.js").read_text(encoding="utf-8")
+    assert "<div data-lista-zam>" in dostawcy and "function odswiezListe" in dostawcy
+    usun = dostawcy.split('"zam-usun":', 1)[1].split('"auto-prognoza"', 1)[0]
+    assert usun.count("poListe(c)") == 2   # zam-usun i zam-wyczysc: drugi argument zmien
+
+
 def test_kebab_prowadzi_do_zlozonych_ekranow_tylko_przez_jawny_wyjatek():
     miejsca = (GRA / "panel_gracza" / "static" / "swiat" / "miejsca.js").read_text(encoding="utf-8")
     cele = re.findall(r'cel: "(\w+)"', miejsca.split("kebab: {", 1)[1])

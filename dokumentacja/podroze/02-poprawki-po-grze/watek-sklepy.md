@@ -255,3 +255,4 @@ nie udało się ich usunąć/zatrzymać (odmowa uprawnień). Do ręcznego sprzą
 | zana_portiernia | Twoje kampanie | ekran: agencje |
 | zana_portiernia | Pokój 12: księga firmy | wejście: pokoj_ksiegi.html |
 | zana_radio | Radio i billboard | agencja: fala_koziolka |
+**Z31 (wolne usuwanie zamówień):** `zam-usun` i `zam-wyczysc` w `dostawcy.js` przekazują drugi argument `zmien(fn, lokalnie)`: odświeża się tylko lista zamówień (`[data-lista-zam]`), a w oknie auto-dostaw samo okno. Test `test_usuwanie_zamowien_odswieza_tylko_liste_a_nie_cala_strone` → `test_wnetrza_sceny.py` 12 passed. Okna sklepów (`ilosc`) już odświeżały się lokalnie. Nie mierzyłem czasu w żywej aplikacji. Uwaga: reszta strony (paski kosztów) odświeża się po zamknięciu/zmianie zakładki.
