@@ -33,6 +33,12 @@ def test_tablica_wydarzen_liczy_parki_a_nie_pojedyncze_sprawy():
     assert "n: parki.length + miasto.length" in pulpit
 
 
+def test_sprawy_w_lokalu_nie_sa_zadaniem_w_zeszycie():
+    zadania = _tekst("zakladki", "zadania.js")
+    assert "Zareaguj:" not in zadania
+    assert "if (!s.park) continue;" in zadania
+
+
 def test_zeszyt_przewija_kolkiem_i_klawiatura():
     zeszyt = _tekst("pulpit", "zeszyt.js")
     assert 'roz.addEventListener("wheel"' in zeszyt
