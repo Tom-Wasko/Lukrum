@@ -22,8 +22,7 @@ export const MIEJSCA = {
     punkty: [
       { klucz: "menu", cel: "lokal_menu", nazwa: "Tablica: menu i ceny", opis: "Dania, ceny i prognoza sprzedaży." },
       { klucz: "lada", cel: "lokal_przeglad", nazwa: "Lada: lokal i sprzedaż", opis: "Stan lokalu, obsada stanowisk, sprzedaż z poprzedniego tygodnia." },
-      { klucz: "kuchnia", cel: "wnetrze_sprzet", miejsce: "sprzet_gastro", odsyla: "Sprzęt kupuje się w Parku handlowym, w hurtowni sprzętu gastronomicznego.",
-        nazwa: "Rożen: sprzęt (Park handlowy)", opis: "Sprzęt i stanowiska kupuje się w Parku handlowym – przejście do hurtowni sprzętu." },
+      { klucz: "kuchnia", cel: "wnetrze_sprzet", nazwa: "Rożen: sprzęt w lokalu", opis: "Jaki sprzęt już stoi w kuchni i w jakim jest stanie. Dokupuje się go w Parku handlowym." },
       { klucz: "zaplecze", cel: "zespol", nazwa: "Zaplecze: zespół i grafik", opis: "Umowy, pensje, grafik i nastroje pracowników." },
       { klucz: "pracownik", cel: "zespol", nazwa: "Pracownik", opis: "", tylkoScena: true },
       { klucz: "kasa", cel: "raport", nazwa: "Kasa: wyniki finansowe", opis: "Przychody, koszty i dochód tygodnia." },
