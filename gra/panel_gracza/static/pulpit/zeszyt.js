@@ -71,6 +71,16 @@ const naMapie = (ids, tekst = "⌖ na mapie", klasa = "pz-mapa") => {
   const l = [].concat(ids || []).filter(Boolean);
   return l.length ? `<button type="button" class="${klasa}" data-akcja="pp-pokaz" data-b="${esc(l.join(","))}" title="Pokaż na mapie" aria-label="${tekst.replace(/<[^>]+>/g, "")}: pokaż na mapie">${tekst}</button>` : "";
 };
+// Cel tygodnia od wujka (silnik/cele.py): cel na ten tydzień i wynik celu z zeszłego tygodnia (znak, nie sam kolor)
+export function celTygodnia(cel) {
+  if (!cel) return "";
+  const p = cel.poprzedni;
+  const wynik = p ? `<p class="pz-cel-wynik ${p.osiagniety ? "ok" : "nie"}"><b>${p.osiagniety ? "✓ Cel z zeszłego tygodnia osiągnięty" : "✗ Cel z zeszłego tygodnia: nie tym razem"}</b>
+      <span>${esc(p.tekst)}${p.osiagniety && p.nagroda ? ` · ${esc(p.nagroda)}` : ""}</span></p>` : "";
+  return `<section class="pz-cel" aria-label="Cel tygodnia od wujka"><h3>Cel tygodnia</h3>
+    <p class="pz-cel-tekst"><b>★ ${esc(cel.tekst)}</b></p>
+    <p class="pz-opis">Nagroda: ${esc(cel.nagroda)}. Wynik zobaczycie w zeszycie po zamknięciu tygodnia.</p>${wynik}</section>`;
+}
 function stronaLista(c) {
   const v = c.v, list = listTygodnia(v);
   let plan = null;
@@ -87,6 +97,7 @@ function stronaLista(c) {
   }).join("");
   return `<h2>List od wujka · tydzień ${v.zeszyt?.tydzien ?? v.runda}</h2>
     ${list ? `<p class="pz-list"><b>${esc(list.tytul)}</b> ${esc(list.tresc)} <span class="pz-podpis">– Wasz wujek</span></p>` : ""}
+    ${celTygodnia(v.zeszyt?.cel)}
     <h3>Do zrobienia w tym tygodniu${plan ? ` <small>${plan.zrobione} z ${plan.razem}</small>` : ""}</h3>
     <p class="pz-opis">Kliknięcie kroku pokazuje budynek na mapie (mapa się przybliża, a budynek pulsuje); „wejdź →” prowadzi od razu do środka.</p><ol class="pz-kroki">${kroki}</ol>
     ${v.zeszyt?.dopisek ? `<p class="pz-opis"><i>${esc(v.zeszyt.dopisek)}</i></p>` : ""}`;

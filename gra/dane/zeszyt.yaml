@@ -9,6 +9,7 @@ zrodlo: decyzje szefa 16.11.2026 (noc), „Wnętrza i pulpit” pkt 1 i 3; treś
 # --- słownik warunków -----------------------------------------------------------------------------------------
 # Warunek to NAZWA z tej listy (plus opcjonalny parametr), a nie wyrażenie: implementacja jest w jednym miejscu w kodzie
 # (panel_gracza/static/pulpit/zeszyt-warunki.js: WARUNKI), test pilnuje, że każda nazwa z danych ma implementację.
+# rodzaj: zmiana – decyzja tej rundy różni się od poprzedniej (v.stan po decyzjach kontra v.stan_przed i v.decyzje);
 # rodzaj: stan – z v.stan; decyzja – klucz obecny w decyzjach roboczych tygodnia; wizyta – gracz wszedł do miejsca
 #         w bieżącej rundzie (zapisuje serwer, v.zeszyt.wizyty); wyslane – v.wyslane.
 warunki:
@@ -35,6 +36,15 @@ warunki:
   higiena_wybrana:     {rodzaj: decyzja, opis: "klucz higiena ustawiony kiedykolwiek (trwa do zmiany)"}
   wizyta:              {rodzaj: wizyta, parametr: miejsce, opis: "wejście do wnętrza (id sceny) w bieżącej rundzie"}
   wyslane:             {rodzaj: wyslane, opis: "v.wyslane"}
+  zmiana_po_tabeli:    {rodzaj: zmiana, opis: "cena dania, menu albo zespół (osoba, pensja, umowa) różni się od poprzedniej rundy"}
+  zmiana_ceny:         {rodzaj: zmiana, opis: "cena któregoś dania różni się od poprzedniej rundy"}
+  zmiana_dania:        {rodzaj: zmiana, opis: "cena któregoś dania albo skład menu różni się od poprzedniej rundy"}
+  wiecej_towaru:       {rodzaj: zmiana, opis: "suma zamówień (opakowania) większa niż w poprzedniej rundzie (v.zeszyt.poprzednie_zamowienia)"}
+  mniej_towaru:        {rodzaj: zmiana, opis: "suma zamówień mniejsza niż w poprzedniej rundzie (gdy w poprzedniej były zamówienia)"}
+  splata_dlugu:        {rodzaj: zmiana, opis: "spłata kredytu, Harpagona albo debetu w tej rundzie; bez długu od razu zrobione"}
+  zmiana_umowy:        {rodzaj: zmiana, opis: "decyzja zmiany (pensja, umowa, premia) albo przenosiny jednej osoby"}
+  detektyw_i_cena:     {rodzaj: zmiana, opis: "detektyw zamówiony i cena któregoś dania zmieniona"}
+  nizszy_koszt_staly:  {rodzaj: zmiana, opis: "niższy pakiet biura, niższa pensja, mniej osób albo mniej kredytów niż w poprzedniej rundzie"}
 
 # --- zadania stałe (na każdej stronie od tygodnia 2, pod zadaniami tygodnia) -------------------------------------
 stale:
@@ -46,6 +56,36 @@ stale:
     - {id: wyniki,  tekst: "Przeczytane wyniki",            kartka: "Przeczytajcie wyniki",  zeton: redakcja, punkt: karta_wynikow, warunek: {wizyta: redakcja},
        od_tygodnia: {wartosc: 3, pewnosc: zalozenie, zrodlo: "szkic Fable 17.11.2026: pierwsze wyniki są po zamknięciu drugiego tygodnia"}}
     - {id: wyslij,  tekst: "Wyślijcie decyzje",             kartka: "Wyślijcie decyzje",     zeton: poczta,   punkt: wyslij,        warunek: wyslane}
+
+# --- cel tygodnia od wujka (silnik/cele.py) -------------------------------------------------------------------------
+# Co rundę od tygodnia 2 jeden cel. Sprawdzany po zamknięciu tygodnia na wynikach tej rundy; wynik („cel osiągnięty ✓”
+# albo „nie tym razem”) widać w zeszycie w następnej rundzie. Typy: dania (sprzedane dania ≥ prog), realizacja (sprzedane
+# dania / popyt ≥ prog), wiecej_dan i przychod_wiecej (więcej niż tydzień wcześniej), dochod_plus (dochód netto > 0).
+# {prog} w tekście zamienia się na próg (dla realizacji: procent).
+cele:
+  od_tygodnia: {wartosc: 2, pewnosc: zalozenie, zrodlo: "decyzja szefa 22.11.2026 (Z32): cel co rundę od tygodnia 2"}
+  nagroda:
+    tekst: "▲ Więcej gości w następnym tygodniu (polecenie wujka)"
+    mnoznik_popytu: {wartosc: 1.03, pewnosc: zalozenie, zrodlo: "Z32: mała nagroda, +3% popytu; balans sprawdzony botami (raport wątku 03/rundy)"}
+    rund: {wartosc: 1, pewnosc: zalozenie, zrodlo: "Z32: nagroda działa przez jeden następny tydzień"}
+  tygodnie:
+    2:  {id: dania_2,    typ: dania,           tekst: "Sprzedajcie {prog} dań",                     prog: {wartosc: 150, pewnosc: skalibrowane, zrodlo: "boty (poziom średni, ziarno 7): tydzień 2 to 240–620 dań; próg niżej, bo drużyna zaczyna ostrożnie"}}
+    3:  {id: dania_3,    typ: dania,           tekst: "Sprzedajcie {prog} dań",                     prog: {wartosc: 300, pewnosc: skalibrowane, zrodlo: "boty: tydzień 3 to 430–1240 dań"}}
+    4:  {id: realiz_4,   typ: realizacja,      tekst: "Obsłużcie co najmniej {prog} gości, którzy chcieli kupić", prog: {wartosc: 0.8, pewnosc: skalibrowane, zrodlo: "boty: realizacja popytu 75–100% w tygodniach 3–5"}}
+    5:  {id: wiecej_5,   typ: wiecej_dan,      tekst: "Sprzedajcie więcej dań niż w zeszłym tygodniu"}
+    6:  {id: dochod_6,   typ: dochod_plus,     tekst: "Zamknijcie tydzień na plusie (dochód powyżej zera)"}
+    7:  {id: dania_7,    typ: dania,           tekst: "Sprzedajcie {prog} dań",                     prog: {wartosc: 600, pewnosc: skalibrowane, zrodlo: "boty: tydzień 7 to 1300–1600 dań; próg dla drużyny z jednym lokalem"}}
+    8:  {id: przychod_8, typ: przychod_wiecej, tekst: "Zarobcie na sprzedaży więcej niż w zeszłym tygodniu"}
+    9:  {id: realiz_9,   typ: realizacja,      tekst: "Obsłużcie co najmniej {prog} gości, którzy chcieli kupić", prog: {wartosc: 0.85, pewnosc: skalibrowane, zrodlo: "boty: realizacja popytu 60–95% w środku sezonu"}}
+    10: {id: dania_10,   typ: dania,           tekst: "Sprzedajcie {prog} dań",                     prog: {wartosc: 800, pewnosc: skalibrowane, zrodlo: "boty: tydzień 10 to 1600–1800 dań; próg dla drużyny z jednym lokalem"}}
+    11: {id: dochod_11,  typ: dochod_plus,     tekst: "Zamknijcie tydzień na plusie (dochód powyżej zera)"}
+    12: {id: wiecej_12,  typ: wiecej_dan,      tekst: "Sprzedajcie więcej dań niż w zeszłym tygodniu"}
+    13: {id: dania_13,   typ: dania,           tekst: "Sprzedajcie {prog} dań",                     prog: {wartosc: 900, pewnosc: skalibrowane, zrodlo: "boty: tydzień 13 to 1400–1900 dań"}}
+    14: {id: realiz_14,  typ: realizacja,      tekst: "Obsłużcie co najmniej {prog} gości, którzy chcieli kupić", prog: {wartosc: 0.9, pewnosc: zalozenie, zrodlo: "szkic: pod koniec sezonu zespół ma być sprawny"}}
+    15: {id: przychod_15, typ: przychod_wiecej, tekst: "Zarobcie na sprzedaży więcej niż w zeszłym tygodniu"}
+    16: {id: dania_16,   typ: dania,           tekst: "Sprzedajcie {prog} dań",                     prog: {wartosc: 1000, pewnosc: zalozenie, zrodlo: "szkic: tydzień świąteczny, górny próg"}}
+    17: {id: dochod_17,  typ: dochod_plus,     tekst: "Zamknijcie tydzień na plusie (dochód powyżej zera)"}
+    ostatni: {id: realiz_ostatni, typ: realizacja, tekst: "Obsłużcie co najmniej {prog} gości, którzy chcieli kupić", prog: {wartosc: 0.85, pewnosc: zalozenie, zrodlo: "szkic: ostatni tydzień, towar ma wystarczyć"}}
 
 # --- strony tygodni -----------------------------------------------------------------------------------------------
 # zeton: id z dane/mapa/budynki.yaml (albo „lokal” = lokal drużyny, „bazar” = bazar bez żetonu); punkt: ekran panelu;
@@ -87,14 +127,8 @@ tygodnie:
     zadania:
       - {id: pieczywo, tekst: "Zamówcie pieczywo", kartka: "Pieczywo z piekarni", zeton: piekarnia, punkt: zaop_dostawy, warunek: {zamowienie_u: "Piekarnia Koziołek"}, element: dostawcy, funkcja: zaopatrzenie,
          czemu: "Pieczywo z piekarni: najtaniej i codziennie świeże."}
-      - {id: mieso, tekst: "Zamówcie mięso", kartka: "Mięso z hurtowni", zeton: selgros, punkt: zaop_dostawy, warunek: towar_jest, element: dostawcy, funkcja: zaopatrzenie,
-         czemu: "Mięso z hurtowni. Dowożą dwa razy w tygodniu, więc liczcie z zapasem."}
-      - {id: reszta, tekst: "Dokupcie warzywa, sosy i napoje", kartka: "Reszta towaru z dyskontu", zeton: biedronka, punkt: zaop_dostawy, warunek: towar_jest, element: dostawcy, funkcja: zaopatrzenie,
-         czemu: "W dyskoncie taniej, ale wozicie sami i dają po cztery opakowania."}
-      - {id: ceny, tekst: "Ustawcie ceny dań", kartka: "Ustawcie ceny", zeton: lokal, punkt: lokal_menu, warunek: ceny_ustawione, element: sprzedaz,
-         czemu: "Cena ma pokryć towar, ludzi i czynsz. Dopiero to, co zostanie, jest Wasze."}
-      - {id: obsada, tekst: "Sprawdźcie obsadę kasy i kuchni", kartka: "Obsadźcie kasę", zeton: lokal, punkt: zespol, warunek: obsada_pelna,
-         czemu: "Pusty posterunek to stracony gość."}
+      - {id: mieso, tekst: "Zamówcie mięso i resztę towaru", kartka: "Mięso i reszta towaru", zeton: selgros, punkt: zaop_dostawy, warunek: towar_jest, element: dostawcy, funkcja: zaopatrzenie,
+         czemu: "Mięso z hurtowni, warzywa i sosy z dyskontu. Dowożą dwa razy w tygodniu, więc liczcie z zapasem."}
       - {id: analizy, tekst: "Zajrzyjcie do Pracowni Analiz", kartka: "Zobaczcie, kto tu mieszka", zeton: uczelnia, punkt: klienci, warunek: {wizyta: uczelnia}, funkcja: analiza,
          czemu: "Zobaczcie, kto mieszka w Waszej okolicy i ile może zapłacić."}
   3:
@@ -103,8 +137,6 @@ tygodnie:
       Zajrzyjcie do kasy i do „Kuriera rankingowego”: tam widać, co zarobiło, a co zjadło pieniądze. Strata na początku
       to nie wstyd. Wstyd to nie wiedzieć, skąd się wzięła.
     zadania:
-      - {id: wyniki, tekst: "Przeczytajcie pierwsze wyniki", kartka: "Przeczytajcie „Kuriera”", zeton: redakcja, punkt: karta_wynikow, warunek: {wizyta: redakcja}, element: karta_wynikow,
-         czemu: "Najpierw trzy duże liczby: goście, przychód, dochód."}
       - {id: producent, tekst: "Mięso zamówcie u producenta", kartka: "Mięso prosto z zakładu", zeton: rozen, punkt: zaop_dostawy, warunek: {zamowienie_u: "Zakłady Mięsne „Rożen” z Łęcznej"}, element: dostawcy_producent, funkcja: zaopatrzenie,
          czemu: "Zakłady „Rożen” otwierają zbyt. Taniej i lepiej, ale biorą tylko większe zamówienia."}
       - {id: promocja, tekst: "Włączcie pierwszą promocję", kartka: "Włączcie promocję", zeton: lokal, punkt: promocje, warunek: promocja_wlaczona, element: promocje, funkcja: marketing,
@@ -117,21 +149,21 @@ tygodnie:
       Lokal już chodzi, teraz niech będzie przyjemny i bezpieczny. W Parku handlowym kupicie wyposażenie i wystrój.
       Wybierzcie taki, jaki lubią ludzie z Waszej okolicy, a nie taki, jaki podoba się Wam.
     zadania:
-      - {id: wystroj, tekst: "Kupcie stoliki albo wystrój", kartka: "Stoliki i wystrój", zeton: market_budowlany, punkt: wnetrze_wyposazenie, warunek: ma_wyposazenie, element: inwestycje_wyposazenie, funkcja: wyposazenie,
-         czemu: "Goście jedzą też oczami."}
+      - {id: tabela, tekst: "Zmieńcie jedną rzecz po tabeli: cenę, menu albo zespół", kartka: "Zmieńcie cenę, menu albo zespół", zeton: redakcja, punkt: ranking, warunek: zmiana_po_tabeli, element: karta_skumulowana,
+         czemu: "W tabeli widać już, kto ucieka, a kto goni. Nie zostawiajcie wszystkiego tak samo."}
       - {id: polisa, tekst: "Ubezpieczcie lokal", kartka: "Ubezpieczcie lokal", zeton: ubezpieczyciel, punkt: ubezpieczenia, warunek: ma_polise, element: ubezpieczenia, funkcja: urzedy,
          czemu: "Od tego tygodnia zdarzają się awarie i wypadki. Polisa kosztuje mało, pech dużo."}
       - {id: higiena, tekst: "Ustawcie poziom higieny", kartka: "Sanepid: poziom higieny", zeton: sanepid, punkt: sanepid, warunek: higiena_wybrana, element: sanepid, funkcja: urzedy,
          czemu: "Sanepid zaczyna chodzić po lokalach. Mandat jest droższy niż ścierka."}
-      - {id: tabela, tekst: "Sprawdźcie tabelę za cztery tygodnie", kartka: "Sprawdźcie tabelę", zeton: redakcja, punkt: ranking, warunek: {wizyta: redakcja}, element: karta_skumulowana,
-         czemu: "Widać już, kto ucieka, a kto goni."}
   5:
     tytul: "Wracają studenci"
     zadania:
       - {id: ulotki, tekst: "Zamówcie ulotki albo plakaty", kartka: "Ulotki przed akademikami", zeton: biurowiec_zana, punkt: agencje, warunek: {kampania_trwa: papier_przyjmie}, element: reklama_papier_przyjmie, funkcja: marketing,
          czemu: "Zaczyna się rok akademicki. Kto pierwszy powiesi plakat przy akademiku, ten ma kolejkę."}
-      - {id: kalendarz, tekst: "Sprawdźcie kalendarz miasta", kartka: "Kalendarz miasta", zeton: uczelnia, punkt: kalendarz, warunek: {wizyta: uczelnia}, funkcja: analiza,
-         czemu: "Juwenalia, mecze, jarmarki: tłum trzeba przewidzieć."}
+      - {id: kalendarz, tekst: "Zamówcie więcej towaru na tydzień z wydarzeniem", kartka: "Więcej towaru na wydarzenie", zeton: uczelnia, punkt: kalendarz, warunek: wiecej_towaru, funkcja: analiza,
+         czemu: "Juwenalia, mecze, jarmarki: tłum trzeba przewidzieć w kalendarzu miasta i zamówić pod niego towar."}
+      - {id: nowa_cena, tekst: "Spróbujcie nowej ceny jednego dania", kartka: "Nowa cena dania", zeton: lokal, punkt: lokal_menu, warunek: zmiana_ceny,
+         czemu: "Studenci liczą każdą złotówkę. Zobaczcie, jak zareagują."}
   6:
     tytul: "Nadwyżki i braki"
     zadania:
@@ -139,8 +171,8 @@ tygodnie:
          czemu: "Czego macie za dużo, tego komuś brakuje."}
       - {id: lokata, tekst: "Wolną gotówkę odłóżcie na lokatę", kartka: "Lokata w banku", zeton: kamienica_bankowa, punkt: bank, warunek: ma_lokate,
          czemu: "Pieniądz w szufladzie nie pracuje."}
-      - {id: dlug, tekst: "Sprawdźcie ratę i debet", kartka: "Sprawdźcie dług", zeton: kamienica_bankowa, punkt: bank, warunek: {wizyta: pierzeja_bankowa},
-         czemu: "Dług trzeba znać na pamięć."}
+      - {id: dlug, tekst: "Spłaćcie część debetu albo raty", kartka: "Spłaćcie część długu", zeton: kamienica_bankowa, punkt: bank, warunek: splata_dlugu,
+         czemu: "Dług trzeba znać na pamięć, a najlepiej zmniejszać. Bez długu to zadanie odhacza się samo."}
   7:
     tytul: "Ludzie i sieć"
     zadania:
@@ -148,7 +180,7 @@ tygodnie:
          czemu: "Wyszkolony kucharz robi więcej porcji z tego samego mięsa."}
       - {id: internet, tekst: "Spróbujcie reklamy w internecie", kartka: "Reklama w internecie", zeton: biurowiec_zana, punkt: internet, warunek: {kampania_trwa: internet}, element: internet, funkcja: marketing,
          czemu: "Młodzi szukają kebaba w telefonie, nie na słupie."}
-      - {id: pensje, tekst: "Przejrzyjcie umowy i pensje", kartka: "Umowy i pensje", zeton: lokal, punkt: zespol, warunek: {wizyta: kebab},
+      - {id: pensje, tekst: "Dajcie podwyżkę albo zmieńcie umowę jednej osobie", kartka: "Podwyżka albo nowa umowa", zeton: lokal, punkt: zespol, warunek: zmiana_umowy,
          czemu: "Kto dobrze pracuje, niech dobrze zarabia, bo odejdzie."}
   8:
     tytul: "Coś specjalnego"
@@ -157,12 +189,12 @@ tygodnie:
          czemu: "Każda dzielnica ma swój smak. Dajcie jej to, czego nie ma u konkurencji."}
       - {id: radio, tekst: "Rozważcie radio albo billboard", kartka: "Radio albo billboard", zeton: biurowiec_zana, punkt: agencje, warunek: {kampania_trwa: fala_koziolka}, element: reklama_fala_koziolka, funkcja: marketing,
          czemu: "Radio słyszy całe miasto, ale i kosztuje jak całe miasto."}
-      - {id: rywal, tekst: "Sprawdźcie rywala", kartka: "Detektyw: sprawdźcie rywala", zeton: detektyw, punkt: konkurencja, warunek: {wizyta: detektyw}, element: detektyw, funkcja: analiza,
-         czemu: "Nie zgadujcie, ile bierze sąsiad. Zapytajcie tego, kto wie."}
+      - {id: rywal, tekst: "Zamówcie detektywa i odpowiedzcie ceną jednego dania", kartka: "Detektyw i nowa cena", zeton: detektyw, punkt: konkurencja, warunek: detektyw_i_cena, element: detektyw, funkcja: analiza,
+         czemu: "Nie zgadujcie, ile bierze sąsiad. Zapytajcie tego, kto wie, i zareagujcie ceną."}
   9:
     tytul: "Półmetek"
     zadania:
-      - {id: polowa, tekst: "Porównajcie pierwszą i drugą połowę", kartka: "Archiwum „Kuriera”", zeton: redakcja, punkt: raport, warunek: {wizyta: redakcja},
+      - {id: polowa, tekst: "Zmieńcie albo usuńcie danie, które najmniej zarabia", kartka: "Zmieńcie najsłabsze danie", zeton: redakcja, punkt: raport, warunek: zmiana_dania,
          czemu: "Połowa sezonu za Wami. Co zarabia, to rozwijać; co traci, to ciąć."}
       - {id: drugi_lokal, tekst: "Zdecydujcie: drugi lokal czy lepszy pierwszy", kartka: "Drugi lokal?", zeton: agencja_nieruchomosci, punkt: lokale, warunek: {wizyta: agencja_nieruchomosci}, funkcja: siec,
          czemu: "Drugi lokal to drugi czynsz i druga załoga. Kredyt inwestycyjny dają pod zastaw."}
@@ -175,53 +207,83 @@ tygodnie:
          czemu: "Kto raz spróbuje na festynie, ten przyjdzie do lokalu."}
       - {id: tlum, tekst: "Sprawdźcie, gdzie będzie tłum", kartka: "Gdzie będzie tłum?", zeton: ogrod_saski, punkt: zdarzenia, warunek: {wizyta: park}, element: parki,
          czemu: "Stoisko stawia się tam, gdzie są ludzie, nie tam, gdzie jest ładnie."}
+      - {id: towar_festyn, tekst: "Zamówcie więcej towaru na festyn", kartka: "Więcej towaru na festyn", zeton: makro, punkt: zaop_dostawy, warunek: wiecej_towaru, funkcja: zaopatrzenie,
+         czemu: "Tłum zje wszystko, co przygotujecie. Pusta chłodnia to stracone pieniądze."}
   11:
     tytul: "Pełna karta"
     zadania:
       - {id: specjalne2, tekst: "Dodajcie drugie danie specjalne i napój", kartka: "Nowe dania w karcie", zeton: lokal, punkt: lokal_menu, warunek: danie_specjalne, element: danie_kebab_specjalny_2,
          czemu: "Karta jest już pełna. Teraz pilnujcie, żeby kuchnia nadążała."}
-      - {id: rentownosc, tekst: "Policzcie, czy każde danie zarabia", kartka: "Które danie zarabia?", zeton: redakcja, punkt: raport, warunek: {wizyta: redakcja},
-         czemu: "Danie, do którego dokładacie, zdejmijcie bez żalu."}
+      - {id: rentownosc, tekst: "Zmieńcie cenę dania, do którego dokładacie", kartka: "Cena dania, które traci", zeton: redakcja, punkt: raport, warunek: zmiana_ceny,
+         czemu: "Danie, do którego dokładacie, podrażnijcie albo zdejmijcie bez żalu."}
+      - {id: zespol_umowa, tekst: "Dajcie premię albo zmieńcie umowę jednej osobie", kartka: "Premia albo nowa umowa", zeton: lokal, punkt: zespol, warunek: zmiana_umowy,
+         czemu: "Pełna karta to więcej pracy. Kto dźwiga, niech to widzi w kopercie."}
   12:
     tytul: "Rutyna dobrego gospodarza"
     zadania:
-      - {id: koszty_stale, tekst: "Sprawdźcie koszty stałe", kartka: "Koszty stałe", zeton: redakcja, punkt: raport, warunek: {wizyta: redakcja},
-         czemu: "Biuro, czynsz, raty: czy coś da się mieć taniej?"}
+      - {id: koszty_stale, tekst: "Obniżcie jeden koszt stały", kartka: "Obniżcie koszt stały", zeton: redakcja, punkt: raport, warunek: nizszy_koszt_staly,
+         czemu: "Biuro, czynsz, raty, pensje: czy coś da się mieć taniej?"}
+      - {id: nowa_cena2, tekst: "Spróbujcie nowej ceny jednego dania", kartka: "Nowa cena dania", zeton: lokal, punkt: lokal_menu, warunek: zmiana_ceny,
+         czemu: "Rutyna nie znaczy, że ceny stoją w miejscu."}
+      - {id: towar12, tekst: "Zamówcie więcej towaru niż tydzień temu", kartka: "Więcej towaru", zeton: makro, punkt: zaop_dostawy, warunek: wiecej_towaru, funkcja: zaopatrzenie,
+         czemu: "Jeśli kolejki rosną, towaru ma być więcej."}
   13:
     tytul: "Rutyna dobrego gospodarza"
     zadania:
       - {id: kampanie, tekst: "Odświeżcie reklamę", kartka: "Wasze kampanie", zeton: biurowiec_zana, punkt: agencje, warunek: kampania_trwa, funkcja: marketing,
          czemu: "Kampania, która się skończyła, już nie pracuje."}
+      - {id: umowa13, tekst: "Dajcie podwyżkę albo zmieńcie umowę jednej osobie", kartka: "Podwyżka albo nowa umowa", zeton: lokal, punkt: zespol, warunek: zmiana_umowy,
+         czemu: "Dobrego pracownika łatwo stracić, trudno zastąpić."}
+      - {id: menu13, tekst: "Zmieńcie albo usuńcie jedno danie", kartka: "Zmieńcie jedno danie", zeton: lokal, punkt: lokal_menu, warunek: zmiana_dania,
+         czemu: "Karta, której nikt nie ruszał od miesiąca, się starzeje."}
   14:
     tytul: "Rutyna dobrego gospodarza"
     zadania:
       - {id: zespol_grudzien, tekst: "Zadbajcie o zespół przed grudniem", kartka: "Zespół przed grudniem", zeton: galeria, punkt: hr_rozwoj, warunek: {wizyta: galeria}, funkcja: rozwoj,
          czemu: "Grudzień to najcięższy miesiąc. Kto odejdzie teraz, tego nie zastąpicie."}
+      - {id: towar14, tekst: "Zamówcie więcej towaru na grudzień", kartka: "Więcej towaru na grudzień", zeton: makro, punkt: zaop_dostawy, warunek: wiecej_towaru, funkcja: zaopatrzenie,
+         czemu: "Przed świętami ludzie jedzą na mieście chętniej."}
+      - {id: koszt14, tekst: "Obniżcie jeden koszt stały", kartka: "Obniżcie koszt stały", zeton: kamienica_rachmistrzow, punkt: biuro, warunek: nizszy_koszt_staly,
+         czemu: "Przed drogim miesiącem warto zrobić miejsce w budżecie."}
   15:
     tytul: "Rutyna dobrego gospodarza"
     zadania:
-      - {id: splata, tekst: "Spłaćcie najdroższy dług", kartka: "Najdroższy dług", zeton: kamienica_bankowa, punkt: bank, warunek: bez_drogiego_dlugu,
-         czemu: "Najpierw to, co najdrożej kosztuje."}
+      - {id: splata, tekst: "Spłaćcie część najdroższego długu", kartka: "Spłaćcie część długu", zeton: kamienica_bankowa, punkt: bank, warunek: splata_dlugu,
+         czemu: "Najpierw to, co najdrożej kosztuje. Bez długu to zadanie odhacza się samo."}
+      - {id: cena15, tekst: "Spróbujcie nowej ceny jednego dania", kartka: "Nowa cena dania", zeton: lokal, punkt: lokal_menu, warunek: zmiana_ceny,
+         czemu: "Zimą goście płacą chętniej za ciepłe jedzenie."}
+      - {id: reklama15, tekst: "Odświeżcie reklamę", kartka: "Wasze kampanie", zeton: biurowiec_zana, punkt: agencje, warunek: kampania_trwa, funkcja: marketing,
+         czemu: "Kampania, która się skończyła, już nie pracuje."}
   16:
     tytul: "Rutyna dobrego gospodarza"
     zadania:
-      - {id: swieta, tekst: "Zaplanujcie święta", kartka: "Plan na święta", zeton: uczelnia, punkt: kalendarz, warunek: {wizyta: uczelnia}, funkcja: analiza,
+      - {id: swieta, tekst: "Zaplanujcie święta: zamówcie mniej towaru", kartka: "Mniej towaru na święta", zeton: uczelnia, punkt: kalendarz, warunek: mniej_towaru, funkcja: analiza,
          czemu: "W święta miasto zwalnia. Mniej towaru, krótszy grafik."}
+      - {id: umowa16, tekst: "Dajcie premię albo zmieńcie umowę jednej osobie", kartka: "Premia albo nowa umowa", zeton: lokal, punkt: zespol, warunek: zmiana_umowy,
+         czemu: "Święta to czas, w którym zespół pamięta, kto o nim pamiętał."}
+      - {id: menu16, tekst: "Zmieńcie albo usuńcie jedno danie", kartka: "Zmieńcie jedno danie", zeton: lokal, punkt: lokal_menu, warunek: zmiana_dania,
+         czemu: "Na święta karta ma być krótsza i pewniejsza."}
   17:
     tytul: "Rutyna dobrego gospodarza"
     zadania:
-      - {id: koniec, tekst: "Zdecydujcie, co zostaje na koniec", kartka: "Zapasy i długi", zeton: lokal, punkt: zaop_magazyn, warunek: {wizyta: kebab},
+      - {id: koniec, tekst: "Zdecydujcie, co zostaje na koniec: zamówcie mniej towaru", kartka: "Mniej towaru na koniec", zeton: lokal, punkt: zaop_magazyn, warunek: mniej_towaru,
          czemu: "Za tydzień zamykamy rachunki. Zapasy i długi liczą się do wyniku."}
+      - {id: splata17, tekst: "Spłaćcie część długu", kartka: "Spłaćcie część długu", zeton: kamienica_bankowa, punkt: bank, warunek: splata_dlugu,
+         czemu: "Im mniej długu na koniec, tym lepszy wynik. Bez długu to zadanie odhacza się samo."}
+      - {id: koszt17, tekst: "Obniżcie jeden koszt stały", kartka: "Obniżcie koszt stały", zeton: kamienica_rachmistrzow, punkt: biuro, warunek: nizszy_koszt_staly,
+         czemu: "Na koniec sezonu każda złotówka kosztów to złotówka więcej w wyniku."}
   ostatni:    # strona ostatniego tygodnia gry (v.runda === liczba_rund), niezależnie od numeru
     tytul: "Ostatni tydzień"
     list: >-
       Po tym tygodniu zamykamy rachunki sezonu. Nie zostawiajcie towaru, który się zepsuje, ani długów, które można
       spłacić. W tabeli ostatnie tygodnie ważą najwięcej, więc jeszcze wszystko może się zmienić.
     zadania:
-      - {id: malo_towaru, tekst: "Zamówcie tylko tyle towaru, ile sprzedacie", kartka: "Mało towaru na koniec", zeton: makro, punkt: zaop_dostawy, warunek: towar_jest,
+      - {id: malo_towaru, tekst: "Zamówcie mniej towaru: tyle, ile sprzedacie", kartka: "Mało towaru na koniec", zeton: makro, punkt: zaop_dostawy, warunek: mniej_towaru,
          czemu: "Co zostanie w chłodni, przepadnie."}
-      - {id: splata_koniec, tekst: "Spłaćcie, co się da", kartka: "Spłaćcie długi", zeton: kamienica_bankowa, punkt: bank, warunek: bez_drogiego_dlugu,
-         czemu: "Czysta kartka na koniec."}
+      - {id: splata_koniec, tekst: "Spłaćcie, co się da", kartka: "Spłaćcie długi", zeton: kamienica_bankowa, punkt: bank, warunek: splata_dlugu,
+         czemu: "Czysta kartka na koniec. Bez długu to zadanie odhacza się samo."}
+      - {id: koszt_koniec, tekst: "Obniżcie jeden koszt stały", kartka: "Obniżcie koszt stały", zeton: kamienica_rachmistrzow, punkt: biuro, warunek: nizszy_koszt_staly,
+         czemu: "Ostatni tydzień to ostatnia szansa, żeby coś zaoszczędzić."}
 
 # --- strony „gdzie co najlepiej kupić” ------------------------------------------------------------------------
 # Zdania są stałe, a liczby i nazwy zwycięzców wstawia gra z bieżących danych (api/zeszyt.py), żeby zmiana cen nie

@@ -1852,7 +1852,7 @@ WarunekZadania = str | dict[str, str]   # nazwa z `warunki` albo {nazwa: paramet
 
 
 class Warunek(Schemat):
-    rodzaj: Literal["stan", "decyzja", "wizyta", "wyslane"]
+    rodzaj: Literal["stan", "decyzja", "wizyta", "wyslane", "zmiana"]
     parametr: str | None = None
     opis: str = Field(min_length=3)
 
@@ -1913,8 +1913,35 @@ class StronaKupic(Schemat):
     tabela: Literal["sprzet"] | None = None
 
 
+class LiczbaCelu(Schemat):
+    wartosc: float
+    pewnosc: Literal["potwierdzone", "skalibrowane", "zalozenie"]
+    zrodlo: str = Zrodlo
+
+
+class CelTygodnia(Schemat):
+    """Cel od wujka na jeden tydzień (silnik/cele.py). `tekst`: {prog} zamienia się na próg."""
+    id: str = Field(min_length=2)
+    typ: Literal["dania", "wiecej_dan", "realizacja", "dochod_plus", "przychod_wiecej"]
+    tekst: str = Field(min_length=5)
+    prog: LiczbaCelu | None = None
+
+
+class NagrodaCelu(Schemat):
+    tekst: str = Field(min_length=3)
+    mnoznik_popytu: LiczbaCelu
+    rund: LiczbaCelu
+
+
+class CeleZeszytu(Schemat):
+    od_tygodnia: TydzienZeszytu
+    nagroda: NagrodaCelu
+    tygodnie: dict[int | Literal["ostatni"], CelTygodnia]
+
+
 class PlikZeszytu(Plik):
     warunki: dict[str, Warunek]
+    cele: CeleZeszytu
     stale: StaleZeszytu
     tygodnie: dict[int | Literal["ostatni"], TydzienStrony]
     gdzie_kupic: list[StronaKupic]
@@ -1932,6 +1959,13 @@ class PlikZeszytu(Plik):
                 raise ValueError(f"warunek {nazwa}: nie ma w słowniku `warunki`")
             if param is not None and self.warunki[nazwa].parametr is None:
                 raise ValueError(f"warunek {nazwa}: nie przyjmuje parametru ({param!r})")
+        for k, c in self.cele.tygodnie.items():
+            if c.typ in ("dania", "realizacja") and c.prog is None:
+                raise ValueError(f"cel {k}: typ {c.typ} wymaga progu")
+            if "{prog}" in c.tekst and c.prog is None:
+                raise ValueError(f"cel {k}: {{prog}} w tekście bez progu")
+        if "ostatni" not in self.cele.tygodnie:
+            raise ValueError("brak celu `ostatni` w `cele.tygodnie`")
         for t in self.tygodnie.values():
             ids = [z.id for z in t.zadania]
             if len(ids) != len(set(ids)):
