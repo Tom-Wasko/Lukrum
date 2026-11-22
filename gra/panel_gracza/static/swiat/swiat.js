@@ -73,7 +73,7 @@ function daneKebabu(c, punkty) {
   const v = c.v, lok = lokalWybrany(v), o = opisLokalu(v, lok.id) || {}, wn = M.wnKlucz === kluczWnetrza(c) ? M.wn : {};
   const menu = menuLokalu(v, lok) || {}, ceny = cenyLokalu(v, lok) || {}, sprz = v.wyniki?.sprzedaz || {};
   const dania = Object.keys(menu).filter((k) => !["napoj", "dodatek"].includes(k)).sort((a, b) => (menu[b] || 0) - (menu[a] || 0)).map((k) => ({
-    nazwa: nazwaUslugi(c.kat, k, o.strefa), cena: ceny[k]?.cena ?? 0,
+    nazwa: nazwaUslugi(c.kat, k, o.strefa), cena: ceny[k]?.cena ?? c.kat.uslugi?.[k]?.cena_preferowana ?? 0,   // przed startem sprzedaży ceny są puste: cena preferowana
     brak: (sprz[k]?.utracona || 0) > 0 && String(sprz[k]?.przyczyna || "").startsWith("zasoby") }));
   const obsluga = (wn.stan?.pracownicy || []).map((p) => ({ id: p.id, imie: p.imie_nazwisko.split(" ")[0], miejsce: p.miejsce, mina: MINA[p.mina] || "zwykla" }));
   if (!wn.stan) for (const s of (v.stan.stanowiska || [])) if (s.pracownik && (!s.lokal || s.lokal === lok.id)) obsluga.push({ id: s.pracownik, imie: "Pracownik", miejsce: s.typ === "kasa" ? "lada" : "kuchnia", mina: "zwykla" });

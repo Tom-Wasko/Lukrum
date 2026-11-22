@@ -179,6 +179,18 @@ function wskaznik() {
   });
 }
 const poRysowaniu = () => requestAnimationFrame(() => requestAnimationFrame(wskaznik));
+// przewijana strona, którą dotyczy kółko albo klawisz: pod kursorem (też róg kartki po swojej stronie), inaczej ostatnio wskazana,
+// inaczej pierwsza, która ma co przewijać
+function stronaPodKursorem(cel) {
+  const b = cel?.closest?.(".pz-str") || (cel?.closest?.(".pz-rog-l") ? document.getElementById("pz-l") : cel?.closest?.(".pz-rog-p") ? document.getElementById("pz-p") : null);
+  return b ? stronaBoku(b) : null;
+}
+function stronaDoPrzewijania() {
+  const f = document.activeElement?.closest?.(".pz-str");
+  const lista = [...(nakladka()?.querySelectorAll("#pz-roz > .pz-str") || [])].filter((b) => b.offsetParent !== null);
+  const b = f || (Z.ostatni?.isConnected && lista.includes(Z.ostatni) ? Z.ostatni : lista.find((x) => { const s = stronaBoku(x); return s && s.scrollHeight > s.clientHeight + 1; }) || lista[0]);
+  return b ? stronaBoku(b) : null;
+}
 export function przewinZeszyt(przycisk) {
   const s = przycisk?.closest?.(".pz-str")?.querySelector(".pz-strona") || nakladka()?.querySelector(".pz-str.biezaca .pz-strona, .pz-strona");
   s?.scrollBy({ top: Math.round(s.clientHeight * 0.8), behavior: bezRuchu() ? "auto" : "smooth" });
@@ -207,6 +219,15 @@ function szkielet() {
   roz.prepend(elementBoku(0, Z.c, "l", "pz-l"));
   roz.insertBefore(elementBoku(1, Z.c, "p", "pz-p"), roz.querySelector(".pz-grzbiet"));
   roz.addEventListener("scroll", wskaznik, { passive: true, capture: true });
+  // kółko myszy: przewija stronę pod kursorem także nad rogiem kartki i przyciskiem „dalej” (podróż 02/drobne)
+  roz.addEventListener("wheel", (e) => {
+    if (e.ctrlKey) return;
+    const s = stronaPodKursorem(e.target);
+    if (!s || s.scrollHeight <= s.clientHeight + 1) return;
+    e.preventDefault();
+    s.scrollBy({ top: e.deltaMode === 1 ? e.deltaY * 34 : e.deltaMode === 2 ? e.deltaY * s.clientHeight : e.deltaY });
+  }, { passive: false });
+  roz.addEventListener("pointerover", (e) => { const b = e.target.closest?.(".pz-str"); if (b) Z.ostatni = b; }, { passive: true });
   addEventListener("resize", () => { if (Z.otwarty) { stan(); wskaznik(); } });
   document.body.appendChild(o);
   return o;
@@ -366,6 +387,16 @@ document.addEventListener("keydown", (e) => {
     e.preventDefault();
     o.querySelector(`.pz-rog[data-d="${e.key === "ArrowRight" ? 1 : -1}"]`)?.click();
     return;
+  }
+  const przewijanie = { ArrowDown: 0.12, ArrowUp: -0.12, PageDown: 0.85, PageUp: -0.85, " ": e.shiftKey ? -0.85 : 0.85 }[e.key];
+  if ((przewijanie != null || e.key === "Home" || e.key === "End") && !e.target.closest?.("input, textarea, select, button, a")) {
+    const s = stronaDoPrzewijania();
+    if (s) {   // klawiatura przewija stronę, nawet gdy fokus jest na przycisku „Zamknij”
+      e.preventDefault();
+      if (e.key === "Home") s.scrollTo({ top: 0 }); else if (e.key === "End") s.scrollTo({ top: s.scrollHeight });
+      else s.scrollBy({ top: Math.round(Math.max(34, s.clientHeight * Math.abs(przewijanie))) * Math.sign(przewijanie) });
+      return;
+    }
   }
   if (e.key !== "Tab") return;
   const f = [...o.querySelectorAll("button:not([disabled]), a[href], .pz-strona")].filter((x) => x.offsetParent !== null && !x.closest(".pz-lisc"));
