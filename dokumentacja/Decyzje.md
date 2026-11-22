@@ -18,6 +18,7 @@
 - 2026-11-22 · „Czyste wyniki” = jeden prosty ekran wyników tygodnia w kebabie (sprzedaż, koszty, zysk, miejsce).
 - 2026-11-22 · W kolejnych rundach gra daje za mało do zrobienia (majster w rundzie 2 kupił tylko bułki): do poprawy.
 - 2026-11-22 · Okienka (makiety https://claude.ai/artifact/YKpg6woJrPqaHFZE59vqjk): zakupy = **A** (paragon kasowy); wydarzenia = **A** (tablica korkowa ze wskazówkami ▲▼); list = **rubryki decyzji z B** (kwoty, ✓ ! ○, odnośnik „popraw”) **w kopercie z A** (list wysuwa się z koperty, stempel po nadaniu).
+- 2026-11-22 · Sprawa w lokalu (np. list pani Haliny) po wyborze reakcji zwija się do paska „✓ Odpowiedziano: <wybór> · zmień”; w nowej rundzie znika i wraca tylko, gdy znów zachodzi jej warunek. Sprawy z lokalu nie trafiają do „do zrobienia” w zeszycie (parkowe zostają zbiorczo).
 
 
 ### Decyzje 13–19.11 (z dawnych notatek, tematami)
