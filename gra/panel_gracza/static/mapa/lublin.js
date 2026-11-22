@@ -117,9 +117,8 @@ function znakiBudynkow(c) {
   const M = c.kat.mapa, widoczne = P.budynkiGry(c.v, M.budynki), sprawy = P.parkiZeSprawa(c.v), html = [];
   for (const z of M.zespoly || []) {
     if (!z.geo || !widoczne.some((b) => b.zespol === z.id)) continue;
-    const n = widoczne.filter((b) => b.zespol === z.id).length;
     html.push(znak(...xy(z.geo), "lm-budynek lm-zespol", "lmapa-wejdz", z.id, z.nazwa, `${z.opis} Kliknij, żeby wejść.`,
-      `<span class="lm-kafel">${zeton(z.id, null, "przedmiot")}<i class="lm-ile" aria-hidden="true">${n}</i></span>`, 4));
+      `<span class="lm-kafel">${zeton(z.id, null, "przedmiot")}</span>`, 4));   // bez licznika firm: plakietka znaczy tylko prawdziwą sprawę
   }
   for (const b of widoczne) {
     if (b.zespol || !b.geo) continue;
@@ -435,7 +434,7 @@ export const nowaMapa = {
     const ramka = document.getElementById("lmapa");
     if (!ramka || !DANE) return;
     widok?.zniszcz();
-    poziom = 0; ulice = false; delete ramka.dataset.ul; for (const n in krycie) delete krycie[n];
+    poziom = 0; ulice = false; ostatniZanik = ""; ostatnieK = 0; czysta = false; delete ramka.dataset.ul; for (const n in krycie) delete krycie[n];
     ULICE = [...ramka.querySelectorAll(".lm-ulica-napis")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, kx: +el.dataset.kx, ky: +el.dataset.ky, n: +el.dataset.n }));
     ZNAKI = [...ramka.querySelectorAll(".lmapa-nakladka > [data-x]")].map((el) => ({ el, x: +el.dataset.x, y: +el.dataset.y, dx: 0, dy: 0, ox: 0, oy: 0,
       napis: el.querySelector(".lm-podpis"), waznosc: waznosc(el) }));
