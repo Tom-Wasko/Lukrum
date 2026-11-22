@@ -60,6 +60,9 @@ szkolnym Microsoft jest opisane w [`dokumentacja/LOGOWANIE_MICROSOFT.md`](dokume
 
 ## Dla programistów i agentów
 
+Panel gracza wczytuje się szybciej: strona od razu podpowiada przeglądarce wszystkie moduły JS (`modulepreload`), więc
+pobierają się naraz, a nie piętro po piętrze. Nic nie trzeba budować ani instalować (szczegóły w `dokumentacja/STACK.md`).
+
 | Plik | Co zawiera |
 |---|---|
 | [`AGENTS.md`](AGENTS.md) | mapa repozytorium, polecenia, zasady kodu |

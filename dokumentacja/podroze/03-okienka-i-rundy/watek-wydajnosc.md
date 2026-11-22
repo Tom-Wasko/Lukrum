@@ -31,3 +31,20 @@
 - **Zrzuty ekranu:** nie.
 
 ## Raport
+**Zrobione:** `modulepreload` dla wszystkich modułów dochodzących z `app.js`; bez budowania i bez nowych zależności.
+- `gra/panel_gracza/moduly.py` zbiera statyczne importy od `app.js` (leniwe `import("…")` pomija). `lista()` liczy
+  na nowo przy `DEBUG` (edycja JS + odświeżenie działa), poza `DEBUG` raz na proces.
+- `widoki.strona_gry` podaje `moduly` do `gra.html`, który wstawia `<link rel="modulepreload">` przed skryptami.
+- Test `gra/testy/aplikacja/test_wczytywanie.py`: lista zgadza się z niezależnym zbieraczem importów, pliki istnieją,
+  linki są na stronie gry. Lista jest generowana, więc nowy moduł dostaje preload automatycznie; test pilnuje poprawności grafu.
+- README i `gra/dokumentacja/STACK.md`: akapit o wczytywaniu.
+
+**Liczby (z grafu importów, nie stoperem):**
+- Przed: 71 modułów w 5 kolejnych „piętrach” (1, 14, 38, 14, 4), czyli 5 sekwencyjnych rund żądań.
+- Po: te same 71 żądań, ale wszystkie ogłoszone w HTML, więc 1 runda równolegle. Liczba żądań się nie zmienia
+  (to preload, nie paczka); spada głębokość łańcucha 5 → 1.
+- Czasu pierwszego wczytania (914 ms) nie zmierzyłem: uruchomienie serwera w tle zostało zablokowane. Na localhost
+  zysk jest mały, największy będzie przez Cloudflare/`hostuj` (opóźnienie × 4 piętra).
+- Do decyzji: jeśli liczba żądań też ma spaść, trzeba jednego pliku z modułami (krok 2 briefu). Nie robiłem.
+
+**Dowód:** `pytest -q` → `912 passed in 335.91s`; `ruff check .` → `All checks passed!`; `test_wczytywanie.py` + `test_pulpit.py` → `37 passed`.

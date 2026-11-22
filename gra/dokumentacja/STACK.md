@@ -101,6 +101,11 @@ przeglądarka ── HTML (szablony) ──▶ panel_gracza / panel_mg / konta
   w `index.js`. Motywy (`motywy/*.css`, `motyw.js`): klasyczny (menu poziome), „bok” (klasyczny z menu z boku) i grafik.
   Opisy i objaśnienia są w kółkach „i” z dymkiem (`zakladki/dymki.js`).
   Wykresy rysuje Chart.js (`static/vendor/chart.umd.min.js`).
+- Wczytywanie panelu: `app.js` importuje ok. 70 modułów w 5 „piętrach” (przeglądarka poznaje import dopiero po pobraniu
+  rodzica). Szablon `gra.html` dopisuje więc `<link rel="modulepreload">` dla każdego modułu, do którego `app.js` dochodzi
+  zwykłymi importami. Listę liczy `panel_gracza/moduly.py` z samych źródeł, przy każdym żądaniu przy `DEBUG` i raz na proces
+  poza nim: bez budowania, więc edycja pliku JS i odświeżenie działają. Importy leniwe `import("…")` (budynki, wnętrza) nie
+  wchodzą na listę. Pilnuje tego `testy/aplikacja/test_wczytywanie.py`.
 - Składnię zakładki sprawdza `node --check plik.mjs` (skopiuj `.js` jako `.mjs`).
 
 ### Narzędzia poboczne
