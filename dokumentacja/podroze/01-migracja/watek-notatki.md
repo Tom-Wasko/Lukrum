@@ -7,8 +7,9 @@
 
 - **Ustalone (nie sprawdzaj ponownie):**
   - Repo to `C:/Users/PC/Pulpit/lukrum` (Tom-Wasko/Lukrum). Kod gry w `gra/`. Pracujesz w swoim worktree.
-  - Folder `notatki/` jest poza gitem (w `.gitignore`), więc w worktree go nie ma: **czytaj ze ścieżki bezwzględnej**
-    `C:/Users/PC/Pulpit/lukrum/notatki/`, zapisuj w worktree. Notatek nie zmieniaj ani nie usuwaj (zrobi to Archi).
+  - Folder `notatki/` jest poza gitem (w `.gitignore`), więc w worktree go nie ma. **Pierwsze polecenie:**
+    `cp -r C:/Users/PC/Pulpit/lukrum/notatki _robocze/notatki` (`_robocze/` jest poza gitem) i czytaj kopię stamtąd.
+    **Nigdy nie rób `cd` poza swój worktree** (sesja traci wtedy dostęp) i nie wołaj EnterWorktree: już w nim jesteś. Notatek nie zmieniaj ani nie usuwaj (zrobi to Archi).
   - Istnieją już (napisał Archi): `dokumentacja/Stan.md`, `Zadania.md` (pusty, `Następny numer: Z1`),
     `Decyzje.md` (5 decyzji szefa i 2 Archiego z 2026-11-22), `podroze/01-migracja/plan.md`, `wiedza/.gitkeep`.
   - Nazwy plików: bez ogonków i spacji w nazwach folderów; w nazwach plików `.md` ogonki zamień (np. `Wyglad.md`,
