@@ -89,7 +89,7 @@ export const zatrudnienie = {
     for (const typ of TYPY) {
       const st = stanowiskaLokalu(v, v.stan.stanowiska).filter((s) => s.typ === typ);
       html += `<div class="pasek">${esc(kat.oferty.stanowiska.typy[typ].nazwa)}${idWybranego(v) ? ` – ${esc(nazwaLokalu(v, idWybranego(v)))}` : ""}</div>`;
-      if (!st.length) { html += `<p class="podpowiedz">Brak stanowisk – uruchom je w zakładce Park handlowy ▸ Stanowiska i sprzęt.</p>`; continue; }
+      if (!st.length) { html += `<p class="podpowiedz">Brak stanowisk – uruchom je w Parku handlowym ▸ Stanowiska i sprzęt.</p>`; continue; }
       html += `<div class="siatka waska">${st.map((s) => {
         const p = v.stan.pracownicy.find((x) => x.id === s.pracownik);
         const wl = v.wlasciciel_stanowisko;   // właściciel staje sam na pustym stanowisku (silnik/ludzie/czas_wlasciciela.py)
@@ -293,7 +293,7 @@ function wolneStanowiska(v, kat, zawod) {
 }
 function wyborMiejsca(v, kat, zawod) {
   const wolne = wolneStanowiska(v, kat, zawod), T = kat.oferty.stanowiska.typy;
-  if (!wolne.length) return `<div class="komunikat zly">Nie masz wolnego stanowiska dla zawodu „${esc(zawod)}”. Uruchom nowe w zakładce
+  if (!wolne.length) return `<div class="komunikat zly">Nie masz wolnego stanowiska dla zawodu „${esc(zawod)}”. Uruchom nowe w miejscu:
     Park handlowy ▸ Stanowiska i sprzęt albo zwolnij miejsce.</div><input type="hidden" id="z-miejsce" value="">`;
   const opcja = (s) => `<option value="${s.typ}:${s.nr}">${esc(T[s.typ].nazwa)} nr ${s.nr}</option>`;
   const lokale = [...new Set(wolne.map((s) => s.lokal))];
@@ -517,7 +517,7 @@ function oknoPrzeniesienia({ v, kat }, id) {
   });
   okno(`Przenieś: ${esc(p.imie_nazwisko)}`, `<p>Pracuje teraz: <b>${miejsceOsoby(v, kat, teraz)}</b> · zadowolenie ${zadowolenieOsoby(p)}</p>`
     + (w.length ? tabela(null, ["Wolne stanowisko", "Zgoda", ""], w, { klasy: ["l", "l"] })
-      : `<div class="komunikat">Nie ma wolnego stanowiska typu ${typy.map((t) => esc(T[t]?.nazwa ?? t)).join(" / ")}. Uruchom nowe w zakładce
+      : `<div class="komunikat">Nie ma wolnego stanowiska typu ${typy.map((t) => esc(T[t]?.nazwa ?? t)).join(" / ")}. Uruchom nowe w miejscu:
         <a data-zakladka-k="stanowiska">Park handlowy ▸ Stanowiska i sprzęt</a>.</div>`)
     + `<p class="podpowiedz">W tym samym lokalu osoba zmienia stanowisko od razu. Do innego lokalu musi się zgodzić – chętniej, gdy jest zadowolona,
       lokale są blisko i dostanie dodatek za przejście (odpowiedź po przeliczeniu rundy).</p>`, { srednie: true });

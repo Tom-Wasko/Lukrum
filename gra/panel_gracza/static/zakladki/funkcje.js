@@ -38,7 +38,7 @@ export function znaczekFunkcji(v, klucze) {
 
 // jedna funkcja w oknie „Odsłoń”: co to, od której rundy, co gra robi teraz za drużynę
 function opisFunkcji(v, k, f, przycisk) {
-  const od = f.od_rundy && f.od_rundy > v.runda ? `<p class="fn-od">${ikona("klodka", 14)}Zakładki od rundy ${f.od_rundy}.</p>` : "";
+  const od = f.od_rundy && f.od_rundy > v.runda ? `<p class="fn-od">${ikona("klodka", 14)}Ta część gry od rundy ${f.od_rundy}.</p>` : "";
   return `<div class="fn-opis">
     <div class="fn-glowa">${ikona(f.ikona, 26)}<div><b>${esc(f.nazwa)}</b><small>${esc(f.krotko)}</small></div>${przycisk}</div>
     <p>${esc(f.opis)}</p>${od}

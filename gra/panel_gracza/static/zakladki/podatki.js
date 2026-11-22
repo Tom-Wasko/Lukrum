@@ -72,7 +72,7 @@ export const vat = {
 
 export const podatki = {
   tytul: "Podatki", tytulPelny: "Finanse – PIT i ZUS (rozliczenie JDG)", ikona: "podatki", odblokowanie: (v) => !!v.podatki, ukryta: (v) => !v.podatki,
-  info: `Prowadzisz jednoosobową działalność: KPiR i PIT liniowy (VAT – w zakładce obok). Na koniec każdej rundy biuro
+  info: `Prowadzisz jednoosobową działalność: KPiR i PIT liniowy (VAT – w osobnym ekranie urzędu skarbowego). Na koniec każdej rundy biuro
     rachunkowe rozlicza składkę zdrowotną, zaliczkę na PIT (narastająco od początku gry) i – po uldze na start –
     preferencyjny ZUS. Wszystko płaci się z konta, automatycznie.${IG_PIT}`,
   decyzje({ v }) {

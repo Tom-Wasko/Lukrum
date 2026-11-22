@@ -22,7 +22,7 @@ function przelewHtml(W, d, edycja) {
       value="${juz || 500}"></label><button class="btn" data-akcja="ks-przelew">${juz ? "Zmień przelew" : "Przelej z firmy do portfela"}</button>
       ${juz ? `<button class="btn jasny" data-akcja="ks-przelew-usun">Anuluj przelew</button>` : ""}</div>
       <p class="podpowiedz">Na koncie firmy: ${zl2(W.gotowka_firmy)}. Wypłata przychodzi przed zakładami, więc można ją
-      postawić jeszcze dziś. Ten sam przelew widać w zakładce Portfel właściciela.</p>` : ""}</div>`;
+      postawić jeszcze dziś. Ten sam przelew widać w Portfelu właściciela (Mój kebab).</p>` : ""}</div>`;
 }
 
 function zakladyHtml(Z, edycja, zwijane = false) {

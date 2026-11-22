@@ -139,7 +139,7 @@ export const licytacje = {
   tytul: "Licytacje", tytulPelny: "Sala licytacji – licytacje lokali", ikona: "lokale",
   odblokowanie: (v) => !!v.przejecia && v.runda >= (v.przejecia.licytacje_od_rundy ?? 1), ukryta: (v) => !v.przejecia,
   info: (c) => `Gdy kilka drużyn chce w jednej rundzie ten sam lokal, wygrywa najwyższa oferta względem ceny wywoławczej
-    (od rundy ${c.v.przejecia.licytacje_od_rundy} – wpisz ją przy lokalu w zakładce Do wynajęcia), remis rozstrzyga losowanie.`,
+    (od rundy ${c.v.przejecia.licytacje_od_rundy} – wpisz ją przy lokalu w biurze „Klucz” (Stare Miasto)), remis rozstrzyga losowanie.`,
   decyzje({ v, kat }) {
     return `<div class="komunikat">Ofertę za lokal wpisujesz przy lokalu w zakładce <a data-zakladka-k="lokale">Do wynajęcia</a>.
       Tu widać, jak poszły licytacje w poprzedniej rundzie – kto przebił i o ile.</div>` + licytacjeMiasta(v, kat);

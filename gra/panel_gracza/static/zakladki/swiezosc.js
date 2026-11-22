@@ -154,7 +154,7 @@ export const swiezosc = {
     return `<div class="pasek ciemny"><span>Chłodnia: <span class="kwota">${licz(S.pojemnosc.chlodnia)} l</span></span>
       <span>Zamrażarka: <span class="kwota">${licz(S.pojemnosc.zamrazarka)} l</span></span>
       <span>Partie kończące termin w tej rundzie: <span class="kwota">${wygasa.length}</span></span></div>`
-      + (S.pojemnosc.chlodnia || S.pojemnosc.zamrazarka ? "" : `<div class="komunikat">Nie masz szafy chłodniczej ani zamrażarki – kup je w zakładce Sprzęt, inaczej mięso będzie trzymane na parapecie.</div>`)
+      + (S.pojemnosc.chlodnia || S.pojemnosc.zamrazarka ? "" : `<div class="komunikat">Nie masz szafy chłodniczej ani zamrażarki – kup je w Parku handlowym (sprzęt gastronomiczny), inaczej mięso będzie trzymane na parapecie.</div>`)
       + zajetoscHtml(S) + planWynajmuHtml(S) + ryzykoHtml(v.magazyn)
       + (S.partie.length ? partieHtml(S, S.dni) : `<p class="podpowiedz">Magazyn${id ? " tego lokalu" : ""} jest pusty.</p>`);
   },

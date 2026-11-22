@@ -47,7 +47,7 @@ export const rynek_pracy = {
   odblokowanie: (v) => !!v.lokale, ukryta: (v) => !v.lokale,
   info: (c) => `Pula pracowników jest wspólna dla wszystkich drużyn. Zatrudniasz tutaj: wybierz kandydata, pensję, kanał rekrutacji
     (pracuj.pl, agencja pracy) oraz lokal i stanowisko. Kto pierwszy, ten lepszy – kandydata dostaje drużyna, która pierwsza zapisze
-    zatrudnienie. Obsadę stanowisk zmienisz w zakładce Mój lokal. ${wolnoPodkupywac(c?.v?.agencja)
+    zatrudnienie. Obsadę stanowisk zmienisz przy ladzie w Mój kebab. ${wolnoPodkupywac(c?.v?.agencja)
     ? "Tylko headhunter złoży ofertę pracownikowi innej drużyny – jego szef może odpowiedzieć kontrofertą w tej samej rundzie."
       + podkupywanieBotow(c?.kat)
     : "W tej grze mistrz gry wyłączył podkupywanie pracowników innych drużyn."}${ofertaPracy(c?.kat)}`,

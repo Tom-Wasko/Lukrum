@@ -387,7 +387,7 @@ PODPOWIEDZI = (
       "i towar. Zostaw zapas na pensje i zamówienia następnej rundy.", "dashboard"),
      ("Lokal to połowa sukcesu", "Tani lokal w pustej strefie jest drogi. Porównaj na mapie ruch i konkurencję "
       "w strefach, zanim podpiszesz najem.", "lokale"),
-     ("Najedź na kółko „i”", "Każda zakładka i pole ma tam wyjaśnienie – przeczytaj je, zanim zgadniesz. "
+     ("Najedź na kółko „i”", "Każdy ekran i pole ma tam wyjaśnienie – przeczytaj je, zanim zgadniesz. "
       "Przed wysłaniem sprawdź listę błędów.", "lista_bledow")),
     (("Patrz na utraconą sprzedaż", "Jeśli klienci odchodzą z kolejki, brakuje ludzi, sprzętu albo miejsc "
       "przy kasie. Sprawdź, ile sprzedaży przepadło w poprzedniej rundzie.", "sprzedaz"),

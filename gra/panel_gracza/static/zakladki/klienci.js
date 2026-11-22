@@ -34,7 +34,7 @@ function wydarzeniaHtml(lista, kat) {
 function jakLiczyc(P) {
   return `<div class="komunikat">Klienci mieszkają i pracują w strefach miasta: im większa strefa i im lepszy Twój lokal na tle konkurencji
     (cena, jakość, opinie), tym więcej chętnych na dania. Poniżej widać, ile klientów ma każda strefa i w które dni tygodnia przychodzą.</div>`
-    + zwin("Jak policzyć prognozę popytu (wzór)", `<p>Prognozę liczysz samodzielnie (zakładka Menu, krok po kroku w dymku ⓘ przy „Popyt roczny”):
+    + zwin("Jak policzyć prognozę popytu (wzór)", `<p>Prognozę liczysz samodzielnie (tablica z menu w Twoim lokalu, krok po kroku w dymku ⓘ przy „Popyt roczny”):
     popyt roczny dania ÷ liczba rund w roku × sezonowość dania × wielkość strefy Twojego lokalu (kolumna niżej), a z tego część,
     którą przyciągniesz ceną i jakością na tle konkurencji w strefie (trochę klientów przychodzi z sąsiednich stref, część zawsze
     idzie do barów spoza gry).</p><p>Obsługa liczona jest dzień po dniu – godziny pracowników
