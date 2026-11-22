@@ -1,0 +1,20 @@
+# środowisko i pamięci podręczne
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.hypothesis/
+
+# dane lokalne gry
+zapisy/
+lokalne.json
+*.sqlite3
+narzedzia/cloudflared.exe
+
+# logi i zrzuty ekranu zostają poza repozytorium
+*.log
+/*.png
+
+# pliki generowane
+narzedzia/grafiki/podglad4.html
