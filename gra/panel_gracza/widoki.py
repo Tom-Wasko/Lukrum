@@ -14,6 +14,7 @@ from gry.models import Gra
 from konta.druzyny import CIASTKO_URZADZENIA
 from konta.role import firmy_ucznia, jest_mg, moze_firme
 
+from . import moduly
 from . import radio as radio_dane
 from .instrukcja import instrukcja
 
@@ -72,7 +73,7 @@ def strona_gry(request, id_, firma):
         raise Http404("Nie ma takiej firmy.")
     if not moze_firme(request.user, id_, firma):
         raise PermissionDenied("To nie jest firma Twojej drużyny.")
-    kontekst = {"id": id_, "firma": firma, "mg": jest_mg(request.user)}
+    kontekst = {"id": id_, "firma": firma, "mg": jest_mg(request.user), "moduly": moduly.lista()}
     odp = render(request, "panel_gracza/gra.html", kontekst)
     if not request.COOKIES.get(CIASTKO_URZADZENIA):   # przeglądarka w dzienniku zapisów
         odp.set_cookie(CIASTKO_URZADZENIA, secrets.token_hex(16), max_age=400 * 24 * 3600,
