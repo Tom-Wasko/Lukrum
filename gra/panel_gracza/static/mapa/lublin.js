@@ -31,7 +31,7 @@ const DALEKO = new Set(["zamek", "arena", "lotnisko", "gorki_czechowskie", "skan
 let CZAS = null, zegar = 0;
 let DANE = null, BLAD = null, WIDOK = null, widok = null, C = null, P = null, ZNAKI = [], poziom = 0, ulice = false;
 const krycie = {};
-let ostatniZanik = "", ostatnieK = 0, ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0, czysta = false, ULICE = [];
+let ostatniZanik = "", ostatnieK = 0, ROZM = 30, ostatnieUlozenie = 0, czekaUlozenie = 0, koniecRuchu = 0, czysta = false, ULICE = [];
 
 // --- style i dane (raz) ---
 (function podlaczStyle() {
@@ -211,6 +211,10 @@ function naZmiane(s) {
   WIDOK = s;
   const ramka = document.getElementById("lmapa");
   if (!ramka) return;
+  // w ruchu (przesuwanie, przybliżanie) znikają najdroższe cienkie linie (granice, kolej, ulice), po 150 ms ciszy wracają
+  if (!ramka.classList.contains("lm-ruch")) ramka.classList.add("lm-ruch");
+  clearTimeout(koniecRuchu);
+  koniecRuchu = setTimeout(() => ramka.classList.remove("lm-ruch"), 150);
   const macierz = `matrix(${s.k} 0 0 ${s.k} ${s.x} ${s.y})`;
   ramka.querySelector("#lmapa-swiat")?.setAttribute("transform", macierz);
   ramka.querySelector("#lmapa-lampy")?.setAttribute("transform", macierz);
