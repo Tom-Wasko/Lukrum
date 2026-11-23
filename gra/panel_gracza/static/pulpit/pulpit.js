@@ -128,6 +128,7 @@ function budujUstawienia(ust) {
       <p class="pp-nota">Muzyka z epoki, „Lalka” Prusa i szum eteru. Tylko dla nastroju, bez wpływu na grę. <a href="/nagrania-w-radiu" target="_blank" rel="noopener">Nagrania w radiu</a></p></section>
     <section class="pp-us" id="pp-sek-konto"><h3>Konto</h3></section>
     <section class="pp-us" id="pp-sek-gra" hidden><h3>Gra</h3></section>
+    <section class="pp-us"><h3>O grze</h3><p class="pp-nota"><a href="/zrodla" target="_blank" rel="noopener">Nawiązania i źródła (nowa karta)</a></p></section>
     ${stopka ? `<p class="pp-nota pp-o-grze">${esc(stopka.textContent.trim())}</p>` : ""}`;
   const sk = lista.querySelector("#pp-sek-konto");
   for (const n of konto) sk.appendChild(n);

@@ -29,3 +29,44 @@
   czysty; pełne testy zielone, `ruff`, `node --check` czyste (wyniki w raporcie).
 
 ## Raport
+
+### Raport wyko (03/prawo, 23.11.2026)
+Gałąź `worktree-podroz-03-prawo`, commity po każdym kroku.
+
+**1. Ikony sieci: zrobione.** Usunięta sekcja `LOGA` (12 znaków prawdziwych sieci), gałąź `LOGA[k]` w `ikonaMarki`
+i reguła `.logo-marki` w `styl.css`. Zostają ogólne ikony branżowe (koszyk, wózek, paleta, bank, dom, młotek).
+Nowy test `test_bez_logo_prawdziwych_marek`; lista kontrolna pkt 4 → ✓, wykaz grafik zaktualizowany.
+
+**2. 0,3162: usunięte z repo (poza historycznym wpisem w `Decyzje.md` i briefami), ale NIE przeliczone z GUS.**
+- Liczba była tylko w tekście pola `zrodlo` (`zalozenia.yaml`, `oferta_pracy`). Silnik jej nie używał: realne nachylenie to
+  `zadowolenie_osoby.wspolczynniki.placa_wzgledem_preferowanej = 0,3`, już opisane jako „okrągłe założenie LUKRUM”.
+- Tekst poprawiony na to nazwane pole i wartość 0,3. Wartość w grze się nie zmieniła, więc `balans.symuluj` przed/po
+  nie był potrzebny (różnica 0%).
+- Przeliczenia „od zera z GUS” nie zrobiłem: brak dostępu do sieci i w repo nie ma żadnych danych GUS o zadowoleniu;
+  wymyślanie liczby byłoby niezgodne z zasadą „wiedza ze źródeł”.
+- **Pytanie do szefa (co i po co):** zostawić 0,3 jako jawne założenie (stan teraz), czy zlecić wyszukanie źródła
+  (np. badania satysfakcji z pracy a wynagrodzenie) i wtedy skalibrować? Zmiana wartości dotknie balansu.
+
+**3. Strona /zrodla („Nawiązania i źródła”): zrobione.** Dane: `dane/zrodla.yaml` (klucz 12 nawiązań, źródła liczb
+i przepisy, grafiki, mapa OSM ODbL, 5 krojów OFL, Chart.js, odsyłacz do `/nagrania-w-radiu`). Kod: `panel_gracza/zrodla.py`,
+`widoki.zrodla`, `templates/panel_gracza/zrodla.html`, URL i wyjątek logowania w `konta/middleware.py`. Podział liczb gry na
+potwierdzone/skalibrowane/założenie liczony z `zalozenia.yaml`. Odnośniki: ⚙ → „O grze”, stopka „Jak grać”, stopka
+`INSTRUKCJA.md` (+ odświeżony `INSTRUKCJA.pdf`). Notatka `dokumentacja/funkcje/Nawiazania-i-zrodla.md`, README, STACK.
+Test `testy/aplikacja/test_zrodla.py`; do listy plików opcjonalnych w `test_dane_zamrozone.py` dopisany `zrodla.yaml`
+(jak `radio.yaml`; to nie osłabia testu, plik nie jest czytany przez silnik).
+- Zrzuty (bar jasny, wysoka ciemny, pewex jasny): `_robocze/zrzuty-prawo/` (poza gitem).
+- Uwaga: strona jest publiczna i zawiera klucz nawiązań, który `INSTRUKCJA.md` (też publiczna) już zawiera; notatka
+  `wiedza/nawiazania.md` mówi „w interfejsie nie podpisujemy”: na ekranach gry nadal nie podpisujemy, klucz jest tylko na tej stronie.
+- Linki do GUS, ISAP, ZUS, PIP to strony główne instytucji (bez głębokich linków, bo nie miałem jak ich zweryfikować).
+  Autor mapy („kolega autora”) i data pobrania z `METODA.md` i wykazu.
+
+**Dowody**
+- `grep`: `git grep -nE "0[,.]3162|LOGA" -- .` (w `gra/`) → brak trafień.
+- `pytest -q` (pełne): 1 failed, 939 passed w 390 s; jedyny błąd to `test_dane_zamrozone` (brak `zrodla.yaml` na liście
+  opcjonalnych), poprawiony; po poprawce `testy/rdzen/test_dane_zamrozone.py` → `5 passed`. Test niestabilny z AGENTS.md nie wrócił.
+- `ruff check .` → `All checks passed!`; `node --check` (`ikony_marek.js`, `pulpit.js`) → ok.
+- `python -X utf8 -m silnik.dane sprawdz` → `Dane w porządku: … (wersja 15aaba0bef2d)`.
+- `testy/aplikacja/test_zrodla.py` + `test_ikony_marek.py` + `test_radio.py` → przechodzą.
+- Serwer na 8792 zatrzymany.
+
+**Propozycje:** głębokie linki do konkretnych aktów w ISAP po weryfikacji przez prawnika; notki prawne (PIP, ZUS, lichwa) dalej czekają na prawnika.

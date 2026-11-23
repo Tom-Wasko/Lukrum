@@ -1,5 +1,5 @@
 """Poprawki 3 (uwaga autora 8.11.2026): każda marka, rola i sprawa, która w kartach (kartaMarki, wspolne.js) dostawała
-dwie litery w kwadracie, ma ikonę w panel_gracza/static/zakladki/ikony_marek.js (prawdziwe marki – LOGA, nasze – WLASNE)."""
+dwie litery w kwadracie, ma ikonę w panel_gracza/static/zakladki/ikony_marek.js (WLASNE: ogólne ikony liniowe, bez logo prawdziwych marek)."""
 
 import re
 from pathlib import Path
@@ -22,9 +22,8 @@ def _yaml(sciezka: Path):
 def _ikony() -> set[str]:
     kod = (ZAKLADKI / "ikony_marek.js").read_text(encoding="utf-8")
     klucze = set()
-    for slownik in ("WLASNE", "LOGA"):
-        cialo = re.search(rf"const {slownik} = \{{\n(.*?)\n\}};", kod, re.S).group(1)
-        klucze |= {a or b for a, b in re.findall(r'^ {2}(?:"([^"]+)"|([^\s"/:]+)):', cialo, re.M)}
+    cialo = re.search(r"const WLASNE = \{\n(.*?)\n\};", kod, re.S).group(1)
+    klucze |= {a or b for a, b in re.findall(r'^ {2}(?:"([^"]+)"|([^\s"/:]+)):', cialo, re.M)}
     return klucze
 
 
@@ -73,3 +72,10 @@ def test_kazda_marka_ma_ikone():
     assert len(nazwy) > 50 and {"Biedronka", "Kasjer", "Kucharz", "Soplicowo", "IKEA", "Pożar w kuchni"} <= set(nazwy)
     brak = sorted(f"{n} ({skad})" for n, skad in nazwy.items() if n not in ikony)
     assert brak == [], "Bez ikony w ikony_marek.js:\n" + "\n".join(brak)
+
+
+def test_bez_logo_prawdziwych_marek():
+    """Decyzja szefa 23.11.2026: tylko ogólne ikony branżowe; żadnych uproszczonych znaków prawdziwych sieci."""
+    kod = (ZAKLADKI / "ikony_marek.js").read_text(encoding="utf-8")
+    assert "LO" + "GA" not in kod and "logo-" + "marki" not in kod
+    assert not re.search(r'fill="#(?:e30613|0050aa|0058a3|ff7d00)"', kod, re.I)

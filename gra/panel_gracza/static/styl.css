@@ -643,7 +643,6 @@ a.zad-pole { cursor: pointer; }
   display: grid; place-items: center; font-weight: 800; font-size: 16px; letter-spacing: .5px; box-shadow: var(--cien); }
 .agencja-znak { overflow: hidden; }   /* poprawki 3: ikony marek (zakladki/ikony_marek.js) zamiast liter */
 .agencja-znak > .ikona-marki { width: 64%; height: 64%; display: block; }
-.agencja-znak > .logo-marki { width: 100%; height: 100%; display: block; }
 .awatar-marki > .ikona-marki { width: 60%; height: 60%; }
 .agencja-opis { flex: 1; min-width: 0; }
 .agencja-opis b { font-size: 15px; color: var(--czarny); }
