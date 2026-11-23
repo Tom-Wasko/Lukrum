@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-23 07:16
+Archi żył: 2026-11-23 07:25
 Tryb: autonomiczny od 06:22 23.11, budżet do 16:00 (nowe kroki do ok. 14:30), koniec najpóźniej 16:00. Scalanie na `podroz-03`.
 
 ## Podróż
@@ -19,6 +19,7 @@ zatwierdzeniu szefa. Scalanie: do `main` dopóki szef jest, po `/papa` na `podro
 | 03/opisy | Z16, Z25 | scalony 22:06 (0 martwych odsyłaczy) |
 | 03/pora | Z12 | scalony na podroz-03 07:50 (934 passed; zrzuty 12:00/22:00 w kebabie i Biedronce OK) |
 | 03/tlok | Z21, Z42 | scalony 07:12 (937 passed w wątku; balans ±0,1% średnio) |
+| podroz-03 (całość) | – | pełne testy po scaleniach: 947 passed (07:25) |
 | 03/prawo | Z23 (decyzje 23.11) | scalony 07:12 (939 passed; 0,3 zostaje jako jawne założenie, pytanie do szefa) |
 | 03/odblokowania | Z15 | scalony 07:11 (938 passed; po scaleniu swiat+aplikacja 286 passed) |
 | 03/wyglad | Z6 | start 07:04 |
