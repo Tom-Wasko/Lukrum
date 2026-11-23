@@ -12,7 +12,7 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 - **Mapa Lublina** z danych OpenStreetMap, z płynnym przybliżaniem. Budynki to żetony, kliknięcie otwiera wnętrze.
 - **Miejsca zamiast zakładek:** Mój kebab, Stare Miasto, Hurtownie (okienko oferty jednego sklepu i działu), Park handlowy, Miasteczko akademickie, Kamienica
   bankowa, Kamienica rachmistrzów, Biurowiec przy Zana (winda z piętrami, piętro = oferta jednej agencji, portiernia = spis pięter), Urzędy, redakcja „Kuriera rankingowego”.
-- **Zeszyt wujka:** list i lista kroków na każdy tydzień (treść w `dane/zeszyt.yaml`), strony „Gdzie co kupić” z liczbami
+- **Zeszyt wujka:** list (z ramką „Od tego tygodnia otwarte”, liczoną z harmonogramu gry) i lista kroków na każdy tydzień (treść w `dane/zeszyt.yaml`), strony „Gdzie co kupić” z liczbami
   z bieżących danych gry. Kroki odhacza gra: ze stanu firmy, decyzji i wizyt we wnętrzach (zapisuje serwer). Pierwszy
   niezrobiony krok ma znacznik „teraz”. Od tygodnia 2 zeszyt podaje **cel tygodnia** (`silnik/cele.py`, dane w
   `dane/zeszyt.yaml: cele`): wynik widać w następnym tygodniu, a za udany cel przychodzi +3% gości na tydzień. Zadania

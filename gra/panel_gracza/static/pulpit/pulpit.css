@@ -555,3 +555,4 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
 .pz-odbl-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .pz-odbl-lista li { display: grid; grid-template-columns: 1.6em 1fr; gap: 6px; align-items: start; }
 .pz-odbl-gdzie { font-size: .9em; }
+.pz-odbl .pz-mapa { max-width: 100%; box-sizing: border-box; white-space: normal; text-align: left; }
