@@ -40,6 +40,7 @@
 
 
 ### Decyzje 13–19.11 (z dawnych notatek, tematami)
+- 2026-11-23 · Wpływ płacy na zadowolenie zostaje 0,3 (jawne założenie); nie zmieniać i nie kalibrować (Z43 usunięte).
 Data w nawiasie to dzień decyzji. Zmieniona decyzja zostaje z adnotacją „(zmienione dd.mm)”.
 
 ### Projekt
