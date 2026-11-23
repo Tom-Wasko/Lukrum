@@ -30,7 +30,7 @@ function uwagi(O) {
     z.push(O.czekanie_grup > 1 ? `▲ Goście tego lokalu źle znoszą czekanie (waga ${gw(O.czekanie_grup)}): biurowi i spieszący się karzą kolejki mocniej niż studenci.`
       : `▼ Goście tego lokalu znoszą czekanie lepiej niż przeciętnie (waga ${gw(O.czekanie_grup)}).`);
   }
-  z.push("Smak zależy też od świeżości: zamiennik za brakujący składnik jest gorszy, a przeterminowane składniki idą do kosza (Zaplecze ▸ Świeżość).");
+  z.push("Smak zależy też od świeżości: zamiennik za brakujący składnik jest gorszy, a przeterminowane składniki idą do kosza (zakładka Magazyn i świeżość).");
   return `<ul class="kg-uwagi">${z.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`;
 }
 

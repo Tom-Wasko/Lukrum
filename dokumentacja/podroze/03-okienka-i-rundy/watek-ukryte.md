@@ -26,3 +26,22 @@
   pełne testy zielone, `ruff`, `node --check`, `silnik.dane sprawdz` czyste (wyniki w raporcie).
 
 ## Raport
+**Raport wyko (23.11.2026)**
+**Zrobione:** wiersze 3–13 spisu mają kolumnę „Pokazane”. Nowe pokazania: 3, 4, 6, 13, 9 (zdania pod tabelą księgi gości,
+`swiat/ksiega.js`; lista per lokal w Klienci ▸ opinie), 5 (Park handlowy ▸ wyposażenie, `inwestycje.js`), 7 i 12 (HR:
+profil osoby + tabela udogodnień, `hr.js`). „OK, już widać”: 8 (`ogolne.js`, `oferta.js`), 10 (`swiezosc.js`, tabela
+„Wzięli inne danie / Odeszli”), 11 (`marketing.js`).
+**Silnik (tylko zapis, bez zmiany obliczeń):** `opinie.po_rundzie` dopisuje `zaufanie`, `zanik`, `rozrzut`, `czekanie_grup`;
+`zadowolenie.po_rundzie` dopisuje `skladniki` osoby; `prezentacja.py`: `wyposazenie_efekt`, `progi_czasu_pracy.zmeczenie`.
+Test: `testy/aplikacja/test_widoczne_skutki.py` (3 testy, zgodność z silnikiem).
+**Dokumenty:** `funkcje/Widoczne-skutki.md`, INSTRUKCJA (akapit w „Księga gości”), spis `wiedza/analizy/ukryte-mechaniki.md`.
+README bez zmian (brak opisu księgi w README). INSTRUKCJA.pdf nie odświeżony.
+**Dowody:**
+- pełne testy: `pytest -q` → `1 failed, 949 passed in 433s`; jedyny błąd (`test_nazwy_zakladek`: „Zaplecze ▸ Świeżość”
+  w tekście) naprawiony; po poprawce `test_nazwy_zakladek + test_widoczne_skutki` → `4 passed`.
+- `ruff check .` → `All checks passed!`; `silnik.dane sprawdz` → `Dane w porządku`; `node --check` 4 moduły: ok.
+- zrzuty (poza gitem): `C:/Users/PC/Pulpit/lukrum/_robocze/zrzuty-ukryte/ksiega-bar-jasny.png`, `ksiega-wysoka-ciemny.png`.
+  Zrzutów HR i wyposażenia nie zrobiłem (JS sprawdzony tylko składniowo) – do obejrzenia przy przeglądzie.
+**Uwagi:** blok CSS `/* podróż 03/ukryte */` na końcu `swiat/swiat.css` (może kolidować z blokiem 03/wyglad: zostawić oba).
+Serwer zatrzymany. Pełnych testów po poprawce nie puszczałem ponownie (zmiana tylko w tekście).
+**Propozycje:** zrzuty HR/wyposażenia; odświeżyć INSTRUKCJA.pdf.
