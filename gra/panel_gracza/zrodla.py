@@ -1,7 +1,8 @@
 """Strona „Nawiązania i źródła” (`/zrodla`, wątek 03/prawo, decyzja szefa 23.11.2026).
 
-Treść leży w `dane/zrodla.yaml`; silnik jej nie czyta. Strona jest dostępna bez logowania, jak instrukcja.
-Liczby gry z podziałem na pewność (potwierdzone, skalibrowane, założenie) liczone są z `dane/zalozenia.yaml`.
+Treść leży w `dane/zrodla.yaml`; silnik jej nie czyta. Strona jest dostępna bez logowania,
+jak instrukcja. Liczby gry z podziałem na pewność (potwierdzone, skalibrowane, założenie)
+liczone są z `dane/zalozenia.yaml`.
 """
 
 from __future__ import annotations
@@ -14,7 +15,8 @@ from django.conf import settings
 
 KATALOG = Path(settings.BASE_DIR) / "dane"
 PEWNOSCI = ("potwierdzone", "skalibrowane", "zalozenie")
-NAZWY_PEWNOSCI = {"potwierdzone": "potwierdzone", "skalibrowane": "skalibrowane", "zalozenie": "założenie"}
+NAZWY_PEWNOSCI = {"potwierdzone": "potwierdzone", "skalibrowane": "skalibrowane",
+                  "zalozenie": "założenie"}
 
 
 @lru_cache(maxsize=4)
