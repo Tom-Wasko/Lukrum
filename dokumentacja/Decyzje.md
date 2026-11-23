@@ -40,6 +40,7 @@
 
 
 ### Decyzje 13–19.11 (z dawnych notatek, tematami)
+- 2026-11-23 · Dalej w podróży 03: Z42 (pokazać ukryte mechaniki), Z17 (lekcja 45 minut) i wszystko, co trzeba zrobić przed testami na klasie; rzeczy niepotrzebne do testu (np. dźwięki) na później. Zeszyt ma mieć kartki (strony), a nie przewijanie.
 - 2026-11-23 · Wpływ płacy na zadowolenie zostaje 0,3 (jawne założenie); nie zmieniać i nie kalibrować (Z43 usunięte).
 Data w nawiasie to dzień decyzji. Zmieniona decyzja zostaje z adnotacją „(zmienione dd.mm)”.
 

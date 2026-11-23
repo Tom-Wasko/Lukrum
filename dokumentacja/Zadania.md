@@ -1,5 +1,5 @@
 # Zadania
-Następny numer: Z44
+Następny numer: Z46
 
 Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej ważne. Zrobione dawniej:
 `historia/postep.md`. Pytania do zadań: `Stan.md`, „Czeka na szefa”. Uwagi z gier testowych 20 i 22.11 (szef,
@@ -20,6 +20,9 @@ Podróż 03-okienka-i-rundy:
 - Z42 · „ukryte” mechaniki (majster): spis skutków, których gracz nie widzi, i pokazanie ich w grze
 - Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie
 - Z23 · prawo (część z 23.11): ogólne ikony zamiast logo sieci, 0,3162 od zera z GUS, ekran „Nawiązania i źródła”
+- Z44 · zeszyt z kartkami: treść dzielona na strony, przewracane „Dalej ›” / „‹ Wstecz”, bez przewijania (decyzja szefa 23.11)
+- Z45 · gotowość do testu na klasie: próba obciążenia 30 graczy + MG przez hostuj, logowanie klasy, szkolny sprzęt (lista w plan.md)
+- Z17 · lekcja 45 minut ze zmierzonym czasem rundy; zestawy funkcji pod scenariusze lekcji; kreator trybu lekcyjnego na zrzutach
 - Z38 · Zana: „Portiernia” jako spis pięter (która agencja na którym piętrze, przejście do windy), zamiast listy wszystkich agencji
 
 ## Zaplanowane
@@ -30,7 +33,6 @@ Podróż 03-okienka-i-rundy:
 ### Ważne
 - Z4 · seria `wnetrza`: osobne wnętrze dla każdego żetonu (projekt Fable 17.11, makiety w `_archiwum/fable-17.11/fable-wnetrza/`), PRL w holach, krytyka i poprawki wybrane przez szefa; majster: wnętrza wyglądają źle; podpisy na makietach przed wdrożeniem
 - Z3 · seria `budynki`: pierzeja 5 banków, giełda osobno, redakcja (Kamienica rachmistrzów i reklama w biurowcu przy Zana już są)
-- Z17 · lekcja 45 minut ze zmierzonym czasem rundy; gotowe zestawy odsłoniętych funkcji; wygląd pól kreatora trybu lekcyjnego na zrzucie
 - Z18 · przewodnik nauczyciela i zasady oceniania; tabela „mechanika a podstawa programowa” (WOS, biznes i zarządzanie); przegląd nauczyciela, próba w klasie
 - Z20 · zgłoszenie do „Zwolnieni z Teorii” z datą lekcji (31.03.2027, niepotwierdzone); `METODA.md` (jawność AI) po pobraniu regulaminu (`wiedza/analizy/regulamin-zwzt-a-ai.md`)
 - Z23 · prawo: decyzje po przeglądzie z 16.11 (pytania w `Stan.md`); notki edukacyjne w instrukcji (progi PIP, staż, ZUS, odsetki, lichwa art. 304, CEIDG/PIS, daty roku szkolnego); ekran „Nawiązania i źródła”; drobne (stopki, PDF zgodny z `.md`, ODbL, User-Agent, autorstwo grafik, dymki 16-latków); wyszukać możliwe prawdziwe nazwiska i firmy (Jakub Klimek-Ślęzak, Zenon Lupa, e-Księgi24.pl) i zmienić przy trafieniu; informacja o klubie w instrukcji MG; lista kontrolna przeglądu (stałe wspólne z dawnym projektem → 0, brak nazw z dawnej gry, `ikony_marek.js` bez prawdziwych logo, tabela nawiązań, wykaz grafik i fontów); rozmowa z prawnikiem

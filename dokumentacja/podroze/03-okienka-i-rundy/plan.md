@@ -66,3 +66,22 @@ Wszystkie briefy zawierają:
 - Testy: `PY -X utf8 -m pytest -q -p no:cacheprovider 2>&1 | tail -5`, `PY -m ruff check .`, `node --check`
   na zmienionych modułach.
 - Serwer na wolnym porcie (8765 może zajmować `start.bat` szefa) i przejście kryteriów w Chrome. Zatrzymuję go po pracy.
+
+## Trzeci plan (23.11, decyzja szefa): przed testem na klasie
+Zasada: robimy to, bez czego test na klasie się nie uda albo będzie mylący; reszta (dźwięki Z11, boty na mapie Z8,
+wnętrza Z4, budynki Z3, nawiązania Z10, wizyty wujka Z13/Z14, UPRP Z24) czeka.
+
+| Wątek | Zadania | Po co przed klasą |
+|---|---|---|
+| `03/ukryte` | Z42 | gracz widzi, dlaczego coś się stało (wiersze 3–13 spisu `wiedza/analizy/ukryte-mechaniki.md`) |
+| `03/kartki` | Z44 | zeszyt z kartkami zamiast przewijania (prosto na lekcji, także na tablicy interaktywnej) |
+| `03/lekcja` | Z17, Z45 | runda mieści się w lekcji; zestawy funkcji pod 5 scenariuszy; próba 30 graczy + MG przez hostuj |
+| później | Z18 | przewodnik nauczyciela (po `03/lekcja`, bo opisze zmierzony przebieg) |
+
+Lista gotowości do testu (odhaczam po dowodzie):
+- [ ] runda (decyzje drużyn + zamknięcie przez MG) w ≤ 15 min, cała lekcja z omówieniem w 45 min
+- [ ] 30 graczy naraz przez `hostuj` bez błędów i z odpowiedzią < 1 s (pomiar)
+- [ ] logowanie klasy bez kont Microsoft (kody drużyn) działa i jest opisane dla nauczyciela
+- [ ] gra działa w Chrome/Edge na szkolnym laptopie 1366×768 i na telefonie (Z6)
+- [ ] gracz widzi skutki swoich decyzji (Z42), zeszyt bez przewijania (Z44)
+- [ ] przewodnik nauczyciela (Z18), pełne testy zielone, scalenie do `main`
