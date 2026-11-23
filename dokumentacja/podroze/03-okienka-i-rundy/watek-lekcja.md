@@ -31,3 +31,46 @@
   gry”) poprawiona; pełne testy zielone, `ruff`, `node --check`, `silnik.dane sprawdz` czyste (wyniki w raporcie).
 
 ## Raport
+**Stan: gotowe** (gałąź `worktree-podroz-03-lekcja`, bez push). Liczby i wnioski: `dokumentacja/wiedza/analizy/czas-lekcji.md`.
+
+**Zrobione**
+- Czas rundy: silnik przelicza tydzień 8 drużyn w 0,6 s (maks. 0,86 s) dla każdego zestawu; tabela lekcja po lekcji
+  (zadania, kliknięcia, namysł) to **szacunek**, nie pomiar na żywej klasie. Lekcje 1–4 mieszczą się w 25 min gry,
+  najbardziej ryzykowna jest lekcja 1 (8 zadań).
+- 5 zestawów `lekcja_1…5` w `dane/funkcje.yaml: zestawy` + test `testy/rdzen/test_zestawy_lekcji.py` (obecność w kreatorze,
+  3 rundy bota).
+- Próba obciążenia 30 uczniów / 8 drużyn (`balans/obciazenie.py`): 0 błędów serwera. Znalazła 3 realne wady, poprawione
+  z testem `testy/aplikacja/test_klasa_naraz.py`: limit logowania z jednego IP (429), „database is locked” (WAL, timeout,
+  IMMEDIATE), kolejka połączeń 10→128. Odpowiedzi po starcie: `stan` 20 ms, zapis decyzji 25 ms (p95 126 ms), zamknięcie
+  rundy 191 ms. **Nie spełnione „< 1 s” przy starcie całej klasy naraz**: logowanie mediana 3,4 s, strona gry 3 s, widok
+  po zamknięciu rundy 1,9 s (jeden proces Pythona, GIL). Nie naprawiałem (duże).
+- Kreator `/mg/` (bar jasny 1366×768): zestawy lekcji widoczne w kroku 3, utworzenie gry z zestawem i okno z hasłami do
+  druku działają. Zrzuty w `_robocze/zrzuty-lekcja/` (poza gitem).
+- `SCENARIUSZE_LEKCJI.md` podaje zestaw przy każdej lekcji; INSTRUKCJA „Dla mistrza gry” poprawiona (lista zestawów,
+  „Pierwsza gra” nie jest już polecana na lekcję 1).
+
+**Dowody**
+- `pytest -q -p no:cacheprovider` → `956 passed in 438.38s`
+- `ruff check .` → `All checks passed!`
+- `silnik.dane sprawdz` → `Dane w porządku: … (wersja 62a4fac80df3)`
+- `node --check`: nie dotyczy, żaden plik JS nie zmieniony.
+- `test_mistrz_gry_widzi_klub` nie zawiódł.
+
+**Pliki poza briefem** (konieczne do poprawek z próby obciążenia): `gra/lukrum/settings.py`, `gra/lukrum/rozgrzewka.py`,
+`gra/balans/obciazenie.py`, `gra/balans/czas_rundy.py`, `gra/testy/aplikacja/test_klasa_naraz.py`.
+
+**Decyzje szefa / pytania**
+1. Stanu funkcji nie zmienia się po utworzeniu gry, więc zestawy „na lekcję” oznaczają **nową grę na każdą lekcję**.
+   Czy gra z lekcji 1 ma móc przejść na zestaw lekcji 2 (zmiana „co i po co”)?
+2. Czy wdrażać serwer wieloprocesowy do `hostuj` (zysk przy starcie klasy)?
+
+**Propozycje (nie wdrożone)**
+- Kreator: „Rozlosuj uczniów po drużynach” i kartki z hasłami w podziale na drużyny (dziś 2 kliknięcia na ucznia, 60 dla
+  30; to największa przeszkoda przed lekcją; w 3 krokach da się tylko założyć grę i wydrukować hasła).
+- Przyciski kroków kreatora przypiąć do dołu ekranu („Utwórz grę” jest poniżej krawędzi 1366×768).
+- Zestaw lekcji ustawia też liczbę rund (domyślnie 18) i tryb lekcyjny.
+- Pasek ładowania przy logowaniu/starcie; prośba o logowanie drużyna po drużynie; pamięć podręczna widoku po `przelicz`.
+- Okruszek „Lublin” skleja się z tytułem w oknie MG („LublinNowe konta”) – styl `karty.css`, współdzielony.
+
+**Sprzątanie:** serwery i symulacje zatrzymane (port 8798 wolny). Usunięcie `_robocze/lekcja/` (pliki robocze, poza gitem)
+zablokowane przez uprawnienia – do skasowania ręcznie.
