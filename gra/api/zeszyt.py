@@ -13,6 +13,7 @@ import re
 
 from silnik import cele
 from silnik.dane import Dane
+from silnik.harmonogram import PRZYGOTOWAWCZY
 from silnik.kuchnia.dostawcy import info as info_dostawcy
 from silnik.kuchnia.dostawcy import oferta_rundy
 from silnik.kuchnia.menu import specjalne
@@ -149,6 +150,18 @@ def _strona(dane: Dane, tydzien: int, ostatni: bool) -> tuple[str, dict]:
     return klucz, tygodnie[klucz]
 
 
+def _odblokowania(dane: Dane, v: dict, runda: int, miejsca: dict) -> list[dict]:
+    """Ogłoszenia odblokowań na `runda`: elementy, których tydzień w harmonogramie TEJ gry
+    (z nadpisaniami mistrza gry) to właśnie ta runda. Tydzień przygotowawczy bez ogłoszeń.
+    Pusta lista – gra bez lokali."""
+    harmonogram = v.get("harmonogram") or {}
+    if runda <= PRZYGOTOWAWCZY:
+        return []
+    return [{"klucz": k, "tekst": o["tekst"], "zeton": o["zeton"],
+             "gdzie": f"{miejsca.get(o['zeton'], o['zeton'])} ▸ {o['wnetrze']}"}
+            for k, o in dane.zeszyt["odblokowania"].items() if harmonogram.get(k) == runda]
+
+
 def _poprzednie_zamowienia(gra, firma: str, runda: int) -> float:
     """Suma zamówionych opakowań w poprzedniej rundzie (do zadań „więcej / mniej towaru”)."""
     z = gra.decyzje.get(runda - 1, {}).get(firma, {}).get("zamowienia") or []
@@ -200,7 +213,9 @@ def widok(gra, firma: str, runda: int, v: dict) -> dict | None:
     wizyty = gra.decyzje.get(runda, {}).get("_zeszyt", {}).get(firma, [])
     dopisek = z["dopiski"][(max(tydzien, 1) - 1) % len(z["dopiski"])]
     return {"tydzien": tydzien, "ostatni": ostatni, "tytul": strona["tytul"],
-            "list": strona.get("list") or "", "zadania": zadania, "dopisek": dopisek,
+            "list": strona.get("list") or "",
+            "odblokowania": _odblokowania(dane, v, runda, miejsca),
+            "zadania": zadania, "dopisek": dopisek,
             "gdzie_kupic": kupic, "wizyty": list(wizyty),
             "cel": _cel(gra, dane, firma, runda),
             "poprzednie_zamowienia": _poprzednie_zamowienia(gra, firma, runda),

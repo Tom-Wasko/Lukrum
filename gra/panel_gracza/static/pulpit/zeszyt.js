@@ -81,6 +81,17 @@ export function celTygodnia(cel) {
     <p class="pz-cel-tekst"><b>★ ${esc(cel.tekst)}</b></p>
     <p class="pz-opis">Nagroda: ${esc(cel.nagroda)}. Wynik zobaczycie w zeszycie po zamknięciu tygodnia.</p>${wynik}</section>`;
 }
+// Od tego tygodnia otwarte: ogłoszenia odblokowań z listu wujka (v.zeszyt.odblokowania, liczone z harmonogramu tej gry);
+// „gdzie” przesuwa mapę do budynku jak pozycja listy zadań, bez budynku na mapie (bazar) – sam tekst z miejscem
+function odblokowania(v) {
+  const l = v.zeszyt?.odblokowania || [];
+  if (!l.length) return "";
+  const poz = l.map((o) => {
+    const b = budynekZadania(v, o), gdzie = b && b !== "bazar" ? naMapie(b, `⌖ ${esc(o.gdzie)}`, "pz-mapa pz-odbl-gdzie") : `<span class="pz-odbl-gdzie">${esc(o.gdzie)}</span>`;
+    return `<li><span class="pz-nr" aria-hidden="true">＋</span><span>${esc(o.tekst)}<br>${gdzie}</span></li>`;
+  }).join("");
+  return `<section class="pz-odbl" aria-label="Od tego tygodnia otwarte"><h3>Od tego tygodnia otwarte</h3><ul class="pz-odbl-lista">${poz}</ul></section>`;
+}
 function stronaLista(c) {
   const v = c.v, list = listTygodnia(v);
   let plan = null;
@@ -97,6 +108,7 @@ function stronaLista(c) {
   }).join("");
   return `<h2>List od wujka · tydzień ${v.zeszyt?.tydzien ?? v.runda}</h2>
     ${list ? `<p class="pz-list"><b>${esc(list.tytul)}</b> ${esc(list.tresc)} <span class="pz-podpis">– Wasz wujek</span></p>` : ""}
+    ${odblokowania(v)}
     ${celTygodnia(v.zeszyt?.cel)}
     <h3>Do zrobienia w tym tygodniu${plan ? ` <small>${plan.zrobione} z ${plan.razem}</small>` : ""}</h3>
     <p class="pz-opis">Kliknięcie kroku pokazuje budynek na mapie (mapa się przybliża, a budynek pulsuje); „wejdź →” prowadzi od razu do środka.</p><ol class="pz-kroki">${kroki}</ol>

@@ -87,6 +87,49 @@ cele:
     17: {id: dochod_17,  typ: dochod_plus,     tekst: "Zamknijcie tydzień na plusie (dochód powyżej zera)"}
     ostatni: {id: realiz_ostatni, typ: realizacja, tekst: "Obsłużcie co najmniej {prog} gości, którzy chcieli kupić", prog: {wartosc: 0.85, pewnosc: zalozenie, zrodlo: "szkic: ostatni tydzień, towar ma wystarczyć"}}
 
+# --- ogłoszenia odblokowań (list wujka) --------------------------------------------------------------------------
+# Po jednym wpisie na element harmonogramu (silnik/harmonogram.py: elementy). Tygodnia tu nie ma: zeszyt bierze go
+# z harmonogramu tej gry (z nadpisaniami mistrza gry) i w tygodniu otwarcia dopisuje do listu blok „Od tego tygodnia
+# otwarte”. tekst: co się otwiera i po co (jedno zdanie); zeton: budynek na mapie (jak w zadaniach; „lokal” – własny lokal
+# drużyny, „bazar” – bez żetonu); wnetrze: miejsce w środku budynku.
+odblokowania:
+  nazwa_firmy:            {zeton: lokal, wnetrze: właściciel, tekst: "Nazwa firmy: pod nią goście Was zapamiętają."}
+  misja:                  {zeton: lokal, wnetrze: właściciel, tekst: "Misja firmy: kilka słów o tym, po co to wszystko, bo marka to obietnica."}
+  oferta:                 {zeton: lokal, wnetrze: menu, tekst: "Menu: wybór dań, bo oferta ma pasować do tego, kto chodzi po okolicy."}
+  inwestycje_stanowiska:  {zeton: stolarnia, wnetrze: lada i blat, tekst: "Stanowiska: lada i blat, bo bez miejsca pracy sprzęt na nic się nie przyda."}
+  inwestycje_sprzet:      {zeton: sprzet_gastro, wnetrze: sprzęt, tekst: "Sprzęt i leasing: kupno albo dzierżawa, czyli czy płacić od razu, czy rozłożyć koszt."}
+  sprzedaz:               {zeton: lokal, wnetrze: ceny dań, tekst: "Ceny dań: ustalacie, ile kosztuje porcja, a od ceny zależy, ilu gości zostanie."}
+  dostawcy:               {zeton: makro, wnetrze: zamówienia, tekst: "Dostawcy: porównanie cen i warunków dostawy, bo ten sam towar bywa tańszy gdzie indziej."}
+  hr_zatrudnienie:        {zeton: agencja_pracy, wnetrze: kandydaci, tekst: "Zatrudnienie: szukanie ludzi do pracy, bo zespół to największy koszt i największa siła."}
+  finanse_bank:           {zeton: kamienica_bankowa, wnetrze: bank, tekst: "Bank: konto firmowe i kredyt, czyli skąd brać pieniądze, gdy brakuje własnych."}
+  finanse_biuro:          {zeton: kamienica_rachmistrzow, wnetrze: biuro rachunkowe, tekst: "Biuro rachunkowe: księgi i podatki, bo papiery muszą się zgadzać."}
+  karta_wynikow:          {zeton: redakcja, wnetrze: karta wyników, tekst: "Karta wyników: tabela z liczbami Waszej firmy, z której widać, co zarabia, a co zjada pieniądze."}
+  hr_udogodnienia:        {zeton: akademia, wnetrze: rozwój ludzi, tekst: "Udogodnienia dla zespołu: zadowoleni ludzie pracują szybciej i rzadziej odchodzą."}
+  inwestycje_wyposazenie: {zeton: park_handlowy, wnetrze: wyposażenie, tekst: "Wyposażenie i wystrój lokalu: stoliki, telewizor, klimatyzacja. Goście wybierają miejsca, w których miło posiedzieć."}
+  karta_skumulowana:      {zeton: redakcja, wnetrze: karta skumulowana, tekst: "Karta skumulowana: wyniki z wielu tygodni naraz, bo jeden tydzień niczego nie dowodzi."}
+  hr_szkolenia:           {zeton: akademia, wnetrze: szkolenia, tekst: "Szkolenia: nauka dla zespołu kosztuje czas i pieniądze, ale zwraca się szybszą i lepszą pracą."}
+  licytacje:              {zeton: agencja_nieruchomosci, wnetrze: licytacje, tekst: "Licytacje lokali: o dobry lokal walczy kilka drużyn, więc warto wiedzieć, ile maksymalnie opłaca się zapłacić."}
+  przejecia:              {zeton: agencja_nieruchomosci, wnetrze: kupno budynku, tekst: "Kupno budynku z najemcą: własny budynek to inwestycja, a najemca płaci czynsz."}
+  rekrutacja_pracuj:      {zeton: agencja_pracy, wnetrze: ogłoszenie, tekst: "Ogłoszenie w internecie: tanie i szybkie, ale zgłasza się różny tłum."}
+  rekrutacja_agencja:     {zeton: agencja_pracy, wnetrze: agencja pracy, tekst: "Agencja pracy: kosztuje więcej niż ogłoszenie, za to podsyła sprawdzonych ludzi."}
+  rekrutacja_headhunter:  {zeton: agencja_pracy, wnetrze: headhunter, tekst: "Headhunter: najdroższy sposób szukania, ale przy trudnych stanowiskach często jedyny."}
+  dostawcy_producent:     {zeton: rozen, wnetrze: zamówienie u producenta, tekst: "Zakłady „Rożen”: mięso prosto od producenta, taniej, ale tylko przy większych zamówieniach."}
+  danie_kebab_specjalny_1:  {zeton: lokal, wnetrze: menu, tekst: "Kebab specjalny I: danie z okolicy, którego nie ma nigdzie indziej, czyli sposób, by wyróżnić się na tle konkurencji."}
+  danie_kebab_specjalny_2:  {zeton: lokal, wnetrze: menu, tekst: "Kebab specjalny II: kolejne danie dopasowane do strefy, bo różne dzielnice lubią co innego."}
+  danie_przekaska_specjalna: {zeton: lokal, wnetrze: menu, tekst: "Przekąska specjalna: dodatek do kebaba, który podnosi rachunek i przyciąga stałych gości."}
+  danie_napoj_specjalny:  {zeton: lokal, wnetrze: menu, tekst: "Napój specjalny: mała rzecz, która daje dobrą marżę i zostaje w pamięci."}
+  promocje:               {zeton: lokal, wnetrze: promocje, tekst: "Promocje: tańsze danie przyciąga gości, ale zmniejsza zysk z każdej porcji. Policzcie, czy się opłaca."}
+  reklama_papier_przyjmie: {zeton: drukarnia, wnetrze: drukarnia, tekst: "Drukarnia „Papier Przyjmie”: ulotki i plakaty, czyli tania reklama dla okolicy."}
+  reklama_fala_koziolka:  {zeton: fala_koziolka, wnetrze: radio i billboardy, tekst: "Radio i billboardy „Fala Koziołka”: duży zasięg za wyższą cenę, więc liczy się, ilu z tych ludzi naprawdę do Was dojdzie."}
+  reklama_kozi_grod:      {zeton: kozi_grod_events, wnetrze: eventy, tekst: "Agencja eventowa „Kozi Gród Events”: wydarzenia i akcje, o których mówi całe miasto."}
+  internet:               {zeton: agencja_lajk, wnetrze: marketing internetowy, tekst: "Marketing internetowy: reklama w sieci, którą da się policzyć, bo widać, ilu ludzi kliknęło."}
+  sanepid:                {zeton: sanepid, wnetrze: kontrole, tekst: "Kontrole sanepidu: mogą zajrzeć do każdego lokalu, więc higiena opłaca się codziennie, a nie tylko w dniu kontroli."}
+  ubezpieczenia:          {zeton: ubezpieczyciel, wnetrze: polisy, tekst: "Ubezpieczenia: niewielka składka co tydzień chroni przed dużą stratą, gdy zdarzy się pech."}
+  parki:                  {zeton: ogrod_saski, wnetrze: park, tekst: "Eventy w parkach: w ładną pogodę w parkach robi się tłoczno, a to szansa na sprzedaż poza lokalem."}
+  wypadki:                {zeton: ubezpieczyciel, wnetrze: polisy, tekst: "Wypadki w lokalu: czasem coś się zepsuje albo ktoś się skaleczy. Warto mieć polisę i zapas na takie dni."}
+  handel:                 {zeton: bazar, wnetrze: giełda handlu, tekst: "Giełda handlu: drużyny sprzedają sobie nawzajem towar i sprzęt, a cenę ustala licytacja."}
+  detektyw:               {zeton: detektyw, wnetrze: biuro, tekst: "Detektyw: dokładne dane o konkurencji za opłatą, bo informacja też ma swoją cenę."}
+
 # --- strony tygodni -----------------------------------------------------------------------------------------------
 # zeton: id z dane/mapa/budynki.yaml (albo „lokal” = lokal drużyny, „bazar” = bazar bez żetonu); punkt: ekran panelu;
 # kartka: tekst na kartce wystającej z zamkniętego zeszytu, gdy to zadanie jest następne (najwyżej 6 słów);
@@ -134,7 +177,7 @@ tygodnie:
   3:
     tytul: "Pierwsze rachunki"
     list: >-
-      Zajrzyjcie do kasy i do „Kuriera rankingowego”: tam widać, co zarobiło, a co zjadło pieniądze. Strata na początku
+      Zajrzyjcie do kasy i do wyników: tam widać, co zarobiło, a co zjadło pieniądze. Strata na początku
       to nie wstyd. Wstyd to nie wiedzieć, skąd się wzięła.
     zadania:
       - {id: producent, tekst: "Mięso zamówcie u producenta", kartka: "Mięso prosto z zakładu", zeton: rozen, punkt: zaop_dostawy, warunek: {zamowienie_u: "Zakłady Mięsne „Rożen” z Łęcznej"}, element: dostawcy_producent, funkcja: zaopatrzenie,
@@ -146,8 +189,8 @@ tygodnie:
   4:
     tytul: "Czas pomyśleć o gościach i o pechu"
     list: >-
-      Lokal już chodzi, teraz niech będzie przyjemny i bezpieczny. W Parku handlowym kupicie wyposażenie i wystrój.
-      Wybierzcie taki, jaki lubią ludzie z Waszej okolicy, a nie taki, jaki podoba się Wam.
+      Lokal już chodzi, teraz niech będzie przyjemny i bezpieczny. Pomyślcie o wystroju i o tym, co może pójść nie tak.
+      Wybierzcie wystrój, jaki lubią ludzie z Waszej okolicy, a nie taki, jaki podoba się Wam.
     zadania:
       - {id: tabela, tekst: "Zmieńcie jedną rzecz po tabeli: cenę, menu albo zespół", kartka: "Zmieńcie cenę, menu albo zespół", zeton: redakcja, punkt: ranking, warunek: zmiana_po_tabeli, element: karta_skumulowana,
          czemu: "W tabeli widać już, kto ucieka, a kto goni. Nie zostawiajcie wszystkiego tak samo."}
