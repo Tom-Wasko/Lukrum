@@ -63,6 +63,8 @@ szkolnym Microsoft jest opisane w [`dokumentacja/LOGOWANIE_MICROSOFT.md`](dokume
   gry” jest na końcu instrukcji.
 - Panel mistrza gry: **/mg/**. Tam zakłada się grę i konta drużyn, prowadzi rundy i wybiera odsłonięte funkcje.
 - Scenariusze lekcji (projekt): [`dokumentacja/SCENARIUSZE_LEKCJI.md`](dokumentacja/SCENARIUSZE_LEKCJI.md).
+- Przewodnik dla nauczyciela (uruchomienie, przebieg lekcji i bloku, co robić przy kłopotach, ocenianie, podstawa programowa):
+  [`dokumentacja/PRZEWODNIK_NAUCZYCIELA.md`](dokumentacja/PRZEWODNIK_NAUCZYCIELA.md), wersja do druku: `.pdf` obok.
 
 ## Dla programistów i agentów
 
