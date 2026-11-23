@@ -22,12 +22,6 @@ zatwierdzeniu szefa. Scalanie: do `main` dopóki szef jest, po `/papa` na `podro
 | 03/przeglad-prawny | Z23 (część) | scalony na podroz-03 07:35 (lista kontrolna, wykaz grafik) |
 
 ## Czeka na szefa
-- (23.11, z 03/przeglad-prawny) `ikony_marek.js` ma uproszczone loga 12 prawdziwych sieci. a) zamienić na ogólne
-  ikony bez marek (rekomendacja, bezpieczniej przed konkursem), b) zostawić z zastrzeżeniem.
-- (23.11) Liczba 0,3162 w `zalozenia.yaml:620` (nachylenie składnika płacy) jest wspólna ze starym projektem.
-  a) przeliczyć od zera z danych GUS (rekomendacja), b) zostawić.
-- (23.11) Podpis autorów grafik i nagrań (licencja wymaga autora): a) strona „Nawiązania i źródła” + stopka instrukcji
-  (rekomendacja), b) tylko instrukcja.
 - (23.11) Z41: inwestor ratunkowy wpłaca najwyżej 40 000 zł, a `zrodlo` mówi „max_kwota = kapitał startowy”, który od
   13.11 wynosi 50 000 zł. a) podnieść do 50 000 (rekomendacja, zgodnie z opisem), b) zostawić 40 000 i poprawić opis.
 - (23.11) Wskazówki w wydarzeniach: wskaźnik „Goście” (tak nazwał wyko, to popyt w lokalach) czy „Opinia” (jak w Twoim

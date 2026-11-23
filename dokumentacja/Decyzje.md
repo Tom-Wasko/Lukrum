@@ -25,6 +25,10 @@
 - 2026-11-22 · Biurowiec przy Zana: „Portiernia” ma być spisem pięter (agencja → piętro, przejście do windy); „Internet” zostaje ekranem reklamy w sieci.
 - 2026-11-22 · Więcej do zrobienia w rundach (Z32): **cel tygodnia od wujka** (jeden cel z nagrodą, sprawdzany po zamknięciu tygodnia) oraz zadania zeszytu typu „sprawdźcie” zamienione na **konkretne ruchy w grze**, odhaczane, gdy decyzja różni się od poprzedniej rundy (np. „Spłaćcie część debetu albo raty”, „Obniżcie jeden koszt stały”); razem **3–4 na rundę**; tylko z decyzji, które już są w grze. Bez dodatkowych spraw w lokalu.
 - 2026-11-22 · Zeszyt (Z35): czcionka zostaje Caveat.
+- 2026-11-23 · `ikony_marek.js`: loga 12 prawdziwych sieci zamienić na ogólne ikony bez marek.
+- 2026-11-23 · Liczba 0,3162 (`zalozenia.yaml`, nachylenie składnika płacy, wspólna ze starym projektem): przeliczyć
+  od zera z danych GUS.
+- 2026-11-23 · Autorstwo grafik i nagrań: ekran „Nawiązania i źródła” w grze + stopka instrukcji.
 
 
 ### Decyzje 13–19.11 (z dawnych notatek, tematami)
