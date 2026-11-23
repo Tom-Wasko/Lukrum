@@ -197,7 +197,7 @@ Klienci wybierają lokal według:
 - **jakości** dania (gwiazdki sprzętu i składników),
 - **odległości** – sąsiednie strefy też przychodzą, ale mniej chętnie,
 - **opinii o lokalu** – ocena 1–5★ i liczba opinii (kliknij lokal na mapie, żeby przeczytać komentarze). Klienci oceniają
-  to, co przeżyli: jakość dań, cenę na tle strefy, kolejkę, brakujące dania, pomyłki w szczycie i wyposażenie. Nowe
+  to, co przeżyli: jakość dań, cenę na tle strefy, kolejkę i tłok, brakujące dania, pomyłki w szczycie i wyposażenie. Nowe
   opinie ważą więcej niż stare, a im więcej opinii, tym bardziej klienci ufają ocenie,
 - **renomy lokalu** – nowy lokal dopiero zdobywa stałych bywalców: w pierwszym tygodniu sprzedaży przychodzi niecała
   połowa klientów, co tydzień więcej. Dotyczy to każdego kolejnego lokalu, więc na start planuje się mniejszą obsadę
@@ -402,6 +402,11 @@ ostatnie – już tak. Przed zmianą warto policzyć, czy oszczędność na doku
 Pod wnętrzem kebaba leży **księga gości**: ocena lokalu w gwiazdkach i pięć rzeczy, z których się bierze – smak,
 czekanie, cena, obsługa i wnętrze. Przy każdej widać, ile gwiazdek dodała albo zabrała w ostatnim tygodniu (▲ albo ▼),
 i dokąd pójść, żeby to poprawić. Lepsza ocena to więcej nowych gości.
+
+**Tłok.** Gdy załoga przez cały tydzień pracuje prawie na 100%, goście czekają w kolejce przy ladzie i oceniają lokal
+trochę gorzej (wiersz „Czekanie” w księdze gości, kolumna „Tłok” w Klientach). We wnętrzu kebaba widać to jako dłuższą
+kolejkę i napis „Tłok: mały ✓ / średni – / duży ▲”. Pomaga więcej rąk do pracy albo drugie stanowisko. Dobre wyposażenie
+i wystrój odwrotnie: lekko podnoszą ocenę.
 
 W Parku handlowym działa sklep meblowy **„Meblościanka”**. Wystrój kupuje się w czterech grupach (ściany, szyld,
 dodatki, meble) i w jednym z kilku stylów. Styl działa tylko wtedy, gdy lubi go wystarczająco dużo gości z okolicy
