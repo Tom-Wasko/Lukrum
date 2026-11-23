@@ -188,7 +188,7 @@ function elementBoku(k, c, strona, id = "") {
   b.dataset.k = String(k);
   b.setAttribute("aria-label", nazwaBoku(k));
   b.innerHTML = `<div class="pz-strona" tabindex="-1">${zawartosc(c, k)}</div>
-    <button type="button" class="pz-wiecej" data-akcja="pz-dol" hidden aria-label="Są dalsze treści niżej: przewiń w dół">▾<span>dalej</span></button><span class="pz-nr-str" aria-hidden="true">${k >= 1 && k <= 4 ? k : ""}</span>`;
+    <button type="button" class="pz-wiecej" data-akcja="pz-dol" hidden aria-label="Są dalsze treści niżej: przewiń w dół" title="Przewiń niżej">▾</button><span class="pz-nr-str" aria-hidden="true">${k >= 1 && k <= 4 ? k : ""}</span>`;
   return b;
 }
 const stronaBoku = (b) => b.querySelector(".pz-strona");

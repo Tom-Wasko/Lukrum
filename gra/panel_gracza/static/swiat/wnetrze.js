@@ -11,6 +11,7 @@ import { filtrAgencji } from "../zakladki/marketing.js";
 import { dostawcaSceny, otworzAuto, otworzSklep } from "../zakladki/dostawcy.js";
 import { otworzSprzet } from "../zakladki/inwestycje.js";
 import { oknoParku } from "../zakladki/zdarzenia.js";
+import { otworzListZDecyzjami } from "../pulpit/pulpit.js";
 
 const pos = (x, y, w, h) => `left:${(x / 12.2).toFixed(2)}%;top:${(y / 6.12).toFixed(2)}%;width:${(w / 12.2).toFixed(2)}%;height:${(h / 6.12).toFixed(2)}%`;
 const goly = (t) => String(t || "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
@@ -137,6 +138,7 @@ export function kliknijPunkt(i, ctx) {
       if (p.teczka?.auto) return otworzAuto(c, { tytul: `${ctx.def.tytul}: ${p.et}`, sklep: ctx.def.tytul });   // auto-dostawy: tylko ta sekcja
       filtrAgencji(p.teczka?.agencja, p.teczka?.tytul);
       if (p.teczka?.sprzet) return otworzSprzet(c, { ...p.teczka.sprzet, tytul: `${ctx.def.tytul}: ${p.et}` });   // hurtownia sprzętu: tylko ta grupa
+      if (o.ekran === "wyslij") return otworzListZDecyzjami(c);   // poczta: ta sama koperta co ikona listu w pasku (03/poprawki-okienek)
       c.teczka(o.ekran, p.teczka?.tryb);   // ekran decyzji (albo wyników: teczka.tryb) w oknie nad wnętrzem; klucz części otwiera tylko tę część
       // firma, której drzwi kliknięto (bank, biuro rachunkowe): ekran przewija się do jej nazwy
       const szukaj = ["bank", "biuro_rachunkowe"].includes(ctx.def.id) ? (/„(.+)”/.exec(ctx.def.tytul) || [])[1] : null;

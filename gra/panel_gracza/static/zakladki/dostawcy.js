@@ -396,7 +396,7 @@ export function otworzSklep(c, s) { SKLEP = { ...s, zmieniono: false }; oknoSkle
 // Pozycje w kolumnie (nazwa, ilość × cena, kwota), suma na dole, data i nazwa sklepu w nagłówku, krój o stałej szerokości.
 // Dane i zapis zamówień bez zmian (decyzja `zamowienia`); pola ilości te same (`data-zmiana="ilosc"`).
 const dataPl = (iso) => `${+iso.slice(8, 10)}.${iso.slice(5, 7)}.${iso.slice(0, 4)}`;
-const nazwaPoz = (z, q) => `${esc(z)}${gw(+q)}`;
+const nazwaPoz = (z, q) => `${esc(z)} ${gw(+q)}`;
 /** Pozycje paragonu: jeden wpis na składnik i jakość; przy dniach dostaw jeden wiersz na każdy dzień dostawy sklepu. */
 function pozycjeParagonu(v, kat, dost, ceny, dni, moje, pole, filtr) {
   const dniDost = dni ? moje : [null];
@@ -406,12 +406,14 @@ function pozycjeParagonu(v, kat, dost, ceny, dni, moje, pole, filtr) {
     const opis = `${zas.typ_opakowania} ${licz(zas.opakowanie)} ${zas.jednostka}`;
     return Object.entries(ceny[z]).map(([q, c]) => {
       const ile = zamowione(v, dost, z, +q);
-      const wiersze = dniDost.map((i) => {
-        const n = i === null ? ile : zamowione(v, dost, z, +q, i);
-        const dzien = i === null ? "" : `<span class="par-dzien">dostawa ${esc(dni[i].dzien)} ${+dni[i].data.slice(8)}.${dni[i].data.slice(5, 7)}</span>`;
-        return `<div class="par-wiersz par-ile">${dzien}<span class="par-mnoz">${i === null ? pole(z, q, n) : pole(z, q, n, i)} op. × ${zl2(c)}</span>
-          <b class="par-kwota">${n ? zl2(n * c) : "–"}</b></div>`;
-      }).join("");
+      // bez dni dostaw: jeden wiersz (pole × cena, kwota); z dniami: siatka małych pól pn…nd, a pod nią razem i kwota
+      let wiersze;
+      if (!dni) wiersze = `<div class="par-wiersz par-ile"><span class="par-mnoz">${pole(z, q, ile)} op. × ${zl2(c)}</span><b class="par-kwota">${ile ? zl2(ile * c) : "–"}</b></div>`;
+      else {
+        const ds = dniDost.map((i) => `<label class="par-dz"><span>${esc(dni[i].dzien)}</span><small>${+dni[i].data.slice(8)}.${dni[i].data.slice(5, 7)}</small>${pole(z, q, zamowione(v, dost, z, +q, i), i, `dostawa ${dni[i].dzien} ${+dni[i].data.slice(8)}.${dni[i].data.slice(5, 7)}`)}</label>`).join("");
+        wiersze = `<div class="par-dni" style="--dni:${dniDost.length}">${ds}</div>
+          <div class="par-wiersz par-ile"><span class="par-mnoz">razem ${licz(ile)} op. × ${zl2(c)}</span><b class="par-kwota">${ile ? zl2(ile * c) : "–"}</b></div>`;
+      }
       return `<div class="par-poz ${ile ? "wybrany" : ""}"><div class="par-wiersz"><span class="par-nazwa">${ile ? "✓ " : ""}${nazwaPoz(z, q)}${r ? ` <span class="par-rabat">−${Math.round(r * 100)}%</span>` : ""}</span></div>
         <small class="par-opis">${esc(opis)} · w magazynie: ${ulamek(stan(v, z, +q))}</small>${wiersze}</div>`;
     }).join("");
@@ -466,20 +468,23 @@ function oknoSklepu(c, s, { poZapisie = false } = {}) {
       widok === "dowoz" ? `Dni dostaw: ${DNI.filter((n, i) => x.dni_dostaw.includes(i)).join(" ")}` : "",
       dni && x.minimalne_zamowienie ? `Dostawa poniżej ${zl(x.minimalne_zamowienie)} nie zostanie zrealizowana.` : "",
     ].filter(Boolean).map((t) => `<p class="par-uwaga">${t}</p>`).join("");
-    const pole = (z, q, ile, dz) => `<input type="number" class="krotkie par-pole" min="0" step="1" value="${ile}" data-zmiana="ilosc" data-d="${esc(dost)}" data-z="${esc(z)}" data-q="${q}"
-      ${dz === undefined ? "" : `data-dz="${dz}"`} aria-label="Ilość opakowań" ${edycja ? "" : "disabled"}>`;
+    const pole = (z, q, ile, dz, opis = "") => `<input type="number" class="krotkie par-pole" min="0" step="1" value="${ile}" data-zmiana="ilosc" data-d="${esc(dost)}" data-z="${esc(z)}" data-q="${q}"
+      ${dz === undefined ? "" : `data-dz="${dz}"`} aria-label="Ilość opakowań${opis ? `, ${esc(opis)}` : ""}" title="${esc(opis)}" ${edycja ? "" : "disabled"}>`;
     const pusty = !filtr.size ? `<p class="pp-par-pusty">${widok === "gazetka" ? `W tym tygodniu ${esc(dost)} nie ma gazetki.`
       : widok === "koszyk" || widok === "dowoz" ? "Koszyk w tym sklepie jest pusty. Towary dodasz w działach sklepu." : "W tym dziale sklep nie ma dziś towaru."}</p>` : "";
     const podpis = { dzial: s.dzialy?.length ? s.dzialy.join(", ").toUpperCase() : "OFERTA", koszyk: "KOSZYK TYGODNIA", dowoz: "DOSTAWA", gazetka: "GAZETKA" }[widok] || "OFERTA";
     tresc = `<div class="pp-paragon par-sklep" role="document">${naglowekParagonu(v, dost, podpis, dni)}${uwagi}
       ${filtr.size ? pozycjeParagonu(v, kat, dost, ceny, dni, moje, pole, filtr) : ""}${pusty}
-      <div class="pp-par-suma"><span>SUMA PLN</span><b>${zl2(wartosc)}</b></div>
-      <p class="par-podsum">W koszyku: ${licz(zam.length)} ${zam.length === 1 ? "pozycja" : "pozycji"}${widok === "dzial" && zam.length > wTymDziale ? `, w tym dziale ${licz(wTymDziale)}` : ""}${progTxt ? `<br>${progTxt}` : ""}</p>
-      <p class="pp-par-nota">Ilości wpisujesz w opakowaniach. „W magazynie” to to, co już masz.</p>${zabParagonu}</div>`;
+      <p class="pp-par-nota">Ilości wpisujesz w opakowaniach. „W magazynie” to to, co już masz.</p>
+      <div class="par-stopka"><div class="pp-par-suma"><span>SUMA PLN</span><b>${zl2(wartosc)}</b></div>
+      <p class="par-podsum">W koszyku: ${licz(zam.length)} ${zam.length === 1 ? "pozycja" : "pozycji"}${widok === "dzial" && zam.length > wTymDziale ? `, w tym dziale ${licz(wTymDziale)}` : ""}${progTxt ? `<br>${progTxt}` : ""}</p></div>${zabParagonu}</div>`;
     if (edycja && zam.length) przyciski = `${przyciskiBazowe}<button class="btn pom" data-par="kup">Kupuję · ${zl2(wartosc)}</button>`;
   }
   if (poZapisie && !otwarteOkno(tytul)) return c.rysuj();
+  const przewiniecie = document.querySelector(".par-okno .ot")?.scrollTop || 0;   // odświeżenie wymienia zawartość okna – lista zostaje na swoim miejscu
   const z = okno(tytul, tresc, { przyciski, klasa: "pp-okno-paragon par-okno", styl: 0, poZamknieciu: () => { if (SKLEP !== s) return; const zm = s.zmieniono; SKLEP = null; if (zm) c.rysuj(); } });
+  const ot = z?.querySelector(".par-okno .ot");
+  if (ot && przewiniecie && !s.potwierdzenie) ot.scrollTop = przewiniecie;
   if (z && !z._paragon) {   // przyciski „Kupuję” / „Wróć”: nasłuch na oknie, bo odświeżenie wymienia tylko jego zawartość
     z._paragon = true;
     z.addEventListener("click", (e) => {

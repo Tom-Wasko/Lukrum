@@ -345,3 +345,29 @@
 .sw-pora-etykieta { position: absolute; right: 8px; top: 8px; z-index: 3; pointer-events: none; }
 .sw-pora-znak { display: inline-block; padding: 2px 9px; border: 2px solid var(--tusz); border-radius: 999px; background: var(--papier); color: var(--tusz); font-size: .8rem; font-weight: 700; }
 @media (prefers-reduced-motion: reduce) { .sw-pora-warstwa, .sw-pora-lampy { transition: none; } }
+/* podróż 03/poprawki-okienek: paragon – krój kasowy, dni dostaw w jednym rzędzie, przyklejona suma, przycisk w arkuszu */
+.pp-paragon.par-sklep { font-family: "Courier New", ui-monospace, monospace; line-height: 1.4; }
+.okno.par-okno { display: flex; flex-direction: column; max-height: calc(100dvh - 60px); }
+.par-okno .ot { flex: 1 1 auto; min-height: 0; max-height: none; overflow-y: auto; }
+.par-okno .pp-paragon { margin-bottom: 0; border-bottom: 0; box-shadow: none; }
+.par-okno .pp-par-zab { display: none; }
+.par-okno .ost { position: relative; flex: none; margin-bottom: 14px; padding: 10px 22px 14px; border: 2px solid var(--g-czern); border-top: 2px dashed var(--g-czern);
+  background: var(--g-biel); box-shadow: 5px 6px 0 color-mix(in srgb, var(--g-czern) 30%, transparent); }
+.par-okno .ost::after { content: ""; position: absolute; left: -2px; right: -2px; bottom: -14px; height: 14px;
+  background: linear-gradient(-45deg, transparent 7px, var(--g-biel) 0) 0 0/14px 14px repeat-x, linear-gradient(45deg, transparent 7px, var(--g-biel) 0) 0 0/14px 14px repeat-x;
+  filter: drop-shadow(0 2px 0 var(--g-czern)); }
+.par-sklep .par-stopka { position: sticky; bottom: 0; margin: 10px -22px 0; padding: 0 22px 6px; background: var(--g-biel); }
+.par-sklep .par-stopka .pp-par-suma { margin: 0 0 4px; font-family: inherit; }
+.par-sklep .par-stopka .par-podsum { margin: 0; text-align: center; }
+.par-sklep .par-dni { display: grid; grid-template-columns: repeat(var(--dni, 7), minmax(0, 1fr)); gap: 3px; margin-top: 4px; }
+.par-sklep .par-dz { display: grid; justify-items: center; gap: 0; font-size: .82em; line-height: 1.2; }
+.par-sklep .par-dz small { opacity: .85; font-size: .9em; }
+.par-sklep .par-dni input.par-pole { width: 100%; min-width: 0; height: 32px; margin-top: 2px; padding: 2px 0; text-align: center; font-size: 1.1em; -moz-appearance: textfield; appearance: textfield; }
+.par-sklep input.par-pole::-webkit-outer-spin-button, .par-sklep input.par-pole::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.par-sklep .par-ile { margin-top: 4px; }
+.par-sklep .par-mnoz { white-space: nowrap; }
+/* tablica wydarzeń: nagłówek każdej opcji (litera, „domyślna”, „wybrano”) jednakowy – bez ramki i tła ogólnego `.kg` */
+.zd-opcja .kg { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; min-height: 44px; padding: 10px 14px; margin: 0; border: 0; border-bottom: 1px solid var(--linia);
+  border-radius: 0; background: transparent; box-shadow: none; }
+.zd-opcja .zd-opcja-nazwa { margin-right: auto; font-size: 12px; letter-spacing: .04em; }
+@media (max-width: 480px) { .par-sklep .par-ile { flex-wrap: nowrap; } .par-sklep .par-stopka { margin: 10px -14px 0; padding: 0 14px 6px; } }

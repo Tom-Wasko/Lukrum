@@ -183,6 +183,12 @@ function htmlKonta() {
     ${wyl ? `<div class="pp-konto-wyloguj">${wyl.outerHTML}</div>` : ""}`;
 }
 
+/** Ta sama koperta z listem co po kliknięciu ikony w pasku (poczta we wnętrzu otwiera ją tędy, nie starym oknem „wyslij”). */
+export function otworzListZDecyzjami(c) {
+  if (c.v.gra.zakonczona) return toast("Gra zakończona – nie ma już decyzji do wysłania.");
+  pokaz("wyslij", c);
+}
+
 // wszystkie okna pulpitu rysują się tą samą drogą – przy odświeżeniu widoku otwarte okno aktualizuje się w miejscu
 function pokaz(rodzaj, c) {
   const v = c.v;
@@ -399,10 +405,7 @@ export const AKCJE_PULPITU = {
     zamknijPodreczne();
     return przelaczRadio();
   },
-  "pp-wyslij": (e, c) => {
-    if (c.v.gra.zakonczona) return toast("Gra zakończona – nie ma już decyzji do wysłania.");
-    pokaz("wyslij", c);
-  },
+  "pp-wyslij": (e, c) => otworzListZDecyzjami(c),
   "pp-kop-popraw": (e, c) => { e.preventDefault?.(); zamknijOkno(); c.idz(e.dataset.z, "decyzje"); },
   "pp-konto": (e, c) => pokaz("konto", c),
   "pp-koszyk": (e, c) => pokaz("zakupy", c),
