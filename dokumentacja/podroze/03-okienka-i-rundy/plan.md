@@ -79,9 +79,9 @@ wnętrza Z4, budynki Z3, nawiązania Z10, wizyty wujka Z13/Z14, UPRP Z24) czeka.
 | później | Z18 | przewodnik nauczyciela (po `03/lekcja`, bo opisze zmierzony przebieg) |
 
 Lista gotowości do testu (odhaczam po dowodzie):
-- [ ] runda (decyzje drużyn + zamknięcie przez MG) w ≤ 15 min, cała lekcja z omówieniem w 45 min
-- [ ] 30 graczy naraz przez `hostuj` bez błędów i z odpowiedzią < 1 s (pomiar)
-- [ ] logowanie klasy bez kont Microsoft (kody drużyn) działa i jest opisane dla nauczyciela
-- [ ] gra działa w Chrome/Edge na szkolnym laptopie 1366×768 i na telefonie (Z6)
-- [ ] gracz widzi skutki swoich decyzji (Z42), zeszyt bez przewijania (Z44)
+- [x] runda ≤ 15 min (szacunek): przeliczenie 8 drużyn 0,6 s; lekcje 1–4 mieszczą się w 25 min gry (`wiedza/analizy/czas-lekcji.md`); pomiar na żywej klasie przy teście
+- [ ] 30 graczy naraz: 0 błędów, po starcie 20–190 ms; start całej klasy naraz 3–4 s (pytanie do szefa: serwer wieloprocesowy)
+- [x] logowanie klasy hasłami z kartek: limity logowania z jednego IP poprawione (`test_klasa_naraz.py`), INSTRUKCJA „Dla mistrza gry”
+- [ ] 1366×768 i telefon: część poprawiona (03/wyglad), reszta kontrastów to propozycje w `przeglad-wygladu-23-11.md`
+- [ ] skutki widoczne (Z42) ✓ scalone; zeszyt kartki (Z44) – poprawka gęstości stron w toku
 - [ ] przewodnik nauczyciela (Z18), pełne testy zielone, scalenie do `main`
