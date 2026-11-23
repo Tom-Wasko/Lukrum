@@ -92,7 +92,7 @@ function daneKebabu(c, punkty) {
   const dekor = { sciany: "podstawowy", szyld: "podstawowy", dodatki: "podstawowy", meble: "podstawowy", ...(lok.dekor || {}) };
   M.mowiacy = mowiacy;
   return { typ: TYP_STREFY[o.strefa] || "pawilon", poziom: poziomSprzetu(v, lok.id), dekor, szyld: String(v.dashboard.nazwa || "").toUpperCase().slice(0, 22),
-    menu: dania, obsluga, mowiacy, wujek, ocena: wn.wskazniki?.ocena ?? lok.ocena, punkty };
+    menu: dania, obsluga, mowiacy, wujek, ocena: wn.wskazniki?.ocena ?? lok.ocena, tlok: wn.stan?.tlok, punkty };
 }
 
 function scenaMiejscaKebab(c, m) {

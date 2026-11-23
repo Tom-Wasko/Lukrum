@@ -46,10 +46,18 @@ const SZYLD_KOLOR = { podstawowy: "var(--g-czern)", prl: "var(--akcent)", nowocz
 const SUFIT = { kamienica: 20, pawilon: 20, dworzec: 18 };
 const GOSCIE = { kamienica: ["gosc-turystka", "gosc-student"], pawilon: ["gosc-sasiadka", "gosc-student"], dworzec: ["gosc-podrozny", "gosc-student"] };
 
+/** Poziom tłoku z obciążenia załogi 0–1 (progi jak `tlok_prog` w dane/mapa/klienci.yaml): kolejka gości, napis i znak. */
+export function poziomTloku(t) {
+  if (t == null || Number.isNaN(Number(t))) return null;
+  if (t >= 0.85) return { poziom: "duzy", napis: "duży", znak: "▲", kolejka: 5 };
+  if (t >= 0.6) return { poziom: "sredni", napis: "średni", znak: "–", kolejka: 3 };
+  return { poziom: "maly", napis: "mały", znak: "✓", kolejka: 1 };
+}
+
 /**
  * Wnętrze działającego kebaba.
  * d: { typ, poziom (1–3), dekor {sciany, szyld, dodatki, meble}, szyld (napis), menu [{nazwa, cena, brak}], obsluga [{id, imie, miejsce, mina}],
- *      mowiacy [{kto, imie, tekst, rodzaj, klik}], wujek {tekst}|null, ocena, punkty {klucz: {…hot}} }
+ *      mowiacy [{kto, imie, tekst, rodzaj, klik}], wujek {tekst}|null, ocena, tlok (0–1), punkty {klucz: {…hot}} }
  */
 export function scenaKebabu(d) {
   const p = Math.min(3, Math.max(1, d.poziom || 1)), dk = d.dekor, typ = d.typ;
@@ -92,6 +100,17 @@ export function scenaKebabu(d) {
     s += osobaSvg(document.getElementById(`g-postacie-${plik}`) ? plik : GOSCIE[typ][0], cx, 588, 1, dm?.klik === "propozycja" ? "zwykla" : MINA_KL(d.ocena), i);
     osoby.push({ cx, stopy: 588, nazwa: dm?.imie || "Gość", d: dm, nr: i });
   });
+  // tłok (podróż 03/tłok): kolejka gości przy ladzie rośnie z obciążeniem załogi, a stan mówi też napis (nie sam kolor)
+  const T = poziomTloku(d.tlok);
+  if (T) {
+    const zajete = new Set(osoby.map((o) => o.cx));
+    [545, 425, 305, 185, 95].slice(0, T.kolejka).forEach((cx, i) => {
+      if (zajete.has(cx)) return;
+      s += osobaSvg(GOSCIE[typ][(i + 1) % 2], cx, 588 - (i % 2) * 6, 1, T.poziom === "duzy" ? "zla" : "zwykla", 4 + i);
+    });
+    s += `<g class="tlok-znak" data-tlok="${T.poziom}"><rect x="30" y="312" width="164" height="32" rx="6" fill="var(--g-tablica)" stroke="var(--g-czern)" stroke-width="2"/>`
+      + napis(112, 334, `Tłok: ${T.napis} ${T.znak}`, 16, "var(--g-biel)", "gruby", 'text-anchor="middle" letter-spacing=".5"') + "</g>";
+  }
   if (d.wujek) { s += osobaSvg("wujek", 1148, 594, 1, "dobra", 3); osoby.push({ cx: 1148, stopy: 594, nazwa: "Wujek", d: { ...d.wujek, rodzaj: "wujek" }, nr: "wujek" }); }
   const P = d.punkty;
   let h = "";

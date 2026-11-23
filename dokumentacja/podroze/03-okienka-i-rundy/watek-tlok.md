@@ -29,3 +29,38 @@
   `silnik.dane sprawdz` czyste.
 
 ## Raport
+
+## Raport wyko (23.11.2026)
+
+**Zrobione**
+1. **Tłok → opinia.** `popyt.py` zapisuje obciążenie lokalu dzień po dniu (`obsluga.obciazenie`, najbardziej zajęte
+   stanowisko: kasa albo kuchnia). `opinie.py`: `obciazenie_dnia`, `kara_za_tlok` i nowy powód `tlok` w ocenie tygodnia
+   (kara × waga „czekanie” grup). Parametry `opinie.tlok_prog: 0.85` i `opinie.tlok: 0.3` w `dane/mapa/klienci.yaml`
+   (założenie; brak publicznego pomiaru czasu oczekiwania w gastronomii). W schemacie domyślnie wyłączone
+   (`tlok_prog` 1, `tlok` 0), więc `dane_zamrozone` bez zmian. Nowe komentarze gości „tlok”.
+2. **Wyposażenie → opinia: już działało** (`opinie.py`, powód `wyposazenie` = `mnoznik_wyposazenia` + dekor).
+   „+0,06 karty” z `boty.yaml` to wynik końcowy firmy, nie ocena gości. Udogodnienia (benefity załogi) wchodzą tylko
+   przez nastrój załogi. **Niczego nie dodawałem, żeby nie liczyć dwa razy**; test pilnuje zestawu powodów.
+3. **Widoczność.** Wnętrze kebaba: kolejka gości 1/3/5 + napis „Tłok: mały ✓ / średni – / duży ▲”
+   (`swiat/sceny.js`, `swiat/swiat.js`). Księga gości: wiersz „Czekanie” obejmuje `tlok`. Klienci: kolumna „Tłok”.
+4. **Z42:** `dokumentacja/wiedza/analizy/ukryte-mechaniki.md` (13 wierszy; w grze tylko 1–2, reszta propozycje).
+5. `dokumentacja/funkcje/Tlok.md`, INSTRUKCJA i README zaktualizowane.
+
+**Balans** (`balans.symuluj 12 sredni 7`, przed `tlok: 0`, po 0,3): zrównoważony 100337→100508, tani 78772→78121,
+premium 51788→53368 (+3,0%), agresywny 17493→17412, naśladowca 81395→80629; średnia 65957→66007 (+0,1%). W ±5%.
+
+**Dowody**
+- `pytest -q -p no:cacheprovider` (pełne): `937 passed in 382.89s`
+- `ruff check .`: `All checks passed!`; `node --check` sceny.js, swiat.js, ksiega.js, klienci.js: ok
+- `silnik.dane sprawdz`: `Dane w porządku`
+- nowe testy `testy/rynek/test_tlok_opinie.py` (3); w `test_klienci_opinie.py` do zestawu powodów dopisany `tlok`
+- zrzuty: `_robocze/zrzuty-tlok/` (poza gitem; mały/duży × jasny/ciemny, duży w palecie wysokiej), serwer zatrzymany.
+  Tłok w zrzutach wymuszony podmianą odpowiedzi API w przeglądarce (w grze pokazowej obciążenie jest niskie).
+
+**Uwagi**
+- Poza briefem dotknięte: `ksiega.js`, `klienci.js` (powód `tlok`), `schematy.py` (pola opinii).
+- Siła tłoku mała (≈ −0,3 ★ przy pełnym tłoku cały tydzień); łatwo zmienić w YAML.
+- `test_kasyno::test_mistrz_gry_widzi_klub` nie padł.
+
+## Propozycje
+- Wiersze 3–13 z `ukryte-mechaniki.md` (najtańsze: podpowiedź o zaufaniu do oceny i o wrażliwości grup).

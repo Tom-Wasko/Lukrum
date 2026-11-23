@@ -126,6 +126,8 @@ opinie:
   cena: 2.0              # za każde +100% ceny ponad cenę preferowaną strefy (taniej – plus)
   cena_limit: 0.6        # największy wpływ ceny w jedną stronę (gwiazdki)
   kolejka: 4.0           # × udział klientów, którzy odeszli z kolejki (pracownicy, sprzęt, kasa) × czekanie grup
+  tlok_prog: 0.85        # średnie obciążenie najbardziej zajętego stanowiska, od którego goście czekają (zał., 0–1)
+  tlok: 0.3              # × udział przedziału prog–100% × czekanie grup: pełny tłok cały tydzień ≈ −0,3★ (zał.)
   brak: 3.0              # × udział klientów odesłanych z braku dania (składniki, stanowisko)
   pomylki: 2.5           # × udział pomyłek w sprzedaży (słabiej niż kolejka: 10% pomyłek ≈ −0,25★)
   wyposazenie: 2.0       # × (mnożnik wyposażenia − 1)
@@ -160,6 +162,10 @@ komentarze:
     - Stałem w kolejce tak długo, że dostałem pocztą wezwanie na wybory.
     - Kolejka sięgała do sąsiedniej strefy. Odpuściłam.
     - Przyszedłem głodny, wyszedłem głodny, ale za to starszy.
+  tlok:
+    - Dobre, ale czekałem tyle, że zdążyłem przeczytać cały regulamin.
+    - Obsługa biegała, jak mogła. Kolejka i tak była dłuższa.
+    - Za ladą kipiało, my staliśmy w ścisku. Po jedzenie warto, na wesele nie.
   brak:
     - Chciałam falafel, a usłyszałam „dziś nie ma”. Wczoraj też nie było.
     - Połowa menu wykreślona markerem. Fajne bazgroły.

@@ -8,7 +8,7 @@ import { lokalWybrany } from "../zakladki/lokal_wybor.js";
 // wymiar → powody silnika, które się na niego składają, i miejsce, w którym gracz może coś z tym zrobić
 const WYMIARY = [
   { nazwa: "Smak", powody: ["jakosc"], cel: "dostawcy", gdzie: "Hurtownie: lepsze składniki", zle: "goście narzekają na jakość dań", dobrze: "goście chwalą jedzenie" },
-  { nazwa: "Czekanie", powody: ["kolejka"], cel: "stanowiska", gdzie: "Rożen: stanowiska i ludzie", zle: "część gości odeszła z kolejki", dobrze: "nikt nie odszedł z kolejki" },
+  { nazwa: "Czekanie", powody: ["kolejka", "tlok"], cel: "stanowiska", gdzie: "Rożen: stanowiska i ludzie", zle: "przy ladzie był tłok: goście czekali albo odeszli z kolejki", dobrze: "nikt nie odszedł z kolejki" },
   { nazwa: "Cena", powody: ["cena"], cel: "oferta", gdzie: "Tablica: ceny", zle: "drożej niż w okolicy", dobrze: "ceny nie odstraszają" },
   { nazwa: "Obsługa", powody: ["pomylki", "brak"], cel: "zespol", gdzie: "Zaplecze: grafik i szkolenia", zle: "pomyłki w zamówieniach albo brak dań z menu", dobrze: "bez pomyłek i braków" },
   { nazwa: "Wnętrze", powody: ["wyposazenie"], cel: "dekor", gdzie: "Park handlowy: wyposażenie i wystrój", zle: "", dobrze: "goście doceniają wyposażenie i wystrój" },

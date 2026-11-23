@@ -98,7 +98,7 @@ function wynikiLokale(k, kat, P) {
 }
 
 // ocena lokali z opinii klientów i jej powody (gwiazdki za jakość, cenę, kolejkę…)
-const POWODY = { jakosc: "Jakość", cena: "Cena", kolejka: "Kolejka", brak: "Brak dań", pomylki: "Pomyłki", wyposazenie: "Wyposażenie" };
+const POWODY = { jakosc: "Jakość", cena: "Cena", kolejka: "Kolejka", tlok: "Tłok", brak: "Brak dań", pomylki: "Pomyłki", wyposazenie: "Wyposażenie" };
 const gw = (x) => x == null ? "–" : x.toFixed(1).replace(".", ",");
 function wynikiOpinie(v, k) {
   const o = v.wyniki?.opinie;
@@ -109,7 +109,7 @@ function wynikiOpinie(v, k) {
     Object.entries(o).map(([id, x]) => [esc(nazwa[id] || id), `★ ${gw(x.ocena_tygodnia)}`, ...Object.keys(POWODY).map((p) => znak(x.powody[p])),
       licz(x.nowe), `★ ${gw(x.ocena)} (${licz(x.liczba)})`, `× ${licz(x.mnoznik, 2)}`]), { klasy: ["l"], sortuj: false })
     + `<p class="podpowiedz">Ocena tygodnia to ocena wyjściowa ± powody (w gwiazdkach): jakość dań, cena wobec cen w strefie, klienci odesłani
-      z kolejki albo bez dania, pomyłki, wyposażenie. Ocena na mapie to średnia z opinii – nowe ważą więcej, stare z czasem tracą znaczenie.
+      z kolejki albo bez dania, tłok przy pełnej załodze, pomyłki, wyposażenie. Ocena na mapie to średnia z opinii – nowe ważą więcej, stare z czasem tracą znaczenie.
       Im więcej opinii, tym mocniej ocena działa na klientów: lokal z oceną powyżej przeciętnej przyciąga ich więcej.</p>`;
 }
 

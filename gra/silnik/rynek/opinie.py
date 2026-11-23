@@ -3,7 +3,7 @@
 Ocena tygodnia lokalu (1–5★) bierze się z przeżyć jego klientów:
 
     ocena = start + jakość (gwiazdki dań ponad 2 × waga jakości grup) ± cena wobec ceny strefy (z limitem)
-            − kolejka (udział odesłanych z kolejki × waga czekania grup) − brak dań − pomyłki + wyposażenie
+            − kolejka (udział odesłanych z kolejki × waga czekania grup) − tłok (czekanie przy pełnej załodze) − brak dań − pomyłki + wyposażenie
 
 Opinie wystawia ułamek obsłużonych klientów (pojedyncza opinia ma rozrzut, średnia tygodnia – rozrzut / √n), a ocena
 lokalu to średnia krocząca: waga starych opinii co tydzień × zanik. Ocena działa na popyt zamiast dawnego zadowolenia
@@ -35,6 +35,25 @@ def rodzaj_utraty(przyczyna: str) -> str:
     return "kolejka" if przyczyna in KOLEJKA else "brak"
 
 
+def obciazenie_dnia(o: dict) -> float:
+    """Obciążenie lokalu w dniu (0–1): najbardziej zajęte stanowisko (kasa albo kuchnia) – godziny potrzebne
+    przez pojemność. Ponad 1 (brak rąk) liczy już `kolejka`, tu ucięte do 1."""
+    pary = [(o["potrzebne_kasy"], o["pojemnosc_kasy"])]
+    pary += [(h, o["pojemnosc_stanowisk"][nr]) for nr, h in o["potrzebne_stanowisk"].items()]
+    return round(min(1.0, max((h / poj for h, poj in pary if poj > 0), default=0.0)), 4)
+
+
+def kara_za_tlok(dane: Dane, obciazenie: list[float] | None) -> float:
+    """Udział kary za tłok 0–1: średnie obciążenie dni ponad `tlok_prog` rozłożone na przedział do 100%.
+    Goście, którzy doczekali się obsługi, ale długo czekali (dane: klienci.yaml → opinie → tlok_*)."""
+    u = ustawienia(dane)
+    prog = u.get("tlok_prog", 1.0) if u else 1.0
+    if not obciazenie or prog >= 1:
+        return 0.0
+    sr = sum(obciazenie) / len(obciazenie)
+    return max(0.0, (sr - prog) / (1 - prog))
+
+
 def zaufanie(dane: Dane, lok: Lokal) -> float:
     u = ustawienia(dane)
     return lok.waga_opinii / (lok.waga_opinii + u["n0"]) if u and lok.ocena is not None else 0.0
@@ -56,7 +75,7 @@ def gwiazdki_jakosci(dane: Dane, jakosc: tuple[float, float, float]) -> float:
 
 
 def ocena_tygodnia(dane: Dane, lokal: str, wynik: dict, oferty: dict[str, dict]) -> tuple[float, dict] | None:
-    """(ocena 1–5, powody {jakosc, cena, kolejka, brak, pomylki, wyposazenie: gwiazdki}) z wyniku lokalu
+    """(ocena 1–5, powody {jakosc, cena, kolejka, tlok, brak, pomylki, wyposazenie: gwiazdki}) z wyniku lokalu
     (popyt.rynek_lokali: klienci.lokale[…]) i ofert jego dań; bez sprzedaży – None."""
     u = ustawienia(dane)
     ob = wynik["obsluga"]
@@ -74,6 +93,7 @@ def ocena_tygodnia(dane: Dane, lokal: str, wynik: dict, oferty: dict[str, dict])
     powody = {"jakosc": u["jakosc"] * wagi["jakosc"] * (gw - 2),
               "cena": max(-u["cena_limit"], min(u["cena_limit"], -u["cena"] * (r - 1))),
               "kolejka": -u["kolejka"] * wagi["czekanie"] * ob["kolejka"] / popyt,
+              "tlok": -u.get("tlok", 0.0) * wagi["czekanie"] * kara_za_tlok(dane, ob.get("obciazenie")),
               "brak": -u["brak"] * ob["brak"] / popyt,
               "pomylki": -u["pomylki"] * ob["pomylki"] / n,
               "wyposazenie": u["wyposazenie"] * (wyp - 1) + (dk.gwiazdki_oceny(dane, dekor) if dekor else 0.0)}
@@ -153,5 +173,5 @@ def publiczne(firmy: dict[str, Firma]) -> dict[str, dict]:
             for n, f in firmy.items() for lok in f.lokale if lok.ocena is not None}
 
 
-__all__ = ["gwiazdki_jakosci", "komentarze", "mnoznik", "ocena_tygodnia", "po_rundzie", "publiczne", "rodzaj_utraty",
+__all__ = ["gwiazdki_jakosci", "kara_za_tlok", "komentarze", "obciazenie_dnia", "mnoznik", "ocena_tygodnia", "po_rundzie", "publiczne", "rodzaj_utraty",
            "ustawienia", "zaufanie"]

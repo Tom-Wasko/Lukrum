@@ -1112,6 +1112,8 @@ class UstawieniaOpinii(Schemat):
     cena: float = Field(ge=0)
     cena_limit: float = Field(ge=0)
     kolejka: float = Field(ge=0)
+    tlok_prog: float = Field(default=1.0, ge=0, le=1)   # domyślnie 1 = tłok nie obniża oceny
+    tlok: float = Field(default=0.0, ge=0)
     brak: float = Field(ge=0)
     pomylki: float = Field(ge=0)
     wyposazenie: float = Field(ge=0)
