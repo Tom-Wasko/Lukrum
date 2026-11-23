@@ -47,10 +47,10 @@ def test_sprawa_w_lokalu_po_wyborze_zwija_sie_do_paska_ze_zmien():
     assert ".zd-odpowiedziano" in _tekst("styl.css")
 
 
-def test_zeszyt_przewija_kolkiem_i_klawiatura():
+def test_zeszyt_przewraca_kartki_kolkiem_i_klawiatura():
     zeszyt = _tekst("pulpit", "zeszyt.js")
     assert 'roz.addEventListener("wheel"' in zeszyt
-    assert "PageDown" in zeszyt and "ArrowDown" in zeszyt
+    assert "PageDown" in zeszyt and "ArrowRight" in zeszyt
 
 
 def test_blok_czytelnosci_zatrudniania_jest_na_koncu_stylu():
