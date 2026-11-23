@@ -212,34 +212,35 @@ Wskazówki: oceniaj proces, nie samo miejsce; drużynie ze słabym startem zalic
 
 ## 6. Mechanika a podstawa programowa
 
-**Uwaga.** Ta tabela nie jest jeszcze sprawdzona z tekstem rozporządzenia. Autor przewodnika nie miał dostępu do
-internetu, więc **nie wpisał numerów wymagań**. Tam, gdzie piszemy „do sprawdzenia”, trzeba otworzyć rozporządzenie
-(spis źródeł niżej) i dopisać numer, np. „WOS ZP, wymaganie …”. Tematy w tabeli to te z `SCENARIUSZE_LEKCJI.md`.
+Numery to oznaczenia wymagań szczegółowych z podstawy programowej, **zakres podstawowy**, szkoła ponadpodstawowa
+(rok szkolny 2025/26), według serwisu Zintegrowanej Platformy Edukacyjnej (źródła [1] i [2]). Skróty są własnymi
+słowami, nie cytatami. Przedmiot „biznes i zarządzanie” (BiZ) wprowadziło rozporządzenie zmieniające, Dz.U. 2023
+poz. 314 (źródło [3]). Numer rozporządzenia bazowego o podstawie programowej: do sprawdzenia.
 
-Dokument: rozporządzenie Ministra Edukacji Narodowej z 30 stycznia 2018 r. w sprawie podstawy programowej kształcenia
-ogólnego dla liceum ogólnokształcącego, technikum oraz branżowej szkoły II stopnia (Dz.U. 2018 poz. 467 – numer
-publikatora do sprawdzenia w źródle [1]). Przedmiot „biznes i zarządzanie” w nowej podstawie: do sprawdzenia
-(źródło [2]).
+**Ważne:** zakres podstawowy wiedzy o społeczeństwie (WOS) nie ma treści ekonomicznych o firmie. Tam, gdzie wpisano
+„brak”, gra nie ma w tej podstawie odpowiednika. Rentowność i próg rentowności są dopiero w zakresie rozszerzonym BiZ.
 
-| Mechanika w LUKRUM | Lekcja | Wiedza o społeczeństwie (liceum) | Biznes i zarządzanie / przedsiębiorczość |
+| Mechanika w LUKRUM | Lekcja | Wiedza o społeczeństwie (zakres podstawowy) | Biznes i zarządzanie (zakres podstawowy) |
 |---|---|---|---|
-| Kapitał początkowy, koszty stałe i zmienne, rezerwa | 1, 2 | do sprawdzenia | do sprawdzenia |
-| Wybór lokalu, rynek lokalny, klient | 1, 3 | do sprawdzenia | do sprawdzenia |
-| Bank, konto firmowe, kredyt, debet | 1 | do sprawdzenia | do sprawdzenia |
-| Przychód, dochód, marża, próg rentowności | 2 | do sprawdzenia | do sprawdzenia |
-| Opinia klientów, marketing, grupa docelowa | 3 | do sprawdzenia | do sprawdzenia |
-| Umowa o pracę i zlecenie, Kodeks pracy, PIP | 4 | do sprawdzenia (prawa pracownika) | do sprawdzenia |
-| Podatki, biuro rachunkowe, urzędy | 1, 4, 5 | do sprawdzenia | do sprawdzenia |
-| Praca zespołowa, podział ról, wspólna decyzja | wszystkie | do sprawdzenia | do sprawdzenia |
-| Instytucje państwa (urząd skarbowy, sanepid, PIP) | 5 | do sprawdzenia | do sprawdzenia |
+| Kapitał początkowy, koszty stałe i zmienne, rezerwa | 1, 2 | brak | VI.7 (źródła finansowania), VI.8 (efekty finansowe z przychodów i kosztów) |
+| Wybór lokalu, rynek lokalny, klient | 1, 3 | brak | III.3, III.4 (popyt i podaż), VI.3 (klienci i konkurenci), VI.6 (otoczenie, mocne i słabe strony) |
+| Bank, konto firmowe, kredyt, debet | 1 | brak | IV.3, IV.10 (oferty banków, kredyty, realna stopa) |
+| Przychód, dochód, marża | 2 | brak | VI.8 (przychody, koszty, wynik). Rentowność i próg rentowności: tylko zakres rozszerzony, V.20 |
+| Opinia klientów, marketing, grupa docelowa | 3 | brak | VI.3 (klienci), VI.10 (zmiana pomysłu po opinii). Instrumenty marketingu: tylko zakres rozszerzony, V.19 |
+| Umowa o pracę i zlecenie, Kodeks pracy, PIP | 4 | V.4 (zobowiązania w prawie cywilnym, pośrednio) | V.9, V.10 (umowy i prawa pracownika) |
+| Podatki, ZUS, biuro rachunkowe | 1, 4, 5 | VI.1, VI.2 (ubezpieczenia społeczne i zdrowotne) | IV.5, IV.6 (od brutto do netto), IV.7, IV.13. Formy opodatkowania i CEIDG: brak w podstawie |
+| Praca zespołowa, podział ról, wspólna decyzja | wszystkie | I.7 (rozwiązywanie konfliktów: mediacja, negocjacje), pośrednio | I.7, I.8, II.1, II.3, II.4, VI.4 |
+| Instytucje państwa (urząd skarbowy, sanepid, PIP) | 5 | V.9 (odwołanie od decyzji administracyjnej), V.11 (gdzie szukać pomocy prawnej) | III.8 (prawa konsumenta, reklamacja), III.5 |
 
 ---
 
 ## Źródła
 
-1. Internetowy System Aktów Prawnych (ISAP), wyszukiwarka aktów: <https://isap.sejm.gov.pl/> (hasło: „podstawa programowa
-   kształcenia ogólnego dla liceum”, rok 2018). Tekst rozporządzenia trzeba tu sprawdzić i wpisać numery wymagań.
-2. Ministerstwo Edukacji i Nauki, podstawy programowe: <https://www.gov.pl/web/edukacja/podstawa-programowa> (sprawdzić,
-   czy obowiązuje nowa podstawa z przedmiotem „biznes i zarządzanie” i od kiedy).
-3. Czasy lekcji i obciążenie: `../dokumentacja/wiedza/analizy/czas-lekcji.md` (w repozytorium).
-4. Instrukcja gry: `INSTRUKCJA.md` (część „Dla mistrza gry”); scenariusze: `SCENARIUSZE_LEKCJI.md`.
+1. Podstawa programowa, biznes i zarządzanie (szkoła ponadpodstawowa), Zintegrowana Platforma Edukacyjna:
+   <https://zpe.gov.pl/podstawa-programowa/szkola-ponadpodstawowa/biznes-i-zarzadzanie>
+2. Podstawa programowa, wiedza o społeczeństwie (szkoła ponadpodstawowa), Zintegrowana Platforma Edukacyjna:
+   <https://zpe.gov.pl/podstawa-programowa/szkola-ponadpodstawowa/wiedza-o-spoleczenstwie>
+3. Rozporządzenie zmieniające, które wprowadziło przedmiot „biznes i zarządzanie”, Dz.U. 2023 poz. 314:
+   <https://eli.gov.pl/eli/DU/2023/314/ogl/pol/pdf>
+4. Czasy lekcji i obciążenie: `../dokumentacja/wiedza/analizy/czas-lekcji.md` (w repozytorium).
+5. Instrukcja gry: `INSTRUKCJA.md` (część „Dla mistrza gry”); scenariusze: `SCENARIUSZE_LEKCJI.md`.
