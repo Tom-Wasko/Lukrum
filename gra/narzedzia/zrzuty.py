@@ -4,10 +4,12 @@ Dla każdego, kto nie ma rozszerzenia przeglądarki (wyko, Archi w nocy).
 Tylko biblioteka standardowa + Django.
 Loguje się bez hasła, przez sesję Django zrobioną dla podanego konta (tylko serwer lokalny).
 
-    python -X utf8 narzedzia/zrzuty.py --port 8783 --konto mg --kroki kroki.json \n        --wyjscie ../_robocze/zrzuty
+    python -X utf8 narzedzia/zrzuty.py --port 8783 --konto mg --kroki kroki.json
+        --wyjscie ../_robocze/zrzuty
 
 kroki.json: lista {"url": "/gra/<id>/<firma>"} | {"js": "kod"} | {"czekaj": sekundy}
-| {"zrzut": "nazwa"} | {"wyglad": ["bar", "jasny"]}. `js` wykonuje się na stronie (await działa), wynik idzie na ekran.
+| {"zrzut": "nazwa"} | {"wyglad": ["bar", "jasny"]}.
+`js` wykonuje się na stronie (await działa), wynik idzie na ekran.
 """
 from __future__ import annotations
 
