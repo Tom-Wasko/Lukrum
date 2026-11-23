@@ -616,8 +616,8 @@ pracownicy:   # (decyzja autora 4.11.2026) zadowolenie każdej osoby i odejścia
     zrodlo: 'Decyzja autora 7.11.2026 (silnik/ludzie/formy.py: prog_oferty, silnik/ludzie/zadowolenie.py):
       kandydat z rynku pracy odrzuca ofertę niższą niż prog_odrzucenia × pensja oczekiwana w tej formie (pół etatu,
       student – jak w formach zatrudnienia; staż bez pensji – zawsze przyjmuje); w licytacji takie oferty się nie liczą. Pensja
-      poniżej oczekiwanej obniża zadowolenie mocniej niż wyższa je podnosi: do składnika płacy (karta, nachylenie
-      0,3162) dochodzi −kara_ponizej_oczekiwanej × (1 − pensja ÷ oczekiwana), liczone co tydzień, więc spadek trwa
+      poniżej oczekiwanej obniża zadowolenie mocniej niż wyższa je podnosi: do składnika płacy (nachylenie
+      zadowolenie_osoby.wspolczynniki.placa_wzgledem_preferowanej = 0,3, okrągłe założenie LUKRUM) dochodzi −kara_ponizej_oczekiwanej × (1 − pensja ÷ oczekiwana), liczone co tydzień, więc spadek trwa
       tak długo jak niska pensja i od pierwszego tygodnia (przed poprawkami 3 przy 95% oczekiwanej: −0,016 − 0,025 = −0,041,
       osoba przy sprzęcie 2★ ok. 0,89 zamiast 0,93). Boty oferują co najmniej próg. wlaczone: false – bez odrzucania, bez
       dodatkowej kary i bez progu w ofertach botów (zachowanie sprzed kalibracji). Liczby – założenie (decyzja autora:

@@ -612,6 +612,9 @@ Postacie są własnymi interpretacjami: mówią dzisiejszym językiem o cenach k
 Mapa miasta korzysta z danych OpenStreetMap (© autorzy OpenStreetMap, licencja ODbL), a kroje pisma są na licencji
 SIL Open Font License.
 
+Pełne nawiązania, źródła liczb i prawa oraz autorzy grafik, krojów pisma i nagrań są na stronie **/zrodla**
+(w grze: ⚙ → O grze → Nawiązania i źródła, a także stopka strony „Jak grać”).
+
 ---
 
 *Pytania o zasady – do mistrza gry. Dokładne liczby i źródła mechanik są w plikach `dane/*.yaml`.*

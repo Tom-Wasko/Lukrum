@@ -16,6 +16,7 @@ from konta.role import firmy_ucznia, jest_mg, moze_firme
 
 from . import moduly
 from . import radio as radio_dane
+from . import zrodla as zrodla_dane
 from .instrukcja import instrukcja
 
 
@@ -48,6 +49,11 @@ def radio_json(request):
 def nagrania_w_radiu(request):
     """Spis nagrań radia: autor, wykonawca, rok, źródło i licencja każdego pliku (bez logowania)."""
     return render(request, "panel_gracza/nagrania_w_radiu.html", radio_dane.dla_strony())
+
+
+def zrodla(request):
+    """Nawiązania i źródła: lektury, źródła liczb i prawa, autorzy grafik, fontów, nagrań i mapy (bez logowania)."""
+    return render(request, "panel_gracza/zrodla.html", zrodla_dane.dla_strony())
 
 
 @never_cache

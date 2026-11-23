@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUKRUM – nawiązania i źródła</title>
+  <link rel="stylesheet" href="{{ statyczne }}fonty/fonty.css">
+  <link rel="stylesheet" href="{{ statyczne }}motywy/zmienne.css">
+  <link rel="stylesheet" href="{{ statyczne }}motywy/dostepnosc.css">
+  <script src="{{ statyczne }}lukrum.js"></script>
+  <style>
+    /* Strona „Nawiązania i źródła” (wątek 03/prawo, 23.11.2026): treść z dane/zrodla.yaml, kolory tylko ze zmiennych */
+    :root { --szary: color-mix(in srgb, var(--tusz) 62%, var(--papier)); --linia: color-mix(in srgb, var(--ramka) 45%, var(--papier)); }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--papier); color: var(--tusz); font: 16px/1.6 var(--font-tekst); }
+    .naglowek { display: flex; align-items: center; gap: 14px; padding: 14px 24px; background: var(--tusz); color: var(--papier); }
+    .naglowek b { font: 400 18px var(--font-gruby); }
+    .naglowek nav { margin-left: auto; display: flex; gap: 18px; flex-wrap: wrap; }
+    .naglowek a { color: var(--papier); font-weight: 600; }
+    main { max-width: 980px; margin: 0 auto; padding: 24px 16px 56px; }
+    h1 { margin: 0 0 4px; font: 400 34px/1.15 var(--font-gruby); }
+    h1 span { color: var(--akcent); }
+    .podtytul { margin: 0 0 18px; color: var(--szary); }
+    h2 { margin: 36px 0 6px; font: 400 22px var(--font-szyld); text-transform: uppercase; letter-spacing: .03em; }
+    .spis { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; padding: 0; list-style: none; }
+    .spis a { display: inline-block; padding: 6px 12px; border: 1px solid var(--linia); border-radius: 999px; background: var(--g-karta); text-decoration: none; }
+    .ramka { margin: 14px 0 18px; padding: 12px 16px; border-left: 5px solid var(--akcent); background: color-mix(in srgb, var(--akcent) 10%, var(--g-karta)); border-radius: 10px; }
+    .tabela { overflow-x: auto; border: 1px solid var(--linia); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14.5px; background: var(--g-karta); }
+    th { padding: 8px 12px; text-align: left; font: 400 13px var(--font-szyld); color: var(--papier); background: var(--tusz); }
+    td { padding: 8px 12px; border-top: 1px solid var(--linia); vertical-align: top; }
+    ul.lista { margin: 8px 0; padding-left: 22px; }
+    .liczby { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; padding: 0; list-style: none; }
+    .liczby li { padding: 8px 14px; border: 1px solid var(--linia); border-radius: 10px; background: var(--g-karta); }
+    .liczby b { font-size: 20px; }
+    a { color: var(--akcent-2); }
+    a:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+    .stopka { text-align: center; color: var(--szary); font-size: 13px; padding: 8px 16px 28px; }
+    @media print { .naglowek, .spis { display: none; } body { background: #fff; color: #000; } th { color: #000; background: #fff; border-bottom: 2px solid #000; } }
+  </style>
+</head>
+<body>
+  <header class="naglowek"><b>LUKRUM</b><nav><a href="/jak-grac">Jak grać</a><a href="/">← Moje gry</a></nav></header>
+  <main>
+    <h1>{{ tytul }}<span>.</span></h1>
+    <p class="podtytul">{{ wstep }}</p>
+    <ul class="spis" aria-label="Spis treści">
+      <li><a href="#nawiazania">Nawiązania literackie</a></li>
+      <li><a href="#liczby">Źródła liczb i prawa</a></li>
+      <li><a href="#grafiki">Grafiki i mapa</a></li>
+      <li><a href="#fonty">Kroje pisma</a></li>
+      <li><a href="#nagrania">Nagrania</a></li>
+    </ul>
+
+    <h2 id="nawiazania">Nawiązania literackie</h2>
+    <p>{{ nawiazania.opis }}</p>
+    <div class="tabela"><table>
+      <thead><tr><th scope="col">W grze</th><th scope="col">Skąd</th><th scope="col">Autor</th></tr></thead>
+      <tbody>{% for n in nawiazania.pozycje %}<tr><td>{{ n.w_grze }}</td><td>{{ n.utwor }}</td><td>{{ n.autor }}</td></tr>{% endfor %}</tbody>
+    </table></div>
+
+    <h2 id="liczby">Źródła liczb i prawa</h2>
+    <p>{{ liczby.opis }}</p>
+    <ul class="liczby" aria-label="Liczby gry według pewności">{% for p in pewnosci %}<li><b>{{ p.ile }}</b> – {{ p.nazwa }}</li>{% endfor %}</ul>
+    <div class="tabela"><table>
+      <thead><tr><th scope="col">Źródło</th><th scope="col">Do czego</th></tr></thead>
+      <tbody>{% for z in liczby.zrodla %}<tr><td><a href="{{ z.adres }}" rel="noopener" target="_blank">{{ z.nazwa }}</a></td><td>{{ z.co }}</td></tr>{% endfor %}</tbody>
+    </table></div>
+    <p>Przepisy, na które powołują się opisy liczb:</p>
+    <ul class="lista">{% for p in liczby.przepisy %}<li>{{ p }}</li>{% endfor %}</ul>
+    <p>{{ liczby.uwaga }}</p>
+
+    <h2 id="grafiki">Grafiki i mapa</h2>
+    <p>{{ grafiki.opis }}</p>
+    <div class="tabela"><table>
+      <thead><tr><th scope="col">Co</th><th scope="col">Autor</th><th scope="col">Licencja</th></tr></thead>
+      <tbody>{% for g in grafiki.pozycje %}<tr><td>{{ g.co }}</td><td>{{ g.autor }}</td><td>{{ g.licencja }}</td></tr>{% endfor %}</tbody>
+    </table></div>
+    <div class="ramka"><b><a href="{{ mapa.adres }}" rel="noopener" target="_blank">{{ mapa.nazwa }}</a></b> · licencja {{ mapa.licencja }}<br>{{ mapa.opis }}</div>
+
+    <h2 id="fonty">Kroje pisma i biblioteki</h2>
+    <p>{{ fonty.opis }}</p>
+    <div class="tabela"><table>
+      <thead><tr><th scope="col">Krój</th><th scope="col">Autorzy</th><th scope="col">Strona</th></tr></thead>
+      <tbody>{% for f in fonty.pozycje %}<tr><td>{{ f.nazwa }}</td><td>{{ f.autor }}</td><td><a href="{{ f.adres }}" rel="noopener" target="_blank">{{ f.adres }}</a></td></tr>{% endfor %}
+      {% for o in oprogramowanie %}<tr><td>{{ o.nazwa }}</td><td>licencja {{ o.licencja }}</td><td><a href="{{ o.adres }}" rel="noopener" target="_blank">{{ o.adres }}</a></td></tr>{% endfor %}</tbody>
+    </table></div>
+
+    <h2 id="nagrania">Nagrania</h2>
+    <p>{{ nagrania.opis }} <a href="{{ nagrania.adres }}">Spis nagrań z licencjami</a>.</p>
+    <p>{{ nagrania.uwaga }}</p>
+
+    <div class="ramka">{{ zastrzezenie }}</div>
+  </main>
+  <div class="stopka">LUKRUM – gra edukacyjna.</div>
+</body>
+</html>
