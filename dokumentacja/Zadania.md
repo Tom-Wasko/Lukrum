@@ -12,7 +12,7 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 - Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie (reszta: propozycje w `wiedza/analizy/przeglad-wygladu-23-11.md`)
 
 ## Zrobione w tej podróży
-Podróż 03: Z34, Z33, Z35, Z5, Z36, Z38, Z9, Z28, Z32, Z37, Z16, Z25, Z12, Z21, Z42, Z23 (część z 23.11), Z15, Z44, Z17, Z45, Z18, Z46; Z6 częściowo. Szczegóły: `podroze/03-okienka-i-rundy/plan.md`.
+(podróż 03 zamknięta 23.11; spis w `podroze/03-okienka-i-rundy/plan.md`, „Podsumowanie”)
 
 ## Zaplanowane
 - Z47 · kreator /mg/: „Rozlosuj uczniów po drużynach”, kartki z hasłami w podziale na drużyny, przyciski kroków przypięte do dołu (1366×768)

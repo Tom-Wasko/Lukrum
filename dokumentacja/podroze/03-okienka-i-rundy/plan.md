@@ -88,3 +88,11 @@ Lista gotowości do testu (odhaczam po dowodzie):
 
 ## Zrobione w podróży (stan 23.11 17:55)
 Z34, Z33, Z35, Z5, Z36, Z38, Z9, Z28, Z32, Z37, Z16, Z25, Z12, Z21, Z42, Z23 (część z 23.11), Z15, Z44, Z17, Z45; Z6 częściowo (reszta: propozycje w `wiedza/analizy/przeglad-wygladu-23-11.md`). Scalone do `main` 23.11 17:50 (960 passed). Potem: Z18 (przewodnik + PDF, tabela podstawy programowej z zpe.gov.pl), Z46 (zmiana zestawu w /mg/, 965 passed). Z19 odłożone (kolega). Z6: reszta propozycji.
+
+## Podsumowanie
+Zamknięta 23.11.2026 ok. 18:50 przez szefa. Wszystko w `main` (pełne testy 965 passed, `ruff` i dane czyste).
+Zrobione: Z34, Z33, Z35, Z5, Z36, Z38, Z9, Z28, Z32, Z37, Z16, Z25, Z12, Z21, Z42, Z23 (część z 23.11), Z15, Z44,
+Z17, Z45, Z18, Z46; Z6 częściowo. Odłożone: Z26 (test nie zawiódł), Z19 (serwer szkoły, po powrocie kolegi), Z48.
+Koszt trybu autonomicznego 23.11 06:22–17:34: 22,0M tokenów ważonych (Archi 8,6M, wyko 13,4M).
+Wnioski: limit w nocy zatrzymał wszystkie sesje na ok. 4 h (wznawianie przez `wyko.py --wznow`); 4 wyko z serwerami
+naraz to za dużo pamięci, pełne testy puszcza Archi raz. Następnie: Z47 (kreator: rozlosuj drużyny) i próba bloku 07.12.
