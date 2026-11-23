@@ -1,4 +1,6 @@
-"""`python manage.py instrukcja_pdf` – INSTRUKCJA.md → INSTRUKCJA.pdf (strona „Jak grać” drukowana
+"""`python manage.py instrukcja_pdf` – INSTRUKCJA.md → INSTRUKCJA.pdf; z `--md` inny plik, np.
+`instrukcja_pdf --md dokumentacja/PRZEWODNIK_NAUCZYCIELA.md` → PDF obok pliku
+(strona „Jak grać” drukowana
 przeglądarką Edge albo Chrome bez okna; czcionki z Google Fonts, gdy jest internet)."""
 
 import shutil
@@ -10,7 +12,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.template.loader import render_to_string
 
-from panel_gracza.instrukcja import instrukcja
+from panel_gracza.instrukcja import instrukcja, na_html
 
 PRZEGLADARKI = [
     r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
@@ -31,13 +33,20 @@ class Command(BaseCommand):
     help = "Tworzy INSTRUKCJA.pdf z INSTRUKCJA.md (wymaga Edge albo Chrome)."
 
     def add_arguments(self, parser):
-        parser.add_argument("--plik", default=str(Path(settings.BASE_DIR) / "INSTRUKCJA.pdf"))
+        parser.add_argument("--plik", default=None, help="PDF wynikowy (domyślnie obok pliku .md)")
+        parser.add_argument("--md", default=None, help="inny plik .md (domyślnie INSTRUKCJA.md)")
 
-    def handle(self, *args, plik, **opcje):
+    def handle(self, *args, plik, md, **opcje):
         exe = przegladarka()
         if exe is None:
             raise CommandError("Nie znaleziono Edge ani Chrome – PDF drukuje przeglądarka.")
-        kontekst = instrukcja() | {"powrot": "/", "powrot_tekst": ""}
+        if md:
+            zrodlo = Path(md).resolve()
+            tresc = na_html(zrodlo.read_text(encoding="utf-8"))
+        else:
+            zrodlo, tresc = Path(settings.BASE_DIR) / "INSTRUKCJA.md", instrukcja()
+        plik = plik or str(zrodlo.with_suffix(".pdf"))
+        kontekst = tresc | {"powrot": "/", "powrot_tekst": ""}
         strona = render_to_string("panel_gracza/jak_grac.html", kontekst)
         with tempfile.TemporaryDirectory() as tmp:
             html = Path(tmp) / "instrukcja.html"

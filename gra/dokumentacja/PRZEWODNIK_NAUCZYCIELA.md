@@ -41,8 +41,9 @@ Zamknięcie okna wyłącza grę.
 7. Przypisz każdego ucznia do drużyny (lista i „Dodaj”). To najdłuższy krok: ok. 2 kliknięcia na ucznia. **Zrób go dzień
    wcześniej.** Dla 3–4 drużyn (ok. 12 osób) to kilka minut.
 
-**Zmiana zestawu w trakcie.** Autor przygotowuje przycisk zmiany zestawu między rundami tej samej gry: [nazwa przycisku
-z 03/zestawy]. Do czasu, gdy będzie dostępny, każda lekcja to osobna gra (krok 1–6 od początku).
+**Zmiana zestawu w trakcie.** Na następnej lekcji nie zakładaj nowej gry. W `/mg/` otwórz grę, zakładka **Funkcje**,
+wybierz zestaw „Lekcja N+1 …” i kliknij **„Zmień zestaw od następnej rundy”**. Okno pokaże, co dojdzie (▲). Funkcji,
+które drużyny już znają, zmiana nie chowa. Drużyny zobaczą nowe funkcje w zeszycie wujka („Od tego tygodnia otwarte”).
 
 ### 1.3 Kartki z hasłami
 - Wydrukuj okno „Drukuj” z zakładki Drużyny (drukuje się samo okno). Kartki na razie nie są podzielone na drużyny:
@@ -144,8 +145,7 @@ To dłuższy blok niż 45 minut: ok. 2,5 godziny (155 min), z możliwością prz
 propozycja. Wszystkie czasy namysłu to szacunki. Ten test sprawdza, czy są dobre.
 
 **Ustawienia gry:** zestaw „Lekcja 1 – Zakładamy firmę”, potem zestaw „Lekcja 2 – Pierwsze rachunki” (zmiana zestawu
-w tej samej grze: [nazwa przycisku z 03/zestawy]; gdyby jej nie było, załóż grę z zestawem lekcji 2 i zacznij od niej
-bez lekcji 1 albo użyj „Pełnej gry”), 4–5 rund, tryb lekcyjny z **czterema rundami na żywo**, 3–4 drużyny i 2–3 boty.
+w tej samej grze: `/mg/` ▸ Funkcje ▸ **„Zmień zestaw od następnej rundy”**, po zamknięciu rundy 1), 4–5 rund, tryb lekcyjny z **czterema rundami na żywo**, 3–4 drużyny i 2–3 boty.
 Konta załóż i przypisz do drużyn dzień wcześniej.
 
 | Godzina | Min | Co |

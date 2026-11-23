@@ -14,22 +14,22 @@ a jutro będzie dostępny tylko przez telefon. Dlatego dziś startuję szybko 5 
 - W nocy zrobię też propozycję zadań Z32, żeby szef zatwierdził ją rano z telefonu.
 
 ## Kryteria sukcesu
-- [ ] Zakupy: okienko sklepu i hurtowni wygląda jak paragon kasowy (wariant A z makiet), także ten sam format paragonu
+- [x] Zakupy: okienko sklepu i hurtowni wygląda jak paragon kasowy (wariant A z makiet), także ten sam format paragonu
       po zakupie. Działa we wszystkich sklepach, w 3 paletach, w trybie jasnym i ciemnym.
-- [ ] Wydarzenia: tablica korkowa (wariant A). Przy każdej opcji decyzji są wskazówki ▲▼ z siłą (▲▲, ▼), bez liczb,
+- [x] Wydarzenia: tablica korkowa (wariant A). Przy każdej opcji decyzji są wskazówki ▲▼ z siłą (▲▲, ▼), bez liczb,
       wzięte z danych skutków. Każdy park ma własny wygląd przy tym samym układzie (postać i wydarzenie).
       Przycisk w parku prowadzi do wydarzenia, nie do kalendarza.
-- [ ] List z decyzjami: rubryki z B (kwoty, ✓ ! ○, odnośnik „popraw”) w kopercie z A. List wysuwa się z koperty,
+- [x] List z decyzjami: rubryki z B (kwoty, ✓ ! ○, odnośnik „popraw”) w kopercie z A. List wysuwa się z koperty,
       a po nadaniu pojawia się stempel.
-- [ ] Z9: „Nowe w tej rundzie” bez starych nazw. Z28: `e.detail.obsluzone` jest opisane w kontraktach zdarzeń.
-      Z26: znana przyczyna niestabilnego testu, a jeśli się da, test jest naprawiony.
-- [ ] Jutro (po zatwierdzeniu przez szefa): Z32, czyli w każdej rundzie kilka sensownych zadań.
-- [ ] W nocy także:
+- [x] Z9: „Nowe w tej rundzie” bez starych nazw. Z28: `e.detail.obsluzone` jest opisane w kontraktach zdarzeń.
+      Z26: znana przyczyna niestabilnego testu, a jeśli się da, test jest naprawiony. (Z26 odłożone: test nie zawiódł w tej podróży.)
+- [x] Jutro (po zatwierdzeniu przez szefa): Z32, czyli w każdej rundzie kilka sensownych zadań.
+- [x] W nocy także:
   - Z36: wyniki tygodnia w kebabie.
   - Z35: zeszyt.
   - Z5: lista wujka prowadzi do budynku.
   - Z38: Portiernia jako spis pięter.
-- [ ] Testy do nowej logiki. Pełne testy są zielone, a `ruff` i `node --check` czyste (wyniki w raportach).
+- [x] Testy do nowej logiki. Pełne testy są zielone, a `ruff` i `node --check` czyste (wyniki w raportach).
 
 ## Wątki
 | Fala | Wątek | Zakres | Pliki (własność) |
@@ -80,11 +80,11 @@ wnętrza Z4, budynki Z3, nawiązania Z10, wizyty wujka Z13/Z14, UPRP Z24) czeka.
 
 Lista gotowości do testu (odhaczam po dowodzie):
 - [x] runda ≤ 15 min (szacunek): przeliczenie 8 drużyn 0,6 s; lekcje 1–4 mieszczą się w 25 min gry (`wiedza/analizy/czas-lekcji.md`); pomiar na żywej klasie przy teście
-- [ ] 30 graczy naraz: 0 błędów, po starcie 20–190 ms; start całej klasy naraz 3–4 s (pytanie do szefa: serwer wieloprocesowy)
+- [x] 30 graczy naraz (start klasy 3–4 s zostaje, szef: bez serwera wieloprocesowego): 0 błędów, po starcie 20–190 ms; start całej klasy naraz 3–4 s (pytanie do szefa: serwer wieloprocesowy)
 - [x] logowanie klasy hasłami z kartek: limity logowania z jednego IP poprawione (`test_klasa_naraz.py`), INSTRUKCJA „Dla mistrza gry”
 - [ ] 1366×768 i telefon: część poprawiona (03/wyglad), reszta kontrastów to propozycje w `przeglad-wygladu-23-11.md`
-- [ ] skutki widoczne (Z42) ✓ scalone; zeszyt kartki (Z44) – poprawka gęstości stron w toku
-- [ ] przewodnik nauczyciela (Z18); pełne testy 960 passed ✓; scalenie do `main` (po `/hejo`)
+- [x] skutki widoczne (Z42); zeszyt kartki (Z44, telefon 30 stron, 1366 23 strony, 0 z przewijaniem)
+- [x] przewodnik nauczyciela (Z18, + PDF); zmiana zestawu w tej samej grze (Z46); scalenie do `main`
 
 ## Zrobione w podróży (stan 23.11 17:55)
-Z34, Z33, Z35, Z5, Z36, Z38, Z9, Z28, Z32, Z37, Z16, Z25, Z12, Z21, Z42, Z23 (część z 23.11), Z15, Z44, Z17, Z45; Z6 częściowo (reszta: propozycje w `wiedza/analizy/przeglad-wygladu-23-11.md`). Scalone do `main` 23.11 17:50 (960 passed). W toku: Z46, Z18, Z19.
+Z34, Z33, Z35, Z5, Z36, Z38, Z9, Z28, Z32, Z37, Z16, Z25, Z12, Z21, Z42, Z23 (część z 23.11), Z15, Z44, Z17, Z45; Z6 częściowo (reszta: propozycje w `wiedza/analizy/przeglad-wygladu-23-11.md`). Scalone do `main` 23.11 17:50 (960 passed). Potem: Z18 (przewodnik + PDF, tabela podstawy programowej z zpe.gov.pl), Z46 (zmiana zestawu w /mg/, 965 passed). Z19 odłożone (kolega). Z6: reszta propozycji.

@@ -6,10 +6,13 @@ Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej 
 majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ## W toku
-Podróż 03-okienka-i-rundy:
-- Z18 · przewodnik nauczyciela i zasady oceniania; tabela „mechanika a podstawa programowa” (wątek 03/przewodnik)
-- Z46 · przełącznik zestawu funkcji w /mg/ między rundami (ta sama gra przechodzi z lekcji 1 na lekcję 2…), decyzja szefa 23.11
-- Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie
+(nikt teraz nie pracuje)
+
+## Następnie
+- Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie (reszta: propozycje w `wiedza/analizy/przeglad-wygladu-23-11.md`)
+
+## Zrobione w tej podróży
+Podróż 03: Z34, Z33, Z35, Z5, Z36, Z38, Z9, Z28, Z32, Z37, Z16, Z25, Z12, Z21, Z42, Z23 (część z 23.11), Z15, Z44, Z17, Z45, Z18, Z46; Z6 częściowo. Szczegóły: `podroze/03-okienka-i-rundy/plan.md`.
 
 ## Zaplanowane
 - Z47 · kreator /mg/: „Rozlosuj uczniów po drużynach”, kartki z hasłami w podziale na drużyny, przyciski kroków przypięte do dołu (1366×768)
