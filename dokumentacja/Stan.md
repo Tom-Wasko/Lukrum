@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-23 07:35
+Archi żył: 2026-11-23 11:27
 Tryb: autonomiczny od 06:22 23.11, budżet do 16:00 (nowe kroki do ok. 14:30), koniec najpóźniej 16:00. Scalanie na `podroz-03`.
 
 ## Podróż
