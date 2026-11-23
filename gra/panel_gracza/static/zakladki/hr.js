@@ -60,6 +60,21 @@ const opisOsoby = (o) => o.charakter ? ` <span class="pigulka">${esc(o.charakter
 const zadowolenieOsoby = (p) => p.zadowolenie == null ? "–"
   : `<span class="${p.niezadowolony ? "minus" : ""}">${licz(p.zadowolenie, 2)}</span>`;
 
+// Z42 (03/ukryte): z czego składa się nastrój osoby (v.wyniki.pracownicy[].skladniki) i skutek zmęczenia
+const SKLADNIKI = { placa: "pensja", sprzet: "sprzęt", udogodnienia: "udogodnienia", szkolenia: "szkolenia", umowa: "umowa", przeciazenie: "przepracowanie" };
+const znakSkl = (x) => (x >= 0.005 ? `<span class="plus">▲ +${licz(x, 2)}</span>` : x <= -0.005 ? `<span class="minus">▼ ${licz(x, 2)}</span>` : "–");
+function nastrojSkladniki(p) {
+  if (!p.skladniki) return "";
+  return Object.entries(SKLADNIKI).map(([k, n]) => `${n} ${znakSkl(p.skladniki[k] || 0)}`).join(" · ");
+}
+function zmeczenieZdanie(v, p) {
+  const prog = v.progi_czasu_pracy?.zmeczenie;
+  if (prog == null || p.wykorzystanie == null) return "";
+  return p.wykorzystanie > prog
+    ? `▲ Zmęczenie: wykorzystanie ${proc(p.wykorzystanie, 0)} jest ponad ${proc(prog, 0)}, więc w kolejnym tygodniu rośnie ryzyko pomyłek przy daniach.`
+    : `✓ Wykorzystanie ${proc(p.wykorzystanie, 0)} nie męczy: ryzyko pomyłek rośnie dopiero ponad ${proc(prog, 0)}.`;
+}
+
 // koszt za rundę: pensje miesięczne z ZUS pracodawcy (wg formy zatrudnienia) przeliczone na rundę + premie (bez ZUS)
 function kosztWynagrodzen(v, kat) {
   return v.stan.pracownicy.reduce((s, p) => s + naRunde(kosztMiesieczny(kat, p)) + (p.premia || 0), 0);
@@ -432,6 +447,8 @@ function oknoProfilu({ v, kat, edycja }, id) {
       <div class="wiersz"><span>Skłonność do pomyłek</span><span>${proc(p.ryzyko_pomylki, 0)}</span></div>
       <div class="wiersz"><span>Zadowolenie klientów</span><span>${proc(p.zadowolenie_klientow, 0)}</span></div>
       <div class="wiersz"><span>Zadowolenie z pracy (ostatni tydzień)</span><span>${zadowolenieOsoby(p)}</span></div></div>
+      ${p.skladniki ? `<p class="podpowiedz" style="text-align:left">Co wpływa na nastrój: ${nastrojSkladniki(p)}.</p>` : ""}
+      <p class="podpowiedz" style="text-align:left">${zmeczenieZdanie(v, p)}</p>
       ${osobaPip(v, p) ? `<p class="znak-uwaga" style="text-align:left">${esc(opisPip(v, p))}</p>` : ""}
       ${p.niezadowolony && !p.odchodzi ? `<p class="minus" style="text-align:left">Niezadowolony od ${p.niezadowolony} tyg. – szczegóły na liście błędów.
         Pomaga podwyżka, lepszy sprzęt albo odciążenie.</p>` : ""}</div>
@@ -634,7 +651,11 @@ export const udogodnienia = {
     const w = Object.entries(v.rynek?.udogodnienia || {}).map(([f, n]) => [esc(nazwaFirmy(v, f)), licz(n)]);
     const moje = v.rynek?.udogodnienia?.[v.firma];
     return podsumowanie(moje ? `Twoja firma ma <b>${licz(moje)}</b> ${moje === 1 ? "udogodnienie" : "udogodnień"} dla pracowników.` : "Twoja firma nie ma jeszcze udogodnień dla pracowników.", moje ? "ok" : "")
-      + zwinTabela("Posiadane udogodnienia", ["Firma", "Liczba udogodnień"], w, { klasy: ["l"], otwarte: true });
+      + zwinTabela("Posiadane udogodnienia", ["Firma", "Liczba udogodnień"], w, { klasy: ["l"], otwarte: true })
+      + ((v.wyniki?.pracownicy || []).some((p) => p.skladniki)
+        ? zwinTabela("Ile udogodnienia dały nastrojowi załogi (ostatni tydzień)", ["Osoba", "Udogodnienia", "Nastrój razem"],
+          v.wyniki.pracownicy.map((p) => [esc(p.imie_nazwisko), znakSkl(p.skladniki?.udogodnienia || 0), zadowolenieOsoby(p)]), { klasy: ["l"], otwarte: true })
+          + `<p class="podpowiedz">Udogodnienia podnoszą nastrój osób w tym lokalu, a lepszy nastrój to szybsza praca i mniej odejść. Do oceny gości nie wchodzą.</p>` : "");
   },
   akcje: {},
 };

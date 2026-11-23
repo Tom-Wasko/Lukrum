@@ -290,6 +290,15 @@ export function ewidencja(lista, tytul) {
     w.length ? w : [["Brak środków trwałych – wynajęty lokal i tańsze zakupy idą od razu w koszty.", "", "", "", "", "", ""]], { klasy: ["l", "l"] });
 }
 
+// Z42 (03/ukryte): „kolejna sztuka daje mniej” – liczby z v.wyposazenie_efekt (api/prezentacja.py)
+function nasycenieWyposazenia(v, id) {
+  const e = v.wyposazenie_efekt?.[id];
+  if (!e) return "";
+  const p = (x) => `${Math.round(x * 100)}%`;
+  return `<p class="podpowiedz skutek-uwaga">▼ Każda kolejna sztuka wyposażenia podnosi liczbę gości słabiej niż poprzednia. ${e.sztuk
+    ? `Teraz wyposażenie tego lokalu daje +${p(e.teraz)} gości (bez tego „zmęczenia” byłoby +${p(e.bez_nasycenia)}).` : "Pierwsze sztuki działają pełną siłą."}</p>`;
+}
+
 export function kafleUdogodnien({ v, kat, edycja }, rodzaj, kogo) {
   const pozycje = kat.oferty[rodzaj].pozycje.filter((p) => p.od_rundy <= v.runda);
   // przy kilku lokalach – wyposażenie / udogodnienia wybranego lokalu
@@ -300,6 +309,7 @@ export function kafleUdogodnien({ v, kat, edycja }, rodzaj, kogo) {
   return `${id ? `<div class="komunikat ok">${rodzaj === "wyposazenie" ? "Wyposażenie" : "Udogodnienia"} lokalu <b>${esc(nazwaLokalu(v, id))}</b>.</div>` : ""}
     <div class="pasek ciemny"><span>Koszt zakupu: <span class="kwota">${zl(kupno)}</span></span>
     <span>Koszt utrzymania: <span class="kwota">${zl(naRunde(utrz))}</span>${naOkres()}</span><span>Przychody ze sprzedaży: <span class="kwota">${zl(sprzedaz)}</span></span></div>
+    ${rodzaj === "wyposazenie" ? nasycenieWyposazenia(v, id) : ""}
     ${kartyUdogodnien(pozycje, przed, teraz, rodzaj, kogo, edycja)}`;
 }
 
