@@ -8,7 +8,11 @@ Nie był jeszcze sprawdzony w klasie.
 - Cykl to **5 lekcji po 45 minut** i ok. 12 tygodni gry. Ustaw w kreatorze **Tryb lekcyjny**: 3 rundy na żywo, potem
   7 dni na rundę (albo 3–4 dni, gdy lekcje są dwa razy w tygodniu).
 - Drużyny po 2–4 osoby, jedno urządzenie na drużynę wystarczy (gra działa też na telefonie).
-- Na pierwszą lekcję wybierz zestaw funkcji **„Pierwsza gra”**: drużyny zaczynają od podstaw i same odsłaniają resztę.
+- Każda lekcja ma własny **zestaw funkcji** w kreatorze (krok 3, „Gotowe zestawy”): „Lekcja 1 – Zakładamy firmę” …
+  „Lekcja 5 – Bilans sezonu”. Zestaw zostawia odkryte tylko to, czego uczy lekcja, resztę zakrywa (drużyna widzi ją
+  wyszarzoną i sama odsłania, gdy chce), a cztery długie wątki (Handel, Harpagon, Giełda, Sieć lokali) wyłącza.
+  Funkcji nie da się zmienić po utworzeniu gry, więc **grę na kolejną lekcję zakłada się osobno** (albo wybiera
+  zestaw „Pełna gra”, gdy klasa ma sama odkrywać wszystko). Czasy lekcji: `../dokumentacja/wiedza/analizy/czas-lekcji.md`.
 - Każda lekcja ma ten sam rytm: **5 min** wejście (pytanie), **25 min** gra albo praca z wynikami, **15 min** omówienie.
 - Do omówienia wyświetl na tablicy **Kurier rankingowy** jednej drużyny (za jej zgodą) albo panel mistrza gry.
 
@@ -21,6 +25,7 @@ Nie był jeszcze sprawdzony w klasie.
 | 5 | po 12 | Bilans sezonu: co zdecydowało o wyniku? | Podium, Kurier rankingowy, punkty tygodnia |
 
 ## Lekcja 1. Zakładamy firmę: kapitał, lokal, bank
+**Zestaw w kreatorze:** „Lekcja 1 – Zakładamy firmę” (wszystko zakryte poza podstawą gry; bez długich wątków).
 **Cele.** Uczeń wyjaśnia, czym jest kapitał początkowy i koszt stały; wybiera lokal i uzasadnia wybór okolicą
 i klientami; porównuje oferty banków.
 
@@ -38,6 +43,7 @@ Po co firmie rezerwa gotówki?
 **Zadanie do domu.** Rozpiszcie 50 000 zł na kategorie: lokal, sprzęt, ludzie, towar, rezerwa.
 
 ## Lekcja 2. Pierwsze rachunki: koszty, cena, zysk
+**Zestaw w kreatorze:** „Lekcja 2 – Pierwsze rachunki” (odkryte Zaopatrzenie; reszta zakryta).
 **Cele.** Uczeń odróżnia przychód od dochodu; liczy koszt porcji i marżę; wyjaśnia, dlaczego nowa firma zaczyna od straty.
 
 **Przebieg.**
@@ -53,6 +59,7 @@ Dlaczego w pierwszym tygodniu sprzedaży przychodzi mniej gości?
 (próg rentowności).
 
 ## Lekcja 3. Klient i opinia: dla kogo jest ten lokal?
+**Zestaw w kreatorze:** „Lekcja 3 – Klient i opinia” (odkryte Zaopatrzenie, Wyposażenie, Marketing i Analiza rynku).
 **Cele.** Uczeń opisuje grupę docelową swojego lokalu; wyjaśnia, z czego bierze się opinia klientów; ocenia
 opłacalność inwestycji.
 
@@ -70,6 +77,7 @@ wysoka cena czy długa kolejka? Po ilu tygodniach zwróci się wystrój za 8 300
 czy zadziałała.
 
 ## Lekcja 4. Praca i prawo: umowa o pracę, zlecenie, PIP
+**Zestaw w kreatorze:** „Lekcja 4 – Praca i prawo” (odkryte Zaopatrzenie, Rozwój i Urzędy).
 **Cele.** Uczeń porównuje umowę o pracę i umowę zlecenie (koszt, prawa pracownika); wyjaśnia, kiedy zlecenie jest
 w świetle Kodeksu pracy stosunkiem pracy; zna rolę Państwowej Inspekcji Pracy.
 
@@ -87,6 +95,7 @@ na wynik firmy? Kto traci, gdy pracownik odchodzi?
 **Zadanie do domu.** Znajdźcie prawdziwe ogłoszenie o pracy w gastronomii w Lublinie i porównajcie stawkę z tą w grze.
 
 ## Lekcja 5. Bilans sezonu: co zdecydowało o wyniku?
+**Zestaw w kreatorze:** „Lekcja 5 – Bilans sezonu” (odkryte Zaopatrzenie, Wyposażenie, Marketing, Analiza rynku, Rozwój i Urzędy).
 **Cele.** Uczeń czyta wskaźniki oceny firmy; wskazuje decyzje, które miały największy wpływ na wynik; formułuje
 wnioski na przyszłość.
 

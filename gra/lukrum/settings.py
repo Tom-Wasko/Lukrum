@@ -102,6 +102,15 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+        # Cała klasa zapisuje naraz (sesje logowania, decyzje drużyn, zamknięcie rundy): bez tego
+        # zapis kończył się „database is locked” po 5 s (próba obciążenia 23.11.2026). WAL –
+        # czytanie nie czeka na zapis, IMMEDIATE – zapis zajmuje blokadę od początku
+        # (bez zakleszczeń przy podnoszeniu blokady).
+        "OPTIONS": {
+            "timeout": 30,
+            "transaction_mode": "IMMEDIATE",
+            "init_command": "PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL;",
+        },
     }
 }
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -124,6 +133,10 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "/konta/login/"
 ACCOUNT_LOGIN_METHODS = {"username"}
 ACCOUNT_SIGNUP_FIELDS = ["username*", "password1*", "password2*"]
 ACCOUNT_EMAIL_VERIFICATION = "none"
+# Cała klasa wychodzi jednym adresem IP szkoły: domyślne 30 logowań i 10 błędnych na minutę
+# z jednego IP zablokowałoby 31. ucznia (próba obciążenia 23.11.2026).
+# Limit na konto (5 błędów na 5 minut) zostaje.
+ACCOUNT_RATE_LIMITS = {"login": "300/m/ip", "login_failed": "100/m/ip,5/300s/key"}
 ACCOUNT_ADAPTER = "konta.adaptery.Konta"
 SOCIALACCOUNT_ADAPTER = "konta.adaptery.KontaMicrosoft"
 SOCIALACCOUNT_PROVIDERS = {

@@ -166,3 +166,38 @@ zestawy:
     opis: na 1–2 lekcje – bez długich wątków (handel, harpagon, giełda, sieć lokali), reszta zakryta
     reszta: zakryta
     stany: {handel: wylaczona, harpagon: wylaczona, gielda: wylaczona, siec: wylaczona}
+  lekcja_1_zakladamy_firme:
+    nazwa: Lekcja 1 – Zakładamy firmę
+    opis: >-
+      kapitał, lokal, bank: tylko podstawa gry (lokal, bank, księgi, menu, ludzie). Zaopatrzenie robi gra za drużyny,
+      długie wątki wyłączone
+    reszta: zakryta
+    stany: {handel: wylaczona, harpagon: wylaczona, gielda: wylaczona, siec: wylaczona}
+  lekcja_2_pierwsze_rachunki:
+    nazwa: Lekcja 2 – Pierwsze rachunki
+    opis: >-
+      koszty, cena, zysk: odkryte Zaopatrzenie (jakość składników, zamówienia); reszta zakryta, długie wątki wyłączone
+    reszta: zakryta
+    stany: {zaopatrzenie: odkryta, handel: wylaczona, harpagon: wylaczona, gielda: wylaczona, siec: wylaczona}
+  lekcja_3_klient_i_opinia:
+    nazwa: Lekcja 3 – Klient i opinia
+    opis: >-
+      grupa docelowa, opinia, wystrój: odkryte Zaopatrzenie, Wyposażenie, Marketing i Analiza rynku; reszta zakryta
+    reszta: zakryta
+    stany: {zaopatrzenie: odkryta, wyposazenie: odkryta, marketing: odkryta, analiza: odkryta,
+            handel: wylaczona, harpagon: wylaczona, gielda: wylaczona, siec: wylaczona}
+  lekcja_4_praca_i_prawo:
+    nazwa: Lekcja 4 – Praca i prawo
+    opis: >-
+      umowy, kontrole PIP, urzędy: odkryte Zaopatrzenie, Rozwój ludzi i Urzędy; reszta zakryta
+    reszta: zakryta
+    stany: {zaopatrzenie: odkryta, rozwoj: odkryta, urzedy: odkryta,
+            handel: wylaczona, harpagon: wylaczona, gielda: wylaczona, siec: wylaczona}
+  lekcja_5_bilans_sezonu:
+    nazwa: Lekcja 5 – Bilans sezonu
+    opis: >-
+      podsumowanie: odkryte wszystko, czego uczyły lekcje 1–4 (Zaopatrzenie, Wyposażenie, Marketing, Analiza, Rozwój,
+      Urzędy); długie wątki wyłączone
+    reszta: zakryta
+    stany: {zaopatrzenie: odkryta, wyposazenie: odkryta, marketing: odkryta, analiza: odkryta, rozwoj: odkryta,
+            urzedy: odkryta, handel: wylaczona, harpagon: wylaczona, gielda: wylaczona, siec: wylaczona}

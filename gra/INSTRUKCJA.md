@@ -507,7 +507,7 @@ które można poprawiać aż do kliknięcia „Utwórz grę”:
    i ziarno losowości – ta sama liczba daje za każdym razem tę samą grę, co przydaje się do powtórek i porównań.
 2. **Drużyny i boty** – drużyny uczniów (1–4 osoby) oraz boty, czyli firmy komputerowe o różnych strategiach
    i poziomach, które konkurują na tym samym rynku.
-3. **Funkcje gry** – zestaw gotowych ustawień („Pierwsza gra”, „Pełna gra”, „Krótka lekcja”) i stan każdej funkcji:
+3. **Funkcje gry** – zestaw gotowych ustawień („Lekcja 1” … „Lekcja 5”, „Pierwsza gra”, „Pełna gra”, „Krótka lekcja”) i stan każdej funkcji:
    odkryta, zakryta albo wyłączona. Tu też ustawia się podpowiedzi na Planie tygodnia, przycisk „Zamów brakujące
    u najtańszych” w Zamówieniach i refleksję przy wysyłaniu decyzji (nieobowiązkowa, wymagana albo wyłączona).
 4. **Sprawdź i utwórz** – podsumowanie całej gry.
@@ -523,8 +523,18 @@ usunąć z drużyny.
 
 Stan funkcji ustawia się przy zakładaniu gry; po jej utworzeniu nie można go zmienić z poziomu panelu. Drużyny
 odsłaniają zakryte funkcje same, a zakładka **Funkcje** pokazuje, która drużyna co odsłoniła, i opisuje, co gra robi
-za zakrytą funkcję. Zestaw „Pierwsza gra” zakrywa wszystko oprócz podstawy – to dobry wybór na pierwszą lekcję.
-„Krótka lekcja” wyłącza handel, Harpagona, giełdę i sieć lokali, żeby zmieścić się w 1–2 lekcjach.
+za zakrytą funkcję. Gotowe zestawy w kroku 3 kreatora:
+
+- **Lekcja 1–5** (po jednym na lekcję z `SCENARIUSZE_LEKCJI.md`: „Zakładamy firmę”, „Pierwsze rachunki”, „Klient
+  i opinia”, „Praca i prawo”, „Bilans sezonu”) – odkrywają tylko to, czego uczy dana lekcja, resztę zakrywają,
+  a handel, Harpagona, giełdę i sieć lokali wyłączają. Rundę z takim zestawem klasa przechodzi w ok. 15 minut
+  (pomiary: `../dokumentacja/wiedza/analizy/czas-lekcji.md`);
+- **Pierwsza gra** (domyślny) – zakrywa wszystko oprócz podstawy, ale zostawia długie wątki do odsłonięcia;
+- **Krótka lekcja** – wyłącza handel, Harpagona, giełdę i sieć lokali, żeby zmieścić się w 1–2 lekcjach;
+- **Pełna gra** – wszystko odkryte.
+
+Ponieważ stanu funkcji nie zmienia się po utworzeniu gry, a każda lekcja ma inny zestaw, grę na daną lekcję zakłada
+się osobno (albo przez cały cykl gra jedna gra z zestawem „Pełna gra” lub „Pierwsza gra”).
 
 ### Zamykanie rundy
 
