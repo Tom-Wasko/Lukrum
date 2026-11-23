@@ -163,7 +163,12 @@ def po_rundzie(dane: Dane, firmy: dict[str, Firma], strefowy: dict, oferty: dict
             wynik.setdefault(f, {})[lok.id] = {
                 "ocena_tygodnia": round(ocena, 2), "powody": {p: round(v, 2) for p, v in powody.items()}, "nowe": n,
                 "ocena": round(lok.ocena, 2) if lok.ocena is not None else None, "liczba": lok.opinie,
-                "mnoznik": round(mnoznik(dane, lok), 3)}
+                "mnoznik": round(mnoznik(dane, lok), 3),
+                # tylko do pokazania w panelu (nie wchodzą do obliczeń): jak mocno ocena działa na gości, jak szybko
+                # stare opinie tracą wagę, rozrzut oceny tygodnia przy tylu opiniach, czekanie klientów lokalu
+                "zaufanie": round(zaufanie(dane, lok), 3), "zanik": u["zanik"],
+                "rozrzut": round(u["rozrzut"] / math.sqrt(n), 2) if n else None,
+                "czekanie_grup": round(kl.wagi_oceny(dane, lw.get("grupy") or {})["czekanie"], 2)}
     return wynik
 
 

@@ -16,6 +16,24 @@ const WYMIARY = [
 const gw = (x) => (x == null ? "–" : x.toFixed(1).replace(".", ","));
 const gwiazdki = (n) => "★".repeat(Math.max(0, Math.min(5, n))) + "☆".repeat(5 - Math.max(0, Math.min(5, n)));
 
+const proc = (x) => `${Math.round(x * 100)}%`;
+// Z42 (03/ukryte): zdania „dlaczego” pod tabelą – liczby z silnika (v.wyniki.opinie[lokal]), bez liczenia wzorów w JS
+function uwagi(O) {
+  if (!O) return "";
+  const z = [];
+  z.push(O.zaufanie < 0.5
+    ? `▼ Mało opinii: ocena działa na gości na ${proc(O.zaufanie)} swojej siły. Im więcej opinii, tym mocniej goście ufają gwiazdkom.`
+    : `✓ Ocena działa na gości na ${proc(O.zaufanie)} swojej siły: opinii jest już dość, żeby goście jej ufali.`);
+  if (O.zanik != null) z.push(`Stare opinie liczą się co tydzień na ${proc(O.zanik)} poprzedniej wagi, więc ocena nadąża za tym, jak jest teraz.`);
+  if (O.rozrzut != null) z.push(`${O.rozrzut >= 0.3 ? "▲" : "–"} Ocena tygodnia mogła się wahać o ok. ±${gw(O.rozrzut)} ★ przez przypadek: przy kilku opiniach skacze, przy wielu się uspokaja.`);
+  if (O.czekanie_grup != null && Math.abs(O.czekanie_grup - 1) >= 0.05) {
+    z.push(O.czekanie_grup > 1 ? `▲ Goście tego lokalu źle znoszą czekanie: biurowi i spieszący się karzą kolejki mocniej niż studenci.`
+      : `▼ Goście tego lokalu znoszą czekanie lepiej niż przeciętnie.`);
+  }
+  z.push("Smak zależy też od świeżości: zamiennik za brakujący składnik jest gorszy, a przeterminowane składniki idą do kosza (zakładka Magazyn i świeżość).");
+  return `<ul class="kg-uwagi">${z.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`;
+}
+
 export function ksiegaGosci(c) {
   const v = c.v, lok = lokalWybrany(v);
   if (!lok) return "";
@@ -38,7 +56,7 @@ export function ksiegaGosci(c) {
   const ocena = P?.ocena ?? O?.ocena;
   return `<section class="kg" aria-label="Księga gości"><header><h2>Księga gości</h2>
       <p class="kg-ocena"><b>${gw(ocena)}</b> ★ <span>średnia z ${licz(P?.liczba ?? O?.liczba ?? 0)} opinii${O ? ` · ostatni tydzień: ${gw(O.ocena_tygodnia)} ★ (${licz(O.nowe)} nowych)` : ""}</span></p></header>
-    <div class="kg-uklad">${O ? `<table class="kg-wymiary"><caption>Co w ostatnim tygodniu podniosło albo obniżyło ocenę</caption><tbody>${wiersze}</tbody></table>` : ""}
+    <div class="kg-uklad">${O ? `<table class="kg-wymiary"><caption>Co w ostatnim tygodniu podniosło albo obniżyło ocenę</caption><tbody>${wiersze}</tbody></table>${uwagi(O)}` : ""}
       ${wpisy ? `<div class="kg-wpisy">${wpisy}</div>` : ""}</div>
     <p class="kg-stopka">Lepsza ocena to więcej gości: nowi klienci patrzą na gwiazdki, zanim wejdą.</p></section>`;
 }

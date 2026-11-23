@@ -408,6 +408,12 @@ trochę gorzej (wiersz „Czekanie” w księdze gości, kolumna „Tłok” w K
 kolejkę i napis „Tłok: mały ✓ / średni – / duży ▲”. Pomaga więcej rąk do pracy albo drugie stanowisko. Dobre wyposażenie
 i wystrój odwrotnie: lekko podnoszą ocenę.
 
+**Skutki widać tam, gdzie się o nich decyduje.** Pod tabelą księgi gości są zdania „dlaczego”: ile siły ma ocena przy
+małej liczbie opinii, że stare opinie z czasem liczą się mniej, że przy kilku opiniach ocena przypadkiem skacze i że
+klienci różnie znoszą czekanie. W Parku handlowym przy wyposażeniu widać, że kolejna sztuka daje mniej niż poprzednia.
+W HR, w profilu osoby, jest rozpiska jej nastroju (pensja, sprzęt, udogodnienia, szkolenia, przepracowanie) i próg, od
+którego zmęczenie zwiększa ryzyko pomyłek.
+
 W Parku handlowym działa sklep meblowy **„Meblościanka”**. Wystrój kupuje się w czterech grupach (ściany, szyld,
 dodatki, meble) i w jednym z kilku stylów. Styl działa tylko wtedy, gdy lubi go wystarczająco dużo gości z okolicy
 lokalu: pokazuje to pieczęć na regale („trafia”, „trafia częściowo”, „nie trafia”). Dopasowany wystrój przyciąga

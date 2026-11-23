@@ -110,7 +110,10 @@ function wynikiOpinie(v, k) {
       licz(x.nowe), `★ ${gw(x.ocena)} (${licz(x.liczba)})`, `× ${licz(x.mnoznik, 2)}`]), { klasy: ["l"], sortuj: false })
     + `<p class="podpowiedz">Ocena tygodnia to ocena wyjściowa ± powody (w gwiazdkach): jakość dań, cena wobec cen w strefie, klienci odesłani
       z kolejki albo bez dania, tłok przy pełnej załodze, pomyłki, wyposażenie. Ocena na mapie to średnia z opinii – nowe ważą więcej, stare z czasem tracą znaczenie.
-      Im więcej opinii, tym mocniej ocena działa na klientów: lokal z oceną powyżej przeciętnej przyciąga ich więcej.</p>`;
+      Im więcej opinii, tym mocniej ocena działa na klientów: lokal z oceną powyżej przeciętnej przyciąga ich więcej.</p>`
+    + `<ul class="podpowiedz">${Object.entries(o).filter(([, x]) => x.zaufanie != null).map(([id, x]) => `<li><b>${esc(nazwa[id] || id)}</b>: ${x.zaufanie < 0.5
+      ? `▼ mało opinii, ocena działa na gości na ${Math.round(x.zaufanie * 100)}% swojej siły (mnożnik ${licz(x.mnoznik, 2)}). Poczeka, aż przybędzie opinii.`
+      : `✓ ocena działa na gości na ${Math.round(x.zaufanie * 100)}% swojej siły.`}${x.rozrzut != null ? ` Ocena tygodnia mogła się przypadkiem wahać o ±${gw(x.rozrzut)} ★.` : ""}</li>`).join("")}</ul>`;
 }
 
 function wynikiStrefy(v, kat, R) {

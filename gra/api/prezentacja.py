@@ -27,6 +27,7 @@ from silnik.kuchnia import menu as mn
 from silnik.kuchnia import swiezosc
 from silnik.kuchnia.dostawcy import ceny_rundy, oferta_rundy
 from silnik.kuchnia.dostawcy import info as info_dostawcy
+from silnik.kuchnia.jakosc import mnoznik_wyposazenia
 from silnik.ludzie import czas_wlasciciela as cw
 from silnik.ludzie import formy as fz
 from silnik.ludzie import kontrola_pip as kpip
@@ -493,7 +494,8 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
                              "waga_nieruchomosci": dane.z["wynik"]["waga_nieruchomosci"]}
         # poprawki 2 (sprawy 17/18): kolory wskaźników czasu pracy w Mój kebab ▸ Zespół (wyniki)
         v["progi_czasu_pracy"] = {"niski": dane.z["operacje"].get("niskie_obciazenie"),   # brak w danych zamrożonych testów
-                                  "przepracowanie": dane.z["zadowolenie_osoby"]["wspolczynniki"]["prog_przepracowania"]}
+                                  "przepracowanie": dane.z["zadowolenie_osoby"]["wspolczynniki"]["prog_przepracowania"],
+                                  "zmeczenie": dane.z["pomylki"]["szansa"]["zmeczenie_od"]}   # od niego rośnie ryzyko pomyłek
         v["majatek_firm"] = {n: _majatek_netto(x) for n, x in w.items()}   # majątek netto obok wyniku w rankingu
         v["ranking"] = historia_rankingu(dane, poprzedni, runda - 1, gra.konfiguracja["liczba_rund"])   # zakładka Kurier rankingowy ▸ Ranking
         v["historia"] = [{"runda": r, "miesiac": dane.nazwa_rundy(r), "skrot": dane.skrot_rundy(r), "karta": poprzedni.wyniki[r][firma].get("karta"),
@@ -503,6 +505,7 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
         v["wyniki_tygodnia"] = wyniki_tygodnia(dane, poprzedni, firma, runda, v["ranking"])
     v["dashboard"] = _dashboard(gra, firma, runda, poprzedni, v.get("karta_skumulowana") or {})
     v["lokale"] = _lokale(gra, firma, runda, f, poprzedni, stan, info if edycja else None)
+    v["wyposazenie_efekt"] = _wyposazenie_efekt(dane, f)   # Z42: „kolejna sztuka daje mniej”
     zk = ((poprzedni.wyniki.get(runda - 1) or {}).get(firma, {}).get("karta") or {}).get("wskazniki", {}).get("zadowolenie_klientow")
     v["popyt"] = widok_popytu(dane, poprzedni, f, runda, zk)
     v["kalendarz_miasta"] = kl.widok(dane, runda, gra.konfiguracja["liczba_rund"])
@@ -639,6 +642,18 @@ def _agencja(gra: Gra, firma: str, runda: int, f: Firma, stan, edycja: bool) -> 
                      "umowa": p.umowa, "student": p.student, "staz": rp.staz(p, runda), "okres": rp.okres_wypowiedzenia(dane, p, runda),
                      "odchodzi": do_slownika(p.odchodzi) if p.odchodzi else None}
                     for p in sorted(f.pracownicy.values(), key=lambda p: p.id)]}
+
+
+def _wyposazenie_efekt(dane: Dane, f: Firma) -> dict[str, dict]:
+    """{lokal: {"teraz", "bez_nasycenia"}}: o ile (ułamek) wyposażenie lokalu podnosi popyt i ile podnosiłoby bez
+    nasycenia (kolejna sztuka działa słabiej). Tylko do pokazania w panelu – wzór z `mnoznik_wyposazenia`."""
+    poz, kappa = dane.pozycje("wyposazenie"), dane.z["popyt"]["wyposazenie_na_procent_klientow"]
+    wynik = {}
+    for lok in f.lokale:
+        lista = pl.lista(f, lok, "wyposazenie")
+        wynik[lok.id] = {"sztuk": len(lista), "teraz": round(mnoznik_wyposazenia(dane, lista) - 1, 3),
+                         "bez_nasycenia": round(kappa * sum(poz[n]["procent"] / 100 for n in lista), 3)}
+    return wynik
 
 
 def _lokale(gra: Gra, firma: str, runda: int, f: Firma, poprzedni, stan, info: dict | None) -> dict:
