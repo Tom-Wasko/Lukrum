@@ -8,7 +8,7 @@ Loguje się bez hasła, przez sesję Django zrobioną dla podanego konta (tylko 
         --wyjscie ../_robocze/zrzuty
 
 kroki.json: lista {"url": "/gra/<id>/<firma>"} | {"js": "kod"} | {"czekaj": sekundy}
-| {"zrzut": "nazwa"} | {"wyglad": ["bar", "jasny"]}.
+| {"zrzut": "nazwa"} | {"wyglad": ["bar", "jasny"]} | {"rozmiar": [szer, wys]}.
 `js` wykonuje się na stronie (await działa), wynik idzie na ekran.
 """
 from __future__ import annotations
@@ -151,6 +151,10 @@ def main():
             if "url" in k:
                 ws.cdp("Page.navigate", url=baza + k["url"])
                 time.sleep(k.get("czekaj", 4))
+            elif "rozmiar" in k:   # zmiana okna w trakcie (np. zwężenie do telefonu bez przeładowania strony)
+                ws.cdp("Emulation.setDeviceMetricsOverride", width=k["rozmiar"][0], height=k["rozmiar"][1],
+                       deviceScaleFactor=1, mobile=False)
+                time.sleep(k.get("czekaj", 1))
             elif "wyglad" in k:
                 p, t = k["wyglad"]
                 h = "document.documentElement.setAttribute"

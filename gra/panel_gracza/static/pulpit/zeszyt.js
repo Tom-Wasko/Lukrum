@@ -177,7 +177,7 @@ const PROG_KOLKA = 40;                                   // tyle „przewinięci
 const waski = () => typeof matchMedia === "function" && matchMedia("(max-width: 900px)").matches;   // wąski ekran: jedna strona, bez 3D
 const nakladka = () => document.getElementById("pz");
 const liczbaStron = () => Z.str.length;
-const liczbaRozkl = () => Math.floor((liczbaStron() + 2 + 1) / 2);   // okładka + strony + ewentualna strona z notatkami, parami
+const liczbaRozkl = () => Math.floor(liczbaStron() / 2) + 1;   // pary (0,1), (2,3)…; przy parzystej liczbie stron ostatnią dopełnia strona z notatkami
 const jestPusty = (k) => k < 1 || k > liczbaStron();
 
 // --- dzielenie treści na strony -----------------------------------------------------------------------------------------------
@@ -191,7 +191,7 @@ function miesci(m) {
   if (!e) return true;
   const r = m.getBoundingClientRect(), skala = r.height / (m.offsetHeight || r.height) || 1;
   const pad = parseFloat(getComputedStyle(m).paddingBottom) || 0;
-  return (e.getBoundingClientRect().bottom - r.top) / skala <= m.clientHeight - pad + 1;
+  return m.scrollHeight <= m.clientHeight + 1 && (e.getBoundingClientRect().bottom - r.top) / skala <= m.clientHeight - pad + 1;
 }
 function podziel(el) {
   if (!DZIELNE.test(el.tagName)) return null;
@@ -231,11 +231,13 @@ function paginuj(wezly, m) {
   const strony = [];
   m.replaceChildren();
   const zamknij = () => {
-    const niesione = [];
-    while (m.children.length > 1 && (naglowek(m.lastElementChild) || (m.lastElementChild.tagName === "P" && naglowek(m.lastElementChild.previousElementSibling)))) {
-      niesione.unshift(m.lastElementChild);
-      m.lastElementChild.remove();
+    let r = 0;   // ile elementów od końca to nagłówek (z akapitem pod nim): przechodzą na następną stronę razem z treścią
+    const dz = [...m.children];
+    for (let i = dz.length - 1; i >= 0; i--) {
+      if (naglowek(dz[i]) || (dz[i].tagName === "P" && naglowek(dz[i - 1]))) r++; else break;
     }
+    const niesione = r && r < dz.length ? dz.slice(dz.length - r) : [];
+    niesione.forEach((e) => e.remove());
     if (m.children.length) strony.push(m.innerHTML);
     m.replaceChildren(...niesione);
   };
@@ -249,6 +251,10 @@ function paginuj(wezly, m) {
     m.append(el);
     if (miesci(m)) return;
     el.remove();
+    if (m.children.length && /^(UL|OL|TABLE)$/.test(el.tagName) && (el.tagName === "TABLE" || el.children.length > 1)) {   // lista albo tabela wypełnia resztę strony, a nie ucieka na następną
+      const czesci = podziel(el);
+      if (czesci) { czesci.forEach(poloz); return; }
+    }
     if (m.children.length) {
       zamknij();
       m.append(el);

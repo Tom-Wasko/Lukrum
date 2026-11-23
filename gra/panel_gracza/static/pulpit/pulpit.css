@@ -572,3 +572,4 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
   .pz-rog { min-width: 44px; min-height: 44px; }
   .pz-wstega, .pz-zamknij { min-height: 44px; }
 }
+.pz-str-l .pz-nr-str, .pz-str-p .pz-nr-str { left: 50%; right: auto; transform: translateX(-50%); bottom: 10px; }
