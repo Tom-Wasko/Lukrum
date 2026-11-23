@@ -26,3 +26,9 @@
   zmienne kolorów (jeśli istnieje) przechodzi; pełne testy zielone, `ruff`, `node --check` czyste (wyniki w raporcie).
 
 ## Raport
+**Wątek 03/wyglad: częściowo zrobiony.** Spis: `dokumentacja/wiedza/analizy/przeglad-wygladu-23-11.md`.
+- Poprawione (commit a832a49): pasek i tabele `/zrodla` w „wysokiej ciemnej”; strzałki gazety w redakcji; menu i ⚙ 44 px na telefonie.
+- Reszta usterek jako propozycje w spisie (kontrasty cen/liczników w oknach w „wysokiej”, zeszyt → 03/kartki).
+- Dowody: `ruff check .` → All checks passed!; `node --check redakcja.js` → ok; `pytest testy/aplikacja` → 261 passed in 160.57s.
+- Nie zrobione: zrzuty „po”, okna na telefonie (serwer w tle zabity przez system z braku pamięci, nie uruchamiałem ponownie), pełne testy.
+- Zapis listy pracowników do dziennika odrzucony przez klasyfikator uprawnień (zapis postępu przeszedł).
