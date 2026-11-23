@@ -61,6 +61,8 @@ class Gra:
         # funkcje gry : pełna lista stanów; bez pola (testy, pomiary, stare gry) – odkryte
         if (stany := fn.sprawdz_stany(dane, opcje.get("funkcje"))) is not None:
             konf["funkcje"] = stany
+            if isinstance(opcje.get("funkcje"), str):
+                konf["zestaw_funkcji"] = opcje["funkcje"]   # nazwa gotowego zestawu (pokazuje ją panel mistrza gry)
         if opcje.get("odblokowanie"):   # mistrz gry może zmienić tygodnie odblokowań
             konf["odblokowanie"] = hm.sprawdz_zmiany(dane, opcje["odblokowanie"], {}, 1, konf["liczba_rund"], konf)
         return cls(konf, {}, dane)
@@ -223,6 +225,18 @@ class Gra:
                 b := fn.blokada_zakrycia(funkcja, self.stan(self.runda - 1).firmy.get(firma))):
             raise ValueError(b)   # np. Harpagon z niespłaconą pożyczką
         fn.odslon(self.konfiguracja, firma, funkcja, odslonic, self.runda)
+
+    def ustaw_zestaw(self, zestaw: str) -> dict[str, list[str]]:
+        """Mistrz gry przełącza zestaw funkcji między rundami – od bieżącej, jeszcze nieprzeliczonej rundy. Tylko
+        odsłania (silnik/funkcje.py: zmien_zestaw); zwraca {"odsloniete", "zostaja"}."""
+        if self.zakonczona:
+            raise ValueError("Gra jest zakończona.")
+        if self.decyzje.get(self.runda, {}).get("_przeliczona"):
+            raise ValueError("Runda jest właśnie liczona – zmień zestaw po jej zakończeniu.")
+        wynik = fn.zmien_zestaw(self.dane, self.konfiguracja, zestaw, self.runda)
+        self.dane = hm.dla_gry(self.dane, self.konfiguracja)
+        self._stany = {k: v for k, v in self._stany.items() if k < self.runda}   # przeliczone rundy bez zmian
+        return wynik
 
     def ustaw_odblokowanie(self, zmiany: dict) -> None:
         """Mistrz gry zmienia tygodnie odblokowań ({element: tydzień}) – tylko elementy jeszcze zablokowane."""

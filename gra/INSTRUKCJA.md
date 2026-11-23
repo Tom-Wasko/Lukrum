@@ -522,8 +522,8 @@ usunąć z drużyny.
 
 ### Zakrywanie funkcji
 
-Stan funkcji ustawia się przy zakładaniu gry; po jej utworzeniu nie można go zmienić z poziomu panelu. Drużyny
-odsłaniają zakryte funkcje same, a zakładka **Funkcje** pokazuje, która drużyna co odsłoniła, i opisuje, co gra robi
+Stan funkcji ustawia się przy zakładaniu gry, a w trakcie gry zmienia się go **zestawem** (niżej: „Przejście do
+następnej lekcji”). Drużyny odsłaniają zakryte funkcje same, a zakładka **Funkcje** pokazuje, która drużyna co odsłoniła, i opisuje, co gra robi
 za zakrytą funkcję. Gotowe zestawy w kroku 3 kreatora:
 
 - **Lekcja 1–5** (po jednym na lekcję z `SCENARIUSZE_LEKCJI.md`: „Zakładamy firmę”, „Pierwsze rachunki”, „Klient
@@ -534,8 +534,17 @@ za zakrytą funkcję. Gotowe zestawy w kroku 3 kreatora:
 - **Krótka lekcja** – wyłącza handel, Harpagona, giełdę i sieć lokali, żeby zmieścić się w 1–2 lekcjach;
 - **Pełna gra** – wszystko odkryte.
 
-Ponieważ stanu funkcji nie zmienia się po utworzeniu gry, a każda lekcja ma inny zestaw, grę na daną lekcję zakłada
-się osobno (albo przez cały cykl gra jedna gra z zestawem „Pełna gra” lub „Pierwsza gra”).
+**Przejście do następnej lekcji w tej samej grze.** Klasa gra dalej tymi samymi firmami, a Ty między rundami dokładasz
+funkcje. Zakładka **Funkcje** w panelu gry ma u góry ramkę „Zestaw funkcji tej gry”:
+
+1. Zamknij rundę (przycisk „Zamknij rundę”) i poczekaj, aż się przeliczy.
+2. W zakładce **Funkcje** wybierz z listy następny zestaw (np. „Lekcja 2 – Pierwsze rachunki”); pod listą jest jego opis.
+3. Kliknij **Zmień zestaw od następnej rundy** i sprawdź okno: ▲ „Dojdą” pokazuje nowe funkcje, ! „Uwaga” – funkcje,
+   które nowy zestaw by ukrył. Potwierdź przyciskiem „Zmień zestaw”.
+
+Zmiana **tylko odsłania**: funkcje już odkryte zostają odkryte (drużyny mogły z nich korzystać), więc przejście
+w tył (np. z lekcji 3 na 2) nic nie ukryje. Przeliczone rundy się nie zmieniają. Drużyny dostają w zeszycie wujka,
+w ramce „Od tego tygodnia otwarte”, ogłoszenie nowej funkcji. Zmiany nie zrobisz w zakończonej grze.
 
 ### Zamykanie rundy
 

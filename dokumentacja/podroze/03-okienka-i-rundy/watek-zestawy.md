@@ -28,3 +28,36 @@
   `ruff`, `node --check`, `silnik.dane sprawdz` czyste (wyniki w raporcie).
 
 ## Raport
+
+**Stan: zrobione.** Gałąź `worktree-podroz-03-zestawy`.
+
+### Co działa
+- MG w `/mg/` (zakładka Funkcje) wybiera zestaw z opisem i klika „Zmień zestaw od następnej rundy”; okno potwierdzenia
+  pokazuje, co dojdzie (▲) i ostrzega (!), gdy zestaw obniżałby coś odkrytego (te funkcje zostają odkryte).
+- Zmiana tylko podnosi (wyłączona < zakryta < odkryta), działa od bieżącej, jeszcze nieprzeliczonej rundy.
+  Odrzucenie: gra zakończona albo runda już liczona.
+- Historia zmian w `konfiguracja["zmiany_funkcji"]` = `[runda, klucz, stan]`; przeliczone rundy liczą się tak samo po
+  przeładowaniu z bazy.
+- Zeszyt wujka: ramka „Od tego tygodnia otwarte” zapowiada „Nowa funkcja: …” z podpowiedzią „menu ▸ …”.
+
+### Dowody
+- `pytest -q -p no:cacheprovider` (całość): `965 passed in 392.08s (0:06:32)`.
+- Nowe: `testy/rdzen/test_zmiana_zestawu.py` (4 testy), `test_mg_zmienia_zestaw_miedzy_rundami_widok_i_zeszyt`
+  w `testy/aplikacja/test_funkcje_api.py`.
+- `ruff check .` → `All checks passed!`; `node --check` mg.js → ok;
+  `silnik.dane sprawdz` → `Dane w porządku … (wersja 62a4fac80df3)`.
+- Zrzuty (poza gitem): `_robocze/zrzuty-zestawy/` – panel MG (bar jasny, wysoka ciemny), potwierdzenie, zeszyt z
+  „Nowa funkcja” (bar jasny, wysoka ciemny). Przejrzane: czytelne w obu paletach. Serwer zatrzymany.
+  Nie sprawdzałem osobno palety pewex ani ciemnego bara (te same zmienne CSS).
+
+### Pliki spoza briefu (potrzebne do działania)
+`silnik/autopilot.py` (stan funkcji z uwzględnieniem rundy), `silnik/harmonogram.py` (elementy otwarte zmianą zestawu
+dostają tydzień zmiany), `api/zeszyt.py` (ogłoszenia o nowych funkcjach).
+
+### Uwagi
+- Test `test_mistrz_gry_widzi_klub` nie wystąpił jako niestabilny.
+- Dziennik: zapis listy pracowników pominąłem (odmowa bez `if_version`).
+
+### Propozycje
+- Zmiana zestawu zapowiedziana z wyprzedzeniem (od rundy N+1, nie od bieżącej).
+- Możliwość obniżenia funkcji przez MG (dziś tylko podnoszenie).

@@ -93,7 +93,7 @@ def decyzje_firmy(dane: Dane, stan: StanGry, nazwa: str, d: dict, konf: dict, ru
 
 def _robi_gra(dane: Dane, konf: dict, nazwa: str, klucz: str, runda: int) -> bool:
     """Funkcję robi gra: wyłączona (dla wszystkich) albo zakryta i nieodsłonięta przez drużynę (autopilot)."""
-    return klucz in fn.rejestr(dane) and (fn.wylaczona(konf, klucz) or fn.autopilot(konf, nazwa, klucz, runda))
+    return klucz in fn.rejestr(dane) and (fn.wylaczona(konf, klucz, runda) or fn.autopilot(konf, nazwa, klucz, runda))
 
 
 # --- zaopatrzenie: auto-dostawy z prognozy --------------------------------------------------------------------

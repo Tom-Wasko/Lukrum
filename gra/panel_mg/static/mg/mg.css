@@ -19,3 +19,9 @@ code.haslo { font-size: 15px; letter-spacing: 1px; }
 .boty-wybor select.poziom { font-size: 12px; padding: 1px 4px; }
 .termin-mg { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
 .tydz-mg { width: 64px; }
+
+/* podróż 03/zestawy */
+.zestaw-mg { margin-bottom: 18px; padding: 12px 14px; border: 1px solid var(--linia); border-radius: 10px; }
+.zestaw-mg select { font: inherit; padding: 6px 8px; margin-right: 8px; max-width: 100%; }
+.zestaw-mg label { display: block; font-size: 12px; margin-bottom: 2px; }
+.zestaw-mg [hidden] { display: none; }

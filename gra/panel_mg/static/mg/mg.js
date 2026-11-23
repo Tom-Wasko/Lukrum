@@ -294,11 +294,46 @@ function funkcje() {
     ? tabela("Kto co odsłonił (funkcje zakryte)", ["Drużyna", ...zakryte.map((f) => esc(f.nazwa))],
       kto.map((d) => [`<b style="white-space:nowrap">${esc(d.firma)}</b>`, ...zakryte.map((f) => odslonieto(d, f))]), { klasy: ["l"], sortuj: false })
     : `<p class="podpowiedz">Żadna funkcja nie jest zakryta, więc nie ma czego odsłaniać.</p>`;
-  return `${info(`Stany funkcji ustawiasz przy tworzeniu gry – w trakcie gry ich nie zmienisz. Odkryte: <b>${liczby.odkryta}</b>,
+  return `${zestawFunkcji()}
+    ${info(`Stany funkcji ustawiasz przy tworzeniu gry, a w trakcie gry zmieniasz je zestawem (wyżej) – zmiana tylko odsłania. Odkryte: <b>${liczby.odkryta}</b>,
       zakryte: <b>${liczby.zakryta}</b>, wyłączone: <b>${liczby.wylaczona}</b>. Zakryte funkcje drużyna odsłania sama w grze; do tego czasu
       gra robi je za nią. Wyłączone nie ma w grze dla nikogo, także dla botów.`)}
     ${tabela("Funkcje gry", ["Funkcja", "Co obejmuje", "Stan", "Gdy zakryta, gra robi za drużynę"], wiersze, { klasy: ["l", "l", "l", "l"], sortuj: false })}
     ${odslon}`;
+}
+
+// Zmiana zestawu funkcji w trakcie gry (Z46): tylko odsłania, od bieżącej rundy; funkcji odkrytych nie chowa
+const RANGA_FUNKCJI = { wylaczona: 0, zakryta: 1, odkryta: 2 };
+function planZestawu(klucz) {
+  const { lista, zestawy } = S.p.funkcje, cel = zestawy.find((z) => z.klucz === klucz);
+  const nowe = [], zostaja = [];
+  for (const f of lista) {
+    const r = RANGA_FUNKCJI[cel.stany[f.klucz]] - RANGA_FUNKCJI[f.stan];
+    if (r > 0) nowe.push(`${esc(f.nazwa)} → ${cel.stany[f.klucz] === "odkryta" ? "odkryta" : "zakryta"}`);
+    else if (r < 0) zostaja.push(esc(f.nazwa));
+  }
+  return { cel, nowe, zostaja };
+}
+function zestawFunkcji() {
+  const { zestaw, zestawy, mozna_zmienic: moznaZmienic } = S.p.funkcje;
+  if (!moznaZmienic) return "";
+  const biezacy = zestawy.find((z) => z.klucz === zestaw);
+  const opcje = zestawy.map((z) => `<option value="${esc(z.klucz)}"${z.klucz === zestaw ? " selected" : ""}>${esc(z.nazwa)}</option>`).join("");
+  const opisy = zestawy.map((z) => `<p class="podpowiedz opis-zestawu" data-z="${esc(z.klucz)}"${z.klucz === zestaw ? "" : " hidden"}>${esc(z.opis)}</p>`).join("");
+  return `<section class="zestaw-mg"><div class="tabela-tytul">Zestaw funkcji tej gry</div>
+    <p>Teraz: <b>${biezacy ? esc(biezacy.nazwa) : "własny wybór funkcji"}</b>. Kolejny zestaw dołoży funkcje na następną lekcję –
+      klasa gra dalej tymi samymi firmami. Zmiana działa od następnej rundy i <b>tylko odsłania</b>: odkrytych funkcji nie chowa.</p>
+    <p><label for="zestaw-funkcji">Nowy zestaw</label>
+      <select id="zestaw-funkcji" data-zmiana="zestaw-opis">${opcje}</select>
+      <button class="btn pom" data-akcja="zestaw-funkcji">Zmień zestaw od następnej rundy</button></p>${opisy}</section>`;
+}
+function potwierdzZestaw() {
+  const klucz = document.getElementById("zestaw-funkcji").value, { cel, nowe, zostaja } = planZestawu(klucz);
+  const lista = (l) => `<ul>${l.map((x) => `<li>${x}</li>`).join("")}</ul>`;
+  okno("Zmiana zestawu funkcji", `<p>Zestaw „${esc(cel.nazwa)}” zacznie działać od następnej rundy. ${esc(cel.opis)}</p>
+    ${nowe.length ? `<p><b>▲ Dojdą:</b></p>${lista(nowe)}` : "<p>! Nic nowego się nie odsłoni.</p>"}
+    ${zostaja.length ? `<p><b>! Uwaga:</b> ten zestaw ukryłby te funkcje, ale są już odkryte (drużyny mogły z nich korzystać), więc <b>zostają odkryte</b>:</p>${lista(zostaja)}` : ""}`,
+  { przyciski: `<button class="btn jasny" data-akcja="zamknij-okno">Anuluj</button><button class="btn pom" data-akcja="zestaw-tak" data-z="${esc(klucz)}">Zmień zestaw</button>` });
 }
 
 function pokazHasla(konta, tytul) {
@@ -394,6 +429,13 @@ async function wykonaj(akcja, el) {
     toast(lekcje ? "Tryb lekcyjny zapisany." : "Gra prowadzona na żywo.");
     return wczytaj();
   }
+  if (akcja === "zestaw-funkcji") return potwierdzZestaw();
+  if (akcja === "zestaw-tak") {
+    zamknijOkno();
+    await api(`${URL_GRY}/prowadzenie`, "POST", { zestaw: el.dataset.z });
+    toast("Zestaw funkcji zmieniony – drużyny zobaczą nowe funkcje od następnej rundy.");
+    return wczytaj();
+  }
   if (akcja === "odblokowanie") return edytujOdblokowanie();
   if (akcja === "zapisz-odblokowanie") {
     const stare = Object.fromEntries(S.p.prowadzenie.odblokowanie.map((e) => [e.klucz, e.tydzien]));
@@ -479,6 +521,8 @@ document.addEventListener("click", (e) => {
 });
 
 document.addEventListener("change", (e) => {
+  const zestaw = e.target.closest("[data-zmiana=zestaw-opis]");
+  if (zestaw) document.querySelectorAll(".opis-zestawu").forEach((p) => { p.hidden = p.dataset.z !== zestaw.value; });
   const el = e.target.closest("[data-zmiana=poziom]");
   if (!el) return;
   api(`${URL_GRY}/prowadzenie`, "POST", { poziom: { firma: el.dataset.f, poziom: el.value } })

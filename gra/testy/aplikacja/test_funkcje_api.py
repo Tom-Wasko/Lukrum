@@ -46,3 +46,27 @@ def test_druzyna_odslania_i_zakrywa(client, uczen):
     assert ala.post(url, {"funkcja": "nie_ma"}, content_type=JSON).status_code == 400
     # mistrz gry też może (np. na prośbę drużyny), mimo że ogląda drużynę tylko do odczytu
     assert client.post(url, {"funkcja": "handel"}, content_type=JSON).json()["funkcje"]["handel"]["odslonieta"]
+
+
+def test_mg_zmienia_zestaw_miedzy_rundami_widok_i_zeszyt(client, uczen):
+    """Z46: zestaw z /prowadzenie – widok MG pokazuje aktualny zestaw, zeszyt zapowiada nowe funkcje."""
+    id_ = _nowa(client, "lekcja_1_zakladamy_firme")
+    ala = uczen("ala")
+    assert client.post(f"/api/gry/{id_}/druzyny/Ala", {"dodaj": "ala"}, content_type=JSON).status_code == 200
+    f = client.get(f"/api/gry/{id_}/mg").json()["funkcje"]
+    assert f["zestaw"] == "lekcja_1_zakladamy_firme" and f["mozna_zmienic"]
+    assert {z["klucz"] for z in f["zestawy"]} >= {"lekcja_1_zakladamy_firme", "lekcja_2_pierwsze_rachunki"}
+    assert client.post(f"/api/gry/{id_}/przelicz", content_type=JSON).status_code == 200
+    r = client.post(f"/api/gry/{id_}/prowadzenie", {"zestaw": "nie_ma"}, content_type=JSON)
+    assert r.status_code == 400
+    r = client.post(f"/api/gry/{id_}/prowadzenie", {"zestaw": "lekcja_2_pierwsze_rachunki"}, content_type=JSON)
+    assert r.status_code == 200
+    assert client.get(f"/api/gry/{id_}/mg").json()["funkcje"]["zestaw"] == "lekcja_2_pierwsze_rachunki"
+    v = ala.get(f"/api/gry/{id_}/widok/Ala").json()
+    assert v["funkcje"]["zaopatrzenie"]["stan"] == "odkryta" and v["funkcje"]["zaopatrzenie"]["aktywna"]
+    nowe = [o for o in v["zeszyt"]["odblokowania"] if o["klucz"] == "funkcja_zaopatrzenie"]
+    assert nowe and "Zaopatrzenie" in nowe[0]["tekst"]
+    for _ in range(3):   # gra ma 4 rundy – po zakończeniu zmiana odrzucona
+        client.post(f"/api/gry/{id_}/przelicz", content_type=JSON)
+    r = client.post(f"/api/gry/{id_}/prowadzenie", {"zestaw": "pelna_gra"}, content_type=JSON)
+    assert r.status_code == 400 and "zakończona" in r.json()["blad"]

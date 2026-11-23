@@ -16,7 +16,7 @@ from __future__ import annotations
 import copy
 
 from .dane import Dane
-from .funkcje import elementy_funkcji, elementy_wylaczone
+from .funkcje import elementy_funkcji, elementy_otwarte_w_grze, elementy_wylaczone
 from .kuchnia import dostawcy as dw
 from .nieruchomosci.lokale import tryb_lokali
 
@@ -102,6 +102,9 @@ def dla_gry(dane: Dane, konfiguracja: dict) -> Dane:
     zmiany = {k: int(t) for k, t in (konfiguracja.get("odblokowanie") or {}).items() if k in el}
     # funkcje wyłączone przez mistrza gry (silnik/funkcje.py) – ich elementy wyłączone jak tydzień liczba_rund + 1
     zmiany |= dict.fromkeys(elementy_wylaczone(dane, konfiguracja, el), int(konfiguracja["liczba_rund"]) + 1)
+    # zmiana zestawu w trakcie gry otworzyła element wyłączony na starcie – od rundy zmiany (nie wcześniej niż w danych)
+    for k, r in elementy_otwarte_w_grze(dane, konfiguracja, el).items():
+        zmiany[k] = max(el[k]["tydzien"], r)
     w = copy.copy(dane)
     w._baza = dane
     w.nadpisane_rundy = zmiany
