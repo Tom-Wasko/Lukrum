@@ -1,5 +1,5 @@
 # Zadania
-Następny numer: Z43
+Następny numer: Z44
 
 Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej ważne. Zrobione dawniej:
 `historia/postep.md`. Pytania do zadań: `Stan.md`, „Czeka na szefa”. Uwagi z gier testowych 20 i 22.11 (szef,
@@ -23,6 +23,7 @@ Podróż 03-okienka-i-rundy:
 - Z38 · Zana: „Portiernia” jako spis pięter (która agencja na którym piętrze, przejście do windy), zamiast listy wszystkich agencji
 
 ## Zaplanowane
+- Z43 · Kalibracja wpływu płacy na zadowolenie (dziś 0,3, założenie): źródła na start: Card, Mas, Moretti, Saez (AER 2012, płace kolegów a zadowolenie), Clark i Oswald 1996 (dochód porównawczy), badanie skandynawskie Soc. Indic. Res. 2025 (doi 10.1007/s11205-025-03634-6; streszczenie: +10% własnej płacy ≈ +0,04 pkt na skali 0–10, za paywallem), Sokolova i Sorensen (IZA DP 11966: elastyczność odejść względem płacy). Wstępnie realny efekt wygląda na mniejszy niż 0,3, a zmiana ruszy balans: decyzja szefa po przeliczeniu.
 - Z39 · moduły panelu w jednym pliku (paczka), jeśli preload z 03/wydajnosc nie wystarczy przez hostuj/Cloudflare; najpierw zmierzyć
 
 ### Lekkie poprawki
