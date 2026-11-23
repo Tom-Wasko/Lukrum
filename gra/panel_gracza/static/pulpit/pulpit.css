@@ -548,3 +548,10 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
 .pz-cel-wynik { margin: 6px 0 0; padding-top: 6px; border-top: 1px solid var(--tusz); display: flex; flex-direction: column; gap: 2px; }
 .pz-cel-wynik.ok b { color: var(--zysk, var(--tusz)); }
 .pz-cel-wynik.nie b { color: var(--strata, var(--tusz)); }
+
+/* podróż 03/odblokowania: blok „Od tego tygodnia otwarte” w liście wujka */
+.pz-odbl { margin: 8px 0; padding: 8px 10px; border: 2px solid var(--tusz); border-radius: 6px; }
+.pz-odbl h3 { margin: 0 0 4px; }
+.pz-odbl-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.pz-odbl-lista li { display: grid; grid-template-columns: 1.6em 1fr; gap: 6px; align-items: start; }
+.pz-odbl-gdzie { font-size: .9em; }

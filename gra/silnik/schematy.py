@@ -1915,6 +1915,13 @@ class ZadanieZeszytu(Schemat):
 Zadania = list[ZadanieZeszytu]
 
 
+class OdblokowanieZeszytu(Schemat):
+    """Ogłoszenie odblokowania w liście wujka: co się otwiera i po co, w którym budynku i wnętrzu."""
+    tekst: str = Field(min_length=10)
+    zeton: str
+    wnetrze: str = Field(min_length=2)
+
+
 class StaleZeszytu(Schemat):
     od_tygodnia: TydzienZeszytu
     zadania: Zadania = Field(min_length=1)
@@ -1964,6 +1971,7 @@ class CeleZeszytu(Schemat):
 class PlikZeszytu(Plik):
     warunki: dict[str, Warunek]
     cele: CeleZeszytu
+    odblokowania: dict[str, OdblokowanieZeszytu]
     stale: StaleZeszytu
     tygodnie: dict[int | Literal["ostatni"], TydzienStrony]
     gdzie_kupic: list[StronaKupic]

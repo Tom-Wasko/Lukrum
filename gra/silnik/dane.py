@@ -450,6 +450,13 @@ def _sprawdz_zeszyt(d: Dane) -> list[str]:
             bledy.append(f"{g}.element: {x['element']} – nie ma takiego elementu harmonogramu")
         if x.get("funkcja") and d.funkcje and x["funkcja"] not in d.funkcje["funkcje"]:
             bledy.append(f"{g}.funkcja: {x['funkcja']} – nie ma w funkcje.yaml")
+    for k, o in z["odblokowania"].items():
+        if el and k not in el:
+            bledy.append(f"zeszyt.yaml: odblokowania.{k}: nie ma takiego elementu harmonogramu")
+        if zetony is not None and o["zeton"] not in zetony:
+            bledy.append(f"zeszyt.yaml: odblokowania.{k}.zeton: {o['zeton']} – nie ma w mapa/budynki.yaml")
+    for k in sorted(set(el) - set(z["odblokowania"])):
+        bledy.append(f"zeszyt.yaml: odblokowania.{k}: brak tekstu ogłoszenia dla elementu harmonogramu")
     for st in z["gdzie_kupic"]:
         if zetony is not None and st["zeton"] not in zetony:
             bledy.append(f"zeszyt.yaml: gdzie_kupic.{st['tytul']}.zeton: {st['zeton']} – nie ma w mapa/budynki.yaml")
