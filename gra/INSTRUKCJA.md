@@ -494,7 +494,8 @@ dobrane do etapu gry.
 
 ## Dla mistrza gry
 
-Ta część jest dla nauczyciela, który prowadzi grę. Panel mistrza gry jest pod adresem `/mg/` (przycisk „Pulpit
+Ta część jest dla nauczyciela, który prowadzi grę. Przebieg lekcji krok po kroku, listę kontrolną i rady na kłopoty
+zawiera osobny **Przewodnik nauczyciela** (`dokumentacja/PRZEWODNIK_NAUCZYCIELA.md`, wersja do druku w PDF). Panel mistrza gry jest pod adresem `/mg/` (przycisk „Pulpit
 mistrza gry”); dostępny jest tylko dla kont z rolą mistrza.
 
 ### Zakładanie gry

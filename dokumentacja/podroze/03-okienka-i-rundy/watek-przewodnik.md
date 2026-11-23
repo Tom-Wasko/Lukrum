@@ -26,3 +26,26 @@
   w raporcie. Testy: `testy/aplikacja` (linki w dokumentach, jeśli taki test jest).
 
 ## Raport
+**Stan: gotowe z zastrzeżeniami** (gałąź `worktree-podroz-03-przewodnik`, bez push).
+
+**Zrobione**
+- `gra/dokumentacja/PRZEWODNIK_NAUCZYCIELA.md` (+ `.pdf` obok, 268 KB): przed lekcją i lista kontrolna, przebieg 5 lekcji
+  (tabele minuta po minucie), blok 07.12 (155 min + opcjonalnie do 13:00, 3 rundy + opcjonalnie 4.), „co robić, gdy…”,
+  kryteria oceniania (propozycja, 100 pkt), tabela mechanika–podstawa programowa, źródła.
+- README (lista dokumentów) i INSTRUKCJA („Dla mistrza gry”) odsyłają do przewodnika. `INSTRUKCJA.pdf` odświeżony.
+- PDF zrobiony jednorazowym skryptem (render tej samej strony co `instrukcja_pdf`, ale z innego pliku .md; skrypt
+  w katalogu roboczym joba, kodu gry nie zmieniałem). Nie ma stałej komendy na PDF przewodnika.
+
+**Dowody**
+- `manage.py instrukcja_pdf` → `Zapisano …INSTRUKCJA.pdf (427 KB).`
+- `pytest testy/aplikacja` → `267 passed in 148.89s`. Pełnych testów nie puszczałem (zmieniły się tylko dokumenty).
+
+**Do uzupełnienia / decyzji Archiego**
+1. **Podstawa programowa: wszystkie numery wymagań to „do sprawdzenia”.** Sieć jest zablokowana, więc nie sprawdziłem
+   rozporządzenia (nie zgaduję numerów). Podałem tylko akt (MEN 30.01.2018, Dz.U. 2018 poz. 467; numer też „do sprawdzenia”)
+   i linki do ISAP/gov.pl. Trzeba ręcznie wypełnić tabelę w pkt 6 (WOS, podstawy przedsiębiorczości / biznes i zarządzanie).
+2. Znacznik **„[nazwa przycisku z 03/zestawy]”** (2 miejsca: pkt 1.2 i blok 07.12) do uzupełnienia po scaleniu 03/zestawy.
+   Wersja bloku zakłada przełączenie zestawu między rundą 1 i 2.
+3. Serwer szkoły (Z19): w przewodniku „adres i opiekun do ustalenia”; po decyzji dopisać (też kto uruchamia `zamykaj_rundy`).
+4. Po uzupełnieniu 1–3 przegenerować PDF przewodnika.
+5. Propozycje: komenda `przewodnik_pdf` zamiast jednorazowego skryptu; kartki z hasłami w podziale na drużyny (Z47).
