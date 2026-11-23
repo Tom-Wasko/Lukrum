@@ -552,3 +552,6 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
 /* podróż 03/poprawki-okienek: nazwy rubryk listu do lewej */
 .pp-kop-lista .pp-rub { display: grid; justify-content: stretch; }   /* starsza reguła „.pp-kop-lista li” (flex, space-between) rozjeżdżała kolumny */
 .pp-rub-nazwa { text-align: left; justify-self: start; }
+/* podróż 03/poprawki-okienek: zakładki DECYZJE / WYNIKI nad teczką nie nachodzą na WRÓĆ (przy prawej krawędzi okna, nie przy lewej) */
+.szk.karta--s1 .teczka-tryb { left: auto; right: 40px; }
+@media (max-width: 560px) { .szk.karta--s1 .teczka-tryb { right: 14px; } .szk.karta--s1 .teczka-tryb button { padding: .45em .8em .4em; font-size: 12px; } }
