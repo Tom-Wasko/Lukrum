@@ -139,6 +139,7 @@ def po_rundzie(dane: Dane, f: Firma, w: dict, r: int, ziarno, szkolenia_procent:
         p.zadowolenie, p.wykorzystanie = z, x["wykorzystanie"]
         p.niezadowolony = p.niezadowolony + 1 if z < u["prog_zadowolenia"] else 0
         x.update(zadowolenie=z, niezadowolony=p.niezadowolony,
+                 skladniki={k: round(c, 3) for k, c in skl.items()},   # tylko do pokazania w panelu
                  powody=powody(dane, p, skl, x["wykorzystanie"]) if p.niezadowolony else [])
         if p.odchodzi or p.niezadowolony <= u["tygodnie_ostrzezenia"]:
             continue
