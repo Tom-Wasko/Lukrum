@@ -11,8 +11,10 @@ Nie był jeszcze sprawdzony w klasie.
 - Każda lekcja ma własny **zestaw funkcji** w kreatorze (krok 3, „Gotowe zestawy”): „Lekcja 1 – Zakładamy firmę” …
   „Lekcja 5 – Bilans sezonu”. Zestaw zostawia odkryte tylko to, czego uczy lekcja, resztę zakrywa (drużyna widzi ją
   wyszarzoną i sama odsłania, gdy chce), a cztery długie wątki (Handel, Harpagon, Giełda, Sieć lokali) wyłącza.
-  Funkcji nie da się zmienić po utworzeniu gry, więc **grę na kolejną lekcję zakłada się osobno** (albo wybiera
-  zestaw „Pełna gra”, gdy klasa ma sama odkrywać wszystko). Czasy lekcji: `../dokumentacja/wiedza/analizy/czas-lekcji.md`.
+  Na kolejną lekcję **nie zakładasz nowej gry**: między rundami wybierasz następny zestaw w panelu mistrza gry
+  (zakładka Funkcje ▸ „Zmień zestaw od następnej rundy”), a klasa gra dalej tymi samymi firmami. Zmiana tylko dokłada
+  funkcje, nic nie chowa (instrukcja: INSTRUKCJA.md, „Przejście do następnej lekcji”). Zestaw „Pełna gra” wybierz, gdy
+  klasa ma sama odkrywać wszystko. Czasy lekcji: `../dokumentacja/wiedza/analizy/czas-lekcji.md`.
 - Każda lekcja ma ten sam rytm: **5 min** wejście (pytanie), **25 min** gra albo praca z wynikami, **15 min** omówienie.
 - Do omówienia wyświetl na tablicy **Kurier rankingowy** jednej drużyny (za jej zgodą) albo panel mistrza gry.
 

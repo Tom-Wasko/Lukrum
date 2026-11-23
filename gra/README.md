@@ -61,7 +61,7 @@ szkolnym Microsoft jest opisane w [`dokumentacja/LOGOWANIE_MICROSOFT.md`](dokume
 
 - Instrukcja gry: [`INSTRUKCJA.md`](INSTRUKCJA.md). W grze jest pod adresem **/jak-grac**. Część „Dla mistrza
   gry” jest na końcu instrukcji.
-- Panel mistrza gry: **/mg/**. Tam zakłada się grę i konta drużyn, prowadzi rundy i wybiera odsłonięte funkcje.
+- Panel mistrza gry: **/mg/**. Tam zakłada się grę i konta drużyn, prowadzi rundy, wybiera odsłonięte funkcje i przełącza zestaw funkcji na kolejną lekcję (bez zakładania nowej gry).
 - Scenariusze lekcji (projekt): [`dokumentacja/SCENARIUSZE_LEKCJI.md`](dokumentacja/SCENARIUSZE_LEKCJI.md).
 
 ## Dla programistów i agentów
