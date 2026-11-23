@@ -19,7 +19,7 @@ Deklaracje `@font-face`: `fonty/fonty.css` (5 rodzin). OFL zezwala na dołączan
 |---|---|---|---|
 | `ikony/`, `dekor/`, `postacie/`, `sklep/`, `stany/`, `tla/`, `wnetrze/` | 118 plików SVG (+ `zestaw.svg`, `zestaw.json`, `README.md` ze spisem) | własne, generowane skryptami `gra/narzedzia/grafiki/` (`postacie.py`, `wnetrza.py`, `zbuduj.py`); README: „Żadna grafika nie odtwarza cudzego logo”, postacie to własne interpretacje | własne (autor projektu) |
 | `favicon.svg` | 1 plik | własny | własny |
-| `zakladki/ikony_marek.js` | ikony branżowe + sekcja `LOGA` | własne rysunki, **ale `LOGA` to uproszczone znaki 12 prawdziwych sieci** (zob. lista kontrolna, pkt 4) | zastrzeżenie w stopce; do decyzji |
+| `zakladki/ikony_marek.js` | ogólne ikony branżowe i ikony naszych marek (bez znaków prawdziwych firm) | własne rysunki liniowe | własny; nazwy firm w tekstach z zastrzeżeniem w stopce |
 
 Na liście plików śledzonych w `gra/` nie ma rastrowych obrazów (png, jpg) poza folderem `fonty/` (pliki `woff2`).
 
