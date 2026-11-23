@@ -28,13 +28,10 @@ Podróż 03-okienka-i-rundy:
 ### Lekkie poprawki
 
 ### Ważne
-- Z2 · gry testowe: znajomi 20 i 22.11 za nami; dalej 4–6 osób ze stoperem, potem klasa; balans jest dotąd tylko z botów;
-  w najbliższej grze sprawdzić poprawki z podróży 02 (sklepy, Park, mapa, drobne), kategorie w rzędzie (1) i „Jak grać” w zakładkach (3)
 - Z4 · seria `wnetrza`: osobne wnętrze dla każdego żetonu (projekt Fable 17.11, makiety w `_archiwum/fable-17.11/fable-wnetrza/`), PRL w holach, krytyka i poprawki wybrane przez szefa; majster: wnętrza wyglądają źle; podpisy na makietach przed wdrożeniem
 - Z3 · seria `budynki`: pierzeja 5 banków, giełda osobno, redakcja (Kamienica rachmistrzów i reklama w biurowcu przy Zana już są)
 - Z17 · lekcja 45 minut ze zmierzonym czasem rundy; gotowe zestawy odsłoniętych funkcji; wygląd pól kreatora trybu lekcyjnego na zrzucie
 - Z18 · przewodnik nauczyciela i zasady oceniania; tabela „mechanika a podstawa programowa” (WOS, biznes i zarządzanie); przegląd nauczyciela, próba w klasie
-- Z19 · serwer dla szkoły (dziś laptop szefa i tunel), osoba od `manage.py zamykaj_rundy`, dane uczniów (RODO) i notka o tym w instrukcji
 - Z20 · zgłoszenie do „Zwolnieni z Teorii” z datą lekcji (31.03.2027, niepotwierdzone); `METODA.md` (jawność AI) po pobraniu regulaminu (`wiedza/analizy/regulamin-zwzt-a-ai.md`)
 - Z23 · prawo: decyzje po przeglądzie z 16.11 (pytania w `Stan.md`); notki edukacyjne w instrukcji (progi PIP, staż, ZUS, odsetki, lichwa art. 304, CEIDG/PIS, daty roku szkolnego); ekran „Nawiązania i źródła”; drobne (stopki, PDF zgodny z `.md`, ODbL, User-Agent, autorstwo grafik, dymki 16-latków); wyszukać możliwe prawdziwe nazwiska i firmy (Jakub Klimek-Ślęzak, Zenon Lupa, e-Księgi24.pl) i zmienić przy trafieniu; informacja o klubie w instrukcji MG; lista kontrolna przeglądu (stałe wspólne z dawnym projektem → 0, brak nazw z dawnej gry, `ikony_marek.js` bez prawdziwych logo, tabela nawiązań, wykaz grafik i fontów); rozmowa z prawnikiem
 
@@ -51,3 +48,6 @@ Podróż 03-okienka-i-rundy:
 
 ## Odłożone
 - Z26 · niestabilny test kasyna (dziś `test_mistrz_gry_widzi_klub`): 22.11 nie powtórzył się w 2 pełnych przebiegach; wrócić, gdy się pojawi
+- Z19 · serwer dla szkoły (dziś laptop szefa i tunel), osoba od `manage.py zamykaj_rundy`, dane uczniów (RODO) i notka o tym w instrukcji
+- Z2 · gry testowe: znajomi 20 i 22.11 za nami; dalej 4–6 osób ze stoperem, potem klasa; balans jest dotąd tylko z botów;
+  w najbliższej grze sprawdzić poprawki z podróży 02 (sklepy, Park, mapa, drobne), kategorie w rzędzie (1) i „Jak grać” w zakładkach (3)
