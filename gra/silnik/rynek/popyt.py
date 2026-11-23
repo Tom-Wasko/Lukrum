@@ -312,7 +312,8 @@ def rynek_lokali(dane: Dane, firmy: dict[str, Firma], oferty: dict[str, dict[str
             widoki.setdefault(lok, widok_lokalu(firma, lok))
         przew = (przewozy or {}).get(f, [])
         sprzedaz_lokalu = {lok: 0 for lok in lokale}
-        obsluga_lokalu = {lok: {"obsluzeni": {}, "kolejka": 0, "brak": 0, "pomylki": 0} for lok in lokale}
+        obsluga_lokalu = {lok: {"obsluzeni": {}, "kolejka": 0, "brak": 0, "pomylki": 0, "obciazenie": []}
+                          for lok in lokale}
         # przychód (ceny lokalu, bez promocji) i wartość zużytych składników każdego lokalu – zakładka Mój lokal
         przychod_lokalu = {lok: 0.0 for lok in lokale}
         skladniki_lokalu = {lok: 0.0 for lok in lokale}
@@ -379,6 +380,7 @@ def rynek_lokali(dane: Dane, firmy: dict[str, Firma], oferty: dict[str, dict[str
                 for nr, h in o["potrzebne_stanowisk"].items():
                     laczna["dni_stanowisk"].setdefault(nr, [None] * len(dni))[i] = (h, o["pojemnosc_stanowisk"][nr])
                 laczna["dni_kasy_lokali"][lok][i] = (o["potrzebne_kasy"], o["pojemnosc_kasy"])
+                obsluga_lokalu[lok]["obciazenie"].append(op.obciazenie_dnia(o))
             if partie:
                 zaj = {t: 0.0 for t in sw.CHLODZONE}
                 for v in widoki.values():
