@@ -24,7 +24,7 @@ zatwierdzeniu szefa. Scalanie: do `main` dopóki szef jest, po `/papa` na `podro
 | 03/odblokowania | Z15 | scalony 07:11 (938 passed; po scaleniu swiat+aplikacja 286 passed) |
 | 03/wyglad | Z6 | scalone 11:31 (część; propozycje w spisie) |
 | 03/ukryte | Z42 | scalone 11:40 |
-| 03/kartki | Z44 | poprawka gęstości stron (od 11:36) |
+| 03/kartki | Z44 | scalone 11:50 (0 stron z przewijaniem; tel 30, 1366 23 strony) |
 | 03/lekcja | Z17, Z45 | scalone 11:44 (956 passed) |
 | 03/poprawki-okienek | Z34 (dokończenie) | scalony na podroz-03 07:03 (929 passed w wątku; swiat+aplikacja po scaleniu 282 passed) |
 | 03/przeglad-prawny | Z23 (część) | scalony na podroz-03 07:35 (lista kontrolna, wykaz grafik) |
