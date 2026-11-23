@@ -18,7 +18,6 @@ Podróż 03-okienka-i-rundy:
 - Z38 · Zana: „Portiernia” jako spis pięter (która agencja na którym piętrze, przejście do windy), zamiast listy wszystkich agencji
 
 ## Zaplanowane
-- Z40 · `silnik/wyniki/wnioski.py:21` mówi graczowi „sprawdźcie zakładki”: zamienić na miejsca na mapie (z 03/opisy)
 - Z41 · opis „40 000 zł” a dane: `inwestor_ratunkowy.max_kwota` 40 000, kapitał startowy 50 000 – sprawdzić, czy to zamierzone (z 03/opisy)
 - Z39 · moduły panelu w jednym pliku (paczka), jeśli preload z 03/wydajnosc nie wystarczy przez hostuj/Cloudflare; najpierw zmierzyć
 

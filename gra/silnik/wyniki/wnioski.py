@@ -18,8 +18,8 @@ _PRZYCZYNY = {
                           "przygotuje więcej porcji i nikt nie odejdzie z kolejki.", "stanowiska"),
     "brak stanowiska z pracownikiem i sprzętem": (
         "Danie bez gotowego stanowiska",
-        "Każde danie z menu potrzebuje stanowiska kuchennego z kompletem sprzętu i kucharzem – sprawdźcie zakładki "
-        "Stanowiska, Sprzęt i Zatrudnienie.", "stanowiska"),
+        "Każde danie z menu potrzebuje stanowiska kuchennego z kompletem sprzętu i kucharzem – na mapie sprawdźcie "
+        "Park handlowy ▸ Stanowiska i sprzęt oraz Miasteczko akademickie ▸ Rynek pracy.", "stanowiska"),
     "kasa": ("Kolejka przy kasie",
              "Dodajcie kasjera albo stanowisko kasowe – jedna kasa obsłuży tylko część chętnych.", "zatrudnienie"),
     "zasoby": ("Zabrakło składników",

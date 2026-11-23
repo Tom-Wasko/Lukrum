@@ -17,8 +17,12 @@ zatwierdzeniu szefa. Scalanie: do `main` dopóki szef jest, po `/papa` na `podro
 | 03/rundy | Z32 | scalony 22:00 (cel tygodnia, 3–4 ruchy w tygodniach 2–ostatni) |
 | 03/wydajnosc | Z37 | scalony 21:56 (preload 71 modułów, 5 pięter żądań → 1) |
 | 03/opisy | Z16, Z25 | scalony 22:06 (0 martwych odsyłaczy) |
+| 03/pora | Z12 | start 06:50 |
+| 03/przeglad-prawny | Z23 (część bez decyzji) | start 06:50 |
 
 ## Czeka na szefa
+- (23.11) Z41: inwestor ratunkowy wpłaca najwyżej 40 000 zł, a `zrodlo` mówi „max_kwota = kapitał startowy”, który od
+  13.11 wynosi 50 000 zł. a) podnieść do 50 000 (rekomendacja, zgodnie z opisem), b) zostawić 40 000 i poprawić opis.
 - (23.11) Wskazówki w wydarzeniach: wskaźnik „Goście” (tak nazwał wyko, to popyt w lokalach) czy „Opinia” (jak w Twoim
   przykładzie)? Rekomendacja: „Goście”, bo to dokładnie to, co liczy gra; opinia to osobny wskaźnik.
 - (23.11) Nagroda za cel tygodnia: wyko dał +3% gości na tydzień zamiast „opinia ▲”. Rekomendacja: zostawić +3% gości
