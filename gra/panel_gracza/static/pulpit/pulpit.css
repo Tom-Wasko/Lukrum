@@ -562,3 +562,13 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
 .pz-odbl-lista li { display: grid; grid-template-columns: 1.6em 1fr; gap: 6px; align-items: start; }
 .pz-odbl-gdzie { font-size: .9em; }
 .pz-odbl .pz-mapa { max-width: 100%; box-sizing: border-box; white-space: normal; text-align: left; }
+
+/* podróż 03/kartki: strony o stałej wysokości, bez przewijania (podział na kartki robi zeszyt.js) */
+.pz-strona { overflow: hidden; }
+.pz-str.pz-mier { position: absolute; inset: 0; z-index: -1; visibility: hidden; pointer-events: none; display: block; }
+.pz-nr-str { font-weight: 700; letter-spacing: .04em; }
+@media (max-width: 900px) {
+  .pz-str.pz-mier { display: block; }
+  .pz-rog { min-width: 44px; min-height: 44px; }
+  .pz-wstega, .pz-zamknij { min-height: 44px; }
+}

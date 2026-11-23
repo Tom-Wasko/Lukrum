@@ -2,6 +2,7 @@
 // (2) najechanie albo fokus – zeszyt wysuwa się i pokazuje listę zadań (to robi CSS), (3) klik – zeszyt na cały ekran
 // (pod półprzezroczystym tłem widać mapę), strony przewraca się z animacją (bez niej przy prefers-reduced-motion).
 // Strony: Lista wujka, Rozpiska funkcji, Gdzie co kupić, Samouczek. Zamknięcie: Esc, przycisk, klik poza zeszytem.
+// Kartki zamiast przewijania (podróż 03/kartki): treść działów jest dzielona na strony o stałej wysokości, z numerem „3 / 7”.
 // Krok 5: zeszyt otwarty to rozkładówka (lewa i prawa strona) z grzbietem i szyciem, stosem kartek po bokach, zakładkami-wstążkami
 // i przewracaniem kartki (rotateY z cieniem; tylko transform i opacity). Bez animacji przy prefers-reduced-motion.
 // Kolory tylko ze zmiennych palet (wygląd: pulpit.css).
@@ -11,7 +12,7 @@ import ZAKLADKI, { MENU } from "../zakladki/index.js";
 import { MIEJSCA } from "../swiat/swiat.js";
 
 const STRONY = [["lista", "Lista wujka"], ["rozpiska", "Rozpiska funkcji"], ["kupic", "Gdzie co kupić"], ["samouczek", "Samouczek"]];
-const Z = { nr: 0, sp: 0, otwarty: false, fokus: null, c: null, anim: null };
+const Z = { nr: 0, k: 1, sp: 0, str: [], pierwsza: [],  otwarty: false, fokus: null, c: null, anim: null };
 const bezRuchu = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 export const zeszytOtwarty = () => Z.otwarty;
 
@@ -158,24 +159,127 @@ function stronaSamouczek() {
     ["Pasek po lewej", "⚙ to ustawienia (wygląd, konto). Poniżej: konto, „Jak grać”, zakupy tygodnia i wydarzenia. Na dole paska leży list: „List z decyzjami”."],
     ["Filtr kategorii", "Rząd ikon u góry po prawej podświetla jeden rodzaj miejsc, na przykład banki, lokale kebab albo miejsca z wydarzeniami tygodnia. Drugie kliknięcie wyłącza filtr."],
     ["Portfel", "Plik banknotów na dole. Najechanie pokazuje gotówkę i debet, kliknięcie otwiera finanse."],
-    ["Zeszyt", "Tu jest lista wujka, rozpiska funkcji i podpowiedzi, gdzie co kupić. Strony przewraca się kliknięciem w róg kartki, zakładkami (wstążkami) albo klawiszami ← i →. Esc zamyka zeszyt."],
+    ["Zeszyt", "Tu jest lista wujka, rozpiska funkcji i podpowiedzi, gdzie co kupić. Strony przewraca się kliknięciem w róg kartki („Dalej ›”, „‹ Wstecz”), zakładkami (wstążkami), klawiszami ← i → albo kółkiem myszy. Esc zamyka zeszyt."],
     ["Tydzień", "Na środku u góry widać numer tygodnia. Gdy wszystko jest gotowe, list na dole paska kończy podejmowanie decyzji. Po przeliczeniu zaczyna się kolejny tydzień."]];
   return `<h2>Samouczek</h2><p class="pz-opis">Krótko, jak się w tym wszystkim poruszać.</p><ol class="pz-kroki pz-samouczek">${kroki.map(([n, o], i) =>
     `<li><span class="pz-nr" aria-hidden="true">${i + 1}</span><span><b>${n}</b> ${o}</span></li>`).join("")}</ol>`;
 }
 
 const TRESCI = { lista: stronaLista, rozpiska: stronaRozpiska, kupic: stronaKupic, samouczek: stronaSamouczek };
-const tresc = (c, nr) => TRESCI[STRONY[nr][0]](c);
 
 // --- pełny zeszyt: rozkładówka ------------------------------------------------------------------------------------------------
-// Kartki: [lewa pusta okładka] Lista | Rozpiska, Gdzie co kupić | Samouczek [prawa pusta]. Rozkładówka 0: „Lista wujka” z prawej,
-// 1: „Rozpiska” z lewej i „Gdzie co kupić” z prawej, 2: „Samouczek” z lewej. Bok k = 0…5 (k = 0 i 5 to puste strony przy okładce), strona nr = k − 1.
-const GLOWNA = [0, 1, 3];                              // strona, którą otwiera się rozkładówkę
-const ROZKLADOWKI = GLOWNA.length;
-const rozkl = (nr) => (nr <= 0 ? 0 : nr >= 3 ? 2 : 1);   // numer rozkładówki, na której leży strona
+// Kartki o stałej wysokości (bez przewijania). Treść każdego działu (Lista, Rozpiska, Gdzie co kupić, Samouczek) jest dzielona po
+// elementach na strony: Z.str = [{ html, dzial }], numer strony k = 1…N. Boki rozkładówki: k = 0 to pusta okładka po lewej, k > N to
+// strona z notatkami (dopełnia parę). Rozkładówka sp ma lewy bok 2·sp i prawy 2·sp + 1; na wąskim ekranie widać jeden bok (Z.k).
+const rozkl = (k) => Math.floor(k / 2);                  // numer rozkładówki, na której leży strona k
 const CZAS_KARTKI = 860;
+const PROG_KOLKA = 40;                                   // tyle „przewinięcia” kółkiem przewraca kartkę
 const waski = () => typeof matchMedia === "function" && matchMedia("(max-width: 900px)").matches;   // wąski ekran: jedna strona, bez 3D
 const nakladka = () => document.getElementById("pz");
+const liczbaStron = () => Z.str.length;
+const liczbaRozkl = () => Math.floor((liczbaStron() + 2 + 1) / 2);   // okładka + strony + ewentualna strona z notatkami, parami
+const jestPusty = (k) => k < 1 || k > liczbaStron();
+
+// --- dzielenie treści na strony -----------------------------------------------------------------------------------------------
+// Elementy kładzie się po kolei na niewidzialnej stronie-mierniku (te same wymiary i czcionka co prawdziwa strona). Co się nie mieści,
+// ląduje na następnej stronie. Element wyższy niż strona dzieli się na kawałki (pozycje listy, wiersze tabeli z powtórzonym nagłówkiem),
+// a gdy się nie da (jeden długi akapit), zmniejsza się go. Nagłówek nigdy nie zostaje na dole strony bez treści pod nim.
+const DZIELNE = /^(SECTION|UL|OL|LI|TABLE|DIV)$/;
+const naglowek = (e) => !!e && (/^H[23]$/.test(e.tagName) || (e.tagName === "SECTION" && e.children.length === 1 && /^H[23]$/.test(e.firstElementChild.tagName)));
+function miesci(m) {
+  const e = m.lastElementChild;
+  if (!e) return true;
+  const r = m.getBoundingClientRect(), skala = r.height / (m.offsetHeight || r.height) || 1;
+  const pad = parseFloat(getComputedStyle(m).paddingBottom) || 0;
+  return (e.getBoundingClientRect().bottom - r.top) / skala <= m.clientHeight - pad + 1;
+}
+function podziel(el) {
+  if (!DZIELNE.test(el.tagName)) return null;
+  if (el.tagName === "TABLE") {
+    const wiersze = [...(el.tBodies[0]?.rows || [])];
+    if (wiersze.length < 2) return null;
+    return wiersze.map((w, i) => {
+      const t = el.cloneNode(false), tb = document.createElement("tbody");
+      if (i) t.dataset.dalej = "1"; else if (el.caption) t.append(el.caption.cloneNode(true));
+      if (el.tHead) t.append(el.tHead.cloneNode(true));
+      tb.append(w.cloneNode(true));
+      t.append(tb);
+      return t;
+    });
+  }
+  const dz = [...el.children];
+  if (!dz.length) return null;
+  if (dz.length === 1) {
+    const w = podziel(dz[0]);
+    return w && w.map((p) => { const s = el.cloneNode(false); if (p.dataset.dalej) s.dataset.dalej = "1"; s.append(p); return s; });
+  }
+  return dz.map((ch, i) => { const s = el.cloneNode(false); if (i) s.dataset.dalej = "1"; s.append(ch.cloneNode(true)); return s; });
+}
+// dokłada kawałek „dalej” do poprzedniego elementu tego samego rodzaju (kawałki jednej listy wracają do jednej listy); zwraca cofnięcie
+function wlej(a, b) {
+  if (a.tagName === "TABLE") {
+    const tb = a.tBodies[0], skad = b.tBodies[0], wiersze = [...skad.rows];
+    wiersze.forEach((w) => tb.append(w));
+    return () => wiersze.forEach((w) => skad.append(w));
+  }
+  const dz = [...b.children], ost = a.lastElementChild;
+  if (dz.length === 1 && dz[0].dataset.dalej && ost && ost.tagName === dz[0].tagName && ost.className === dz[0].className) return wlej(ost, dz[0]);
+  dz.forEach((x) => a.append(x));
+  return () => dz.forEach((x) => b.append(x));
+}
+function paginuj(wezly, m) {
+  const strony = [];
+  m.replaceChildren();
+  const zamknij = () => {
+    const niesione = [];
+    while (m.children.length > 1 && (naglowek(m.lastElementChild) || (m.lastElementChild.tagName === "P" && naglowek(m.lastElementChild.previousElementSibling)))) {
+      niesione.unshift(m.lastElementChild);
+      m.lastElementChild.remove();
+    }
+    if (m.children.length) strony.push(m.innerHTML);
+    m.replaceChildren(...niesione);
+  };
+  const poloz = (el) => {
+    const ost = m.lastElementChild;
+    if (el.dataset.dalej && ost && ost.tagName === el.tagName && ost.className === el.className) {
+      const cofnij = wlej(ost, el);
+      if (miesci(m)) return;
+      cofnij();
+    }
+    m.append(el);
+    if (miesci(m)) return;
+    el.remove();
+    if (m.children.length) {
+      zamknij();
+      m.append(el);
+      if (miesci(m)) return;
+      el.remove();
+    }
+    const czesci = podziel(el);
+    if (czesci) { czesci.forEach(poloz); return; }
+    m.append(el);   // niepodzielny i za wysoki: zmniejszenie, aż się zmieści
+    for (let z = 0.94; z >= 0.5 && !miesci(m); z -= 0.06) el.style.zoom = z.toFixed(2);
+  };
+  wezly.forEach(poloz);
+  zamknij();
+  return strony;
+}
+function miernik() {
+  const roz = nakladka().querySelector("#pz-roz");
+  return roz.querySelector(".pz-mier .pz-strona");
+}
+function zbudujStrony(c) {
+  const m = miernik(), wynik = [];
+  STRONY.forEach(([klucz], d) => {
+    const korzen = document.createElement("div");
+    korzen.innerHTML = TRESCI[klucz](c);
+    const strony = paginuj([...korzen.children], m);
+    (strony.length ? strony : [""]).forEach((html) => wynik.push({ html, dzial: d }));
+  });
+  m.replaceChildren();
+  Z.str = wynik;
+  Z.pierwsza = STRONY.map((_, d) => wynik.findIndex((s) => s.dzial === d) + 1);
+}
 
 function bokPusty(k) {
   if (k === 0) {
@@ -189,48 +293,22 @@ function bokPusty(k) {
   }
   return `<div class="pz-koniec" aria-hidden="true"><p class="pz-t1">Notatki</p><p class="pz-t3">Tu mieści się to, o czym wujek jeszcze nie zdążył napisać.</p></div>`;
 }
-const zawartosc = (c, k) => (k >= 1 && k <= 4 ? tresc(c, k - 1) : bokPusty(k));
-const nazwaBoku = (k) => (k >= 1 && k <= 4 ? STRONY[k - 1][1] : k === 0 ? "Okładka zeszytu, strona wewnętrzna" : "Strona z notatkami");
+const zawartosc = (k) => (jestPusty(k) ? bokPusty(k) : Z.str[k - 1].html);
+const nazwaBoku = (k) => (jestPusty(k) ? (k === 0 ? "Okładka zeszytu, strona wewnętrzna" : "Strona z notatkami")
+  : `${STRONY[Z.str[k - 1].dzial][1]}, strona ${k} z ${liczbaStron()}`);
+const numerBoku = (k) => (jestPusty(k) ? "" : `${k} / ${liczbaStron()}`);
 
-// Jeden bok rozkładówki: przewijana strona w linię + wskaźnik „dalej”. Klasa l/p = lewa/prawa (inne cienie, dziurki po zewnętrznej stronie).
-function elementBoku(k, c, strona, id = "") {
+// Jeden bok rozkładówki: strona o stałej wysokości (bez przewijania). Klasa l/p = lewa/prawa (inne cienie, dziurki po zewnętrznej stronie).
+function elementBoku(k, strona, id = "") {
   const b = document.createElement("section");
-  b.className = `pz-str pz-str-${strona}${k === 0 || k === 5 ? " pz-pusta" : ""}`;
+  b.className = `pz-str pz-str-${strona}${jestPusty(k) ? " pz-pusta" : ""}`;
   if (id) b.id = id;
   b.dataset.k = String(k);
   b.setAttribute("aria-label", nazwaBoku(k));
-  b.innerHTML = `<div class="pz-strona" tabindex="-1">${zawartosc(c, k)}</div>
-    <button type="button" class="pz-wiecej" data-akcja="pz-dol" hidden aria-label="Są dalsze treści niżej: przewiń w dół" title="Przewiń niżej">▾</button><span class="pz-nr-str" aria-hidden="true">${k >= 1 && k <= 4 ? k : ""}</span>`;
+  b.innerHTML = `<div class="pz-strona">${zawartosc(k)}</div><span class="pz-nr-str" aria-hidden="true">${numerBoku(k)}</span>`;
   return b;
 }
 const stronaBoku = (b) => b.querySelector(".pz-strona");
-
-// wskaźnik „przewiń w dół” przy każdej stronie, dopóki jest co czytać niżej (przycisk – dostępny też z klawiatury i dla czytników)
-function wskaznik() {
-  const o = nakladka();
-  if (!o) return;
-  o.querySelectorAll("#pz-roz > .pz-str").forEach((b) => {
-    const s = stronaBoku(b), w = b.querySelector(".pz-wiecej");
-    if (s && w) w.hidden = !(Z.otwarty && s.scrollHeight - s.scrollTop - s.clientHeight > 12);
-  });
-}
-const poRysowaniu = () => requestAnimationFrame(() => requestAnimationFrame(wskaznik));
-// przewijana strona, którą dotyczy kółko albo klawisz: pod kursorem (też róg kartki po swojej stronie), inaczej ostatnio wskazana,
-// inaczej pierwsza, która ma co przewijać
-function stronaPodKursorem(cel) {
-  const b = cel?.closest?.(".pz-str") || (cel?.closest?.(".pz-rog-l") ? document.getElementById("pz-l") : cel?.closest?.(".pz-rog-p") ? document.getElementById("pz-p") : null);
-  return b ? stronaBoku(b) : null;
-}
-function stronaDoPrzewijania() {
-  const f = document.activeElement?.closest?.(".pz-str");
-  const lista = [...(nakladka()?.querySelectorAll("#pz-roz > .pz-str") || [])].filter((b) => b.offsetParent !== null);
-  const b = f || (Z.ostatni?.isConnected && lista.includes(Z.ostatni) ? Z.ostatni : lista.find((x) => { const s = stronaBoku(x); return s && s.scrollHeight > s.clientHeight + 1; }) || lista[0]);
-  return b ? stronaBoku(b) : null;
-}
-export function przewinZeszyt(przycisk) {
-  const s = przycisk?.closest?.(".pz-str")?.querySelector(".pz-strona") || nakladka()?.querySelector(".pz-str.biezaca .pz-strona, .pz-strona");
-  s?.scrollBy({ top: Math.round(s.clientHeight * 0.8), behavior: bezRuchu() ? "auto" : "smooth" });
-}
 
 function szkielet() {
   let o = nakladka();
@@ -246,73 +324,93 @@ function szkielet() {
     <nav class="pz-zakladki" aria-label="Zakładki zeszytu">${STRONY.map(([, n], i) => `<button type="button" class="pz-wstega pz-w${i}" data-akcja="pp-zeszyt-strona" data-n="${i}"><span>${n}</span></button>`).join("")}</nav>
     <div class="pz-blok"><i class="pz-stos pz-stos-l" aria-hidden="true"></i><i class="pz-stos pz-stos-p" aria-hidden="true"></i>
       <div class="pz-rozkladowka" id="pz-roz"><i class="pz-cien" aria-hidden="true"></i>
+        <section class="pz-str pz-str-p pz-mier" aria-hidden="true" inert><div class="pz-strona"></div></section>
         <div class="pz-grzbiet" aria-hidden="true"></div>
         <button type="button" class="pz-rog pz-rog-l" data-akcja="pp-zeszyt-strona" data-d="-1" aria-label="Poprzednia strona"><span>‹ Wstecz</span></button>
         <button type="button" class="pz-rog pz-rog-p" data-akcja="pp-zeszyt-strona" data-d="1" aria-label="Następna strona"><span>Dalej ›</span></button></div></div>
-    <p class="pz-numer" id="pz-numer" role="status"></p></div>`;
+    <p class="pz-numer" id="pz-numer" role="status" aria-live="polite" aria-atomic="true"></p></div>`;
   o.addEventListener("click", (e) => { if (e.target === o) zamknijZeszyt(); });
   const roz = o.querySelector("#pz-roz");
-  roz.prepend(elementBoku(0, Z.c, "l", "pz-l"));
-  roz.insertBefore(elementBoku(1, Z.c, "p", "pz-p"), roz.querySelector(".pz-grzbiet"));
-  roz.addEventListener("scroll", wskaznik, { passive: true, capture: true });
-  // kółko myszy: przewija stronę pod kursorem także nad rogiem kartki i przyciskiem „dalej” (podróż 02/drobne)
+  roz.prepend(elementBoku(0, "l", "pz-l"));
+  roz.insertBefore(elementBoku(1, "p", "pz-p"), roz.querySelector(".pz-grzbiet"));
+  // kółko myszy przewraca kartkę (z progiem, żeby jeden ruch kółka nie przerzucił kilku stron); strony się nie przewijają
+  let zebrane = 0, ostatnieKolko = 0;
   roz.addEventListener("wheel", (e) => {
     if (e.ctrlKey) return;
-    const s = stronaPodKursorem(e.target);
-    if (!s || s.scrollHeight <= s.clientHeight + 1) return;
     e.preventDefault();
-    s.scrollBy({ top: e.deltaMode === 1 ? e.deltaY * 34 : e.deltaMode === 2 ? e.deltaY * s.clientHeight : e.deltaY });
+    const teraz = Date.now();
+    if (teraz - ostatnieKolko > 250) zebrane = 0;
+    ostatnieKolko = teraz;
+    zebrane += e.deltaMode === 1 ? e.deltaY * 34 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY;
+    if (Math.abs(zebrane) < PROG_KOLKA || Z.anim) return;
+    krokZeszytu(Z.c, Math.sign(zebrane));
+    zebrane = 0;
+    ostatnieKolko = teraz + 400;   // chwila przerwy po przewróceniu, żeby rozpęd kółka nie przewrócił kolejnej kartki
   }, { passive: false });
-  roz.addEventListener("pointerover", (e) => { const b = e.target.closest?.(".pz-str"); if (b) Z.ostatni = b; }, { passive: true });
-  addEventListener("resize", () => { if (Z.otwarty) { stan(); wskaznik(); } });
+  let czas = 0;
+  addEventListener("resize", () => { clearTimeout(czas); czas = setTimeout(() => { if (Z.otwarty) przeladuj(Z.c); }, 120); });
   document.body.appendChild(o);
   return o;
 }
 
 const strL = () => document.getElementById("pz-l"), strP = () => document.getElementById("pz-p");
-function ustawBok(b, k, c) {
+function ustawBok(b, k) {
   b.dataset.k = String(k);
-  b.classList.toggle("pz-pusta", k === 0 || k === 5);
+  b.classList.toggle("pz-pusta", jestPusty(k));
   b.setAttribute("aria-label", nazwaBoku(k));
-  stronaBoku(b).innerHTML = zawartosc(c, k);
-  stronaBoku(b).scrollTop = 0;
-  b.querySelector(".pz-nr-str").textContent = k >= 1 && k <= 4 ? String(k) : "";
+  stronaBoku(b).innerHTML = zawartosc(k);
+  b.querySelector(".pz-nr-str").textContent = numerBoku(k);
 }
 // stan wokół stron: zakładki, podpis dla czytników, rogi, grubość stosu kartek po bokach
 function stan() {
   const o = nakladka();
   if (!o) return;
-  const szer = waski();
+  const szer = waski(), n = liczbaStron(), roz = liczbaRozkl();
   o.querySelectorAll(".pz-wstega").forEach((b, i) => { b.classList.toggle("aktywna", i === Z.nr); b.setAttribute("aria-current", i === Z.nr ? "page" : "false"); });
-  o.querySelector("#pz-numer").textContent = `${STRONY[Z.nr][1]} · strona ${Z.nr + 1} z ${STRONY.length}`;
+  o.querySelector("#pz-numer").textContent = `${STRONY[Z.nr][1]} · strona ${Z.k} z ${n}`;
   const wstecz = o.querySelector('.pz-rog[data-d="-1"]'), dalej = o.querySelector('.pz-rog[data-d="1"]');
-  wstecz.disabled = szer ? Z.nr === 0 : Z.sp === 0;
-  dalej.disabled = szer ? Z.nr === STRONY.length - 1 : Z.sp === ROZKLADOWKI - 1;
-  const roz = o.querySelector("#pz-roz");
-  roz.dataset.sp = String(Z.sp);
-  roz.querySelectorAll(":scope > .pz-str").forEach((b) => b.classList.toggle("biezaca", Number(b.dataset.k) === Z.nr + 1));
-  o.style.setProperty("--stos-l", String(0.18 + 0.82 * (Z.sp / (ROZKLADOWKI - 1))));
-  o.style.setProperty("--stos-p", String(0.18 + 0.82 * (1 - Z.sp / (ROZKLADOWKI - 1))));
+  wstecz.disabled = szer ? Z.k <= 1 : Z.sp === 0;
+  dalej.disabled = szer ? Z.k >= n : Z.sp >= roz - 1;
+  const r = o.querySelector("#pz-roz");
+  r.dataset.sp = String(Z.sp);
+  r.querySelectorAll(":scope > .pz-str[data-k]").forEach((b) => b.classList.toggle("biezaca", Number(b.dataset.k) === Z.k));
+  const ulamek = roz > 1 ? Z.sp / (roz - 1) : 0;
+  o.style.setProperty("--stos-l", String(0.18 + 0.82 * ulamek));
+  o.style.setProperty("--stos-p", String(0.18 + 0.82 * (1 - ulamek)));
 }
-function wypelnij(c) {
-  ustawBok(strL(), 2 * Z.sp, c);
-  ustawBok(strP(), 2 * Z.sp + 1, c);
+function wypelnij() {
+  ustawBok(strL(), 2 * Z.sp);
+  ustawBok(strP(), 2 * Z.sp + 1);
   stan();
-  poRysowaniu();
+}
+// ponowny podział na strony (zmiana rozmiaru okna albo pisma, odświeżenie widoku gry); zostajemy przy tej samej stronie, a gdy treść
+// się nie zmieniła, nic nie dotykamy (fokus na przyciskach strony zostaje)
+function przeladuj(c) {
+  Z.anim?.finish?.();
+  Z.c = c;
+  const stare = JSON.stringify(Z.str), dzial = Z.str[Z.k - 1]?.dzial ?? Z.nr;
+  zbudujStrony(c);
+  Z.k = Math.min(liczbaStron(), Math.max(1, Z.k));
+  if (Z.str[Z.k - 1].dzial !== dzial) Z.k = Z.pierwsza[dzial];
+  Z.nr = Z.str[Z.k - 1].dzial;
+  Z.sp = rozkl(Z.k);
+  if (stare !== JSON.stringify(Z.str) || strL().dataset.k !== String(2 * Z.sp)) wypelnij(); else stan();
 }
 
 export function otworzZeszyt(c, nr = 0) {
   Z.fokus = document.activeElement;
   Z.c = c;
-  Z.nr = Math.min(STRONY.length - 1, Math.max(0, nr));
-  Z.sp = rozkl(Z.nr);
   const o = szkielet();
-  wypelnij(c);
   Z.otwarty = true;
   document.body.classList.add("pz-otwarty");
   o.classList.add("otwarty");
+  zbudujStrony(c);
+  Z.nr = Math.min(STRONY.length - 1, Math.max(0, nr));
+  Z.k = Z.pierwsza[Z.nr];
+  Z.sp = rozkl(Z.k);
+  wypelnij();
   o.querySelector(".pz-zamknij").focus({ preventScroll: true });
-  poRysowaniu();
+  document.fonts?.ready?.then(() => { if (Z.otwarty) przeladuj(Z.c); });   // po wczytaniu czcionek wysokości mogą się zmienić
 }
 
 export function zamknijZeszyt(oddajFokus = true) {
@@ -326,29 +424,19 @@ export function zamknijZeszyt(oddajFokus = true) {
   if (oddajFokus && Z.fokus?.isConnected) Z.fokus.focus({ preventScroll: true });
 }
 
-// odświeżenie treści otwartych stron po zmianie widoku gry (bez przewracania, z zachowaniem przewinięcia)
+// odświeżenie treści po zmianie widoku gry (bez przewracania; strony przeliczane tylko, gdy treść się zmieniła)
 export function odswiezZeszyt(c) {
-  const o = nakladka();
-  if (!o || !Z.otwarty) return;
-  Z.c = c;
-  Z.anim?.finish?.();
-  o.querySelectorAll("#pz-roz > .pz-str").forEach((b) => {
-    const k = Number(b.dataset.k);
-    if (k < 1 || k > 4) return;
-    const s = stronaBoku(b), przew = s.scrollTop;
-    s.innerHTML = tresc(c, k - 1);
-    s.scrollTop = przew;
-  });
-  poRysowaniu();
+  if (!nakladka() || !Z.otwarty) return;
+  przeladuj(c);
 }
 
 // Przewrócenie kartki. Kartka leży na prawej (wprzód) albo lewej (wstecz) stronie i obraca się wokół grzbietu (rotateY), z lekkim wygięciem
 // (skewY), uniesieniem (translateZ) i cieniem. Pod nią od razu leży nowa strona. Animowane są tylko transform i opacity.
 function przewroc(c, od, doSp) {
   const o = nakladka(), roz = o.querySelector("#pz-roz"), L = strL(), P = strP(), wprzod = doSp > od;
-  const zrodlo = wprzod ? P : L, zapas = stronaBoku(zrodlo).scrollTop;
+  const zrodlo = wprzod ? P : L;
   const lico = (k, kl, przod) => {
-    const b = elementBoku(k, c, kl), f = document.createElement("div");
+    const b = elementBoku(k, kl), f = document.createElement("div");
     f.className = `pz-lico ${przod ? "przod" : "tyl"}`;
     f.setAttribute("aria-hidden", "true");
     f.inert = true;
@@ -363,9 +451,8 @@ function przewroc(c, od, doSp) {
   lisc.className = `pz-lisc ${wprzod ? "wprzod" : "wstecz"}`;
   lisc.append(przod, tyl);
   // pod kartką od razu leży nowa strona po stronie, z której kartkę się zdejmuje; druga strona zmieni się po lądowaniu
-  if (wprzod) ustawBok(P, 2 * doSp + 1, c); else ustawBok(L, 2 * doSp, c);
+  if (wprzod) ustawBok(P, 2 * doSp + 1); else ustawBok(L, 2 * doSp);
   roz.append(lisc);
-  stronaBoku(przod.firstChild).scrollTop = zapas;
   Z.sp = doSp;
   stan();
   const z = wprzod ? -1 : 1, opcje = { duration: CZAS_KARTKI, easing: "cubic-bezier(.45, .05, .2, 1)", fill: "forwards" };
@@ -384,7 +471,7 @@ function przewroc(c, od, doSp) {
     if (koniec) return;
     koniec = true;
     a2.cancel();
-    if (wprzod) ustawBok(L, 2 * doSp, c); else ustawBok(P, 2 * doSp + 1, c);
+    if (wprzod) ustawBok(L, 2 * doSp); else ustawBok(P, 2 * doSp + 1);
     lisc.remove();
     Z.anim = null;
     poRysowaniu();
@@ -393,49 +480,48 @@ function przewroc(c, od, doSp) {
   Z.anim = { finish: () => { ruch.finish(); skoncz(); } };
 }
 
-// przejście do strony nr (0…3): ta sama rozkładówka – tylko zmiana zakładki; inna – przewrócenie kartki (bez ruchu – zmiana od razu)
-export function idzDoStrony(c, nr) {
-  nr = Math.min(STRONY.length - 1, Math.max(0, nr));
+// przejście do strony k (1…N): ta sama rozkładówka – tylko zmiana zakładki; inna – przewrócenie kartki (bez ruchu – zmiana od razu)
+function idzDoK(c, k) {
+  k = Math.min(liczbaStron(), Math.max(1, k));
   const o = nakladka();
-  if (!o || nr === Z.nr) return;
+  if (!o || k === Z.k) return;
   Z.anim?.finish?.();
-  const od = Z.sp, doSp = rozkl(nr);
-  Z.nr = nr;
+  const od = Z.sp, doSp = rozkl(k);
+  Z.k = k;
+  Z.nr = Z.str[k - 1].dzial;
   Z.c = c;
   if (doSp === od || waski() || bezRuchu()) {
     Z.sp = doSp;
-    if (doSp !== od || waski()) wypelnij(c); else stan();
+    if (doSp !== od || waski()) wypelnij(); else stan();
     return;
   }
   przewroc(c, od, doSp);
 }
-// kolejna / poprzednia strona (róg kartki, strzałki): na szerokim ekranie przewraca rozkładówkę, na wąskim – jedną stronę
+// zakładka: pierwsza strona działu (nr 0…3)
+export function idzDoStrony(c, nr) {
+  idzDoK(c, Z.pierwsza[Math.min(STRONY.length - 1, Math.max(0, nr))]);
+}
+// kolejna / poprzednia strona (róg kartki, strzałki, kółko): na szerokim ekranie przewraca rozkładówkę, na wąskim – jedną stronę
 export function krokZeszytu(c, d) {
-  idzDoStrony(c, waski() ? Z.nr + d : GLOWNA[Math.min(ROZKLADOWKI - 1, Math.max(0, Z.sp + d))]);
+  if (waski()) { idzDoK(c, Z.k + d); return; }
+  const cel = Z.sp + d;
+  if (cel < 0 || cel >= liczbaRozkl()) return;
+  idzDoK(c, cel === 0 ? 1 : Math.min(liczbaStron(), 2 * cel + 1));
 }
 
-// klawiatura: Esc zamyka, ← → przewracają strony, Tab krąży po zeszycie (fokus nie ucieka na mapę)
+// klawiatura: Esc zamyka, ← → i PageUp/PageDown przewracają kartki, Tab krąży po zeszycie (fokus nie ucieka na mapę)
 document.addEventListener("keydown", (e) => {
   if (!Z.otwarty) return;
   const o = nakladka();
   if (e.key === "Escape") { e.preventDefault(); e.stopImmediatePropagation(); zamknijZeszyt(); return; }
-  if ((e.key === "ArrowRight" || e.key === "ArrowLeft") && !e.target.closest?.("input, textarea, select")) {
+  const kierunek = { ArrowRight: 1, ArrowLeft: -1, PageDown: 1, PageUp: -1 }[e.key];
+  if (kierunek && !e.target.closest?.("input, textarea, select")) {
     e.preventDefault();
-    o.querySelector(`.pz-rog[data-d="${e.key === "ArrowRight" ? 1 : -1}"]`)?.click();
+    o.querySelector(`.pz-rog[data-d="${kierunek}"]`)?.click();
     return;
   }
-  const przewijanie = { ArrowDown: 0.12, ArrowUp: -0.12, PageDown: 0.85, PageUp: -0.85, " ": e.shiftKey ? -0.85 : 0.85 }[e.key];
-  if ((przewijanie != null || e.key === "Home" || e.key === "End") && !e.target.closest?.("input, textarea, select, button, a")) {
-    const s = stronaDoPrzewijania();
-    if (s) {   // klawiatura przewija stronę, nawet gdy fokus jest na przycisku „Zamknij”
-      e.preventDefault();
-      if (e.key === "Home") s.scrollTo({ top: 0 }); else if (e.key === "End") s.scrollTo({ top: s.scrollHeight });
-      else s.scrollBy({ top: Math.round(Math.max(34, s.clientHeight * Math.abs(przewijanie))) * Math.sign(przewijanie) });
-      return;
-    }
-  }
   if (e.key !== "Tab") return;
-  const f = [...o.querySelectorAll("button:not([disabled]), a[href], .pz-strona")].filter((x) => x.offsetParent !== null && !x.closest(".pz-lisc"));
+  const f = [...o.querySelectorAll("button:not([disabled]), a[href]")].filter((x) => x.offsetParent !== null && !x.closest(".pz-lisc") && !x.closest(".pz-mier"));
   if (!f.length) return;
   const i = f.indexOf(document.activeElement);
   if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
