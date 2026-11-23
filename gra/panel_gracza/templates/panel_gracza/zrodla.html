@@ -36,6 +36,11 @@
     a { color: var(--akcent-2); }
     a:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
     .stopka { text-align: center; color: var(--szary); font-size: 13px; padding: 8px 16px 28px; }
+    /* podróż 03/wyglad: pasek i nagłówki tabel jak tło strony z ramką (odwrócone tło dawało biały pasek w trybie ciemnym), w „wysokiej” szary tekst pełnym kolorem */
+    .naglowek { background: var(--g-karta); color: var(--tusz); border-bottom: max(2px, var(--ramka-grubosc)) solid var(--ramka); }
+    .naglowek a { color: var(--tusz); }
+    th { color: var(--tusz); background: color-mix(in srgb, var(--tusz) 12%, var(--papier)); border-bottom: 2px solid var(--ramka); }
+    [data-paleta="wysoka"] { --szary: var(--tusz); }
     @media print { .naglowek, .spis { display: none; } body { background: #fff; color: #000; } th { color: #000; background: #fff; border-bottom: 2px solid #000; } }
   </style>
 </head>
