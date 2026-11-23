@@ -43,3 +43,9 @@
 - Martwy CSS `.pz-wiecej` w `pulpit.css` (ok. l. 365–377) do usunięcia.
 - Zapis dziennika `pracownicy/lista` został odrzucony; wpis `postep` odmówił bez `if_version` (nie ponawiałem).
 - Przy pracy kilka poleceń Bash (złożone, `cd`, `curl`) było odrzucanych w izolacji worktree.
+
+**Poprawka (wyko, 23.11.2026): mniej pustych stron.**
+- Przyczyna na telefonie: tekst kroku listy miał kolumnę ok. 90 px (obok „teraz” i „wejdź →”), więc jeden krok zajmował do 580 px, a z `podziel` rozbijającego LI na kawałki zostawały strony z samym ogonem (57–91 px). Poprawki: (1) `pulpit.css` (≤900 px): krok w dwóch wierszach, „teraz” i „wejdź” pod treścią; (2) `zeszyt.js`: pozycja listy (LI) dzieli się tylko przez wiersze swojej tabeli, inaczej zostaje w całości (dotąd rozbijała się na pojedyncze elementy); (3) martwy CSS `.pz-wiecej` usunięty (blok, odwołania, `@keyframes pz-skok`).
+- Liczby stron (ta sama gra pokazowa, tydzień 5): telefon 390×844: **40 → 30**; 1366×820: **24 → 23** (strona ma tylko 626 px, a pojedyncze kroki i blok celu są niepodzielne, więc zysk jest mały). Strony przewijające: **0** w obu rozmiarach (`scrollHeight ≤ clientHeight`; telefon: n=29 kliknięć, przew=[]; szeroko: przew=0).
+- Zrzuty przed/po w `_robocze/zrzuty-kartki/`: `lista-bar-jasny.png` → `po-lista-bar-jasny.png`, `tel-lista.png` → `po-tel-lista.png` (poza gitem).
+- Dowód: `pytest test_pulpit.py test_drobne.py` → `47 passed`; `ruff check .` → `All checks passed!`; `node --check zeszyt.js` czyste. Pełnych testów nie powtarzałem (zmiana tylko w JS/CSS kartek).

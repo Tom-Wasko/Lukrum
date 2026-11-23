@@ -209,6 +209,16 @@ function podziel(el) {
   }
   const dz = [...el.children];
   if (!dz.length) return null;
+  if (el.tagName === "LI") {   // pozycja listy: dzieli się tylko przez wiersze swojej tabeli (resztę kładzie w całości przy pierwszym kawałku)
+    const tab = dz.find((x) => x.tagName === "TABLE"), w = tab && podziel(tab);
+    if (!w) return null;
+    return w.map((t, i) => {
+      const s = el.cloneNode(false);
+      if (i) s.dataset.dalej = "1"; else dz.forEach((x) => { if (x !== tab) s.append(x.cloneNode(true)); });
+      s.append(t);
+      return s;
+    });
+  }
   if (dz.length === 1) {
     const w = podziel(dz[0]);
     return w && w.map((p) => { const s = el.cloneNode(false); if (p.dataset.dalej) s.dataset.dalej = "1"; s.append(p); return s; });
