@@ -112,7 +112,7 @@ urząd wyglądają inaczej i poznaje się je po jednym charakterystycznym przedm
 czynności (po najechaniu albo wejściu klawiszem Tab punkt się podświetla, a „!” ostrzega o błędach do poprawy). Etykieta
 z „➜” mówi, że sprawę załatwia się w innym miejscu, a przy zamkniętych punktach jest kłódka i numer tygodnia. Kto tu
 mówi, ten ma dymek (po najechaniu), a pod rysunkiem jest lista tych samych punktów dla czytników ekranu. Wejście do
-banku albo biura rachunkowego prowadzi najpierw przez fasadę (Pierzeja bankowa, Kamienica rachmistrzów).
+banku albo biura rachunkowego prowadzi najpierw przez fasadę (Pierzeja bankowa, Kamienica rachmistrzów). Pora dnia za oknem i światło we wnętrzu zgadzają się z zegarem, tak jak na mapie: w dzień jest jasno, wieczorem zapalają się lampy, w nocy jest ciemno (napis w rogu podaje porę; tryb jasny i ciemny jej nie zmienia).
 
 Na mapie u góry po prawej jest **rząd ikon kategorii** (Jedzenie i zaopatrzenie, Finanse, Urzędy i prawo, Praca i ludzie,
 Reklama i media, Miasto i rozrywka): kliknięta ikona podświetla pasujące miejsca (aktywną znaczy ✓ i gruba ramka),

@@ -140,6 +140,24 @@ miejsca:
     ksztalt: gorki
     opis: Dzikie wzgórza i wąwozy na Czechowie – ulubione miejsce spacerów, biegów i wiosennych pikników.
     mapa: {x: 5, y: 2, szer: 3, gl: 3}
+pora:
+  # pora dnia (03/pora): jedno źródło dla mapy i wnętrz. Wysokość Słońca nad Lublinem (stopnie) → nakładka [r, g, b, krycie];
+  # pomiędzy punktami interpolacja liniowa. Tylko wygląd – nie zmienia zasad gry.
+  etapy:
+    - [-18, [10, 20, 60, 0.5]]      # noc
+    - [-8, [25, 40, 100, 0.38]]     # zmierzch
+    - [-2, [150, 80, 90, 0.24]]     # po zachodzie
+    - [3, [255, 130, 40, 0.15]]     # złota godzina
+    - [12, [255, 190, 110, 0.04]]
+    - [20, [255, 255, 255, 0]]      # dzień
+  lampy: {od: 4, rozpietosc: 10}    # lampy zapalają się od tej wysokości Słońca i świecą w pełni po rozpiętości (°)
+  progi:                            # wysokość Słońca (°), od której zaczyna się dana pora wnętrza
+    noc: -8                         # niżej: noc
+    dzien: 6                        # wyżej: dzień; pomiędzy: świt (rano) albo zmierzch (wieczorem)
+    pelna_noc: -18                  # ciemność 1,0 (pełna noc); od progu „dzien” w górę ciemność 0
+  wnetrze:
+    przyciemnienie: 0.85            # jaka część nakładki mapy kryje wnętrze (wnętrze jest jaśniejsze niż mapa)
+    poswiata_lamp: 0.55             # największe krycie ciepłej poświaty lamp w nocy
 ruch:
   # natężenie ruchu o godzinie 0, 1, …, 23 (szczyty rano i po pracy, nocne powroty)
   godziny: [0.15, 0.1, 0.06, 0.05, 0.06, 0.15, 0.35, 0.75, 1.0, 0.75, 0.6, 0.65, 0.8, 0.8, 0.75, 0.85, 1.0, 1.0,

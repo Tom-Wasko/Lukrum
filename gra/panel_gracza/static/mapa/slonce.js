@@ -25,7 +25,7 @@ export function wysokoscSlonca(minuty = null, teraz = new Date()) {
 }
 
 // punkty kontrolne: wysokość Słońca → [r, g, b, krycie nakładki]; pomiędzy interpolacja liniowa
-const ETAPY = [
+let ETAPY = [
   [-18, [10, 20, 60, 0.5]],     // noc
   [-8, [25, 40, 100, 0.38]],    // zmierzch
   [-2, [150, 80, 90, 0.24]],    // po zachodzie
@@ -33,6 +33,20 @@ const ETAPY = [
   [12, [255, 190, 110, 0.04]],
   [20, [255, 255, 255, 0]],     // dzień
 ];
+
+let LAMPY = { od: 4, rozpietosc: 10 };
+/** Ustawienia pory z `dane/mapa/miasto.yaml` (klucz `pora`): etapy nakładki i lampy. Bez nich działają wartości wbudowane powyżej. */
+export function ustawUstawieniaPory(p) {
+  if (Array.isArray(p?.etapy) && p.etapy.length > 1) ETAPY = p.etapy;
+  if (p?.lampy) LAMPY = { ...LAMPY, ...p.lampy };
+}
+/** Jak mocno świecą lampy (0–1) przy danej wysokości Słońca: zapalają się przy zachodzie, pełne niżej o `rozpietosc` stopni. */
+export const stopienLamp = (h) => Math.min(1, Math.max(0, (LAMPY.od - h) / LAMPY.rozpietosc));
+
+// godzina ręczna z suwaka mapy (null = prawdziwy zegar); wnętrza czytają ją stąd, więc oba widoki pokazują tę samą porę
+let CZAS_RECZNY = null;
+export const ustawCzasReczny = (m) => { CZAS_RECZNY = m; };
+export const czasReczny = () => CZAS_RECZNY;
 
 /** Kolor nakładki (rgba) i jej krycie dla danej wysokości Słońca. */
 export function nakladkaPory(h) {

@@ -10,7 +10,7 @@ import { ikona, zeton } from "./ikony.js";
 import { utworzWidok } from "./widok.js";
 import { utworzZdjecie } from "./zdjecie.js";
 import { pokazKarte } from "../pulpit/karta.js";
-import { nakladkaPory, naGodzine, terazMinuty, wysokoscSlonca } from "./slonce.js";
+import { nakladkaPory, naGodzine, stopienLamp, terazMinuty, ustawCzasReczny, ustawUstawieniaPory, wysokoscSlonca } from "./slonce.js";
 
 const ADRES = (plik) => new URL(plik, import.meta.url).href;
 const POZIOMY = [0.14, 0.45];
@@ -418,7 +418,7 @@ function ustawPore(ramka) {
   const noc = ramka.querySelector(".lm-noc");
   if (!noc) return;
   const h = wysokoscSlonca(CZAS), { kolor, krycie } = nakladkaPory(h);
-  const lampy = Math.min(1, Math.max(0, (4 - h) / 10));   // zapalają się przy zachodzie, pełne od −6°
+  const lampy = stopienLamp(h);   // zapalają się przy zachodzie, pełne od −6° (progi: dane/mapa/miasto.yaml, pora)
   ramka.classList.toggle("lm-lampy", lampy > 0);
   ramka.querySelector("#lmapa-lampy")?.style.setProperty("--lampy", lampy.toFixed(2));
   zdj?.uniewaznij();   // poświata lamp jest na zdjęciu mapy
@@ -439,7 +439,8 @@ export const nowaMapa = {
     C = c; P = pomoc;
     if (BLAD) return `<div class="komunikat">Nie udało się wczytać danych mapy (${esc(BLAD)}). <button class="btn maly jasny" data-akcja="mapa-wersja">Pokaż starą mapę</button></div>`;
     if (!DANE) { wczytane.then(() => { if (C === c) c.rysuj(); }); return `<div class="ladowanie">Wczytywanie mapy…</div>`; }
-    const M = c.kat.mapa, wart = P.wartosciWarstwy(c), zakres = wart ? zakresWartosci(wart) : null;
+    const M = c.kat.mapa; ustawUstawieniaPory(M.miasto?.pora);
+    const wart = P.wartosciWarstwy(c), zakres = wart ? zakresWartosci(wart) : null;
     const brak = c.v.lokale && !c.v.lokale.moje.length
       ? `<div class="komunikat">Nie masz jeszcze lokalu – przybliż mapę i kliknij wolny lokal albo działkę (żeton z przerywaną ramką).</div>` : "";
     return `${brak}${P.parkiNaMapie(c.v, c.kat, c.edycja)}${pasekUstawien(c)}
@@ -477,7 +478,7 @@ export const nowaMapa = {
     clearInterval(zegar);
     zegar = setInterval(() => { if (!ramka.isConnected) return clearInterval(zegar); if (CZAS == null) { ustawPore(ramka); const w = ramka.querySelector(".lm-slonce input"); if (w) { w.value = terazMinuty(); w.nextElementSibling.textContent = naGodzine(+w.value); } } }, 60000);
     ramka.querySelector(".lm-slonce input")?.addEventListener("input", (e) => {
-      CZAS = +e.target.value; e.target.nextElementSibling.textContent = naGodzine(CZAS);
+      CZAS = +e.target.value; ustawCzasReczny(CZAS); e.target.nextElementSibling.textContent = naGodzine(CZAS);
       ramka.querySelector(".lm-pora-teraz")?.removeAttribute("hidden"); ustawPore(ramka);
     });
     widok = utworzWidok(ramka, { zasieg: DANE.zasieg, start, stan: WIDOK, naZmiane });
@@ -501,7 +502,7 @@ export const nowaMapa = {
   akcje: {
     "lmapa-zoom": (el) => { const z = +el.dataset.z; if (z) widok?.przybliz(z); else widok?.calosc(); },
     "lmapa-pora-teraz": (el) => {
-      CZAS = null; const ramka = document.getElementById("lmapa"), w = ramka?.querySelector(".lm-slonce input");
+      CZAS = null; ustawCzasReczny(null); const ramka = document.getElementById("lmapa"), w = ramka?.querySelector(".lm-slonce input");
       if (w) { w.value = terazMinuty(); w.nextElementSibling.textContent = naGodzine(+w.value); }
       el.hidden = true; if (ramka) ustawPore(ramka);
     },
