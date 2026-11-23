@@ -29,6 +29,14 @@
 - 2026-11-23 · Liczba 0,3162 (`zalozenia.yaml`, nachylenie składnika płacy, wspólna ze starym projektem): przeliczyć
   od zera z danych GUS.
 - 2026-11-23 · Autorstwo grafik i nagrań: ekran „Nawiązania i źródła” w grze + stopka instrukcji.
+- 2026-11-23 · Z41: inwestor ratunkowy wpłaca do 50 000 zł (jak kapitał startowy).
+- 2026-11-23 · Wskaźnik w wskazówkach wydarzeń nazywa się „Goście”; nagroda za cel tygodnia zostaje +3% gości na tydzień.
+- 2026-11-23 · Z15: terminy odblokowań zostają w kalendarzu (MG może je zmienić); każde odblokowanie ogłasza list
+  wujka (co się otwiera, gdzie na mapie, po co).
+- 2026-11-23 · Z21: tłok (zajętość załogi) obniża opinię i jest widoczny we wnętrzu (kolejka, miny, napis);
+  wyposażenie podnosi opinię (bez liczenia dwa razy z kartami sprzętu). Majster: część mechanik jest „ukryta” –
+  każdy skutek ma być widoczny dla gracza (Z42).
+- 2026-11-23 · Drugi plan podróży 03: Z23 (prawo wg decyzji), Z6 (przegląd wyglądu zrzutami), Z15, Z21, Z42.
 
 
 ### Decyzje 13–19.11 (z dawnych notatek, tematami)

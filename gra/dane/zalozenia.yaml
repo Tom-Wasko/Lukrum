@@ -139,12 +139,12 @@ finanse:
     zrodlo: 'założenie autora: odsetki proste, np. 100 zł na 1 miesiąc przy 10% rocznie to 0,83 zł'
   inwestor_ratunkowy:
     wartosc:
-      max_kwota: 40000
+      max_kwota: 50000
       udzial: 0.3
       rund: 8
     pewnosc: zalozenie
     zrodlo: '(odpowiedź autora w planie optymalizacji balansu: „Inwestor za udział w wyniku”, „Wpłata jako dług”): mistrz gry
-      ratuje drużynę z debetem ponad limit wpłatą do max_kwota (kapitał startowy); inwestor przez `rund` rund bierze
+      ratuje drużynę z debetem ponad limit wpłatą do max_kwota (kapitał startowy, od 13.11 50 000 zł; decyzja szefa 23.11); inwestor przez `rund` rund bierze
       `udzial` dodatniego dochodu netto rundy, a niezwrócona wpłata liczy się jak dług – wartości do kalibracji'
 wynik:   # wynik punktowy: pięć działów po 0–200 pkt, tydzień 1 to „Wielkie otwarcie” (silnik/wyniki/punkty.py)
   mandaty_w_dochodzie:

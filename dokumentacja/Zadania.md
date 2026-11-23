@@ -1,5 +1,5 @@
 # Zadania
-Następny numer: Z42
+Następny numer: Z43
 
 Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej ważne. Zrobione dawniej:
 `historia/postep.md`. Pytania do zadań: `Stan.md`, „Czeka na szefa”. Uwagi z gier testowych 20 i 22.11 (szef,
@@ -15,10 +15,14 @@ Podróż 03-okienka-i-rundy:
   na wolnej licencji (6)
 - Z36 · wyniki tygodnia w kebabie: jeden prosty ekran (sprzedaż, koszty, zysk, miejsce w rankingu), łatwy do znalezienia
 - Z5 · lista wujka: kliknięcie pozycji przesuwa i przybliża mapę do budynku, a ten pulsuje
+- Z15 · odblokowania ogłaszane listami wujka (terminy z kalendarza zostają)
+- Z21 · skutki wnętrza: tłok obniża opinię i jest widoczny; wyposażenie podnosi opinię
+- Z42 · „ukryte” mechaniki (majster): spis skutków, których gracz nie widzi, i pokazanie ich w grze
+- Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie
+- Z23 · prawo (część z 23.11): ogólne ikony zamiast logo sieci, 0,3162 od zera z GUS, ekran „Nawiązania i źródła”
 - Z38 · Zana: „Portiernia” jako spis pięter (która agencja na którym piętrze, przejście do windy), zamiast listy wszystkich agencji
 
 ## Zaplanowane
-- Z41 · opis „40 000 zł” a dane: `inwestor_ratunkowy.max_kwota` 40 000, kapitał startowy 50 000 – sprawdzić, czy to zamierzone (z 03/opisy)
 - Z39 · moduły panelu w jednym pliku (paczka), jeśli preload z 03/wydajnosc nie wystarczy przez hostuj/Cloudflare; najpierw zmierzyć
 
 ### Lekkie poprawki
@@ -35,11 +39,8 @@ Podróż 03-okienka-i-rundy:
 - Z23 · prawo: decyzje po przeglądzie z 16.11 (pytania w `Stan.md`); notki edukacyjne w instrukcji (progi PIP, staż, ZUS, odsetki, lichwa art. 304, CEIDG/PIS, daty roku szkolnego); ekran „Nawiązania i źródła”; drobne (stopki, PDF zgodny z `.md`, ODbL, User-Agent, autorstwo grafik, dymki 16-latków); wyszukać możliwe prawdziwe nazwiska i firmy (Jakub Klimek-Ślęzak, Zenon Lupa, e-Księgi24.pl) i zmienić przy trafieniu; informacja o klubie w instrukcji MG; lista kontrolna przeglądu (stałe wspólne z dawnym projektem → 0, brak nazw z dawnej gry, `ikony_marek.js` bez prawdziwych logo, tabela nawiązań, wykaz grafik i fontów); rozmowa z prawnikiem
 
 ### Mniej ważne
-- Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie
 - Z7 · mapa: położenia lokali w `lokale.yaml: geo` zamiast w `lublin.json`; odsyłacze dla twórców usunąć z `budynki.yaml`; opisy 11 punktów orientacyjnych i położenia Auchan/błonia/Lidl sprawdzić w źródłach; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html`
 - Z8 · boty i billboardy na mapie; przycisk „Stara mapa” do zdjęcia po teście z klasą
-- Z15 · harmonogram odblokowań prowadzony listami wujka zamiast numerów rund
-- Z21 · dane wnętrz: podpiąć skutki wskaźników (`wyposazenie`, `tlok`)
 - Z13 · wizyty wujka przy ladzie w ważnych momentach
 - Z14 · nastrój zespołu na twarzach, wydarzenia dla filii, popyt z mapy
 - Z11 · dźwięk: lekkie dźwięki domyślnie (dzwonek, skwierczenie, gwar, stempel), łatwe wyciszenie, MG wycisza klasę; bez muzyki z syntezatora
