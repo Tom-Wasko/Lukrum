@@ -36,6 +36,7 @@ PY -X utf8 -m silnik.dane sprawdz                             # po każdej zmian
 PY -X utf8 -m balans.symuluj 12 sredni 7                      # gra botów, 12 rund ≈ 3 s
 PY -X utf8 manage.py graj --port <PORT> --bez-przegladarki    # serwer (w tle); gra testowa: manage.py gra_pokazowa
 cp plik.js "$TEMP/t.mjs" && node --check "$TEMP/t.mjs"        # składnia modułu JS
+PY -X utf8 narzedzia/zrzuty.py --port <PORT> --kroki k.json   # zrzuty ekranu bez przeglądarki (opis w pliku)
 ```
 Po pracy zatrzymaj uruchomiony serwer.
 
