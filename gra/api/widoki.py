@@ -229,6 +229,7 @@ def api_prowadzenie(request, id_):
     (harmonogram odblokowań gry z lokalami), {"auto_zamowienia": bool} (przycisk „Zamów brakujące”
     w Dostawcach), {"refleksja": "wylaczona" | "opcjonalna" | "wymagana"},
     {"podpowiedzi": bool} (rady na Dashboardzie w pierwszych rundach),
+    {"zestaw": klucz zestawu funkcji} (od bieżącej rundy, tylko odsłania),
     {"podkupywanie": bool} (czy wolno podkupywać pracowników innych drużyn),
     {"klub": bool} (klub z hasłem w tej grze; wyłączony – drużyny go nie widzą, zakłady
     przepadają z decyzji),
@@ -284,6 +285,12 @@ def api_prowadzenie(request, id_):
         with serwisy.zmiana(id_) as g:
             g.konfiguracja["formy_zatrudnienia"] = [u for u in fz.formy(g.dane)
                                                     if u in lista or u == fz.PRACE]
+    if "zestaw" in d:   # zestaw funkcji między rundami (tylko odsłania; silnik/funkcje.py)
+        try:
+            with serwisy.zmiana(id_) as g:
+                g.ustaw_zestaw(d["zestaw"])
+        except ValueError as e:
+            raise BladZapytania(str(e)) from e
     if "odblokowanie" in d:
         if not isinstance(d["odblokowanie"], dict):
             raise BladZapytania("Harmonogram odblokowań: {element: tydzień}.")

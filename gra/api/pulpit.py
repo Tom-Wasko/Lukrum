@@ -91,6 +91,13 @@ def funkcje_gry(g: GraSilnika, firmy: list[str] | None) -> dict | list | None:
         f["zakryta"] = rej[f["klucz"]].get("zakryta", "")
     zakryte = [f["klucz"] for f in lista if f["stan"] == fn.ZAKRYTA]
     return {
+        "zestaw": konf.get("zestaw_funkcji"),   # ostatni gotowy zestaw (None – własny wybór)
+        "zestawy": [
+            {"klucz": k, "nazwa": z["nazwa"], "opis": z.get("opis", ""),
+             "stany": fn.stany_zestawu(g.dane, k)}
+            for k, z in fn.zestawy(g.dane).items()
+        ],
+        "mozna_zmienic": not g.zakonczona,
         "lista": lista,
         "liczby": {s: sum(1 for f in lista if f["stan"] == s) for s in fn.STANY},
         "druzyny": [

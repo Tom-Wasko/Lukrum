@@ -12,6 +12,7 @@ from __future__ import annotations
 import re
 
 from silnik import cele
+from silnik import funkcje as fn
 from silnik.dane import Dane
 from silnik.harmonogram import PRZYGOTOWAWCZY
 from silnik.kuchnia.dostawcy import info as info_dostawcy
@@ -150,6 +151,16 @@ def _strona(dane: Dane, tydzien: int, ostatni: bool) -> tuple[str, dict]:
     return klucz, tygodnie[klucz]
 
 
+def _nowe_funkcje(gra, runda: int) -> list[dict]:
+    """Funkcje odkryte zmianą zestawu w trakcie gry (silnik/funkcje.py: zmien_zestaw)."""
+    rej = fn.rejestr(gra.dane)
+    zmiany = gra.konfiguracja.get("zmiany_funkcji") or []
+    return [{"klucz": f"funkcja_{k}", "zeton": "bazar", "gdzie": f"menu ▸ {rej[k]['nazwa']}",
+             "tekst": f"Nowa funkcja: {rej[k]['nazwa']} ({rej[k].get('krotko', '')}). "
+                      "Od teraz decydujecie o niej sami."}
+            for r, k, s in zmiany if r == runda and s == fn.ODKRYTA and k in rej]
+
+
 def _odblokowania(dane: Dane, v: dict, runda: int, miejsca: dict) -> list[dict]:
     """Ogłoszenia odblokowań na `runda`: elementy, których tydzień w harmonogramie TEJ gry
     (z nadpisaniami mistrza gry) to właśnie ta runda. Tydzień przygotowawczy bez ogłoszeń.
@@ -214,7 +225,7 @@ def widok(gra, firma: str, runda: int, v: dict) -> dict | None:
     dopisek = z["dopiski"][(max(tydzien, 1) - 1) % len(z["dopiski"])]
     return {"tydzien": tydzien, "ostatni": ostatni, "tytul": strona["tytul"],
             "list": strona.get("list") or "",
-            "odblokowania": _odblokowania(dane, v, runda, miejsca),
+            "odblokowania": _odblokowania(dane, v, runda, miejsca) + _nowe_funkcje(gra, runda),
             "zadania": zadania, "dopisek": dopisek,
             "gdzie_kupic": kupic, "wizyty": list(wizyty),
             "cel": _cel(gra, dane, firma, runda),

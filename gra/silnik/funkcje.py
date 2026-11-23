@@ -1,7 +1,7 @@
 """Funkcje gry: odkryte, zakryte i wyłączone (seria „funkcje”).
 
 Rejestr funkcji – `dane/funkcje.yaml` (brak pliku – gra bez funkcji, wszystko odkryte). Mistrz gry ustawia stany przy
-tworzeniu gry (konfiguracja: `funkcje` – {klucz: "odkryta"|"zakryta"|"wylaczona"}, później bez zmian); brak klucza
+tworzeniu gry (konfiguracja: `funkcje` – {klucz: "odkryta"|"zakryta"|"wylaczona"}; w trakcie gry mistrz gry może tylko odsłaniać – `zmien_zestaw`, historia w `zmiany_funkcji`); brak klucza
 (stare gry) – „odkryta”. Drużyna odsłania zakrytą funkcję (i może ją znów zakryć) – historia w konfiguracji:
 `odsloniete` – {firma: [[runda, klucz, odslonieta], …]}; odsłonięcie w rundzie r działa od przeliczenia rundy r,
 więc przeliczenie starszej rundy daje to samo co wtedy (event sourcing).
@@ -55,13 +55,51 @@ def sprawdz_stany(dane, funkcje: dict | str | None) -> dict[str, str] | None:
     return {k: funkcje.get(k, domyslne[k]) for k in rej}
 
 
-def stan(konfiguracja: dict, klucz: str) -> str:
-    """Stan funkcji ustawiony przez mistrza gry (stara gra albo nieznana funkcja – „odkryta”)."""
-    return (konfiguracja.get("funkcje") or {}).get(klucz, ODKRYTA)
+def stan(konfiguracja: dict, klucz: str, runda: int | None = None) -> str:
+    """Stan funkcji ustawiony przez mistrza gry (stara gra albo nieznana funkcja – „odkryta”). `runda` – stan przy
+    przeliczeniu tej rundy (zmiany zestawu w trakcie gry: `zmiany_funkcji`); bez rundy – stan obecny."""
+    wynik = (konfiguracja.get("funkcje") or {}).get(klucz, ODKRYTA)
+    for r, k, s in konfiguracja.get("zmiany_funkcji") or []:
+        if k == klucz and (runda is None or r <= runda):
+            wynik = s
+    return wynik
 
 
-def wylaczona(konfiguracja: dict, klucz: str) -> bool:
-    return stan(konfiguracja, klucz) == WYLACZONA
+def wylaczona(konfiguracja: dict, klucz: str, runda: int | None = None) -> bool:
+    return stan(konfiguracja, klucz, runda) == WYLACZONA
+
+
+def od_rundy_dostepna(konfiguracja: dict, klucz: str) -> int:
+    """Runda, od której funkcja przestała być wyłączona po zmianie zestawu (0 – nie zmieniano)."""
+    return max((r for r, k, s in konfiguracja.get("zmiany_funkcji") or [] if k == klucz and s != WYLACZONA), default=0)
+
+
+_RANGA = {WYLACZONA: 0, ZAKRYTA: 1, ODKRYTA: 2}
+
+
+def zmien_zestaw(dane, konfiguracja: dict, zestaw: str, runda: int) -> dict[str, list[str]]:
+    """Mistrz gry przełącza gotowy zestaw w trakcie gry – od rundy `runda` (bieżącej, jeszcze nieprzeliczonej).
+    Zmiana tylko odsłania (wyłączona → zakryta → odkryta); funkcji, które nowy zestaw miałby schować, nie rusza –
+    zostają jak były. Historia w `zmiany_funkcji` ([runda, klucz, stan]), więc przeliczone rundy się nie zmieniają.
+    Zwraca {"odsloniete": [klucze], "zostaja": [klucze, które nowy zestaw chciał schować]}."""
+    if not konfiguracja.get("funkcje") or not rejestr(dane):
+        raise ValueError("Ta gra nie ma funkcji do przełączania.")
+    cel = stany_zestawu(dane, zestaw)
+    odsloniete, zostaja = [], []
+    hist = [x for x in (konfiguracja.get("zmiany_funkcji") or []) if x[0] != runda]   # ponowna zmiana w tej rundzie
+    for k in rejestr(dane):
+        bylo, ma = stan(konfiguracja, k, runda - 1), cel[k]
+        if _RANGA[ma] > _RANGA[bylo]:
+            hist.append([runda, k, ma])
+            odsloniete.append(k)
+        elif _RANGA[ma] < _RANGA[bylo]:
+            zostaja.append(k)
+    # po powtórnej zmianie w tej samej rundzie liczy się stan sprzed niej
+    konfiguracja["zmiany_funkcji"] = hist
+    if not hist:
+        konfiguracja.pop("zmiany_funkcji")
+    konfiguracja["zestaw_funkcji"] = zestaw
+    return {"odsloniete": odsloniete, "zostaja": zostaja}
 
 
 def _bot(konfiguracja: dict, firma: str) -> bool:
@@ -79,7 +117,7 @@ def odslonieta(konfiguracja: dict, firma: str, klucz: str, runda: int) -> bool:
 
 def aktywna(konfiguracja: dict, firma: str, klucz: str, runda: int) -> bool:
     """Drużyna (albo bot) sama decyduje w tej funkcji: odkryta, odsłonięta albo – u bota – każda niewyłączona."""
-    s = stan(konfiguracja, klucz)
+    s = stan(konfiguracja, klucz, runda)
     if s == WYLACZONA:
         return False
     return s == ODKRYTA or _bot(konfiguracja, firma) or odslonieta(konfiguracja, firma, klucz, runda)
@@ -87,7 +125,7 @@ def aktywna(konfiguracja: dict, firma: str, klucz: str, runda: int) -> bool:
 
 def autopilot(konfiguracja: dict, firma: str, klucz: str, runda: int) -> bool:
     """Zakryta i nieodsłonięta – gra robi funkcję za drużynę (boty nigdy)."""
-    return stan(konfiguracja, klucz) == ZAKRYTA and not aktywna(konfiguracja, firma, klucz, runda)
+    return stan(konfiguracja, klucz, runda) == ZAKRYTA and not aktywna(konfiguracja, firma, klucz, runda)
 
 
 def zakryta_ponownie(konfiguracja: dict, firma: str, klucz: str, runda: int) -> bool:
@@ -112,7 +150,7 @@ def blokada_zakrycia(klucz: str, firma) -> str:
 
 def odslon(konfiguracja: dict, firma: str, klucz: str, odslonic: bool, runda: int) -> None:
     """Drużyna odsłania (albo znów zakrywa) zakrytą funkcję od rundy `runda` (bieżącej – jeszcze nieprzeliczonej)."""
-    if stan(konfiguracja, klucz) != ZAKRYTA:
+    if stan(konfiguracja, klucz, runda) != ZAKRYTA:
         raise ValueError("Odsłonić albo zakryć można tylko funkcję, którą mistrz gry zakrył.")
     if not any(f["nazwa"] == firma and not f["bot"] for f in konfiguracja.get("firmy", [])):
         raise ValueError(f"Nie ma takiej drużyny: {firma}.")
@@ -130,6 +168,19 @@ def elementy_wylaczone(dane, konfiguracja: dict, elementy: dict) -> set[str]:
     """Elementy harmonogramu (silnik/harmonogram.py: elementy) wyłączonych funkcji – wzorce `*` z funkcje.yaml."""
     wzorce = [w for k, f in rejestr(dane).items() if wylaczona(konfiguracja, k) for w in f.get("elementy", [])]
     return {e for e in elementy if any(fnmatchcase(e, w) for w in wzorce)}
+
+
+def elementy_otwarte_w_grze(dane, konfiguracja: dict, elementy: dict) -> dict[str, int]:
+    """{element: runda} – elementy funkcji, które były wyłączone na starcie, a zmiana zestawu w trakcie gry otworzyła
+    (od tej rundy; harmonogram daje im tydzień nie wcześniejszy niż ta runda)."""
+    wynik = {}
+    for k, f in rejestr(dane).items():
+        r = od_rundy_dostepna(konfiguracja, k)
+        if r and (konfiguracja.get("funkcje") or {}).get(k) == WYLACZONA and not wylaczona(konfiguracja, k):
+            for e in elementy:
+                if any(fnmatchcase(e, w) for w in f.get("elementy", [])):
+                    wynik[e] = r
+    return wynik
 
 
 def elementy_funkcji(dane, konfiguracja: dict, elementy: dict) -> dict[str, str]:
@@ -195,7 +246,7 @@ def filtruj(dane, konfiguracja: dict, firma: str, d: dict, runda: int) -> tuple[
         return d, []
     wynik, bledy, bot = d, [], _bot(konfiguracja, firma)
     for k, f in rejestr(dane).items():
-        wyl = wylaczona(konfiguracja, k)
+        wyl = wylaczona(konfiguracja, k, runda)
         if not wyl and aktywna(konfiguracja, firma, k, runda):
             continue
         usuniete: list = []
