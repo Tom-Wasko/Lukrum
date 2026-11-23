@@ -142,7 +142,7 @@ def test_opinie_w_grze_deterministyczne_i_publiczne():
     # liczba opinii rośnie ze sprzedażą
     assert sum(o["liczba"] for o in pub.values()) > sum(o["liczba"] for o in s.rynek[3]["opinie"].values())
     w = s.wyniki[4]["Premium"]["opinie"]
-    assert all(set(x["powody"]) == {"jakosc", "cena", "kolejka", "brak", "pomylki", "wyposazenie"} for x in w.values())
+    assert all(set(x["powody"]) == {"jakosc", "cena", "kolejka", "tlok", "brak", "pomylki", "wyposazenie"} for x in w.values())
 
 
 def test_dane_zamrozone_bez_grup_i_opinii():
