@@ -30,6 +30,12 @@ def rozgrzej_w_tle() -> threading.Thread:
         except Exception:  # noqa: BLE001 - rozgrzewka jest tylko przyspieszeniem
             pass
 
+    # Kolejka połączeń serwera: domyślne 10 przy 30 uczniach otwierających grę naraz kończyło się
+    # „połączenie odrzucone” (próba obciążenia 23.11.2026).
+    from django.core.servers import basehttp
+
+    basehttp.WSGIServer.request_queue_size = 128
+
     watek = threading.Thread(target=praca, name="rozgrzewka", daemon=True)
     watek.start()
     return watek
