@@ -35,7 +35,6 @@ Podróż 03-okienka-i-rundy:
 - Z23 · prawo: decyzje po przeglądzie z 16.11 (pytania w `Stan.md`); notki edukacyjne w instrukcji (progi PIP, staż, ZUS, odsetki, lichwa art. 304, CEIDG/PIS, daty roku szkolnego); ekran „Nawiązania i źródła”; drobne (stopki, PDF zgodny z `.md`, ODbL, User-Agent, autorstwo grafik, dymki 16-latków); wyszukać możliwe prawdziwe nazwiska i firmy (Jakub Klimek-Ślęzak, Zenon Lupa, e-Księgi24.pl) i zmienić przy trafieniu; informacja o klubie w instrukcji MG; lista kontrolna przeglądu (stałe wspólne z dawnym projektem → 0, brak nazw z dawnej gry, `ikony_marek.js` bez prawdziwych logo, tabela nawiązań, wykaz grafik i fontów); rozmowa z prawnikiem
 
 ### Mniej ważne
-- Z12 · pora dnia zgodna z prawdziwą godziną także we wnętrzu i za oknem (m), niezależna od trybu jasny/ciemny
 - Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie
 - Z7 · mapa: położenia lokali w `lokale.yaml: geo` zamiast w `lublin.json`; odsyłacze dla twórców usunąć z `budynki.yaml`; opisy 11 punktów orientacyjnych i położenia Auchan/błonia/Lidl sprawdzić w źródłach; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html`
 - Z8 · boty i billboardy na mapie; przycisk „Stara mapa” do zdjęcia po teście z klasą
