@@ -52,7 +52,7 @@ def nagrania_w_radiu(request):
 
 
 def zrodla(request):
-    """Nawiązania i źródła: lektury, liczby, prawo, autorzy grafik, fontów, nagrań (bez logowania)."""
+    """Nawiązania i źródła: lektury, liczby, prawo, autorzy grafik i nagrań (bez logowania)."""
     return render(request, "panel_gracza/zrodla.html", zrodla_dane.dla_strony())
 
 
