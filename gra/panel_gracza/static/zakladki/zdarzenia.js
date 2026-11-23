@@ -96,7 +96,7 @@ function scenaHtml(s, wybor, edycja, kat) {
   const opcje = s.opcje.map((o, i) => {
     const wybrana = st.id === o.id, brak = st.brakNa(o);
     const koszt = o.koszt?.gotowka || o.koszt?.porcje ? kosztTekst({ ...o.koszt, czas: 0 }) : "–";
-    const tresc = `<div class="kg"><span class="zd-litera">${"ABCDEFG"[i] || i + 1}</span>${o.id === s.domyslna ? `<span class="pigulka inf">domyślna</span>` : ""}
+    const tresc = `<div class="kg"><span class="zd-litera">${"ABCDEFG"[i] || i + 1}</span><span class="zd-opcja-nazwa">Opcja ${"ABCDEFG"[i] || i + 1}</span>${o.id === s.domyslna ? `<span class="pigulka inf">domyślna</span>` : ""}
         ${wybrana ? `<span class="pigulka ${brak ? "nie" : "ok"}">${brak ? "brak czasu" : "wybrano"}</span>` : ""}</div>
       <div class="kt">${esc(o.tekst)}${wskazowkiHtml(o)}</div>
       <div class="kd"><div class="wiersz"><span>Czas</span><span>${o.koszt?.czas ? `${licz(o.koszt.czas, 1)} h` : "–"}</span></div>
