@@ -7,25 +7,10 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ## W toku
 Podróż 03-okienka-i-rundy:
+- Z18 · przewodnik nauczyciela i zasady oceniania; tabela „mechanika a podstawa programowa” (wątek 03/przewodnik)
 - Z46 · przełącznik zestawu funkcji w /mg/ między rundami (ta sama gra przechodzi z lekcji 1 na lekcję 2…), decyzja szefa 23.11
 - Z19 · serwer szkoły: szef z kolegą ustawia LUKRUM na serwerze szkoły (FTP) 23.11; osoba od `manage.py zamykaj_rundy`, dane uczniów (RODO) i notka w instrukcji
-- Z33 · wydarzenia i parki: wskazówki skutków decyzji ▲▼ z siłą, bez liczb (9); każdy park własny wygląd, przycisk
-  prowadzi do wydarzenia, nie do kalendarza (m)
-- Z34 · wdrożyć nowe okienka według wyboru szefa 22.11 (`Decyzje.md`): zakupy A (paragon kasowy, też format paragonu, m), wydarzenia A
-  (tablica korkowa ▲▼), list: rubryki z B w kopercie z A; makiety: https://claude.ai/artifact/YKpg6woJrPqaHFZE59vqjk (5)
-- Z35 · zeszyt: stary, zniszczony, skórzana okładka, schowany przechylony, lepiej pasująca odręczna czcionka
-  na wolnej licencji (6)
-- Z36 · wyniki tygodnia w kebabie: jeden prosty ekran (sprzedaż, koszty, zysk, miejsce w rankingu), łatwy do znalezienia
-- Z5 · lista wujka: kliknięcie pozycji przesuwa i przybliża mapę do budynku, a ten pulsuje
-- Z15 · odblokowania ogłaszane listami wujka (terminy z kalendarza zostają)
-- Z21 · skutki wnętrza: tłok obniża opinię i jest widoczny; wyposażenie podnosi opinię
-- Z42 · „ukryte” mechaniki (majster): spis skutków, których gracz nie widzi, i pokazanie ich w grze
 - Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie
-- Z23 · prawo (część z 23.11): ogólne ikony zamiast logo sieci, 0,3162 od zera z GUS, ekran „Nawiązania i źródła”
-- Z44 · zeszyt z kartkami: treść dzielona na strony, przewracane „Dalej ›” / „‹ Wstecz”, bez przewijania (decyzja szefa 23.11)
-- Z45 · gotowość do testu na klasie: próba obciążenia 30 graczy + MG przez hostuj, logowanie klasy, szkolny sprzęt (lista w plan.md)
-- Z17 · lekcja 45 minut ze zmierzonym czasem rundy; zestawy funkcji pod scenariusze lekcji; kreator trybu lekcyjnego na zrzutach
-- Z38 · Zana: „Portiernia” jako spis pięter (która agencja na którym piętrze, przejście do windy), zamiast listy wszystkich agencji
 
 ## Zaplanowane
 - Z47 · kreator /mg/: „Rozlosuj uczniów po drużynach”, kartki z hasłami w podziale na drużyny, przyciski kroków przypięte do dołu (1366×768)
@@ -35,9 +20,8 @@ Podróż 03-okienka-i-rundy:
 ### Ważne
 - Z4 · seria `wnetrza`: osobne wnętrze dla każdego żetonu (projekt Fable 17.11, makiety w `_archiwum/fable-17.11/fable-wnetrza/`), PRL w holach, krytyka i poprawki wybrane przez szefa; majster: wnętrza wyglądają źle; podpisy na makietach przed wdrożeniem
 - Z3 · seria `budynki`: pierzeja 5 banków, giełda osobno, redakcja (Kamienica rachmistrzów i reklama w biurowcu przy Zana już są)
-- Z18 · przewodnik nauczyciela i zasady oceniania; tabela „mechanika a podstawa programowa” (WOS, biznes i zarządzanie); przegląd nauczyciela, próba w klasie
 - Z20 · zgłoszenie do „Zwolnieni z Teorii” z datą lekcji (31.03.2027, niepotwierdzone); `METODA.md` (jawność AI) po pobraniu regulaminu (`wiedza/analizy/regulamin-zwzt-a-ai.md`)
-- Z23 · prawo: decyzje po przeglądzie z 16.11 (pytania w `Stan.md`); notki edukacyjne w instrukcji (progi PIP, staż, ZUS, odsetki, lichwa art. 304, CEIDG/PIS, daty roku szkolnego); ekran „Nawiązania i źródła”; drobne (stopki, PDF zgodny z `.md`, ODbL, User-Agent, autorstwo grafik, dymki 16-latków); wyszukać możliwe prawdziwe nazwiska i firmy (Jakub Klimek-Ślęzak, Zenon Lupa, e-Księgi24.pl) i zmienić przy trafieniu; informacja o klubie w instrukcji MG; lista kontrolna przeglądu (stałe wspólne z dawnym projektem → 0, brak nazw z dawnej gry, `ikony_marek.js` bez prawdziwych logo, tabela nawiązań, wykaz grafik i fontów); rozmowa z prawnikiem
+- Z23 · prawo (reszta; część z 23.11 zrobiona w podróży 03): decyzje po przeglądzie z 16.11; notki edukacyjne w instrukcji (progi PIP, staż, ZUS, odsetki, lichwa art. 304, CEIDG/PIS, daty roku szkolnego); ekran „Nawiązania i źródła”; drobne (stopki, PDF zgodny z `.md`, ODbL, User-Agent, autorstwo grafik, dymki 16-latków); wyszukać możliwe prawdziwe nazwiska i firmy (Jakub Klimek-Ślęzak, Zenon Lupa, e-Księgi24.pl) i zmienić przy trafieniu; informacja o klubie w instrukcji MG; lista kontrolna przeglądu (stałe wspólne z dawnym projektem → 0, brak nazw z dawnej gry, `ikony_marek.js` bez prawdziwych logo, tabela nawiązań, wykaz grafik i fontów); rozmowa z prawnikiem
 
 ### Mniej ważne
 - Z7 · mapa: położenia lokali w `lokale.yaml: geo` zamiast w `lublin.json`; odsyłacze dla twórców usunąć z `budynki.yaml`; opisy 11 punktów orientacyjnych i położenia Auchan/błonia/Lidl sprawdzić w źródłach; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html`

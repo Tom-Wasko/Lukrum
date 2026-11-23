@@ -85,3 +85,6 @@ Lista gotowości do testu (odhaczam po dowodzie):
 - [ ] 1366×768 i telefon: część poprawiona (03/wyglad), reszta kontrastów to propozycje w `przeglad-wygladu-23-11.md`
 - [ ] skutki widoczne (Z42) ✓ scalone; zeszyt kartki (Z44) – poprawka gęstości stron w toku
 - [ ] przewodnik nauczyciela (Z18); pełne testy 960 passed ✓; scalenie do `main` (po `/hejo`)
+
+## Zrobione w podróży (stan 23.11 17:55)
+Z34, Z33, Z35, Z5, Z36, Z38, Z9, Z28, Z32, Z37, Z16, Z25, Z12, Z21, Z42, Z23 (część z 23.11), Z15, Z44, Z17, Z45; Z6 częściowo (reszta: propozycje w `wiedza/analizy/przeglad-wygladu-23-11.md`). Scalone do `main` 23.11 17:50 (960 passed). W toku: Z46, Z18, Z19.
