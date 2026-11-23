@@ -1,6 +1,6 @@
 # Stan
 Archi żył: 2026-11-23 17:36
-Tryb: autonomiczny zakończony 23.11 (17:35); czeka na `/hejo`. Wszystko scalone na `podroz-03`, nie w `main`.
+Tryb: nadzorowany od 17:42 23.11.
 
 ## Podróż
 **03-okienka-i-rundy** od 2026-11-22 21:40 (`podroze/03-okienka-i-rundy/plan.md`). W nocy 5 wyko, rano Z32 po
@@ -25,6 +25,8 @@ zatwierdzeniu szefa. Scalanie: do `main` dopóki szef jest, po `/papa` na `podro
 | 03/wyglad | Z6 | scalone 11:31 (część; propozycje w spisie) |
 | 03/ukryte | Z42 | scalone 11:40 |
 | 03/kartki | Z44 | scalone 11:50 (0 stron z przewijaniem; tel 30, 1366 23 strony) |
+| 03/zestawy | Z46 | start 17:50 |
+| 03/przewodnik | Z18 | start 17:50 |
 | 03/lekcja | Z17, Z45 | scalone 11:44 (956 passed) |
 | 03/poprawki-okienek | Z34 (dokończenie) | scalony na podroz-03 07:03 (929 passed w wątku; swiat+aplikacja po scaleniu 282 passed) |
 | 03/przeglad-prawny | Z23 (część) | scalony na podroz-03 07:35 (lista kontrolna, wykaz grafik) |
