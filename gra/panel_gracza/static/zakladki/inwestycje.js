@@ -1,7 +1,7 @@
 // Inwestycje: stanowiska, sprzęt, wyposażenie dla klientów.
 import { kosztLokali, miejscaLokali } from "./lokale.js";
 import { esc, kartaMarki, KOLORY, naOkres, naRunde, gw, kafelkiLiczb, licz, nazwaFirmy, nazwaUslugi, okno, podsumowanie, proc, tabela, toast, wykres, zamknijOkno, zl, zwinTabela, zl2 } from "./wspolne.js";
-import { decyzjaLokalu, idWybranego, listaLokalu, nazwaLokalu, opisLokalu, stanowiskaLokalu } from "./lokal_wybor.js";
+import { decyzjaLokalu, idWybranego, listaLokalu, lokalWybrany, nazwaLokalu, opisLokalu, stanowiskaLokalu } from "./lokal_wybor.js";
 import { klienciZKolejki, OPISY_SPRZETU, wykresObciazenia } from "./obciazenie.js";
 
 // miejsca na stanowiska – przy kilku lokalach tylko w wybranym lokalu
@@ -295,7 +295,7 @@ function nasycenieWyposazenia(v, id) {
   const e = v.wyposazenie_efekt?.[id];
   if (!e) return "";
   const p = (x) => `${Math.round(x * 100)}%`;
-  return `<p class="podpowiedz skutek-uwaga">▼ Każda kolejna sztuka wyposażenia podnosi liczbę gości słabiej niż poprzednia. ${e.sztuk
+  return `<p class="podpowiedz zostaw skutek-uwaga">▼ Każda kolejna sztuka wyposażenia podnosi liczbę gości słabiej niż poprzednia. ${e.sztuk
     ? `Teraz wyposażenie tego lokalu daje +${p(e.teraz)} gości (bez tego „zmęczenia” byłoby +${p(e.bez_nasycenia)}).` : "Pierwsze sztuki działają pełną siłą."}</p>`;
 }
 
@@ -309,7 +309,7 @@ export function kafleUdogodnien({ v, kat, edycja }, rodzaj, kogo) {
   return `${id ? `<div class="komunikat ok">${rodzaj === "wyposazenie" ? "Wyposażenie" : "Udogodnienia"} lokalu <b>${esc(nazwaLokalu(v, id))}</b>.</div>` : ""}
     <div class="pasek ciemny"><span>Koszt zakupu: <span class="kwota">${zl(kupno)}</span></span>
     <span>Koszt utrzymania: <span class="kwota">${zl(naRunde(utrz))}</span>${naOkres()}</span><span>Przychody ze sprzedaży: <span class="kwota">${zl(sprzedaz)}</span></span></div>
-    ${rodzaj === "wyposazenie" ? nasycenieWyposazenia(v, id) : ""}
+    ${rodzaj === "wyposazenie" ? nasycenieWyposazenia(v, id || lokalWybrany(v)?.id) : ""}
     ${kartyUdogodnien(pozycje, przed, teraz, rodzaj, kogo, edycja)}`;
 }
 

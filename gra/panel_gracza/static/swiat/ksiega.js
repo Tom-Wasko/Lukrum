@@ -27,8 +27,8 @@ function uwagi(O) {
   if (O.zanik != null) z.push(`Stare opinie liczą się co tydzień na ${proc(O.zanik)} poprzedniej wagi, więc ocena nadąża za tym, jak jest teraz.`);
   if (O.rozrzut != null) z.push(`${O.rozrzut >= 0.3 ? "▲" : "–"} Ocena tygodnia mogła się wahać o ok. ±${gw(O.rozrzut)} ★ przez przypadek: przy kilku opiniach skacze, przy wielu się uspokaja.`);
   if (O.czekanie_grup != null && Math.abs(O.czekanie_grup - 1) >= 0.05) {
-    z.push(O.czekanie_grup > 1 ? `▲ Goście tego lokalu źle znoszą czekanie (waga ${gw(O.czekanie_grup)}): biurowi i spieszący się karzą kolejki mocniej niż studenci.`
-      : `▼ Goście tego lokalu znoszą czekanie lepiej niż przeciętnie (waga ${gw(O.czekanie_grup)}).`);
+    z.push(O.czekanie_grup > 1 ? `▲ Goście tego lokalu źle znoszą czekanie: biurowi i spieszący się karzą kolejki mocniej niż studenci.`
+      : `▼ Goście tego lokalu znoszą czekanie lepiej niż przeciętnie.`);
   }
   z.push("Smak zależy też od świeżości: zamiennik za brakujący składnik jest gorszy, a przeterminowane składniki idą do kosza (zakładka Magazyn i świeżość).");
   return `<ul class="kg-uwagi">${z.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`;

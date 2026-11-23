@@ -67,7 +67,8 @@ function nastrojSkladniki(p) {
   if (!p.skladniki) return "";
   return Object.entries(SKLADNIKI).map(([k, n]) => `${n} ${znakSkl(p.skladniki[k] || 0)}`).join(" · ");
 }
-function zmeczenieZdanie(v, p) {
+function zmeczenieZdanie(v, p0) {
+  const p = (v.wyniki?.pracownicy || []).find((x) => x.id === p0.id) || p0;
   const prog = v.progi_czasu_pracy?.zmeczenie;
   if (prog == null || p.wykorzystanie == null) return "";
   return p.wykorzystanie > prog
@@ -436,6 +437,7 @@ function oknoPrzenosin({ v }, id, typ, nr) {
 function oknoProfilu({ v, kat, edycja }, id) {
   const p = v.stan.pracownicy.find((x) => x.id === id);
   const nowy = p.od_rundy === v.runda;
+  const sk = (v.wyniki?.pracownicy || []).find((x) => x.id === id)?.skladniki;
   const pole = (etykieta, html) => `<label class="pole">${etykieta}${html}</label>`;
   okno("Profil pracownika", `<div class="dwie"><div class="srodek"><div class="awatar">${inicjaly(p.imie_nazwisko)}</div>${gw(p.gwiazdki)}
       <h3 style="margin:6px 0">${esc(p.imie_nazwisko)}</h3><div class="podpowiedz">${esc(p.zawod)}</div>
@@ -447,8 +449,8 @@ function oknoProfilu({ v, kat, edycja }, id) {
       <div class="wiersz"><span>Skłonność do pomyłek</span><span>${proc(p.ryzyko_pomylki, 0)}</span></div>
       <div class="wiersz"><span>Zadowolenie klientów</span><span>${proc(p.zadowolenie_klientow, 0)}</span></div>
       <div class="wiersz"><span>Zadowolenie z pracy (ostatni tydzień)</span><span>${zadowolenieOsoby(p)}</span></div></div>
-      ${p.skladniki ? `<p class="podpowiedz" style="text-align:left">Co wpływa na nastrój: ${nastrojSkladniki(p)}.</p>` : ""}
-      <p class="podpowiedz" style="text-align:left">${zmeczenieZdanie(v, p)}</p>
+      ${sk ? `<p class="podpowiedz zostaw" style="text-align:left">Co wpływa na nastrój: ${nastrojSkladniki({ skladniki: sk })}.</p>` : ""}
+      <p class="podpowiedz zostaw" style="text-align:left">${zmeczenieZdanie(v, p)}</p>
       ${osobaPip(v, p) ? `<p class="znak-uwaga" style="text-align:left">${esc(opisPip(v, p))}</p>` : ""}
       ${p.niezadowolony && !p.odchodzi ? `<p class="minus" style="text-align:left">Niezadowolony od ${p.niezadowolony} tyg. – szczegóły na liście błędów.
         Pomaga podwyżka, lepszy sprzęt albo odciążenie.</p>` : ""}</div>

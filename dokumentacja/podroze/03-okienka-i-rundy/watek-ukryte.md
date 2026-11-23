@@ -45,3 +45,9 @@ README bez zmian (brak opisu księgi w README). INSTRUKCJA.pdf nie odświeżony.
 **Uwagi:** blok CSS `/* podróż 03/ukryte */` na końcu `swiat/swiat.css` (może kolidować z blokiem 03/wyglad: zostawić oba).
 Serwer zatrzymany. Pełnych testów po poprawce nie puszczałem ponownie (zmiana tylko w tekście).
 **Propozycje:** zrzuty HR/wyposażenia; odświeżyć INSTRUKCJA.pdf.
+
+### Dopisek po przeglądzie Archiego (23.11.2026)
+- Księga gości: usunięto „(waga …)” ze zdań o czekaniu grup.
+- Zrzuty (bar jasny, wysoka ciemny): profil pracownika (składniki nastroju + zdanie o zmęczeniu), Park handlowy ▸ wyposażenie: czytelne, nic nie wystaje.
+- Naprawiono: akapity `.podpowiedz` zamienia `dymki.js` w dymek „i” (zdanie było schowane); nowe zdania mają klasę `zostaw`. Składniki nastroju czytane z `v.wyniki.pracownicy`; wyposażenie bierze pierwszy lokal przy jednym lokalu.
+- Sprawdzenia: node --check ok, ruff ok, test_nazwy_zakladek + test_widoczne_skutki: 4 passed.
