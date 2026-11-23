@@ -84,4 +84,4 @@ Lista gotowości do testu (odhaczam po dowodzie):
 - [x] logowanie klasy hasłami z kartek: limity logowania z jednego IP poprawione (`test_klasa_naraz.py`), INSTRUKCJA „Dla mistrza gry”
 - [ ] 1366×768 i telefon: część poprawiona (03/wyglad), reszta kontrastów to propozycje w `przeglad-wygladu-23-11.md`
 - [ ] skutki widoczne (Z42) ✓ scalone; zeszyt kartki (Z44) – poprawka gęstości stron w toku
-- [ ] przewodnik nauczyciela (Z18), pełne testy zielone, scalenie do `main`
+- [ ] przewodnik nauczyciela (Z18); pełne testy 960 passed ✓; scalenie do `main` (po `/hejo`)

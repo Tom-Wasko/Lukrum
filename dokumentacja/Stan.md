@@ -1,6 +1,6 @@
 # Stan
-Archi żył: 2026-11-23 11:46
-Tryb: autonomiczny od 06:22 23.11, budżet do 16:00 (nowe kroki do ok. 14:30), koniec najpóźniej 16:00. Scalanie na `podroz-03`.
+Archi żył: 2026-11-23 17:36
+Tryb: autonomiczny zakończony 23.11 (17:35); czeka na `/hejo`. Wszystko scalone na `podroz-03`, nie w `main`.
 
 ## Podróż
 **03-okienka-i-rundy** od 2026-11-22 21:40 (`podroze/03-okienka-i-rundy/plan.md`). W nocy 5 wyko, rano Z32 po
@@ -19,7 +19,7 @@ zatwierdzeniu szefa. Scalanie: do `main` dopóki szef jest, po `/papa` na `podro
 | 03/opisy | Z16, Z25 | scalony 22:06 (0 martwych odsyłaczy) |
 | 03/pora | Z12 | scalony na podroz-03 07:50 (934 passed; zrzuty 12:00/22:00 w kebabie i Biedronce OK) |
 | 03/tlok | Z21, Z42 | scalony 07:12 (937 passed w wątku; balans ±0,1% średnio) |
-| podroz-03 (całość) | – | pełne testy po scaleniach: 947 passed (07:25) |
+| podroz-03 (całość) | – | pełne testy po scaleniach: 960 passed (11:58, po scaleniu wyglad, ukryte, lekcja, kartki) |
 | 03/prawo | Z23 (decyzje 23.11) | scalony 07:12 (939 passed; 0,3 zostaje jako jawne założenie, pytanie do szefa) |
 | 03/odblokowania | Z15 | scalony 07:11 (938 passed; po scaleniu swiat+aplikacja 286 passed) |
 | 03/wyglad | Z6 | scalone 11:31 (część; propozycje w spisie) |
