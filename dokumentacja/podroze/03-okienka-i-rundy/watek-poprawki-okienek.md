@@ -36,3 +36,33 @@
   - pełne testy zielone, `ruff` i `node --check` czyste (wyniki w raporcie).
 
 ## Raport
+
+**Stan:** wszystkie 5 punktów zrobione, mechanika bez zmian (tylko wygląd i sposób otwarcia okna).
+
+### Co zrobiono
+1. **Paragon** (`zakladki/dostawcy.js`, blok „03/poprawki-okienek” na końcu `swiat/swiat.css`): krój kasowy (Courier), spacja przed gwiazdkami, nazwa i cena w jednym rzędzie. Przy dostawach na kilka dni wybrano **siatkę małych pól dni (pn…nd z datą) w jednym rzędzie na produkt** (zamiast zwijania): pola nie przesuwają się, a na 390 px mieszczą się 7 dni (Biedronka) i 2 dni (Makro). Suma i „W koszyku” przyklejone na dole, ZAMKNIJ i KUPUJĘ w arkuszu papieru z ząbkowanym dołem; przewinięcie okna zachowuje się po zmianie ilości.
+2. **Tablica wydarzeń** (`zakladki/zdarzenia.js`, `swiat/swiat.css`): nagłówki opcji jednakowe „Opcja A/B/C” (pusty pasek A wynikał z ogólnej reguły `.kg`).
+3. **List z decyzjami** (`pulpit/pulpit.js`, `pulpit/pulpit.css`, `swiat/wnetrze.js`): nowa funkcja `otworzListZDecyzjami`, poczta („Nadaj list z decyzjami”) otwiera od razu tę samą kopertę co ikona w pasku. Nazwy rubryk do lewej: przyczyną była starsza reguła `.pp-kop-lista li` (flex, space-between), nadpisana w moim bloku.
+4. **Zakładki DECYZJE / WYNIKI** (`pulpit/pulpit.css`): w teczce s1 przesunięte do prawej krawędzi okna (na wąskim ekranie mniejsze), nie nachodzą na WRÓĆ.
+5. **Zeszyt wujka** (`pulpit/zeszyt.js`): zostało „Dalej ›” (przewracanie strony). Ze „▾ dalej” usunięto napis; została sama strzałka ▾ jako podpowiedź przewijania (element i test `test_pulpit.py:167` zostają). Jeśli ma zniknąć całkiem, to decyzja do Archiego/szefa.
+Dokumentacja: `INSTRUKCJA.md` (paragon, poczta → koperta). README bez zmian (nic z opisu tam nie dotyczy).
+
+### Zrzuty (`_robocze/zrzuty-poprawki/` w worktree, poza gitem)
+- paragon: `par-biedronka-bar-jasny-po`, `par-biedronka-pewex-ciemny-po`, `par-biedronka-bar-jasny-390`, `par-makro-bar-jasny-390`, `par-makro-wysoka-ciemny-390`
+- tablica wydarzeń: `wyd-bar-jasny-po`, `wyd-pewex-ciemny-po`
+- list: `list-bar-jasny-po`, `list-pewex-ciemny-po`
+- wyniki: `wyniki-bar-jasny-po`, `wyniki-pewex-ciemny-po` (wersji 390 px dla zakładek nie oglądano)
+- zeszyt: `zeszyt-bar-jasny-po`, `zeszyt-pewex-ciemny-po`
+Zrzutów „przed” w plikach nie ma (nadpisane), opisane słownie wyżej.
+
+### Dowody
+- `pytest -q -p no:cacheprovider` → `929 passed in 397.31s (0:06:37)`
+- `ruff check .` → `All checks passed!`
+- `node --check` (kopia do $TEMP/t.mjs) → ok dla `dostawcy.js`, `zdarzenia.js`, `pulpit.js`, `wnetrze.js`, `zeszyt.js`
+
+### Uwagi
+- Serwer na porcie 8791 (uruchomiony wcześniej w tej sesji) nadal działa: próba zatrzymania procesu została zablokowana. Serwer 8792 zatrzymany. Proszę zamknąć proces na 8791.
+- Baza `gra/db.sqlite3` i gra `pokazowa-7fed3e` w worktree są lokalne, niezacommitowane.
+
+### Propozycje
+- Zakładki wyników w s1 bez wystawania nad okno (np. wewnątrz nagłówka) – spójniej na telefonie.
