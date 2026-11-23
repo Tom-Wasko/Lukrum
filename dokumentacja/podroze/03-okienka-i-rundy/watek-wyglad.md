@@ -32,3 +32,5 @@
 - Dowody: `ruff check .` → All checks passed!; `node --check redakcja.js` → ok; `pytest testy/aplikacja` → 261 passed in 160.57s.
 - Nie zrobione: zrzuty „po”, okna na telefonie (serwer w tle zabity przez system z braku pamięci, nie uruchamiałem ponownie), pełne testy.
 - Zapis listy pracowników do dziennika odrzucony przez klasyfikator uprawnień (zapis postępu przeszedł).
+
+**Uzupełnienie (zrzuty „po”, na prośbę Archiego):** `_robocze/zrzuty-wyglad/po_zrodla_wysoka-ciemny.png` (pasek czarny z ramką, tabela bez białego nagłówka), `po_redakcja_wysoka-ciemny.png` (strzałki gazety), `po_menu_tel_bar-jasny.png` (390×844). Pomiar po poprawce: wysokości przycisków menu i ⚙ → `[44,44,…,44]` (18 elementów). Serwer zatrzymany. Pełnych testów nie puszczałem (zgodnie z poleceniem Archiego).

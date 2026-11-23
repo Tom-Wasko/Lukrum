@@ -24,7 +24,7 @@ Pominięte: zeszyt wujka (przerabiany w 03/kartki), panel `/mg/` (przerabiany w 
 | Poziome przewijanie | 390 px | nie wykryto | ✓ |
 
 ## Czego nie zrobiono (do ustalenia z Archim)
-- Zrzuty „po” (dla poprawek wyżej): serwer w tle został wyłączony przez system (mało pamięci), nie uruchamiałem go
+- Zrzuty „po” trzech poprawek zrobione (nazwy w raporcie wątku).
   ponownie. Poprawki zweryfikowane tylko pomiarem sprzed wyłączenia (menu i strzałki) oraz testami.
 - Przegląd okien na telefonie (plik kroków `_robocze/k_okna_tel.json` jest gotowy, nieuruchomiony).
 - Pełne testy (7 min): uruchomiono tylko `testy/aplikacja` (261 zielonych), `ruff` czysty, `node --check` czysty.
