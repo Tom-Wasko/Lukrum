@@ -30,9 +30,6 @@ zatwierdzeniu szefa. Scalanie: do `main` dopóki szef jest, po `/papa` na `podro
 | 03/przeglad-prawny | Z23 (część) | scalony na podroz-03 07:35 (lista kontrolna, wykaz grafik) |
 
 ## Czeka na szefa
-- P1 (03/lekcja): zestaw funkcji wybiera się przy zakładaniu gry, więc na każdą lekcję jest nowa gra. Czy gra z lekcji 1 ma móc przejść na zestaw lekcji 2? Rekomendacja: tak (przełącznik zestawu w /mg/ między rundami).
-- P2 (03/lekcja): start całej klasy naraz trwa 3–4 s (jeden proces). Wdrożyć serwer wieloprocesowy w `hostuj`? Rekomendacja: tak, przed testem na klasie.
-- P3 (03/kartki): zeszyt jest tylko na ekranie ≥ 901 px; na telefonie go nie ma. Dodać zeszyt na telefonie? Rekomendacja: później (lekcja na laptopach).
-- P4 (03/lekcja): kreator: „rozlosuj uczniów po drużynach” + kartki z hasłami w podziale na drużyny (dziś 60 kliknięć dla klasy). Rekomendacja: tak, przed testem.
+- Serwer szkoły (Z19): jaki dostęp poza FTP? Django potrzebuje uruchomionego Pythona na serwerze.
 
 ## Od Pomocnika

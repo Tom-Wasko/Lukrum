@@ -1,5 +1,5 @@
 # Zadania
-Następny numer: Z46
+Następny numer: Z49
 
 Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej ważne. Zrobione dawniej:
 `historia/postep.md`. Pytania do zadań: `Stan.md`, „Czeka na szefa”. Uwagi z gier testowych 20 i 22.11 (szef,
@@ -7,6 +7,8 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ## W toku
 Podróż 03-okienka-i-rundy:
+- Z46 · przełącznik zestawu funkcji w /mg/ między rundami (ta sama gra przechodzi z lekcji 1 na lekcję 2…), decyzja szefa 23.11
+- Z19 · serwer szkoły: szef z kolegą ustawia LUKRUM na serwerze szkoły (FTP) 23.11; osoba od `manage.py zamykaj_rundy`, dane uczniów (RODO) i notka w instrukcji
 - Z33 · wydarzenia i parki: wskazówki skutków decyzji ▲▼ z siłą, bez liczb (9); każdy park własny wygląd, przycisk
   prowadzi do wydarzenia, nie do kalendarza (m)
 - Z34 · wdrożyć nowe okienka według wyboru szefa 22.11 (`Decyzje.md`): zakupy A (paragon kasowy, też format paragonu, m), wydarzenia A
@@ -26,6 +28,7 @@ Podróż 03-okienka-i-rundy:
 - Z38 · Zana: „Portiernia” jako spis pięter (która agencja na którym piętrze, przejście do windy), zamiast listy wszystkich agencji
 
 ## Zaplanowane
+- Z47 · kreator /mg/: „Rozlosuj uczniów po drużynach”, kartki z hasłami w podziale na drużyny, przyciski kroków przypięte do dołu (1366×768)
 
 ### Lekkie poprawki
 
@@ -49,7 +52,7 @@ Podróż 03-okienka-i-rundy:
 - Z39 · moduły panelu w jednym pliku (paczka), jeśli preload z 03/wydajnosc nie wystarczy przez hostuj/Cloudflare; najpierw zmierzyć
 
 ## Odłożone
+- Z48 · zeszyt wujka na telefonie (dziś tylko ekran ≥ 901 px); późna przyszłość
 - Z26 · niestabilny test kasyna (dziś `test_mistrz_gry_widzi_klub`): 22.11 nie powtórzył się w 2 pełnych przebiegach; wrócić, gdy się pojawi
-- Z19 · serwer dla szkoły (dziś laptop szefa i tunel), osoba od `manage.py zamykaj_rundy`, dane uczniów (RODO) i notka o tym w instrukcji
 - Z2 · gry testowe: znajomi 20 i 22.11 za nami; dalej 4–6 osób ze stoperem, potem klasa; balans jest dotąd tylko z botów;
   w najbliższej grze sprawdzić poprawki z podróży 02 (sklepy, Park, mapa, drobne), kategorie w rzędzie (1) i „Jak grać” w zakładkach (3)

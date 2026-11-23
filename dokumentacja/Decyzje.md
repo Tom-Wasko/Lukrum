@@ -274,6 +274,7 @@ Wygląd tych elementów: [Wygląd](Wyglad.md). Kolejność prac: [Zadania](Zadan
   „Lalka” z Wolnych Lektur na Licencji Wolnej Sztuki 1.3 dopuszczona (warunki jak CC BY-SA). Nagrania ≤1925 bez
   jawnego znaku PD (Great 78, „USA-Archives”) wchodzą z opisem podstawy domeny publicznej. Polskie pozycje z
   niepotwierdzonym autorem: lider sprawdza, niepotwierdzone odpadają.
+- **23.11.2026 (szef, okienko), przed testem na klasie:** test gry 07.12, 9:45–12:20/13:00, 3–4 drużyny. Zestaw funkcji ma się dać przełączać w /mg/ w tej samej grze (Z46). Serwera wieloprocesowego w `hostuj` nie robimy: LUKRUM stanie na serwerze szkoły (FTP; szef ustala z kolegą, Z19). Losowanie drużyn w kreatorze później (Z47). Zeszyt na telefonie: późna przyszłość (Z48).
 
 ## Archiego
 - 2026-11-22 · Archiwum lokalne to `_archiwum/` (folder już istniał), nie `archiwum/`; jest w `.gitignore`.
