@@ -47,3 +47,8 @@
 - Noc (< −8°, np. 22:00): ciemnogranatowe niebo, nakładka ok. 0,4 krycia, pełna poświata lamp przy suficie; napis „☾ noc”.
 - Suwak pory na mapie zmienia też wnętrza (po wejściu / po minucie). Tryb jasny/ciemny pory nie zmienia.
 - Uwaga: sceny rysujące niebo stałym kolorem zamiast `--g-niebo` (część fasad) pociemnieją tylko od nakładki.
+
+### Dowód
+- `pytest -q -p no:cacheprovider` (pełne) → `934 passed in 374.68s`
+- `ruff check .` → czysto; `node --check` na pora.js, swiat.js, slonce.js, lublin.js → ok; `silnik.dane sprawdz` → „Dane w porządku”.
+- Do ustalenia przez Archiego: INSTRUKCJA.pdf nie przebudowany.
