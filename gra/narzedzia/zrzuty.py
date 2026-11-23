@@ -1,12 +1,13 @@
 """Zrzuty ekranu gry bez przeglądarki z okienkiem (Chrome bez okna, sterowany przez DevTools).
 
-Dla każdego, kto nie ma rozszerzenia przeglądarki (wyko, Archi w nocy). Tylko biblioteka standardowa + Django.
+Dla każdego, kto nie ma rozszerzenia przeglądarki (wyko, Archi w nocy).
+Tylko biblioteka standardowa + Django.
 Loguje się bez hasła, przez sesję Django zrobioną dla podanego konta (tylko serwer lokalny).
 
-    python -X utf8 -m narzedzia.zrzuty --port 8783 --konto mg --kroki kroki.json --wyjscie _robocze/zrzuty
+    python -X utf8 narzedzia/zrzuty.py --port 8783 --konto mg --kroki kroki.json \n        --wyjscie ../_robocze/zrzuty
 
-kroki.json: lista {"url": "/gra/<id>/<firma>"} | {"js": "kod"} | {"czekaj": sekundy} | {"zrzut": "nazwa"}
-| {"wyglad": ["bar", "jasny"]}. `js` wykonuje się na stronie (await działa), wynik idzie na ekran.
+kroki.json: lista {"url": "/gra/<id>/<firma>"} | {"js": "kod"} | {"czekaj": sekundy}
+| {"zrzut": "nazwa"} | {"wyglad": ["bar", "jasny"]}. `js` wykonuje się na stronie (await działa), wynik idzie na ekran.
 """
 from __future__ import annotations
 
@@ -25,7 +26,8 @@ import urllib.request
 from pathlib import Path
 
 CHROME = [r"C:\Program Files\Google\Chrome\Application\chrome.exe",
-          r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", "google-chrome", "chromium"]
+          r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+          "google-chrome", "chromium"]
 
 
 class Ws:
@@ -125,7 +127,8 @@ def main():
         raise SystemExit("Nie ma Chrome.")
     profil = tempfile.mkdtemp(prefix="lukrum-zrzuty-")
     dbg = 9300 + o.port % 100
-    proc = subprocess.Popen([chrome, "--headless=new", f"--remote-debugging-port={dbg}", f"--user-data-dir={profil}",
+    proc = subprocess.Popen([chrome, "--headless=new", f"--remote-debugging-port={dbg}",
+                             f"--user-data-dir={profil}",
                              f"--window-size={o.szer},{o.wys}", "--hide-scrollbars", "about:blank"],
                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     try:
@@ -137,7 +140,8 @@ def main():
                 time.sleep(0.2)
         ws = Ws(next(s for s in strony if s["type"] == "page")["webSocketDebuggerUrl"])
         ws.cdp("Page.enable")
-        ws.cdp("Emulation.setDeviceMetricsOverride", width=o.szer, height=o.wys, deviceScaleFactor=1, mobile=False)
+        ws.cdp("Emulation.setDeviceMetricsOverride", width=o.szer, height=o.wys,
+               deviceScaleFactor=1, mobile=False)
         nazwa, klucz = sesja(o.konto)
         ws.cdp("Network.setCookie", name=nazwa, value=klucz, domain="localhost", path="/")
         baza = f"http://localhost:{o.port}"
@@ -147,11 +151,13 @@ def main():
                 time.sleep(k.get("czekaj", 4))
             elif "wyglad" in k:
                 p, t = k["wyglad"]
-                ws.cdp("Runtime.evaluate", expression=f"document.documentElement.setAttribute('data-paleta','{p}');"
-                       f"document.documentElement.setAttribute('data-tryb','{t}')")
+                h = "document.documentElement.setAttribute"
+                ws.cdp("Runtime.evaluate",
+                       expression=f"{h}('data-paleta','{p}');{h}('data-tryb','{t}')")
                 time.sleep(0.5)
             elif "js" in k:
-                r = ws.cdp("Runtime.evaluate", expression=k["js"], awaitPromise=True, returnByValue=True)
+                r = ws.cdp("Runtime.evaluate", expression=k["js"], awaitPromise=True,
+                           returnByValue=True)
                 wynik = r.get("exceptionDetails") or r.get("result", {}).get("value")
                 if wynik is not None:
                     print("js:", json.dumps(wynik, ensure_ascii=False)[:500])
