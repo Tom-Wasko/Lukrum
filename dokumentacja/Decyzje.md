@@ -1,6 +1,13 @@
 # Decyzje
 
 ## Szefa
+- 2026-11-23 (wieczór, okienko) · Podróż 04 wygląd i dźwięk (Z49, Z11, Z50). Zawartość okien ma pasować do ramy
+  danego okna: okna mają własne style (teczka, paragon, list, tablica…), bez jednego szablonu dla wszystkich, całość
+  spójna. Najpierw wzór na 3 oknach (Sokole Oko, bank, kadry) do akceptacji. Tło: tylko odgłosy miejsca (gwar itp.),
+  prawdziwa muzyka tylko z radia. Domyślnie dźwięki tak, odgłosy/muzyka wyłączone; MG wycisza klasę. Odgłosy i dźwięki
+  z prawdziwych nagrań CC0 / domeny publicznej, lista do akceptacji przed pobraniem. Radio (na koniec podróży):
+  przycisk radia dziś nic nie robi; zamiast niego ikona radia obok kaski; nie ma okna radia: kliknięcie wysuwa retro
+  radio, na którym bezpośrednio zmienia się stacje; gdy radio gra, gwar cichnie. Start podróży 24.11 rano.
 - 2026-11-22 · Folder `lukrum/` to repo Tom-Wasko/Lukrum: w korzeniu README, CLAUDE.md, `dokumentacja/`; cały kod w `gra/`.
 - 2026-11-22 · Całe `notatki/` przechodzi do `dokumentacja/`; repo Lukrum-notatki dostaje ostatni commit z odnośnikiem
   i zostaje zarchiwizowane na GitHubie.

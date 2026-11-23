@@ -1,5 +1,5 @@
 # Zadania
-Następny numer: Z49
+Następny numer: Z51
 
 Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej ważne. Zrobione dawniej:
 `historia/postep.md`. Pytania do zadań: `Stan.md`, „Czeka na szefa”. Uwagi z gier testowych 20 i 22.11 (szef,
@@ -9,6 +9,10 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 (nikt teraz nie pracuje)
 
 ## Następnie
+Podróż 04-wyglad-i-dzwiek (start 24.11):
+- Z49 · zawartość wszystkich okien w stylu ramy danego okna (teczka, paragon, list, okienko urzędu…); spis okien, wzór na 3 oknach do akceptacji
+- Z11 · dźwięk: lekkie dźwięki domyślnie (dzwonek, skwierczenie, gwar, stempel), łatwe wyciszenie, MG wycisza klasę; bez muzyki z syntezatora; plus odgłosy tła zależne od miejsca (CC0), domyślnie dźwięki tak / tło nie
+- Z50 · radio: ikona radia obok kaski (dzisiejszy przycisk nic nie robi), wysuwany retro odbiornik ze zmianą stacji na nim, gwar cichnie przy radiu
 - Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie (reszta: propozycje w `wiedza/analizy/przeglad-wygladu-23-11.md`)
 
 ## Zrobione w tej podróży
@@ -30,7 +34,6 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 - Z8 · boty i billboardy na mapie; przycisk „Stara mapa” do zdjęcia po teście z klasą
 - Z13 · wizyty wujka przy ladzie w ważnych momentach
 - Z14 · nastrój zespołu na twarzach, wydarzenia dla filii, popyt z mapy
-- Z11 · dźwięk: lekkie dźwięki domyślnie (dzwonek, skwierczenie, gwar, stempel), łatwe wyciszenie, MG wycisza klasę; bez muzyki z syntezatora
 - Z10 · kolejne nawiązania literackie, zdarzenia z lektur w parkach
 - Z22 · niezależny przegląd całości (kod, dane, teksty, zrzuty)
 - Z27 · wersja na telefon (układ razem z majstrem) i pilot w szkole do maja 2027
