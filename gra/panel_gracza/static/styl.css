@@ -909,3 +909,9 @@ body .oferta-wiersz .pigulka.ok::before { content: "✓ "; }
 .zd-wz-cegly { --wzor: linear-gradient(var(--wz) 2px, transparent 2px), linear-gradient(90deg, var(--wz) 2px, transparent 2px); background-size: 48px 20px; }
 .zd-wz-zygzak { --wzor: repeating-linear-gradient(135deg, var(--wz) 0 3px, transparent 3px 14px); }
 @media (max-width: 600px) { .zd-tablica { padding: 10px; border-width: 5px; } .zd-kartka { transform: none; } }
+
+/* podróż 03/wyglad: na telefonie przyciski górnego menu i ustawień mają co najmniej 44 px */
+@media (max-width: 700px) {
+  .menu .poz > a { min-height: 44px; box-sizing: border-box; }
+  .ustawienia-przycisk { width: 44px; height: 44px; }
+}
