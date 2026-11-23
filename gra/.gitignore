@@ -18,3 +18,5 @@ narzedzia/cloudflared.exe
 
 # pliki generowane
 narzedzia/grafiki/podglad4.html
+*.sqlite3-wal
+*.sqlite3-shm
