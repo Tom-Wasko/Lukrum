@@ -195,7 +195,7 @@ body.pz-otwarty .pp-zeszyt { visibility: hidden; }
 .pz-rog:disabled span, .pz-rog:disabled::before, .pz-rog:disabled::after { display: none; }
 .pz-rog:focus-visible { outline: var(--ognisko); outline-offset: -4px; }
 /* wysoka widoczność daje każdemu przyciskowi ramkę (dostepnosc.css) – rogi i wstążki mają kształt, więc bez ramki */
-#pz .pz-rog, #pz .pz-wstega, #pz .pz-wiecej { border: 0; }
+#pz .pz-rog, #pz .pz-wstega { border: 0; }
 .pz-numer { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); margin: 0; white-space: nowrap; }
 .pz-zamknij { position: absolute; left: 34px; top: -46px; z-index: 2; padding: 4px 14px; min-height: 38px; font: calc(17px * var(--skala-tekstu, 1)) var(--font-reka); color: var(--g-czern); background: var(--g-biel); border: 2px solid var(--g-czern); border-radius: 6px; cursor: pointer; }
 .pz-zamknij small { font-size: .8em; opacity: .8; }
@@ -359,22 +359,14 @@ body.pz-otwarty .pp-zeszyt { visibility: hidden; }
 .pz-mapa, .pz-miejsce { padding: 0 10px; min-height: 30px; cursor: pointer; color: var(--g-czern); background: var(--g-biel); border: 2px solid var(--g-czern); border-radius: 6px; font: calc(15px * var(--skala-tekstu, 1)) var(--font-reka); line-height: 1.3; }
 .pz-mapa { flex: none; white-space: nowrap; }
 .pz-mapa:hover, .pz-miejsce:hover { color: var(--g-biel); background: var(--g-rudy); }
-.pz-mapa:focus-visible, .pz-miejsce:focus-visible, .pz-wiersz:focus-visible, .pz-wiecej:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+.pz-mapa:focus-visible, .pz-miejsce:focus-visible, .pz-wiersz:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
 .pz-miejsca { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 6px; }
 .pz-kupic li > span:last-child { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; }
-.pz-wiecej { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 76px; padding: 0 0 4px; cursor: pointer; border: 0;
-  color: var(--g-czern); background: linear-gradient(to bottom, transparent, var(--g-biel) 70%); font: 700 calc(26px * var(--skala-tekstu, 1))/1 var(--font-reka); }
-.pz .pz-wiecej { border: 0; min-height: 0; }
-.pz-wiecej[hidden] { display: none; }
-.pz-wiecej span { font-size: 13px; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; }
-@media (prefers-reduced-motion: no-preference) { .pz-wiecej { animation: pz-skok 1.6s ease-in-out infinite; } }
-@keyframes pz-skok { 50% { padding-bottom: 10px; } }
 
 /* ruch tylko dla tych, którzy go nie wyłączyli: reszta dostaje te same stany od razu, bez przejść */
 @media (prefers-reduced-motion: reduce) {
   .pp-ik span, .pp-portfel, .pp-zeszyt { transition: none; }   /* wysunięcie i prostowanie – od razu, bez animacji */
   .pz.otwarty, .pp-szuflada { animation: none; }
-  .pz-wiecej { animation: none; }
   .pz-lisc, .pz-cien { display: none; }   /* bez animacji przewracania strona po prostu się zmienia */
   .pz-stos, .pz-wstega, .pz-rog::before, .pz-rog::after { transition: none; }
 }
@@ -562,3 +554,19 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
 .pz-odbl-lista li { display: grid; grid-template-columns: 1.6em 1fr; gap: 6px; align-items: start; }
 .pz-odbl-gdzie { font-size: .9em; }
 .pz-odbl .pz-mapa { max-width: 100%; box-sizing: border-box; white-space: normal; text-align: left; }
+
+/* podróż 03/kartki: strony o stałej wysokości, bez przewijania (podział na kartki robi zeszyt.js) */
+.pz-strona { overflow: hidden; }
+.pz-str.pz-mier { position: absolute; inset: 0; z-index: -1; visibility: hidden; pointer-events: none; display: block; }
+.pz-nr-str { font-weight: 700; letter-spacing: .04em; }
+@media (max-width: 900px) {
+  .pz-str.pz-mier { display: block; }
+  .pz-rog { min-width: 44px; min-height: 44px; }
+  .pz-wstega, .pz-zamknij { min-height: 44px; }
+  /* krok na wąskiej kartce w dwóch wierszach (treść na całą szerokość, „teraz” i „wejdź” pod nią), żeby nie zajmował pół strony */
+  .pz-kroki li { flex-wrap: wrap; }
+  .pz-kroki li .pz-wiersz { flex: 1 1 100%; grid-template-columns: 2em 1fr; }
+  .pz-kroki li .pz-wiersz .pz-stan { grid-column: 2; }
+  .pz-kroki li .pz-wejdz { margin: 0 0 4px 2.4em; }
+}
+.pz-str-l .pz-nr-str, .pz-str-p .pz-nr-str { left: 50%; right: auto; transform: translateX(-50%); bottom: 10px; }

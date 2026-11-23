@@ -12,7 +12,7 @@ import { stylEkranu } from "./karty-style.js";
 import ZAKLADKI from "../zakladki/index.js";
 import { oznaczCel, zadanieZeszytu } from "../zakladki/wujek.js";
 import { nazwaStrefy } from "../zakladki/lokale.js";
-import { idzDoStrony, krokZeszytu, odswiezZeszyt, otworzZeszyt, przewinZeszyt, rysujMalyZeszyt, zamknijZeszyt, zeszytOtwarty } from "./zeszyt.js";
+import { idzDoStrony, krokZeszytu, odswiezZeszyt, otworzZeszyt, rysujMalyZeszyt, zamknijZeszyt, zeszytOtwarty } from "./zeszyt.js";
 import { dokadWroc, mozeWrocic, pokazNaMapie, wejdzDoKroku, wroc, zapamietajWidok } from "./nawigacja.js";
 import { AKCJE_RADIA, przelaczRadio, radioOtwarte, zamknijRadio } from "./radio.js";
 
@@ -416,7 +416,6 @@ export const AKCJE_PULPITU = {
   "pp-zeszyt": (e, c) => { zamknijPodreczne(); otworzZeszyt(c, 0); },
   "pp-zeszyt-zamknij": () => zamknijZeszyt(),
   "pp-zeszyt-strona": (e, c) => (e.dataset.n != null ? idzDoStrony(c, +e.dataset.n) : krokZeszytu(c, +(e.dataset.d || 0))),
-  "pz-dol": (e) => przewinZeszyt(e),
   // klik w nazwę miejsca (zeszyt, wydarzenia): zeszyt i szuflada się chowają, mapa przelatuje do budynku i go pulsuje
   "pp-pokaz": (e, c) => { zamknijZeszyt(false); zamknijPodreczne(); filtr = null; pokazNaMapie(c, e.dataset.b.split(",")); },
   "pp-dzielnica": (e, c) => { zamknijPodreczne(); if (e.dataset.d) pokazNaMapie(c, null, { dzielnica: e.dataset.d }); },

@@ -55,7 +55,7 @@ def test_kazda_akcja_pulpitu_ma_obsluge():
     uzyte |= set(re.findall(r'data-akcja="(pz-[a-z-]+)"', ZESZYT_JS))
     assert uzyte <= obslugiwane | {"pp-wyglad"}
     assert obslugiwane >= {"pp-wyslij", "pp-konto", "pp-koszyk", "pp-mapa", "pp-portfel", "pp-zeszyt", "pp-zeszyt-zamknij", "pp-zeszyt-strona",
-                           "pp-wydarzenia", "pp-filtr", "pp-wroc", "pp-pokaz", "pp-wejdz", "pp-wyglad", "pz-dol"}
+                           "pp-wydarzenia", "pp-filtr", "pp-wroc", "pp-pokaz", "pp-wejdz", "pp-wyglad"}
     assert 'akcja = "pp-wyglad"' in PULPIT_JS
 
 
@@ -164,7 +164,7 @@ def test_krok_3_ustawienia_wroc_wydarzenia_zeszyt():
     nawigacja = (STATIC / "pulpit" / "nawigacja.js").read_text(encoding="utf-8")
     assert "export function wroc" in nawigacja and "export function zapamietajWidok" in nawigacja and 'id="pp-wroc"' in PULPIT_JS
     assert "mozeWrocic(ostatniC)" in PULPIT_JS and '"Escape"' in PULPIT_JS
-    assert 'class="pz-wiecej"' in ZESZYT_JS and "scrollHeight - s.scrollTop" in ZESZYT_JS and ".pz-wiecej" in PULPIT_CSS
+    assert "pz-wiecej" not in ZESZYT_JS and "scrollBy" not in ZESZYT_JS and "scrollTop" not in ZESZYT_JS   # kartki zamiast przewijania
     assert 'data-akcja="pp-pokaz"' in ZESZYT_JS and 'data-akcja="pp-wejdz"' in ZESZYT_JS and "data-akcja=\"pp-pokaz\"" in PULPIT_JS or 'data-akcja="pp-pokaz"' in PULPIT_JS
     assert "otworzBudynek" in nawigacja and "WNETRZE_KROKU" in nawigacja and "pokazZnak" in nawigacja
     lublin = (STATIC / "mapa" / "lublin.js").read_text(encoding="utf-8")
@@ -355,3 +355,12 @@ def test_zeszyt_03_lista_prowadzi_na_mape_a_okladka_jest_zniszczona():
     # Z35: pożółkły papier i dodatkowe zniszczenia, w wysokiej widoczności zwykły papier
     assert "pożółkły papier" in css and '[data-paleta="wysoka"] .pp-kartka' in css
     assert ZESZYT_JS.count("vector-effect") > 8
+
+
+def test_zeszyt_ma_kartki_a_nie_przewijanie():
+    # strony o stałej wysokości z numerem „k / N”, przewracane rogiem, klawiszami i kółkiem; strzałki ▾ nie ma
+    for slowo in ("function paginuj", "function zbudujStrony", "numerBoku", "PageDown", "PageUp", "PROG_KOLKA", "aria-live=\"polite\"", "krokZeszytu(Z.c"):
+        assert slowo in ZESZYT_JS, slowo
+    assert "`${k} / ${liczbaStron()}`" in ZESZYT_JS
+    css = _bez_komentarzy(PULPIT_CSS)
+    assert re.search(r"\.pz-strona \{ overflow: hidden; \}", PULPIT_CSS) and "pz-mier" in css

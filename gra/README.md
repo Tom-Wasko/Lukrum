@@ -14,7 +14,7 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
   bankowa, Kamienica rachmistrzów, Biurowiec przy Zana (winda z piętrami, piętro = oferta jednej agencji, portiernia = spis pięter), Urzędy, redakcja „Kuriera rankingowego”.
 - **Tłok i opinie:** pełna załoga (obciążenie ponad 85%) wydłuża kolejkę we wnętrzu kebaba („Tłok: duży ▲”) i lekko obniża
   ocenę lokalu; wyposażenie ją podnosi. Skutki widać w księdze gości (`dokumentacja/funkcje/Tlok.md`).
-- **Zeszyt wujka:** list (z ramką „Od tego tygodnia otwarte”, liczoną z harmonogramu gry) i lista kroków na każdy tydzień (treść w `dane/zeszyt.yaml`), strony „Gdzie co kupić” z liczbami
+- **Zeszyt wujka:** kartki o stałej wysokości zamiast przewijania (Dalej/Wstecz, numer strony, ←/→, PageUp/PageDown, kółko); list (z ramką „Od tego tygodnia otwarte”, liczoną z harmonogramu gry) i lista kroków na każdy tydzień (treść w `dane/zeszyt.yaml`), strony „Gdzie co kupić” z liczbami
   z bieżących danych gry. Kroki odhacza gra: ze stanu firmy, decyzji i wizyt we wnętrzach (zapisuje serwer). Pierwszy
   niezrobiony krok ma znacznik „teraz”. Od tygodnia 2 zeszyt podaje **cel tygodnia** (`silnik/cele.py`, dane w
   `dane/zeszyt.yaml: cele`): wynik widać w następnym tygodniu, a za udany cel przychodzi +3% gości na tydzień. Zadania
