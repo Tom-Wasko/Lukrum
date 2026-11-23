@@ -9,7 +9,6 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 Podróż 03-okienka-i-rundy:
 - Z18 · przewodnik nauczyciela i zasady oceniania; tabela „mechanika a podstawa programowa” (wątek 03/przewodnik)
 - Z46 · przełącznik zestawu funkcji w /mg/ między rundami (ta sama gra przechodzi z lekcji 1 na lekcję 2…), decyzja szefa 23.11
-- Z19 · serwer szkoły: szef z kolegą ustawia LUKRUM na serwerze szkoły (FTP) 23.11; osoba od `manage.py zamykaj_rundy`, dane uczniów (RODO) i notka w instrukcji
 - Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie
 
 ## Zaplanowane
@@ -36,6 +35,7 @@ Podróż 03-okienka-i-rundy:
 - Z39 · moduły panelu w jednym pliku (paczka), jeśli preload z 03/wydajnosc nie wystarczy przez hostuj/Cloudflare; najpierw zmierzyć
 
 ## Odłożone
+- Z19 · (czeka na powrót kolegi) serwer szkoły: szef z kolegą ustawia LUKRUM na serwerze szkoły (FTP) 23.11; osoba od `manage.py zamykaj_rundy`, dane uczniów (RODO) i notka w instrukcji
 - Z48 · zeszyt wujka na telefonie (dziś tylko ekran ≥ 901 px); późna przyszłość
 - Z26 · niestabilny test kasyna (dziś `test_mistrz_gry_widzi_klub`): 22.11 nie powtórzył się w 2 pełnych przebiegach; wrócić, gdy się pojawi
 - Z2 · gry testowe: znajomi 20 i 22.11 za nami; dalej 4–6 osób ze stoperem, potem klasa; balans jest dotąd tylko z botów;
