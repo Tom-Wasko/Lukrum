@@ -33,4 +33,13 @@
   - Pełne testy są zielone.
 - **Zrzuty ekranu:** nie.
 
+- **Z pierwszej próby (sesja padła na złym katalogu, 23.11 07:10):**
+  - Wyszukiwanie w sieci nie znalazło prawdziwych osób ani firm: Klimek-Ślęzak, Lupa, e-Księgi24.pl, Sokole Oko
+    i inne. Jedyne podobne to „Debet/Credit” z Krakowa (inna pisownia, inne miasto).
+  - Nazwisk nie zmieniasz. Wpisz tę tabelę do raportu (krótko uzupełnij odnośniki).
+  - `ikony_marek.js` ma sekcję LOGA z „uproszczonymi znakami prawdziwych marek”: opisz to w liście kontrolnej jako !,
+    nic nie usuwaj.
+  - **Nie wychodź poleceniem `cd` poza swój worktree** (do `_archiwum/` ani wyżej). `_archiwum` czytaj narzędziem
+    Read, z pełną ścieżką.
+
 ## Raport
