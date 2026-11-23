@@ -1,6 +1,6 @@
 # Stan
-Archi żył: 2026-11-22 22:13
-Tryb: noc 22.11 – wszystkie wątki scalone, komputer wyłączony; jutro przegląd wyglądu w Chrome.
+Archi żył: 2026-11-23 06:22
+Tryb: autonomiczny od 06:22 23.11, budżet do 16:00 (nowe kroki do ok. 14:30), koniec najpóźniej 16:00. Scalanie na `podroz-03`.
 
 ## Podróż
 **03-okienka-i-rundy** od 2026-11-22 21:40 (`podroze/03-okienka-i-rundy/plan.md`). W nocy 5 wyko, rano Z32 po
@@ -19,5 +19,9 @@ zatwierdzeniu szefa. Scalanie: do `main` dopóki szef jest, po `/papa` na `podro
 | 03/opisy | Z16, Z25 | scalony 22:06 (0 martwych odsyłaczy) |
 
 ## Czeka na szefa
+- (23.11) Wskazówki w wydarzeniach: wskaźnik „Goście” (tak nazwał wyko, to popyt w lokalach) czy „Opinia” (jak w Twoim
+  przykładzie)? Rekomendacja: „Goście”, bo to dokładnie to, co liczy gra; opinia to osobny wskaźnik.
+- (23.11) Nagroda za cel tygodnia: wyko dał +3% gości na tydzień zamiast „opinia ▲”. Rekomendacja: zostawić +3% gości
+  (działa bez nowej mechaniki, balans botów +2,7%).
 
 ## Od Pomocnika
