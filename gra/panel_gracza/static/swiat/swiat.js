@@ -6,6 +6,7 @@ import { ikona } from "../zakladki/ikony.js";
 import { cenyLokalu, lokalWybrany, menuLokalu, mojeLokale, opisLokalu, wieleLokali } from "../zakladki/lokal_wybor.js";
 import { BUDYNEK_DO_MIEJSCA, BUDYNEK_PARAMETR, MIEJSCA, miejsceEkranu, ustawEkranyMiejsc } from "./miejsca.js";
 import { scenaBezLokalu, scenaBudowy, scenaKebabu, scenaSurowa, ustawRozmiary } from "./sceny.js";
+import { etykietaPory, poraTeraz, stylPory, warstwaPory } from "./pora.js";
 import { akcjaMapa, kliknijPunkt, listaPunktow, przewinDo, punktySceny, sceneWczytana, wczytajScene, zbudujScene } from "./wnetrze.js";
 
 import { gazeta } from "./kurier.js";
@@ -184,6 +185,12 @@ function wyborLokalu(c, m) {
     class="${l.id === akt ? "aktywny" : ""}" data-akcja="wybierz-lokal" data-id="${esc(l.id)}">${esc(opisLokalu(c.v, l.id)?.nazwa || l.id)}</button>`).join("")}</div>`;
 }
 
+let zegarPory = 0;
+function odswiezPore(sc, c) {
+  const pora = poraTeraz(c.kat.mapa.miasto?.pora), sp = stylPory(pora);
+  sc.className = `sw-scena ${sp.klasa}`; sc.setAttribute("style", sp.zmienne);
+  const et = sc.querySelector(".sw-pora-etykieta"); if (et) et.innerHTML = etykietaPory(pora);
+}
 const makieta = (m) => m.scena === "makieta";
 export const miejsce = {
   get tytul() { return MIEJSCA[M.id]?.tytul || "Miejsce"; },
@@ -195,14 +202,16 @@ export const miejsce = {
     if (!gotoweGrafiki || (makieta(m) && !sceneWczytana(M.id, M.q))) {
       return `<div class="sw">${naglowek(c, m)}<div class="ladowanie">${M.blad ? "Nie udało się wczytać wnętrza." : "Wczytywanie wnętrza…"}</div>${makieta(m) ? "" : lista(c, m)}</div>`;
     }
-    const sc = scenaMiejsca(c, m);
+    const sc = scenaMiejsca(c, m), pora = poraTeraz(c.kat.mapa.miasto?.pora), sp = stylPory(pora);
     return `<div class="sw">${naglowek(c, m)}${wyborLokalu(c, m)}${DODATKI[M.id] ? DODATKI[M.id](c) : ""}
-      <div class="sw-scena-ramka"><div class="sw-scena"><svg viewBox="0 0 1220 612" role="img" aria-label="${esc(sc.opis)}">${sc.s}</svg>
-        <div class="sw-nakladka">${sc.h}</div><div id="sw-karta-miejsce">${kartaHtml(c)}</div></div></div>
+      <div class="sw-scena-ramka"><div class="sw-scena ${sp.klasa}" style="${sp.zmienne}"><svg viewBox="0 0 1220 612" role="img" aria-label="${esc(sc.opis)}">${sc.s}</svg>
+        ${warstwaPory()}<span class="sw-pora-etykieta">${etykietaPory(pora)}</span><div class="sw-nakladka">${sc.h}</div><div id="sw-karta-miejsce">${kartaHtml(c)}</div></div></div>
       ${DODATKI_POD[M.id] ? DODATKI_POD[M.id](c) : ""}<h2 class="sw-co">Co tu zrobisz</h2>${makieta(m) ? listaPunktow(M.punkty) : lista(c, m)}</div>`;
   },
   po(c) {
     const naMiejscu = () => document.querySelector(".sw");
+    clearInterval(zegarPory);   // co minutę pora wnętrza dogania zegar (albo suwak na mapie), bez przerysowania sceny
+    zegarPory = setInterval(() => { const sc = document.querySelector(".sw-scena"); if (!sc) return clearInterval(zegarPory); odswiezPore(sc, c); }, 60000);
     const m = MIEJSCA[M.id];
     if (!gotoweGrafiki) wczytajGrafiki().then((ok) => { gotoweGrafiki = !!ok; if (ok && naMiejscu()) c.rysuj(); });
     else if (m && makieta(m) && !sceneWczytana(M.id, M.q) && !M.blad) {
