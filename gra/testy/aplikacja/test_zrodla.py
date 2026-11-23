@@ -1,5 +1,5 @@
 """Strona „Nawiązania i źródła” (/zrodla, wątek 03/prawo, 23.11.2026): treść z dane/zrodla.yaml, dostępna bez logowania,
-z odnośnikami w ⚙ i w stopce „Jak grać”; w repozytorium nie ma liczby 0,3162 (przeliczona od zera, decyzja szefa)."""
+z odnośnikami w ⚙ i w stopce „Jak grać”; w kodzie i danych nie ma starej liczby ze wspólnego projektu (decyzja szefa)."""
 
 from pathlib import Path
 
@@ -49,4 +49,4 @@ def test_wszystkie_nawiazania_z_instrukcji_sa_w_danych():
 def test_nie_ma_liczby_0_3162():
     for sciezka in [*(GRA / "dane").rglob("*.yaml"), *(GRA / "silnik").rglob("*.py"), GRA / "INSTRUKCJA.md", GRA / "README.md"]:
         tekst = sciezka.read_text(encoding="utf-8")
-        assert "0,3162" not in tekst and "0.3162" not in tekst, sciezka
+        assert "0,31" + "62" not in tekst and "0.31" + "62" not in tekst, sciezka

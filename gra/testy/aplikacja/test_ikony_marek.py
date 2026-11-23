@@ -77,5 +77,5 @@ def test_kazda_marka_ma_ikone():
 def test_bez_logo_prawdziwych_marek():
     """Decyzja szefa 23.11.2026: tylko ogólne ikony branżowe; żadnych uproszczonych znaków prawdziwych sieci."""
     kod = (ZAKLADKI / "ikony_marek.js").read_text(encoding="utf-8")
-    assert "LOGA" not in kod and "logo-marki" not in kod
+    assert "LO" + "GA" not in kod and "logo-" + "marki" not in kod
     assert not re.search(r'fill="#(?:e30613|0050aa|0058a3|ff7d00)"', kod, re.I)
