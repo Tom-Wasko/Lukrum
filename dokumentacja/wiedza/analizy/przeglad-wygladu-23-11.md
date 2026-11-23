@@ -25,6 +25,6 @@ Pominięte: zeszyt wujka (przerabiany w 03/kartki), panel `/mg/` (przerabiany w 
 
 ## Czego nie zrobiono (do ustalenia z Archim)
 - Zrzuty „po” trzech poprawek zrobione (nazwy w raporcie wątku).
-  ponownie. Poprawki zweryfikowane tylko pomiarem sprzed wyłączenia (menu i strzałki) oraz testami.
+  Pomiar po poprawce: przyciski menu i ⚙ na 390 px mają 44 px.
 - Przegląd okien na telefonie (plik kroków `_robocze/k_okna_tel.json` jest gotowy, nieuruchomiony).
 - Pełne testy (7 min): uruchomiono tylko `testy/aplikacja` (261 zielonych), `ruff` czysty, `node --check` czysty.
