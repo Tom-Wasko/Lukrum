@@ -63,6 +63,8 @@ przeglądarka ── HTML (szablony) ──▶ panel_gracza / panel_mg / konta
 - `zeszyt.yaml`: treść zeszytu wujka (listy, zadania tygodni, strony „Gdzie co kupić”). `api/zeszyt.py` składa z niej
   `v.zeszyt`, warunki odhaczenia liczy `panel_gracza/static/pulpit/zeszyt-warunki.js`, a wizyty we wnętrzach zapisuje
   `api/wizyty.py` (`Runda.zeszyt`).
+- `zrodla.yaml`: treść strony `/zrodla` („Nawiązania i źródła”: klucz nawiązań, źródła liczb i prawa, autorzy grafik, fontów,
+  nagrań i mapy). Silnik go nie czyta: `panel_gracza/zrodla.py` + `templates/panel_gracza/zrodla.html`, test `testy/aplikacja/test_zrodla.py`.
 - `radio.yaml`: radio „Fala Koziołka” (stacje, nagrania z autorem, źródłem i licencją, teksty prowadzącego). Silnik
   go nie czyta: `panel_gracza/radio.py` daje `/radio.json` (odbiornik `static/pulpit/radio.js`) i stronę
   `/nagrania-w-radiu`. Pliki MP3 (mono) leżą w `panel_gracza/static/radio/<stacja>/`; `lukrum/statyczne.py` obsługuje
