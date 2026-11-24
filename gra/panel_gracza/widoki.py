@@ -14,6 +14,7 @@ from gry.models import Gra
 from konta.druzyny import CIASTKO_URZADZENIA
 from konta.role import firmy_ucznia, jest_mg, moze_firme
 
+from . import dzwieki as dzwieki_dane
 from . import moduly
 from . import radio as radio_dane
 from . import zrodla as zrodla_dane
@@ -46,9 +47,15 @@ def radio_json(request):
     return JsonResponse(radio_dane.dla_odbiornika())
 
 
+def dzwieki_json(request):
+    """Krótkie dźwięki i odgłosy tła miejsc dla panelu (static/pulpit/dzwiek.js)."""
+    return JsonResponse(dzwieki_dane.dla_panelu())
+
+
 def nagrania_w_radiu(request):
-    """Spis nagrań radia: autor, wykonawca, rok, źródło i licencja każdego pliku (bez logowania)."""
-    return render(request, "panel_gracza/nagrania_w_radiu.html", radio_dane.dla_strony())
+    """Spis nagrań radia i dźwięków gry: autor, źródło i licencja każdego pliku (bez logowania)."""
+    return render(request, "panel_gracza/nagrania_w_radiu.html",
+                  radio_dane.dla_strony() | dzwieki_dane.dla_strony())
 
 
 def zrodla(request):

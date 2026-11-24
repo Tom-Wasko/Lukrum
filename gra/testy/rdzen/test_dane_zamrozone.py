@@ -39,6 +39,7 @@ def test_zamrozona_kopia_ma_wszystkie_pliki_danych():
                                                                            Path("mapa/dekor.yaml"),
                                                                            Path("zeszyt.yaml"),
                                                                            Path("radio.yaml"), Path("zrodla.yaml"),
+                                                                           Path("dzwieki.yaml"),
                                                                            Path("zdarzenia/wskazowki.yaml")}   # wskazówki ▲▼: opcjonalny
     assert pliki <= {p.relative_to(DANE_ZAMROZONE) for p in DANE_ZAMROZONE.rglob("*.yaml")}
 

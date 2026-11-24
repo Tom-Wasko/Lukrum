@@ -29,3 +29,22 @@
 @media (prefers-reduced-motion: reduce) {
   :is(.para, .neon, .sekundnik, .hak) { animation: none !important; transition: none !important; }
 }
+
+/* === podróż 04/kontrast ============================================================================================ */
+/* kółko „i”: bez przygaszenia (opacity .85 obniżało kontrast poniżej 4,5:1, w „wysokiej” poniżej 7:1) */
+.kolko-i { opacity: 1; }
+/* gwiazdki ocen: pełna ★ = ciemna, pusta = sam obrys (stan niesie kształt, nie kolor); papier paragonu zawsze jasny */
+.pp-paragon .gwiazdki { color: var(--g-czern); }
+.pp-paragon .gwiazdki .p { color: transparent; -webkit-text-stroke: 1px var(--g-czern); }
+.szk .gwiazdki .p { color: transparent; -webkit-text-stroke: 1px var(--tusz); }
+/* „wysoka” jasna: żółty pasek „w budowie” i pigułki dostają czerń zamiast barwnego tekstu (≥ 7:1) */
+[data-paleta="wysoka"][data-tryb="jasny"] .w-budowie .napis { color: var(--czarny); }
+[data-paleta="wysoka"][data-tryb="jasny"] :is(.pigulka.ok, .pigulka.nie, .pigulka.inf) { color: var(--czarny); }
+/* ciemny: kółko „i” na ciemnej teczce w kolorze tekstu, na papierze (koperta, paragon) w czerni papieru */
+[data-tryb="ciemny"] :is(.szk, .pp-koperta) .kolko-i { color: var(--tusz); }
+[data-tryb="ciemny"] .pp-okno-paragon .kolko-i { color: var(--g-czern); }
+[data-tryb="ciemny"] .pp-koperta .tabela-tytul .kolko-i { color: var(--na-kolorze); }
+/* „wysoka”: szary przycisk na papierze paragonu (biel na szarości 5,3:1) → czerń */
+[data-paleta="wysoka"] .okno .ost > .btn:not(.gl):not(.zielony) { background: var(--g-czern); color: var(--g-biel); }
+/* tablica korkowa w parku: kółko „i” leży na brązowej tekturze, nie na papierze */
+.zd-tablica > .kolko-i { color: var(--g-biel); }

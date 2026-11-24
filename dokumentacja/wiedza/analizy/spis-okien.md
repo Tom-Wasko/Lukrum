@@ -30,76 +30,76 @@ Rama i klasy odczytane skryptem z `karty-style.js` i modułów `zakladki/*.js` (
 
 ### 2a. Punkty scen z oknem (kolumny: scena → punkt → ekran → rama → stare klasy → stan)
 
-| scena | punkt | ekran | rama | stare klasy w środku | stan |
-|---|---|---|---|---|---|
-| agencja_nieruchomosci | Lokale do wzięcia | lokale | inna (sklep, auto, lokal, dymek) | kafel, pasek, btn, pigulka, komunikat, wiersz | inne |
-| agencja_nieruchomosci | Licytacje | licytacje | inna (sklep, auto, lokal, dymek) | kafel, pasek, btn, pigulka, komunikat | inne |
-| agencja_nieruchomosci | Notariusz | przejecia | inna (sklep, auto, lokal, dymek) | kafel, pasek, btn, pigulka, komunikat | inne |
-| agencja_nieruchomosci | Twoje klucze | lokale (Twoje) | inna (sklep, auto, lokal, dymek) | kafel, pasek, btn, pigulka, komunikat, wiersz | inne |
+| scena | punkt | ekran | rama | stare klasy w środku | stan | zrzut (`_robocze/zrzuty-okna/`) |
+|---|---|---|---|---|---|---|
+| agencja_nieruchomosci | Lokale do wzięcia | lokale | inna (sklep, auto, lokal, dymek) | kafel, pasek, btn, pigulka, komunikat, wiersz | zgodne | agencja_nieruchomosci-lokale-do-wziecia-<paleta>-<tryb>.png |
+| agencja_nieruchomosci | Licytacje | licytacje | inna (sklep, auto, lokal, dymek) | kafel, pasek, btn, pigulka, komunikat | zgodne | agencja_nieruchomosci-licytacje-<paleta>-<tryb>.png |
+| agencja_nieruchomosci | Notariusz | przejecia | inna (sklep, auto, lokal, dymek) | kafel, pasek, btn, pigulka, komunikat | zgodne | agencja_nieruchomosci-notariusz-<paleta>-<tryb>.png |
+| agencja_nieruchomosci | Twoje klucze | lokale (Twoje) | inna (sklep, auto, lokal, dymek) | kafel, pasek, btn, pigulka, komunikat, wiersz | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
 | agencja_pracy | Kandydaci | rynek_pracy | s4 kratka | pasek, btn, komunikat | zgodne (wzór) |
 | agencja_pracy | Twoje ogłoszenia | rynek_pracy (zastępca) | s4 kratka | pasek, btn, komunikat | zgodne (wzór) |
 | agencja_pracy | Agencja | rynek_pracy (kanał agencja) | s4 kratka | pasek, btn, komunikat | zgodne (wzór) |
 | agencja_pracy | Headhunter | rynek_pracy (headhunter) | s4 kratka | pasek, btn, komunikat | zgodne (wzór) |
-| akademia | Kursy | szkolenia | s4 kratka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | stare |
-| akademia | Dyplomy | szkolenia (historia) | s4 kratka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | stare |
-| auchan | Zakupy z dowozem | zaop_dostawy (auto-dostawy) | s1 teczka | pasek, btn, agencja, komunikat, wiersz | stare |
+| akademia | Kursy | szkolenia | s4 kratka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | zgodne | akademia-kursy-<paleta>-<tryb>.png |
+| akademia | Dyplomy | szkolenia (historia) | s4 kratka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | zgodne | akademia-dyplomy-<paleta>-<tryb>.png |
+| auchan | Zakupy z dowozem | zaop_dostawy (auto-dostawy) | s1 teczka | pasek, btn, agencja, komunikat, wiersz | zgodne | auchan-zakupy-z-dowozem-<paleta>-<tryb>.png |
 | bank | Konto i debet | bank | s2 akta urzędowe | pasek, btn, przelacznik, komunikat, wiersz | zgodne (wzór) |
 | bank | Kredyty | bank | s2 akta urzędowe | pasek, btn, przelacznik, komunikat, wiersz | zgodne (wzór) |
 | bank | Lokaty | bank | s2 akta urzędowe | pasek, btn, przelacznik, komunikat, wiersz | zgodne (wzór) |
 | bank | Leasing sprzętu | bank | s2 akta urzędowe | pasek, btn, przelacznik, komunikat, wiersz | zgodne (wzór) |
-| bazar | Okazje | handel | s1 teczka | karta, pasek, btn | mieszane |
-| bazar | Twój stragan | handel | s1 teczka | karta, pasek, btn | mieszane |
-| bazar | Zakończone | handel (historia) | s1 teczka | karta, pasek, btn | mieszane |
-| biuro_rachunkowe | Umowa i pakiet | biuro | s2 akta urzędowe | kafel, btn, pigulka, przelacznik, komunikat, wiersz | stare |
-| biuro_rachunkowe | Cennik | biuro (cennik) | s2 akta urzędowe | kafel, btn, pigulka, przelacznik, komunikat, wiersz | stare |
-| biuro_rachunkowe | Twoje dokumenty | biuro (dokumenty) | s2 akta urzędowe | kafel, btn, pigulka, przelacznik, komunikat, wiersz | stare |
+| bazar | Okazje | handel | s1 teczka | karta, pasek, btn | zgodne | bazar-okazje-<paleta>-<tryb>.png |
+| bazar | Twój stragan | handel | s1 teczka | karta, pasek, btn | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
+| bazar | Zakończone | handel (historia) | s1 teczka | karta, pasek, btn | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
+| biuro_rachunkowe | Umowa i pakiet | biuro | s2 akta urzędowe | kafel, btn, pigulka, przelacznik, komunikat, wiersz | zgodne | biuro_rachunkowe-umowa-i-pakiet-<paleta>-<tryb>.png |
+| biuro_rachunkowe | Cennik | biuro (cennik) | s2 akta urzędowe | kafel, btn, pigulka, przelacznik, komunikat, wiersz | zgodne | biuro_rachunkowe-cennik-<paleta>-<tryb>.png |
+| biuro_rachunkowe | Twoje dokumenty | biuro (dokumenty) | s2 akta urzędowe | kafel, btn, pigulka, przelacznik, komunikat, wiersz | zgodne | biuro_rachunkowe-twoje-dokumenty-<paleta>-<tryb>.png |
 | detektyw | Zleć śledztwo | konkurencja | s2 akta urzędowe | kafel, karta, pasek, btn | zgodne (wzór) |
 | detektyw | Kto jest kim | konkurencja | s2 akta urzędowe | kafel, karta, pasek, btn | zgodne (wzór) |
 | detektyw | Raporty | konkurencja (raporty) | s2 akta urzędowe | kafel, karta, pasek, btn | zgodne (wzór) |
-| galeria | Udogodnienia | udogodnienia | s4 kratka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | stare |
-| gielda | Notowania | gielda | s2 akta urzędowe | – | zgodne |
-| gielda | Kup albo sprzedaj | gielda | s2 akta urzędowe | – | zgodne |
-| gielda | Wiadomości | gielda (wiadomości) | s2 akta urzędowe | – | zgodne |
-| harpagon | Pożyczka od ręki | harpagon | s2 akta urzędowe | karta, pasek, btn, komunikat | stare |
-| harpagon | Twój dług | harpagon (stan długu) | s2 akta urzędowe | karta, pasek, btn, komunikat | stare |
-| harpagon | Zapukaj | kasyno | inna (sklep, auto, lokal, dymek) | kafel, karta, pasek, btn | inne |
-| kamienica_rachmistrzow | Porównaj biura | biuro (porównanie) | s2 akta urzędowe | kafel, btn, pigulka, przelacznik, komunikat, wiersz | stare |
-| kamienica_rachmistrzow | Poczta z urzędu | biuro (historia błędów) | s2 akta urzędowe | kafel, btn, pigulka, przelacznik, komunikat, wiersz | stare |
-| park | Co się tu dzieje | – | inna (sklep, auto, lokal, dymek) | (osobnego modułu brak) | inne |
-| park_handlowy | Stoliki i ogródek | wyposazenie | s1 teczka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | stare |
-| park_handlowy | Wystrój | dekor | inna (sklep, auto, lokal, dymek) | btn | inne |
-| piekarnia | Jakość wypieku | – | inna (sklep, auto, lokal, dymek) | (osobnego modułu brak) | inne |
+| galeria | Udogodnienia | udogodnienia | s4 kratka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | zgodne | galeria-udogodnienia-<paleta>-<tryb>.png |
+| gielda | Notowania | gielda | s2 akta urzędowe | – | zgodne | gielda-notowania-<paleta>-<tryb>.png |
+| gielda | Kup albo sprzedaj | gielda | s2 akta urzędowe | – | zgodne | gielda-kup-albo-sprzedaj-<paleta>-<tryb>.png |
+| gielda | Wiadomości | gielda (wiadomości) | s2 akta urzędowe | – | zgodne | gielda-wiadomosci-<paleta>-<tryb>.png |
+| harpagon | Pożyczka od ręki | harpagon | s2 akta urzędowe | karta, pasek, btn, komunikat | zgodne | harpagon-pozyczka-od-reki-<paleta>-<tryb>.png |
+| harpagon | Twój dług | harpagon (stan długu) | s2 akta urzędowe | karta, pasek, btn, komunikat | zgodne | harpagon-twoj-dlug-<paleta>-<tryb>.png |
+| harpagon | Zapukaj | kasyno | inna (sklep, auto, lokal, dymek) | kafel, karta, pasek, btn | zgodne | harpagon-zapukaj-<paleta>-<tryb>.png |
+| kamienica_rachmistrzow | Porównaj biura | biuro (porównanie) | s2 akta urzędowe | kafel, btn, pigulka, przelacznik, komunikat, wiersz | zgodne | kamienica_rachmistrzow-porownaj-biura-<paleta>-<tryb>.png |
+| kamienica_rachmistrzow | Poczta z urzędu | biuro (historia błędów) | s2 akta urzędowe | kafel, btn, pigulka, przelacznik, komunikat, wiersz | zgodne | kamienica_rachmistrzow-poczta-z-urzedu-<paleta>-<tryb>.png |
+| park | Co się tu dzieje | – | inna (sklep, auto, lokal, dymek) | (osobnego modułu brak) | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
+| park_handlowy | Stoliki i ogródek | wyposazenie | s1 teczka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | zgodne | park_handlowy-stoliki-i-ogrodek-<paleta>-<tryb>.png |
+| park_handlowy | Wystrój | dekor | inna (sklep, auto, lokal, dymek) | btn | zgodne | park_handlowy-wystroj-<paleta>-<tryb>.png |
+| piekarnia | Jakość wypieku | – | inna (sklep, auto, lokal, dymek) | (osobnego modułu brak) | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
 | pierzeja_bankowa | Porównaj banki | bank (porównanie) | s2 akta urzędowe | pasek, btn, przelacznik, komunikat, wiersz | zgodne (wzór) |
 | poczta | Nadaj list z decyzjami | wyslij | własna | kafel, btn, pigulka, tab-wrap, tabela-tytul, komunikat | własne |
-| poczta | Do poprawy | lista_bledow | s4 kratka | kafel, btn, pigulka, tab-wrap, tabela-tytul, komunikat | stare |
+| poczta | Do poprawy | lista_bledow | s4 kratka | kafel, btn, pigulka, tab-wrap, tabela-tytul, komunikat | zgodne | poczta-do-poprawy-<paleta>-<tryb>.png |
 | poczta | Potwierdzenia | wyslij (historia) | własna | kafel, btn, pigulka, tab-wrap, tabela-tytul, komunikat | własne |
-| pokoj_ksiegi | Księga firmy | kpir | s4 kratka | kafel, btn, pigulka, przelacznik, komunikat, wiersz | stare |
-| pokoj_ksiegi | Dokumenty | kpir (dokumenty) | s4 kratka | kafel, btn, pigulka, przelacznik, komunikat, wiersz | stare |
-| ratusz | Sprawy lokalu | urzad | s2 akta urzędowe | kafel, karta, pasek, btn, wiersz | stare |
-| ratusz | VAT | vat | s2 akta urzędowe | karta, pasek | mieszane |
-| ratusz | Podatek dochodowy | podatki | s2 akta urzędowe | karta, pasek | mieszane |
-| redakcja | Wyniki tygodnia | karta_wynikow, raport | inna (sklep, auto, lokal, dymek) | (osobnego modułu brak) | inne |
-| redakcja | Tabela ligowa | ranking | s3 apka | kafel, btn, pigulka, tab-wrap, tabela-tytul, komunikat | stare |
-| redakcja | Dział porad | wnioski | s4 kratka | kafel, btn, pigulka, tab-wrap, tabela-tytul, komunikat | stare |
-| redakcja | Archiwum | raport (historia) | s3 apka | kafel, btn, pigulka, przelacznik, komunikat, wiersz | stare |
-| sanepid | Poziom higieny | sanepid | s2 akta urzędowe | kafel, karta, pasek, btn, wiersz | stare |
-| sanepid | Kontrole | sanepid (historia) | s2 akta urzędowe | kafel, karta, pasek, btn, wiersz | stare |
-| sprzet_gastro | Rożny i grille | wnetrze_sprzet | s1 teczka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | stare |
-| sprzet_gastro | Frytownice i chłodzenie | wnetrze_sprzet | s1 teczka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | stare |
-| sprzet_gastro | Kasy | wnetrze_sprzet | s1 teczka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | stare |
-| sprzet_gastro | Komis | wnetrze_sprzet | s1 teczka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | stare |
-| stolarnia | Nowe stanowiska | stanowiska | s1 teczka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | stare |
-| stolarnia | Cennik i terminy | – | inna (sklep, auto, lokal, dymek) | (osobnego modułu brak) | inne |
-| ubezpieczyciel | Kup polisę | ubezpieczenia | s2 akta urzędowe | karta, pasek, btn, komunikat, wiersz | stare |
-| ubezpieczyciel | Co grozi | ubezpieczenia (informacja) | s2 akta urzędowe | karta, pasek, btn, komunikat, wiersz | stare |
-| ubezpieczyciel | Twoje polisy | ubezpieczenia (historia) | s2 akta urzędowe | karta, pasek, btn, komunikat, wiersz | stare |
-| uczelnia | Klienci w strefach | klienci | s3 apka | pasek, komunikat | mieszane |
-| uczelnia | Kalendarz miasta | kalendarz | s4 kratka | pasek, btn, tab-wrap | mieszane |
-| uczelnia | Prognoza popytu | klienci (prognoza) | s3 apka | pasek, komunikat | mieszane |
-| zana_drukarnia | Ulotki i plakaty | agencje | s1 teczka | kafel, pasek, btn, pigulka, agencja, wiersz | stare |
-| zana_eventy | Eventy | agencje | s1 teczka | kafel, pasek, btn, pigulka, agencja, wiersz | stare |
-| zana_internet | Internet | internet | s1 teczka | kafel, pasek, btn, pigulka, agencja, wiersz | stare |
-| zana_radio | Radio i billboard | agencje | s1 teczka | kafel, pasek, btn, pigulka, agencja, wiersz | stare |
+| pokoj_ksiegi | Księga firmy | kpir | s4 kratka | kafel, btn, pigulka, przelacznik, komunikat, wiersz | zgodne | pokoj_ksiegi-ksiega-firmy-<paleta>-<tryb>.png |
+| pokoj_ksiegi | Dokumenty | kpir (dokumenty) | s4 kratka | kafel, btn, pigulka, przelacznik, komunikat, wiersz | zgodne | pokoj_ksiegi-dokumenty-<paleta>-<tryb>.png |
+| ratusz | Sprawy lokalu | urzad | s2 akta urzędowe | kafel, karta, pasek, btn, wiersz | zgodne | ratusz-sprawy-lokalu-<paleta>-<tryb>.png |
+| ratusz | VAT | vat | s2 akta urzędowe | karta, pasek | zgodne | ratusz-vat-<paleta>-<tryb>.png |
+| ratusz | Podatek dochodowy | podatki | s2 akta urzędowe | karta, pasek | zgodne | ratusz-podatek-dochodowy-<paleta>-<tryb>.png |
+| redakcja | Wyniki tygodnia | karta_wynikow, raport | inna (sklep, auto, lokal, dymek) | (osobnego modułu brak) | zgodne | redakcja-wyniki-tygodnia-<paleta>-<tryb>.png |
+| redakcja | Tabela ligowa | ranking | s3 apka | kafel, btn, pigulka, tab-wrap, tabela-tytul, komunikat | zgodne | redakcja-tabela-ligowa-<paleta>-<tryb>.png |
+| redakcja | Dział porad | wnioski | s4 kratka | kafel, btn, pigulka, tab-wrap, tabela-tytul, komunikat | zgodne | redakcja-dzial-porad-<paleta>-<tryb>.png |
+| redakcja | Archiwum | raport (historia) | s3 apka | kafel, btn, pigulka, przelacznik, komunikat, wiersz | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
+| sanepid | Poziom higieny | sanepid | s2 akta urzędowe | kafel, karta, pasek, btn, wiersz | zgodne | sanepid-poziom-higieny-<paleta>-<tryb>.png |
+| sanepid | Kontrole | sanepid (historia) | s2 akta urzędowe | kafel, karta, pasek, btn, wiersz | zgodne | sanepid-kontrole-<paleta>-<tryb>.png |
+| sprzet_gastro | Rożny i grille | wnetrze_sprzet | s1 teczka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | zgodne | sprzet_gastro-rozny-i-grille-<paleta>-<tryb>.png |
+| sprzet_gastro | Frytownice i chłodzenie | wnetrze_sprzet | s1 teczka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
+| sprzet_gastro | Kasy | wnetrze_sprzet | s1 teczka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
+| sprzet_gastro | Komis | wnetrze_sprzet | s1 teczka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
+| stolarnia | Nowe stanowiska | stanowiska | s1 teczka | kafel, pasek, btn, pigulka, oferta-wiersz, komunikat, wiersz | zgodne | stolarnia-nowe-stanowiska-<paleta>-<tryb>.png |
+| stolarnia | Cennik i terminy | – | inna (sklep, auto, lokal, dymek) | (osobnego modułu brak) | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
+| ubezpieczyciel | Kup polisę | ubezpieczenia | s2 akta urzędowe | karta, pasek, btn, komunikat, wiersz | zgodne | ubezpieczyciel-kup-polise-<paleta>-<tryb>.png |
+| ubezpieczyciel | Co grozi | ubezpieczenia (informacja) | s2 akta urzędowe | karta, pasek, btn, komunikat, wiersz | zgodne | ubezpieczyciel-co-grozi-<paleta>-<tryb>.png |
+| ubezpieczyciel | Twoje polisy | ubezpieczenia (historia) | s2 akta urzędowe | karta, pasek, btn, komunikat, wiersz | zgodne | ubezpieczyciel-twoje-polisy-<paleta>-<tryb>.png |
+| uczelnia | Klienci w strefach | klienci | s3 apka | pasek, komunikat | zgodne | uczelnia-klienci-w-strefach-<paleta>-<tryb>.png |
+| uczelnia | Kalendarz miasta | kalendarz | s4 kratka | pasek, btn, tab-wrap | zgodne | uczelnia-kalendarz-miasta-<paleta>-<tryb>.png |
+| uczelnia | Prognoza popytu | klienci (prognoza) | s3 apka | pasek, komunikat | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
+| zana_drukarnia | Ulotki i plakaty | agencje | s1 teczka | kafel, pasek, btn, pigulka, agencja, wiersz | zgodne | zana_drukarnia-ulotki-i-plakaty-<paleta>-<tryb>.png |
+| zana_eventy | Eventy | agencje | s1 teczka | kafel, pasek, btn, pigulka, agencja, wiersz | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
+| zana_internet | Internet | internet | s1 teczka | kafel, pasek, btn, pigulka, agencja, wiersz | zgodne | zana_internet-internet-<paleta>-<tryb>.png |
+| zana_radio | Radio i billboard | agencje | s1 teczka | kafel, pasek, btn, pigulka, agencja, wiersz | zgodne | brak zrzutu (okno zamknięte o tej porze w grze pokazowej; ta sama rama i komponenty co pozostałe) |
 
 Punkty bez okna z ramą (nie ma co przerabiać): 54× `szkic?` (punkt-dymek sceny z tekstem, `.wn-info`), 15× `odsyla`
 (dymek „To załatwisz gdzie indziej”, `swiat/swiat.js:230`), 6× `wejscie` (przejście do innej sceny). Razem z 2a

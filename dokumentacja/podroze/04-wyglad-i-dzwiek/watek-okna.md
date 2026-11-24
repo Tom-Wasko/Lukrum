@@ -31,3 +31,20 @@
 - **Archi:** archi-lukrum.
 
 ## Raport
+### Zrobione
+- **s1 (teczka):** `swiat/okna-teczka.css` (z okna-b) przejrzany i potwierdzony na zrzutach (agencja nieruchomości, park handlowy, sprzęt: tabele z etykietą kraft, karty katalogowe, zszywki, naklejki).
+- **s2 i s4:** `swiat/okna.css`: dopisany blok `podróż 04/okna` (`.kg` kafli bez zaokrągleń, `.lw`, `.tydzien`, `.sprawy`, `details.szczegoly`, `.podsumowanie` ze znakami ✓ ! ✕, `.delta`); „Dział porad” w s4 jak zeszyt, kontrast w „wysokiej” OK.
+- **Okna podrzędne (2b):** okna otwierane z teczki dziedziczą jej ramę (`_stylTeczki` w `wspolne.js`), więc pożyczka Harpagona i formularze banku są już w s2 bez zmian w modułach (zrzut `harpagon-pozyczka-okno`, pewex ciemny). Okna wołane spoza teczki dostają s1, objętą `okna-teczka.css`. Moduły JS bez zmian.
+- **s3:** sprawdzone (Wyniki tygodnia, ranking, klienci), bez rażących usterek.
+- **Spis:** 55 wierszy → „zgodne”, kolumna ze zrzutem.
+
+### Odstępstwa
+- Brak zrzutów „po” dla okien niedostępnych o tej porze w grze pokazowej (Internet, Bazar, Drukarnia): ta sama rama i komponenty co pozostałe, oznaczone w spisie.
+- Serwer 8781 trzeba było zrestartować po merge’u (szablon `gra.html` był w pamięci bez `okna-teczka.css`).
+
+### Dowody
+- Zrzuty: `C:/Users/PC/Pulpit/lukrum/_robocze/zrzuty-okna/` (bar jasny, pewex ciemny, wysoka ciemny, 1366×768).
+- `pytest testy/swiat testy/aplikacja` → `299 passed in 153.91s`
+- `ruff check .` → `All checks passed!`
+- pełne testy → `965 passed in 366.87s (0:06:06)`
+- `node --check`: nie dotyczy (zmiany tylko w CSS i dokumentacji).

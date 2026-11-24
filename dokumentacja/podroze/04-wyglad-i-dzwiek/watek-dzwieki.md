@@ -38,3 +38,33 @@
 - **Archi:** archi-lukrum.
 
 ## Raport
+
+**Wyko, 24.11.2026. Status: gotowe do przeglądu (kod, dane, testy, dokumentacja, zrzuty).**
+
+### Co zrobione
+- `dane/dzwieki.yaml`: 10 plików (5 krótkich, 5 tła), wszystkie `status: oczekuje` (robocze nazwy `.ogg`), zdarzenia → dźwięk, miejsca → odgłos albo „cisza” (każdy budynek i zespół z `budynki.yaml`), głośności domyślne 40 %/30 %, krótkie włączone, tło wyłączone.
+- `panel_gracza/dzwieki.py` + `/dzwieki.json` (bez logowania); do panelu trafiają tylko pliki „gotowe” i istniejące, brak pliku = cisza. Strona `/nagrania-w-radiu` ma sekcję „Dźwięki gry”.
+- `static/pulpit/dzwiek.js` (Web Audio, `lukrum.dzwiek.{zagraj,tlo,przycisz,ustawMG}`): nic nie gra przed pierwszym kliknięciem, tło z płynnym przejściem, localStorage `lukrum-dzwiek`.
+- ⚙ → Dźwięk (2 włączniki, 2 suwaki, „Wycisz wszystko”); MG: wiersz „Dźwięki gry w klasie” w `/mg/`, flaga `dzwiek_wyciszony`, gracz widzi „Dźwięk wyciszony przez prowadzącego”.
+- INSTRUKCJA, README, `dokumentacja/funkcje/Dzwieki.md`, test `testy/aplikacja/test_dzwieki.py` (10 testów).
+
+### Zmiany w cudzych plikach (minimalne)
+`pulpit/pulpit.js` (import, sekcja ⚙, `ustawMG` w `odswiezTydzien`), `pulpit/pulpit.css` (blok na końcu), `panel_mg/static/mg/mg.js`, `api/widoki.py` (flaga w `api_prowadzenie`), `api/prezentacja.py`, `konta/middleware.py` (`/dzwieki.json` w WOLNE), `panel_gracza/widoki.py` + `urls.py` + szablon nagrań, `testy/rdzen/test_dane_zamrozone.py` (dzwieki.yaml na liście wyjątków jak radio.yaml). Dźwięki paragonu, stempla, zeszytu i teczki podpięte przez MutationObserver w `dzwiek.js`, bez edycji `wspolne.js`, `zeszyt.js` ani okien.
+
+### Dowody
+- Pełne testy, pierwszy przebieg: `4 failed, 971 passed in 391.69s`. Naprawione: brak `opis`/`zrodlo` w dzwieki.yaml, wyjątek w kopii zamrożonej, `MutationObserver` w teście węzłowym (strażnik w `dzwiek.js`). Po poprawkach osobno zielone: `test_dane`, `test_dane_zamrozone`, `test_wnetrza_sceny`, `test_dzwieki` (`10 passed`). Pełnego przebiegu po poprawkach nie powtarzałem (7 min); niestabilny `test_mistrz_gry_widzi_klub` nie wystąpił.
+- `ruff check .` → `All checks passed!`; `node --check dzwiek.js` ok; `silnik.dane sprawdz` → `Dane w porządku`.
+- Zrzuty: `C:/Users/PC/Pulpit/lukrum/_robocze/zrzuty-dzwieki/` (ust-dzwiek-bar-jasny, ust-dzwiek-wysoka-ciemny, mg-dzwiek). Serwer 8782 zatrzymany.
+
+### Uwaga
+W worktree leży obcy, niezacommitowany plik `gra/panel_gracza/static/dzwieki/lokal.ogg` (2 MB, 06:52; nie mój, brak go w spisie). Przez niego pada `test_w_paczce_nie_ma_plikow_spoza_spisu` (bez niego 10 passed). Zostawiony na miejscu, nie w commicie: trzeba go wpisać do `dzwieki.yaml` (autor, licencja) albo usunąć.
+
+### Propozycje
+- `04/radio`: wołać `lukrum.dzwiek.przycisz(true)`, gdy gra radio.
+
+### Dopisek 24.11.2026 (nagrania, scalenie, pełne testy)
+- `lokal.ogg` to nagranie od Archiego (szef zaakceptował listę), nie obcy plik. Pod kluczami w `dzwieki.yaml` są teraz 4 pliki `gotowe`: `dzwonek.flac` (CC0), `kartka.ogg`, `lokal.ogg`, `urzad.ogg` (domena publiczna), wszystkie z Wikimedia Commons. Sześć pozostałych (kasa, ulica, kuchnia, sklep, biuro, szkola) ma `oczekuje` = cisza; stempel bez nagrania.
+- **Autor, licencja i źródło pochodzą z listy podanej przez Archiego, nie z API Commons:** mam zakaz sieci, więc nie sprawdziłem `imageinfo extmetadata`. Archi powinien zweryfikować te cztery wpisy (dzwonek: qubodup/CC0; kartka: planish; lokal: stephan; urzad: ezwa).
+- Teczka (`otwarcie_okna`) gra szelest kartki; kasyno (`harpagon`) i parki/woda grają odgłos na 50 % (`glosnosc_miejsc`). Klucza `kuchnia` żadne miejsce nie używa (kuchnia to punkt w lokalu).
+- `git merge main` (04/wzor) bez konfliktów.
+- Dowody: `pytest -q` (pełne) → `976 passed in 366.75s`; `test_dzwieki.py` → `11 passed`; `ruff check .` → `All checks passed!`; `silnik.dane sprawdz` → `Dane w porządku`. `test_mistrz_gry_widzi_klub` nie wystąpił.

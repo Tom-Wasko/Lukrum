@@ -1,6 +1,6 @@
 # Stan
-Archi żył: 2026-11-24 07:22
-Tryb: autonomiczny od 07:22 24.11, budżet do 15:00 (nowe kroki do ok. 13:50), koniec najpóźniej 15:00. Scalenia do `podroz-04`.
+Archi żył: 2026-11-24 13:08
+Tryb: nadzorowany od 13:04 (wcześniej autonomiczny 07:22–13:04, scalenia w `podroz-04`).
 
 ## Podróż
 **04-wyglad-i-dzwiek**: plan zatwierdzony 23.11 wieczorem (`podroze/04-wyglad-i-dzwiek/plan.md`), **start 24.11 rano**
@@ -11,11 +11,14 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | Wątek | Zadania | Stan |
 |---|---|---|
 | 04/wzor | Z49 | scalony ae06cae (wzór przyjęty) |
-| 04/dzwieki | Z11 | w toku (wyko c8c0b414) |
-| 04/okna | Z49 | w toku (kontynuacja wyko wzoru, 2a866f76; s1 z zatrzymanego okna-b do wciągnięcia) |
-| 04/radio | Z50 | kontynuacja 04/dzwieki, na koniec |
+| 04/dzwieki | Z11 | scalony do `podroz-04` (4 nagrania gotowe, 6 czeka na Commons; 976 passed) |
+| 04/okna | Z49 | scalony do `podroz-04` 43f80fc (55 okien zgodne, 965 passed); galeria dla szefa |
+| 04/radio | Z50 | scalony do `podroz-04` 6b01743 (979 passed) |
+| 04/kontrast | Z6 | scalony do `podroz-04` 1f9d5f9 (979 passed) |
+| 04/kreator | Z47 | scalony do `podroz-04` 60d8ea9 (995 passed) |
 
 ## Czeka na szefa
-(nic; Z19 odłożone do powrotu kolegi)
+- 6 nagrań (kasa, ulica, kuchnia, sklep, biuro, szkoła): szef pobiera w przeglądarce do `gra/panel_gracza/static/dzwieki/`, potem Archi wpisuje licencje.
+- Serwer gry na porcie 8784 (pid 25996, po wątku 04/kontrast) nadal działa: wyko nie mógł go zatrzymać (blokada), zatrzymaj ręcznie.
 
 ## Od Pomocnika

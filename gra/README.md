@@ -20,8 +20,10 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
   `dane/zeszyt.yaml: cele`): wynik widać w następnym tygodniu, a za udany cel przychodzi +3% gości na tydzień. Zadania
   tygodnia to konkretne ruchy w grze (zmiana ceny, towar, dług…), odhaczane, gdy decyzja różni się od poprzedniej rundy.
 - **Wynik 0–1000 pkt** w pięciu działach, gazeta „Kurier rankingowy” co tydzień i podium na koniec gry.
-- **Radio „Fala Koziołka”** na pasku: pięć stacji ze starymi nagraniami z domeny publicznej i z wolnych licencji
+- **Radio „Fala Koziołka”**: ikona obok portfela wysuwa retro odbiornik (skala, gałki, włącznik; gwar cichnie): pięć stacji ze starymi nagraniami z domeny publicznej i z wolnych licencji
   (pliki w repozytorium, gra bez internetu), prowadzący czytany syntezatorem mowy. Spis: **/nagrania-w-radiu**.
+- **Dźwięki gry:** krótkie dźwięki (dzwonek, kasa, stempel, kartka, teczka) i odgłosy tła miejsc, ⚙ → Dźwięk (suwaki,
+  „wycisz wszystko”), mistrz gry wycisza klasę w `/mg/`. Dane: `dane/dzwieki.yaml`, pliki CC0 w `panel_gracza/static/dzwieki/`.
 - **Nawiązania i źródła:** strona **/zrodla** (⚙ → O grze): klucz do nawiązań literackich, źródła liczb i prawa,
   autorzy grafik, krojów pisma, nagrań i mapy (OpenStreetMap, ODbL). Treść: `dane/zrodla.yaml`.
 - **Trzy palety** (Bar mleczny, Pewex, wysoka widoczność), każda jasna i ciemna. Stan nigdy samym kolorem (▲ ▼ !).
@@ -61,7 +63,7 @@ szkolnym Microsoft jest opisane w [`dokumentacja/LOGOWANIE_MICROSOFT.md`](dokume
 
 - Instrukcja gry: [`INSTRUKCJA.md`](INSTRUKCJA.md). W grze jest pod adresem **/jak-grac**. Część „Dla mistrza
   gry” jest na końcu instrukcji.
-- Panel mistrza gry: **/mg/**. Tam zakłada się grę i konta drużyn, prowadzi rundy, wybiera odsłonięte funkcje i przełącza zestaw funkcji na kolejną lekcję (bez zakładania nowej gry).
+- Panel mistrza gry: **/mg/**. Tam zakłada się grę (z losowaniem uczniów po drużynach i kartkami z hasłami do druku) i konta drużyn, prowadzi rundy, wybiera odsłonięte funkcje i przełącza zestaw funkcji na kolejną lekcję (bez zakładania nowej gry).
 - Scenariusze lekcji (projekt): [`dokumentacja/SCENARIUSZE_LEKCJI.md`](dokumentacja/SCENARIUSZE_LEKCJI.md).
 - Przewodnik dla nauczyciela (uruchomienie, przebieg lekcji i bloku, co robić przy kłopotach, ocenianie, podstawa programowa):
   [`dokumentacja/PRZEWODNIK_NAUCZYCIELA.md`](dokumentacja/PRZEWODNIK_NAUCZYCIELA.md), wersja do druku: `.pdf` obok.

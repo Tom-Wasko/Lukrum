@@ -1,0 +1,73 @@
+/* LUKRUM – zawartość okien w ramie s1 (teczka kartonowa), podróż 04/okna-b (Z49).
+   Język: karton i tektura. Kafle i karty marek to karty katalogowe z zadrukowaną etykietą u góry, wiersze to
+   wpisy na kartotece, przyciski to metalowe zszywki/etykiety, pigułka to naklejka. Okna bez wpisu w STYL_EKRANU
+   (lokale, licytacje, notariusz, kasyno, wystrój) dostają ramę domyślną s1, więc też są tu.
+   Selektory zawężone do `.szk.karta--s1`; tylko zmienne z motywy/zmienne.css (--kraft, --kraft2, --ob ustawia rama);
+   stan nigdy samym kolorem (znaki ✓ ■ □ w treści zostają); paleta „wysoka”: bez ozdób obniżających kontrast. */
+
+/* nagłówek tabeli i tytuł sekcji: zadrukowana etykieta przyklejona do kartoteki */
+.szk.karta--s1 .tab-wrap { border: 1px solid var(--ob); border-radius: 0; background: var(--arkusz); }
+.szk.karta--s1 .tabela-tytul { justify-content: flex-start; gap: 6px; margin-top: 18px; padding: 5px 12px; color: var(--tusz); background: var(--kraft2);
+  border: 1px solid var(--ob); border-bottom: 0; border-radius: 6px 6px 0 0; width: fit-content; max-width: 100%;
+  font-family: var(--font-szyld); letter-spacing: .08em; text-transform: uppercase; }
+.szk.karta--s1 .tabela-tytul + .tab-wrap { margin-top: 0; border-top: 2px solid var(--ob); }
+.szk.karta--s1 .tabela-tytul .kolko-i { color: var(--tusz); }
+.szk.karta--s1 table.t th { color: var(--tusz); background: var(--kraft2); font-family: var(--font-szyld); letter-spacing: .06em; border-bottom: 2px solid var(--ob); border-radius: 0; }
+.szk.karta--s1 table.t td { border-top: 1px solid color-mix(in srgb, var(--ob) 45%, transparent); }
+.szk.karta--s1 table.t tbody tr:hover td { background: color-mix(in srgb, var(--kraft2) 55%, transparent); }
+.szk.karta--s1 table.t tfoot td { background: var(--kraft2); border-top: 2px solid var(--ob); }
+
+/* kafel = karta katalogowa: zadrukowana etykieta u góry, grzbiet z lewej */
+.szk.karta--s1 .kafel { background: var(--arkusz); border: 1px solid var(--ob); border-left: 5px solid var(--ob); border-radius: 2px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--ob) 35%, transparent); }
+.szk.karta--s1 .kafel:hover { box-shadow: 3px 3px 0 color-mix(in srgb, var(--ob) 45%, transparent); }
+.szk.karta--s1 .kafel .kg { color: var(--tusz); background: var(--kraft2); font-family: var(--font-szyld); font-size: 11.5px; letter-spacing: .08em; border-bottom: 1px solid var(--ob); }
+.szk.karta--s1 .kafel.wybrany { border-width: 2px 2px 2px 8px; border-color: var(--ob); box-shadow: 2px 2px 0 var(--ob); }
+.szk.karta--s1 .kafel.wybrany .kg::before { content: "✓ "; }
+.szk.karta--s1 .kafel.niedostepny .kg::before { content: "✕ "; }
+.szk.karta--s1 .wiersz { color: var(--tusz); border-bottom: 1px dotted var(--ob); }
+
+/* białe karty i komunikaty: kartka włożona do teczki */
+.szk.karta--s1 .ot .karta, .szk.karta--s1 .podsumowanie, .szk.karta--s1 .komunikat { background: var(--arkusz); color: var(--tusz); border: 1px solid var(--ob); border-left: 5px solid var(--ob); border-radius: 2px; box-shadow: none; }
+.szk.karta--s1 .podpowiedz { color: var(--tusz); opacity: .85; }
+
+/* pasek z liczbami: tekturowa taśma z naklejoną kwotą */
+.szk.karta--s1 .pasek, .szk.karta--s1 .pasek.ciemny { color: var(--tusz); background: var(--kraft2); border: 1px solid var(--ob); border-block-width: 3px; border-radius: 0;
+  font-family: var(--font-szyld); letter-spacing: .07em; font-weight: 600; }
+.szk.karta--s1 .pasek .kwota { padding: 0 6px; background: var(--arkusz); border: 1px solid var(--ob); font-family: var(--font-gruby); letter-spacing: 0; }
+.szk.karta--s1 .pasek .kolko-i { color: var(--tusz); }
+
+/* karty marek i agencji (.agencja): karta katalogowa z paskiem etykiety, znak jak okrągła naklejka */
+.szk.karta--s1 .agencja { margin-top: 18px; background: var(--arkusz); border: 1px solid var(--ob); border-top: 12px solid color-mix(in srgb, var(--agencja) 45%, var(--kraft2)); border-radius: 2px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--ob) 35%, transparent); }
+[data-paleta="wysoka"] .szk.karta--s1 .agencja { border-top: 12px solid var(--tusz); box-shadow: none; }
+.szk.karta--s1 .agencja-znak { border-radius: 50%; border: 2px solid var(--ob); }
+.szk.karta--s1 .agencja-opis b { font-family: var(--font-szyld); letter-spacing: .04em; text-transform: uppercase; }
+.szk.karta--s1 .agencja-opis p, .szk.karta--s1 .agencja-suma, .szk.karta--s1 .kanal-cena span { color: var(--tusz); }
+.szk.karta--s1 .agencja-suma b, .szk.karta--s1 .kanal-cena b { color: var(--tusz); }
+
+/* wiersze ofert: wpisy na kartotece, wybrany ma ramkę i ✓ */
+.szk.karta--s1 .oferty-wiersze { gap: 0; }
+.szk.karta--s1 .oferta-wiersz { background: none; border: 0; border-bottom: 1px solid color-mix(in srgb, var(--ob) 45%, transparent); border-radius: 0; padding: 8px 4px; }
+.szk.karta--s1 .oferta-wiersz .cena { color: var(--tusz); font-family: var(--font-gruby); }
+.szk.karta--s1 .oferta-wiersz.wybrany { background: var(--kraft2); border: 2px solid var(--ob); box-shadow: none; }
+.szk.karta--s1 .oferta-wiersz.wybrany > div > b::before { content: "✓ "; }
+.szk.karta--s1 .gwiazdki { color: var(--tusz); }
+.szk.karta--s1 .gwiazdki .p { color: var(--ramka); }
+
+/* przyciski jak metalowe zszywki / etykiety na grzbiecie: prostokąt z ramką, twarde światło u dołu */
+.szk.karta--s1 .btn { border: 2px solid var(--ob); border-radius: 3px; font-family: var(--font-szyld); font-size: 12px; letter-spacing: .08em; box-shadow: 0 2px 0 var(--ob); }
+.szk.karta--s1 .btn:hover { box-shadow: 0 2px 0 var(--ob); filter: brightness(1.06); }
+.szk.karta--s1 .btn:active { transform: translateY(2px); box-shadow: none; }
+.szk.karta--s1 .btn.jasny { background: var(--arkusz); color: var(--tusz); }
+.szk.karta--s1 .btn.jasny:hover { background: var(--kraft2); color: var(--tusz); }
+.szk.karta--s1 .btn[disabled], .szk.karta--s1 .btn.szary { box-shadow: none; border-style: dashed; }
+.szk.karta--s1 .btn.maly { font-size: 11px; }
+/* naklejka zamiast pigułki (znak ✓ ✕ ▲ ▼ w treści zostaje) */
+.szk.karta--s1 .pigulka { color: var(--tusz); background: var(--arkusz); border: 1px solid var(--ob); border-radius: 3px; transform: rotate(-1deg); font-family: var(--font-szyld); letter-spacing: .06em; }
+[data-paleta="wysoka"] .szk.karta--s1 .pigulka { transform: none; }
+
+/* zakładki wewnątrz okna: etykiety kartoteki, aktywna ma ✓ */
+.szk.karta--s1 .przelacznik { background: none; padding: 0; gap: 4px; flex-wrap: wrap; }
+.szk.karta--s1 .przelacznik a { color: var(--tusz); background: var(--kraft2); border: 2px solid var(--ob); border-bottom: 0; border-radius: 8px 8px 0 0; box-shadow: none; font-family: var(--font-szyld); letter-spacing: .06em; padding: 6px 14px; }
+.szk.karta--s1 .przelacznik a.aktywny { color: var(--tusz); background: var(--arkusz); padding-bottom: 8px; }
+.szk.karta--s1 .przelacznik a.aktywny::before { content: "✓ "; }
+.szk.karta--s1 .przelacznik a.wylaczony { border-style: dashed; }

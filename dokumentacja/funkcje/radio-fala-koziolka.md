@@ -1,10 +1,10 @@
 # Radio „Fala Koziołka”
 
 - **Stan:** w grze (19.11.2026, gałąź `radio-odtwarzacz`)
-- **Gdzie w grze:** lewy pasek pulpitu (ikona odbiornika) i ⚙ → Dźwięk; spis nagrań: strona `/nagrania-w-radiu`
+- **Gdzie w grze:** ikona radia obok portfela (od 24.11.2026; wysuwany odbiornik) i ⚙ → Dźwięk; spis nagrań: strona `/nagrania-w-radiu`
 
 ## Dla ucznia (do instrukcji)
-Na pasku jest radio z pięcioma stacjami: polskie pieśni i fortepian z płyt sprzed stu lat, wczesny jazz, muzyka
+Obok portfela jest ikona radia; kliknięcie wysuwa retro odbiornik z pięcioma stacjami (zmienia się je na skali albo gałką strojenia): polskie pieśni i fortepian z płyt sprzed stu lat, wczesny jazz, muzyka
 klasyczna, „Lalka” Prusa czytana po kolei i sam szum eteru. Między płytami odzywa się prowadzący z krótkimi
 przypomnieniami o grze. Radio gra tylko dla nastroju i nie zmienia wyniku. Włącza się je przyciskiem.
 
@@ -19,6 +19,9 @@ przypomnieniami o grze. Radio gra tylko dla nastroju i nie zmienia wyniku. Włą
   - szum robi przeglądarka (Web Audio), a przy zmianie stacji słychać trzask;
   - prowadzący to syntezator mowy przeglądarki z polskim głosem; co `co_ile` nagrań mówi wtrącenie i zapowiedź;
   - bez polskiego głosu tekst prowadzącego pokazuje się na ekraniku radia.
+- Odbiornik to własny rysunek (CSS): skala stacji, gałka strojenia, gałka głośności, włącznik, antena. Bez okna;
+  Esc albo ponowny klik w ikonę go chowa, radio gra dalej. Wysunięcie bez ruchu przy `prefers-reduced-motion`.
+- Gdy radio gra, gwar tła cichnie (`lukrum.dzwiek.przycisz`), po wyłączeniu wraca.
 - Nic nie gra samo: radio rusza dopiero po kliknięciu ▶ Włącz albo stacji.
 - Test `testy/aplikacja/test_radio.py` pilnuje, że:
   - każde nagranie ma pełny opis i dozwoloną licencję;

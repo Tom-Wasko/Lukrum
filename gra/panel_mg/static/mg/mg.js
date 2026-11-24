@@ -4,6 +4,7 @@
 import { esc, godzina, info, inicjaly, licz, nazwaRundy, okno, RANKING_DLACZEGO, skrotRundy, tabela, termin, toast, ustawKalendarz, wsk, wyczyscWykresy,
   kolorFirmy, twardeSpacje, wykres, zamknijOkno, zl }
   from "../zakladki/wspolne.js";
+import { kartkiHtml } from "./kartki.js";
 
 const ID = JSON.parse(document.getElementById("id-gry").textContent);
 const URL_GRY = `/api/gry/${encodeURIComponent(ID)}`;
@@ -143,6 +144,8 @@ function decyzje() {
       : ` <a data-akcja="auto-zamowienia">${gra.auto_zamowienia ? "wyłącz" : "włącz"}</a>`}`],
     ["Podpowiedzi na Planie tygodnia (3 pierwsze rundy)", `${gra.podpowiedzi ? "włączone" : "wyłączone"}${gra.zakonczona ? ""
       : ` <a data-akcja="podpowiedzi">${gra.podpowiedzi ? "wyłącz" : "włącz"}</a>`}`],
+    ["Dźwięki gry w klasie", `${gra.dzwiek_wyciszony ? "wyciszone" : "włączone (gracz reguluje w ⚙)"}${gra.zakonczona ? ""
+      : ` <a data-akcja="dzwiek">${gra.dzwiek_wyciszony ? "włącz" : "wycisz"}</a>`}`],
     // poprawki 2 (sprawa 6): headhunter – oferty dla pracowników innych drużyn i kontroferty
     ["Podkupywanie pracowników innych drużyn", `${gra.podkupywanie !== false ? "dozwolone" : "wyłączone"}${gra.zakonczona ? ""
       : ` <a data-akcja="podkupywanie">${gra.podkupywanie !== false ? "wyłącz" : "pozwól"}</a>`}`],
@@ -340,8 +343,9 @@ function pokazHasla(konta, tytul) {
   const wiersze = konta.map((k) => [esc(k.nazwa), `<b>${esc(k.login)}</b>`, `<code class="haslo">${esc(k.haslo)}</code>`]);
   okno(tytul, `<p>Przekaż uczniom login i hasło (adres: <b>${esc(location.origin)}/konta/login/</b>).
       Po zamknięciu tego okna haseł nie da się odczytać – można tylko nadać nowe.</p>
-    ${tabela(null, ["Uczeń", "Login", "Hasło"], wiersze, { klasy: ["l", "l", "l"] })}`,
-  { przyciski: `<button class="btn jasny" data-akcja="drukuj">Drukuj</button><button class="btn pom" data-akcja="zamknij-okno">Gotowe</button>` });
+    <div class="tylko-ekran">${tabela(null, ["Uczeń", "Login", "Hasło"], wiersze, { klasy: ["l", "l", "l"] })}</div>
+    <div class="tylko-druk">${kartkiHtml([{ tytul, osoby: konta }], `${location.origin}/konta/login/`)}</div>`,
+  { przyciski: `<button class="btn jasny" data-akcja="drukuj" title="Drukuje kartki do wycięcia">Drukuj kartki</button><button class="btn pom" data-akcja="zamknij-okno">Gotowe</button>` });
 }
 
 // --- Wyniki: ranking i wykresy -----------------------------------------------------------------------------------
@@ -463,6 +467,12 @@ async function wykonaj(akcja, el) {
     const otworz = !S.p.gra.klub.wlaczone;
     await api(`${URL_GRY}/prowadzenie`, "POST", { klub: otworz });
     toast(otworz ? "Klub „Nocna 13” jest otwarty dla drużyn." : "Klub zablokowany – drużyny go nie widzą, zakłady z tej rundy przepadły.");
+    return wczytaj();
+  }
+  if (akcja === "dzwiek") {
+    const wycisz = !S.p.gra.dzwiek_wyciszony;
+    await api(`${URL_GRY}/prowadzenie`, "POST", { dzwiek_wyciszony: wycisz });
+    toast(wycisz ? "Dźwięki gry wyciszone dla całej klasy." : "Dźwięki gry znów włączone (gracze regulują je w ⚙).");
     return wczytaj();
   }
   if (akcja === "podkupywanie") {

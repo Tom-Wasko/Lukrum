@@ -10,6 +10,7 @@ urlpatterns = [
     path("gry", w.api_gry),
     path("gry/import", w.api_import),
     path("konta", w.api_konta),
+    path("losowanie", w.api_losowanie),
     path("konta/<str:login>/haslo", w.api_nowe_haslo),
     path("gry/<str:id_>", w.api_usun),
     path("gry/<str:id_>/mg", w.api_mg),
