@@ -1,6 +1,6 @@
 # Stan
-Archi żył: 2026-11-24 13:45
-Tryb: nadzorowany od 13:04 (wcześniej autonomiczny 07:22–13:04, scalenia w `podroz-04`).
+Archi żył: 2026-11-24 13:21
+Tryb: autonomiczny od 13:21, budżet do 16:00 (nowe kroki do ok. 15:35), koniec najpóźniej 16:00. Scalenia do `podroz-04`.
 
 ## Podróż
 **04-wyglad-i-dzwiek**: plan zatwierdzony 23.11 wieczorem (`podroze/04-wyglad-i-dzwiek/plan.md`), **start 24.11 rano**
