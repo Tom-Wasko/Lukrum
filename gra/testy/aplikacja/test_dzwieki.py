@@ -46,6 +46,12 @@ def test_kazde_miejsce_ma_odglos_albo_cisze():
     assert DANE["domyslne"] in odglosy
 
 
+def test_glosnosc_miejsc_dla_kasyna_i_parku():
+    g = dz.glosnosc_miejsc(DANE)
+    assert g["harpagon"] == 50 and g["park_ludowy"] == 50   # kasyno i parki ciszej
+    assert "bank_1" not in g and all(0 < v < 100 for v in g.values())
+
+
 def test_zdarzenia_wskazuja_krotkie_dzwieki():
     for zd, nazwa in DANE["zdarzenia"].items():
         assert DANE["pliki"][nazwa]["rodzaj"] == "krotki", zd

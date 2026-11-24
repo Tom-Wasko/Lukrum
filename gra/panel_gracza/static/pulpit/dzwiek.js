@@ -78,7 +78,8 @@ async function zagraj(nazwa) {
   z.start();
 }
 
-const poziomTla = () => (cicho() || !wlaczone("tlo") ? 0 : (glosnosc("tlo") / 100) * (przyciszone ? PRZYCISZENIE : 1));
+const poziomTla = () => (cicho() || !wlaczone("tlo") ? 0
+  : (glosnosc("tlo") / 100) * (tlo.mn ?? 1) * (przyciszone ? PRZYCISZENIE : 1));
 
 function wygasTlo(t) {
   if (!t.zrodlo || !ctx) return;
@@ -95,9 +96,10 @@ async function ustawTlo(miejsce) {
   await pobierz();
   const o = miejsce == null ? "cisza" : dane.miejsca[miejsce] || dane.miejsca.lokal || dane.domyslne;
   if (!odblokowany || !kontekst()) return;
-  if (o === tlo.nazwa) return odswiezTlo();
+  const mn = (dane.miejsca_glosnosc?.[miejsce] ?? 100) / 100;   // np. kasyno i park ciszej
+  if (o === tlo.nazwa) { tlo.mn = mn; return odswiezTlo(dane.przejscie); }
   const stare = tlo;
-  tlo = { nazwa: o, zrodlo: null, gain: null };
+  tlo = { nazwa: o, zrodlo: null, gain: null, mn };
   wygasTlo(stare);
   if (o === "cisza" || dane.pliki[o]?.rodzaj !== "tlo") return;
   const b = await bufor(o);

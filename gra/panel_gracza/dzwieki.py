@@ -51,6 +51,17 @@ def miejsca_rozwiazane(d: dict) -> dict[str, str]:
     return wynik
 
 
+def glosnosc_miejsc(d: dict) -> dict[str, int]:
+    """{id budynku albo zespołu: głośność odgłosu w %} tylko tam, gdzie różni się od 100."""
+    g = d.get("glosnosc_miejsc") or {}
+    b = _budynki()
+    wynik = {x["id"]: g.get(x["id"], g.get(x.get("rodzaj"), 100)) for x in b["budynki"]}
+    wynik |= {z["id"]: g.get(z["id"], 100) for z in b.get("zespoly", [])}
+    wynik["mapa"] = g.get("mapa", 100)
+    wynik["lokal"] = g.get("lokal", 100)
+    return {k: v for k, v in wynik.items() if v != 100}
+
+
 def _dostepny(p: dict) -> bool:
     return p.get("status") == "gotowe" and (KATALOG_PLIKOW / p["plik"]).is_file()
 
@@ -62,7 +73,8 @@ def dla_panelu() -> dict:
              for k, p in d["pliki"].items() if _dostepny(p)}
     return {"glosnosc": d["glosnosc_domyslna"], "wlaczone": d["wlaczone_domyslnie"],
             "przejscie": d["przejscie_tla_s"], "pliki": pliki, "zdarzenia": d["zdarzenia"],
-            "miejsca": miejsca_rozwiazane(d), "domyslne": d["domyslne"]}
+            "miejsca": miejsca_rozwiazane(d), "miejsca_glosnosc": glosnosc_miejsc(d),
+            "domyslne": d["domyslne"]}
 
 
 def dla_strony() -> dict:
