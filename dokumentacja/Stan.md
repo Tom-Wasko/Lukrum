@@ -1,6 +1,7 @@
 # Stan
 Archi żył: 2026-11-24 15:30
-Tryb: autonomiczny zakończony 15:30 (wszystko scalone do `podroz-04`, czeka na szefa). Podsumowanie: 04/prawo (Z23), 04/wujek (Z13), 04/wnetrza (Z4 przegląd) scalone do `podroz-04`, bez pusha; dalej wybór poprawek wnętrz, nagrania, scalenie do `main`.
+Tryb: nadzorowany od 16:46
+Tempo: zwykły
 
 ## Podróż
 **04-wyglad-i-dzwiek**: plan zatwierdzony 23.11 wieczorem (`podroze/04-wyglad-i-dzwiek/plan.md`), **start 24.11 rano**

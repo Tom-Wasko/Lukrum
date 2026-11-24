@@ -1,6 +1,7 @@
 # Decyzje
 
 ## Szefa
+- 2026-11-24 (popołudnie, okienko) · Wnętrza (Z4): robimy wszystkie trzy wątki poprawek z przeglądu: A „nakładka” (P1, P3, P4, P11–P13), potem B „kebab i ciemna paleta” (P5, P10), potem C „charakter scen” (P2, P6–P9, P14, P15). `podroz-04` scalić do `main` i wypchnąć. Nagrania: szef pobiera sam z linków. `_robocze/wnetrza/` usunąć.
 - 2026-11-23 (wieczór, okienko) · Podróż 04 wygląd i dźwięk (Z49, Z11, Z50). Zawartość okien ma pasować do ramy
   danego okna: okna mają własne style (teczka, paragon, list, tablica…), bez jednego szablonu dla wszystkich, całość
   spójna. Najpierw wzór na 3 oknach (Sokole Oko, bank, kadry) do akceptacji. Tło: tylko odgłosy miejsca (gwar itp.),
