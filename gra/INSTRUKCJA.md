@@ -223,6 +223,10 @@ długa. Bywają też plotki o parkach i konkurencji, pytania z WOS-u z krótką 
 skarga sąsiadki). Przy każdej odpowiedzi widać wskazówkę, w którą stronę pójdą skutki – bez liczb i bez szansy
 powodzenia.
 
+**Wujek przy ladzie.** Wujek zagląda do kebabu tylko w ważnych momentach: pierwszy tydzień, pierwsza strata,
+rekord, pierwszy kredyt, wejście w debet, kontrola sanepidu, drugi lokal, spadek nastroju załogi, połowa gry
+i ostatni tydzień. Staje przy ladzie i mówi jedno zdanie, a gdy okazji jest kilka, wybiera najważniejszą.
+
 ## 6. Menu i ceny
 
 - Na start są trzy dania; od tygodnia 3 dochodzą kolejne (rollo, box, talerz, falafel, dodatki). **Dania specjalne

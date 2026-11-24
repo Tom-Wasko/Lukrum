@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-24 13:55
+Archi żył: 2026-11-24 13:45
 Tryb: autonomiczny od 13:21, budżet do 16:00 (nowe kroki do ok. 15:35), koniec najpóźniej 16:00. Scalenia do `podroz-04`.
 
 ## Podróż
@@ -16,7 +16,7 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/radio | Z50 | scalony do `podroz-04` 6b01743 (979 passed) |
 | 04/kontrast | Z6 | scalony do `podroz-04` 1f9d5f9 (979 passed) |
 | 04/kreator | Z47 | scalony do `podroz-04` 60d8ea9 (995 passed) |
-| 04/wujek | Z13 | w toku |
+| 04/wujek | Z13 | scalony do `podroz-04` (1007 passed) |
 | 04/prawo | Z23 (reszta) | scalony do `podroz-04` (995 passed; notki ze źródłami) |
 | 04/wnetrza | Z4 (przegląd) | w toku |
 
