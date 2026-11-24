@@ -16,6 +16,6 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/radio | Z50 | kontynuacja 04/dzwieki, na koniec |
 
 ## Czeka na szefa
-(nic; Z19 odłożone do powrotu kolegi)
+- Przejrzeć galerię okien (Z49): https://claude.ai/artifact/PRwXig2fz7q7vVaqF1JxUf ; potem scalenie `podroz-04` do `main`. (Z19 odłożone do powrotu kolegi)
 
 ## Od Pomocnika
