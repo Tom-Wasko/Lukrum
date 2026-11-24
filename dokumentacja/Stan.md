@@ -1,6 +1,6 @@
 # Stan
-Archi żył: 2026-11-24 16:56
-Tryb: nadzorowany od 16:46
+Archi żył: 2026-11-24 17:03
+Tryb: autonomiczny od 17:03, budżet: do skończenia wątku 04/nakladka (Z4 A), koniec po scaleniu A do `podroz-04` i galerii przed/po. Scalenia do `podroz-04`.
 Tempo: zwykły
 
 ## Podróż
