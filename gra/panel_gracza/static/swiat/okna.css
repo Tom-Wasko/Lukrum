@@ -121,3 +121,32 @@
 .szk.karta--s4 .przelacznik a { color: var(--tusz); background: none; border: 2px dashed var(--tusz); border-radius: 99px; box-shadow: none; font: 400 1.1em var(--font-reka); text-transform: none; padding: 3px 14px; }
 .szk.karta--s4 .przelacznik a.aktywny { color: var(--papier); background: var(--tusz); border-style: solid; }
 .szk.karta--s4 .przelacznik a.aktywny::before { content: "✓ "; }
+
+/* ===== podróż 04/okna: reszta komponentów w ramach s2 i s4 ===== */
+/* s2: nagłówek rubryki bez zaokrągleń; liczby wyników jak rubryki; „tydzień w liczbach” jak druk; szczegóły jak przypis */
+.szk.karta--s2 .kafel .kg { border-radius: 0; background: none; }
+.szk.karta--s2 .lw { background: none; border: 2px solid var(--tusz); border-radius: 0; box-shadow: none; }
+.szk.karta--s2 .lw .etykieta, .szk.karta--s2 .lw b, .szk.karta--s2 .lw .opis { color: var(--tusz); }
+.szk.karta--s2 .tydzien, .szk.karta--s2 .sprawy { background: none; border: 1px dashed var(--tusz); border-left: 6px solid var(--tusz); border-radius: 0; }
+.szk.karta--s2 .tydzien-glowa span:first-child { color: var(--tusz); }
+.szk.karta--s2 details.szczegoly { background: none; border: 1px dotted var(--tusz); border-radius: 0; }
+.szk.karta--s2 details.szczegoly > summary::before { color: var(--tusz); }
+.szk.karta--s2 .podsumowanie.ok::before { content: "✓ "; font-weight: 700; }
+.szk.karta--s2 .podsumowanie.uwaga::before { content: "! "; font-weight: 700; }
+.szk.karta--s2 .podsumowanie.zly::before { content: "✕ "; font-weight: 700; }
+.szk.karta--s2 .delta { color: var(--tusz); }
+
+/* s4: to samo w języku zeszytu */
+.szk.karta--s4 .lw { background: var(--arkusz); border: 2px dashed var(--tusz); border-radius: 3px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 30%, transparent); }
+.szk.karta--s4 .lw .etykieta { color: var(--tusz); font: 400 1.1em var(--font-reka); text-transform: none; }
+.szk.karta--s4 .lw b { color: var(--tusz); font: 700 1.5em var(--font-reka); }
+.szk.karta--s4 .lw .opis { color: var(--tusz); }
+.szk.karta--s4 .tydzien, .szk.karta--s4 .sprawy { background: var(--arkusz); border: 2px dashed var(--tusz); border-radius: 3px; }
+.szk.karta--s4 .tydzien-glowa span:first-child { color: var(--tusz); font: 700 1.3em var(--font-reka); text-transform: none; }
+.szk.karta--s4 details.szczegoly { background: none; border: 2px dashed var(--tusz); border-radius: 3px; }
+.szk.karta--s4 details.szczegoly > summary { font-family: var(--font-reka); font-size: 1.15em; }
+.szk.karta--s4 details.szczegoly > summary::before { color: var(--tusz); }
+.szk.karta--s4 .podsumowanie.ok::before { content: "✓ "; font-weight: 700; }
+.szk.karta--s4 .podsumowanie.uwaga::before { content: "! "; font-weight: 700; }
+.szk.karta--s4 .podsumowanie.zly::before { content: "✕ "; font-weight: 700; }
+.szk.karta--s4 .kafel .kg { border-radius: 0; background: none; }
