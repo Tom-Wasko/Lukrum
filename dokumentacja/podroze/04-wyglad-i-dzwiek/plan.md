@@ -29,7 +29,7 @@ Decyzje szefa (23.11, okienko) – do `Decyzje.md`:
 - [x] Z6: rzadkie ekrany (ciemny, wysoka) i okna na telefonie bez usterek kontrastu i rozmiaru
 - [x] Z47: kreator /mg/ losuje uczniów do drużyn, kartki z hasłami po drużynach
 - [ ] Z13: wujek przy ladzie w kebabie, 10 okazji, po 3 kwestie
-- [ ] Z23: notki prawne w instrukcji, strona źródeł uzupełniona, lista kontrolna
+- [x] Z23: notki prawne w instrukcji, strona źródeł uzupełniona, lista kontrolna
 - [ ] Z4: galeria wszystkich wnętrz i lista poprawek dla szefa
 - [x] Pełne testy zielone, `ruff`, `node --check`, `silnik.dane sprawdz` czyste
 
