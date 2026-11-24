@@ -328,6 +328,35 @@ powodzenia.
 w dyskoncie, rekrutacja, przewozy, reakcje na zdarzenia w parkach, detektyw. Co zostanie, właściciel spędza na pustym
 stanowisku (najpierw kasa, potem kuchnia). Licznik jest w Moim kebabie (biurko).
 
+### Prawo za mechanikami: krótkie notki
+
+To informacja do lekcji, a nie porada prawna. Gra upraszcza przepisy do poziomu zajęć, a liczby w grze (progi, kary, długość stażu)
+są założeniami autora, nie cytatami z ustaw. Teksty ustaw: [ISAP](https://isap.sejm.gov.pl/).
+
+- **Kontrola PIP.** Państwowa Inspekcja Pracy sprawdza, czy umowa odpowiada sposobowi pracy (art. 22 § 1 Kodeksu pracy).
+  Zatrudnianie na zlecenie „jak na etat” może skończyć się grzywną (art. 281 Kodeksu pracy). Próg 30 godzin, 4 tygodnie i kara
+  2 000 zł to uproszczenie z gry. Źródło: [pip.gov.pl](https://www.pip.gov.pl/), [Kodeks pracy w ISAP](https://isap.sejm.gov.pl/).
+- **Staż z urzędu pracy.** Staż organizuje urząd pracy dla osoby bezrobotnej na podstawie ustawy o promocji zatrudnienia
+  i instytucjach rynku pracy. Pracodawca nie płaci wynagrodzenia, bo osoba na stażu dostaje stypendium z urzędu. W prawdziwym
+  życiu staż trwa miesiącami, a w grze 6 tygodni. Źródło: [praca.gov.pl](https://www.praca.gov.pl/), ustawa w ISAP.
+- **ZUS od zlecenia i student do 26 lat.** Od umowy zlecenia co do zasady płaci się składki na ubezpieczenia społeczne.
+  Uczeń albo student do ukończenia 26 lat jest z nich zwolniony, a jego zarobki ze zlecenia są też wolne od podatku
+  dochodowego (ustawa o systemie ubezpieczeń społecznych, ustawa o PIT). Źródło: [zus.pl](https://www.zus.pl/), ustawy w ISAP.
+- **Odsetki ustawowe i maksymalne.** Odsetki ustawowe ustala Rada Ministrów, a umowa nie może ustalić więcej niż
+  dwukrotność odsetek ustawowych w skali roku (odsetki maksymalne, art. 359 Kodeksu cywilnego). Od 5 marca 2026 r. odsetki
+  ustawowe wynoszą 7,25% w skali roku, więc maksymalne 14,5% (obwieszczenie:
+  [Monitor Polski 2026 poz. 368](https://eli.gov.pl/eli/MP/2026/368/ogl/pol/pdf)). Oprocentowanie w grze jest fikcyjne.
+- **Lichwa.** Wykorzystanie przymusowego położenia drugiej osoby przy umowie o rażąco niekorzystnych warunkach jest
+  przestępstwem (art. 304 Kodeksu karnego), a od 2020 r. ten artykuł obejmuje też zawyżone koszty pozaodsetkowe i odsetki.
+  To dobry kontekst dla kantoru „U Harpagona”. Źródło: Kodeks karny w [ISAP](https://isap.sejm.gov.pl/).
+- **CEIDG i sanepid.** Jednoosobową firmę zgłasza się do CEIDG (wniosek CEIDG-1 jest też zgłoszeniem do ZUS, GUS i urzędu
+  skarbowego). Lokal z jedzeniem zgłasza się dodatkowo do sanepidu, czyli Państwowej Inspekcji Sanitarnej, przed rozpoczęciem
+  działalności. Źródło: [biznes.gov.pl](https://www.biznes.gov.pl/), [gov.pl/web/psse](https://www.gov.pl/web/psse).
+- **Rok szkolny 2026/27** (do planowania rund): zajęcia od 1 września 2026 r., przerwa świąteczna 23–31 grudnia 2026 r.,
+  ferie zimowe w trzech turach od 18 stycznia do 28 lutego 2027 r. (termin zależy od województwa), przerwa wiosenna
+  25–30 marca 2027 r., koniec zajęć 25 czerwca 2027 r. Źródło: komunikat MEN o organizacji roku szkolnego,
+  [gov.pl/web/edukacja](https://www.gov.pl/web/edukacja).
+
 ## 9. Pieniądze
 
 - **Ceny są brutto.** Z każdej sprzedaży i większości zakupów wydzielany jest VAT, a do księgi trafia kwota netto.
@@ -603,6 +632,14 @@ a drużyna widzi plakietkę „Na żywo, na lekcji” albo „Do: data”. Spraw
   i czwartek) – drużyny decydują w domu, a na kolejnej lekcji omawia się wyniki.
 - Na krótszą naukę: liczba rund od 2 w górę, zestaw „Krótka lekcja” i podpowiedzi na Planie tygodnia.
 - Pole „co zmieniamy i dlaczego” (wymagane w ustawieniach) ułatwia rozmowę o decyzjach.
+
+### Ukryty klub
+
+W grze jest ukryty, nielegalny klub („Nocna 13”) z hazardem na pieniądze firmy: otwiera go hasło albo zaproszenie, a uczniom
+go nie opisujemy. Klub nie trafia do przeglądu MG, eksportu, CSV ani rankingu. Jeśli nie pasuje do klasy
+(np. młodsza grupa), w podglądzie gry na pulpicie MG przy wierszu „Klub „Nocna 13”” klikasz **zablokuj** (i **otwórz**, gdy
+zmienisz zdanie); na całym serwerze wyłącza go ustawienie `LUKRUM_KASYNO=0`. Tematy do rozmowy: ryzyko,
+wartość oczekiwana, a także to, że hazard poza koncesją jest w Polsce zabroniony.
 
 ### Kontrola PIP, spory i pytania uczniów
 

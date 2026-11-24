@@ -50,13 +50,15 @@ liczby:
     - rozporządzenie w sprawie kas rejestrujących
     - rozporządzenie Rady Ministrów w sprawie płacy minimalnej
   uwaga: >-
-    Dokładne artykuły i daty przy każdej liczbie są w polu „zrodlo” w plikach danych. Notki prawne do instrukcji
-    (kontrola PIP, ZUS, lichwa) czekają jeszcze na przegląd prawnika.
+    Dokładne artykuły i daty przy każdej liczbie są w polu „zrodlo” w plikach danych. Krótkie notki o prawie za
+    mechanikami (kontrola PIP, staż, ZUS, odsetki, lichwa, CEIDG i sanepid, rok szkolny) są w instrukcji, w rozdziale
+    „Prawo za mechanikami”, każda z odnośnikiem do źródła. To informacja, a nie porada prawna.
 grafiki:
   opis: "Wszystkie grafiki w grze są własne: rysuje je skrypt projektu, a żadna nie odtwarza cudzego logo ani znaku firmy."
   pozycje:
     - {co: 'Ilustracje, postacie, wnętrza, ikony (pliki SVG)', autor: 'autor projektu LUKRUM', licencja: 'własne'}
     - {co: 'Ikony marek i ról w kartach', autor: 'autor projektu LUKRUM', licencja: 'własne; nazwy prawdziwych firm mają tylko ogólne ikony branżowe'}
+    - {co: 'Krótkie dźwięki gry i odgłosy tła miejsc (dzwonek, kartka, odgłosy lokalu i urzędu)', autor: 'różni autorzy, podani przy każdym pliku', licencja: 'CC0 albo domena publiczna (spis: Nagrania w radiu → Dźwięki gry)'}
     - {co: 'Mapa Lublina', autor: 'kolega autora na podstawie danych OpenStreetMap', licencja: 'ODbL'}
 mapa:
   nazwa: '© autorzy OpenStreetMap'
@@ -76,6 +78,7 @@ oprogramowanie:
 nagrania:
   opis: >-
     Radio „Fala Koziołka” gra nagrania z domeny publicznej i wolnych licencji (Library of Congress, Musopen, Fundacja
-    Wolne Lektury). Autor, wykonawca, rok, źródło i licencja każdego nagrania są na osobnej stronie.
+    Wolne Lektury). Autor, wykonawca, rok, źródło i licencja każdego nagrania są na osobnej stronie. Tam też są krótkie dźwięki gry
+    i odgłosy tła miejsc (bez muzyki): każdy plik ma autora, źródło i licencję CC0 albo domenę publiczną.
   adres: /nagrania-w-radiu
   uwaga: 'Przy audiobooku „Lalki” (Bolesław Prus) licencja Wolnej Sztuki 1.3 wymaga podania autora, wykonawcy i licencji: robi to ten spis.'
