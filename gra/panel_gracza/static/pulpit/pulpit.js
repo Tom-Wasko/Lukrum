@@ -2,7 +2,8 @@
 // Krok 2: „Tydzień N” na środku u góry, szuflada „Wydarzenia”, ikona „Warstwy” (czynsze, popyt…), rząd ikon kategorii (6 grup) wzdłuż górnej krawędzi, zeszyt w prawym dolnym rogu na trzy stany (zeszyt.js), karta miejsca (karta.js).
 //  - lewy górny róg: ⚙ (ustawienia z motyw.js) nad pionowym paskiem LUKRUM z ikonami: List z decyzjami, konto, Jak grać,
 //    zakupy (tylko do odczytu: co zamówiono i kupiono w tym tygodniu); pod paskiem „Tydzień N” (tylko informacja);
-//  - dół: portfel (plik banknotów) – najechanie pokazuje gotówkę i debet, kliknięcie otwiera okno finansów;
+//  - dół: portfel (plik banknotów) – najechanie pokazuje gotówkę i debet, kliknięcie otwiera okno finansów; obok niego
+//    ikona radia, która wysuwa retro odbiornik (radio.js);
 //  - prawa krawędź: zeszyt wujka – wystaje z brzegu z następnym krokiem, najechanie wysuwa listę, kliknięcie otwiera zeszyt.
 // Stary układ (nagłówek, menu, stopka) jest do obejrzenia pod adresem ?uklad=stary i na wąskim ekranie (telefon – później).
 // Kolory tylko ze zmiennych motywy/zmienne.css; wygląd: pulpit.css.
@@ -23,7 +24,7 @@ export const PULPIT = document.body.classList.contains("pulpit");
 const T_WYSLIJ = "List z decyzjami", T_FINANSE = "Finanse", T_KONTO = "Konto", T_ZAKUPY = "Zakupy tygodnia";
 const IKONY_PASKA = [   // klucz, ikona, napis (osobny przycisk „List z decyzjami” leży na dole paska: LIST_PASKA)
   ["konto", "osoba", "Konto"], ["jak", "ksiazka", "Jak grać"], ["koszyk", "sprzedaz", "Zakupy"],
-  ["wydarzenia", "zdarzenia", "Wydarzenia"], ["radio", "radio", "Radio"], ["mapa", "mapa", "Mapa miasta"]];
+  ["wydarzenia", "zdarzenia", "Wydarzenia"], ["mapa", "mapa", "Mapa miasta"]];   // radio: ikona obok portfela (pp-radio-ik), nie na pasku
 let filtr = null;   // wybrana kategoria miejsc na mapie (filtr w prawym górnym rogu) albo null
 
 let zamontowany = false, oknoRunda = null, ostatniC = null;
@@ -71,8 +72,9 @@ function montuj() {
     <div class="pp-tydzien" id="pp-tydzien" role="status"></div>
     <nav class="pp-filtr" id="pp-filtr" aria-label="Filtr kategorii miejsc na mapie" hidden></nav>
     <aside class="pp-szuflada" id="pp-szuflada" aria-label="Wydarzenia tygodnia" hidden></aside>
-    <aside class="pp-szuflada pp-radio" id="pp-radio-panel" aria-label="Radio" hidden></aside>
+    <aside class="odb" id="pp-radio-panel" aria-label="Radio „Fala Koziołka”" hidden></aside>
     <button type="button" class="pp-portfel" id="pp-portfel" data-akcja="pp-portfel">${SVG_PLIK}<span class="pp-kwoty" id="pp-kwoty"></span></button>
+    <button type="button" class="pp-radio-ik" id="pp-radio" data-akcja="pp-radio" aria-label="Radio" title="Radio" aria-expanded="false" aria-controls="pp-radio-panel">${ikona("radio", 30)}<i class="pp-znak" aria-hidden="true" hidden></i></button>
     <button type="button" class="pp-zeszyt" id="pp-zeszyt" data-akcja="pp-zeszyt"></button>`;
   document.body.appendChild(rys);
   przeniesUstawienia();

@@ -68,7 +68,7 @@ def test_ikony_paska_istnieja():
 def test_style_pulpitu_maja_kolory_tylko_ze_zmiennych():
     css = _bez_komentarzy(PULPIT_CSS)
     assert not re.search(r"#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(", css), "kolory tylko przez zmienne z motywy/zmienne.css"
-    zdefiniowane = set(re.findall(r"(--[\w-]+)\s*:", ZMIENNE_CSS)) | set(re.findall(r"(--font-reka)\s*:", PULPIT_CSS))         | {"--stos-l", "--stos-p", "--pp-gra-h"}   # ustawiane ze skryptu (grubość stosu kartek, wysokość tabliczki z nazwą gry)
+    zdefiniowane = set(re.findall(r"(--[\w-]+)\s*:", ZMIENNE_CSS)) | set(re.findall(r"(--font-reka)\s*:", PULPIT_CSS))         | {"--stos-l", "--stos-p", "--pp-gra-h", "--n", "--i", "--kat"}   # ustawiane ze skryptu (stos kartek, tabliczka z nazwą gry, skala i gałki radia)
     uzyte = set(re.findall(r"var\((--[\w-]+)", css))
     assert uzyte <= zdefiniowane, uzyte - zdefiniowane
     # grafika SVG w skrypcie też używa tylko zmiennych palety

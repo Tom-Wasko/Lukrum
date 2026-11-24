@@ -3,6 +3,7 @@
 Pilnuje zasad szefa: każde nagranie ma autora, wykonawcę, źródło i dozwoloną licencję, plik leży w paczce (gra bez
 internetu), w paczce nie ma plików spoza spisu, a stare nagrania „z mocy prawa” są sprzed 1926 r.
 """
+import json
 import re
 import shutil
 import subprocess
@@ -16,6 +17,7 @@ GRA = Path(__file__).resolve().parents[2]
 DANE = yaml.safe_load((GRA / "dane" / "radio.yaml").read_text(encoding="utf-8"))
 KATALOG = GRA / "panel_gracza" / "static" / "radio"
 RADIO_JS = (GRA / "panel_gracza" / "static" / "pulpit" / "radio.js").read_text(encoding="utf-8")
+PULPIT_CSS = (GRA / "panel_gracza" / "static" / "pulpit" / "pulpit.css").read_text(encoding="utf-8")
 PULPIT_JS = (GRA / "panel_gracza" / "static" / "pulpit" / "pulpit.js").read_text(encoding="utf-8")
 NAGRANIA = [(s["id"], n) for s in DANE["stacje"] for n in s.get("nagrania", [])]
 POLA = ("tytul", "autor", "wykonawca", "zrodlo", "licencja", "plik", "sekundy")
@@ -93,14 +95,57 @@ def test_mp3_kawalkami(client):
     assert client.get(f"/static/radio/{plik}", HTTP_RANGE=f"bytes={rozmiar + 5}-").status_code == 416
 
 
-def test_odbiornik_na_pasku():
-    # przycisk na pasku, panel, akcje radia w akcjach pulpitu, bez „Radio: wkrótce” w ustawieniach
-    assert '["radio", "radio", "Radio"]' in PULPIT_JS and 'id="pp-radio-panel"' in PULPIT_JS
+def test_ikona_radia_obok_portfela_a_nie_w_lewym_pasku():
+    # decyzja szefa 23.11: ikona obok kaski (portfela), pozycji radia w lewym pasku nie ma, odbiornik wysuwa się sam
+    assert '["radio", "radio", "Radio"]' not in PULPIT_JS
+    assert 'id="pp-radio"' in PULPIT_JS and 'class="pp-radio-ik"' in PULPIT_JS and 'data-akcja="pp-radio"' in PULPIT_JS
+    assert PULPIT_JS.index('id="pp-portfel"') < PULPIT_JS.index('id="pp-radio"')
+    assert 'id="pp-radio-panel"' in PULPIT_JS and 'class="odb"' in PULPIT_JS
+    assert "pp-szuflada pp-radio" not in PULPIT_JS   # to już nie szuflada ani okno
     assert "...AKCJE_RADIA" in PULPIT_JS and "Radio: wkrótce" not in PULPIT_JS
+    assert "otwórz odbiornik" in PULPIT_JS   # pozycja w ⚙ zostaje
+
+
+def test_odbiornik_ma_wszystkie_elementy_i_akcje():
     for a in re.findall(r'data-akcja="([\w-]+)"', RADIO_JS):
         assert f'"{a}"' in RADIO_JS.split("export const AKCJE_RADIA")[1] or a == "pp-radio", a
+    for el in ("odb-skala", "odb-wskazowka", "odb-strojenie", "odb-glosnosc", "odb-wl", "odb-antena"):
+        assert el in RADIO_JS, el   # skala, wskazówka, gałka strojenia, gałka głośności, włącznik, antena
+    assert "okno(" not in RADIO_JS   # bez okna z wspolne.js
     assert "speechSynthesis" in RADIO_JS and "createBiquadFilter" in RADIO_JS   # prowadzący i szum bez plików
     assert "autoplay" not in RADIO_JS   # nic nie gra samo
+    assert "przycisz?.(" in RADIO_JS
+
+
+def test_odbiornik_css_ruch_kolory_i_telefon():
+    css = re.sub(r"/\*.*?\*/", "", PULPIT_CSS, flags=re.S)
+    assert not re.search(r"#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(", css)
+    redukcja = css.split("prefers-reduced-motion: reduce", 1)[1]
+    assert ".odb:not([hidden])" in redukcja and "animation: none" in redukcja   # wysunięcie bez ruchu
+    assert re.search(r"@media \(max-width: 760px\)[^@]*\.odb \{", css)   # telefon: odbiornik na całą szerokość
+    assert 'data-paleta="wysoka"] .odb' in css
+    for znak in ('content: "▼ "', "▶ Włącz", "■ Wyłącz", "♪"):
+        assert znak in css or znak in RADIO_JS, znak   # stan nie samym kolorem
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="brak node")
+def test_odbiornik_zachowanie_pod_node():
+    # prawdziwy moduł radia ze stubem DOM: ikona otwiera odbiornik, stacje zmienia się na nim (skala, gałka), gwar cichnie
+    wynik = subprocess.run([shutil.which("node"), str(Path(__file__).with_name("radio_zachowanie.mjs")),
+                            str(GRA / "panel_gracza" / "static")], capture_output=True, text=True, encoding="utf-8")
+    assert wynik.returncode == 0, wynik.stderr
+    d = json.loads(wynik.stdout.strip().splitlines()[-1])
+    assert d["bledy"] == [], d["bledy"]
+    w = d["wynik"]
+    assert w["otwarcie"] == {"przed": False, "po": True, "stacje": 3, "ikona_aria": "true", "wl": "▶ Włącz"}
+    z = w["zmiana_stacji_na_odbiorniku"]
+    assert z["klik"] == ["b"] and z["gałka_dalej"] == ["c"] and z["zawiniecie"] == ["a"] and z["wstecz"] == ["c"]
+    assert z["zapisana"] == "c" and z["wskazowka"] == "2"
+    g = w["przyciszanie_gwaru"]   # radio zaczyna grać → przycisz(true); stop → przycisz(false); start → znowu true
+    assert g["po_starcie"][-1] is True and g["po_stopie"][-1] is False and g["na_koncu"] is True
+    assert g["znak_ukryty"] is False   # ♪ przy ikonie, gdy gra
+    assert w["schowanie"]["po_kliku"] is False and w["schowanie"]["po_esc"] is False
+    assert w["schowanie"]["gra_dalej"] is True   # schowanie nie wyłącza radia
 
 
 def test_skladnia_radio_js():

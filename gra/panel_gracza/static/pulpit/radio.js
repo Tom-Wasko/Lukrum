@@ -1,10 +1,12 @@
-// Radio „Fala Koziołka” (seria radio, decyzje 19.11.2026): odbiornik na pasku pulpitu, tylko dla nastroju (bez wpływu na grę).
+// Radio „Fala Koziołka” (seria radio, decyzje 19.11 i 23.11.2026): ikona obok portfela wysuwa retro odbiornik, tylko dla nastroju (bez wpływu na grę).
 // Stacje, nagrania i teksty prowadzącego są w dane/radio.yaml (adres /radio.json), pliki MP3 w static/radio/<stacja>/.
 //  - stacje z muzyką grają nagrania w losowej kolejności, co kilka utworów odzywa się prowadzący (synteza mowy przeglądarki, pl-PL;
 //    bez polskiego głosu tekst pojawia się tylko na skali); słuchowisko („Lalka”) idzie po kolei i pamięta miejsce;
 //  - stacja „szum” nie ma plików: szum eteru robi Web Audio, ten sam szum słychać krótko przy przełączaniu stacji;
-//  - nic nie gra samo: radio włącza dopiero kliknięcie (zasady przeglądarek), stan (stacja, głośność, głos) zostaje w localStorage.
-// Kolory tylko ze zmiennych (pulpit.css: .pp-radio); stan nie samym kolorem (▶ ■ ♪).
+//  - nic nie gra samo: radio włącza dopiero kliknięcie (zasady przeglądarek), stan (stacja, głośność, głos) zostaje w localStorage;
+//  - stacje zmienia się na samym odbiorniku: klik w skalę, gałka strojenia (klik albo strzałki), gałka głośności, włącznik;
+//  - gdy radio gra, odgłosy miejsc cichną (lukrum.dzwiek.przycisz, dzwiek.js).
+// Kolory tylko ze zmiennych (pulpit.css: .odb); stan nie samym kolorem (▶ ■ ♪ ▼).
 import { esc } from "../zakladki/wspolne.js";
 
 const KLUCZ = "lukrum-radio";
@@ -12,6 +14,7 @@ const el = (id) => document.getElementById(id);
 let dane = null, ladowanie = null, audio = null, ctx = null, szumGlos = null;
 let gra = false, kolejka = [], pozycja = -1, odUtworu = 0, mowa = null, mowaCzas = null, mowaPotem = null;
 const st = wczytaj();
+const przyciszTlo = (tak) => { try { window.lukrum?.dzwiek?.przycisz?.(tak); } catch { /* bez odgłosów miejsc */ } };
 try { window.speechSynthesis?.getVoices(); } catch { /* głosy wczytują się w tle, pierwsza lista bywa pusta */ }
 
 function wczytaj() {
@@ -92,7 +95,13 @@ function graj(nr, od = 0) {
   a.src = n.url;
   a.volume = st.glosnosc / 100;
   if (od) a.addEventListener("loadedmetadata", () => { try { a.currentTime = od; } catch { /* bez przewijania */ } }, { once: true });
-  a.play().catch(() => { gra = false; odswiez(); });
+  a.play().catch((blad) => {   // przeglądarka nie pozwoliła zagrać (albo brak pliku): radio się wyłącza i mówi o tym na ekranie
+    if (blad?.name === "AbortError") return;   // przerwane przez zmianę stacji albo wyłączenie, nie błąd
+    gra = false;
+    przyciszTlo(false);
+    odswiez();
+    pokazNapis("Nie udało się zagrać. Kliknij „Włącz” jeszcze raz.");
+  });
   odswiez();
 }
 function nastepny(poKoncu) {
@@ -153,6 +162,7 @@ function pokazNapis(t) { const n = el("pp-radio-napis"); if (n) { n.textContent 
 function wlacz() {
   const s = stacja();
   gra = true;
+  przyciszTlo(true);
   trzask();
   odUtworu = 0;
   if (s.rodzaj === "szum") { setTimeout(() => szum(0.55, 0.4), 700); pokazNapis(""); return odswiez(); }
@@ -171,6 +181,7 @@ function wlacz() {
 }
 function wylacz() {
   gra = false;
+  przyciszTlo(false);
   ucisz();
   audio?.pause();
   szum(0);
@@ -178,20 +189,26 @@ function wylacz() {
   odswiez();
 }
 
-// --- panel odbiornika ----------------------------------------------------------------------------------------------------
+// --- odbiornik (wysuwa się spod dolnej krawędzi; rysunek w pulpit.css: .odb) -----------------------------------------------
+const kat = (ulamek, zakres) => Math.round(-zakres / 2 + zakres * ulamek);
 function htmlPanelu() {
   const d = dane;
-  const skala = d.stacje.map((s) => `<button type="button" class="pp-radio-st" data-akcja="radio-stacja" data-s="${esc(s.id)}" aria-pressed="false"
+  const skala = d.stacje.map((s) => `<button type="button" class="odb-st" data-akcja="radio-stacja" data-s="${esc(s.id)}" aria-pressed="false"
     title="${esc(s.opis)}"><b>${esc(s.fala)}</b><span>${esc(s.nazwa)}</span></button>`).join("");
-  return `<div class="pp-sz-gora"><h2>Radio · ${esc(d.nadawca.nazwa)}</h2><button type="button" class="pp-sz-x" data-akcja="pp-radio" aria-label="Zamknij radio (muzyka gra dalej)">✕</button></div>
-    <p class="pp-radio-adres">${esc(d.nadawca.opis)}</p>
-    <div class="pp-radio-skala" role="group" aria-label="Stacje (UKF, MHz)">${skala}</div>
-    <div class="pp-radio-gora"><button type="button" class="pp-radio-wl" id="pp-radio-wl" data-akcja="radio-wl" aria-pressed="false"></button>
-      <label class="pp-radio-gl">Głośność <input type="range" id="pp-radio-gl" min="0" max="100" step="5" value="${st.glosnosc}"></label></div>
-    <div class="pp-radio-ekran" aria-live="polite"><p class="pp-radio-teraz" id="pp-radio-teraz"></p><p class="pp-radio-napis" id="pp-radio-napis" hidden></p></div>
-    <div class="pp-radio-dol"><button type="button" class="pp-lnk" id="pp-radio-dalej" data-akcja="radio-dalej">⏭ Następne nagranie</button>
+  return `<div class="odb-antena" aria-hidden="true"><i></i><i></i></div>
+    <div class="odb-szyld"><div><h2>${esc(d.nadawca.nazwa)}</h2><p>${esc(d.nadawca.opis)}</p></div>
+      <button type="button" class="odb-schowaj" data-akcja="pp-radio" aria-label="Schowaj radio (muzyka gra dalej)">▾ Schowaj</button></div>
+    <div class="odb-skala" id="pp-radio-skala" role="group" aria-label="Stacje (UKF, MHz)">${skala}<i class="odb-wskazowka" aria-hidden="true"></i></div>
+    <div class="odb-pulpit">
+      <div class="odb-g"><button type="button" class="odb-galka odb-strojenie" id="pp-radio-stroj" data-akcja="radio-strojenie" data-d="1"
+        aria-label="Gałka strojenia: następna stacja (strzałki w lewo i w prawo zmieniają stację)"><i></i></button><span>Strojenie</span></div>
+      <div class="odb-ekran" aria-live="polite"><p class="odb-teraz" id="pp-radio-teraz"></p><p class="odb-napis" id="pp-radio-napis" hidden></p></div>
+      <div class="odb-g"><label class="odb-galka odb-glosnosc" id="pp-radio-galka"><input type="range" id="pp-radio-gl" min="0" max="100" step="5" value="${st.glosnosc}"
+        aria-label="Głośność radia"><i></i></label><span>Głośność</span></div>
+      <button type="button" class="odb-wl" id="pp-radio-wl" data-akcja="radio-wl" aria-pressed="false"></button></div>
+    <div class="odb-dol"><button type="button" class="pp-lnk" id="pp-radio-dalej" data-akcja="radio-dalej">⏭ Następne nagranie</button>
       <button type="button" class="pp-lnk" id="pp-radio-glos" data-akcja="radio-glos" aria-pressed="${st.glos}"></button>
-      <a class="pp-lnk" href="/nagrania-w-radiu" target="_blank" rel="noopener">Nagrania w radiu: autorzy i licencje (nowa karta)</a></div>`;
+      <a class="pp-lnk" href="/nagrania-w-radiu" target="_blank" rel="noopener">Nagrania: autorzy i licencje (nowa karta)</a></div>`;
 }
 function odswiez() {
   const p = el("pp-radio-panel"), s = stacja();
@@ -199,19 +216,26 @@ function odswiez() {
   if (b) {
     const z = b.querySelector(".pp-znak");
     if (z) { z.textContent = "♪"; z.hidden = !gra; }
+    b.classList.toggle("gra", gra);
     b.title = gra && s ? `Radio: ${s.nazwa} (${s.fala} MHz) gra` : "Radio";
     b.setAttribute("aria-label", b.title);
   }
-  if (!p || !dane) return;
-  p.querySelectorAll(".pp-radio-st").forEach((x) => { const t = x.dataset.s === st.stacja; x.setAttribute("aria-pressed", String(t)); x.classList.toggle("aktywny", t); });
+  if (!p || !dane || !p.dataset.zbudowany) return;
+  const n = dane.stacje.length, idx = Math.max(0, dane.stacje.findIndex((x) => x.id === st.stacja));
+  p.querySelectorAll(".odb-st").forEach((x) => { const t = x.dataset.s === st.stacja; x.setAttribute("aria-pressed", String(t)); x.classList.toggle("aktywny", t); });
+  p.style.setProperty("--n", String(n));
+  p.style.setProperty("--i", String(idx));
+  el("pp-radio-stroj").style.setProperty("--kat", `${kat(n > 1 ? idx / (n - 1) : 0.5, 240)}deg`);
+  el("pp-radio-galka").style.setProperty("--kat", `${kat(st.glosnosc / 100, 270)}deg`);
+  p.classList.toggle("gra", gra);
   const wl = el("pp-radio-wl");
   wl.textContent = gra ? "■ Wyłącz" : "▶ Włącz";
   wl.setAttribute("aria-pressed", String(gra));
   wl.classList.toggle("aktywny", gra);
-  const n = gra && s?.rodzaj !== "szum" && pozycja >= 0 ? s.nagrania[s.rodzaj === "muzyka" ? kolejka[pozycja] : pozycja] : null;
+  const nagr = gra && s?.rodzaj !== "szum" && pozycja >= 0 ? s.nagrania[s.rodzaj === "muzyka" ? kolejka[pozycja] : pozycja] : null;
   el("pp-radio-teraz").innerHTML = !gra ? `<small>Wyłączone</small> ${esc(s.nazwa)} · ${esc(s.fala)} MHz`
-    : n ? `<small>Na antenie ♪</small> <b>${esc(n.tytul)}</b> – ${esc(n.wykonawca)}${n.rok ? ` (${esc(String(n.rok))})` : ""}`
-      : `<small>Na antenie</small> ${esc(s.opis)}`;
+    : nagr ? `<small>Na antenie ♪</small> <b>${esc(nagr.tytul)}</b> – ${esc(nagr.wykonawca)}${nagr.rok ? ` (${esc(String(nagr.rok))})` : ""}`
+      : `<small>Na antenie ♪</small> ${esc(s.opis)}`;
   el("pp-radio-dalej").hidden = s.rodzaj === "szum";
   el("pp-radio-dalej").textContent = s.rodzaj === "sluchowisko" ? "⏭ Następny rozdział" : "⏭ Następne nagranie";
   const g = el("pp-radio-glos");
@@ -223,6 +247,7 @@ function zmienGlosnosc(v) {
   zapisz();
   if (audio) audio.volume = v / 100;
   if (gra && stacja()?.rodzaj === "szum") szum(0.55, 0.05);
+  odswiez();
 }
 
 export const radioOtwarte = () => !!el("pp-radio-panel") && !el("pp-radio-panel").hidden;
@@ -239,11 +264,28 @@ export async function przelaczRadio() {
     p.innerHTML = htmlPanelu();
     p.dataset.zbudowany = "1";
     el("pp-radio-gl").addEventListener("input", (e) => zmienGlosnosc(+e.target.value));
+    p.addEventListener("keydown", (e) => {   // strzałki na skali i gałce strojenia zmieniają stację (suwak głośności ma swoje strzałki)
+      const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (!d || !e.target.closest?.(".odb-skala, .odb-strojenie")) return;
+      e.preventDefault();
+      const naSkali = !!e.target.closest(".odb-skala");
+      AKCJE_RADIA["radio-strojenie"]({ dataset: { d: String(d) } }).then(() => { if (naSkali) p.querySelector(".odb-st.aktywny")?.focus?.({ preventScroll: true }); });
+    });
   }
   p.hidden = false;
   el("pp-radio")?.setAttribute("aria-expanded", "true");
   odswiez();
   el("pp-radio-wl").focus({ preventScroll: true });
+}
+
+function zmienStacje(id) {
+  ucisz();
+  audio?.pause();
+  st.stacja = id;
+  zapisz();
+  kolejka = [];
+  pozycja = -1;
+  wlacz();
 }
 
 export const AKCJE_RADIA = {
@@ -252,13 +294,12 @@ export const AKCJE_RADIA = {
   "radio-stacja": async (e) => {
     await pobierz();   // wybór stacji włącza radio (jak klawisz w starym odbiorniku)
     if (e.dataset.s === st.stacja && gra) return;
-    ucisz();
-    audio?.pause();
-    st.stacja = e.dataset.s;
-    zapisz();
-    kolejka = [];
-    pozycja = -1;
-    wlacz();
+    zmienStacje(e.dataset.s);
+  },
+  "radio-strojenie": async (e) => {   // gałka strojenia: następna (d = 1) albo poprzednia (d = -1) stacja, z zawinięciem
+    await pobierz();
+    const n = dane.stacje.length, i = Math.max(0, dane.stacje.findIndex((x) => x.id === st.stacja));
+    zmienStacje(dane.stacje[(i + (+e.dataset.d || 1) + n) % n].id);
   },
   "radio-dalej": () => { if (!gra) return; ucisz(); audio?.pause(); trzask(); setTimeout(() => nastepny(false), 400); },
   "radio-glos": () => {   // wyłączenie głosu w trakcie zapowiedzi: od razu następne nagranie
