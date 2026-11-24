@@ -292,3 +292,4 @@ Wygląd tych elementów: [Wygląd](Wyglad.md). Kolejność prac: [Zadania](Zadan
 - 2026-11-22 · Uwagi z gier testowych podzielone na 8 zadań tematycznych (Z29–Z36), a nie jedno, bo szef kazał je posortować według wagi.
 - 2026-11-24 · Okna-b zatrzymany po 5 min na polecenie szefa; jego commit s1 (06bab8b) wciąga wyko 04/okna, potem `claude rm`.
 - 2026-11-24 · Commons odmawia pobierania (429): 04/dzwieki kończy z 4 nagraniami (lokal, urzad, dzwonek, kartka); 6 pozostałych Archi dociąga później, do tego czasu cisza.
+- 2026-11-24 · Wątki planu skończone przed 9:00, więc do podróży 04 dobrany Z6 (był w „Następnie” podróży 04) jako 04/kontrast; jeden wyko.

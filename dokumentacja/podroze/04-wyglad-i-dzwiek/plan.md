@@ -26,6 +26,7 @@ Decyzje szefa (23.11, okienko) – do `Decyzje.md`:
 - [x] 3 palety × jasny/ciemny działają, wysoka ≥ 7:1, stan nie samym kolorem
 - [ ] Krótkie dźwięki i gwar każdego miejsca; ⚙ wyciszanie; MG wycisza klasę; strona nagrań z licencjami
 - [x] Radio: ikona obok kaski działa, odbiornik PRL, gwar cichnie przy radiu
+- [ ] Z6: rzadkie ekrany (ciemny, wysoka) i okna na telefonie bez usterek kontrastu i rozmiaru
 - [x] Pełne testy zielone, `ruff`, `node --check`, `silnik.dane sprawdz` czyste
 
 ## Wątki
