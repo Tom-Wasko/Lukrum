@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-24 15:30
+Archi żył: 2026-11-24 16:56
 Tryb: nadzorowany od 16:46
 Tempo: zwykły
 
@@ -22,8 +22,8 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/wnetrza | Z4 (przegląd) | scalony do `podroz-04` (52 sceny, 15 poprawek) |
 
 ## Czeka na szefa
-- **Z4: wybór poprawek wnętrz.** Galeria: https://claude.ai/artifact/NhXHYihS8koXJjejDtsHe1 (lista P1–P15, zrzuty). Rekomendacja: wątek A „nakładka” (P1, P3, P4, P11–P13; ok. 10–12 h).
-- Folder `_robocze/wnetrza/` (roboczy, poza gitem) został po wyko; usunąć ręcznie albo zgodzić się, żeby usunął Archi.
+- `podroz-04` scalona do `main` i wypchnięta 24.11 16:55 (1007 passed).
+- Z4: szef wybrał wątki A, B, C (Decyzje 24.11); do zaplanowania.
 - Notki prawne w INSTRUKCJI (04/prawo, rozdz. „Prawo za mechanikami”) sprawdzone w serwisach prawnych i gov.pl, nie w Dz.U.; pokazać prawnikowi przed pokazem.
 - **Przypomnieć szefowi po powrocie:** 6 nagrań (kasa, ulica, kuchnia, sklep, biuro, szkoła): szef pobiera w przeglądarce do `gra/panel_gracza/static/dzwieki/`, potem Archi wpisuje licencje.
 - Serwer gry na porcie 8784 (pid 25996, po wątku 04/kontrast) nadal działa: wyko nie mógł go zatrzymać (blokada), zatrzymaj ręcznie.
