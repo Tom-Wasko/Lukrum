@@ -15,6 +15,7 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/okna | Z49 | scalony do `podroz-04` 43f80fc (55 okien zgodne, 965 passed); galeria dla szefa |
 | 04/radio | Z50 | scalony do `podroz-04` 6b01743 (979 passed) |
 | 04/kontrast | Z6 | scalony do `podroz-04` 1f9d5f9 (979 passed) |
+| 04/kreator | Z47 | w toku (nowy wyko; dobrany z listy) |
 
 ## Czeka na szefa
 - Serwer gry na porcie 8784 (pid 25996, po wątku 04/kontrast) nadal działa: wyko nie mógł go zatrzymać (blokada), zatrzymaj ręcznie.
