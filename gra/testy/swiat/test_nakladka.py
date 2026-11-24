@@ -145,3 +145,12 @@ def test_bialy_napis_na_tablicy_metalu_i_drewnie_ma_kontrast(paleta, tryb):
         t = _jasnosc(_kolor(f"var({tlo})", d))
         kontrast = (max(biel, t) + .05) / (min(biel, t) + .05)
         assert kontrast >= prog, f"{paleta}/{tryb}: biel na {tlo} = {kontrast:.2f}"
+
+
+def test_telefon_ma_pasek_ikon_na_dole_i_male_ikony_zeszytu_i_banknotow():
+    css = (STATIC / "pulpit" / "pulpit.css").read_text(encoding="utf-8")
+    blok = css[css.index("podróż 04/nakladka (P4)"):]
+    assert "@media (max-width: 600px)" in blok
+    assert re.search(r"\.pp-lewy \{[^}]*bottom: 0[^}]*flex-direction: row", blok)
+    assert re.search(r"\.pp-zeszyt \{[^}]*scale: \.2", blok) and ".pp-portfel {" in blok
+    assert ".sw { grid-template-columns: minmax(0, 1fr); }" in (STATIC / "swiat" / "swiat.css").read_text(encoding="utf-8")

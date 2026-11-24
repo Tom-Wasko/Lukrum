@@ -67,3 +67,9 @@
 - Makiety nie mają jeszcze flagi `nowy` w danych scen (kebab: wujek i niezałatwiona propozycja są „nowe”).
 - Zapis dziennika `pracownicy/lista` nie powiódł się (brak wersji / odczyt zablokowany); `postep` zapisany.
 - Sprzątanie `_robocze/nakladka/` i pustego `gra/_robocze` zablokowane (rm odmówiony); oba poza gitem, do usunięcia ręcznie.
+
+**Poprawki od Archiego (kebab i telefon):**
+- Kebab: zrzuty „po” z gry w toku (`aktywna-218635`, tydzień 4, wejście z mapy żetonem własnego lokalu): `kebab-bar-jasny`, `kebab-dymek-bar-jasny` (dymek plotki nie zasłania punktów, znak „NOWE”), `kebab-wysoka-ciemny`, `kebab-tel-bar-jasny`. Nakładka w kebabie niczego nie psuje. Wcześniejsze zrzuty `kebab-*` z gry zakończonej były bez dymków (goście bez wypowiedzi) i zostały zastąpione.
+- Telefon ≤600 px w scenie (poza mapą): pasek ikon na dole (przewijany w bok), zeszyt wujka i banknoty jako małe ikony nad paskiem, „Tydzień” w prawym rogu (nie nachodzi na „Wróć”), adres w osobnej linii, komunikat „Gra zakończona” mniejszy, scena na pełną szerokość (naprawiono też poziome rozpychanie przez księgę gości w kebabie: `.sw` i `.kg-uklad` jako `minmax(0,1fr)`). Scena i początek listy są na pierwszym ekranie 390×844 bez przewijania. Pliki: `pulpit/pulpit.css`, `swiat/swiat.css`; test `test_telefon_ma_pasek_ikon_…`.
+- Zrzuty tel (bar jasny i wysoka ciemny) przerobione dla: kebab, bank (`bank_1`, Pierzeja bankowa), hurtownia (Makro), ratusz, agencja pracy.
+- Dowód: `pytest testy/swiat testy/wnetrza` → `150 passed in 32.50s`; `ruff check .` → `All checks passed!`. Pełnych testów po tej poprawce nie powtarzano (zmiany tylko CSS + 1 test). Folderów `_robocze` nie ruszano; serwer 8789 zatrzymany. Gra pokazowa `aktywna-218635` zostaje w lokalnej bazie (poza gitem).

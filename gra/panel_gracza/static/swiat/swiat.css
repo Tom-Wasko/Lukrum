@@ -397,3 +397,14 @@
 .kg-uwagi { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: color-mix(in srgb, var(--tusz) 80%, var(--papier)); }
 .kg-uwagi li { margin: 2px 0; }
 .skutek-uwaga { margin: 6px 0; font-size: 13px; }
+
+/* telefon (04/nakladka, P4): adres w osobnej linii, nie nachodzi na „Tydzień” */
+@media (max-width: 600px) {
+  .sw-gora .adres { flex: 1 1 100%; margin-right: 0; font-size: 13px; overflow-wrap: anywhere; }
+  .sw-gora .wsk { flex: none; }
+  .sw-scena-ramka { margin-left: 0; margin-right: 0; }
+}
+@media (max-width: 600px) {
+  .sw { grid-template-columns: minmax(0, 1fr); }   /* szeroka księga gości nie rozpycha sceny poza ekran */
+  .kg-uklad { grid-template-columns: minmax(0, 1fr); }
+}
