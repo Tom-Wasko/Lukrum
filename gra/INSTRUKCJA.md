@@ -153,6 +153,12 @@ stacjami (sam szum). Między płytami odzywa się prowadzący (syntezator mowy p
 „Głos prowadzącego”). Radio włącza się dopiero przyciskiem **▶ Włącz**, gra bez internetu i nie wpływa na wynik gry. Spis
 nagrań z autorami, źródłami i licencjami jest na stronie **/nagrania-w-radiu**.
 
+**Dźwięk w grze.** W ⚙ → Dźwięk są dwa suwaki: krótkie dźwięki (dzwonek drzwi, kasa, stempel na liście, kartka zeszytu,
+szelest teczki; domyślnie włączone, cicho) i odgłosy miejsc (gwar w lokalu, ulica, biuro, cisza w banku; domyślnie
+wyłączone), oraz przycisk **Wycisz wszystko**. Muzyka jest tylko w radiu. Ustawienia zostają w przeglądarce. Mistrz gry
+może wyciszyć dźwięk całej klasy w panelu **/mg/** (gracz widzi wtedy „Dźwięk wyciszony przez prowadzącego”). Nic nie
+gra przed pierwszym kliknięciem. Spis dźwięków z licencjami: **/nagrania-w-radiu**.
+
 **Kurier rankingowy** co tydzień wydaje nowy numer: na pierwszej stronie jest lider ligi, tabela ze zmianami miejsc,
 liczby Twojego tygodnia i jedna rada redakcji. Po ostatnim tygodniu gry Plan tygodnia pokazuje podium i ostatni list
 od wujka.

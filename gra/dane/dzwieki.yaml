@@ -1,0 +1,108 @@
+# Dźwięki gry (podróż 04, wątek dzwieki; decyzje szefa 23.11.2026). Silnik gry tego pliku nie czyta.
+# Czyta go panel_gracza/dzwieki.py: /dzwieki.json dla panelu (static/pulpit/dzwiek.js) i strona /nagrania-w-radiu.
+# Zasady:
+#  - tło to tylko odgłosy (gwar, ulica, biuro); prawdziwa muzyka jest wyłącznie w radiu;
+#  - pliki leżą w panel_gracza/static/dzwieki/; brak pliku = cisza, bez błędu;
+#  - każdy plik w stanie „gotowe” ma autora, źródło i licencję: CC0 albo domena publiczna (pilnuje test);
+#  - pliki w stanie „oczekuje” czekają na akceptację listy nagrań przez szefa (nazwy plików są robocze).
+opis: Dźwięki gry – krótkie (dzwonek, kasa, stempel, kartka, teczka) i odgłosy tła zależne od miejsca.
+
+glosnosc_domyslna:      # 0–100, gracz zmienia w ⚙ → Dźwięk
+  krotkie: 40
+  tlo: 30
+wlaczone_domyslnie:     # krótkie dźwięki włączone (cicho), odgłosy tła wyłączone
+  krotkie: true
+  tlo: false
+przejscie_tla_s: 1.2    # płynne przejście (fade) przy wejściu do wnętrza i powrocie na mapę
+
+pliki:
+  dzwonek_drzwi:
+    rodzaj: krotki
+    opis: dzwonek nad drzwiami lokalu
+    plik: dzwonek_drzwi.ogg
+    status: oczekuje
+  kasa:
+    rodzaj: krotki
+    opis: kasa sklepowa przy zakupie
+    plik: kasa.ogg
+    status: oczekuje
+  stempel:
+    rodzaj: krotki
+    opis: stempel na liście z decyzjami
+    plik: stempel.ogg
+    status: oczekuje
+  kartka:
+    rodzaj: krotki
+    opis: przewracana kartka zeszytu
+    plik: kartka.ogg
+    status: oczekuje
+  teczka:
+    rodzaj: krotki
+    opis: szelest teczki przy otwarciu okna
+    plik: teczka.ogg
+    status: oczekuje
+  gwar_kebab:
+    rodzaj: tlo
+    opis: gwar w lokalu gastronomicznym
+    plik: gwar_kebab.ogg
+    status: oczekuje
+  ulica:
+    rodzaj: tlo
+    opis: szum miejskiej ulicy
+    plik: ulica.ogg
+    status: oczekuje
+  biuro:
+    rodzaj: tlo
+    opis: stukot klawiatur i szelest papieru w biurze
+    plik: biuro.ogg
+    status: oczekuje
+  sklep:
+    rodzaj: tlo
+    opis: cichy gwar sklepu i hali
+    plik: sklep.ogg
+    status: oczekuje
+  park:
+    rodzaj: tlo
+    opis: ptaki i wiatr w parku
+    plik: park.ogg
+    status: oczekuje
+
+# zdarzenie w grze → dźwięk krótki (lista łatwa do zmiany; „zdarzenia” podpina dzwiek.js)
+zdarzenia:
+  wejscie_do_lokalu: dzwonek_drzwi
+  zakup: kasa
+  nadanie_listu: stempel
+  kartka_zeszytu: kartka
+  otwarcie_okna: teczka
+
+# miejsce → odgłos tła albo „cisza”. Klucz: id z dane/mapa/budynki.yaml (budynek albo zespół),
+# a gdy go nie ma – rodzaj budynku. Jedno i drugie ma pierwszeństwo przed „domyslne”.
+miejsca:
+  mapa: ulica             # widok mapy miasta
+  lokal: gwar_kebab       # własny lokal drużyny (id lokalu spoza budynki.yaml)
+  # rodzaje budynków
+  bank: cisza
+  biuro: biuro
+  urzad: biuro
+  poczta: biuro
+  nieruchomosci: biuro
+  praca: biuro
+  media: biuro
+  reklama: biuro
+  ubezpieczenia: biuro
+  gielda: biuro
+  dostawca: sklep
+  sklep: sklep
+  park: park
+  woda: park
+  szkola: cisza
+  uczelnia: cisza
+  lichwiarz: cisza
+  detektyw: cisza
+  # zespoły budynków
+  kamienica_bankowa: cisza
+  biurowiec_zana: biuro
+  park_handlowy: sklep
+  # pojedyncze budynki, które różnią się od swojego rodzaju
+  piekarnia: gwar_kebab
+domyslne: ulica

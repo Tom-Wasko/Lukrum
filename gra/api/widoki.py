@@ -229,6 +229,7 @@ def api_prowadzenie(request, id_):
     (harmonogram odblokowań gry z lokalami), {"auto_zamowienia": bool} (przycisk „Zamów brakujące”
     w Dostawcach), {"refleksja": "wylaczona" | "opcjonalna" | "wymagana"},
     {"podpowiedzi": bool} (rady na Dashboardzie w pierwszych rundach),
+    {"dzwiek_wyciszony": bool} (dźwięki gry wyciszone dla całej klasy),
     {"zestaw": klucz zestawu funkcji} (od bieżącej rundy, tylko odsłania),
     {"podkupywanie": bool} (czy wolno podkupywać pracowników innych drużyn),
     {"klub": bool} (klub z hasłem w tej grze; wyłączony – drużyny go nie widzą, zakłady
@@ -255,6 +256,12 @@ def api_prowadzenie(request, id_):
     if "podpowiedzi" in d:
         with serwisy.zmiana(id_) as g:
             g.konfiguracja["podpowiedzi"] = bool(d["podpowiedzi"])
+    if "dzwiek_wyciszony" in d:   # podróż 04: mistrz gry wycisza dźwięki całej klasy
+        with serwisy.zmiana(id_) as g:
+            if d["dzwiek_wyciszony"]:
+                g.konfiguracja["dzwiek_wyciszony"] = True
+            else:
+                g.konfiguracja.pop("dzwiek_wyciszony", None)
     if "lekcje" in d:
         try:
             u = lekcje.popraw(d["lekcje"])

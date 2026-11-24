@@ -143,6 +143,8 @@ function decyzje() {
       : ` <a data-akcja="auto-zamowienia">${gra.auto_zamowienia ? "wyłącz" : "włącz"}</a>`}`],
     ["Podpowiedzi na Planie tygodnia (3 pierwsze rundy)", `${gra.podpowiedzi ? "włączone" : "wyłączone"}${gra.zakonczona ? ""
       : ` <a data-akcja="podpowiedzi">${gra.podpowiedzi ? "wyłącz" : "włącz"}</a>`}`],
+    ["Dźwięki gry w klasie", `${gra.dzwiek_wyciszony ? "wyciszone" : "włączone (gracz reguluje w ⚙)"}${gra.zakonczona ? ""
+      : ` <a data-akcja="dzwiek">${gra.dzwiek_wyciszony ? "włącz" : "wycisz"}</a>`}`],
     // poprawki 2 (sprawa 6): headhunter – oferty dla pracowników innych drużyn i kontroferty
     ["Podkupywanie pracowników innych drużyn", `${gra.podkupywanie !== false ? "dozwolone" : "wyłączone"}${gra.zakonczona ? ""
       : ` <a data-akcja="podkupywanie">${gra.podkupywanie !== false ? "wyłącz" : "pozwól"}</a>`}`],
@@ -463,6 +465,12 @@ async function wykonaj(akcja, el) {
     const otworz = !S.p.gra.klub.wlaczone;
     await api(`${URL_GRY}/prowadzenie`, "POST", { klub: otworz });
     toast(otworz ? "Klub „Nocna 13” jest otwarty dla drużyn." : "Klub zablokowany – drużyny go nie widzą, zakłady z tej rundy przepadły.");
+    return wczytaj();
+  }
+  if (akcja === "dzwiek") {
+    const wycisz = !S.p.gra.dzwiek_wyciszony;
+    await api(`${URL_GRY}/prowadzenie`, "POST", { dzwiek_wyciszony: wycisz });
+    toast(wycisz ? "Dźwięki gry wyciszone dla całej klasy." : "Dźwięki gry znów włączone (gracze regulują je w ⚙).");
     return wczytaj();
   }
   if (akcja === "podkupywanie") {
