@@ -111,7 +111,7 @@ export function scenaKebabu(d) {
     s += `<g class="tlok-znak" data-tlok="${T.poziom}"><rect x="30" y="312" width="164" height="32" rx="6" fill="var(--g-tablica)" stroke="var(--g-czern)" stroke-width="2"/>`
       + napis(112, 334, `Tłok: ${T.napis} ${T.znak}`, 16, "var(--g-biel)", "gruby", 'text-anchor="middle" letter-spacing=".5"') + "</g>";
   }
-  if (d.wujek) { s += osobaSvg("wujek", 1148, 594, 1, "dobra", 3); osoby.push({ cx: 1148, stopy: 594, nazwa: "Wujek", d: { ...d.wujek, rodzaj: "wujek" }, nr: "wujek" }); }
+  if (d.wujek) { s += osobaSvg("wujek", 690, 594, 1, "dobra", 3); osoby.push({ cx: 690, stopy: 594, nazwa: "Wujek", d: { ...d.wujek, rodzaj: "wujek" }, nr: "wujek" }); }
   const P = d.punkty;
   let h = "";
   const dodaj = (k, x, y, w, hh) => { if (P[k]) h += hot(P[k], x, y, w, hh); };

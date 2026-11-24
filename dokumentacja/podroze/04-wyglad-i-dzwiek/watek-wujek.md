@@ -60,4 +60,11 @@
 
 **Opis dla instrukcji (wpisze Archi):** „Wujek zagląda do kebabu tylko w ważnych momentach: pierwszy tydzień, pierwsza strata, rekord, pierwszy kredyt, debet, kontrola sanepidu, drugi lokal, spadek nastroju załogi, połowa gry i ostatni tydzień. Staje przy ladzie i mówi jedno zdanie, a gdy okazji jest kilka, wybiera najważniejszą.”
 
+**Poprawka (prośba Archiego): wujek poza zeszytem.** W `swiat/sceny.js` wujek przestawiony z (1148, 594) na (690, 594): przed ladą,
+na podłodze jak bywalcy, między ostatnim bywalcem a ladą (przed kasą). W całości widoczny, nie zasłania punktów (kasa, lada) ani dymków
+bywalców; zeszytu nie ruszałem. Uwaga: dosłowne „między kasą a rożnem” (x≈860) zasłaniałoby punkt lady, więc stoi na lewym końcu lady.
+Dowody: `node --check sceny.js` → NODE_OK; `pytest testy/wnetrza` → `106 passed in 34.50s`. Zrzuty ponownie: `wujek-bar-jasny.png`,
+`wujek-wysoka-ciemny.png` (1366×768), `wujek-telefon.png` (390×844); na telefonie scena jest mała, ale wujek stoi przy ladzie bez zasłaniania.
+Serwer zatrzymany.
+
 **Propozycje:** zeszyt wujka warto przesunąć albo zwinąć, gdy w kebabie stoi wujek.
