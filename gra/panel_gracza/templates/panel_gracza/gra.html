@@ -30,7 +30,7 @@
   </header>
   <nav class="menu" id="menu"></nav>
   <main class="scena"><div class="karta" id="karta"><div class="ladowanie">Wczytywanie…</div></div></main>
-  <div class="stopka">LUKRUM – gra edukacyjna. Nazwy prawdziwych firm i miejsc oddają realia Lublina, a oferty, ceny i zdarzenia w grze są fikcyjne. Gra nie jest związana z tymi firmami.</div>
+  <div class="stopka">LUKRUM – gra edukacyjna. Nazwy prawdziwych firm i miejsc oddają realia Lublina, a oferty, ceny i zdarzenia w grze są fikcyjne. Gra nie jest związana z tymi firmami. <a href="/zrodla" target="_blank" rel="noopener">Nawiązania i źródła</a></div>
   {{ id|json_script:"id-gry" }}{{ firma|json_script:"id-firmy" }}{{ mg|json_script:"mg" }}{{ konto.login|json_script:"login" }}
   <script>window.GRA = JSON.parse(document.getElementById("id-gry").textContent); window.FIRMA = JSON.parse(document.getElementById("id-firmy").textContent); window.MG = JSON.parse(document.getElementById("mg").textContent); window.KONTO = JSON.parse(document.getElementById("login").textContent);</script>
   <script type="module" src="{{ statyczne }}app.js"></script>

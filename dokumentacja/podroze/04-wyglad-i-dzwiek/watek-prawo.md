@@ -24,3 +24,36 @@
 - **Archi:** archi-lukrum.
 
 ## Raport
+
+**Raport wyko (24.11.2026)**
+
+**Porównanie listy Z23 ze stanem repo**
+- *Zrobione wcześniej (03):* strona `/zrodla`, lista kontrolna, wykaz grafik i fontów, ikony bez logo marek, PDF, podpis OSM, tabela nazwisk (brak trafień).
+- *Zrobione teraz:* notki prawne w INSTRUKCJI (podrozdział „Prawo za mechanikami”: PIP, staż, ZUS i student do 26 lat, odsetki ustawowe i maksymalne, lichwa art. 304 kk, CEIDG i sanepid, rok szkolny 2026/27), „Ukryty klub” w części dla MG, dźwięki gry w `dane/zrodla.yaml`, odnośniki do `/zrodla` w stopkach (start, gra), stopka `/zrodla`, uaktualniona lista kontrolna i wykaz, PDF zbudowany na nowo.
+- *Zostaje:* sprawdzenie notek przez prawnika (szef); punkty 1–3 listy kontrolnej (hasła w archiwum) nie powtórzone dziś; 7 dźwięków w stanie „oczekuje” nie ma jeszcze nagrań (wątek dźwięków); przejście po wszystkich postaciach i firmach w `dane/` (szef wyłączył wyszukiwanie nazwisk).
+
+**Dowody**
+- `silnik.dane sprawdz` → „Dane w porządku … (wersja f22c54a3f294)”
+- `ruff check .` → „All checks passed!”
+- `pytest testy/aplikacja/test_zrodla.py` → „5 passed”
+- pełne `pytest -q` → „995 passed in 403.72s (0:06:43)”
+- `manage.py instrukcja_pdf` → „Zapisano … INSTRUKCJA.pdf (457 KB)” po ostatniej zmianie `.md`
+- zrzuty `/zrodla` (bar jasny, wysoka ciemny): `C:/Users/PC/Pulpit/lukrum/_robocze/zrzuty-prawo/`; serwer zatrzymany.
+
+**Źródła notek** (WebSearch 24.11): odsetki: [Monitor Polski 2026 poz. 368](https://eli.gov.pl/eli/MP/2026/368/ogl/pol/pdf) (ustawowe 7,25% od 5.03.2026, maksymalne 14,5%); rok szkolny: komunikat MEN (prasa, gov.pl); CEIDG i sanepid: biznes.gov.pl, gov.pl (PSSE).
+**Do sprawdzenia:** notki o PIP (art. 281 KP), stażu (ustawa o promocji zatrudnienia) i ZUS/PIT studenta do 26 lat napisałem z własnej wiedzy, z odnośnikami do stron ogólnych (ISAP, zus.pl, praca.gov.pl), bez numerów Dz.U.; art. 304 kk potwierdzony tylko ogólnie (nowelizacja 2020, §2–3); numeracji paragrafów art. 359 KC w ISAP nie sprawdzałem, więc podałem sam artykuł.
+
+**Decyzja szefa:** czy notki mają przejść przez prawnika przed pokazem (zalecane).
+**Propozycje:** test, że PDF nie jest starszy od `.md`; w worktree brak `.venv` i `db.sqlite3` (użyłem venv z głównego repo i migracji), warto dopisać do przewodnika.
+
+**Poprawka (24.11, na prośbę Archiego): notki sprawdzone w źródłach**
+| Notka | Źródło | Co poprawiono |
+|---|---|---|
+| PIP, art. 281 pkt 1 KP | [lexlege art. 281](https://lexlege.pl/kp/art-281/), kadry.infor.pl; grzywna 1 000–30 000 zł | doprecyzowano: wykroczenie za umowę cywilnoprawną zamiast umowy o pracę |
+| Staż | [Dz.U. 2025 poz. 620](https://eli.gov.pl/eli/DU/2025/620), [Dz.U. 2025 poz. 1536](https://api.sejm.gov.pl/eli/acts/DU/2025/1536/text.pdf) | **błąd:** dawna ustawa o promocji zatrudnienia (art. 53) uchylona 1.06.2025; podano nową ustawę z 20.03.2025; usunięto stwierdzenie o długości stażu (niepotwierdzone) |
+| ZUS, student do 26 lat | [Zielona Linia gov.pl](https://zielonalinia.gov.pl/czy-za-studenta-placi-sie-zus/), art. 6 ustawy o sus | usunięto numer ustępu; dodano wyjątek (zlecenie od własnego pracodawcy) |
+| PIT młodych | [objaśnienia MF](https://www.podatki.gov.pl/media/5974/objaśnienia-podatkowe-ulga-dla-młodych-14-kwietnia-2020-r.pdf), art. 21 ust. 1 pkt 148 | dodano roczny limit 85 528 zł (z objaśnień; kwotę dla 2026 sprawdzić) |
+| Odsetki, art. 359 KC | [Monitor Polski 2026 poz. 368](https://eli.gov.pl/eli/MP/2026/368/ogl/pol/pdf), [art. 359](https://lexlege.pl/kc/art-359/) | wskazano § 2¹ i § 2²; 7,25% / 14,5% zgodne ze źródłami |
+| Lichwa, art. 304 KK | [lexlege art. 304](https://lexlege.pl/kk/art-304/) | **usunięto** wysokość kary i „od 2020 r.” (niepotwierdzone); zostały § 1 (wyzysk kontrahenta) i ogólnie § 2–3 |
+
+Nie potwierdziłem w oficjalnym dzienniku (tylko w serwisach prawnych i na gov.pl): dosłownego brzmienia art. 281 KP, 304 KK, 359 KC i 6 ustawy o sus; Dz.U. tekstów jednolitych KP, KK, KC nie podaję. Dowody: PDF przebudowany (461 KB), `test_zrodla.py` 5 passed, `ruff` czysty.
