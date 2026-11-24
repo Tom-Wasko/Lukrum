@@ -513,16 +513,23 @@ które można poprawiać aż do kliknięcia „Utwórz grę”:
    50 000 zł). W „Więcej ustawień”: sposób rozliczania debetu (na bieżąco albo tylko niedobór na koniec tygodnia)
    i ziarno losowości – ta sama liczba daje za każdym razem tę samą grę, co przydaje się do powtórek i porównań.
 2. **Drużyny i boty** – drużyny uczniów (1–4 osoby) oraz boty, czyli firmy komputerowe o różnych strategiach
-   i poziomach, które konkurują na tym samym rynku.
+   i poziomach, które konkurują na tym samym rynku. Tu też możesz **rozlosować uczniów po drużynach**: wklej imiona
+   i nazwiska (po jednym w linii) i/albo zaznacz istniejące konta uczniów, kliknij „Rozlosuj uczniów po drużynach”.
+   Uczniowie rozdzielą się losowo i po równo (różnica najwyżej jedna osoba). Wynik widać od razu: możesz losować
+   ponownie albo przenieść ucznia do innej drużyny (w drużynie najwyżej 4 osoby).
 3. **Funkcje gry** – zestaw gotowych ustawień („Lekcja 1” … „Lekcja 5”, „Pierwsza gra”, „Pełna gra”, „Krótka lekcja”) i stan każdej funkcji:
    odkryta, zakryta albo wyłączona. Tu też ustawia się podpowiedzi na Planie tygodnia, przycisk „Zamów brakujące
    u najtańszych” w Zamówieniach i refleksję przy wysyłaniu decyzji (nieobowiązkowa, wymagana albo wyłączona).
-4. **Sprawdź i utwórz** – podsumowanie całej gry.
+4. **Sprawdź i utwórz** – podsumowanie całej gry. Przyciski Wstecz / Dalej / Utwórz grę zostają przypięte u dołu ekranu.
+   Jeśli rozlosowano uczniów, po kliknięciu „Utwórz grę” założą się konta (dla nowych imion) i pokaże się strona
+   **kartek z hasłami**: dla każdej drużyny nagłówek z nazwą, pod nim kartki do wycięcia (uczeń, login, hasło, adres
+   logowania). „Drukuj kartki” drukuje je czytelnie na A4, czarno-biało, każda drużyna na osobnej stronie. Haseł nie da się
+   odczytać po opuszczeniu tej strony – można tylko nadać nowe. Zakładanie wielu kont chwilę trwa.
 
 Można też **wczytać grę z pliku** (.json pobranego przyciskiem „Pobierz plik gry”) – np. kopię zapasową albo grę
 z innego komputera. Wczytana gra wraca bez kont uczniów.
 
-Uczniów dopisuje się do drużyn po utworzeniu gry, w zakładce **Drużyny**: z listy albo przez „Nowe konta uczniów”
+Uczniów można też dopisać do drużyn po utworzeniu gry, w zakładce **Drużyny**: z listy albo przez „Nowe konta uczniów”
 (login i hasło przekazuje się uczniom; adres logowania to `/konta/login/`). Hasło można nadać od nowa, a ucznia
 usunąć z drużyny.
 

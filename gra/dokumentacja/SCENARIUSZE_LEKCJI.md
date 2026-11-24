@@ -7,6 +7,9 @@ Nie był jeszcze sprawdzony w klasie.
 ## Jak korzystać
 - Cykl to **5 lekcji po 45 minut** i ok. 12 tygodni gry. Ustaw w kreatorze **Tryb lekcyjny**: 3 rundy na żywo, potem
   7 dni na rundę (albo 3–4 dni, gdy lekcje są dwa razy w tygodniu).
+- **Przygotowanie lekcji w `/mg/`:** w kreatorze (krok 2) wklej listę klasy i kliknij „Rozlosuj uczniów po drużynach”
+  – konta powstaną same, a po utworzeniu gry wydrukujesz **kartki z hasłami** podzielone na drużyny (do wycięcia).
+  Rozdaj je na początku lekcji 1. Opis: `../dokumentacja/funkcje/Losowanie-druzyn.md`.
 - Drużyny po 2–4 osoby, jedno urządzenie na drużynę wystarczy (gra działa też na telefonie).
 - Każda lekcja ma własny **zestaw funkcji** w kreatorze (krok 3, „Gotowe zestawy”): „Lekcja 1 – Zakładamy firmę” …
   „Lekcja 5 – Bilans sezonu”. Zestaw zostawia odkryte tylko to, czego uczy lekcja, resztę zakrywa (drużyna widzi ją

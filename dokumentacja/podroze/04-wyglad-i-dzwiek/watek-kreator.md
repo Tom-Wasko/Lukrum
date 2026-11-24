@@ -27,3 +27,26 @@
 - **Archi:** archi-lukrum.
 
 ## Raport
+
+**Zrobione (Z47):**
+- Losowanie: `konta/druzyny.py: rozlosuj` (po równo, różnica ≤ 1, max 4 w drużynie), `POST /api/losowanie`. Krok 2 kreatora:
+  wklejone imiona i/albo zaznaczone konta, „Rozlosuj”, ponowne losowanie, przenoszenie ucznia selectem, podgląd rozkładu.
+- Skład w `POST /api/gry` (pole `sklad`, walidacja: login istnieje i nie jest MG, brak duplikatów, ≤ 4, ≤ 60 nowych kont);
+  konta jak dziś (`nowe_konto`, `nowe_haslo`). Po utworzeniu gry strona „Gra utworzona” z kartkami.
+- Kartki: `kartki.js` + `kartki.css` (A4, czarno-biało, 2 kolumny, nowa strona na drużynę, linia cięcia); okno haseł w
+  zakładce Drużyny: tabela na ekranie + „Drukuj kartki”.
+- Przyciski kroków: `position: sticky; bottom: 0` (`pulpit.css: .nawigacja-kroku`).
+- Dokumentacja: INSTRUKCJA.md, README.md, SCENARIUSZE_LEKCJI.md, `dokumentacja/funkcje/Losowanie-druzyn.md`.
+
+**Dowody:**
+- `pytest testy/aplikacja/test_kreator.py` → `16 passed in 20.03s` (13/4 → 4,3,3,3; każdy raz; skład zapisany; kartki).
+- `ruff check .` → `All checks passed!`; `node --check pulpit.js` → ok; `silnik.dane sprawdz` → `Dane w porządku`.
+- Zrzuty (poza gitem): `_robocze/zrzuty-kreator/{druzyny-bar-jasny,druzyny-wysoka-ciemny,kartki-podglad}.png`; przypięty pasek
+  widoczny na 1366×768. Serwer 8785 zatrzymany (PID zabity, port wolny).
+- Pełne testy: `pytest -q` → `995 passed in 396.90s (0:06:36)` (niestabilny test_kasyno nie wrócił).
+
+**Uwagi:** na telefonie nie robiłem zrzutu (narzędzie ma rozmiar, ale nie sprawdzałem wąskiego widoku); sticky działa niezależnie
+od szerokości. Tworzenie gry z 15 nowymi kontami trwa ok. 30 s (haszowanie haseł), dodałem komunikat „Zakładanie N kont…”.
+
+**Propozycje:** (1) przyspieszyć zakładanie kont (hasher PBKDF2 w testowej bazie jest wolny; sprawdzić iteracje lub partię);
+(2) zrzut kartek na telefonie.

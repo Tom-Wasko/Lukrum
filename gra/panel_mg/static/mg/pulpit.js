@@ -327,6 +327,8 @@ $("utworz").onclick = async () => {
   pokazBlad("");
   if (podzial?.some((g) => g.osoby.length && !nazwaD(g.w))) return pokazBlad("Drużyna z uczniami nie ma nazwy – wpisz ją w kroku 2.");
   $("utworz").disabled = true;
+  const nowe = podzial?.reduce((t, g) => t + g.osoby.filter((o) => !o.login).length, 0) || 0;
+  if (nowe) $("utworz").textContent = `Zakładanie ${nowe} kont – chwilę potrwa…`;
   try {
     const r = await fetch("/api/gry", { method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify({
       nazwa: $("nazwa").value, liczba_rund: +$("rundy").value, kapital_startowy: $("kapital").value, ziarno: $("ziarno").value,
@@ -344,7 +346,7 @@ $("utworz").onclick = async () => {
       return;
     }
     location.href = `/mg/gra/${encodeURIComponent(j.id)}`;
-  } finally { $("utworz").disabled = false; }
+  } finally { $("utworz").disabled = false; $("utworz").textContent = "Utwórz grę"; }
 };
 
 // --- wczytanie gry z pliku ----------------------------------------------------------------------------------------
