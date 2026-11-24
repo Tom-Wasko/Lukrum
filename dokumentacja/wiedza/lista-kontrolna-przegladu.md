@@ -26,7 +26,7 @@ Punkty 1–3 wymagają haseł z archiwalnego porównania (poza gitem), więc dzi
 | 7 | Licencje fontów | `grep -c "^=====" gra/panel_gracza/static/fonty/OFL.txt` | 5 | ✓ |
 | 8 | PDF zgodny z `.md` | `manage.py instrukcja_pdf` po ostatniej zmianie `.md` | „Zapisano … INSTRUKCJA.pdf (457 KB)”. PDF powstaje z `.md` poleceniem `instrukcja_pdf`; za każdym razem po zmianie instrukcji uruchom je i zapisz w tym samym commicie | ✓ |
 | 10 | User-Agent narzędzi pobierających | `grep -rn -i "user-agent" --include=*.py gra` | tylko `narzedzia/mapa/pobierz_osm.py:31`: „geokoder-skrypt/1.0” (bez danych osobowych). `zrzuty.py` i `balans/obciazenie.py` łączą się tylko z własnym serwerem | ✓ |
-| 11 | Notki prawne w instrukcji | `INSTRUKCJA.md`, „Prawo za mechanikami” | 7 notek, każda z odnośnikiem; odsetki, lichwa, rok szkolny i CEIDG/sanepid sprawdzone w wyszukiwarce 24.11; PIP, staż i ZUS (numery artykułów z pamięci, bez numerów Dz.U.) **do sprawdzenia przez prawnika** | ! |
+| 11 | Notki prawne w instrukcji | `INSTRUKCJA.md`, „Prawo za mechanikami” | 7 notek sprawdzonych w źródłach 24.11 (lista notka → źródło w raporcie wątku `watek-prawo.md`); do rozmowy z prawnikiem | ✓ |
 | 12 | Stopki z odnośnikiem do `/zrodla` | `grep -n "zrodla" gra/panel_gracza/templates/panel_gracza/*.html` | start, gra, „Jak grać”; `/zrodla` odsyła do „Jak grać” i „Nagrań w radiu” | ✓ |
 | 13 | Klub (kasyno) w instrukcji MG | `grep -n "Ukryty klub" gra/INSTRUKCJA.md` | jest w części „Dla mistrza gry” (jak go zablokować) | ✓ |
 

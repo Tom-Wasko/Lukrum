@@ -331,24 +331,34 @@ stanowisku (najpierw kasa, potem kuchnia). Licznik jest w Moim kebabie (biurko).
 ### Prawo za mechanikami: krótkie notki
 
 To informacja do lekcji, a nie porada prawna. Gra upraszcza przepisy do poziomu zajęć, a liczby w grze (progi, kary, długość stażu)
-są założeniami autora, nie cytatami z ustaw. Teksty ustaw: [ISAP](https://isap.sejm.gov.pl/).
+są założeniami autora, nie cytatami z ustaw. Odnośniki prowadzą do tekstów przepisów i stron urzędowych (wykaz: [ISAP](https://isap.sejm.gov.pl/)).
 
 - **Kontrola PIP.** Państwowa Inspekcja Pracy sprawdza, czy umowa odpowiada sposobowi pracy (art. 22 § 1 Kodeksu pracy).
-  Zatrudnianie na zlecenie „jak na etat” może skończyć się grzywną (art. 281 Kodeksu pracy). Próg 30 godzin, 4 tygodnie i kara
-  2 000 zł to uproszczenie z gry. Źródło: [pip.gov.pl](https://www.pip.gov.pl/), [Kodeks pracy w ISAP](https://isap.sejm.gov.pl/).
-- **Staż z urzędu pracy.** Staż organizuje urząd pracy dla osoby bezrobotnej na podstawie ustawy o promocji zatrudnienia
-  i instytucjach rynku pracy. Pracodawca nie płaci wynagrodzenia, bo osoba na stażu dostaje stypendium z urzędu. W prawdziwym
-  życiu staż trwa miesiącami, a w grze 6 tygodni. Źródło: [praca.gov.pl](https://www.praca.gov.pl/), ustawa w ISAP.
-- **ZUS od zlecenia i student do 26 lat.** Od umowy zlecenia co do zasady płaci się składki na ubezpieczenia społeczne.
-  Uczeń albo student do ukończenia 26 lat jest z nich zwolniony, a jego zarobki ze zlecenia są też wolne od podatku
-  dochodowego (ustawa o systemie ubezpieczeń społecznych, ustawa o PIT). Źródło: [zus.pl](https://www.zus.pl/), ustawy w ISAP.
-- **Odsetki ustawowe i maksymalne.** Odsetki ustawowe ustala Rada Ministrów, a umowa nie może ustalić więcej niż
-  dwukrotność odsetek ustawowych w skali roku (odsetki maksymalne, art. 359 Kodeksu cywilnego). Od 5 marca 2026 r. odsetki
-  ustawowe wynoszą 7,25% w skali roku, więc maksymalne 14,5% (obwieszczenie:
-  [Monitor Polski 2026 poz. 368](https://eli.gov.pl/eli/MP/2026/368/ogl/pol/pdf)). Oprocentowanie w grze jest fikcyjne.
-- **Lichwa.** Wykorzystanie przymusowego położenia drugiej osoby przy umowie o rażąco niekorzystnych warunkach jest
-  przestępstwem (art. 304 Kodeksu karnego), a od 2020 r. ten artykuł obejmuje też zawyżone koszty pozaodsetkowe i odsetki.
-  To dobry kontekst dla kantoru „U Harpagona”. Źródło: Kodeks karny w [ISAP](https://isap.sejm.gov.pl/).
+  Kto w warunkach, w których powinna być umowa o pracę, zawiera umowę cywilnoprawną, popełnia wykroczenie zagrożone
+  grzywną od 1 000 do 30 000 zł (art. 281 pkt 1 Kodeksu pracy). Próg 30 godzin, 4 tygodnie, szansa 5% i kara 2 000 zł
+  to uproszczenia z gry. Źródło: [art. 281 KP](https://lexlege.pl/kp/art-281/), [pip.gov.pl](https://www.pip.gov.pl/).
+- **Staż z urzędu pracy.** Staż u pracodawcy organizuje starosta (urząd pracy) dla osoby bezrobotnej. Osoba na stażu nie
+  dostaje pensji od pracodawcy, tylko stypendium z urzędu. Zasady stażu są w ustawie z 20 marca 2025 r. o rynku pracy
+  i służbach zatrudnienia (od 1 czerwca 2025 r. zastąpiła dawną ustawę o promocji zatrudnienia); 6 tygodni w grze to
+  uproszczenie. Źródło: [Dz.U. 2025 poz. 620](https://eli.gov.pl/eli/DU/2025/620),
+  [rozporządzenie o stażach, Dz.U. 2025 poz. 1536](https://api.sejm.gov.pl/eli/acts/DU/2025/1536/text.pdf).
+- **ZUS od zlecenia i student do 26 lat.** Od umowy zlecenia co do zasady płaci się składki emerytalną i rentową
+  (art. 6 ustawy o systemie ubezpieczeń społecznych). Uczeń albo student do ukończenia 26 lat jest z tego obowiązku
+  zwolniony, ale nie wtedy, gdy zlecenie dostaje od własnego pracodawcy (taka umowa liczy się jak umowa o pracę).
+  Przychody ze zlecenia do 26. roku życia są też zwolnione z podatku dochodowego do rocznego limitu 85 528 zł (art. 21 ust. 1
+  pkt 148 ustawy o PIT, „zerowy PIT dla młodych”). Źródło:
+  [Zielona Linia (gov.pl): czy za studenta płaci się ZUS](https://zielonalinia.gov.pl/czy-za-studenta-placi-sie-zus/),
+  [objaśnienia podatkowe MF o uldze dla młodych](https://www.podatki.gov.pl/media/5974/objaśnienia-podatkowe-ulga-dla-młodych-14-kwietnia-2020-r.pdf).
+- **Odsetki ustawowe i maksymalne.** Maksymalna wysokość odsetek wynikających z umowy nie może w skali roku przekraczać
+  dwukrotności odsetek ustawowych (odsetki maksymalne, art. 359 § 2¹ Kodeksu cywilnego); jeśli umowa ustala więcej,
+  należą się odsetki maksymalne (§ 2²). Od 5 marca 2026 r. odsetki ustawowe za korzystanie z kapitału wynoszą 7,25%
+  w skali roku, więc maksymalne 14,5% (obwieszczenie:
+  [Monitor Polski 2026 poz. 368](https://eli.gov.pl/eli/MP/2026/368/ogl/pol/pdf); tekst art. 359:
+  [Kodeks cywilny](https://lexlege.pl/kc/art-359/)). Oprocentowanie w grze jest fikcyjne.
+- **Lichwa.** Przestępstwem jest zawarcie umowy, w której świadczenie jest rażąco niewspółmierne do świadczenia
+  wzajemnego, przez wykorzystanie przymusowego położenia drugiej osoby (art. 304 § 1 Kodeksu karnego, „wyzysk
+  kontrahenta”). Paragrafy 2 i 3 tego artykułu dotyczą żądania nadmiernych kosztów pozaodsetkowych i odsetek przy
+  pożyczce. To dobry kontekst dla kantoru „U Harpagona”. Źródło: [art. 304 KK](https://lexlege.pl/kk/art-304/).
 - **CEIDG i sanepid.** Jednoosobową firmę zgłasza się do CEIDG (wniosek CEIDG-1 jest też zgłoszeniem do ZUS, GUS i urzędu
   skarbowego). Lokal z jedzeniem zgłasza się dodatkowo do sanepidu, czyli Państwowej Inspekcji Sanitarnej, przed rozpoczęciem
   działalności. Źródło: [biznes.gov.pl](https://www.biznes.gov.pl/), [gov.pl/web/psse](https://www.gov.pl/web/psse).
