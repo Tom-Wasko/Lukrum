@@ -6,9 +6,9 @@ Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej 
 majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ## W toku
+- Z4 · seria `wnetrza`: osobne wnętrze dla każdego żetonu (projekt Fable 17.11, makiety w `_archiwum/fable-17.11/fable-wnetrza/`), PRL w holach, krytyka i poprawki wybrane przez szefa; majster: wnętrza wyglądają źle; podpisy na makietach przed wdrożeniem (wyko 04/wnetrza) Przegląd 24.11 gotowy (`wiedza/analizy/przeglad-wnetrz.md`, 15 poprawek P1–P15); szef wybrał A, B, C; teraz wątek A (wyko 04/nakladka), potem B i C.
 
 ## Następnie
-- Z4 · seria `wnetrza`: osobne wnętrze dla każdego żetonu (projekt Fable 17.11, makiety w `_archiwum/fable-17.11/fable-wnetrza/`), PRL w holach, krytyka i poprawki wybrane przez szefa; majster: wnętrza wyglądają źle; podpisy na makietach przed wdrożeniem (wyko 04/wnetrza) Przegląd 24.11 gotowy (`wiedza/analizy/przeglad-wnetrz.md`, 15 poprawek P1–P15); czeka na wybór szefa.
 Podróż 04-wyglad-i-dzwiek (start 24.11):
 
 ## Zrobione w tej podróży
