@@ -22,7 +22,7 @@ Decyzje szefa (23.11, okienko) – do `Decyzje.md`:
 ## Kryteria sukcesu
 - [x] Spis wszystkich okien gry (scena → punkt → ekran → rama → stan) w `wiedza/analizy/spis-okien.md`
 - [x] Wzór na 3 oknach zaakceptowany przez szefa (strona przed/po)
-- [ ] Każde okno ze spisu: zawartość w stylu swojej ramy, w spisie „zgodne” + zrzut
+- [x] Każde okno ze spisu: zawartość w stylu swojej ramy, w spisie „zgodne” + zrzut
 - [ ] 3 palety × jasny/ciemny działają, wysoka ≥ 7:1, stan nie samym kolorem
 - [ ] Krótkie dźwięki i gwar każdego miejsca; ⚙ wyciszanie; MG wycisza klasę; strona nagrań z licencjami
 - [ ] Radio: ikona obok kaski działa, odbiornik PRL, gwar cichnie przy radiu
