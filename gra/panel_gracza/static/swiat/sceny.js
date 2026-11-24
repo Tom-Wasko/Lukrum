@@ -3,6 +3,7 @@
 // Układ wnętrza kebaba pochodzi z podglądu 4 (narzedzia/grafiki/), reszta scen jest rysowana tu z prostych kształtów
 // w kolorach palety (motywy/zmienne.css) – żadnych kolorów na sztywno.
 import { esc } from "../zakladki/wspolne.js";
+import { kluczDymka, widziany } from "./nakladka.js";
 
 let ROZM = {};
 export const ustawRozmiary = (r) => { ROZM = r || {}; };
@@ -120,21 +121,34 @@ export function scenaKebabu(d) {
   dodaj("zaplecze", 1096, 136, 118, 246); dodaj("stoliki", 36, 474, 228, 132);
   if (lada[0] && P.pracownik) h += hot({ ...P.pracownik, etykieta: `${lada[0].imie}: lada` }, 742, 204, 66, 74);
   if (kuchnia[0] && P.pracownik) h += hot({ ...P.pracownik, etykieta: `${kuchnia[0].imie}: kuchnia` }, 866, 196, 68, 100);
-  h += osobyHtml(osoby);
-  return { s, h, opis: `Wnętrze kebaba: lada, rożen, tablica z menu${osoby.length ? ", goście przy ladzie" : ""}.` };
+  h += osobyHtml(osoby, d.runda);
+  return { s, h, dymki: listaDymkowKebabu(osoby, d.runda), opis: `Wnętrze kebaba: lada, rożen, tablica z menu${osoby.length ? ", goście przy ladzie" : ""}.` };
 }
 
 const RODZAJ_KROTKO = { cena_smak: "opinia", plotki: "plotka", propozycje: "propozycja", wos: "WOS", wujek: "wujek" };
-function osobyHtml(osoby) {
+// Dymek jest „nowy”, dopóki nie został otwarty: list od wujka i niezałatwiona propozycja (reszta mówi tak samo co tydzień).
+const nowyDymek = (o, runda) => !!o.d && (o.d.rodzaj === "wujek" || (o.d.klik === "propozycja" && !o.d.wybrana)) && !widziany(kluczDymka(runda, "kebab", o.nazwa));
+/** Lista „Kto tu co mówi” pod sceną (telefon): te same dymki co przy postaciach; klikalne (propozycja, WOS) otwierają kartę jak postać. */
+function listaDymkowKebabu(osoby, runda) {
+  const w = osoby.filter((o) => o.d);
+  if (!w.length) return "";
+  return `<section class="sw-dymki" aria-label="Kto co mówi"><h2 class="sw-co">Kto tu co mówi</h2><ul>${w.map((o) => {
+    const klik = o.d.klik === "wos" ? "Kliknij: jak to jest z prawem?" : o.d.klik === "propozycja" ? (o.d.wybrana ? "Kliknij: zobacz odpowiedź" : "Kliknij: odpowiedz na propozycję") : "";
+    const tresc = `<b>${esc(o.nazwa)}${nowyDymek(o, runda) ? ` <i class="wn-nowe">nowe</i>` : ""}</b><span>${esc(o.d.tekst)}</span>${klik ? `<i class="stan">${klik}</i>` : ""}`;
+    return klik ? `<li><button type="button" data-akcja="sw-osoba" data-nr="${o.nr}">${tresc}</button></li>` : `<li><div>${tresc}</div></li>`;
+  }).join("")}</ul></section>`;
+}
+function osobyHtml(osoby, runda) {
   return osoby.map((o) => {
     const d = o.d;
     if (!d) return "";
     const klik = d.klik === "wos" ? "Kliknij: jak to jest z prawem?" : d.klik === "propozycja" ? (d.wybrana ? "Kliknij: zobacz odpowiedź" : "Kliknij: odpowiedz na propozycję") : "";
     const znak = d.klik === "propozycja" ? "!" : d.klik === "wos" ? "§" : ZNAK_DYMKU;
     const strona = o.cx < 180 ? " w-prawo" : o.cx > 1040 ? " w-lewo" : "";
-    return `<button class="osoba" ${klik ? `data-akcja="sw-osoba" data-nr="${o.nr}"` : ""} style="${pos(o.cx - 46, o.stopy - 238, 92, 232)}"
-      aria-label="${esc(o.nazwa)} mówi: ${esc(d.tekst)}${klik ? ` ${klik}` : ""}">
-      <span class="znak${klik && !d.wybrana ? " wazny" : ""}" aria-hidden="true">${znak}</span>
+    const nowy = nowyDymek(o, runda), klucz = esc(kluczDymka(runda, "kebab", o.nazwa));
+    return `<button type="button" class="osoba${nowy ? " nowy" : ""}" ${klik ? `data-akcja="sw-osoba" data-nr="${o.nr}"` : `data-akcja="sw-dymek" data-klucz="${klucz}" aria-expanded="false"`} style="${pos(o.cx - 46, o.stopy - 238, 92, 232)}"
+      aria-label="${esc(o.nazwa)} mówi${nowy ? " (nowe)" : ""}: ${esc(d.tekst)}${klik ? ` ${klik}` : ""}">
+      <span class="znak${klik && !d.wybrana ? " wazny" : ""}" aria-hidden="true">${znak}${nowy ? `<b class="wn-nowe">nowe</b>` : ""}</span>
       <span class="dymek r-${d.rodzaj}${strona}" aria-hidden="true"><span class="kto"><span>${esc(o.nazwa)}</span><span class="rodzaj">${RODZAJ_KROTKO[d.rodzaj] || ""}</span></span>${esc(d.tekst)}${klik ? `<span class="kliknij">${klik}</span>` : ""}</span></button>`;
   }).join("");
 }

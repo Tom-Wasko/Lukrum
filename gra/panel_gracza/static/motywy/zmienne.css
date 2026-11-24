@@ -78,6 +78,7 @@
   --tekstura: none;
 
   --g-karta: #ffffff;
+  --g-metal2: #3a4240;   /* biały napis na metalu (kiosk, drzwi, szyldy) ≥ 7:1 */
   --g-sciana: #f2f2f2; --g-sciana2: #d6d6d6; --g-podloga: #e0e0e0; --g-podloga2: #bdbdbd; --g-tablica: #000000;
 }
 [data-paleta="wysoka"][data-tryb="ciemny"] {
@@ -86,6 +87,7 @@
   --ognisko: 4px solid var(--akcent);
 
   --g-karta: #000000;
+  --g-metal2: #3a4240;
   --g-sciana: #1a1a1a; --g-sciana2: #333333; --g-podloga: #262626; --g-podloga2: #404040; --g-tablica: #000000;
 }
 

@@ -6,6 +6,7 @@ import { esc, okno, toast, zamknijOkno } from "../zakladki/wspolne.js";
 import { stylEkranu } from "../pulpit/karty-style.js";
 import { wybierzPozycje } from "../pulpit/uklady.js";
 import { R, ustawWyglad } from "./rysunek.js";
+import { kluczDymka, oznaczWidziany, rozlozSzyldy, ulozDymek, widziany } from "./nakladka.js";
 import { SCENY } from "./sceny/index.js";
 import { filtrAgencji } from "../zakladki/marketing.js";
 import { dostawcaSceny, otworzAuto, otworzSklep } from "../zakladki/dostawcy.js";
@@ -80,13 +81,15 @@ export function zbudujScene(c, def, nazwaWidoku, punkty) {
     return `<button class="wn-pkt${o.klasa ? ` ${o.klasa}` : ""}${o.cichy ? " cichy" : ""}" data-akcja="sw-wn" data-i="${i}" data-gdzie="${esc(o.gdzie)}" style="${pos(p.x, p.y, p.w, p.h)}"
       aria-label="${esc(opisAria)}"><span class="wn-met" aria-hidden="true">${zn}${esc(o.et)}${ogon}</span></button>`;
   }).join("");
-  const osoby = lista(w.osoby, R).map((o) => {
-    const sk = o.s || 1;
-    return `<button type="button" class="wn-osoba${o.stale ? " stale" : ""}${o.powitanie ? " powitanie" : ""}${o.strona ? ` w-${o.strona}` : ""}"
-      style="${pos(o.x - 46 * sk, o.stopy - 238 * sk, 92 * sk, (o.h || 232) * sk)}" aria-label="${esc(o.imie)} mówi: ${esc(o.tekst)}"><span class="wn-znak" aria-hidden="true">${o.znak || "…"}</span>
+  const gadajacy = lista(w.osoby, R);
+  const osoby = gadajacy.map((o, i) => {
+    const sk = o.s || 1, nowy = !!o.nowy && !widziany(kluczDymka(c.v.runda, def.id, o.imie));
+    return `<button type="button" class="wn-osoba${nowy ? " nowy" : ""}${o.strona ? ` w-${o.strona}` : ""}" data-akcja="sw-dymek" data-klucz="${esc(kluczDymka(c.v.runda, def.id, o.imie))}"
+      style="${pos(o.x - 46 * sk, o.stopy - 238 * sk, 92 * sk, (o.h || 232) * sk)}" aria-expanded="false" aria-label="${esc(o.imie)} mówi${nowy ? " (nowe)" : ""}: ${esc(o.tekst)}"><span class="wn-znak" aria-hidden="true">${o.znak || "…"}${nowy ? `<b class="wn-nowe">nowe</b>` : ""}</span>
       <span class="wn-dymek" aria-hidden="true"><span class="wn-kto">${esc(o.imie)}</span>${esc(o.tekst)}</span></button>`;
   }).join("");
-  return { s, h: pkt + osoby, opis: w.opis || w.tytul };
+  const dymki = gadajacy.map((o) => ({ imie: o.imie, tekst: o.tekst, nowy: !!o.nowy && !widziany(kluczDymka(c.v.runda, def.id, o.imie)) }));
+  return { s, h: pkt + osoby, opis: w.opis || w.tytul, dymki: listaDymkow(dymki) };
 }
 
 /** Pozycje listy „Co tu zrobisz” pod sceną (dla czytników i wąskich ekranów): te same punkty, z opisem z makiety bez liczb „na niby”. */
@@ -95,6 +98,74 @@ export function listaPunktow(punkty) {
     <b>${esc(o.p.nazwa || o.et)}</b><span>${esc(opisPunktu(o.p))}</span>${o.stan ? `<i class="stan ${o.klasa === "zamkniete" ? "szary" : ""}">${esc(o.stan)}</i>` : ""}</button></li>`).join("")}</ul>`;
 }
 const opisPunktu = (p) => (p.odsyla ? goly(p.odsyla.tekst) : p.wejscie ? "Wejście do środka." : goly(p.teczka?.wstep));
+
+// --- nakładka: dymki zwinięte, szyldy bez nachodzenia (podróż 04/nakladka; logika układu: nakladka.js) ---------------------------------
+
+/** Lista dymków pod sceną (telefon ≤ 600 px: na rysunku nie ma ani punktów, ani dymków). osoby: [{ imie, tekst, nowy, nr?, klik? }] */
+export function listaDymkow(osoby) {
+  if (!osoby.length) return "";
+  return `<section class="sw-dymki" aria-label="Kto co mówi"><h2 class="sw-co">Kto tu co mówi</h2><ul>${osoby.map((o) => {
+    const tresc = `<b>${esc(o.imie)}${o.nowy ? ` <i class="wn-nowe">nowe</i>` : ""}</b><span>${esc(o.tekst)}</span>${o.klik ? `<i class="stan">${esc(o.klik)}</i>` : ""}`;
+    return o.klik ? `<li><button type="button" data-akcja="sw-osoba" data-nr="${o.nr}">${tresc}</button></li>` : `<li><div>${tresc}</div></li>`;
+  }).join("")}</ul></section>`;
+}
+
+const rel = (el, B) => { const r = el.getBoundingClientRect(); return { x: r.left - B.left, y: r.top - B.top, w: r.width, h: r.height }; };
+const widoczny = (r) => r.w > 0 && r.h > 0;
+
+/** Zamyka otwarte dymki (jeden naraz). Zwraca, czy coś było otwarte. */
+export function zamknijDymki(sc = document) {
+  let bylo = false;
+  for (const o of sc.querySelectorAll(".wn-osoba.otwarty, .osoba.otwarty")) { o.classList.remove("otwarty"); o.setAttribute("aria-expanded", "false"); bylo = true; }
+  return bylo;
+}
+
+/** Klik w postać: otwiera jej dymek (reszta się zamyka), drugi klik zamyka. Dymek ustawia się tam, gdzie jest miejsce. */
+export function przelaczDymek(el) {
+  const sc = el.closest(".sw-scena"), byl = el.classList.contains("otwarty");
+  zamknijDymki(sc || document);
+  if (byl || !sc) return;
+  el.classList.add("otwarty"); el.setAttribute("aria-expanded", "true");
+  if (el.dataset.klucz) oznaczWidziany(el.dataset.klucz);
+  el.classList.remove("nowy"); el.querySelectorAll(".wn-nowe").forEach((n) => n.remove());
+  const B = sc.getBoundingClientRect(), d = el.querySelector(".wn-dymek, .dymek"), os = rel(el, B);
+  const przeszkody = [...sc.querySelectorAll(".wn-pkt")].flatMap((p) => [rel(p, B), ...[p.querySelector(".wn-met")].filter(Boolean).map((m) => rel(m, B))]).filter(widoczny);
+  const u = ulozDymek(os, { w: d.offsetWidth, h: d.offsetHeight }, przeszkody, { w: B.width, h: B.height });
+  Object.assign(d.style, { left: `${(u.x - os.x - el.clientLeft).toFixed(1)}px`, top: `${(u.y - os.y - el.clientTop).toFixed(1)}px`, right: "auto", bottom: "auto", margin: "0", transform: "none" });
+  d.dataset.strona = u.strona;
+}
+
+/** Układa szyldy punktów na gotowej scenie (po wstawieniu do DOM i przy zmianie rozmiaru). Na telefonie punktów na rysunku nie ma (CSS), więc nic się nie dzieje. */
+let obserwator = null;
+export function ulozNakladke() {
+  obserwator?.disconnect(); obserwator = null;
+  const sc = document.querySelector(".sw-scena");
+  if (!sc || !sc.querySelector(".wn-pkt")) return;
+  const uloz = () => {
+    const B = sc.getBoundingClientRect();
+    if (!B.width) return;
+    const pkt = [...sc.querySelectorAll(".wn-pkt")].map((el) => ({ el, met: el.querySelector(".wn-met"), rect: rel(el, B) })).filter((p) => p.met && widoczny(p.rect));
+    if (!pkt.length) return;
+    const wynik = rozlozSzyldy(pkt.map((p, i) => ({ id: i, rect: p.rect, szyld: { w: p.met.offsetWidth, h: p.met.offsetHeight }, gdzie: p.el.dataset.gdzie })),
+      { w: B.width, h: B.height }, [...sc.querySelectorAll(".wn-osoba")].map((o) => rel(o, B)).filter(widoczny));
+    for (const w of wynik) {
+      const p = pkt[w.id];
+      Object.assign(p.met.style, { left: `${(w.x - p.rect.x - p.el.clientLeft).toFixed(1)}px`, top: `${(w.y - p.rect.y - p.el.clientTop).toFixed(1)}px`, right: "auto", bottom: "auto", transform: "none" });
+    }
+  };
+  uloz();
+  if (typeof ResizeObserver === "function") {
+    let ramka = 0;
+    obserwator = new ResizeObserver(() => { cancelAnimationFrame(ramka); ramka = requestAnimationFrame(uloz); });
+    obserwator.observe(sc);
+  }
+}
+
+// Esc zamyka najpierw otwarty dymek (a dopiero kolejny Esc wraca na mapę); w oknie nad sceną Esc należy do okna
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape" || document.querySelector(".zaslona")) return;
+  if (zamknijDymki()) { e.preventDefault(); e.stopImmediatePropagation(); }
+}, true);
 
 // --- kliknięcie punktu ------------------------------------------------------------------------------------------------------------
 /** Przewija ekran do firmy (po przejściu z drzwi banku, sklepu itd.). */

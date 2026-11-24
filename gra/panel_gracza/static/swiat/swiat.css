@@ -126,6 +126,27 @@
 .sw-okruszek { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; cursor: pointer; }
 .sw-wskazany { outline: 3px solid var(--akcent); outline-offset: 4px; border-radius: 4px; }
 
+/* kapsułki „Wróć / Mapa” zawsze w jednej linii (podróż 04/nakladka, P13) */
+.sw-wroty { display: inline-flex; flex-wrap: nowrap; align-items: center; gap: 6px; flex: none; }
+.sw-wroty .sw-wroc, .sw-wroty .wn-wroc-wyzej { white-space: nowrap; margin-right: 0; }
+
+/* lista „Kto tu co mówi”: tylko na telefonie, gdzie dymków na rysunku nie ma */
+.sw-dymki { display: none; gap: 6px; }
+.sw-dymki ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.sw-dymki li { background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 6px; display: grid; }
+.sw-dymki li > button { all: unset; box-sizing: border-box; cursor: pointer; }
+.sw-dymki li > button:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+.sw-dymki li > div, .sw-dymki li > button { display: grid; gap: 2px; padding: 7px 11px 8px; text-align: left; }
+.sw-dymki b { font-family: var(--font-szyld); font-weight: 500; font-size: 15px; letter-spacing: .03em; }
+.sw-dymki span { font-size: 14px; }
+.sw-dymki .stan { font-style: normal; justify-self: start; font-family: var(--font-szyld); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; background: var(--akcent); color: var(--papier); padding: 0 6px; border-radius: 3px; }
+.sw-dymki .wn-nowe { font-style: normal; margin-left: .4em; font-size: 12px; background: var(--akcent); color: var(--papier); border-radius: 3px; padding: 0 5px; letter-spacing: .05em; text-transform: uppercase; }
+@media (max-width: 600px) {
+  .sw-dymki { display: grid; }
+  .sw-gora { gap: 6px 10px; }
+  .sw-wroty .sw-wroc { padding: 3px 8px; font-size: 13px; }
+}
+
 @media (max-width: 640px) {
   .sw-scena .hot .podpis, .sw-scena .hot .stan { display: none; }
   .sw-gora h1 { font-size: 18px; }
