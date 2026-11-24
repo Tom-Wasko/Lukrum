@@ -13,7 +13,7 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/wzor | Z49 | scalony ae06cae (wzór przyjęty) |
 | 04/dzwieki | Z11 | scalony do `podroz-04` (4 nagrania gotowe, 6 czeka na Commons; 976 passed) |
 | 04/okna | Z49 | scalony do `podroz-04` 43f80fc (55 okien zgodne, 965 passed); galeria dla szefa |
-| 04/radio | Z50 | kontynuacja 04/dzwieki, na koniec |
+| 04/radio | Z50 | w toku (kontynuacja wyko dzwieki, c8c0b414) |
 
 ## Czeka na szefa
 - Przejrzeć galerię okien (Z49): https://claude.ai/artifact/PRwXig2fz7q7vVaqF1JxUf ; potem scalenie `podroz-04` do `main`. (Z19 odłożone do powrotu kolegi)

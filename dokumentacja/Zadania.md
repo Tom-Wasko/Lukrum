@@ -6,11 +6,11 @@ Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej 
 majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ## W toku
-- Z11 · dźwięk: lekkie dźwięki domyślnie (dzwonek, skwierczenie, gwar, stempel), łatwe wyciszenie, MG wycisza klasę; bez muzyki z syntezatora; plus odgłosy tła zależne od miejsca (CC0), domyślnie dźwięki tak / tło nie (wyko 04/dzwieki)
+- Z50 · radio: ikona radia obok kaski (dzisiejszy przycisk nic nie robi), wysuwany retro odbiornik ze zmianą stacji na nim, gwar cichnie przy radiu (wyko 04/radio)
+- Z11 · dźwięk: lekkie dźwięki domyślnie (dzwonek, skwierczenie, gwar, stempel), łatwe wyciszenie, MG wycisza klasę; bez muzyki z syntezatora; plus odgłosy tła zależne od miejsca (CC0), domyślnie dźwięki tak / tło nie (scalone do `podroz-04`; 6 nagrań czeka na Commons)
 
 ## Następnie
 Podróż 04-wyglad-i-dzwiek (start 24.11):
-- Z50 · radio: ikona radia obok kaski (dzisiejszy przycisk nic nie robi), wysuwany retro odbiornik ze zmianą stacji na nim, gwar cichnie przy radiu
 - Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie (reszta: propozycje w `wiedza/analizy/przeglad-wygladu-23-11.md`)
 
 ## Zrobione w tej podróży
