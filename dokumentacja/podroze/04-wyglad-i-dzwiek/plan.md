@@ -27,7 +27,7 @@ Decyzje szefa (23.11, okienko) – do `Decyzje.md`:
 - [ ] Krótkie dźwięki i gwar każdego miejsca; ⚙ wyciszanie; MG wycisza klasę; strona nagrań z licencjami
 - [x] Radio: ikona obok kaski działa, odbiornik PRL, gwar cichnie przy radiu
 - [x] Z6: rzadkie ekrany (ciemny, wysoka) i okna na telefonie bez usterek kontrastu i rozmiaru
-- [ ] Z47: kreator /mg/ losuje uczniów do drużyn, kartki z hasłami po drużynach
+- [x] Z47: kreator /mg/ losuje uczniów do drużyn, kartki z hasłami po drużynach
 - [x] Pełne testy zielone, `ruff`, `node --check`, `silnik.dane sprawdz` czyste
 
 ## Wątki

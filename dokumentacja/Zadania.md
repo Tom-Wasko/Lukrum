@@ -6,7 +6,6 @@ Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej 
 majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ## W toku
-- Z47 · kreator /mg/: „Rozlosuj uczniów po drużynach”, kartki z hasłami w podziale na drużyny, przyciski kroków przypięte do dołu (1366×768) (wyko 04/kreator)
 - Z11 · dźwięk: lekkie dźwięki domyślnie (dzwonek, skwierczenie, gwar, stempel), łatwe wyciszenie, MG wycisza klasę; bez muzyki z syntezatora; plus odgłosy tła zależne od miejsca (CC0), domyślnie dźwięki tak / tło nie (scalone do `podroz-04`; 6 nagrań czeka na Commons)
 
 ## Następnie
@@ -16,6 +15,7 @@ Podróż 04-wyglad-i-dzwiek (start 24.11):
 - Z49 · zawartość wszystkich okien w stylu ramy danego okna (teczka, paragon, list, okienko urzędu…); spis okien, wzór na 3 oknach do akceptacji (04/wzor + 04/okna, gałąź `podroz-04`)
 - Z50 · radio: ikona radia obok kaski (dzisiejszy przycisk nic nie robi), wysuwany retro odbiornik ze zmianą stacji na nim, gwar cichnie przy radiu (04/radio, gałąź `podroz-04`)
 - Z6 · wygląd: przegląd rzadkich ekranów w trybie ciemnym i w wysokiej widoczności; pełny przegląd na telefonie (reszta: propozycje w `wiedza/analizy/przeglad-wygladu-23-11.md`) (04/kontrast, gałąź `podroz-04`)
+- Z47 · kreator /mg/: „Rozlosuj uczniów po drużynach”, kartki z hasłami w podziale na drużyny, przyciski kroków przypięte do dołu (1366×768) (04/kreator, gałąź `podroz-04`)
 
 ## Zaplanowane
 
