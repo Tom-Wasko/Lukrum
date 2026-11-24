@@ -12,8 +12,7 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 |---|---|---|
 | 04/wzor | Z49 | scalony ae06cae (wzór przyjęty) |
 | 04/dzwieki | Z11 | w toku (wyko c8c0b414) |
-| 04/okna-a | Z49 | w toku (kontynuacja wyko wzoru, 2a866f76) |
-| 04/okna-b | Z49 | w toku (nowy wyko) |
+| 04/okna | Z49 | w toku (kontynuacja wyko wzoru, 2a866f76; s1 z zatrzymanego okna-b do wciągnięcia) |
 | 04/radio | Z50 | kontynuacja 04/dzwieki, na koniec |
 
 ## Czeka na szefa

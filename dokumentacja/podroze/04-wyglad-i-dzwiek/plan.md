@@ -33,8 +33,7 @@ Decyzje szefa (23.11, okienko) – do `Decyzje.md`:
 |---|---|---|---|---|
 | 1 | `04/wzor` | wyko | spis okien + katalog ram (jakie rekwizyty już są); język wyglądu zawartości dla każdej ramy (teczka akt: maszynopis, pieczątki, rubryki; paragon; list; tablica; okienko urzędu); wzór na Sokole Oko (`konkurencja.js`), bank (`banki.js`), kadry (`hr.js`); zrzuty przed/po | nowy `swiat/okna.css` (style zawartości per rama, tylko zmienne), 3 moduły zakładek, spis |
 | – | Archi | sam | strona przed/po dla szefa (artifact), pytanie o akceptację; lista nagrań CC0 (Wikimedia Commons, Freesound CC0) z linkami, licencją, rozmiarem → okienko do szefa | – |
-| 2 (po akceptacji) | `04/okna-a` | wyko (kontynuacja `04/wzor`) | finanse i urzędy: `finanse, podatki, ubezpieczenia, urzad, formy, wlasciciel, przejecia, gielda, kasyno, harpagon` + ich sceny | swoje moduły + blok w `okna.css` |
-| 2 | `04/okna-b` | wyko | firma i ludzie: `klienci, konkurencja (reszta), oferta, sprzedaz, swiezosc, marketing, rynek_pracy, lekcje, kalendarz, lokal, lokale, lokal_wybor, inwestycje, dekor, dostawcy, handel, ogolne, czas, funkcje, final` | swoje moduły + blok w `okna.css` |
+| 2 (po akceptacji) | `04/okna` | jeden wyko (kontynuacja `04/wzor`; szef 24.11: bez podziału) | wszystkie pozostałe okna ze spisu: ramy s1, s2, s4, „inne”, przegląd s3, okna podrzędne | `swiat/okna.css`, `swiat/okna-teczka.css`, moduły zakładek |
 | 2 (równolegle) | `04/dzwieki` | wyko | `pulpit/dzwiek.js` (krótkie dźwięki + gwar miejsca, Web Audio, głośności), `dane/dzwieki.yaml` (miejsce → odgłos, zdarzenie → dźwięk, źródło/licencja), ⚙ Dźwięk, MG wycisza klasę, strona nagrań; pliki do `static/dzwieki/` dopiero po akceptacji listy (pobieram ja) | nowe pliki + `pulpit.js` (⚙), `panel_mg` (wycisz) |
 | 3 (koniec) | `04/radio` | kontynuacja `04/dzwieki` | **bez osobnego okna radia**: ikona radia obok kaski; kliknięcie wysuwa retro odbiornik, na którym bezpośrednio zmienia się stacje (gałka/skala) i głośność; naprawa dzisiejszego przycisku (nic nie robi); ściszanie gwaru przy radiu | `pulpit/radio.js`, `pulpit.js`, `pulpit.css` (blok radia) |
 
@@ -48,7 +47,7 @@ kolorem, zero wzmianek o innych grach, mechanika bez zmian (tylko wygląd), teks
 1. `git fetch`, przegląd `origin/maciex`; `plan.md` podróży 04, Z49/Z50 w `Zadania.md`, decyzje szefa w `Decyzje.md`, Stan.
 2. Brief i start `04/wzor` oraz `04/dzwieki` (kod bez plików nagrań).
 3. Ja: lista nagrań CC0 → okienko do szefa → po zgodzie pobranie do `static/dzwieki/` (spis licencji w danych).
-4. Wzór gotowy → strona przed/po → akceptacja szefa → `04/okna-a` (kontynuacja wyko wzoru) i `04/okna-b`.
+4. Wzór gotowy → strona przed/po → akceptacja szefa → `04/okna` (jeden wyko, kontynuacja wzoru).
 5. Po `04/dzwieki`: kontynuacja `04/radio`.
 6. Na koniec: galeria wszystkich okien dla szefa, pełne testy, scalenie, propozycja zamknięcia.
 
