@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-24 13:08
+Archi żył: 2026-11-24 13:45
 Tryb: nadzorowany od 13:04 (wcześniej autonomiczny 07:22–13:04, scalenia w `podroz-04`).
 
 ## Podróż
@@ -16,6 +16,9 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/radio | Z50 | scalony do `podroz-04` 6b01743 (979 passed) |
 | 04/kontrast | Z6 | scalony do `podroz-04` 1f9d5f9 (979 passed) |
 | 04/kreator | Z47 | scalony do `podroz-04` 60d8ea9 (995 passed) |
+| 04/wujek | Z13 | w toku |
+| 04/prawo | Z23 (reszta) | w toku |
+| 04/wnetrza | Z4 (przegląd) | w toku |
 
 ## Czeka na szefa
 - 6 nagrań (kasa, ulica, kuchnia, sklep, biuro, szkoła): szef pobiera w przeglądarce do `gra/panel_gracza/static/dzwieki/`, potem Archi wpisuje licencje.
