@@ -27,7 +27,7 @@ export default function (R) {
         + R.swietlowka(130, 26, 170) + R.swietlowka(530, 26, 170) + R.swietlowka(930, 26, 170);
       s += `<rect class="k" x="12" y="60" width="130" height="186" fill="var(--g-sciana2)" opacity=".5"/>` + R.okno(40, 86, 150, 130, { zaluzje: true })
         + R.szyld(660, 52, 470, 56, "„Lajk i Spółka”", { tlo: "var(--akcent)", tekst: "var(--g-biel)", r: 22 }) + R.t(660, 132, "reklama w internecie", 15, { f: "tekst", bez: true, op: .85 })
-        + R.tabliczka(1120, 70, 150, "Piętro 4", "Biurowiec przy Zana · ul. Zana 39");
+        + R.tabliczka(1112, 70, 176, "Piętro 4", "Biurowiec przy Zana · ul. Zana 39");
       s += `<g transform="translate(${TX} ${TY}) scale(${K})">` + pokoj() + `</g>`;
       s += (zamkniety() ? "" : R.osoba("bywalec-jozio", 400, 600, 0.85, "zwykla")) + R.paprotka(70, 580, 0.9);
       return s;
