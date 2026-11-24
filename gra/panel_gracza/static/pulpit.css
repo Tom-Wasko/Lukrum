@@ -131,7 +131,9 @@ body.pulpit { min-height: 100vh; }
 .pulpit label.pole small { color: var(--szary); font-weight: 500; }
 .pulpit details.wiecej { margin-top: 16px; }
 .pulpit details.wiecej summary { cursor: pointer; font-weight: 700; color: var(--pom-ciemny); margin-bottom: 12px; }
-.nawigacja-kroku { display: flex; gap: 10px; margin-top: 18px; align-items: center; }
+/* przyciski kroków przypięte do dołu okna: Wstecz / Dalej / Utwórz widać bez przewijania */
+.nawigacja-kroku { display: flex; gap: 10px; margin-top: 18px; align-items: center; position: sticky; bottom: 0; z-index: 5;
+  background: var(--tlo, var(--biel)); padding: 12px 0; border-top: 1px solid var(--linia); }
 .nawigacja-kroku .dalej { margin-left: auto; }
 .nawigacja-kroku [hidden] { display: none; }
 .lista-druzyn { display: flex; flex-direction: column; gap: 8px; max-width: 560px; }

@@ -4,6 +4,7 @@
 import { esc, godzina, info, inicjaly, licz, nazwaRundy, okno, RANKING_DLACZEGO, skrotRundy, tabela, termin, toast, ustawKalendarz, wsk, wyczyscWykresy,
   kolorFirmy, twardeSpacje, wykres, zamknijOkno, zl }
   from "../zakladki/wspolne.js";
+import { kartkiHtml } from "./kartki.js";
 
 const ID = JSON.parse(document.getElementById("id-gry").textContent);
 const URL_GRY = `/api/gry/${encodeURIComponent(ID)}`;
@@ -342,8 +343,9 @@ function pokazHasla(konta, tytul) {
   const wiersze = konta.map((k) => [esc(k.nazwa), `<b>${esc(k.login)}</b>`, `<code class="haslo">${esc(k.haslo)}</code>`]);
   okno(tytul, `<p>Przekaż uczniom login i hasło (adres: <b>${esc(location.origin)}/konta/login/</b>).
       Po zamknięciu tego okna haseł nie da się odczytać – można tylko nadać nowe.</p>
-    ${tabela(null, ["Uczeń", "Login", "Hasło"], wiersze, { klasy: ["l", "l", "l"] })}`,
-  { przyciski: `<button class="btn jasny" data-akcja="drukuj">Drukuj</button><button class="btn pom" data-akcja="zamknij-okno">Gotowe</button>` });
+    <div class="tylko-ekran">${tabela(null, ["Uczeń", "Login", "Hasło"], wiersze, { klasy: ["l", "l", "l"] })}</div>
+    <div class="tylko-druk">${kartkiHtml([{ tytul, osoby: konta }], `${location.origin}/konta/login/`)}</div>`,
+  { przyciski: `<button class="btn jasny" data-akcja="drukuj" title="Drukuje kartki do wycięcia">Drukuj kartki</button><button class="btn pom" data-akcja="zamknij-okno">Gotowe</button>` });
 }
 
 // --- Wyniki: ranking i wykresy -----------------------------------------------------------------------------------

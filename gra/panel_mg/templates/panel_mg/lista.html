@@ -3,6 +3,7 @@
 {% block podpis %}Mistrz gry{% endblock %}
 {% block konto %}<a href="/jak-grac">Instrukcja</a><a href="/">Moje gry</a>{% include "konta/_konto.html" with bez_mg=True %}{% endblock %}
 {% block tresc %}
+<link rel="stylesheet" href="{{ statyczne }}mg/kartki.css">
 <div class="pm">
   <nav class="pm-bok" id="bok" aria-label="Pulpit mistrza gry">
     <a data-widok="pulpit" href="#pulpit"><span data-ikona="dashboard"></span>Pulpit</a>
@@ -51,11 +52,23 @@
 
       <div class="panel-kroku" data-krok="2" hidden>
         <h2>Drużyny i boty</h2>
-        <p class="opis-kroku">Drużyny to firmy uczniów (1–4 osoby). Uczniów dopisujesz po utworzeniu gry, w zakładce „Drużyny” gry –
-          tam też założysz im konta. Boty to firmy komputerowe – konkurencja dla drużyn na tym samym rynku.</p>
+        <p class="opis-kroku">Drużyny to firmy uczniów (1–4 osoby). Uczniów możesz rozlosować po drużynach już tutaj (albo dopisać
+          po utworzeniu gry, w zakładce „Drużyny” gry). Boty to firmy komputerowe – konkurencja dla drużyn na tym samym rynku.</p>
         <div class="podsekcja">Drużyny uczniów</div>
         <div class="lista-druzyn" id="druzyny"></div>
         <p><button class="btn jasny" type="button" id="dodaj">+ Drużyna</button></p>
+        <div class="podsekcja">Uczniowie <span class="podpowiedz">(nieobowiązkowo)</span></div>
+        <div class="losowanie">
+          <label class="pole">Wklej imiona i nazwiska, po jednym w linii
+            <textarea id="uczniowie-wklej" rows="5" placeholder="Ala Nowak&#10;Jan Kowalski"></textarea>
+            <small>Konta (login i hasło) założą się przy tworzeniu gry.</small></label>
+          <details id="konta-istniejace" hidden><summary>Dodaj istniejące konta uczniów <span id="konta-licznik"></span></summary>
+            <div id="konta-lista"></div></details>
+          <p class="przyciski-losowania"><button class="btn pom" type="button" id="losuj">Rozlosuj uczniów po drużynach</button>
+            <button class="btn jasny" type="button" id="wyczysc-podzial" hidden>Wyczyść podział</button></p>
+          <p class="blad-formularza" id="blad-losowania" hidden></p>
+          <div id="rozklad" aria-live="polite"></div>
+        </div>
         <div class="podsekcja"><label><input type="checkbox" id="boty" checked> Boty na rynku</label></div>
         <div class="boty-p" id="lista-botow"></div>
       </div>
@@ -103,6 +116,14 @@
         <button class="btn pom dalej" type="button" id="dalej">Dalej</button>
         <button class="btn pom duzy dalej" type="button" id="utworz" hidden>Utwórz grę</button>
       </div>
+    </section>
+
+    <section id="w-gotowe" data-widok="gotowe" hidden>
+      <div class="glowa-p bez-druku"><div><h1>Gra utworzona</h1>
+        <p class="pod-tytul">Wydrukuj kartki, potnij je i rozdaj uczniom. Haseł nie da się odczytać po opuszczeniu tej strony – można tylko nadać nowe.</p></div></div>
+      <div class="panel-kroku"><p class="bez-druku przyciski-losowania"><button class="btn jasny" type="button" id="drukuj-kartki">Drukuj kartki</button>
+        <a class="btn pom" id="do-gry" href="#">Przejdź do gry</a></p>
+        <div id="kartki-wynik"></div></div>
     </section>
 
     <section id="w-wczytaj" data-widok="wczytaj" hidden>

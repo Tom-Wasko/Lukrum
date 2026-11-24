@@ -10,6 +10,7 @@ from functools import wraps
 from urllib.parse import quote
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
@@ -149,6 +150,7 @@ def api_gry(request):
         return blad("Nazwa firmy nie może zaczynać się od podkreślenia.")
     if not any(b is None for _, b in firmy):
         return blad("Co najmniej jedna firma musi być prowadzona przez gracza.")
+    sklad = _sklad_z_zapytania(d, {n for n, b in firmy if b is None})
     ziarno = d.get("ziarno")
     kapital = d.get("kapital_startowy")
     if kapital not in (None, ""):
@@ -183,7 +185,79 @@ def api_gry(request):
         )
     except ValueError as e:
         return blad(str(e))
-    return odpowiedz({"id": serwisy.utworz(g)})
+    id_ = serwisy.utworz(g)
+    return odpowiedz({"id": id_, "sklad": _zaloz_sklad(id_, sklad)})
+
+
+def _sklad_z_zapytania(d: dict, ludzie: set[str]) -> dict[str, list[dict]]:
+    """Skład drużyn z kreatora: {firma: [{"login": …} | {"imie": …}]}. Sprawdza wszystko przed
+    założeniem gry (istniejące konta, brak powtórzeń, 1–4 osoby, nowe konta w limicie)."""
+    surowy = d.get("sklad") or {}
+    if not isinstance(surowy, dict):
+        raise BladZapytania("Skład drużyn ma zły format.")
+    sklad, loginy, nowych = {}, set(), 0
+    Konto = get_user_model()
+    for firma, osoby in surowy.items():
+        if firma not in ludzie:
+            raise BladZapytania(f"Skład: „{firma}” nie jest drużyną uczniów w tej grze.")
+        if not isinstance(osoby, list):
+            raise BladZapytania("Skład drużyn ma zły format.")
+        if len(osoby) > druzyny.MAKS_CZLONKOW:
+            raise BladZapytania(f"Drużyna {firma}: najwyżej {druzyny.MAKS_CZLONKOW} osoby.")
+        wpisy = []
+        for o in osoby:
+            login, imie = str(o.get("login") or "").strip(), str(o.get("imie") or "").strip()
+            if login:
+                user = Konto.objects.filter(username=login).first()
+                if user is None or jest_mg(user):
+                    raise BladZapytania(f"Nie ma konta ucznia {login}.")
+                if login in loginy:
+                    raise BladZapytania(f"{login} jest w dwóch drużynach.")
+                loginy.add(login)
+                wpisy.append({"login": login})
+            elif imie:
+                nowych += 1
+                wpisy.append({"imie": imie})
+        if wpisy:
+            sklad[firma] = wpisy
+    if nowych > MAKS_NOWYCH_KONT:
+        raise BladZapytania(f"Najwyżej {MAKS_NOWYCH_KONT} nowych kont naraz.")
+    return sklad
+
+
+def _zaloz_sklad(id_: str, sklad: dict[str, list[dict]]) -> dict[str, list[dict]]:
+    """Zakłada brakujące konta (losowe hasła, widoczne tylko tu) i dopisuje uczniów do drużyn.
+    Zwraca {firma: [{nazwa, login, haslo}]}; „haslo”: None – konto istniało już wcześniej."""
+    wynik: dict[str, list[dict]] = {}
+    Konto = get_user_model()
+    for firma, osoby in sklad.items():
+        for o in osoby:
+            if "login" in o:
+                user, haslo = Konto.objects.get(username=o["login"]), None
+            else:
+                try:
+                    user, haslo = druzyny.nowe_konto(druzyny.wolny_login(o["imie"]), o["imie"])
+                except ValidationError as e:
+                    raise BladZapytania(f"{o['imie']}: {' '.join(e.messages)}") from e
+            druzyny.dodaj(id_, firma, user.username)
+            wynik.setdefault(firma, []).append({**druzyny.osoba(user), "haslo": haslo})
+    return wynik
+
+
+@require_POST
+@api
+@tylko_mg
+def api_losowanie(request):
+    """{"osoby": n, "druzyny": k} – losowy podział n uczniów na k drużyn po równo:
+    {"podzial": [[numery osób], …]} (po jednej liście na drużynę)."""
+    d = cialo(request)
+    try:
+        podzial = druzyny.rozlosuj(int(d.get("osoby", 0)), int(d.get("druzyny", 0)))
+    except (TypeError, ValueError) as e:
+        raise BladZapytania("Podaj liczbę uczniów i drużyn.") from e
+    except ValidationError as e:
+        raise BladZapytania(" ".join(e.messages)) from e
+    return odpowiedz({"podzial": podzial})
 
 
 @require_GET

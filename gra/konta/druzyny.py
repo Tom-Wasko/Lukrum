@@ -5,6 +5,7 @@ from __future__ import annotations
 import base64
 import binascii
 import hashlib
+import random
 import re
 import secrets
 
@@ -234,3 +235,26 @@ def wolny_login(imie: str) -> str:
         n += 1
         login = f"{baza}{n}"
     return login
+
+
+def rozlosuj(liczba_osob: int, liczba_druzyn: int) -> list[list[int]]:
+    """Losowy podział osób (numery 0…n-1) na drużyny po równo: liczebności różnią się najwyżej o 1.
+    Zwraca listę numerów osób dla każdej drużyny. Błąd: `ValidationError` (zbyt wielu uczniów)."""
+    if liczba_druzyn < 1:
+        raise ValidationError("Dodaj co najmniej jedną drużynę.")
+    if liczba_osob > liczba_druzyn * MAKS_CZLONKOW:
+        raise ValidationError(
+            f"Za dużo uczniów ({liczba_osob}) na {liczba_druzyn} drużyn: w drużynie najwyżej "
+            f"{MAKS_CZLONKOW} osoby. Dodaj drużyny."
+        )
+    los = random.SystemRandom()
+    osoby = list(range(liczba_osob))
+    los.shuffle(osoby)
+    rozmiary = [liczba_osob // liczba_druzyn + (1 if i < liczba_osob % liczba_druzyn else 0)
+                for i in range(liczba_druzyn)]
+    los.shuffle(rozmiary)   # dodatkowa osoba trafia do losowych drużyn
+    wynik, od = [], 0
+    for r in rozmiary:
+        wynik.append(sorted(osoby[od:od + r]))
+        od += r
+    return wynik

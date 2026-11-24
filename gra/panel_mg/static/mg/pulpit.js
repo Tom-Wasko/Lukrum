@@ -2,6 +2,7 @@
 // (Podstawy → Drużyny i boty → Funkcje gry → Sprawdź i utwórz) oraz wczytanie gry z pliku.
 import { esc } from "../zakladki/wspolne.js";
 import { ikona } from "../zakladki/ikony.js";
+import { kartkiHtml } from "./kartki.js";
 
 const U = JSON.parse(document.getElementById("ustawienia").textContent);
 const csrf = () => document.cookie.match(/(?:^|; )csrftoken=([^;]*)/)?.[1] ?? "";
@@ -21,7 +22,7 @@ document.querySelectorAll("[data-ikona]").forEach((el) => { el.outerHTML = ikona
 // --- widoki z menu (adres #pulpit / #nowa / #wczytaj) -------------------------------------------------------------
 function pokaz() {
   const w = (location.hash || "#pulpit").slice(1);
-  const widok = document.querySelector(`section[data-widok="${w}"]`) ? w : "pulpit";
+  const widok = document.querySelector(`section[data-widok="${w}"]`) && (w !== "gotowe" || $("kartki-wynik").innerHTML) ? w : "pulpit";
   document.querySelectorAll("section[data-widok]").forEach((s) => { s.hidden = s.dataset.widok !== widok; });
   document.querySelectorAll("#bok a[data-widok]").forEach((a) => a.classList.toggle("aktywna", a.dataset.widok === widok));
   if (widok === "pulpit") odswiez();
@@ -124,13 +125,14 @@ function druzyna(nazwa) {
   w.className = "wiersz-d";
   w.innerHTML = `<span class="nr"></span><input type="text" value="${esc(nazwa)}" maxlength="60" aria-label="Nazwa drużyny">
     <button class="btn jasny maly" type="button">Usuń</button>`;
-  w.querySelector("button").onclick = () => { w.remove(); numery(); };
+  w.querySelector("button").onclick = () => { w.remove(); numery(); uniewaznijPodzial(); };
   lista.appendChild(w);
   numery();
 }
 const numery = () => [...lista.children].forEach((w, i) => { w.querySelector(".nr").textContent = `${i + 1}.`; });
 ["Drużyna 1", "Drużyna 2", "Drużyna 3", "Drużyna 4"].forEach(druzyna);
-$("dodaj").onclick = () => druzyna(`Drużyna ${lista.children.length + 1}`);
+$("dodaj").onclick = () => { druzyna(`Drużyna ${lista.children.length + 1}`); uniewaznijPodzial(); };
+lista.addEventListener("input", () => rysujRozklad());
 
 const lb = $("lista-botow");
 const poziomy = Object.entries(U.poziomy || {});
@@ -139,6 +141,84 @@ const wyborPoziomu = () => (poziomy.length ? `<select class="poziom" title="Pozi
 lb.innerHTML = Object.entries(U.strategie).map(([k, n]) =>
   `<label><input type="checkbox" value="${esc(k)}" checked><span class="nazwa-bota">${esc(n)}</span>${wyborPoziomu()}</label>`).join("");
 $("boty").onchange = () => lb.classList.toggle("wylaczone", !$("boty").checked);
+
+// --- kreator: krok 2 – uczniowie: wklejone imiona i istniejące konta, losowanie po drużynach, ręczne przenoszenie -------
+const MAKS = U.maks_w_druzynie || 4;
+const KONTA = U.uczniowie || [];
+let podzial = null;   // [{ w: wiersz drużyny, osoby: [{ nazwa, login? }] }] – pusty, dopóki mistrz gry nie losuje
+const nazwaD = (w) => w.querySelector("input").value.trim();
+const bladLosowania = (t) => { $("blad-losowania").textContent = t; $("blad-losowania").hidden = !t; };
+
+if (KONTA.length) {
+  $("konta-istniejace").hidden = false;
+  $("konta-licznik").textContent = `(${KONTA.length})`;
+  $("konta-lista").innerHTML = KONTA.map((k) => `<label><input type="checkbox" value="${esc(k.login)}" data-nazwa="${esc(k.nazwa)}">
+    <span>${esc(k.nazwa)}${k.nazwa !== k.login ? ` <small>(${esc(k.login)})</small>` : ""}</span></label>`).join("");
+}
+
+function pula() {
+  const wklejone = $("uczniowie-wklej").value.split("\n").map((x) => x.trim().replace(/\s+/g, " ")).filter(Boolean).map((nazwa) => ({ nazwa }));
+  const konta = [...$("konta-lista").querySelectorAll("input:checked")].map((i) => ({ nazwa: i.dataset.nazwa, login: i.value }));
+  return [...konta, ...wklejone];
+}
+
+function uniewaznijPodzial() {   // zmiana listy drużyn – podział przestaje pasować
+  if (podzial) bladLosowania("Zmieniono drużyny – rozlosuj uczniów jeszcze raz.");
+  podzial = null;
+  rysujRozklad();
+}
+
+function rysujRozklad() {
+  $("wyczysc-podzial").hidden = !podzial;
+  $("losuj").textContent = podzial ? "Losuj ponownie" : "Rozlosuj uczniów po drużynach";
+  if (!podzial) { $("rozklad").innerHTML = ""; return; }
+  const nazwy = podzial.map((g) => nazwaD(g.w) || "(bez nazwy)");
+  const razem = podzial.reduce((t, g) => t + g.osoby.length, 0);
+  const osoba = (o, i, j) => `<li><span>${esc(o.nazwa)}${o.login ? ` <small>(konto ${esc(o.login)})</small>` : ""}</span>
+    <select data-g="${i}" data-o="${j}" aria-label="Przenieś: ${esc(o.nazwa)}"><option value="">przenieś…</option>${nazwy.map((n, k) =>
+    (k === i ? "" : `<option value="${k}">${esc(n)}</option>`)).join("")}</select></li>`;
+  $("rozklad").innerHTML = `<p class="podpowiedz">Rozlosowano ${razem} ${odmiana(razem, "osobę", "osoby", "osób")} do ${podzial.length}
+    ${odmiana(podzial.length, "drużyny", "drużyn", "drużyn")}. Możesz kogoś przenieść (w drużynie najwyżej ${MAKS} osoby).</p>
+    <div class="rozklad-siatka">${podzial.map((g, i) => `<div class="rozklad-druzyna"><h4><span>${esc(nazwy[i])}</span>
+      <span class="podpowiedz">${g.osoby.length} ${odmiana(g.osoby.length, "osoba", "osoby", "osób")}</span></h4>
+      ${g.osoby.length ? `<ul>${g.osoby.map((o, j) => osoba(o, i, j)).join("")}</ul>` : `<p class="pusto">nikogo</p>`}</div>`).join("")}</div>`;
+}
+
+$("losuj").onclick = async () => {
+  bladLosowania("");
+  const osoby = pula(), wiersze = [...lista.children];
+  if (!osoby.length) return bladLosowania("Wklej imiona i nazwiska albo zaznacz istniejące konta.");
+  if (wiersze.some((w) => !nazwaD(w))) return bladLosowania("Każda drużyna musi mieć nazwę.");
+  $("losuj").disabled = true;
+  try {
+    const r = await fetch("/api/losowanie", { method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() },
+      body: JSON.stringify({ osoby: osoby.length, druzyny: wiersze.length }) });
+    const j = await r.json();
+    if (!r.ok) return bladLosowania(j.blad);
+    podzial = wiersze.map((w, i) => ({ w, osoby: j.podzial[i].map((k) => osoby[k]) }));
+    rysujRozklad();
+  } finally { $("losuj").disabled = false; }
+};
+$("wyczysc-podzial").onclick = () => { podzial = null; bladLosowania(""); rysujRozklad(); };
+$("rozklad").addEventListener("change", (e) => {
+  const sel = e.target.closest("select[data-g]");
+  if (!sel || sel.value === "") return;
+  const cel = podzial[+sel.value];
+  if (cel.osoby.length >= MAKS) { bladLosowania(`Drużyna ${nazwaD(cel.w)} jest pełna (${MAKS} osoby).`); return rysujRozklad(); }
+  bladLosowania("");
+  cel.osoby.push(podzial[+sel.dataset.g].osoby.splice(+sel.dataset.o, 1)[0]);
+  rysujRozklad();
+});
+
+function sklad() {
+  if (!podzial) return undefined;
+  const wynik = {};
+  for (const g of podzial) {
+    const n = nazwaD(g.w);
+    if (n && g.osoby.length) wynik[n] = g.osoby.map((o) => (o.login ? { login: o.login } : { imie: o.nazwa }));
+  }
+  return wynik;
+}
 
 // --- kreator: krok 3 (funkcje gry) – tabela z przełącznikiem trzech stanów i gotowe zestawy -----------------------
 const stany = Object.fromEntries(FUNKCJE.map((f) => [f.klucz, "odkryta"]));
@@ -216,6 +296,9 @@ function podsumowanie() {
     pole("Rundy", `${esc($("rundy").value)} ${esc(U.mnoga)}, od: ${esc(U.pierwsza)}`),
     pole("Kapitał startowy", `${esc(Number($("kapital").value || U.kapital).toLocaleString("pl-PL"))}&nbsp;zł`),
     pole(`Drużyny (${ludzie.length})`, ludzie.map((x, i) => `<span class="kropka" style="background:${PALETA[i % PALETA.length]};width:9px;height:9px"></span> ${esc(x.nazwa)}`).join("<br>") || "–"),
+    pole("Uczniowie", podzial ? podzial.map((g) => `${esc(nazwaD(g.w) || "(bez nazwy)")}: ${g.osoby.length}`).join("<br>")
+      + (podzial.some((g) => g.osoby.some((o) => !o.login)) ? "<br>nowe konta założą się przy utworzeniu gry" : "")
+      : "dopiszesz w panelu gry"),
     pole(`Boty (${boty.length})`, boty.map((x) => `${esc(x.nazwa)}${x.poziom ? ` – ${esc(U.poziomy[x.poziom] || x.poziom)}` : ""}`).join("<br>") || "bez botów"),
     pole("Funkcje gry", FUNKCJE.length ? `${zestaw ? `zestaw „${esc(zestaw.nazwa)}”` : "własny zestaw"}<br>odkryte: ${liczba("odkryta")}, zakryte: ${liczba("zakryta")}, `
       + `wyłączone: ${wylaczone.length}${wylaczone.length ? ` (${wylaczone.join(", ")})` : ""}` : "bez funkcji"),
@@ -238,18 +321,28 @@ for (const [id, k] of [["rundy-na-zywo", "rundy_na_zywo"], ["termin-dni", "termi
 }
 $("tryb").onchange = () => { $("tryb-lekcyjny").hidden = $("tryb").value !== "lekcyjny"; };
 
+$("drukuj-kartki").onclick = () => window.print();
+
 $("utworz").onclick = async () => {
   pokazBlad("");
+  if (podzial?.some((g) => g.osoby.length && !nazwaD(g.w))) return pokazBlad("Drużyna z uczniami nie ma nazwy – wpisz ją w kroku 2.");
   $("utworz").disabled = true;
   try {
     const r = await fetch("/api/gry", { method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify({
       nazwa: $("nazwa").value, liczba_rund: +$("rundy").value, kapital_startowy: $("kapital").value, ziarno: $("ziarno").value,
       ceny_dostawcow: "losowe", tryb_debetu: $("kredyt").value, auto_zamowienia: $("auto-zamowienia").checked,
       refleksja: $("refleksja").value, podpowiedzi: $("podpowiedzi").checked, firmy: firmy(),
-      funkcje: FUNKCJE.length ? stany : undefined, lekcje: lekcje(),
+      funkcje: FUNKCJE.length ? stany : undefined, lekcje: lekcje(), sklad: sklad(),
     }) });
     const j = await r.json();
     if (!r.ok) return pokazBlad(j.blad);
+    const grupy = Object.entries(j.sklad || {}).map(([tytul, osoby]) => ({ tytul, osoby }));
+    if (grupy.length) {   // hasła widać tylko teraz: kartki do wydruku, potem przejście do gry
+      $("kartki-wynik").innerHTML = kartkiHtml(grupy, `${location.origin}/konta/login/`);
+      $("do-gry").href = `/mg/gra/${encodeURIComponent(j.id)}`;
+      location.hash = "#gotowe";
+      return;
+    }
     location.href = `/mg/gra/${encodeURIComponent(j.id)}`;
   } finally { $("utworz").disabled = false; }
 };

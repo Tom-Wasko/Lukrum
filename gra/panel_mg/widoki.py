@@ -9,6 +9,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 
 from gry import lekcje, serwisy
 from gry.models import Gra
+from konta import druzyny
 from konta.role import jest_mg
 from silnik import funkcje as fn
 from silnik.dane import dane_domyslne
@@ -56,6 +57,8 @@ def lista(request):
         "pierwsza": dane.nazwa_rundy(1),
         "okres": dane.okres["mianownik"],
         "mnoga": dane.okres["mnoga"],
+        "uczniowie": druzyny.uczniowie(),   # istniejące konta do losowania w kroku drużyn
+        "maks_w_druzynie": druzyny.MAKS_CZLONKOW,
         "lekcje": lekcje.zakresy(),   # tryb lekcyjny: domyślne i zakresy z danych (katalog.yaml)
     }
     ustawienia.update(_funkcje_kreatora(dane))

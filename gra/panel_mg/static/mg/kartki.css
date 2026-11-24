@@ -1,0 +1,40 @@
+/* kartki z hasłami: na ekranie podgląd, na papierze (A4, czarno-biało) kartki do wycięcia */
+.kartki-grupa h3 { margin: 18px 0 8px; font-size: 15px; break-after: avoid; }
+.kartki-siatka { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.kartka { border: 2px dashed var(--szary); border-radius: 6px; padding: 10px 12px; break-inside: avoid; font-size: 13px; }
+.kartka::before { content: "✂"; float: right; color: var(--szary); font-size: 12px; }
+.kartka-uczen { font-weight: 800; font-size: 14px; margin-bottom: 6px; overflow-wrap: anywhere; }
+.kartka-wiersz { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; border-bottom: 1px solid var(--linia); }
+.kartka-wiersz span { color: var(--szary); }
+.kartka-wiersz code.haslo { font-size: 17px; font-weight: 800; letter-spacing: 2px; }
+.kartka-adres { margin-top: 6px; font-size: 11.5px; color: var(--szary); overflow-wrap: anywhere; }
+.tylko-druk { display: none; }
+
+/* losowanie uczniów w kreatorze (krok drużyn) */
+.losowanie { max-width: 760px; }
+.losowanie textarea { width: 100%; font: inherit; padding: 8px 10px; border: 1px solid var(--linia); border-radius: 8px; }
+.losowanie details { margin: 8px 0; }
+.losowanie #konta-lista { max-height: 180px; overflow-y: auto; border: 1px solid var(--linia); border-radius: 8px; padding: 6px 10px; margin-top: 6px; }
+.losowanie #konta-lista label { display: flex; gap: 8px; padding: 3px 0; }
+.przyciski-losowania { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.rozklad-siatka { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-top: 8px; }
+.rozklad-druzyna { border: 1px solid var(--linia); border-radius: 10px; padding: 10px 12px; }
+.rozklad-druzyna h4 { margin: 0 0 6px; font-size: 13.5px; display: flex; justify-content: space-between; gap: 8px; }
+.rozklad-druzyna ul { list-style: none; margin: 0; padding: 0; }
+.rozklad-druzyna li { display: flex; align-items: center; gap: 6px; padding: 3px 0; font-size: 13px; }
+.rozklad-druzyna li span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.rozklad-druzyna li select { font: inherit; font-size: 12px; max-width: 110px; }
+.rozklad-druzyna .pusto { color: var(--szary); font-size: 12.5px; }
+
+@media print {
+  .tylko-druk { display: block; }
+  .tylko-ekran, .bez-druku, .naglowek, .pm-bok { display: none !important; }
+  .pm { display: block; }
+  .pm-tresc { padding: 0; }
+  .pm-tresc > section[hidden] { display: none !important; }
+  .panel-kroku { box-shadow: none; padding: 0; }
+  .kartka, .kartka-wiersz, .kartka-wiersz span, .kartka-adres, .kartki-grupa h3 { color: #000 !important; border-color: #000 !important; }
+  .kartka { border-width: 1.5px; padding: 9px 11px; }
+  .kartki-siatka { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .kartki-grupa + .kartki-grupa { break-before: page; }
+}
