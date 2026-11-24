@@ -160,6 +160,7 @@ function klasyDodane(w) {
   else if (w.matches(".pz-lico")) zagraj("kartka_zeszytu");
 }
 function obserwuj() {
+  if (typeof MutationObserver === "undefined" || typeof Element === "undefined") return;   // np. test bez przeglądarki
   new MutationObserver((lista) => { for (const m of lista) for (const w of m.addedNodes) klasyDodane(w); })
     .observe(document.body, { childList: true, subtree: true });
 }

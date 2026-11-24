@@ -1,3 +1,5 @@
+opis: 'Krótkie dźwięki gry i odgłosy tła miejsc: pliki z autorem i licencją, zdarzenia, odgłosy miejsc, głośności domyślne. Tylko nastrój, bez wpływu na wynik.'
+zrodlo: 'Decyzje szefa 23.11.2026 (podróż 04, dźwięki); autor, źródło i licencja każdego nagrania w polach pliku.'
 # Dźwięki gry (podróż 04, wątek dzwieki; decyzje szefa 23.11.2026). Silnik gry tego pliku nie czyta.
 # Czyta go panel_gracza/dzwieki.py: /dzwieki.json dla panelu (static/pulpit/dzwiek.js) i strona /nagrania-w-radiu.
 # Zasady:
