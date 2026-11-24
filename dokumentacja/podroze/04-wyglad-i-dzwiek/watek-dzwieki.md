@@ -61,3 +61,10 @@ W worktree leży obcy, niezacommitowany plik `gra/panel_gracza/static/dzwieki/lo
 
 ### Propozycje
 - `04/radio`: wołać `lukrum.dzwiek.przycisz(true)`, gdy gra radio.
+
+### Dopisek 24.11.2026 (nagrania, scalenie, pełne testy)
+- `lokal.ogg` to nagranie od Archiego (szef zaakceptował listę), nie obcy plik. Pod kluczami w `dzwieki.yaml` są teraz 4 pliki `gotowe`: `dzwonek.flac` (CC0), `kartka.ogg`, `lokal.ogg`, `urzad.ogg` (domena publiczna), wszystkie z Wikimedia Commons. Sześć pozostałych (kasa, ulica, kuchnia, sklep, biuro, szkola) ma `oczekuje` = cisza; stempel bez nagrania.
+- **Autor, licencja i źródło pochodzą z listy podanej przez Archiego, nie z API Commons:** mam zakaz sieci, więc nie sprawdziłem `imageinfo extmetadata`. Archi powinien zweryfikować te cztery wpisy (dzwonek: qubodup/CC0; kartka: planish; lokal: stephan; urzad: ezwa).
+- Teczka (`otwarcie_okna`) gra szelest kartki; kasyno (`harpagon`) i parki/woda grają odgłos na 50 % (`glosnosc_miejsc`). Klucza `kuchnia` żadne miejsce nie używa (kuchnia to punkt w lokalu).
+- `git merge main` (04/wzor) bez konfliktów.
+- Dowody: `pytest -q` (pełne) → `976 passed in 366.75s`; `test_dzwieki.py` → `11 passed`; `ruff check .` → `All checks passed!`; `silnik.dane sprawdz` → `Dane w porządku`. `test_mistrz_gry_widzi_klub` nie wystąpił.

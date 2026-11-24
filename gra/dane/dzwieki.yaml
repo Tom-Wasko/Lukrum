@@ -30,10 +30,7 @@ pliki:
     rodzaj: krotki
     opis: kasa i monety przy zakupie
     plik: kasa.ogg
-    autor: ezwa
-    zrodlo: https://commons.wikimedia.org/wiki/File:Coins_dropped_in_metallic_moneybox_0.ogg
-    licencja: domena publiczna
-    status: gotowe
+    status: oczekuje
 
   stempel:
     rodzaj: krotki
@@ -63,28 +60,19 @@ pliki:
     rodzaj: tlo
     opis: szum miejskiej ulicy
     plik: ulica.ogg
-    autor: cori
-    zrodlo: https://commons.wikimedia.org/wiki/File:Sunday_in_the_city_street_noise1.ogg
-    licencja: domena publiczna
-    status: gotowe
+    status: oczekuje
 
   kuchnia:
     rodzaj: tlo
     opis: smażenie w kuchni i na zapleczu
     plik: kuchnia.ogg
-    autor: hugh
-    zrodlo: https://commons.wikimedia.org/wiki/File:Sauteing_leeks.ogg
-    licencja: domena publiczna
-    status: gotowe
+    status: oczekuje
 
   sklep:
     rodzaj: tlo
     opis: gwar sklepu i hali
     plik: sklep.ogg
-    autor: natalie
-    zrodlo: https://commons.wikimedia.org/wiki/File:Shopping_mall_less_crowded.ogg
-    licencja: domena publiczna
-    status: gotowe
+    status: oczekuje
 
   urzad:
     rodzaj: tlo
@@ -99,19 +87,13 @@ pliki:
     rodzaj: tlo
     opis: stukot klawiatury w biurze
     plik: biuro.ogg
-    autor: teto_yasha
-    zrodlo: https://commons.wikimedia.org/wiki/File:Typing_medium_speed.ogg
-    licencja: domena publiczna
-    status: gotowe
+    status: oczekuje
 
   szkola:
     rodzaj: tlo
     opis: gwar szkolnej stołówki
     plik: szkola.ogg
-    autor: aradlaw
-    zrodlo: https://commons.wikimedia.org/wiki/File:High_school_cafeteria.ogg
-    licencja: domena publiczna
-    status: gotowe
+    status: oczekuje
 
 # zdarzenie w grze → dźwięk krótki (lista łatwa do zmiany; „zdarzenia” podpina dzwiek.js)
 zdarzenia:

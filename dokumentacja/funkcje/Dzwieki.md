@@ -1,6 +1,6 @@
 # Dźwięki
 
-- **Stan:** kod w grze (podróż 04, wątek dzwieki, Z11, 24.11.2026); pliki nagrań czekają na akceptację listy przez szefa
+- **Stan:** kod w grze (podróż 04, wątek dzwieki, Z11, 24.11.2026); 4 z 10 nagrań gotowe (lokal, urząd, dzwonek, kartka; Wikimedia Commons), reszta czeka na pobranie
 - **Gdzie w grze:** ⚙ → Dźwięk (suwaki, „wycisz wszystko”), wejście do lokalu, paragon, list z decyzjami, zeszyt, teczki;
   panel mistrza gry `/mg/` (wyciszenie klasy); spis licencji: strona `/nagrania-w-radiu`
 
@@ -46,4 +46,5 @@ W LUKRUM drzwi kebaba dzwonią, kasa dzwoni, a każdy dźwięk ma wpisane źród
 Brak (dźwięki to tło miejsc, bez odniesienia do konkretnej lektury).
 
 ## Otwarte
-Lista nagrań do zaakceptowania przez szefa; nazwy plików w danych są robocze. Sprawy do decyzji: [Czeka na szefa](../Stan.md).
+Do pobrania: ulica, kuchnia, sklep, biuro, szkola, kasa (status `oczekuje` = cisza); stempel bez nagrania. Zdarzenie
+„otwarcie okna” gra ten sam szelest co kartka zeszytu. Kasyno i parki grają odgłos ciszej (`glosnosc_miejsc`). Sprawy do decyzji: [Czeka na szefa](../Stan.md).
