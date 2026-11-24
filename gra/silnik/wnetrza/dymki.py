@@ -19,10 +19,10 @@ import re
 
 from ..dane import Dane
 from ..losowosc import Strumien, strumien
-from .schematy import KTO_OGOLNIE, WUJEK
+from .schematy import KTO_OGOLNIE, OKAZJE, WUJEK
 
-# pierwszeństwo okazji, gdy kilka naraz (wujek mówi najwyżej raz na rundę)
-PIERWSZENSTWO_OKAZJI = ("ostatnia_runda", "pierwsza_strata", "rekord", "start")
+# pierwszeństwo okazji, gdy kilka naraz (wujek mówi najwyżej raz na rundę): kolejność `schematy.OKAZJE`
+PIERWSZENSTWO_OKAZJI = OKAZJE
 TEMAT_BEZ_WARUNKU = "runda"
 
 

@@ -32,6 +32,10 @@ Na liście plików śledzonych w `gra/` nie ma rastrowych obrazów (png, jpg) po
 | `polska/` | Library of Congress National Jukebox, Internet Archive | domena publiczna (Public Domain Mark 1.0 albo z mocy prawa, nagrania z lat 1907–1925) |
 | `lalka/` (3 rozdziały) | Fundacja Wolne Lektury, wolnelektury.pl | Licencja Wolnej Sztuki 1.3, wymaga podania autora, wykonawcy i licencji |
 
+## Dźwięki gry (`dzwieki/`, 4 pliki; spis w `gra/dane/dzwieki.yaml`)
+Autor, źródło i licencja każdego pliku w stanie „gotowe” są w `dzwieki.yaml` i na stronie `/nagrania-w-radiu#dzwieki`
+(CC0 albo domena publiczna, pilnuje test). Pliki w stanie „oczekuje” (7) nie mają jeszcze nagrań w repo.
+
 ## Dane i biblioteki zewnętrzne
 | Co | Źródło | Licencja | Podpis w grze |
 |---|---|---|---|

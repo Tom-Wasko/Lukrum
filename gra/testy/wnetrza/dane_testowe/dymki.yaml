@@ -30,6 +30,12 @@ dymki:
 - {rodzaj: cena_smak, kto: wujek, okazja: pierwsza_strata, tekst: 'WUJ-STRATA'}
 - {rodzaj: cena_smak, kto: wujek, okazja: rekord, tekst: 'WUJ-REKORD'}
 - {rodzaj: cena_smak, kto: wujek, okazja: ostatnia_runda, tekst: 'WUJ-KONIEC'}
+- {rodzaj: cena_smak, kto: wujek, okazja: koniec_polrocza, tekst: 'WUJ-POLROCZE'}
+- {rodzaj: cena_smak, kto: wujek, okazja: debet, tekst: 'WUJ-DEBET'}
+- {rodzaj: cena_smak, kto: wujek, okazja: kontrola_sanepidu, tekst: 'WUJ-SANEPID'}
+- {rodzaj: cena_smak, kto: wujek, okazja: pierwszy_kredyt, tekst: 'WUJ-KREDYT'}
+- {rodzaj: cena_smak, kto: wujek, okazja: pierwsza_filia, tekst: 'WUJ-FILIA'}
+- {rodzaj: cena_smak, kto: wujek, okazja: spadek_nastroju, tekst: 'WUJ-NASTROJ'}
 propozycje_zasady:
   co_ile_rund: {wartosc: 2, pewnosc: zalozenie, zrodlo: 'test'}
   od_rundy: {wartosc: 2, pewnosc: zalozenie, zrodlo: 'test'}

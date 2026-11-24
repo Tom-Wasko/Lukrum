@@ -1,6 +1,7 @@
 # Stan
-Archi żył: 2026-11-24 13:45
-Tryb: nadzorowany od 13:04 (wcześniej autonomiczny 07:22–13:04, scalenia w `podroz-04`).
+Archi żył: 2026-11-24 15:30
+Tryb: nadzorowany od 16:46
+Tempo: zwykły
 
 ## Podróż
 **04-wyglad-i-dzwiek**: plan zatwierdzony 23.11 wieczorem (`podroze/04-wyglad-i-dzwiek/plan.md`), **start 24.11 rano**
@@ -16,11 +17,14 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/radio | Z50 | scalony do `podroz-04` 6b01743 (979 passed) |
 | 04/kontrast | Z6 | scalony do `podroz-04` 1f9d5f9 (979 passed) |
 | 04/kreator | Z47 | scalony do `podroz-04` 60d8ea9 (995 passed) |
-| 04/wujek | Z13 | w toku |
-| 04/prawo | Z23 (reszta) | w toku |
-| 04/wnetrza | Z4 (przegląd) | w toku |
+| 04/wujek | Z13 | scalony do `podroz-04` (1007 passed) |
+| 04/prawo | Z23 (reszta) | scalony do `podroz-04` (995 passed; notki ze źródłami) |
+| 04/wnetrza | Z4 (przegląd) | scalony do `podroz-04` (52 sceny, 15 poprawek) |
 
 ## Czeka na szefa
+- **Z4: wybór poprawek wnętrz.** Galeria: https://claude.ai/artifact/NhXHYihS8koXJjejDtsHe1 (lista P1–P15, zrzuty). Rekomendacja: wątek A „nakładka” (P1, P3, P4, P11–P13; ok. 10–12 h).
+- Folder `_robocze/wnetrza/` (roboczy, poza gitem) został po wyko; usunąć ręcznie albo zgodzić się, żeby usunął Archi.
+- Notki prawne w INSTRUKCJI (04/prawo, rozdz. „Prawo za mechanikami”) sprawdzone w serwisach prawnych i gov.pl, nie w Dz.U.; pokazać prawnikowi przed pokazem.
 - **Przypomnieć szefowi po powrocie:** 6 nagrań (kasa, ulica, kuchnia, sklep, biuro, szkoła): szef pobiera w przeglądarce do `gra/panel_gracza/static/dzwieki/`, potem Archi wpisuje licencje.
 - Serwer gry na porcie 8784 (pid 25996, po wątku 04/kontrast) nadal działa: wyko nie mógł go zatrzymać (blokada), zatrzymaj ręcznie.
 
