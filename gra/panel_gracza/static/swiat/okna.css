@@ -150,3 +150,15 @@
 .szk.karta--s4 .podsumowanie.uwaga::before { content: "! "; font-weight: 700; }
 .szk.karta--s4 .podsumowanie.zly::before { content: "✕ "; font-weight: 700; }
 .szk.karta--s4 .kafel .kg { border-radius: 0; background: none; }
+
+/* === podróż 04/kontrast: na telefonie każdy dotykany element okna ma co najmniej 44 px ================================== */
+@media (max-width: 700px) {
+  .okno .og button.x, .okno .og .x { min-width: 44px; min-height: 44px; box-sizing: border-box; }
+  .szk .ost > button:not(.btn), .szk .ost > button.btn, .okno .pp-kop-wyslij .btn, .okno .teczka-tryb button, .okno .kafel .kd .btn,
+  .okno .par-kwota .btn { min-height: 44px; box-sizing: border-box; }
+  .okno .przelacznik a { display: inline-flex; align-items: center; min-height: 44px; box-sizing: border-box; }
+  .okno .par-dz input.krotkie { min-height: 44px; min-width: 44px; box-sizing: border-box; }
+  /* małe kółko „i” zostaje małe, ale rozszerzamy pole dotyku niewidzialną nakładką */
+  .okno .kolko-i { position: relative; }
+  .okno .kolko-i::after { content: ""; position: absolute; inset: -14px; }
+}

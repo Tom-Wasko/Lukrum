@@ -115,7 +115,7 @@ body.pz-otwarty .pp-zeszyt { visibility: hidden; }
 .pp-lista li { display: flex; gap: 8px; align-items: baseline; font: calc(17px * var(--skala-tekstu, 1))/28px var(--font-reka); }
 .pp-lp { flex: none; width: 1.4em; text-align: center; font-weight: 700; }
 .pp-lista li.ok { text-decoration: line-through; opacity: .7; }
-.pp-lista li.teraz { font-weight: 700; color: var(--g-rudy); }
+.pp-lista li.teraz { font-weight: 700; color: var(--g-czern); } /* podróż 04/kontrast: rudy dawał 4,0:1; krok „teraz” niesie ▶ i pogrubienie */
 .pp-zeszyt .sr, .pz .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* --- zeszyt na cały ekran (stan 3, krok 5): rozkładówka z grzbietem i szyciem, kartki w linię z marginesem i dziurkami, stos kartek po bokach,
