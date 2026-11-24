@@ -111,7 +111,9 @@ Esc albo ✕ zamyka teczkę). Każde miejsce ma własne, narysowane wnętrze: ba
 urząd wyglądają inaczej i poznaje się je po jednym charakterystycznym przedmiocie. Przy punkcie stoi etykieta z nazwą
 czynności (po najechaniu albo wejściu klawiszem Tab punkt się podświetla, a „!” ostrzega o błędach do poprawy). Etykieta
 z „➜” mówi, że sprawę załatwia się w innym miejscu, a przy zamkniętych punktach jest kłódka i numer tygodnia. Kto tu
-mówi, ten ma dymek (po najechaniu), a pod rysunkiem jest lista tych samych punktów dla czytników ekranu. Wejście do
+mówi, ten ma przy sobie ikonę „…”: kliknięcie otwiera dymek, ponowne kliknięcie albo Esc go chowa, a nowe
+wypowiedzi mają napis „nowe”. Pod rysunkiem jest lista tych samych punktów dla czytników ekranu. Na telefonie wnętrze jest paskiem na całą
+szerokość, a pod nim są listy „Kto tu co mówi” i „Co tu zrobisz”; menu gry przenosi się na dół ekranu. Wejście do
 banku albo biura rachunkowego prowadzi najpierw przez fasadę (Pierzeja bankowa, Kamienica rachmistrzów). Pora dnia za oknem i światło we wnętrzu zgadzają się z zegarem, tak jak na mapie: w dzień jest jasno, wieczorem zapalają się lampy, w nocy jest ciemno (napis w rogu podaje porę; tryb jasny i ciemny jej nie zmienia).
 
 Na mapie u góry po prawej jest **rząd ikon kategorii** (Jedzenie i zaopatrzenie, Finanse, Urzędy i prawo, Praca i ludzie,

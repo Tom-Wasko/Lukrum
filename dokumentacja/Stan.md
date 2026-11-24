@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-24 17:03
+Archi żył: 2026-11-24 18:20
 Tryb: autonomiczny od 17:03, budżet: do skończenia wątku 04/nakladka (Z4 A), koniec po scaleniu A do `podroz-04` i galerii przed/po. Scalenia do `podroz-04`.
 Tempo: zwykły
 
@@ -20,9 +20,10 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/wujek | Z13 | scalony do `podroz-04` (1007 passed) |
 | 04/prawo | Z23 (reszta) | scalony do `podroz-04` (995 passed; notki ze źródłami) |
 | 04/wnetrza | Z4 (przegląd) | scalony do `podroz-04` (52 sceny, 15 poprawek) |
-| 04/nakladka | Z4 A (P1, P3, P4, P11–P13) | w toku (wyko, port 8789); potem B i C jako kontynuacja |
+| 04/nakladka | Z4 A (P1, P3, P4, P11–P13) | scalony do `podroz-04` (448 passed swiat+wnetrza+aplikacja; pełne 1019 u wyko); B i C czekają na akceptację szefa |
 
 ## Czeka na szefa
+- **Z4 A do akceptacji** (galeria przed/po); po akceptacji ten sam wyko robi B (kebab, ciemna paleta), potem C. Do usunięcia ręcznie: `_robocze/nakladka/`, pusty `gra/_robocze`.
 - `podroz-04` scalona do `main` i wypchnięta 24.11 16:55 (1007 passed).
 - Notki prawne w INSTRUKCJI (04/prawo, rozdz. „Prawo za mechanikami”) sprawdzone w serwisach prawnych i gov.pl, nie w Dz.U.; pokazać prawnikowi przed pokazem.
 - Serwer gry na porcie 8784 (pid 25996, po wątku 04/kontrast) nadal działa: wyko nie mógł go zatrzymać (blokada), zatrzymaj ręcznie.
