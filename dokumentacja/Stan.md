@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-24 08:20
+Archi żył: 2026-11-24 10:35
 Tryb: autonomiczny od 07:22 24.11, budżet do 15:00 (nowe kroki do ok. 13:50), koniec najpóźniej 15:00. Scalenia do `podroz-04`.
 
 ## Podróż
@@ -14,9 +14,10 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/dzwieki | Z11 | scalony do `podroz-04` (4 nagrania gotowe, 6 czeka na Commons; 976 passed) |
 | 04/okna | Z49 | scalony do `podroz-04` 43f80fc (55 okien zgodne, 965 passed); galeria dla szefa |
 | 04/radio | Z50 | scalony do `podroz-04` 6b01743 (979 passed) |
-| 04/kontrast | Z6 | w toku (nowy wyko; dobrany z listy, bo wątki planu skończone) |
+| 04/kontrast | Z6 | scalony do `podroz-04` 1f9d5f9 (979 passed) |
 
 ## Czeka na szefa
+- Serwer gry na porcie 8784 (pid 25996, po wątku 04/kontrast) nadal działa: wyko nie mógł go zatrzymać (blokada), zatrzymaj ręcznie.
 - Przejrzeć galerię okien (Z49): https://claude.ai/artifact/PRwXig2fz7q7vVaqF1JxUf ; potem scalenie `podroz-04` do `main`. (Z19 odłożone do powrotu kolegi)
 
 ## Od Pomocnika
