@@ -20,8 +20,8 @@ Decyzje szefa (23.11, okienko) – do `Decyzje.md`:
   **Nie ma okna radia:** kliknięcie wysuwa retro radio, na nim bezpośrednio zmienia się stacje. Gdy radio gra, gwar cichnie.
 
 ## Kryteria sukcesu
-- [ ] Spis wszystkich okien gry (scena → punkt → ekran → rama → stan) w `wiedza/analizy/spis-okien.md`
-- [ ] Wzór na 3 oknach zaakceptowany przez szefa (strona przed/po)
+- [x] Spis wszystkich okien gry (scena → punkt → ekran → rama → stan) w `wiedza/analizy/spis-okien.md`
+- [x] Wzór na 3 oknach zaakceptowany przez szefa (strona przed/po)
 - [ ] Każde okno ze spisu: zawartość w stylu swojej ramy, w spisie „zgodne” + zrzut
 - [ ] 3 palety × jasny/ciemny działają, wysoka ≥ 7:1, stan nie samym kolorem
 - [ ] Krótkie dźwięki i gwar każdego miejsca; ⚙ wyciszanie; MG wycisza klasę; strona nagrań z licencjami

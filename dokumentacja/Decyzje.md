@@ -282,8 +282,11 @@ Wygląd tych elementów: [Wygląd](Wyglad.md). Kolejność prac: [Zadania](Zadan
   jawnego znaku PD (Great 78, „USA-Archives”) wchodzą z opisem podstawy domeny publicznej. Polskie pozycje z
   niepotwierdzonym autorem: lider sprawdza, niepotwierdzone odpadają.
 - **23.11.2026 (szef, okienko), przed testem na klasie:** test gry 07.12, 9:45–12:20/13:00, 3–4 drużyny. Zestaw funkcji ma się dać przełączać w /mg/ w tej samej grze (Z46). Serwera wieloprocesowego w `hostuj` nie robimy: LUKRUM stanie na serwerze szkoły (FTP; szef ustala z kolegą, Z19). Losowanie drużyn w kreatorze później (Z47). Zeszyt na telefonie: późna przyszłość (Z48). Tego samego dnia wieczorem: serwer szkoły (FTP, Z19) odłożony do powrotu kolegi.
+- 2026-11-24 (okienko) · Nagrania Z11 z Wikimedia Commons (CC0 / domena publiczna), pobrać: ulica (Sunday in the city street noise1), lokal (Restaurant ambience), kuchnia (Sauteing leeks), sklep (Shopping mall less crowded), urząd (Group discussion 1), biuro (Typing medium speed), szkoła (High school cafeteria), dzwonek (Bell-ring), kasa (Coins dropped in metallic moneybox 0), kartka (Turning a page); bank itp. cisza. Stempel: na razie cisza. Kasyno: gwar lokalu, ciszej.
+- 2026-11-24 (okienko) · Wzór okien 04/wzor zaakceptowany: „wszystkie są spoko”; reszta okien tym samym sposobem (każda rama swój język).
 
 ## Archiego
 - 2026-11-22 · Archiwum lokalne to `_archiwum/` (folder już istniał), nie `archiwum/`; jest w `.gitignore`.
 - 2026-11-22 · `gra/AGENTS.md` zostaje jako przewodnik po kodzie (dla narzędzi majstra), `CLAUDE.md` go importuje.
 - 2026-11-22 · Uwagi z gier testowych podzielone na 8 zadań tematycznych (Z29–Z36), a nie jedno, bo szef kazał je posortować według wagi.
+- 2026-11-24 · Podział reszty okien według ram, z rozłącznymi plikami: 04/okna-a = ramy s2 i s4 (`okna.css`) + okna podrzędne ich modułów; 04/okna-b = rama s1, ramy „inne” (sklep, auto, lokal), sprawdzenie s3 (nowy `okna-teczka.css`).
