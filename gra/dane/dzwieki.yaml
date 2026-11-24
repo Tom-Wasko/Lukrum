@@ -1,0 +1,143 @@
+opis: 'Krótkie dźwięki gry i odgłosy tła miejsc: pliki z autorem i licencją, zdarzenia, odgłosy miejsc, głośności domyślne. Tylko nastrój, bez wpływu na wynik.'
+zrodlo: 'Decyzje szefa 23.11.2026 (podróż 04, dźwięki); autor, źródło i licencja każdego nagrania w polach pliku.'
+# Dźwięki gry (podróż 04, wątek dzwieki; decyzje szefa 23.11.2026). Silnik gry tego pliku nie czyta.
+# Czyta go panel_gracza/dzwieki.py: /dzwieki.json dla panelu (static/pulpit/dzwiek.js) i strona /nagrania-w-radiu.
+# Zasady:
+#  - tło to tylko odgłosy (gwar, ulica, biuro); prawdziwa muzyka jest wyłącznie w radiu;
+#  - pliki leżą w panel_gracza/static/dzwieki/; brak pliku = cisza, bez błędu;
+#  - każdy plik w stanie „gotowe” ma autora, źródło i licencję: CC0 albo domena publiczna (pilnuje test);
+#  - pliki w stanie „oczekuje” czekają na akceptację listy nagrań przez szefa (nazwy plików są robocze).
+
+glosnosc_domyslna:      # 0–100, gracz zmienia w ⚙ → Dźwięk
+  krotkie: 40
+  tlo: 30
+wlaczone_domyslnie:     # krótkie dźwięki włączone (cicho), odgłosy tła wyłączone
+  krotkie: true
+  tlo: false
+przejscie_tla_s: 1.2    # płynne przejście (fade) przy wejściu do wnętrza i powrocie na mapę
+
+pliki:
+  dzwonek_drzwi:
+    rodzaj: krotki
+    opis: dzwonek nad drzwiami lokalu
+    plik: dzwonek.flac
+    autor: qubodup
+    zrodlo: https://commons.wikimedia.org/wiki/File:Bell-ring.flac
+    licencja: CC0
+    status: gotowe
+
+  kasa:
+    rodzaj: krotki
+    opis: kasa i monety przy zakupie
+    plik: kasa.ogg
+    status: oczekuje
+
+  stempel:
+    rodzaj: krotki
+    opis: stempel na liście z decyzjami (na razie bez nagrania)
+    plik: stempel.ogg
+    status: oczekuje
+
+  kartka:
+    rodzaj: krotki
+    opis: przewracana kartka zeszytu i szelest teczki
+    plik: kartka.ogg
+    autor: planish
+    zrodlo: https://commons.wikimedia.org/wiki/File:Turning_a_page.ogg
+    licencja: domena publiczna
+    status: gotowe
+
+  gwar_kebab:
+    rodzaj: tlo
+    opis: gwar w lokalu
+    plik: lokal.ogg
+    autor: stephan
+    zrodlo: https://commons.wikimedia.org/wiki/File:Restaurant_ambience.ogg
+    licencja: domena publiczna
+    status: gotowe
+
+  ulica:
+    rodzaj: tlo
+    opis: szum miejskiej ulicy
+    plik: ulica.ogg
+    status: oczekuje
+
+  kuchnia:
+    rodzaj: tlo
+    opis: smażenie w kuchni i na zapleczu
+    plik: kuchnia.ogg
+    status: oczekuje
+
+  sklep:
+    rodzaj: tlo
+    opis: gwar sklepu i hali
+    plik: sklep.ogg
+    status: oczekuje
+
+  urzad:
+    rodzaj: tlo
+    opis: rozmowy w urzędzie i na poczcie
+    plik: urzad.ogg
+    autor: ezwa
+    zrodlo: https://commons.wikimedia.org/wiki/File:Group_discussion_1.ogg
+    licencja: domena publiczna
+    status: gotowe
+
+  biuro:
+    rodzaj: tlo
+    opis: stukot klawiatury w biurze
+    plik: biuro.ogg
+    status: oczekuje
+
+  szkola:
+    rodzaj: tlo
+    opis: gwar szkolnej stołówki
+    plik: szkola.ogg
+    status: oczekuje
+
+# zdarzenie w grze → dźwięk krótki (lista łatwa do zmiany; „zdarzenia” podpina dzwiek.js)
+zdarzenia:
+  wejscie_do_lokalu: dzwonek_drzwi
+  zakup: kasa
+  nadanie_listu: stempel
+  kartka_zeszytu: kartka
+  otwarcie_okna: kartka
+
+# miejsce → odgłos tła albo „cisza”. Klucz: id z dane/mapa/budynki.yaml (budynek albo zespół),
+# a gdy go nie ma – rodzaj budynku. Jedno i drugie ma pierwszeństwo przed „domyslne”.
+miejsca:
+  mapa: ulica             # widok mapy miasta
+  lokal: gwar_kebab       # własny lokal drużyny (id lokalu spoza budynki.yaml)
+  # rodzaje budynków
+  bank: cisza
+  ubezpieczenia: cisza
+  gielda: cisza
+  lichwiarz: cisza
+  nieruchomosci: cisza
+  biuro: biuro
+  praca: biuro
+  media: biuro
+  reklama: biuro
+  detektyw: biuro
+  urzad: urzad
+  poczta: urzad
+  dostawca: sklep
+  sklep: sklep
+  szkola: szkola
+  uczelnia: szkola
+  park: ulica
+  woda: ulica
+  # zespoły budynków
+  kamienica_bankowa: cisza
+  biurowiec_zana: biuro
+  park_handlowy: sklep
+  # pojedyncze budynki, które różnią się od swojego rodzaju
+  piekarnia: gwar_kebab
+  harpagon: gwar_kebab    # kasyno: ten sam gwar, ciszej
+domyslne: ulica
+
+# mnożnik głośności odgłosu w wybranych miejscach (klucz jak w „miejsca”: id albo rodzaj; brak = 100 %)
+glosnosc_miejsc:
+  harpagon: 50
+  park: 50
+  woda: 50

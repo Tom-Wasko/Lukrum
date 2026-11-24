@@ -52,6 +52,13 @@
     </table></div>
     {% else %}<p class="pusta">Bez nagrań: szum eteru powstaje w przeglądarce na bieżąco.</p>{% endif %}
     {% endfor %}
+    <h2 id="dzwieki">Dźwięki gry <small>· krótkie dźwięki i odgłosy tła miejsc (bez muzyki)</small></h2>
+    {% if dzwieki %}
+    <div class="tabela"><table>
+      <thead><tr><th scope="col">Dźwięk</th><th scope="col">Do czego</th><th scope="col">Autor</th><th scope="col">Licencja i źródło</th></tr></thead>
+      <tbody>{% for p in dzwieki %}<tr><td>{{ p.nazwa }}</td><td>{{ p.opis }}</td><td>{{ p.autor }}</td><td>{{ p.licencja }} · <a href="{{ p.zrodlo }}" rel="noopener" target="_blank">źródło</a></td></tr>{% endfor %}</tbody>
+    </table></div>
+    {% else %}<p class="pusta">Dźwięki gry są w przygotowaniu: każdy plik dostanie tu autora, źródło i licencję (CC0 albo domena publiczna).</p>{% endif %}
   </main>
 </body>
 </html>

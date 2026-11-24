@@ -431,6 +431,7 @@ def widok(gra: Gra, firma: str, runda: int | None = None) -> dict:
                  "auto_zamowienia": bool(gra.konfiguracja.get("auto_zamowienia")),
                  "refleksja": gra.tryb_refleksji,
                  "podpowiedzi": bool(gra.konfiguracja.get("podpowiedzi")),
+                 "dzwiek_wyciszony": bool(gra.konfiguracja.get("dzwiek_wyciszony")),
                  "formy_zatrudnienia": fz.dozwolone(dane, gra.konfiguracja),   # TYMCZASOWE – opcja MG
                  "podkupywanie": rp.podkupywanie(gra.konfiguracja),   # poprawki 2 (sprawa 6) – opcja MG
                  "lokale": True,
@@ -776,6 +777,7 @@ def przeglad_mg(gra: Gra) -> dict:
                 "auto_zamowienia": bool(konf.get("auto_zamowienia")),
                 "refleksja": gra.tryb_refleksji,
                 "podpowiedzi": bool(konf.get("podpowiedzi")),
+                "dzwiek_wyciszony": bool(konf.get("dzwiek_wyciszony")),
                 # TYMCZASOWE, usunąć przed oficjalną wersją: które formy zatrudnienia są w grze
                 "formy_zatrudnienia": fz.dozwolone(dane, konf),
                 "formy_wszystkie": {k: f["nazwa"] for k, f in fz.formy(dane).items()},

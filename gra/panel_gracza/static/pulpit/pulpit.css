@@ -570,3 +570,12 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
   .pz-kroki li .pz-wejdz { margin: 0 0 4px 2.4em; }
 }
 .pz-str-l .pz-nr-str, .pz-str-p .pz-nr-str { left: 50%; right: auto; transform: translateX(-50%); bottom: 10px; }
+
+/* podróż 04/dzwieki: ⚙ → Dźwięk (włączniki, suwaki głośności, „wycisz wszystko”) */
+.pp-dz-rzad { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 8px; }
+.pp-dz-glos { display: inline-flex; align-items: center; gap: 8px; font: calc(13px * var(--skala-tekstu, 1)) var(--font-tekst); }
+.pp-dz-glos input { width: 120px; accent-color: var(--akcent); }
+.pp-dz-glos output { min-width: 3ch; font-variant-numeric: tabular-nums; }
+.pp-dz-mg { padding: 6px 8px; border: 2px dashed var(--tusz); border-radius: 6px; font-weight: 700; }
+.pp-dz-mg::before { content: "! "; }
+.pp-dz-rzad .pp-opcja[aria-pressed="false"]::before { content: "✕ "; }

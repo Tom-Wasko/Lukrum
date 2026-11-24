@@ -1,6 +1,6 @@
 # Stan
-Archi żył: 2026-11-24 08:08
-Tryb: nadzorowany od 06:40 24.11.
+Archi żył: 2026-11-24 08:20
+Tryb: autonomiczny od 07:22 24.11, budżet do 15:00 (nowe kroki do ok. 13:50), koniec najpóźniej 15:00. Scalenia do `podroz-04`.
 
 ## Podróż
 **04-wyglad-i-dzwiek**: plan zatwierdzony 23.11 wieczorem (`podroze/04-wyglad-i-dzwiek/plan.md`), **start 24.11 rano**
@@ -11,7 +11,7 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | Wątek | Zadania | Stan |
 |---|---|---|
 | 04/wzor | Z49 | scalony ae06cae (wzór przyjęty) |
-| 04/dzwieki | Z11 | w toku (wyko c8c0b414) |
+| 04/dzwieki | Z11 | scalony do `podroz-04` (4 nagrania gotowe, 6 czeka na Commons; 976 passed) |
 | 04/okna | Z49 | scalony do `podroz-04` 43f80fc (55 okien zgodne, 965 passed); galeria dla szefa |
 | 04/radio | Z50 | kontynuacja 04/dzwieki, na koniec |
 

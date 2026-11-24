@@ -14,6 +14,7 @@ import { oznaczCel, zadanieZeszytu } from "../zakladki/wujek.js";
 import { nazwaStrefy } from "../zakladki/lokale.js";
 import { idzDoStrony, krokZeszytu, odswiezZeszyt, otworzZeszyt, rysujMalyZeszyt, zamknijZeszyt, zeszytOtwarty } from "./zeszyt.js";
 import { dokadWroc, mozeWrocic, pokazNaMapie, wejdzDoKroku, wroc, zapamietajWidok } from "./nawigacja.js";
+import { ustawienia as dzwUstawienia, ustawMG, wczytajDane, zmien as dzwZmien } from "./dzwiek.js";
 import { AKCJE_RADIA, przelaczRadio, radioOtwarte, zamknijRadio } from "./radio.js";
 
 // klasę ustawia skrypt na początku <body> (gra.html), żeby układ nie migał
@@ -124,17 +125,53 @@ function budujUstawienia(ust) {
       <p class="pp-et">Tryb</p>${seg("Tryb jasny albo ciemny", TRYBY, "tryb")}<p class="pp-et">Rozmiar pisma</p>${seg("Rozmiar pisma", ROZMIARY, "rozmiar")}</section>
     <section class="pp-us"><h3>Mapa</h3><p class="pp-et">Warstwa mapy</p>${seg("Warstwa mapy", WARSTWY, "w", "mapa-warstwa")}
       <button type="button" class="pp-opcja pp-opinie" data-akcja="mapa-opinie" aria-pressed="false">★ Oceny klientów przy lokalach</button></section>
-    <section class="pp-us"><h3>Dźwięk</h3><button type="button" class="pp-opcja" data-akcja="pp-radio-ust">Radio „Fala Koziołka”: otwórz odbiornik</button>
+    <section class="pp-us" id="pp-sek-dzwiek"><h3>Dźwięk</h3>
+      <p class="pp-nota pp-dz-mg" id="pp-dz-mg" role="status" hidden>Dźwięk wyciszony przez prowadzącego.</p>
+      ${["krotkie|Krótkie dźwięki (dzwonek, kasa, stempel)", "tlo|Odgłosy miejsc (gwar, ulica, biuro)"].map((x) => { const [k, n] = x.split("|");
+        return `<div class="pp-dz-rzad"><button type="button" class="pp-opcja" data-dz-wl="${k}" aria-pressed="false">${n}</button>
+        <label class="pp-dz-glos">Głośność <input type="range" min="0" max="100" step="5" data-dz-glos="${k}" aria-label="Głośność: ${n.split(" (")[0]}"><output></output></label></div>`; }).join("")}
+      <button type="button" class="pp-opcja" data-dz-wszystko aria-pressed="false">Wycisz wszystko</button>
+      <button type="button" class="pp-opcja" data-akcja="pp-radio-ust">Radio „Fala Koziołka”: otwórz odbiornik</button>
       <p class="pp-nota">Muzyka z epoki, „Lalka” Prusa i szum eteru. Tylko dla nastroju, bez wpływu na grę. <a href="/nagrania-w-radiu" target="_blank" rel="noopener">Nagrania w radiu</a></p></section>
     <section class="pp-us" id="pp-sek-konto"><h3>Konto</h3></section>
     <section class="pp-us" id="pp-sek-gra" hidden><h3>Gra</h3></section>
     <section class="pp-us"><h3>O grze</h3><p class="pp-nota"><a href="/zrodla" target="_blank" rel="noopener">Nawiązania i źródła (nowa karta)</a></p></section>
     ${stopka ? `<p class="pp-nota pp-o-grze">${esc(stopka.textContent.trim())}</p>` : ""}`;
+  budujDzwiek(lista);
   const sk = lista.querySelector("#pp-sek-konto");
   for (const n of konto) sk.appendChild(n);
   if (!konto.length) sk.hidden = true;
   if (funkcje) { const g = lista.querySelector("#pp-sek-gra"); g.hidden = false; g.appendChild(funkcje); }
   odswiezUstawienia();
+}
+// ⚙ → Dźwięk: włączniki i suwaki krótkich dźwięków i odgłosów tła, „wycisz wszystko” (stan w localStorage: dzwiek.js)
+function budujDzwiek(lista) {
+  lista.querySelectorAll("[data-dz-wl]").forEach((b) => b.addEventListener("click", () => {
+    const k = b.dataset.dzWl, u = dzwUstawienia();
+    dzwZmien({ [k === "krotkie" ? "krotkieWl" : "tloWl"]: !u[k === "krotkie" ? "krotkieWl" : "tloWl"] }).then(odswiezDzwiek);
+  }));
+  lista.querySelectorAll("[data-dz-glos]").forEach((r) => r.addEventListener("input", () => {
+    dzwZmien({ [r.dataset.dzGlos]: Number(r.value) }).then(odswiezDzwiek);
+  }));
+  lista.querySelector("[data-dz-wszystko]")?.addEventListener("click", () => dzwZmien({ wszystko: !dzwUstawienia().wszystko }).then(odswiezDzwiek));
+  wczytajDane().then(odswiezDzwiek);
+}
+function odswiezDzwiek() {
+  const lista = document.getElementById("ustawienia-lista");
+  if (!lista?.dataset.pp) return;
+  const u = dzwUstawienia(), ustaw = (b, tak) => { b.setAttribute("aria-pressed", String(tak)); b.classList.toggle("aktywny", tak); };
+  lista.querySelectorAll("[data-dz-wl]").forEach((b) => ustaw(b, u[b.dataset.dzWl === "krotkie" ? "krotkieWl" : "tloWl"]));
+  lista.querySelectorAll("[data-dz-glos]").forEach((r) => {
+    const k = r.dataset.dzGlos;
+    if (document.activeElement !== r) r.value = u[k];
+    r.nextElementSibling.textContent = `${u[k]}%`;
+    r.disabled = u.mg;
+  });
+  const w = lista.querySelector("[data-dz-wszystko]");
+  if (w) { ustaw(w, u.wszystko); w.disabled = u.mg; }
+  lista.querySelectorAll("[data-dz-wl]").forEach((b) => { b.disabled = u.mg; });
+  const m = lista.querySelector("#pp-dz-mg");
+  if (m) m.hidden = !u.mg;
 }
 function przeniesUstawienia() {
   const cel = el("pp-ust");
@@ -478,6 +515,8 @@ function odswiezTydzien(c) {
   // „Tydzień N” na środku u góry – tylko informacja; nazwa drużyny i stan gry z dawnego nagłówka (wstrzymanie, „Czekamy na…”,
   // termin; bez nazwy gry, składu i salda) zostają przy pasku po lewej
   const chipy = st ? [...st.children].slice(1).filter((x) => !x.querySelector("svg")).map((x) => `<span class="pp-chip">${x.innerHTML}</span>`).join("") : "";
+  ustawMG(v.gra?.dzwiek_wyciszony);   // mistrz gry wyciszył klasę
+  odswiezDzwiek();
   el("pp-tydzien").innerHTML = `<b title="Tydzień ${v.runda} z ${v.gra.liczba_rund}">Tydzień ${v.runda}${v.runda < v.gra.runda ? " · podgląd" : ""}</b>`;
   // nazwa gry (np. „testowa”) i firma: na mapie leżą nad przyciskiem Legenda (pulpit.css), poza mapą – pod paskiem
   const gra = v.gra?.nazwa || "", firma = v.dashboard?.nazwa || "";

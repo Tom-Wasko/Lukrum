@@ -22,6 +22,8 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 - **Wynik 0–1000 pkt** w pięciu działach, gazeta „Kurier rankingowy” co tydzień i podium na koniec gry.
 - **Radio „Fala Koziołka”** na pasku: pięć stacji ze starymi nagraniami z domeny publicznej i z wolnych licencji
   (pliki w repozytorium, gra bez internetu), prowadzący czytany syntezatorem mowy. Spis: **/nagrania-w-radiu**.
+- **Dźwięki gry:** krótkie dźwięki (dzwonek, kasa, stempel, kartka, teczka) i odgłosy tła miejsc, ⚙ → Dźwięk (suwaki,
+  „wycisz wszystko”), mistrz gry wycisza klasę w `/mg/`. Dane: `dane/dzwieki.yaml`, pliki CC0 w `panel_gracza/static/dzwieki/`.
 - **Nawiązania i źródła:** strona **/zrodla** (⚙ → O grze): klucz do nawiązań literackich, źródła liczb i prawa,
   autorzy grafik, krojów pisma, nagrań i mapy (OpenStreetMap, ODbL). Treść: `dane/zrodla.yaml`.
 - **Trzy palety** (Bar mleczny, Pewex, wysoka widoczność), każda jasna i ciemna. Stan nigdy samym kolorem (▲ ▼ !).
