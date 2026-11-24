@@ -77,7 +77,32 @@ def wskazniki(dane: Dane, stan: StanGry, firma: str, biezaca: int) -> dict[str, 
     return wynik
 
 
-def _historia_okazji(stan: StanGry, firma: str, biezaca: int) -> set[str]:
+def _nowe_kredyty(w: dict | None) -> list:
+    return (((w or {}).get("bank") or {}).get("poczatek") or {}).get("nowe_kredyty") or []
+
+
+def _okazje_ze_stanu(dane: Dane, stan: StanGry, firma: str, biezaca: int, ostatnia: dict,
+                     wczesniejsze: list[dict]) -> set[str]:
+    """Okazje wujka z ostatniej przeliczonej rundy (biezaca − 1) na tle wcześniejszych (`wczesniejsze`)."""
+    okazje = set()
+    if (ostatnia.get("debet") or 0) > 0 and not (wczesniejsze and (wczesniejsze[-1].get("debet") or 0) > 0):
+        okazje.add("debet")
+    if _nowe_kredyty(ostatnia) and not any(_nowe_kredyty(x) for x in wczesniejsze):
+        okazje.add("pierwszy_kredyt")
+    if ((ostatnia.get("urzad") or {}).get("kontrola") or {}).get("kontrola"):
+        okazje.add("kontrola_sanepidu")
+    f = stan.firmy.get(firma)
+    lokale = sorted(f.lokale, key=lambda lok: lok.od_rundy) if f else []
+    if len(lokale) >= 2 and lokale[1].od_rundy == biezaca - 1:
+        okazje.add("pierwsza_filia")
+    teraz = wskazniki(dane, stan, firma, biezaca).get("nastroj_zespolu")
+    przedtem = wskazniki(dane, stan, firma, biezaca - 1).get("nastroj_zespolu")
+    if teraz is not None and przedtem is not None and przedtem - teraz >= dane.wnetrza["silnik"]["okazje"]["spadek_nastroju"]:
+        okazje.add("spadek_nastroju")
+    return okazje
+
+
+def _historia_okazji(dane: Dane, stan: StanGry, firma: str, biezaca: int) -> set[str]:
     okazje = set()
     if biezaca == 1:
         okazje.add("start")
@@ -90,15 +115,18 @@ def _historia_okazji(stan: StanGry, firma: str, biezaca: int) -> set[str]:
             okazje.add("pierwsza_strata")
         if wczesniejsze and kpir["przychody"] > max(x["kpir"]["przychody"] for x in wczesniejsze):
             okazje.add("rekord")
+        okazje |= _okazje_ze_stanu(dane, stan, firma, biezaca, ostatnia, wczesniejsze)
     return okazje
 
 
 def kontekst(dane: Dane, stan: StanGry, firma: str, biezaca: int, ziarno, liczba_rund: int) -> dict:
     """Kontekst rundy do wyboru dymków: okazje wujka i dane plotek (najbliższe zdarzenia, wydarzenie z kalendarza,
     konkurenci). Puste listy = plotki z tego źródła odpadają."""
-    okazje = _historia_okazji(stan, firma, biezaca)
+    okazje = _historia_okazji(dane, stan, firma, biezaca)
     if biezaca == liczba_rund:
         okazje.add("ostatnia_runda")
+    elif liczba_rund >= dane.wnetrza["silnik"]["okazje"]["polrocze_min_rund"] and biezaca == liczba_rund // 2 + 1:
+        okazje.add("koniec_polrocza")   # połowa rund za drużyną
     parki = []
     if dane.zdarzenia:   # zdarzenia parkowe z tej rundy (te same widać na mapie): najbliższe, o jakich mówi miasto
         historie = zd.historie_parkow(dane)

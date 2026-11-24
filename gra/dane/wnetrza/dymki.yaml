@@ -8,7 +8,7 @@
 #   kto: id bywalca, „gosc” (anonimowy klient) albo „kazdy” (bywalec albo gość)
 #   gdy: warunki na wskaźniki, {wskaznik: {od: x, do: y}}. `od` włącznie, `do` wyłącznie. Brak warunków = zawsze
 #   zrodlo (plotki): park | kalendarz | konkurencja. Skąd brać {park}/{tytul}, {wydarzenie}, {konkurent}/{dzielnica}
-#   okazja (wujek): start | pierwsza_strata | rekord | ostatnia_runda
+#   okazja (wujek): jedna z `silnik/wnetrza/schematy.py: OKAZJE` (tam też kolejność pierwszeństwa); 3 kwestie na okazję
 #   tekst: treść dymka. Pola {cena}, {cena_strefy}, {ocena}, {zmiana_ceny} wstawia silnik
 #   wyjasnienie, zrodlo_prawne, sprawdzone (wos): krótka odpowiedź pod dymkiem. sprawdzone: false = do sprawdzenia
 #     przez autora przed lekcją
@@ -249,16 +249,120 @@ dymki:
   tekst: 'No to klucze są wasze. Za Gierka kolejka stała do samego rogu. Zobaczymy, ile wy postoicie.'
 - rodzaj: cena_smak
   kto: wujek
+  okazja: start
+  tekst: 'Pierwszy dzień to jak pierwszy zeszyt: czysty. Piszcie w nim uczciwie, a będzie co czytać.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: start
+  tekst: 'Zajrzałem, jak się zaczyna. Ladę wytrzeć, uśmiech założyć, resztę policzymy po tygodniu.'
+- rodzaj: cena_smak
+  kto: wujek
   okazja: pierwsza_strata
   tekst: 'Pierwszy tydzień na minusie? Ja miałem takich dziesięć z rzędu. Głowa do góry i liczyć, liczyć.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: pierwsza_strata
+  tekst: 'Strata się zdarza, to nie wyrok. Zajrzyjcie, gdzie uciekły pieniądze, i zatkajcie dziurę.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: pierwsza_strata
+  tekst: 'Pamiętam swój pierwszy minus. Spałem źle, a potem poprawiłem ceny i poszło. Wam też pójdzie.'
 - rodzaj: cena_smak
   kto: wujek
   okazja: rekord
   tekst: 'Taki utarg? Za moich czasów to by mi milicja przyszła sprawdzić, skąd tyle. Gratuluję, naprawdę.'
 - rodzaj: cena_smak
   kto: wujek
+  okazja: rekord
+  tekst: 'Najlepszy tydzień! Postawcie sobie po herbacie, ale jutro znów do roboty.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: rekord
+  tekst: 'Kolejka do drzwi, kasa brzęczy. Zapamiętajcie, co tym razem zrobiliście dobrze.'
+- rodzaj: cena_smak
+  kto: wujek
   okazja: ostatnia_runda
   tekst: 'Ostatni tydzień. Cokolwiek wyjdzie w rachunkach, lokal żyje. A to więcej, niż ja potrafiłem.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: ostatnia_runda
+  tekst: 'No i dobiegacie do mety. Wytrzyjcie ladę na błysk i wyciśnijcie z tego tygodnia, ile się da.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: ostatnia_runda
+  tekst: 'Fajnie było patrzeć, jak to rośnie. Jeszcze jeden tydzień, a potem opowiecie mi wszystko.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: koniec_polrocza
+  tekst: 'Pół drogi za wami. Przysiądźcie na chwilę i spójrzcie, co się opłaciło, a co tylko wyglądało ładnie.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: koniec_polrocza
+  tekst: 'Pół roku mija jak z bicza strzelił. Co dobre, zostawcie. Co nie wyszło, zmieńcie, póki jest czas.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: koniec_polrocza
+  tekst: 'Dotąd szło, jak szło. Teraz druga połowa i wasze karty. Powodzenia.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: debet
+  tekst: 'Na koncie pod kreską? Znam to, w kantorku też kiedyś brakowało. Pożyczka to nie wstyd, byle ją oddać.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: debet
+  tekst: 'Debet kosztuje, więc nie siedźcie w nim długo. Wpływy do góry albo wydatki w dół, inaczej się nie da.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: debet
+  tekst: 'Saldo na minusie. Policzcie, co musi wyjść, a co może poczekać, i wyjdźcie na prostą.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: kontrola_sanepidu
+  tekst: 'Kontrola była? Spokojnie. Czysta ręka, czysta lada i nikt wam nic nie zrobi.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: kontrola_sanepidu
+  tekst: 'Pan z inspekcji zajrzał do lodówki, wiem, wiem. Przy mnie też zaglądali. Kto dba o czystość, ten śpi dobrze.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: kontrola_sanepidu
+  tekst: 'Takie wizyty to nic złego, tylko przypomnienie. Wydajcie parę groszy na porządek, to się zwróci.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: pierwszy_kredyt
+  tekst: 'Pierwszy kredyt, no no. Tylko pamiętajcie: raty spłaca się z zysku, nie z nadziei.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: pierwszy_kredyt
+  tekst: 'Pożyczka z banku to jak rower z cudzych rąk. Jedzie się szybciej, ale trzeba go oddać i jeszcze dopłacić.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: pierwszy_kredyt
+  tekst: 'Wzięliście pieniądze na rozwój? Dobrze, tylko policzcie raty, zanim wydacie pierwszą złotówkę.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: pierwsza_filia
+  tekst: 'Drugi lokal! Ja miałem tylko jeden, a i tak nie dawałem rady. Dobrze dobierzcie ludzi do obu.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: pierwsza_filia
+  tekst: 'Dwa lokale to dwa razy więcej roboty. Jednego pilnujcie sami, drugiemu zaufajcie z głową.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: pierwsza_filia
+  tekst: 'Gratuluję filii. Tylko żeby jeden lokal nie zjadł tego, co zarobi drugi.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: spadek_nastroju
+  tekst: 'Ludziom kwaśne miny, widzę. Dobre słowo i uczciwa płaca często robią więcej niż nowy piec.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: spadek_nastroju
+  tekst: 'Zespół się zniechęcił, nastrój spadł. Pogadajcie z nimi, zanim pójdą do konkurencji.'
+- rodzaj: cena_smak
+  kto: wujek
+  okazja: spadek_nastroju
+  tekst: 'Jak załoga smutna, klient to czuje. Dajcie im odetchnąć i pochwalcie, jak coś wyjdzie.'
 
 # ── Propozycje i kłopoty (decyzja autora 13.11: 2–3 odpowiedzi z prawdziwym skutkiem, najwyżej jedna na kilka rund) ──
 # Pola propozycji: id, kto, od_rundy, gdy, tekst, odpowiedzi [{id, tekst, reakcja, skutki, szansa, skutki_porazka}].

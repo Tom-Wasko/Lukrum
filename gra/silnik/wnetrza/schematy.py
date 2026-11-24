@@ -10,7 +10,9 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
 ZRODLA_PLOTEK = ("park", "kalendarz", "konkurencja")
-OKAZJE = ("start", "pierwsza_strata", "rekord", "ostatnia_runda")
+# okazje wujka w kolejności pierwszeństwa (gdy kilka naraz, wujek mówi najwyżej raz na rundę: wygrywa pierwsza)
+OKAZJE = ("ostatnia_runda", "koniec_polrocza", "pierwsza_strata", "debet", "kontrola_sanepidu", "pierwszy_kredyt",
+          "pierwsza_filia", "spadek_nastroju", "rekord", "start")
 KTO_OGOLNIE = ("gosc", "kazdy")
 WUJEK = "wujek"
 # pola wstawiane do tekstu dymka: wskaźniki liczone z wyników (stan.py) i dane plotek (kontekst)
@@ -86,7 +88,7 @@ class Dymek(Schemat):
     kto: str
     gdy: dict[str, Zakres] = Field(default_factory=dict)
     zrodlo: Literal["park", "kalendarz", "konkurencja"] | None = None
-    okazja: Literal["start", "pierwsza_strata", "rekord", "ostatnia_runda"] | None = None
+    okazja: str | None = None
     tekst: str = Field(min_length=3)
     wyjasnienie: str | None = None
     zrodlo_prawne: str | None = None
@@ -94,6 +96,13 @@ class Dymek(Schemat):
     sprawdzil: str | None = None
     cytat: bool | None = None
     cytat_zrodlo: str | None = None
+
+    @field_validator("okazja")
+    @classmethod
+    def _znana_okazja(cls, v):
+        if v is not None and v not in OKAZJE:
+            raise ValueError(f"nieznana okazja „{v}” (dozwolone: {', '.join(OKAZJE)})")
+        return v
 
     @model_validator(mode="after")
     def _spojny(self):
@@ -232,10 +241,16 @@ class UstawieniaDymkow(Schemat):
     gosc: str = Field(min_length=1)
 
 
+class OkazjeWujka(Schemat):
+    spadek_nastroju: float = Field(gt=0, le=100)   # o tyle punktów (skala 0–100) musi spaść nastrój zespołu
+    polrocze_min_rund: int = Field(ge=4)           # „koniec półrocza” tylko w grze o tylu rundach albo dłuższej
+
+
 class PlikSilnika(Schemat):
     opis: str = Field(min_length=3)
     zrodlo: str = Field(min_length=3)
     nastroj: Nastroj
+    okazje: OkazjeWujka
     miny: dict[str, Mina]
     dymki: UstawieniaDymkow
 

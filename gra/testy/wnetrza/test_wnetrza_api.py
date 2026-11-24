@@ -51,6 +51,19 @@ def test_widok_wnetrza_i_uprawnienia(dane_wnetrz, client, uczen):
     assert client.get("/api/gry/nie-ma/wnetrza/Ala").status_code == 404
 
 
+def test_wujek_tylko_w_rundzie_okazji(dane_wnetrz, client, uczen):
+    """Widok sceny (`dymki` z wujkiem) ma wujka tylko w rundzie okazji; bez okazji go nie ma (postać nie jest rysowana)."""
+    id_, ala, _ = _gra(client, uczen)
+    url = f"/api/gry/{id_}/wnetrza/Ala"
+    assert [x["tekst"] for x in ala.get(url).json()["dymki"] if x["kto"] == "wujek"] == ["WUJ-START"]   # runda 1
+    _runda_2(client, id_)
+    w = ala.get(url).json()
+    assert w["runda"] == 2
+    okazje_w_rundzie_2 = {x["tekst"] for x in w["dymki"] if x["kto"] == "wujek"}
+    assert len(okazje_w_rundzie_2) <= 1   # najwyżej jeden dymek wujka na rundę
+    assert "WUJ-START" not in okazje_w_rundzie_2   # „start” tylko w pierwszej rundzie
+
+
 def test_gracz_nie_wylacza_dymkow(dane_wnetrz, client, uczen):
     id_, ala, _ = _gra(client, uczen)
     _runda_2(client, id_)

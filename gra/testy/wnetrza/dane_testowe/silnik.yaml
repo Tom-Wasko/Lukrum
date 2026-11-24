@@ -1,6 +1,7 @@
 opis: 'Parametry silnika wnętrz do testów.'
 zrodlo: 'dane testowe'
 nastroj: {zadowolenie_zero: 0.75, zadowolenie_sto: 1.05}
+okazje: {spadek_nastroju: 10, polrocze_min_rund: 4}
 miny:
   smutna: {nastroj_do: 40}
   zmeczona: {wykorzystanie_od: 0.85}
