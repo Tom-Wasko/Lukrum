@@ -23,10 +23,10 @@ Decyzje szefa (23.11, okienko) – do `Decyzje.md`:
 - [x] Spis wszystkich okien gry (scena → punkt → ekran → rama → stan) w `wiedza/analizy/spis-okien.md`
 - [x] Wzór na 3 oknach zaakceptowany przez szefa (strona przed/po)
 - [x] Każde okno ze spisu: zawartość w stylu swojej ramy, w spisie „zgodne” + zrzut
-- [ ] 3 palety × jasny/ciemny działają, wysoka ≥ 7:1, stan nie samym kolorem
+- [x] 3 palety × jasny/ciemny działają, wysoka ≥ 7:1, stan nie samym kolorem
 - [ ] Krótkie dźwięki i gwar każdego miejsca; ⚙ wyciszanie; MG wycisza klasę; strona nagrań z licencjami
-- [ ] Radio: ikona obok kaski działa, odbiornik PRL, gwar cichnie przy radiu
-- [ ] Pełne testy zielone, `ruff`, `node --check`, `silnik.dane sprawdz` czyste
+- [x] Radio: ikona obok kaski działa, odbiornik PRL, gwar cichnie przy radiu
+- [x] Pełne testy zielone, `ruff`, `node --check`, `silnik.dane sprawdz` czyste
 
 ## Wątki
 | Kolejność | Wątek | Kto | Zakres | Pliki |
