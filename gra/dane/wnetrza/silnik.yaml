@@ -8,6 +8,10 @@ nastroj:
   # zadowolenie osoby (0,75 → nastrój 0, 1,05 → nastrój 100; poza zakresem przycięte)
   zadowolenie_zero: 0.75
   zadowolenie_sto: 1.05
+okazje:
+  # progi okazji wujka (kiedy staje przy ladzie); pozostałe okazje wynikają wprost ze stanu gry
+  spadek_nastroju: 10     # o ile punktów (skala 0–100) musi spaść nastrój zespołu między dwiema ostatnimi rundami
+  polrocze_min_rund: 4    # „koniec półrocza” (runda po połowie rund) tylko w grze o tylu rundach albo dłuższej
 miny:
   # kolejność = pierwszeństwo: pierwsza pasująca mina wygrywa; ostatnia („neutralna”) pasuje zawsze
   smutna: {nastroj_do: 40}
