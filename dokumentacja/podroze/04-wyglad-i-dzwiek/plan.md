@@ -24,7 +24,7 @@ Decyzje szefa (23.11, okienko) – do `Decyzje.md`:
 - [x] Wzór na 3 oknach zaakceptowany przez szefa (strona przed/po)
 - [x] Każde okno ze spisu: zawartość w stylu swojej ramy, w spisie „zgodne” + zrzut
 - [x] 3 palety × jasny/ciemny działają, wysoka ≥ 7:1, stan nie samym kolorem
-- [ ] Krótkie dźwięki i gwar każdego miejsca; ⚙ wyciszanie; MG wycisza klasę; strona nagrań z licencjami
+- [x] Krótkie dźwięki i gwar każdego miejsca; ⚙ wyciszanie; MG wycisza klasę; strona nagrań z licencjami
 - [x] Radio: ikona obok kaski działa, odbiornik PRL, gwar cichnie przy radiu
 - [x] Z6: rzadkie ekrany (ciemny, wysoka) i okna na telefonie bez usterek kontrastu i rozmiaru
 - [x] Z47: kreator /mg/ losuje uczniów do drużyn, kartki z hasłami po drużynach
