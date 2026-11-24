@@ -21,7 +21,7 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/wnetrza | Z4 (przegląd) | w toku |
 
 ## Czeka na szefa
-- 6 nagrań (kasa, ulica, kuchnia, sklep, biuro, szkoła): szef pobiera w przeglądarce do `gra/panel_gracza/static/dzwieki/`, potem Archi wpisuje licencje.
+- **Przypomnieć szefowi po powrocie:** 6 nagrań (kasa, ulica, kuchnia, sklep, biuro, szkoła): szef pobiera w przeglądarce do `gra/panel_gracza/static/dzwieki/`, potem Archi wpisuje licencje.
 - Serwer gry na porcie 8784 (pid 25996, po wątku 04/kontrast) nadal działa: wyko nie mógł go zatrzymać (blokada), zatrzymaj ręcznie.
 
 ## Od Pomocnika
