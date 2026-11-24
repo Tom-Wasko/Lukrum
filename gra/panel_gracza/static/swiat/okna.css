@@ -1,0 +1,123 @@
+/* LUKRUM – zawartość okien dopasowana do ramy okna (podróż 04/wzor, Z49).
+   Rama okna to jeden z czterech stylów z pulpit/karty.css (klasy .karta--s1…s4, przypisanie: pulpit/karty-style.js).
+   Stare komponenty ze styl.css (.kafel, .karta, .pasek, .btn, .pigulka, tabele, .agencja…) wyglądają tu jak rekwizyty
+   własnej ramy: w aktach urzędowych (s2) jak druk i maszynopis, w kartce z notatnika (s4) jak odręczna notatka.
+   Zasady: selektory zawężone do ramy (`.szk.karta--sN …`), więc stare ekrany poza oknami się nie zmieniają;
+   kolory tylko ze zmiennych (motywy/zmienne.css; stare --pom, --biel, --linia są ich aliasami z motywy/lukrum.css);
+   stan nigdy samym kolorem (znaki □ ■ ✓ ✕ zostają w treści); w palecie „wysoka” bez ozdób, które obniżają kontrast.
+   Katalog ram i „język” zawartości każdej z nich: dokumentacja/wiedza/analizy/spis-okien.md.
+   Wdrożone: s2 (Sokole Oko, bank) i s4 (kadry). s1 i s3 czekają na kontynuację wątku. */
+
+/* ===== s2: akta urzędowe – druk, maszynopis, rubryki z kropkami, pieczątka ===== */
+.szk.karta--s2 .tab-wrap { border: 2px solid var(--tusz); border-radius: 0; background: none; }
+.szk.karta--s2 .tabela-tytul { counter-increment: par; justify-content: flex-start; gap: 6px; margin-top: 22px; padding: 0 0 3px; color: var(--tusz); background: none; border-radius: 0;
+  border-bottom: 1px dotted var(--tusz); font: 700 .95em var(--font-masz); letter-spacing: .02em; }
+.szk.karta--s2 .tabela-tytul::before { content: "§ " counter(par) ". "; white-space: pre; }
+.szk.karta--s2 .tabela-tytul + .tab-wrap { margin-top: 6px; border-top: 2px solid var(--tusz); border-radius: 0; }
+.szk.karta--s2 .tabela-tytul .kolko-i { color: var(--tusz); }
+.szk.karta--s2 table.t th { color: var(--tusz); background: none; font-size: 10.5px; letter-spacing: .04em; border-bottom: 2px solid var(--tusz); border-right: 1px dotted var(--tusz); border-radius: 0; }
+.szk.karta--s2 table.t th:last-child, .szk.karta--s2 table.t td:last-child { border-right: 0; }
+.szk.karta--s2 table.t td { border-top: 1px dotted var(--tusz); border-right: 1px dotted var(--tusz); }
+.szk.karta--s2 table.t tbody tr:hover td { background: color-mix(in srgb, var(--tusz) 8%, transparent); }
+.szk.karta--s2 table.t tfoot td { background: none; border-top: 2px solid var(--tusz); }
+
+/* rubryka formularza zamiast kafelka */
+.szk.karta--s2 .kafel { background: none; border: 2px solid var(--tusz); border-radius: 0; box-shadow: none; }
+.szk.karta--s2 .kafel:hover { box-shadow: none; background: color-mix(in srgb, var(--tusz) 5%, transparent); }
+.szk.karta--s2 .kafel .kg { color: var(--tusz); font-size: 10.5px; letter-spacing: .05em; border-bottom: 1px dotted var(--tusz); }
+.szk.karta--s2 .kafel .kg::before { content: "Rubryka: "; text-transform: none; font-weight: 400; white-space: pre; }
+.szk.karta--s2 .kafel.wybrany { border-style: double; border-width: 5px; box-shadow: none; }
+.szk.karta--s2 .wiersz { color: var(--tusz); border-bottom: 1px dotted var(--tusz); gap: 14px; font-weight: 400; }
+.szk.karta--s2 .wiersz span:last-child { font-weight: 700; }
+
+/* adnotacja urzędnika zamiast białej karty, podsumowanie zamiast czarnego paska */
+.szk.karta--s2 .ot > .karta, .szk.karta--s2 .ot .karta { max-width: none; margin: 16px 0; padding: 10px 14px; background: none; box-shadow: none; border-radius: 0; border: 1px dashed var(--tusz); border-left: 6px solid var(--tusz); }
+.szk.karta--s2 .ot .karta p { margin: 4px 0; }
+.szk.karta--s2 .pasek.ciemny, .szk.karta--s2 .pasek { color: var(--tusz); background: none; border-radius: 0; border-block: 4px double var(--tusz); text-transform: none; letter-spacing: 0; font-weight: 400; padding: 10px 4px; }
+.szk.karta--s2 .pasek .kwota { font-weight: 700; text-decoration: underline dotted var(--tusz); text-underline-offset: 4px; }
+.szk.karta--s2 .pasek .kolko-i { color: var(--tusz); }
+.szk.karta--s2 .podsumowanie, .szk.karta--s2 .komunikat { background: none; border: 1px solid var(--tusz); border-left: 6px solid var(--tusz); border-radius: 0; color: var(--tusz); font-weight: 400; }
+.szk.karta--s2 .podpowiedz { color: var(--tusz); opacity: .85; font-style: italic; }
+
+/* przycisk jak odcisk pieczątki: kwadrat, grube obramowanie, twardy cień */
+.szk.karta--s2 .btn { border: 2px solid var(--tusz); border-radius: 0; font-family: var(--font-masz); font-size: 11.5px; letter-spacing: .05em; box-shadow: 3px 3px 0 var(--tusz); }
+.szk.karta--s2 .btn:hover { box-shadow: 3px 3px 0 var(--tusz); }
+.szk.karta--s2 .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--tusz); }
+.szk.karta--s2 .btn.jasny { background: none; color: var(--tusz); }
+.szk.karta--s2 .btn.jasny:hover { background: var(--tusz); color: var(--papier); border-color: var(--tusz); }
+.szk.karta--s2 .btn[disabled] { box-shadow: none; border-style: dashed; }
+.szk.karta--s2 .btn.maly { font-size: 10.5px; }
+/* pieczątka zamiast pigułki (znak ✓ / ✕ w treści zostaje) */
+.szk.karta--s2 .pigulka { color: var(--tusz); background: none; border: 2px solid var(--tusz); border-radius: 0; font-size: 10px; letter-spacing: .06em; padding: 1px 6px; }
+
+/* karty banków i agencji (.agencja): druk z podwójną linią, znak banku jako kwadratowa pieczęć */
+.szk.karta--s2 .agencja { margin-top: 18px; padding: 14px 16px 16px; background: none; border: 2px solid var(--tusz); border-top: 6px double var(--tusz); border-radius: 0; }
+.szk.karta--s2 .agencja-znak { border-radius: 0; border: 2px solid var(--tusz); }
+.szk.karta--s2 .agencja-opis b { font-size: 1.05em; text-transform: uppercase; letter-spacing: .03em; }
+.szk.karta--s2 .agencja-opis p, .szk.karta--s2 .agencja-suma { color: var(--tusz); }
+.szk.karta--s2 .agencja-opis .pigulka { color: var(--tusz); background: none; }
+.szk.karta--s2 .agencja-suma b, .szk.karta--s2 .kanal-cena b, .szk.karta--s2 .agencja-opis p b.bank-najlepszy, .szk.karta--s2 .oferta-wiersz .cena { color: var(--tusz); }
+.szk.karta--s2 .kanal-cena span { color: var(--tusz); }
+.szk.karta--s2 .kanal .kg { border-bottom-color: var(--tusz); }
+
+/* zakładki wewnątrz okna jak rubryki do zaznaczenia: ■ wybrana, □ pozostałe */
+.szk.karta--s2 .przelacznik { background: none; padding: 0; gap: 6px; flex-wrap: wrap; }
+.szk.karta--s2 .przelacznik a { color: var(--tusz); background: none; border: 2px solid var(--tusz); border-radius: 0; box-shadow: none; padding: 6px 12px; }
+.szk.karta--s2 .przelacznik a::before { content: "□ "; }
+.szk.karta--s2 .przelacznik a.aktywny { color: var(--papier); background: var(--tusz); box-shadow: none; }
+.szk.karta--s2 .przelacznik a.aktywny::before { content: "■ "; }
+.szk.karta--s2 .przelacznik a.wylaczony { border-style: dashed; }
+
+/* ===== s4: kartka z notatnika – odręczne pismo, przerywane linie, flamaster ===== */
+.szk.karta--s4 .tab-wrap { border: 0; border-radius: 0; background: none; }
+.szk.karta--s4 .tabela-tytul { justify-content: flex-start; margin-top: 18px; padding: 0 0 2px; color: var(--tusz); background: none; border-radius: 0; font: 700 1.25em var(--font-reka);
+  text-transform: none; letter-spacing: 0; text-decoration: underline wavy var(--akcent); text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.szk.karta--s4 .tabela-tytul + .tab-wrap { margin-top: 8px; border-radius: 0; }
+.szk.karta--s4 .tabela-tytul .kolko-i { color: var(--tusz); }
+.szk.karta--s4 table.t th { color: var(--tusz); background: none; font: 700 1.1em var(--font-reka); text-transform: none; letter-spacing: 0; border-bottom: 2px solid var(--tusz); }
+.szk.karta--s4 table.t td { border-top: 1px dashed var(--tusz); }
+.szk.karta--s4 table.t tbody tr:hover td { background: color-mix(in srgb, var(--akcent) 10%, transparent); }
+
+/* karteczki i wiersze zamiast kafelków i białych kart */
+.szk.karta--s4 .kafel { background: var(--arkusz); border: 2px dashed var(--tusz); border-radius: 3px; box-shadow: 2px 2px 0 color-mix(in srgb, var(--tusz) 30%, transparent); }
+.szk.karta--s4 .kafel:hover { box-shadow: 3px 3px 0 color-mix(in srgb, var(--tusz) 40%, transparent); }
+.szk.karta--s4 .kafel .kg { color: var(--tusz); font: 700 1.15em var(--font-reka); text-transform: none; border-bottom: 1px dashed var(--tusz); }
+.szk.karta--s4 .wiersz { color: var(--tusz); font-weight: 400; text-transform: none; font-size: 1em; border-bottom: 1px dotted var(--tusz); }
+.szk.karta--s4 .ot .karta, .szk.karta--s4 .podsumowanie, .szk.karta--s4 .komunikat { background: var(--arkusz); border: 2px dashed var(--tusz); border-radius: 3px; box-shadow: none; color: var(--tusz); }
+.szk.karta--s4 .podpowiedz { color: var(--tusz); opacity: .85; }
+/* pasek z liczbami: zakreślone flamastrem */
+.szk.karta--s4 .pasek.ciemny, .szk.karta--s4 .pasek { color: var(--tusz); background: var(--arkusz); border: 2px dashed var(--tusz); border-radius: 3px; text-transform: none; letter-spacing: 0; font: 400 1.15em var(--font-reka); }
+.szk.karta--s4 .pasek .kwota { font-size: 1.25em; font-weight: 700; padding: 0 4px;
+  background: linear-gradient(transparent 55%, color-mix(in srgb, var(--akcent) 28%, transparent) 55%); }
+[data-paleta="wysoka"] .szk.karta--s4 .pasek .kwota { background: none; text-decoration: underline; }
+.szk.karta--s4 .pasek .kolko-i { color: var(--tusz); }
+
+/* karta firmy (.agencja, siatka banków) jak przyklejona kartka z paskiem taśmy */
+.szk.karta--s4 .agencja { background: var(--arkusz); border: 2px dashed var(--tusz); border-top: 12px solid color-mix(in srgb, var(--agencja) 38%, var(--arkusz)); border-radius: 3px; }
+[data-paleta="wysoka"] .szk.karta--s4 .agencja { border-top: 12px solid var(--tusz); }
+.szk.karta--s4 .agencja-znak { border-radius: 50%; border: 2px solid var(--tusz); }
+.szk.karta--s4 .agencja-opis b { font: 700 1.25em var(--font-reka); }
+.szk.karta--s4 .agencja-opis p, .szk.karta--s4 .agencja-suma { color: var(--tusz); }
+.szk.karta--s4 .agencja-suma { font: 400 1.05em var(--font-reka); text-transform: none; }
+.szk.karta--s4 .agencja-suma b, .szk.karta--s4 .kanal-cena b { color: var(--tusz); }
+
+/* wiersze kandydatów i ofert: linijki notatnika */
+.szk.karta--s4 .oferty-wiersze { gap: 0; }
+.szk.karta--s4 .oferta-wiersz { background: none; border: 0; border-bottom: 1px dashed var(--tusz); border-radius: 0; padding: 8px 4px; }
+.szk.karta--s4 .oferta-wiersz > div > b { font: 700 1.2em var(--font-reka); }
+.szk.karta--s4 .oferta-wiersz .cena { font: 700 1.35em var(--font-reka); }
+.szk.karta--s4 .oferta-wiersz.wybrany { border: 2px solid var(--tusz); border-radius: 3px; box-shadow: none; background: color-mix(in srgb, var(--akcent) 8%, transparent); }
+.szk.karta--s4 .gwiazdki { color: var(--tusz); }
+.szk.karta--s4 .gwiazdki .p { color: var(--ramka); }
+
+/* przyciski i etykiety jak pisane długopisem; stan zostaje w napisie i znaku, nie w samym kolorze */
+.szk.karta--s4 .btn { border: 2px solid var(--tusz); border-radius: 99px; font-family: var(--font-reka); font-size: 1.1em; text-transform: none; letter-spacing: 0; box-shadow: none; }
+.szk.karta--s4 .btn:hover { box-shadow: 2px 2px 0 var(--tusz); }
+.szk.karta--s4 .btn.jasny { background: none; color: var(--tusz); border-style: dashed; }
+.szk.karta--s4 .btn[disabled] { border-style: dashed; }
+.szk.karta--s4 .btn.maly { font-size: 1em; }
+.szk.karta--s4 .pigulka { color: var(--tusz); background: none; border: 1.5px dashed var(--tusz); border-radius: 99px; font: 400 1.05em var(--font-reka); text-transform: none; letter-spacing: 0; padding: 0 8px; }
+.szk.karta--s4 .przelacznik { background: none; padding: 0; gap: 6px; flex-wrap: wrap; }
+.szk.karta--s4 .przelacznik a { color: var(--tusz); background: none; border: 2px dashed var(--tusz); border-radius: 99px; box-shadow: none; font: 400 1.1em var(--font-reka); text-transform: none; padding: 3px 14px; }
+.szk.karta--s4 .przelacznik a.aktywny { color: var(--papier); background: var(--tusz); border-style: solid; }
+.szk.karta--s4 .przelacznik a.aktywny::before { content: "✓ "; }
