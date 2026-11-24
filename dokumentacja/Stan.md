@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-24 10:58
+Archi żył: 2026-11-24 11:35
 Tryb: autonomiczny od 07:22 24.11, budżet do 15:00 (nowe kroki do ok. 13:50), koniec najpóźniej 15:00. Scalenia do `podroz-04`.
 
 ## Podróż
@@ -18,6 +18,7 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/kreator | Z47 | scalony do `podroz-04` 60d8ea9 (995 passed) |
 
 ## Czeka na szefa
+- 6 nagrań (kasa, ulica, kuchnia, sklep, biuro, szkoła): Commons nadal odpowiada 429 (ponowienie 11:07–11:33). Do zrobienia ręcznie albo później.
 - Uwaga do testu 07.12: drużyna ma najwyżej 4 osoby (zasada od początku gry), więc klasa 25–30 osób potrzebuje 7–8 drużyn albo gry w parach przy jednym koncie. Zostawić limit czy podnieść?
 - Serwer gry na porcie 8784 (pid 25996, po wątku 04/kontrast) nadal działa: wyko nie mógł go zatrzymać (blokada), zatrzymaj ręcznie.
 - Przejrzeć galerię okien (Z49): https://claude.ai/artifact/PRwXig2fz7q7vVaqF1JxUf ; potem scalenie `podroz-04` do `main`. (Z19 odłożone do powrotu kolegi)
