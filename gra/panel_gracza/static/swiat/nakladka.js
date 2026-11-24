@@ -77,7 +77,7 @@ export function ulozDymek(osoba, dymek, przeszkody, obszar, pasekGory = 0.24) {
   let najlepszy = null;
   for (const [i, [strona, x, y]] of kandydaci.entries()) {
     const r = { x, y, w, h };
-    const koszt = 5 * przeszkody.reduce((s, u) => s + pole(r, u), 0) + 3 * pole(r, osoba) + 50 * poza(r, obszar) + 1.5 * pole(r, pas) + i * 30;
+    const koszt = 40 * przeszkody.reduce((s, u) => s + pole(r, u), 0) + 3 * pole(r, osoba) + 50 * poza(r, obszar) + 1.5 * pole(r, pas) + i * 30;
     if (!najlepszy || koszt < najlepszy.koszt) najlepszy = { strona, x, y, koszt };
   }
   const x = Math.min(Math.max(0, najlepszy.x), Math.max(0, obszar.w - w)), y = Math.min(Math.max(0, najlepszy.y), Math.max(0, obszar.h - h));
