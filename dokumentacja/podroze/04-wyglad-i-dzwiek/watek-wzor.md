@@ -39,3 +39,27 @@
 - **Archi:** archi-lukrum.
 
 ## Raport
+
+**Zrobione (24.11, wyko):**
+- `dokumentacja/wiedza/analizy/spis-okien.md`: katalog ram (s1–s4, własne, dymek) z „językiem” zawartości; tabela 2a (wszystkie
+  punkty scen z oknem + stan), 2b (wszystkie wywołania `okno(` poza scenami), uwaga o 54 `szkic?`, 15 `odsyla`, 6 `wejscie`.
+  Stan „do sprawdzenia” = klasy w module złożonym, ocena skryptem po `class=`, wymaga oglądu w przeglądarce.
+- `gra/panel_gracza/static/swiat/okna.css` (nowy, podpięty w `gra.html` po `pulpit/karty.css`; jest ładowany później, więc
+  nadpisuje `styl.css`): reguły `.szk.karta--s2` (Sokole Oko, bank) i `.szk.karta--s4` (kadry). Tylko zmienne palet, bez zmian
+  w modułach JS, `styl.css`, danych ani plikach 04/dzwieki. Stan zaznaczony znakami (□ ■ ✓), pismo ręczne wyłączone w „wysokiej”.
+- Zrzuty przed/po (3 okna × bar jasny, pewex ciemny, wysoka ciemny, 1366×768, 18 plików): `C:/Users/PC/Pulpit/lukrum/_robocze/zrzuty-wzor/`.
+
+**Dowody:**
+- `pytest -q testy/swiat testy/aplikacja` → `299 passed in 160.37s`
+- `ruff check .` → `All checks passed!`
+- `node --check`: nie dotyczy, żaden moduł JS nie zmieniony.
+- Serwer 8781 zatrzymany.
+
+**Odstępstwa i uwagi:**
+- Raz użyłem `EnterWorktree` z `path` własnego worktree: shell zablokował się po `cd` poza worktree.
+- Dziennik: zapis `postep` działa; zapis listy `pracownicy` odmówiony (wymaga wersji z odczytu, a odczyt do `out_dir` w `jobs/` jest zablokowany), pominięty.
+- `rm -rf _robocze/wzor` w worktree odmówiony przez hook; folder `_robocze/wzor/` (poza gitem) został, do usunięcia ręcznie.
+- Przy ramie s2 nagłówki kafli (`.kt`) mają jeszcze zaokrąglone górne rogi; drobiazg do poprawki w kontynuacji.
+
+**Propozycje:** s1 (teczka) tym samym sposobem; okna podrzędne (spis 2b) z ramą rodzica (`styl: stylEkranu(...)`, zmiana w modułach).
+Zakres ocenić na zrzutach przed rozszerzeniem na resztę okien.
