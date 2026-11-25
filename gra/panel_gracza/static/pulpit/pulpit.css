@@ -632,3 +632,22 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
 .pp-dz-mg { padding: 6px 8px; border: 2px dashed var(--tusz); border-radius: 6px; font-weight: 700; }
 .pp-dz-mg::before { content: "! "; }
 .pp-dz-rzad .pp-opcja[aria-pressed="false"]::before { content: "✕ "; }
+
+/* podróż 04/nakladka (P4): telefon ≤600 px w scenie – pasek ikon na dole, zeszyt i banknoty jako małe ikony, scena na pełną szerokość.
+   Mapa (body.na-mapie) i komputer bez zmian. */
+@media (max-width: 600px) {
+  body.pulpit:not(.na-mapie) .scena { padding: 58px 8px 150px; }
+  body.pulpit:not(.na-mapie) .pp-lewy { top: auto; bottom: 0; left: 0; right: 0; width: auto; flex-direction: row; align-items: center; gap: 6px;
+    padding: 6px 8px; box-sizing: border-box; background: var(--papier); border-top: 2px solid var(--tusz); }
+  body.pulpit:not(.na-mapie) .pp-pasek { flex-direction: row; align-items: center; flex: 1; min-width: 0; overflow-x: auto; padding: 8px 8px 4px 2px; gap: 6px; }
+  body.pulpit:not(.na-mapie) .pp-szyld, body.pulpit:not(.na-mapie) .pp-druzyna { display: none; }
+  body.pulpit:not(.na-mapie) .pp-ik span { display: none; }
+  body.pulpit:not(.na-mapie) .pp-wroc { left: 10px; }
+  body.pulpit:not(.na-mapie) .pp-tydzien { left: auto; right: 10px; translate: none; padding: 8px 12px; }
+  body.pulpit:not(.na-mapie) .pp-radio-ik { left: 10px; bottom: 68px; width: 44px; height: 44px; }
+  body.pulpit:not(.na-mapie) .pp-portfel { left: auto; right: 84px; bottom: 66px; width: 84px; height: 52px; }
+  body.pulpit:not(.na-mapie) .pp-portfel:hover, body.pulpit:not(.na-mapie) .pp-portfel:focus-visible { translate: none; }
+  body.pulpit:not(.na-mapie) .pp-zeszyt { right: 6px; bottom: 56px; width: 300px; height: 430px; translate: 0 0; rotate: -8deg; scale: .2; transform-origin: 100% 100%; }
+  body.pulpit:not(.na-mapie) .pp-zeszyt:hover, body.pulpit:not(.na-mapie) .pp-zeszyt:focus-visible { translate: 0 0; rotate: -8deg; }
+  body.pulpit:not(.na-mapie) .komunikat { font-size: calc(12.5px * var(--skala-tekstu, 1)); padding: 6px 10px; margin: 0 0 6px; }
+}

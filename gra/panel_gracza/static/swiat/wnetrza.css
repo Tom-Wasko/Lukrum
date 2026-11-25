@@ -16,9 +16,10 @@
 
 /* klikalne miejsce: bez ramki w spoczynku, stała mała etykieta; obrys i odwrócona etykieta po najechaniu / fokusie */
 .wn-pkt { position: absolute; padding: 0; border: .18em solid transparent; border-radius: .5em; background: none; z-index: 2; color: var(--tusz); font: inherit; cursor: pointer; }
-.wn-pkt .wn-met { position: absolute; left: 50%; top: 100%; transform: translate(-50%, -55%); white-space: nowrap; display: inline-flex; align-items: center; gap: .35em;
+.wn-pkt .wn-met { position: absolute; z-index: 1; left: 50%; top: 100%; transform: translate(-50%, -55%); white-space: nowrap; display: inline-flex; align-items: center; gap: .35em;
   background: var(--g-karta); color: var(--tusz); border: max(.11em, var(--ramka-grubosc)) solid var(--tusz); border-radius: .28em; padding: 0 .5em; line-height: 1.45;
   font-family: var(--font-szyld); letter-spacing: .05em; text-transform: uppercase; font-size: .95em; box-shadow: .14em .14em 0 color-mix(in srgb, var(--tusz) 75%, transparent); pointer-events: none; }
+.wn-pkt .wn-met::after { content: ""; position: absolute; inset: .12em; border: .06em solid color-mix(in srgb, var(--tusz) 55%, transparent); border-radius: .16em; pointer-events: none; }
 .wn-pkt .wn-met::before { content: ""; width: .42em; height: .42em; border-radius: 50%; border: .1em solid var(--tusz); background: var(--papier); flex: none; }   /* dziurka przywieszki */
 .wn-pkt[data-gdzie="gora"] .wn-met { top: 0; transform: translate(-50%, -45%); }
 .wn-pkt[data-gdzie="srodek"] .wn-met { top: 50%; transform: translate(-50%, -50%); }
@@ -29,7 +30,7 @@
 .wn-pkt[data-gdzie="lewy-brzeg"] .wn-met { left: .2em; top: auto; bottom: .3em; transform: none; }
 .wn-pkt .wn-zn { font-family: var(--font-tekst); font-weight: 700; letter-spacing: 0; }
 .wn-pkt .wn-zn.uw { color: var(--uwaga); } .wn-pkt .wn-zn.st { color: var(--strata); }
-.wn-pkt .wn-met i { font-style: normal; font-family: var(--font-tekst); text-transform: none; letter-spacing: 0; opacity: .85; }
+.wn-pkt .wn-met i { font-style: normal; font-family: var(--font-tekst); text-transform: none; letter-spacing: 0; }
 .wn-pkt:hover, .wn-pkt:focus-visible { border-color: var(--akcent); background: color-mix(in srgb, var(--akcent) 10%, transparent); z-index: 5; outline: none; }
 .wn-pkt:focus-visible { box-shadow: 0 0 0 .14em var(--papier), 0 0 0 .32em var(--akcent); }
 .wn-pkt:hover .wn-met, .wn-pkt:focus-visible .wn-met { background: var(--tusz); color: var(--papier); }
@@ -39,24 +40,27 @@
 [data-paleta="wysoka"] .wn-pkt:hover, [data-paleta="wysoka"] .wn-pkt:focus-visible { border-width: .3em; background: none; }
 [data-paleta="wysoka"] .wn-pkt .wn-met { border-width: 3px; }
 
-/* postać z dymkiem */
-.wn-osoba { position: absolute; padding: 0; border: 0; background: none; z-index: 3; color: var(--tusz); font: inherit; cursor: default; }
-.wn-osoba .wn-znak { position: absolute; left: 62%; top: 2%; min-width: 1.5em; height: 1.5em; border-radius: 50%; background: var(--g-karta); border: .12em solid var(--tusz); font-weight: 700; display: grid; place-items: center; }
-.wn-dymek { position: absolute; background: var(--g-karta); color: var(--tusz); border: max(.15em, var(--ramka-grubosc)) solid var(--tusz); border-radius: .8em; padding: .45em .8em .55em; width: max-content; max-width: 19em;
-  box-shadow: .22em .22em 0 color-mix(in srgb, var(--tusz) 75%, transparent); display: grid; gap: .3em; text-align: left; z-index: 6; font-size: 1em; font-family: var(--font-tekst); }
+/* postać z dymkiem (podróż 04/nakladka): dymek domyślnie zwinięty (znaczek „…” przy postaci); klik / Enter / Spacja otwiera, drugi klik albo Esc zamyka.
+   Miejsce dymka wylicza swiat/nakladka.js (nie zasłania szyldu, tablicy ani rekwizytu z punktem), a „nowe” przy znaczku to napis, nie sam kolor. */
+.wn-osoba, .sw-scena .osoba { position: absolute; padding: 0; border: 0; background: none; z-index: 3; color: var(--tusz); font: inherit; cursor: pointer; border-radius: .6em; }
+.wn-osoba .wn-znak { position: absolute; left: 62%; top: 2%; min-width: 1.5em; height: 1.5em; padding: 0 .25em; border-radius: .75em; background: var(--g-karta); border: .12em solid var(--tusz);
+  font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: .3em; white-space: nowrap; }
+.wn-osoba.otwarty .wn-znak { background: var(--tusz); color: var(--papier); }
+.wn-nowe { font-style: normal; font-family: var(--font-szyld); font-weight: 700; font-size: .8em; letter-spacing: .05em; text-transform: uppercase; background: var(--akcent); color: var(--papier);
+  border-radius: .25em; padding: 0 .35em; }
+.wn-osoba.nowy .wn-znak { border-color: var(--akcent); }
+.wn-dymek, .sw-scena .osoba .dymek { position: absolute; background: var(--g-karta); color: var(--tusz); border: max(.15em, var(--ramka-grubosc)) solid var(--tusz); border-radius: .8em; padding: .45em .8em .55em; width: max-content; max-width: 19em;
+  box-shadow: .22em .22em 0 color-mix(in srgb, var(--tusz) 75%, transparent); text-align: left; z-index: 6; font-size: 1em; font-family: var(--font-tekst); display: none; gap: .3em; }
 .wn-dymek .wn-kto { font-family: var(--font-szyld); text-transform: uppercase; letter-spacing: .06em; font-size: .85em; color: color-mix(in srgb, var(--tusz) 70%, var(--papier)); }
-.wn-osoba .wn-dymek { left: 50%; bottom: 96%; transform: translateX(-50%); display: none; }
+.wn-osoba .wn-dymek { left: 50%; bottom: 96%; transform: translateX(-50%); }
 .wn-osoba.w-lewo .wn-dymek { left: auto; right: 10%; transform: none; } .wn-osoba.w-prawo .wn-dymek { left: 10%; transform: none; }
-.wn-osoba:hover .wn-dymek, .wn-osoba:focus-visible .wn-dymek, .wn-osoba.stale .wn-dymek { display: grid; }
-.wn-osoba:hover, .wn-osoba:focus-visible { z-index: 7; }
-.wn-osoba:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
-/* powitanie: dymek obsługi widać przez kilka sekund po wejściu, potem zostaje znaczek „…” (dymek wraca po najechaniu / fokusie);
-   przy ograniczeniu ruchu dymek nie pojawia się sam */
-@media (prefers-reduced-motion: no-preference) {
-  .wn-osoba.powitanie .wn-dymek { display: grid; animation: wn-znikaj 4s forwards; }
-  .wn-osoba.powitanie:hover .wn-dymek, .wn-osoba.powitanie:focus-visible .wn-dymek { animation: none; }
-}
-@keyframes wn-znikaj { 0%, 88% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; } }
+.wn-osoba.otwarty .wn-dymek { display: grid; }
+.sw-scena .osoba.otwarty .dymek { display: block; }
+.wn-osoba.otwarty, .sw-scena .osoba.otwarty { z-index: 9; }
+.wn-osoba:focus-visible, .sw-scena .osoba:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
+/* grubsza krawędź po stronie postaci wskazuje, kto mówi */
+.wn-dymek[data-strona="prawo"], .dymek[data-strona="prawo"] { border-left-width: .5em; }
+.wn-dymek[data-strona="lewo"], .dymek[data-strona="lewo"] { border-right-width: .5em; }
 .wn-plakietka { position: absolute; background: var(--g-karta); border: max(.14em, var(--ramka-grubosc)) solid var(--tusz); border-radius: .35em; padding: .25em .7em; box-shadow: .18em .18em 0 var(--tusz); max-width: 30em; z-index: 2; }
 
 /* dymek „to załatwisz gdzie indziej” i informacja w oknie */
@@ -87,3 +91,12 @@
 .teczka-tryb button.szare { opacity: .55; cursor: not-allowed; border-style: dashed; border-color: currentColor; }
 .teczka-tryb button:focus-visible { outline: var(--ognisko, 2px solid currentColor); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .zaslona { animation: none; } }
+
+/* telefon (≤ 600 px): scena to tylko pasek z rysunkiem; punkty i dymki są pod nią jako lista przycisków (swiat.css: .sw-lista, .sw-dymki) */
+@media (max-width: 600px) {
+  .sw-scena .sw-nakladka { display: none; }
+}
+/* postać kebaba z kartą (propozycja, WOS): klik otwiera kartę, a dymek pokazuje się po najechaniu albo fokusie */
+.sw-scena .osoba[data-akcja="sw-osoba"]:hover .dymek, .sw-scena .osoba[data-akcja="sw-osoba"]:focus-visible .dymek { display: block; }
+.sw-scena .osoba .znak { white-space: nowrap; }
+.sw-scena .osoba .znak .wn-nowe { margin-left: .3em; }

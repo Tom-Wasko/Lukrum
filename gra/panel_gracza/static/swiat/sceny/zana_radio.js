@@ -13,7 +13,7 @@ export default function (R) {
     let s = "";
     s += `<rect class="k" x="520" y="20" width="250" height="${104 - 30}" fill="var(--g-tablica)"/><rect class="k1" x="530" y="28" width="230" height="40" fill="var(--g-szklo)" opacity=".5"/>` + ludzik("bywalec-papkin", 600)
       + `<path class="k bez" d="M650 94v-30l22-10" stroke-width="3"/><rect class="k" x="668" y="44" width="12" height="20" rx="6" fill="var(--g-metal)"/><rect class="k" x="690" y="74" width="70" height="20" fill="var(--g-metal2)"/>`
-      + `<rect class="k" x="790" y="24" width="96" height="24" rx="4" fill="var(--g-czern)"/><g class="neon">` + R.t(838, 41, "NA ANTENIE", 13, { fill: "var(--akcent)" }) + `</g>`;
+      + `<rect class="k" x="790" y="24" width="96" height="24" rx="4" fill="var(--g-czern)"/><g class="neon">` + R.t(838, 41, "NA ANTENIE", 13, { fill: "var(--g-biel)" }) + `</g>`;
     s += `<path class="k" d="M960 94v-34M1040 94v-34" stroke-width="3"/>` + R.plakat(930, 22, 140, 42, ["BILLBOARD", "przy rondzie"], "var(--akcent-2)", 12);
     s += `<path class="k" d="M250 104h850" />`;
     return s;
@@ -26,7 +26,7 @@ export default function (R) {
         + R.swietlowka(130, 26, 170) + R.swietlowka(530, 26, 170) + R.swietlowka(930, 26, 170);
       s += `<rect class="k" x="12" y="60" width="130" height="186" fill="var(--g-sciana2)" opacity=".5"/>` + R.okno(40, 86, 150, 130, { zaluzje: true })
         + R.szyld(660, 52, 470, 56, "„Fala Koziołka”", { tlo: "var(--g-tablica)", tekst: "var(--g-biel)", r: 22 }) + R.t(660, 132, "radio · billboardy", 15, { f: "tekst", bez: true, op: .85 })
-        + R.tabliczka(1120, 70, 150, "Piętro 2", "Biurowiec przy Zana · ul. Zana 39");
+        + R.tabliczka(1112, 70, 176, "Piętro 2", "Biurowiec przy Zana · ul. Zana 39");
       s += `<g transform="translate(${TX} ${TY}) scale(${K})">` + pokoj() + `</g>`; s += R.zanaDekor("radio");
       s += R.osoba("bywalec-papkin", 400, 600, 0.85, "zwykla") + R.fikus(70, 590, 0.9);
       return s;

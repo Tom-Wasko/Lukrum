@@ -20,10 +20,10 @@ R.osoba = (n, cx, stopy, s = 1, mina = "dobra") => { const sym = document.getEle
 R.osobaZa = (n, cx, blatY, stopy, s = 1, mina = "dobra") => { const sym = document.getElementById(`g-postacie-${n}`), top = stopy - 256 * s, h = blatY - top;
   return `<svg x="${cx - 60 * s}" y="${top}" width="${120 * s}" height="${h}" viewBox="0 0 120 ${h / s}" data-mina="${mina}">${sym ? sym.innerHTML : ""}</svg>`; };
 const SZER = { szyld: 0.5, gruby: 0.66, tekst: 0.52 }, SZER_W = { szyld: 0.68, gruby: 0.64, tekst: 0.56 };   // wysoka: Atkinson jest szerszy niż Oswald
-/** Napis. o: { f: szyld|gruby|tekst, fill, w: największa szerokość (napis się zmniejszy), kot: start|middle|end, ls, op, extra, bez: true = bez wersalików } */
+/** Napis. o: { f: szyld|gruby|tekst, fill, w: największa szerokość (napis się zmniejszy), kot: start|middle|end, ls, op (dziś pomijane: półprzezroczysty tekst nie mieści progu kontrastu), extra, bez: true = bez wersalików } */
 R.t = (x, y, txt, r, o = {}) => { const f = o.f || "szyld", tekst = f === "szyld" && !o.bez ? String(txt).toUpperCase() : String(txt);
-  let rr = r * R.sk; const dl = tekst.length * rr * (R.pal === "wysoka" ? SZER_W[f] : SZER[f]) + (o.ls || 0) * tekst.length; if (o.w && dl > o.w) rr = Math.max(7, rr * o.w / dl);
-  return `<text x="${x}" y="${y}" fill="${o.fill || "var(--tusz)"}" text-anchor="${o.kot || "middle"}" style="font-family:var(--font-${f});font-size:${rr.toFixed(1)}px${f === "gruby" ? ";font-weight:var(--waga-gruby,400)" : ""}"${o.ls ? ` letter-spacing="${o.ls}"` : ""}${o.op ? ` opacity="${o.op}"` : ""} ${o.extra || ""}>${esc(tekst)}</text>`; };
+  let rr = r * R.sk; const dl = tekst.length * rr * (R.pal === "wysoka" ? SZER_W[f] : SZER[f]) + (o.ls || 0) * tekst.length; if (o.w && dl > o.w) rr = Math.max(9, rr * o.w / dl);
+  return `<text x="${x}" y="${y}" fill="${o.fill || "var(--tusz)"}" text-anchor="${o.kot || "middle"}" style="font-family:var(--font-${f});font-size:${rr.toFixed(1)}px${f === "gruby" ? ";font-weight:var(--waga-gruby,400)" : ""}"${o.ls ? ` letter-spacing="${o.ls}"` : ""} ${o.extra || ""}>${esc(tekst)}</text>`; };
 const los = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
 
 // ---------- tło: ściana, lamperia, podłogi ----------

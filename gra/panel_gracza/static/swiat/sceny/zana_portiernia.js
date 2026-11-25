@@ -26,7 +26,7 @@ export default function (R) {
     s += `<rect class="k3" x="688" y="4" width="236" height="98" fill="var(--g-tablica)"/>` + R.t(806, 17, "SPIS PIĘTER", 12, { fill: "var(--g-biel)", ls: 1.5 })
       + PIETRA.map((p, i) => R.t(698, 34 + i * 15, `${p.nr}  ${p.firma}`, 11, { fill: "var(--g-biel)", kot: "start", w: 112 })
         + R.t(914, 34 + i * 15, zamkniete(p) ? `od tyg. ${gra().odRundy("internet")}` : p.pod, 10, { fill: "var(--g-biel)", f: "tekst", kot: "end", w: 110 })).join("")
-      + R.t(698, 95, "↑  Winda: wszystkie piętra", 11, { fill: "var(--uwaga)", kot: "start", w: 200 });
+      + R.t(698, 95, "↑  Winda: wszystkie piętra", 12, { fill: "var(--g-biel)", kot: "start", w: 200 });
     s += R.drzwi(1010, 14, 60, 90, { typ: "matowa", napis: "POK. 12" }) + R.paprotka(950, 70, 0.55) + `<rect class="k1" x="938" y="88" width="24" height="6" fill="var(--g-drewno)"/>`;
     s += `<path class="k" d="M250 104h850" />`;
     return s;
@@ -39,7 +39,7 @@ export default function (R) {
         + R.swietlowka(130, 26, 170) + R.swietlowka(530, 26, 170) + R.swietlowka(930, 26, 170);
       s += `<rect class="k" x="12" y="60" width="130" height="186" fill="var(--g-sciana2)" opacity=".5"/>` + R.okno(40, 86, 150, 130, { zaluzje: true })
         + R.szyld(660, 52, 470, 56, "Portiernia", { tlo: "var(--g-tablica)", tekst: "var(--g-biel)", r: 22 }) + R.t(660, 132, "klucze · spis pięter · księga", 15, { f: "tekst", bez: true, op: .85 })
-        + R.tabliczka(1120, 70, 150, "Parter", "Biurowiec przy Zana · ul. Zana 39");
+        + R.tabliczka(1112, 70, 176, "Parter", "Biurowiec przy Zana · ul. Zana 39");
       s += `<g transform="translate(${TX} ${TY}) scale(${K})">` + pokoj() + `</g>`;
       s += R.osoba("bywalec-zagloba", 130, 604, 0.85, "zwykla");
       return s;

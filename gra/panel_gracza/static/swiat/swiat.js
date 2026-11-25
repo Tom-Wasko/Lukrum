@@ -7,7 +7,7 @@ import { cenyLokalu, lokalWybrany, menuLokalu, mojeLokale, opisLokalu, wieleLoka
 import { BUDYNEK_DO_MIEJSCA, BUDYNEK_PARAMETR, MIEJSCA, miejsceEkranu, ustawEkranyMiejsc } from "./miejsca.js";
 import { scenaBezLokalu, scenaBudowy, scenaKebabu, scenaSurowa, ustawRozmiary } from "./sceny.js";
 import { etykietaPory, poraTeraz, stylPory, warstwaPory } from "./pora.js";
-import { akcjaMapa, kliknijPunkt, listaPunktow, przewinDo, punktySceny, sceneWczytana, wczytajScene, zbudujScene } from "./wnetrze.js";
+import { akcjaMapa, kliknijPunkt, listaPunktow, przewinDo, przelaczDymek, punktySceny, sceneWczytana, ulozNakladke, wczytajScene, zbudujScene } from "./wnetrze.js";
 
 import { gazeta } from "./kurier.js";
 import { ksiegaGosci } from "./ksiega.js";
@@ -92,7 +92,7 @@ function daneKebabu(c, punkty) {
   const dekor = { sciany: "podstawowy", szyld: "podstawowy", dodatki: "podstawowy", meble: "podstawowy", ...(lok.dekor || {}) };
   M.mowiacy = mowiacy;
   return { typ: TYP_STREFY[o.strefa] || "pawilon", poziom: poziomSprzetu(v, lok.id), dekor, szyld: String(v.dashboard.nazwa || "").toUpperCase().slice(0, 22),
-    menu: dania, obsluga, mowiacy, wujek, ocena: wn.wskazniki?.ocena ?? lok.ocena, tlok: wn.stan?.tlok, punkty };
+    runda: v.runda, menu: dania, obsluga, mowiacy, wujek, ocena: wn.wskazniki?.ocena ?? lok.ocena, tlok: wn.stan?.tlok, punkty };
 }
 
 function scenaMiejscaKebab(c, m) {
@@ -165,7 +165,7 @@ function naglowek(c, m) {
   const adres = kebab ? (o ? `${esc(o.nazwa)}, ${esc(o.adres || "")}` : "") : esc(def?.adres || m.adres || "");
   const wyzej = def?.wrocDo ? `<button class="sw-wroc wn-wroc-wyzej" data-akcja="sw-wejdz" data-m="${esc(def.wrocDo.replace(/\.html.*/, ""))}" title="Wróć: ${esc(def.wroc || "")}">${ikona("lewo", 18)}<span>${esc(def.wroc || "Wyżej")}</span></button>` : "";
   const ocena = kebab && lok?.ocena ? wsk("Ocena", `${lok.ocena.toFixed(1).replace(".", ",")} ★`) : "";
-  return `<div class="sw-gora">${wyzej}<button class="sw-wroc" data-akcja="sw-mapa" title="Wróć na mapę miasta">${ikona("mapa", 18)}<span>Mapa</span></button>
+  return `<div class="sw-gora"><div class="sw-wroty">${wyzej}<button class="sw-wroc" data-akcja="sw-mapa" title="Wróć na mapę miasta">${ikona("mapa", 18)}<span>Mapa</span></button></div>
     <h1>${tytul}</h1><span class="adres">${adres}</span>
     ${wsk("Tydzień", `${Math.min(v.runda, v.gra.liczba_rund)} z ${v.gra.liczba_rund}`)}${ocena}</div>`;
 }
@@ -206,7 +206,7 @@ export const miejsce = {
     return `<div class="sw">${naglowek(c, m)}${wyborLokalu(c, m)}${DODATKI[M.id] ? DODATKI[M.id](c) : ""}
       <div class="sw-scena-ramka"><div class="sw-scena ${sp.klasa}" style="${sp.zmienne}"><svg viewBox="0 0 1220 612" role="img" aria-label="${esc(sc.opis)}">${sc.s}</svg>
         ${warstwaPory()}<span class="sw-pora-etykieta">${etykietaPory(pora)}</span><div class="sw-nakladka">${sc.h}</div><div id="sw-karta-miejsce">${kartaHtml(c)}</div></div></div>
-      ${DODATKI_POD[M.id] ? DODATKI_POD[M.id](c) : ""}<h2 class="sw-co">Co tu zrobisz</h2>${makieta(m) ? listaPunktow(M.punkty) : lista(c, m)}</div>`;
+      ${sc.dymki || ""}${DODATKI_POD[M.id] ? DODATKI_POD[M.id](c) : ""}<h2 class="sw-co">Co tu zrobisz</h2>${makieta(m) ? listaPunktow(M.punkty) : lista(c, m)}</div>`;
   },
   po(c) {
     const naMiejscu = () => document.querySelector(".sw");
@@ -218,6 +218,7 @@ export const miejsce = {
       const id = M.id;
       wczytajScene(id, M.q).then(() => { if (naMiejscu() && M.id === id) c.rysuj(); }).catch((e) => { console.error(e); M.blad = true; if (naMiejscu()) c.rysuj(); });
     } else if ((MIEJSCA[M.id] || {}).scena === "kebab" && lokalWybrany(c.v)) wczytajWnetrze(c).then((zmiana) => { if (zmiana && naMiejscu()) c.rysuj(); });
+    ulozNakladke();
     const k = document.querySelector(".sw-karta .zamknij");
     if (k && M.fokusKarty) { k.focus({ preventScroll: true }); M.fokusKarty = false; }
   },
@@ -237,6 +238,7 @@ export const miejsce = {
       c.teczka(k);   // ekran w oknie nad wnętrzem (teczka), nie osobna karta
       if (el.dataset.szukaj) przewinDo(el.dataset.szukaj);
     },
+    "sw-dymek": (el) => przelaczDymek(el),
     "sw-osoba": (el, c) => {
       const o = el.dataset.nr === "wujek" ? null : (M.mowiacy || [])[+el.dataset.nr];
       if (!o) return;
