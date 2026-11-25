@@ -1,6 +1,6 @@
 # Stan
-Archi żył: 2026-11-25 12:35
-Tryb: autonomiczny od 10:47, budżet do 17:00, koniec najpóźniej 17:00
+Archi żył: 2026-11-25 13:07
+Tryb: nadzorowany od 13:07
 Tempo: żółw
 
 ## Podróż
