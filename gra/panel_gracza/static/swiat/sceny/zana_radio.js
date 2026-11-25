@@ -29,6 +29,7 @@ export default function (R) {
         + R.tabliczka(1112, 70, 176, "Piętro 2", "Biurowiec przy Zana · ul. Zana 39");
       s += `<g transform="translate(${TX} ${TY}) scale(${K})">` + pokoj() + `</g>`; s += R.zanaDekor("radio");
       s += R.osoba("bywalec-papkin", 400, 600, 0.85, "zwykla") + R.fikus(70, 590, 0.9);
+      s += R.wycieraczka(560, 590, 120) + R.doniczka(1170, 596, 1);
       return s;
     },
     punkty: () => [{ x: 8, y: by(0) + 4, w: 1204, h: Math.round(104 * K) - 8, et: "Radio i billboard", gdzie: "gora", 

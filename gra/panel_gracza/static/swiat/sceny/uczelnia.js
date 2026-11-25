@@ -19,6 +19,7 @@ export default function (R) {
       s += `<path d="M330 492q120-60 260-30t280-34" fill="none" stroke="var(--akcent-2)" stroke-width="7" opacity=".7"/>` + [[380, 446, "var(--g-zielen)"], [520, 436, "var(--g-sciana2)"], [660, 440, "var(--uwaga)"], [800, 434, "var(--g-skora2)"], [450, 476, "var(--g-skora)"], [730, 480, "var(--g-zielen)"]].map(([x, y, k], i) => `<path class="k1" d="M${x} ${y}l70-8 20 22-80 12z" fill="${k}" opacity=".7"/><path class="k" d="M${x + 44} ${y + 10}v-22" stroke-width="2"/><circle class="k1" cx="${x + 44}" cy="${y - 14}" r="7" fill="${i % 2 ? "var(--akcent)" : "var(--akcent-2)"}"/>`).join("");
       s += `<circle class="k3 bez" cx="900" cy="470" r="20"/><path class="k" d="M914 484l26 22" stroke-width="6"/>` + R.t(610, 548, "MAPA STREF · LUBLIN", 15, { fill: "var(--g-biel)", ls: 2 });
       s += R.osoba("bywalec-jozio", 190, 606, 0.86) + R.fikus(1180, 600, 0.95) + R.maszyna(1010, 270, 0.7);
+      s += R.biegacz(380, 584, 420, 22, "var(--akcent-2)") + R.doniczka(80, 596, 1.2) + R.krzeslaRzad(1000, 598, 3);
       return s;
     },
     punkty: [

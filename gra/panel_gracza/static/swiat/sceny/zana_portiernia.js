@@ -42,6 +42,7 @@ export default function (R) {
         + R.tabliczka(1112, 70, 176, "Parter", "Biurowiec przy Zana · ul. Zana 39");
       s += `<g transform="translate(${TX} ${TY}) scale(${K})">` + pokoj() + `</g>`;
       s += R.osoba("bywalec-zagloba", 130, 604, 0.85, "zwykla");
+      s += R.wycieraczka(560, 590, 120) + R.doniczka(1170, 596, 1);
       return s;
     },
     punkty: () => [

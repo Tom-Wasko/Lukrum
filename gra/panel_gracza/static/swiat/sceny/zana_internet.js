@@ -30,6 +30,7 @@ export default function (R) {
         + R.tabliczka(1112, 70, 176, "Piętro 4", "Biurowiec przy Zana · ul. Zana 39");
       s += `<g transform="translate(${TX} ${TY}) scale(${K})">` + pokoj() + `</g>`;
       s += (zamkniety() ? "" : R.osoba("bywalec-jozio", 400, 600, 0.85, "zwykla")) + R.paprotka(70, 580, 0.9);
+      s += R.wycieraczka(560, 590, 120) + R.doniczka(1170, 596, 1);
       return s;
     },
     punkty: () => [{ x: 8, y: by(0) + 4, w: 1204, h: Math.round(104 * K) - 8, et: "Internet", gdzie: "gora", ktoMowi: "Portier", zamkniete: zamkniety() ? `od tyg. ${gra().odRundy("internet")}` : "",

@@ -32,6 +32,7 @@ export default function (R) {
       s += R.regal(1090, 150, 110, 250, 4, (px, py, pw, ph, nr) => Array.from({ length: 5 - nr }, (_, k) => `<rect class="k1" x="${px + 4 + k * 17}" y="${py + 8}" width="14" height="${ph - 8}" fill="var(--g-biel)"/>`).join("")) + R.t(1145, 142, "NADANE", 12, { ls: 1.5, op: .8 });
       // pierwszy plan: stolik do pisania z długopisem na łańcuszku, kolejka
       s += `<rect class="k" x="120" y="480" width="210" height="12" fill="var(--g-drewno)"/><path class="k" d="M136 492v112M314 492v112" stroke-width="5"/>` + R.papiery(150, 480, 4) + `<path class="k1 bez" d="M260 480q20-34 40-8"/>` + R.osoba("gosc-sasiadka", 520, 606, 0.82, "zwykla") + R.osoba("gosc-student", 800, 606, 0.82, "zwykla") + R.kwietnik(1150, 604, 0.9);
+      s += R.wycieraczka(60, 596, 130) + R.krzeslaRzad(980, 598, 3);
       return s;
     },
     punkty: () => {

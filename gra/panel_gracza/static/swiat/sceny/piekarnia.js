@@ -22,6 +22,7 @@ export default function (R) {
       s += [["BUŁKI", 640], ["TORTILLE", 760], ["PITA", 880]].map(([n, x], i) => `<path class="k" d="M${x} 330h100l-10-40h-80z" fill="var(--g-drewno)"/>` + bochenki(x + 20, 288, 3, i === 1 ? "var(--g-biel)" : "var(--g-skora2)") + R.cenowka(x + 14, 356, n, 76)).join("");
       // pierwszy plan: skrzynki dowozowe i rower z koszem
       s += R.skrzynka(80, 520, 130, 70, "var(--g-drewno2)", "DOWÓZ 5:30") + R.skrzynka(96, 456, 110, 64, "var(--g-drewno2)", "") + `<circle class="k3 bez" cx="1010" cy="560" r="40"/><circle class="k3 bez" cx="1140" cy="560" r="40"/><path class="k3 bez" d="M1010 560l44-70h60l26 70M1054 490l32 70h-76M1114 490l-10-22h22"/><rect class="k" x="1116" y="470" width="60" height="40" fill="var(--g-drewno2)"/>`;
+      s += R.wycieraczka(520, 598, 150) + R.pojemnik(330, 600);
       return s;
     },
     punkty: () => [

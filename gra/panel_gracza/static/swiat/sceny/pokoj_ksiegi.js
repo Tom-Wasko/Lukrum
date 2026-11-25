@@ -19,6 +19,7 @@ export default function (R) {
       s += `<path class="k" d="M280 440v-44h110v44z" fill="var(--g-drewno2)"/><path class="k" d="M274 396h122v-10h-122z" fill="var(--g-drewno)"/>` + [0, 1, 2, 3].map((i) => `<rect class="k1" x="${290 + i * 24}" y="${366 - (i % 2) * 6}" width="18" height="${30 + (i % 2) * 6}" fill="var(--g-biel)" transform="rotate(${i * 5 - 8} ${299 + i * 24} 386)"/>`).join("") + R.t(335, 428, "PARAGONY", 12, { ls: 1 });
       s += `<rect class="k" x="760" y="414" width="60" height="26" rx="3" fill="var(--g-metal2)"/><rect class="k1" x="766" y="418" width="48" height="8" fill="var(--g-szklo)"/>` + `<path class="k bez" d="M850 440v-70q0-20-30-14" stroke-width="4"/><path class="k" d="M832 350l-34 10 14 22z" fill="var(--uwaga)"/>` + R.krzeslo(580, 606, 1.5, "var(--g-metal2)");
       s += R.fikus(1180, 590, 1.0) + R.kosz(930, 566);
+      s += R.doniczka(80, 596, 1.2) + R.krzeslaRzad(1000, 600, 2);
       return s;
     },
     punkty: [
