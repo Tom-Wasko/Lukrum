@@ -148,7 +148,7 @@ export function ulozNakladke() {
     const pkt = [...sc.querySelectorAll(".wn-pkt")].map((el) => ({ el, met: el.querySelector(".wn-met"), rect: rel(el, B) })).filter((p) => p.met && widoczny(p.rect));
     if (!pkt.length) return;
     const wynik = rozlozSzyldy(pkt.map((p, i) => ({ id: i, rect: p.rect, szyld: { w: p.met.offsetWidth, h: p.met.offsetHeight }, gdzie: p.el.dataset.gdzie })),
-      { w: B.width, h: B.height }, [...sc.querySelectorAll(".wn-osoba")].map((o) => rel(o, B)).filter(widoczny));
+      { w: B.width, h: B.height }, [...sc.querySelectorAll(".wn-osoba, .polka, .tlok-znak")].map((o) => rel(o, B)).filter(widoczny));
     for (const w of wynik) {
       const p = pkt[w.id];
       Object.assign(p.met.style, { left: `${(w.x - p.rect.x - p.el.clientLeft).toFixed(1)}px`, top: `${(w.y - p.rect.y - p.el.clientTop).toFixed(1)}px`, right: "auto", bottom: "auto", transform: "none" });
