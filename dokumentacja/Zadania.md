@@ -33,7 +33,7 @@ Podróż 04-wyglad-i-dzwiek (start 24.11):
 ### Mniej ważne
 - Z7 · mapa: położenia lokali w `lokale.yaml: geo` zamiast w `lublin.json`; odsyłacze dla twórców usunąć z `budynki.yaml`; opisy 11 punktów orientacyjnych i położenia Auchan/błonia/Lidl sprawdzić w źródłach; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html`
 - Z8 · boty i billboardy na mapie; przycisk „Stara mapa” do zdjęcia po teście z klasą
-- Z14 · nastrój zespołu na twarzach, wydarzenia dla filii, popyt z mapy
+- Z14 · wydarzenia dla filii, popyt z mapy (nastrój zespołu na twarzach zrobiony 25.11, wątek 04/nastroj: miny obsługi w kebabie z nastroju)
 - Z22 · niezależny przegląd całości (kod, dane, teksty, zrzuty)
 - Z27 · wersja na telefon (układ razem z majstrem) i pilot w szkole do maja 2027
 - Z24 · nazwa w UPRP i znaki towarowe (zwłaszcza poza szkołami), publikacja za zgodą szefa
