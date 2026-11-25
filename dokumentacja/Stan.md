@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-25 12:00
+Archi żył: 2026-11-25 12:35
 Tryb: autonomiczny od 10:47, budżet do 17:00, koniec najpóźniej 17:00
 Tempo: żółw
 
@@ -34,3 +34,12 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 - Serwer gry na porcie 8784 (pid 25996, po wątku 04/kontrast) nadal działa: wyko nie mógł go zatrzymać (blokada), zatrzymaj ręcznie.
 
 ## Od Pomocnika
+
+## Podsumowanie trybu autonomicznego (25.11, 10:47–12:35)
+Zrobione i scalone do `podroz-04` (pełne testy 1031 passed, `ruff` czysty): Z10, Z3, Z14 (nastrój), szyldy, Z8 (billboardy),
+Z7 (opisy punktów mapy), Z52 (realny błąd debetu w silniku), Z22 (przegląd: `podroze/04-wyglad-i-dzwiek/przeglad-z22.md`;
+poprawiono neutralność płciową w `parki.yaml` i znacznik naliczenia debetu).
+Czeka na szefa: wybór ikony lokalu (6 wariantów) i usunięcie `podglad_lokali.html` (Z7); paczka Z39; Z53 (billboardy:
+położenia w OSM, strefy kampanii); „bloki osiedla” w parku Rury; szyld „Tablica wyników” w palecie wysokiej ciemnej;
+Z19, Z20, Z24, Z27. `podroz-04` nie jest w `main` (bez push, czeka na powrót szefa).
+Do sprzątnięcia ręcznie: `_robocze/` (nawiazania, nakladka, charakter, baza, billboardy, zrzuty-billboardy), `gra/_robocze`, serwer 8784.
