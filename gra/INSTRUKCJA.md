@@ -445,6 +445,8 @@ ostatnie – już tak. Przed zmianą warto policzyć, czy oszczędność na doku
   wybiera się kanał, strefę i **liczbę emisji**. Cena emisji zależy od kanału i strefy, a od progów dochodzi rabat.
   Efekt się nasyca – pierwsze emisje dają najwięcej, a dalsze kosztują i prawie nic nie dodają. Kampanie się sumują, ale
   z sufitem, a firmy reklamujące się tak samo w jednej strefie zagłuszają się nawzajem.
+  Gdy w rundzie trwa kampania billboardowa, na mapie (po przybliżeniu) pojawiają się trzy billboardy „Fali Koziołka”
+  przy rondach: Dmowskiego, KUL i Thatcher. Kliknięcie billboardu pokazuje opis; wpis jest też w legendzie.
 - **Internet** (od tygodnia 7, „Lajk i Spółka”) – zamawia się tak samo, ale efekt rośnie przez kilka rund i gaśnie
   wolniej niż ulotki. Opłaca się zacząć wcześnie.
 

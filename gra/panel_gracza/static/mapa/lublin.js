@@ -151,6 +151,13 @@ function znakiLokali(c) {
   }).join("");
 }
 
+// billboardy reklamowe: tylko gdy w tej rundzie działa kampania billboardowa (v.reklama.billboardy – filtruje silnik)
+function znakiBillboardow(c) {
+  return (c.v.reklama?.billboardy || []).filter((b) => b.geo).map((b) =>
+    znak(...xy(b.geo), "lm-billboard", "lmapa-billboard", b.id, b.nazwa, `${b.opis} Kampania billboardowa trwa – nie wpływa na grę poza reklamą.`,
+      `<span class="lm-kafel">${zeton("plakat", null, "kolo")}<i class="lm-plakietka" aria-hidden="true">▤</i></span>`, 4)).join("");
+}
+
 // punkty orientacyjne: miejsca z miasto.yaml i dodatkowe punkty Lublina z danych mapy (lublin.json: dodatkowe)
 const miejsce = (xyM, akcja, m) => znak(...xyM, `lm-miejsce${DALEKO.has(m.id) ? " lm-daleko" : ""}`, akcja, m.id, m.nazwa,
   `${m.opis} Punkt orientacyjny – nie wpływa na grę.`, `<span class="lm-kafel">${zeton(m.id, null, "")}</span>`, 1);
@@ -198,6 +205,7 @@ const legenda = (c) => `<button type="button" class="lm-leg-przycisk" data-akcja
   ${c.v.lokale ? `<span>${wzor("lm-moj", null, "lokal", "★")}Twój lokal</span><span>${wzor("lm-wybrany", null, "lokal", "✓")}wybrany w tej rundzie</span>
   <span>${wzor("lm-wolny", null, "lokal")}wolny lokal</span><span>${wzor("lm-wolny", null, "dzialka")}wolna działka</span>
   <span>${wzor("lm-zajety", null, "lokal")}lokal innej firmy (żeton w jej kolorze)</span>` : ""}
+  ${c.v.reklama?.billboardy?.length ? `<span>${wzor("lm-billboard", "plakat", null, "▤")}billboard przy rondzie (trwa kampania)</span>` : ""}
   <span>${wzor("lm-budynek", "kamienica_bankowa")}budynek – kliknij, żeby wejść</span><span>${wzor("lm-zielony", null, "park")}park albo woda</span>
   <span>${wzor("lm-miejsce", "zamek")}punkt orientacyjny (nadrukowany na planszy)</span>
   <span class="podpowiedz">Przybliżanie: kółko myszy, dwa palce, dwuklik albo + i −. Przesuwanie: przeciągnij albo strzałki.</span></div>`;
@@ -283,7 +291,7 @@ function naZmiane(s) {
 function waznosc(el) {
   const k = el.classList;
   return k.contains("lm-moj") || k.contains("lm-wybrany") ? 1 : k.contains("lm-strefa-napis") ? (k.contains("lm-mala") ? 4 : 2) : k.contains("lm-zespol") ? 3
-    : k.contains("lm-budynek") || k.contains("lm-zielony") ? 5 : k.contains("lm-zajety") ? 6 : k.contains("lm-wolny") ? 7 : k.contains("lm-miejsce") ? 8 : 9;
+    : k.contains("lm-budynek") || k.contains("lm-zielony") ? 5 : k.contains("lm-zajety") ? 6 : k.contains("lm-wolny") ? 7 : k.contains("lm-miejsce") || k.contains("lm-billboard") ? 8 : 9;
 }
 
 // na pełnym oddaleniu zostaje tylko Twój lokal
@@ -448,7 +456,7 @@ export const nowaMapa = {
         <svg class="lmapa-svg" aria-hidden="true">${rysunek(M, wart, zakres)}</svg>
         <div class="lm-noc" aria-hidden="true"></div>
         ${swiatloLatarn()}
-        <div class="lmapa-nakladka">${napisy(M, wart)}${znakiMiejsc(M)}${znakiBudynkow(c)}${znakiLokali(c)}</div>
+        <div class="lmapa-nakladka">${napisy(M, wart)}${znakiMiejsc(M)}${znakiBudynkow(c)}${znakiBillboardow(c)}${znakiLokali(c)}</div>
         ${pasekSkrotow()}
         <div class="lm-zoom"><button type="button" data-akcja="lmapa-zoom" data-z="1.6" aria-label="Przybliż" title="Przybliż">${ikona("plus", 20)}</button>
           <button type="button" data-akcja="lmapa-zoom" data-z="0.625" aria-label="Oddal" title="Oddal">${ikona("minus", 20)}</button>
@@ -519,6 +527,10 @@ export const nowaMapa = {
     "lmapa-punkt": (el) => {
       const m = (DANE.dodatkowe || []).find((x) => x.id === el.dataset.id);
       if (m) pokazKarte({ rodzaj: "Punkt orientacyjny", tytul: m.nazwa, adres: m.adres || "Lublin", opis: m.opis, uwaga: "Nie wpływa na grę." });
+    },
+    "lmapa-billboard": (el, c) => {
+      const b = (c.v.reklama?.billboardy || []).find((x) => x.id === el.dataset.id);
+      if (b) pokazKarte({ rodzaj: "Billboard", tytul: b.nazwa, adres: "Lublin", opis: b.opis, uwaga: "Widać go, bo trwa kampania billboardowa." });
     },
     "lmapa-firma": (el, c) => { zamknijOkno(); P.akcje["mapa-budynek"](el, c); },
     "lmapa-wyglad": (el) => window.lukrum.wyglad.ustaw({ paleta: el.dataset.paleta, tryb: el.dataset.tryb }),
