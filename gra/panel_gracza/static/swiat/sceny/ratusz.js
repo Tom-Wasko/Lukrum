@@ -16,6 +16,7 @@ export default function (R) {
           + `<rect class="k1" x="${cx - 36}" y="296" width="72" height="24" fill="var(--g-biel)"/>` + R.t(cx, 313, `OKIENKO ${i + 1}`, 11.5, { fill: "var(--g-czern)" }); });
       s += R.kartka(516, 200, 104, 62, ["PRZERWA", "śniadaniowa", "10:00–10:15"], -3, 11);
       s += R.numerki(1128, 316, "A 017") + R.kwietnik(60, 600, 1.0) + [300, 370, 440].map((x) => R.krzeslo(x, 604, 1.25, "var(--g-drewno2)")).join("") + R.osoba("bywalec-rzecki", 700, 606, 0.86, "zwykla") + R.kosz(1150, 566);
+      s += R.krzeslaRzad(980, 598, 3) + R.doniczka(70, 596, 1.1);
       return s;
     },
     punkty: [

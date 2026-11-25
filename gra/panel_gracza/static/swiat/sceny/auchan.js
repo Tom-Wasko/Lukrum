@@ -20,6 +20,7 @@ export default function (R) {
       // pierwszy plan: trzy kasy w rzędzie (numery na masztach), wózek sklepowy, klientka w kolejce
       [150, 420, 690].forEach((x, i) => { s += R.u("sklep-kasa", x, 440, 0.95) + `<path class="k" d="M${x + 150} 452v-70"/><circle class="k" cx="${x + 150}" cy="370" r="15" fill="${i === 1 ? "var(--uwaga)" : "var(--g-biel)"}"/>` + R.t(x + 150, 376, String(i + 1), 16, { fill: "var(--g-czern)", f: "gruby" }); });
       s += R.osobaZa("obsluga-kasjerka", 510, 500, 600, 0.9) + R.u("sklep-wozek", 900, 474, 0.95) + R.osoba("gosc-sasiadka", 1090, 606, 0.78, "zwykla");
+      s += R.wozekSklep(40, 604, 0.9, "var(--akcent)") + R.wozekSklep(1190, 604, 0.9, "var(--akcent)");
       return s;
     },
     punkty: () => [

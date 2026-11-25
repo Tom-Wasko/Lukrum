@@ -1,7 +1,7 @@
 # Stan
-Archi żył: 2026-11-25 07:55
-Tryb: nadzorowany od 07:06 (25.11)
-Tempo: żółw
+Archi żył: 2026-11-25 10:20
+Tryb: nadzorowany od 10:20
+Tempo: zwykły
 
 ## Podróż
 **04-wyglad-i-dzwiek**: plan zatwierdzony 23.11 wieczorem (`podroze/04-wyglad-i-dzwiek/plan.md`), **start 24.11 rano**
@@ -21,10 +21,11 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/prawo | Z23 (reszta) | scalony do `podroz-04` (995 passed; notki ze źródłami) |
 | 04/wnetrza | Z4 (przegląd) | scalony do `podroz-04` (52 sceny, 15 poprawek) |
 | 04/nakladka | Z4 A | scalony do `main` 25.11 (f5a41a8, 448 passed) |
-| 04/kebab | Z4 B (P5, P10) | w toku: nowy wyko (sesja 04/nakladka wygasła w nocy), port 8789 |
-| 04/charakter | Z4 C (P2, P6–P9, P14, P15) | w toku: wyko 15778b32, port 8790 |
+| 04/kebab | Z4 B (P5, P10) | scalony do podroz-04 (f4dec9d), 1023 passed; wyko 46a0eef7 do zatrzymania |
+| 04/charakter | Z4 C (P2, P6–P9, P14, P15) | scalony do podroz-04 (981ff5f), 1024 passed; P14 czeka na decyzję |
 
 ## Czeka na szefa
+- P14 (Z4 C): kafelki akcji w piekarni są puste, bo `dane/dostawcy.yaml` nie ma produktów ani akcji dla Piekarni Koziołek. Czy uzupełnić dane gry (co piekarnia dostarcza)? Rekomendacja: tak, w osobnym zadaniu.
 - Radio jako lampowy odbiornik PRL obok banknotów (25.11, Archi); do obejrzenia w grze.
 - `podroz-04` scalona do `main` i wypchnięta 24.11 16:55 (1007 passed).
 - Notki prawne w INSTRUKCJI (04/prawo, rozdz. „Prawo za mechanikami”) sprawdzone w serwisach prawnych i gov.pl, nie w Dz.U.; pokazać prawnikowi przed pokazem.

@@ -25,12 +25,24 @@ export default function (R) {
     opis: `Gabinet biura ${f.nazwa}: biurko, regał z segregatorami, cennik pakietów na ścianie.`,
     rysuj: (R) => {
       const noc = id === "asteroida_328";
-      let s = R.sciana(f.sciana) + R.boazeria(300, 380) + R.podloga("parkiet", 380, "var(--g-podloga)");
+      const tla = {
+        jks: () => R.sciana(f.sciana) + R.boazeria(300, 380) + R.podloga("parkiet", 380, "var(--g-podloga)"),
+        jozef_k: () => R.sciana(f.sciana) + R.lamperia(260, 380, "var(--g-sciana)", true) + R.podloga("beton", 380) + R.kasetony(0, 50, 0, 1220, 100),
+        scrooge: () => R.sciana(f.sciana) + R.podloga("plytki", 380) + R.kaloryfer(40, 300, 5),
+        asteroida_328: () => R.sciana(f.sciana) + R.boazeria(300, 380) + R.podloga("wykladzina", 380),
+      };
+      let s = tla[id]();
       s += R.okno(880, 70, 150, 190, { widok: noc ? "var(--g-tablica)" : undefined, firanka: !noc }) + (noc ? [[900, 100], [950, 150], [1000, 96], [930, 210], [1004, 190], [968, 118]].map(([a, b]) => `<circle cx="${a}" cy="${b}" r="3" fill="var(--uwaga)"/>`).join("") : "");
       s += R.literki(60, 60, 290, 160, "CENNIK · MIESIĄC BRUTTO", f.cennik, 14.5) + R.zegar(420, 100, 28, 3, 40);
       // regał z segregatorami (5 półek), kaloryfer pod oknem, fikus
       s += R.regal(560, 60, 250, 320, 4, id === "jozef_k" ? (px, py, pw, ph) => R.papiery(px + 6, py + ph, 6) + R.papiery(px + 70, py + ph, 8) + R.papiery(px + 140, py + ph, 5) : R.segregatory) + (id === "jks" ? R.t(685, 54, "Z ← A", 13, { op: .7 }) : "");
-      s += R.kaloryfer(900, 300, 9) + R.fikus(1150, 560, 1.1);
+      const bok = {
+        jks: () => R.kaloryfer(900, 300, 9) + R.fikus(1150, 560, 1.1) + R.wycieraczka(640, 590, 120),
+        jozef_k: () => R.kaloryfer(900, 300, 9) + R.stosSkrzynek(1090, 600, 3, 90, "var(--g-drewno2)") + R.teczki(640, 600, 6) + R.plakatPRL(70, 270, 100, 100, "KOLEJKA DO OKIENKA 3", "var(--strata)"),
+        scrooge: () => R.kaloryfer(900, 300, 9) + R.kosz(1110, 570) + R.wieszak(1010, 604) + R.biegacz(600, 570, 300, 22, "var(--g-metal2)"),
+        asteroida_328: () => R.kaloryfer(900, 300, 9) + R.doniczka(1150, 604, 1.4) + R.krzeslaRzad(700, 600, 3, 90, "var(--akcent-2)") + R.biegacz(560, 570, 360, 22, "var(--akcent)"),
+      };
+      s += bok[id]();
       // księgowy za biurkiem, na blacie: maszyna do liczenia z taśmą, liczydło, lampka, teczki
       s += R.osobaZa(f.postac, 330, 404, 520, 1.1) + R.biurko(140, 400, 400, 130);
       s += R.maszyna(180, 400, 0.9) + `<path class="k1" d="M196 364q-6-40 16-60" fill="none" stroke="var(--g-biel)" stroke-width="12"/>` + `<rect class="k" x="420" y="356" width="96" height="44" fill="var(--g-drewno)"/>` + [0, 1, 2].map((r) => `<path d="M424 ${366 + r * 12}h88" stroke="var(--g-czern)"/>` + [0, 1, 2, 3, 4].map((k) => `<circle cx="${436 + k * 9 + r * 14}" cy="${366 + r * 12}" r="4" fill="${R.KOL[(k + r) % 4]}" class="k1"/>`).join("")).join("") + R.teczki(250, 400, 4);

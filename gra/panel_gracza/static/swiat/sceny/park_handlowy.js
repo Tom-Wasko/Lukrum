@@ -17,7 +17,7 @@ export default function (R) {
       s += `<rect class="k" x="320" y="150" width="130" height="78" rx="4" fill="var(--g-czern)"/><rect x="328" y="158" width="114" height="62" fill="var(--g-zielen)"/><circle cx="385" cy="189" r="12" fill="var(--g-biel)"/>` + R.t(385, 244, "MECZ MOTORU", 12, { op: .8 });
       s += `<rect class="k" x="320" y="262" width="130" height="36" rx="6" fill="var(--g-biel)"/><path d="M330 284h110M330 290h110" stroke="var(--g-czern)" opacity=".5"/>` + `<rect class="k" x="480" y="210" width="56" height="170" rx="4" fill="var(--g-metal2)"/><rect class="k1" x="488" y="220" width="40" height="64" fill="var(--g-szklo)"/>` + R.t(508, 310, "KIOSK", 11, { fill: "var(--g-biel)" });
       s += R.cenowka(70, 140, "OGRÓDEK 6 000", 110) + R.cenowka(320, 316, "TV 2 900", 76) + R.cenowka(470, 150, "KIOSK 9 000", 86);
-      s += `<path class="efekt" d="M60 400l120-270M110 400l70-160" stroke="var(--g-biel)" stroke-width="10" opacity=".25"/><rect class="k3 bez" x="40" y="118" width="520" height="302"/>`;
+      s += `<path class="efekt" d="M60 418h90l110-298h-60zM190 418h40l80-298h-30z" fill="var(--g-biel)" opacity=".1"/><rect class="k3 bez" x="40" y="118" width="520" height="302"/>`;
       // słup z drogowskazem
       s += `<rect class="k" x="576" y="60" width="68" height="360" fill="var(--g-sciana)"/>` + R.tabliczka(610, 200, 84, "Sprzęt", "hala obok ➜");
       // prawa witryna: Meblościanka
@@ -25,7 +25,7 @@ export default function (R) {
       s += `<rect class="k3" x="690" y="150" width="300" height="230" fill="var(--g-drewno)"/>` + [0, 1, 2].map((k) => `<rect class="k" x="${700 + k * 96}" y="160" width="88" height="100" fill="${k === 1 ? "var(--g-szklo)" : "var(--g-drewno2)"}" opacity="${k === 1 ? .7 : 1}"/><rect class="k" x="${700 + k * 96}" y="270" width="88" height="100" fill="var(--g-drewno2)"/><circle cx="${780 + k * 96}" cy="320" r="3.5" fill="var(--uwaga)"/>`).join("")
         + [0, 1, 2].map((i) => `<path class="k1" d="M${812 + i * 22} 250l8-22 8 22z" fill="var(--g-biel)"/>`).join("") + `<path d="M690 156h300" stroke="var(--g-biel)" stroke-width="3" opacity=".5" class="efekt"/>` + R.paprotka(740, 116, 0.8);
       s += `<path class="k" d="M1060 380v-150" stroke-width="4"/><path class="k" d="M1020 230l14-56h52l14 56z" fill="var(--uwaga)"/>` + Array.from({ length: 9 }, (_, i) => `<path d="M${1024 + i * 9} 230v10" stroke="var(--tusz)" stroke-width="2"/>`).join("") + fotel(1010, 384, "var(--akcent-2)") + fotel(1090, 384, "var(--g-zielen)");
-      s += R.cenowka(700, 130, "PRL · NOWOCZESNY · STUDENCKI · RODZINNY", 270) + `<path class="efekt" d="M690 400l110-260" stroke="var(--g-biel)" stroke-width="10" opacity=".22"/><rect class="k3 bez" x="660" y="118" width="520" height="302"/>`;
+      s += R.cenowka(700, 130, "PRL · NOWOCZESNY · STUDENCKI · RODZINNY", 270) + `<path class="efekt" d="M680 418h90l110-298h-60zM810 418h40l80-298h-30z" fill="var(--g-biel)" opacity=".1"/><rect class="k3 bez" x="660" y="118" width="520" height="302"/>`;
       // pierwszy plan
       s += R.lawka(500, 604, 150) + R.fikus(60, 590, 1.0) + R.osoba("sprzedawca", 1130, 606, 0.85) + R.osoba("gosc-sasiadka", 330, 606, 0.8, "zwykla");
       return s;

@@ -100,3 +100,18 @@
 .sw-scena .osoba[data-akcja="sw-osoba"]:hover .dymek, .sw-scena .osoba[data-akcja="sw-osoba"]:focus-visible .dymek { display: block; }
 .sw-scena .osoba .znak { white-space: nowrap; }
 .sw-scena .osoba .znak .wn-nowe { margin-left: .3em; }
+
+/* kebab: punkty to szyldy z nakładki (bez przerywanej ramki i plusa ze starych .hot); wujek.js może je nadal podświetlić */
+.sw-scena .wn-pkt.hot { border: .18em solid transparent; background: none; }
+.sw-scena .wn-pkt.hot::before { content: none; }
+.sw-scena .wn-pkt.hot:hover, .sw-scena .wn-pkt.hot:focus-visible { border: .18em solid var(--akcent); background: color-mix(in srgb, var(--akcent) 10%, transparent); }
+.sw-scena .wn-pkt.hot.zablokowane { background: none; border-color: transparent; }
+
+/* P10: ciemne palety – postacie i rekwizyty w ciemnej wersji, nie jasne wycinanki. Wartości w motywy/zmienne.css. */
+[data-tryb="ciemny"] .sw-scena svg[data-mina] {
+  --g-kontur: var(--g-kontur-ciemny);
+  --g-biel: var(--g-postac-biel); --g-skora: var(--g-postac-skora); --g-skora3: var(--g-postac-skora3); --g-siwy: var(--g-postac-siwy); --g-karta: var(--g-postac-karta);
+}
+[data-tryb="ciemny"] .sw-scena svg[data-mina] [stroke="var(--g-czern)"] { stroke: var(--g-kontur); }
+[data-tryb="ciemny"] .sw-scena svg:not([data-mina]) { --g-biel: var(--g-rekwizyt-biel); }
+[data-paleta="wysoka"][data-tryb="ciemny"] .sw-scena .k, [data-paleta="wysoka"][data-tryb="ciemny"] .sw-scena .k1, [data-paleta="wysoka"][data-tryb="ciemny"] .sw-scena .k3 { stroke: var(--g-kontur-ciemny); }

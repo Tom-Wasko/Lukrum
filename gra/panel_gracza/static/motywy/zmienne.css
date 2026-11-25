@@ -58,6 +58,10 @@
   --g-podloga: color-mix(in srgb, var(--papier) 62%, #6d6657);
   --g-podloga2: color-mix(in srgb, var(--papier) 45%, #4c473c);
   --g-tablica: color-mix(in srgb, var(--papier) 60%, #000);
+  /* ciemna wersja postaci i rekwizytów (P10) */
+  --g-kontur-ciemny: color-mix(in srgb, var(--tusz) 78%, var(--papier));
+  --g-postac-biel: #a9a79c; --g-postac-skora: #b8906f; --g-postac-skora3: #9d7658;
+  --g-postac-siwy: #8e8c84; --g-postac-karta: #25302b; --g-rekwizyt-biel: #bdbbb0;
 }
 
 /* Pewex – ciemny */
@@ -86,7 +90,7 @@
   --zysk: #7dff8f; --strata: #ff8c8c; --uwaga: #ffd400;
   --ognisko: 4px solid var(--akcent);
 
-  --g-karta: #000000;
+  --g-karta: #000000; --g-kontur-ciemny: #ffffff;   /* kontur postaci i rekwizytów 21:1 na ścianie */
   --g-metal2: #3a4240;
   --g-sciana: #1a1a1a; --g-sciana2: #333333; --g-podloga: #262626; --g-podloga2: #404040; --g-tablica: #000000;
 }

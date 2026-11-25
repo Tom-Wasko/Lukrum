@@ -31,3 +31,24 @@
 - **Archi:** archi-lukrum.
 
 ## Raport
+
+**Stan: gotowe (P5 i P10).** Gałąź `worktree-podroz-04-kebab`, commity 3aa9d09, 036a33a, 565e043.
+
+**Co zrobiono**
+- P5: punkty kebabu to szyldy nakładki (`.wn-pkt .wn-met`), bez przerywanych ramek i niebieskich plusów. „Miejsce na dodatki” to półka (`polkaPusta` w `swiat/sceny.js`); pusta ma tabliczkę „PÓŁKA PUSTA”.
+- P10: w ciemnych paletach postacie mają ciemne wypełnienia i jasny kontur, rekwizyty jaśniejszy obrys; w wysokiej ciemnej kontur `#ffffff` (21:1). Kolory siedzą w `motywy/zmienne.css` (`--g-kontur-ciemny`, `--g-postac-*`, `--g-rekwizyt-biel`), `wnetrza.css` ma tylko `var(...)`. Sceny i rekwizyty (wątek C) nietknięte.
+- Nowy test: `testy/swiat/test_kebab_wyglad.py` (3 testy).
+
+**Dowody**
+- `pytest testy/swiat testy/wnetrza testy/aplikacja/test_wnetrza_sceny.py` → `167 passed`
+- `pytest` (pełne) → `1023 passed in 385.92s`
+- `ruff check .` → `All checks passed!`
+- Zrzuty: `_robocze/zrzuty-kebab/` (poza gitem): kebab bar jasny, wysoka ciemny, pewex ciemny, telefon 390×844; ratusz, poczta, makro, bank, agencja pracy w wysokiej ciemnej. Brakuje wariantu „z dymkiem” (nie wyzwolono dymka).
+- Serwer na 8789 zatrzymany.
+
+**Opis dla gracza:** W kebabie punkty do kliknięcia są teraz szyldami, a miejsce na dodatki to półka, która gdy jest pusta, ma tabliczkę. W ciemnych motywach postacie i rekwizyty są ciemne z wyraźnym konturem.
+
+**Uwagi / do poprawy (kosmetyka)**
+- Szyld „PÓŁKA PUSTA” częściowo nachodzi na szyld „Dodatki: wystrój sali”; szyld „Okno: ulica i klienci…” nachodzi na ciemny pasek (`.osoba` nie są przeszkodami dla `rozlozSzyldy`); długie etykiety szyldów.
+- Odmowa klasyfikatora dla zapisu `pracownicy/lista` (plik poza worktree) – nie obchodziłem.
+- Test niestabilny `test_mistrz_gry_widzi_klub` tym razem przeszedł.
