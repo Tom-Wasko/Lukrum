@@ -19,3 +19,24 @@
 - **Archi:** archi-lukrum.
 
 ## Raport
+**Zrobione (wątek szyldy, gałąź worktree-podroz-04-szyldy):**
+- Przyczyna usterek 1 i 2: silnik układu szyldów (`nakladka.js`) uznawał za przeszkody tylko postacie (`.wn-osoba`). Rysowane
+  elementy sceny (tabliczka „PÓŁKA PUSTA” z deską `.polka`, ciemny pasek „Tłok” `.tlok-znak`) szyldy punktów mogły przykryć.
+- Poprawka (1 linia, `gra/panel_gracza/static/swiat/wnetrze.js`, `ulozNakladke`): przeszkodami są też `.polka` i `.tlok-znak`.
+  Szyld „Okno: ulica i klienci (Pracownia Analiz)” przeskoczył nad okno (nie zasłania paska Tłok), „Dodatki” i „Tablica wyników”
+  omijają półkę. Bez zmian w silniku, danych, mapie i nastroju; kolory nietknięte (zmienne).
+- Usterka 3 (park Rury): **to nie usterka parku** – scena `sceny/park.js` nie rysuje żadnych bloków (tablica ogłoszeń, mostek,
+  ławka, drzewa, krzew; zrzut `przed/rury-bar-jasny.png`). „Bloki” istnieją tylko w widoku z okna kebabu
+  (`wnetrze/okno-pawilon.svg`) i w tle działki (`tla/dzialka-teren.svg`); wyglądają poprawnie. Jeśli szefowi chodziło o to okno,
+  proszę o wskazanie, co jest nie tak (decyzja o wyglądzie).
+- Zrzuty (poza gitem): `_robocze/zrzuty-szyldy/przed/` i `po/` (kebab: bar jasny, wysoka ciemny, pewex jasny 1366×768; telefon 390×844
+  – na telefonie szyldów punktów na scenie nie ma, bez zmian).
+
+**Dowody:**
+- `node --check` (wnetrze.js jako .mjs) → `JS_OK`
+- `pytest -q testy/swiat testy/wnetrza` → `160 passed in 33.26s`
+- `ruff check .` → `All checks passed!`
+- Serwer 8792 zatrzymany.
+
+**Propozycje:** na zrzucie wysoka ciemny szyld „Tablica wyników” leży blisko dolnego rogu tablicy menu – do obejrzenia przy
+okazji kolejnej poprawki wyglądu.
