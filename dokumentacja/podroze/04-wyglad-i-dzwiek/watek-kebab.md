@@ -1,8 +1,8 @@
-# Wątek: kebab (podróż 04), kontynuacja 04/nakladka
+# Wątek: kebab (podróż 04)
 
 ## Brief
 - **Najpierw:**
-  - zrób rebase swojej gałęzi na `main` (A jest już w `main`, f5a41a8);
+  - wątek A (nakładka: `swiat/nakladka.js`, punkty-szyldy, dymki „…”, telefon) jest już w `main` (f5a41a8), raport w `watek-nakladka.md`;
   - przeczytaj w `dokumentacja/wiedza/analizy/przeglad-wnetrz.md` P5 i P10 oraz opis kebabu.
   - Kod kebabu: `gra/panel_gracza/static/swiat/sceny.js` (sekcja „kebab”, układ z podglądu 4 w `narzedzia/grafiki/`)
     i postacie w `swiat/rysunek.js`.
