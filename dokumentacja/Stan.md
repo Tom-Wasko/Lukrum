@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-25 10:20
+Archi żył: 2026-11-25 11:25
 Tryb: autonomiczny od 10:47, budżet do 17:00, koniec najpóźniej 17:00
 Tempo: żółw
 
@@ -22,6 +22,9 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/wnetrza | Z4 (przegląd) | scalony do `podroz-04` (52 sceny, 15 poprawek) |
 | 04/nakladka | Z4 A | scalony do `main` 25.11 (f5a41a8, 448 passed) |
 | 04/kebab | Z4 B | scalony do main (f46a05a) |
+| 04/nastroj | Z14 (nastrój) | scalony do `podroz-04` 25.11 (miny na twarzach) |
+| 04/szyldy | usterki kebabu | scalony do `podroz-04` 3cf6565 (160 passed; „bloki w parku Rury” to nie usterka parku, pytanie do szefa) |
+| 04/billboardy | Z8 | w toku (wyko 51e3b829) |
 | 04/charakter | Z4 C | scalony do main (f46a05a); P14 → Z51 |
 
 ## Czeka na szefa
