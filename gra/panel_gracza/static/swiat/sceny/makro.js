@@ -17,6 +17,7 @@ export default function (R) {
       s += R.rampa(1030, 190, 170, 240, "Dowóz: pon. i czw.");
       // pierwszy plan: wózek widłowy z paletą, wózek platformowy, paleta opakowań
       s += R.widlak(380, 590, 1.05) + R.paleta(500, 574, 110, 1, "var(--g-biel)") + R.wozekPlatf(720, 600) + R.paleta(100, 600, 150, 2, "var(--g-biel)");
+      s += R.stosSkrzynek(1100, 604, 3, 90, "var(--g-drewno2)") + R.paletyRzad(580, 440, 2, "var(--g-drewno2)");
       return s;
     },
     punkty: () => [

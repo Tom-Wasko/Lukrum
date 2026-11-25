@@ -17,6 +17,7 @@ export default function (R) {
       // warzywa w skrzynkach przed ladą, kosz z okazjami, sąsiadka w kolejce
       s += R.skrzynki(60, 470, 3, 90) + R.skrzynki(160, 470, 2, 90) + R.plakat(50, 200, 200, 60, ["WARZYWA", "prosto z giełdy"], "var(--g-tablica)", 16);
       s += R.zamrazarka(60, 600, 180, "FRYTKI") + R.koszOkazji(820, 596, 120, "−20%") + R.osoba("gosc-sasiadka", 460, 606, 0.85, "dobra");
+      s += R.wiezaKoszykow(1100, 606, 4, MARKA) + R.wycieraczka(560, 612, 120);
       return s;
     },
     punkty: () => [

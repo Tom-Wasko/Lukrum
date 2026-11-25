@@ -28,6 +28,7 @@ export default function (R) {
         + R.tabliczka(1112, 70, 176, "Piętro 1", "Biurowiec przy Zana · ul. Zana 39");
       s += `<g transform="translate(${TX} ${TY}) scale(${K})">` + pokoj() + `</g>`; s += R.zanaDekor("drukarnia");
       s += R.osoba("sprzedawca", 400, 600, 0.85) + R.paprotka(70, 580, 0.9);
+      s += R.wycieraczka(560, 590, 120) + R.doniczka(1170, 596, 1);
       return s;
     },
     punkty: () => [{ x: 8, y: by(0) + 4, w: 1204, h: Math.round(104 * K) - 8, et: "Ulotki i plakaty", gdzie: "gora", 

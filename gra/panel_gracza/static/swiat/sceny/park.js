@@ -22,7 +22,16 @@ export default function (R) {
     rysuj: (R) => {
       let s = `<rect width="1220" height="${YP}" fill="var(--g-niebo)"/><ellipse cx="300" cy="70" rx="90" ry="18" fill="var(--g-biel)" opacity=".7" class="efekt"/><ellipse cx="1000" cy="110" rx="70" ry="14" fill="var(--g-biel)" opacity=".7" class="efekt"/>`
         + `<path d="M0 ${YP - 60}q300-60 620-10t600-20v90h-1220z" fill="var(--g-zielen2)" opacity=".5"/><rect x="0" y="${YP}" width="1220" height="${612 - YP}" fill="var(--g-zielen)"/><path class="k" d="M0 ${YP}h1220"/><path d="M0 500h1220v70h-1220z" fill="var(--g-podloga)"/><path class="k1" d="M0 500h1220M0 570h1220"/>`;
-      s += drzewo(60, YP, 1.1) + drzewo(470, YP, 0.9) + drzewo(1160, YP, 1.0) + obiekt();
+      const tlo = {
+        ogrod_saski: () => R.drzewo(60, YP, 1.1, "kasztan") + R.drzewo(1160, YP, 1.0, "kasztan") + R.klomb(450, YP + 20, 90) + R.fontanna(1010, YP + 50, 0.8),
+        park_ludowy: () => R.drzewo(60, YP, 1.2, "topola") + R.drzewo(470, YP, 1.0, "topola") + R.drzewo(1160, YP, 1.1, "lisc") + R.krzew(1040, YP + 6, 110),
+        ogrod_botaniczny: () => R.drzewo(60, YP, 1.0, "lisc") + R.klomb(450, YP + 18, 100) + R.krzew(1000, YP + 6, 120) + R.drzewo(1160, YP, 0.9, "lisc"),
+        park_bronowicki: () => R.drzewo(60, YP, 1.0, "lisc") + R.drzewo(470, YP, 0.9, "sosna") + R.drzewo(1160, YP, 1.0, "sosna") + R.krzew(1010, YP + 6, 90),
+        park_rury: () => R.drzewo(60, YP, 1.2, "sosna") + R.drzewo(470, YP, 1.0, "lisc") + R.drzewo(1160, YP, 1.1, "sosna") + R.krzew(1040, YP + 6, 130),
+        blonia: () => R.drzewo(60, YP, 1.0, "lisc") + R.pomnik(460, YP, 0.8, "obelisk") + R.drzewo(1160, YP, 0.9, "lisc"),
+        zalew: () => R.drzewo(60, YP, 1.1, "topola") + R.drzewo(470, YP, 0.8, "sosna") + R.krzew(1160, YP + 6, 90),
+      };
+      s += tlo[id]() + obiekt();
       // tablica ogłoszeń z afiszami
       s += `<path class="k" d="M150 ${YP + 40}v-250M410 ${YP + 40}v-250" stroke-width="8" stroke="var(--g-drewno)"/><rect class="k3" x="140" y="210" width="280" height="200" fill="var(--g-drewno2)"/><path class="k3" d="M130 210l150-40 150 40z" fill="var(--g-zielen2)"/>`
         + R.plakat(156, 226, 120, 100, ["FESTYN", "sobota"], "var(--akcent)", 17) + R.plakat(286, 226, 120, 70, ["BIEG", "niedziela 10:00"], "var(--akcent-2)", 15) + R.kartka(290, 310, 110, 80, ["KINO", "POD CHMURKĄ", "za 2 tyg."], 2, 13) + R.kartka(160, 340, 110, 56, ["ZGUBIONO", "jamnika"], -3, 12);

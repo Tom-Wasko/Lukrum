@@ -18,6 +18,7 @@ export default function (R) {
       // tablica poziomów higieny
       s += R.literki(1010, 70, 190, 190, "HIGIENA", [["BRAK", "!"], ["PODSTAWOWA", "✓"], ["FIRMA", ""], ["HACCP", ""]], 14);
       s += R.wieszak(1130, YP) + R.osoba("gosc-sasiadka", 180, 606, 0.82, "zwykla") + R.kosz(380, 566);
+      s += R.doniczka(1150, 596, 1.1) + R.wycieraczka(60, 596, 120) + R.krzeslaRzad(900, 598, 2);
       return s;
     },
     punkty: [

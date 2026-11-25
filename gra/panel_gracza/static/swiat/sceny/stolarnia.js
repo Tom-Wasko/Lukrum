@@ -21,6 +21,7 @@ export default function (R) {
       // stolarz, pies na trocinach, sterta desek
       s += R.osoba("budowlaniec", 820, 606, 0.9) + [0, 1, 2, 3].map((i) => `<rect class="k" x="${80 + i * 6}" y="${560 - i * 16}" width="240" height="16" fill="var(--g-drewno)"/>`).join("")
         + `<ellipse class="k" cx="1010" cy="580" rx="60" ry="20" fill="var(--g-skora2)"/><circle class="k" cx="1066" cy="566" r="16" fill="var(--g-skora2)"/><path class="k" d="M1072 552l10-12 2 16z" fill="var(--g-drewno)"/><circle cx="1070" cy="566" r="2" fill="var(--g-czern)"/>`;
+      s += R.stosSkrzynek(1100, 604, 3, 80, "var(--g-drewno2)") + R.pojemnik(60, 600);
       return s;
     },
     punkty: [

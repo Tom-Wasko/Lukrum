@@ -22,6 +22,7 @@ export default function (R) {
       s += R.kartka(790, 106, 130, 60, ["MIĘSA NA ROŻEN", "nie prowadzimy"], -2, 13);
       s += R.osobaZa("obsluga-kasjerka", 1130, 480, 580, 0.9) + R.u("sklep-kasa", 1030, 420, 1.0) + R.kartka(1050, 300, 140, 62, ["LIMIT", "4 opakowania", "na osobę dziennie"], 2, 13);
       s += R.osoba("gosc-student", 890, 606, 0.8, "zwykla") + R.osoba("gosc-sasiadka", 780, 608, 0.8, "zwykla");
+      s += R.wiezaKoszykow(960, 606, 4, MARKA) + R.wycieraczka(60, 612, 120);
       return s;
     },
     punkty: () => [

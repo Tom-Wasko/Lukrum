@@ -6,6 +6,7 @@ import { esc, okno, toast, zamknijOkno } from "../zakladki/wspolne.js";
 import { stylEkranu } from "../pulpit/karty-style.js";
 import { wybierzPozycje } from "../pulpit/uklady.js";
 import { R, ustawWyglad } from "./rysunek.js";
+import "./rekwizyty.js";
 import { kluczDymka, oznaczWidziany, rozlozSzyldy, ulozDymek, widziany } from "./nakladka.js";
 import { SCENY } from "./sceny/index.js";
 import { filtrAgencji } from "../zakladki/marketing.js";
