@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-25 07:31
+Archi żył: 2026-11-25 08:05
 Tryb: autonomiczny od 07:31, budżet do 17:00 (nowe kroki do 15:35), koniec najpóźniej 17:00. Scalenia do `podroz-04`.
 Tempo: żółw
 
@@ -21,7 +21,7 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/prawo | Z23 (reszta) | scalony do `podroz-04` (995 passed; notki ze źródłami) |
 | 04/wnetrza | Z4 (przegląd) | scalony do `podroz-04` (52 sceny, 15 poprawek) |
 | 04/nakladka | Z4 A | scalony do `main` 25.11 (f5a41a8, 448 passed) |
-| 04/kebab | Z4 B (P5, P10) | w toku: nowy wyko (sesja 04/nakladka wygasła w nocy), port 8789 |
+| 04/kebab | Z4 B (P5, P10) | scalony do podroz-04 (f4dec9d), 1023 passed; wyko 46a0eef7 do zatrzymania |
 | 04/charakter | Z4 C (P2, P6–P9, P14, P15) | w toku: wyko 15778b32, port 8790 |
 
 ## Czeka na szefa

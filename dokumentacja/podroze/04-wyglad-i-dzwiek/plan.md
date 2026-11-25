@@ -32,7 +32,7 @@ Decyzje szefa (23.11, okienko) – do `Decyzje.md`:
 - [x] Z23: notki prawne w instrukcji, strona źródeł uzupełniona, lista kontrolna
 - [x] Z4: galeria wszystkich wnętrz i lista poprawek dla szefa
 - [x] Z4 A: dymki zwinięte, punkty-szyldy, czytelny telefon
-- [ ] Z4 B: kebab w nowym stylu, ciemna paleta postaci
+- [x] Z4 B: kebab w nowym stylu, ciemna paleta postaci
 - [ ] Z4 C: własny charakter banków, parków, marketów; pełny dół scen
 - [x] Pełne testy zielone, `ruff`, `node --check`, `silnik.dane sprawdz` czyste
 
