@@ -471,13 +471,14 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
 
 /* --- radio „Fala Koziołka” (radio.js): ikona obok portfela wysuwa retro odbiornik z dolnej krawędzi. Skrzynka z drewna, antena,
    kremowa skala UKF ze wskazówką, dwie gałki (strojenie, głośność), włącznik z lampką; napisy czarne na kremowym ------------- */
-.pp-radio-ik { position: fixed; left: 436px; bottom: 26px; z-index: 45; display: grid; place-items: center; width: 54px; height: 54px; padding: 0; cursor: pointer;
-  color: var(--tusz); background: var(--g-karta); border: 2px solid var(--tusz); border-radius: 8px;
-  box-shadow: 2px 3px 0 color-mix(in srgb, var(--tusz) 40%, transparent); transition: translate .15s ease; }
-.pp-radio-ik:hover, .pp-radio-ik:focus-visible, .pp-radio-ik[aria-expanded="true"] { translate: 0 -4px; background: var(--akcent); color: var(--papier); }
+.pp-radio-ik { position: fixed; left: 430px; bottom: -32px; z-index: 45; width: 118px; height: 87px; padding: 0; cursor: pointer;
+  color: var(--tusz); background: none; border: 0; transition: translate .2s ease; font: inherit; }
+.pp-radio-ik:hover, .pp-radio-ik:focus-visible, .pp-radio-ik[aria-expanded="true"] { translate: 0 -30px; }
 .pp-radio-ik:focus-visible { outline: var(--ognisko); outline-offset: 2px; }
-.pp-radio-ik.gra svg { animation: odb-puls 1.6s ease-in-out infinite; }
-.pp-radio-ik .pp-znak { right: -7px; top: -7px; }
+.pp-radio-svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(2px 3px 0 color-mix(in srgb, var(--tusz) 35%, transparent)); }
+.pp-radio-ik.gra .pp-radio-lampka { fill: var(--akcent) !important; animation: odb-puls 1.6s ease-in-out infinite; }
+.pp-schowane .pp-radio-ik:not([aria-expanded="true"]) { translate: 0 0; }
+.pp-radio-ik .pp-znak { right: 4px; top: 10px; }
 .odb { position: fixed; left: 500px; bottom: 0; z-index: 47; box-sizing: border-box; width: min(470px, calc(100vw - 520px));
   padding: 26px 16px 14px; color: var(--g-czern); background: color-mix(in srgb, var(--g-drewno2) 55%, var(--g-karta));
   border: 5px solid var(--g-drewno); border-bottom: 0; border-radius: 18px 18px 0 0; box-shadow: 6px -4px 0 color-mix(in srgb, var(--tusz) 30%, transparent); }
@@ -537,7 +538,8 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
 [data-paleta="wysoka"] .odb { background: var(--papier); color: var(--tusz); border-color: var(--tusz); box-shadow: none; }
 [data-paleta="wysoka"] .odb-st.aktywny { text-decoration: underline; text-decoration-thickness: 3px; }
 @media (max-width: 760px) {
-  .pp-radio-ik { left: 112px; bottom: 10px; width: 50px; height: 50px; }
+  .pp-radio-ik { left: 112px; bottom: -14px; width: 72px; height: 53px; }
+  .pp-radio-ik:hover, .pp-radio-ik:focus-visible, .pp-radio-ik[aria-expanded="true"] { translate: 0 -12px; }
   .odb { left: 6px; right: 6px; width: auto; max-height: 88vh; overflow: auto; padding: 24px 10px 12px; }
   .odb-antena { display: none; }
   .odb-skala { flex-wrap: wrap; }
@@ -547,7 +549,7 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
   .odb-wl { justify-self: stretch; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .odb:not([hidden]), .pp-radio-ik.gra svg, .odb-wl.aktywny::before { animation: none; }
+  .odb:not([hidden]), .pp-radio-ik.gra .pp-radio-lampka, .odb-wl.aktywny::before { animation: none; }
   .odb-wskazowka, .odb-galka i, .pp-radio-ik { transition: none; }
 }
 
@@ -644,7 +646,7 @@ body.pulpit.na-mapie .lm-legenda { bottom: calc(54px + var(--pp-gra-h, 0px)); }
   body.pulpit:not(.na-mapie) .pp-ik span { display: none; }
   body.pulpit:not(.na-mapie) .pp-wroc { left: 10px; }
   body.pulpit:not(.na-mapie) .pp-tydzien { left: auto; right: 10px; translate: none; padding: 8px 12px; }
-  body.pulpit:not(.na-mapie) .pp-radio-ik { left: 10px; bottom: 68px; width: 44px; height: 44px; }
+  body.pulpit:not(.na-mapie) .pp-radio-ik { left: 10px; bottom: 66px; width: 70px; height: 52px; translate: none; }
   body.pulpit:not(.na-mapie) .pp-portfel { left: auto; right: 84px; bottom: 66px; width: 84px; height: 52px; }
   body.pulpit:not(.na-mapie) .pp-portfel:hover, body.pulpit:not(.na-mapie) .pp-portfel:focus-visible { translate: none; }
   body.pulpit:not(.na-mapie) .pp-zeszyt { right: 6px; bottom: 56px; width: 300px; height: 430px; translate: 0 0; rotate: -8deg; scale: .2; transform-origin: 100% 100%; }

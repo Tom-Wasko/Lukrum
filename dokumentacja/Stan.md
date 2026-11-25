@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-25 07:24
+Archi żył: 2026-11-25 07:55
 Tryb: nadzorowany od 07:06 (25.11)
 Tempo: żółw
 
@@ -25,6 +25,7 @@ po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11)
 | 04/charakter | Z4 C (P2, P6–P9, P14, P15) | w toku: wyko 15778b32, port 8790 |
 
 ## Czeka na szefa
+- Radio jako lampowy odbiornik PRL obok banknotów (25.11, Archi); do obejrzenia w grze.
 - `podroz-04` scalona do `main` i wypchnięta 24.11 16:55 (1007 passed).
 - Notki prawne w INSTRUKCJI (04/prawo, rozdz. „Prawo za mechanikami”) sprawdzone w serwisach prawnych i gov.pl, nie w Dz.U.; pokazać prawnikowi przed pokazem.
 - Serwer gry na porcie 8784 (pid 25996, po wątku 04/kontrast) nadal działa: wyko nie mógł go zatrzymać (blokada), zatrzymaj ręcznie.

@@ -44,6 +44,24 @@ const SVG_PLIK = `<svg class="pp-plik" viewBox="0 0 240 150" aria-hidden="true" 
   <rect x="104" y="14" width="46" height="120" rx="3" transform="rotate(-1 127 74)" style="fill:var(--akcent);stroke:var(--g-czern)" stroke-width="2.5"/>
   <path d="M112 44h30M112 60h30M112 76h30" style="stroke:var(--papier)" stroke-width="3" stroke-linecap="round"/></svg>`;
 
+// Radio „Fala Koziołka” na dole ekranu: lampowy odbiornik PRL w drewnianej skrzynce (maskownica z materiału, skala UKF,
+// dwie gałki), narysowany w tym samym stylu co plik banknotów; wystaje z dolnej krawędzi i wysuwa się po najechaniu
+const SVG_RADIO = `<svg class="pp-radio-svg" viewBox="0 0 160 118" aria-hidden="true" focusable="false">
+  <path d="M58 22L40 2M98 22l22-16" fill="none" style="stroke:var(--g-czern)" stroke-width="3" stroke-linecap="round"/>
+  <rect x="6" y="20" width="148" height="96" rx="14" style="fill:var(--g-drewno);stroke:var(--g-czern)" stroke-width="2.5"/>
+  <rect x="12" y="26" width="136" height="84" rx="10" fill="none" style="stroke:var(--g-drewno2)" stroke-width="2"/>
+  <rect x="18" y="32" width="66" height="70" rx="6" style="fill:color-mix(in srgb, var(--g-drewno2) 55%, var(--g-biel));stroke:var(--g-czern)" stroke-width="2"/>
+  <path d="M22 44h58M22 54h58M22 64h58M22 74h58M22 84h58M22 94h58" style="stroke:var(--g-drewno)" stroke-width="2.2" opacity=".55"/>
+  <path d="M30 34v66M44 34v66M58 34v66M72 34v66" style="stroke:var(--g-drewno)" stroke-width="1.2" opacity=".35"/>
+  <rect x="92" y="34" width="52" height="26" rx="3" style="fill:var(--g-biel);stroke:var(--g-czern)" stroke-width="2"/>
+  <path d="M97 44v-5M104 44v-3M111 44v-5M118 44v-3M125 44v-5M132 44v-3M139 44v-5" style="stroke:var(--g-czern)" stroke-width="1.3"/>
+  <text x="118" y="56" text-anchor="middle" font-size="8.5" style="fill:var(--g-czern);font-family:var(--font-gruby)">UKF</text>
+  <path d="M121 36v22" style="stroke:var(--akcent)" stroke-width="2.4"/>
+  <circle cx="104" cy="84" r="11" style="fill:var(--g-czern);stroke:var(--g-drewno2)" stroke-width="2"/>
+  <circle cx="134" cy="84" r="11" style="fill:var(--g-czern);stroke:var(--g-drewno2)" stroke-width="2"/>
+  <path d="M104 75v7M134 75v7" style="stroke:var(--g-biel)" stroke-width="2" stroke-linecap="round"/>
+  <circle class="pp-radio-lampka" cx="119" cy="101" r="3" style="fill:var(--g-drewno2);stroke:var(--g-czern)" stroke-width="1"/></svg>`;
+
 // „List z decyzjami” na dole paska: duży list w kopercie (z listem wystającym w rogu); po wysłaniu dostaje stempel (CSS: .pp-list.wyslana)
 const LIST_PASKA = `<svg class="pp-list-svg" viewBox="0 0 64 48" aria-hidden="true" focusable="false">
   <g class="pp-list-kartka"><path d="M30 20 L40 3 L58 9 L50 26z" style="fill:var(--papier);stroke:var(--tusz)" stroke-width="2" stroke-linejoin="round"/>
@@ -74,7 +92,7 @@ function montuj() {
     <aside class="pp-szuflada" id="pp-szuflada" aria-label="Wydarzenia tygodnia" hidden></aside>
     <aside class="odb" id="pp-radio-panel" aria-label="Radio „Fala Koziołka”" hidden></aside>
     <button type="button" class="pp-portfel" id="pp-portfel" data-akcja="pp-portfel">${SVG_PLIK}<span class="pp-kwoty" id="pp-kwoty"></span></button>
-    <button type="button" class="pp-radio-ik" id="pp-radio" data-akcja="pp-radio" aria-label="Radio" title="Radio" aria-expanded="false" aria-controls="pp-radio-panel">${ikona("radio", 30)}<i class="pp-znak" aria-hidden="true" hidden></i></button>
+    <button type="button" class="pp-radio-ik" id="pp-radio" data-akcja="pp-radio" aria-label="Radio" title="Radio" aria-expanded="false" aria-controls="pp-radio-panel">${SVG_RADIO}<i class="pp-znak" aria-hidden="true" hidden></i></button>
     <button type="button" class="pp-zeszyt" id="pp-zeszyt" data-akcja="pp-zeszyt"></button>`;
   document.body.appendChild(rys);
   przeniesUstawienia();

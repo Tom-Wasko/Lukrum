@@ -148,7 +148,7 @@ ustawienia: **paleta kolorów** (Bar mleczny, Pewex albo Wysoka widoczność), *
 (z boku lub u góry). Paleta „Wysoka widoczność” ma mocny kontrast, większe litery, grube ramki i bardzo czytelny krój
 pisma; w każdej palecie zysk jest oznaczony znakiem ▲, a strata ▼.
 
-**Radio „Fala Koziołka”** ma ikonę odbiornika **obok portfela** (w lewym dolnym rogu; to samo otwiera ⚙ → Dźwięk). Kliknięcie wysuwa retro odbiornik: stację zmienia się od razu na nim (klik w skalę, gałka strojenia albo strzałki ← →), jest też gałka głośności i włącznik. Ponowny klik w ikonę albo **Esc** chowa odbiornik, a radio gra dalej (przy ikonie widać ♪). Gdy radio gra, gwar miejsc cichnie. Ma pięć stacji:
+**Radio „Fala Koziołka”** to **drewniany odbiornik wystający z dolnej krawędzi obok banknotów** (najechanie go podnosi, a gdy gra, świeci lampka; to samo otwiera ⚙ → Dźwięk). Kliknięcie wysuwa retro odbiornik: stację zmienia się od razu na nim (klik w skalę, gałka strojenia albo strzałki ← →), jest też gałka głośności i włącznik. Ponowny klik w ikonę albo **Esc** chowa odbiornik, a radio gra dalej (przy ikonie widać ♪). Gdy radio gra, gwar miejsc cichnie. Ma pięć stacji:
 Program Polski (pieśni i fortepian z polskich płyt sprzed stu lat), Synkopa (ragtime i wczesny jazz), Filharmonia
 (muzyka klasyczna), Teatr przy mikrofonie („Lalka” Prusa czytana po kolei – radio pamięta, gdzie skończono) i Między
 stacjami (sam szum). Między płytami odzywa się prowadzący (syntezator mowy przeglądarki; można go wyłączyć przyciskiem
