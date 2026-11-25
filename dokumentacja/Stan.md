@@ -1,7 +1,7 @@
 # Stan
-Archi żył: 2026-11-24 17:45
-Tryb: autonomiczny 17:03–17:45 zakończony (budżet „do skończenia A” wyczerpany); czekam na `/hejo`. Podsumowanie: 04/nakladka scalony do `podroz-04` (2528ab5), instrukcja 2ce9f2d, galeria przed/po https://claude.ai/artifact/8b4Rtou3gSHyRXJJYqwrYG. Wyko 04/nakladka (ef48b208) czeka bezczynnie na kontynuację B.
-Tempo: zwykły
+Archi żył: 2026-11-25 07:06
+Tryb: nadzorowany od 07:06 (25.11)
+Tempo: żółw
 
 ## Podróż
 **04-wyglad-i-dzwiek**: plan zatwierdzony 23.11 wieczorem (`podroze/04-wyglad-i-dzwiek/plan.md`), **start 24.11 rano**
