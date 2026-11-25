@@ -35,7 +35,15 @@ export default function (R) {
     opis: `Sala operacyjna banku ${b.nazwa}: tablica oprocentowania, okienko kasy, okienko kredytów, skarbiec.`,
     warianty: [["b=kmicic", "Kmicic (kredyt na start)"], ["b=wokulski", "Wokulski i S-ka (kredyt inwestycyjny)"], ["b=ziemia", "Ziemia Obiecana (leasing, Twoje konto)"], ["b=rzecki", "Oszczędności Rzeckiego (lokaty)"], ["b=soplicowo", "Soplicowo (tanie konto, debet)"]],
     rysuj: (R) => {
-      let s = R.sciana() + R.lamperia(250, 400, b.lamp, true) + R.podloga("lastryko", 400) + R.kula(250, 20, 18) + R.kula(960, 20, 18);
+      // tło i podłoga: każdy bank ma inną salę (inny układ, nie tylko kolor)
+      const tla = {
+        kmicic: () => R.sciana() + R.lamperia(250, 400, b.lamp, true) + R.podloga("lastryko", 400) + R.kula(250, 20, 18) + R.kula(960, 20, 18),
+        wokulski: () => R.sciana("var(--g-sciana2)") + R.boazeria(230, 400) + R.podloga("parkiet", 400) + R.kula(250, 20, 18) + R.kula(960, 20, 18) + R.kasetony(0, 60, 0, 1220, 110),
+        ziemia: () => R.sciana("var(--g-biel)") + R.podloga("plytki", 400) + R.swietlowka(200, 14, 300) + R.swietlowka(720, 14, 300),
+        rzecki: () => R.sciana() + R.lamperia(210, 400, b.lamp, true) + R.podloga("lastryko", 400) + R.kaloryfer(20, 330, 6) + R.kula(250, 20, 18) + R.kula(960, 20, 18),
+        soplicowo: () => R.sciana("var(--g-sciana2)") + R.podloga("wykladzina", 400) + R.swietlowka(200, 14, 300) + R.swietlowka(720, 14, 300),
+      };
+      let s = tla[id]();
       s += R.literki(40, 56, 300, 178, "OPROCENTOWANIE", b.tab, 15) + R.zegar(388, 96, 30, 10, 12);
       s += R.szyld(660, 44, 400, 62, b.nazwa, { tlo: b.marka, tekst: b.tk, ksztalt: b.ksztalt, znak: b.znak });
       // skarbiec
@@ -45,9 +53,15 @@ export default function (R) {
       s += R.szyba(410, 170, 180, 160) + R.szyba(690, 170, 180, 160) + `<rect class="k" x="590" y="170" width="100" height="160" fill="var(--g-sciana2)"/>` + R.kartka(606, 196, 68, 50, ["PRZERWA", "10:00–10:15"], -3, 11);
       s += R.tabliczka(500, 132, 150, "Kasa") + R.tabliczka(780, 132, 150, "Kredyty");
       s += R.lada(390, 330, 500, 150, { front: "var(--g-drewno2)" }) + R.stemple(430, 330) + R.papiery(820, 330, 4);
-      // pierwszy plan: stolik z drukami i długopisem na łańcuszku, kwietnik, słupki ze sznurem
-      s += `<rect class="k" x="70" y="470" width="190" height="12" fill="var(--g-drewno)"/><path class="k" d="M86 482v120M244 482v120" stroke-width="5"/>` + R.papiery(90, 470, 5) + `<path class="k1 bez" d="M200 470q20-40 40-10"/><path class="k" d="M236 458l8 12" stroke-width="3"/>` + R.t(165, 505, "DRUKI", 13, { op: .7 });
-      s += R.kwietnik(330, 600, 1.1) + `<path class="k" d="M470 606v-74M700 606v-74" stroke-width="5"/><circle class="k" cx="470" cy="528" r="7" fill="var(--uwaga)"/><circle class="k" cx="700" cy="528" r="7" fill="var(--uwaga)"/><path class="bez" d="M470 540q115 34 230 0" stroke="var(--akcent)" stroke-width="6"/>`;
+      // pierwszy plan: osobny dla każdego banku
+      const dolBanku = {
+        kmicic: () => `<rect class="k" x="70" y="470" width="190" height="12" fill="var(--g-drewno)"/><path class="k" d="M86 482v120M244 482v120" stroke-width="5"/>` + R.papiery(90, 470, 5) + R.t(165, 505, "DRUKI", 13, { op: .7 }) + R.krzeslaRzad(300, 600, 3, 70, "var(--akcent)") + R.wycieraczka(560, 590, 130),
+        wokulski: () => R.biegacz(300, 560, 600, 30, "var(--strata)") + R.fikus(120, 604, 1.2) + R.fikus(1110, 604, 1.2) + R.krzeslaRzad(190, 600, 2, 80, "var(--g-skora)") + R.doniczka(1000, 604, 1.2),
+        ziemia: () => R.doniczka(90, 604, 1.3) + R.pojemnik(1130, 604, 1.1) + R.krzeslaRzad(220, 600, 4, 78, "var(--g-metal2)") + R.wycieraczka(620, 592, 150),
+        rzecki: () => R.wieszak(80, 604) + R.krzeslaRzad(160, 600, 2, 70, "var(--g-drewno)") + R.plakatPRL(330, 440, 90, 120, "GROSZ DO GROSZA", "var(--akcent-2)") + R.doniczka(520, 604, 1.0) + R.doniczka(660, 604, 1.0) + R.wycieraczka(820, 590, 120),
+        soplicowo: () => R.kosz(60, 570) + R.lawka(120, 590, 200) + R.paprotka(380, 600, 1.2) + R.wycieraczka(600, 590, 140) + R.plakatPRL(60, 440, 100, 110, "KONTO BEZ OPŁAT", "var(--g-zielen2)"),
+      };
+      s += dolBanku[id]();
       return s + rekwizyt();
     },
     punkty: () => [
