@@ -36,3 +36,21 @@ def test_ciemne_palety_maja_kontur_i_ciemne_wypelnienia_postaci():
     assert "--g-kontur" in css
     zm = (SWIAT.parent / "motywy" / "zmienne.css").read_text(encoding="utf-8")
     assert re.search(r'\[data-paleta="wysoka"\]\[data-tryb="ciemny"\] \{[^}]*--g-kontur-ciemny: #ffffff', zm)
+
+
+def test_mina_obslugi_zalezy_od_nastroju_i_ma_opis_slowami():
+    swiat = (SWIAT / "swiat.js").read_text(encoding="utf-8")
+    m = re.search(r"const MINA = \{(.*?)\}", swiat)
+    assert m, "brak mapy MINA w swiat.js"
+    mapa = dict(re.findall(r"(\w+): \"(\w+)\"", m.group(1)))
+    assert mapa["smutna"] == "zla" and mapa["wesola"] == "dobra" and mapa["smutna"] != mapa["wesola"]
+    assert mapa["zmeczona"] == "zmeczona"
+    assert "MINA_OPIS" in swiat and "zły nastrój" in swiat and "dobry nastrój" in swiat
+    assert 'aria-label="${esc(opis)}"' in _sceny()
+
+
+def test_postac_obslugi_ma_wszystkie_miny_rysunku():
+    for rola in ("kasjerka", "kucharz"):
+        svg = (KATALOG_GRY / "panel_gracza" / "static" / "grafiki" / "postacie" / f"obsluga-{rola}.svg").read_text(encoding="utf-8")
+        for mina in ("dobra", "zwykla", "zla", "zmeczona"):
+            assert f"mina-{mina}" in svg, f"{rola}: brak miny {mina}"

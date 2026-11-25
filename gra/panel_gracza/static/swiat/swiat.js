@@ -50,7 +50,8 @@ const punktyMiejsca = (c, m) => m.punkty.map((p) => stanPunktu(c, { ...p, etykie
 
 // --- kebab: dane sceny z widoku gry i z API wnętrz (dymki, miny, propozycja) --------------------------------------------
 const TYP_STREFY = { stare_miasto: "kamienica", centrum: "kamienica", dworzec: "dworzec" };
-const MINA = { wesola: "dobra", zmeczona: "zmeczona", smutna: "zmeczona" };
+const MINA = { wesola: "dobra", zmeczona: "zmeczona", smutna: "zla" };   // mina z silnika (progi w danych) → wariant rysunku
+const MINA_OPIS = { dobra: "dobry nastrój w zespole", zwykla: "zwykły nastrój w zespole", zla: "zły nastrój w zespole", zmeczona: "zmęczone osoby w zespole" };
 const kluczWnetrza = (c) => `${c.v.runda}|${lokalWybrany(c.v)?.id || ""}|${c.v.gra.runda}`;
 
 async function wczytajWnetrze(c) {
@@ -76,8 +77,9 @@ function daneKebabu(c, punkty) {
   const dania = Object.keys(menu).filter((k) => !["napoj", "dodatek"].includes(k)).sort((a, b) => (menu[b] || 0) - (menu[a] || 0)).map((k) => ({
     nazwa: nazwaUslugi(c.kat, k, o.strefa), cena: ceny[k]?.cena ?? c.kat.uslugi?.[k]?.cena_preferowana ?? 0,   // przed startem sprzedaży ceny są puste: cena preferowana
     brak: (sprz[k]?.utracona || 0) > 0 && String(sprz[k]?.przyczyna || "").startsWith("zasoby") }));
-  const obsluga = (wn.stan?.pracownicy || []).map((p) => ({ id: p.id, imie: p.imie_nazwisko.split(" ")[0], miejsce: p.miejsce, mina: MINA[p.mina] || "zwykla" }));
-  if (!wn.stan) for (const s of (v.stan.stanowiska || [])) if (s.pracownik && (!s.lokal || s.lokal === lok.id)) obsluga.push({ id: s.pracownik, imie: "Pracownik", miejsce: s.typ === "kasa" ? "lada" : "kuchnia", mina: "zwykla" });
+  const obsluga = (wn.stan?.pracownicy || []).map((p) => ({ id: p.id, imie: p.imie_nazwisko.split(" ")[0], miejsce: p.miejsce, mina: MINA[p.mina] || "zwykla" }))
+    .map((o) => ({ ...o, opis: `${o.imie}: ${MINA_OPIS[o.mina]}` }));
+  if (!wn.stan) for (const s of (v.stan.stanowiska || [])) if (s.pracownik && (!s.lokal || s.lokal === lok.id)) obsluga.push({ id: s.pracownik, imie: "Pracownik", miejsce: s.typ === "kasa" ? "lada" : "kuchnia", mina: "zwykla", opis: `Pracownik: ${MINA_OPIS.zwykla}` });
   const pr = wn.propozycja;
   const mowiacy = [];
   if (pr) mowiacy.push({ kto: pr.kto, imie: pr.imie, tekst: pr.wybrana ? pr.reakcja : pr.tekst, rodzaj: "propozycje", klik: "propozycja", wybrana: pr.wybrana });
