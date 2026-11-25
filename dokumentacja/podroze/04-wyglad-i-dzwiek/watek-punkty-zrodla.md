@@ -23,3 +23,25 @@
 - **Archi:** archi-lukrum.
 
 ## Raport
+**Ograniczenie:** Nominatim/OSM niedostępny (curl zablokowany; WebSearch nie podaje współrzędnych poza jednym przypadkiem).
+Nie da się więc sprawdzić położeń z dokładnością 80 m. Zgodnie z briefem („brak pewności → zostaw”) **żadnych `xy` ani `geo` nie ruszano.**
+
+| Punkt | Co sprawdzono | Źródło | Zmiana |
+|---|---|---|---|
+| trybunal | Sejm ustanowił Trybunał 1578, pierwsza sesja w Lublinie 1579; Rynek 1, dziś Trasa Podziemna | zabytek.pl/en/obiekty/lublin-trybunal-(d-stary-ratusz)-ob-palac-slubow-oraz-lubelsk; umcs.pl/pl/crown-tribunal-old-town-hall,22082.htm | opis: „Od 1578” → „Od 1579 roku”. Położenie: niesprawdzone |
+| katedra | budowa jezuitów 1586–1604/1606, katedra od 1805 | lublin.eu/en/what-to-see-do/attractions-sights/monuments/archcathedral,8415,w.html | opis bez zmian. „Zakrystia akustyczna”: brak potwierdzenia w źródłach, do weryfikacji |
+| brama_grodzka | Wikipedia: 51,24944 N 22,56972 E; nasze xy ≈ 51,24965 / 22,56987 (≈ 25 m) | en.wikipedia.org/wiki/Grodzka_Gate_–_NN_Theatre | bez zmian |
+| nowy_ratusz | klasycyzm 1827–1828, pl. Łokietka; hejnał w południe (balkon vs taras: źródła różnie) | lublin.eu/en/what-to-see-do/attractions-sights/monuments/the-new-city-hall,8434,w.html | bez zmian |
+| teatr | gmach Narutowicza 17, 1884–1886 (XIX w.) | zabytek.pl/en/obiekty/lublin-budynek-teatru-im-juliusza-osterwy | bez zmian |
+| centrum_kultury | dawny klasztor wizytek, Peowiaków 12 | ck.lublin.pl/en/about-us-buildings-history/ | bez zmian |
+| skansen | al. Warszawska 96 | skansen.lublin.pl | bez zmian; współrzędnych nie znaleziono |
+| dworzec_glowny | gmach XIX w. (linia 1877), obok Dworca Metropolitalnego | lublin.eu/en/what-to-see-do/attractions-sights/monuments/railway-station,8444,w.html | bez zmian |
+| most | Hennebique, 1909 (początek XX w.); źródła mieszają dwa mosty Lutosławskiego (Kalinowszczyzna i Zamojska) | structurae.net/en/structures/marian-lutoslawski-bridge | bez zmian; do weryfikacji, o który most chodzi |
+| kosciol_czwartek | „targ” niepotwierdzony; Czwartek to jedno z najstarszych miejsc osadnictwa | ph.pollub.pl/index.php/teka/article/view/2611 | opis: „Tu, przy dawnym targu, zaczynał się Lublin.” → „Wzgórze Czwartek to jedno z najstarszych miejsc osadnictwa w Lublinie.” |
+| cmentarz_lipowa | koniec XVIII w. (grunt 1794; zakaz pochówków przy kościołach 1792); części kat., ew., praw., wojskowa | zabytek.pl/en/obiekty/lublin-cmentarz-rzymskokatolicki-ewangelicki-prawoslawny-oraz- | bez zmian |
+| auchan, blonia, lidl | nie sprawdzano (brak współrzędnych OSM) | – | bez zmian |
+
+**Testy:** `silnik.dane sprawdz` → „Dane w porządku”; `pytest testy/swiat testy/aplikacja` → 349 passed; `ruff check .` → All checks passed.
+
+**Do dokończenia (wymaga sieci):** współrzędne z Nominatim dla 10 punktów + Auchan, Błonia, Lidl; porównanie z xy (próg 80 m).
+Plik wątku istniał tylko w głównym checkoucie (niescommitowany); skopiowałem go do worktree.
