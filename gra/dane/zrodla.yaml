@@ -29,6 +29,11 @@ nawiazania:
     - {w_grze: 'biuro Scrooge', utwor: '„Opowieść wigilijna”', autor: Charles Dickens}
     - {w_grze: 'biuro Asteroida 328', utwor: '„Mały Książę”', autor: Antoine de Saint-Exupéry}
     - {w_grze: 'Kantor „U Harpagona”', utwor: '„Skąpiec”', autor: Molier}
+    - {w_grze: 'Park: „Bal dobroczynny w altanie” (komitet pań pilnujący pozorów)', utwor: '„Moralność pani Dulskiej”', autor: Gabriela Zapolska}
+    - {w_grze: 'Park: „Spór o murek” (kłótnia rymem o dwie cegły)', utwor: '„Zemsta”', autor: Aleksander Fredro}
+    - {w_grze: 'Park: „Kulig z karczmą” (pan Onufry, gawędziarz)', utwor: 'Trylogia: „Ogniem i mieczem”', autor: Henryk Sienkiewicz}
+    - {w_grze: 'Park: „Pan z lornetką i wachlarzem”', utwor: '„Lalka”', autor: Bolesław Prus}
+    - {w_grze: 'Park: „Doktor z walizką”', utwor: '„Ludzie bezdomni”', autor: Stefan Żeromski}
 liczby:
   opis: >-
     Liczby gry leżą w jednym pliku (dane/zalozenia.yaml i pokrewnych) i nie są wpisane w kod. Przy każdej jest zapisane,

@@ -704,6 +704,11 @@ polskiego). Dla prowadzących:
 | biuro Scrooge | „Opowieść wigilijna” | Charles Dickens |
 | biuro Asteroida 328 | „Mały Książę” | Antoine de Saint-Exupéry |
 | Kantor „U Harpagona” | „Skąpiec” | Molier |
+| Park: „Bal dobroczynny w altanie” (komitet pań pilnujący pozorów) | „Moralność pani Dulskiej” | Gabriela Zapolska |
+| Park: „Spór o murek” (kłótnia rymem o dwie cegły) | „Zemsta” | Aleksander Fredro |
+| Park: „Kulig z karczmą” (pan Onufry, gawędziarz) | Trylogia: „Ogniem i mieczem” | Henryk Sienkiewicz |
+| Park: „Pan z lornetką i wachlarzem” | „Lalka” | Bolesław Prus |
+| Park: „Doktor z walizką” | „Ludzie bezdomni” | Stefan Żeromski |
 
 Postacie są własnymi interpretacjami: mówią dzisiejszym językiem o cenach kebaba, a nie cytatami z książek.
 Mapa miasta korzysta z danych OpenStreetMap (© autorzy OpenStreetMap, licencja ODbL), a kroje pisma są na licencji

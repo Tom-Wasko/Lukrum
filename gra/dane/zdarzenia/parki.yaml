@@ -984,3 +984,209 @@ historie:
       - id: dalej
         tekst: Mijasz autobus
         wynik: Autobus stoi na Błoniach do wieczora. Akcja zebrała kilkadziesiąt donacji.
+
+- id: bal_pozorow
+  park: ogrod_saski
+  tytul: Bal dobroczynny w altanie
+  start: zaproszenie
+  sceny:
+    zaproszenie:
+      tekst: >-
+        W Ogrodzie Saskim zebrał się komitet pań z kamienicy przy Krakowskim Przedmieściu i urządza bal dobroczynny
+        „na cele zacne, choć niewymienione”. Przewodnicząca prosi o poczęstunek, ale „bez czosnku, bez sosu i bez
+        wspominania, skąd Państwo są”. Cały park udaje, że nic się nie dzieje, a wszyscy patrzą.
+      domyslna: odmow
+      opcje:
+      - id: poczestunek
+        tekst: Dostarczasz poczęstunek w eleganckich pudełkach, bez logo
+        koszt: {czas: 3, porcje: 12}
+        wynik: >-
+          Kebaby wędrują do altany jako „wytworne roladki z jagnięciną po lubelsku”. Panie jedzą dyskretnie,
+          odwrócone tyłem do ogrodu, a jedna prosi o dokładkę „dla chorej ciotki”.
+        nastepna:
+        - {scena: plotka, za_ile_rund: 1, szansa: 0.7}
+      - id: wizytowka
+        tekst: Zostawiasz przy wejściu dyskretną wizytówkę
+        koszt: {gotowka: 30}
+        wynik: >-
+          Wizytówka leży na stoliku z napisem „Kuchnia domowa” i nikt jej nie zabiera. Wieczorem jest jednak
+          o jedną mniej, a w koszu nie ma żadnej.
+        skutki:
+        - {typ: popyt, mnoznik: 1.01, rund: 1, opis: Wizytówka na balu}
+      - id: odmow
+        tekst: Dziękujesz za zaproszenie
+        wynik: >-
+          Przewodnicząca przyjmuje odmowę z uśmiechem szerokim jak ulica Lipowa i dodaje, że „oczywiście,
+          rozumiemy”. Wszyscy rozumieją więcej, niż mówią.
+    plotka:
+      tekst: >-
+        W kamienicy mówi się tylko o jednym: że na balu jedzono kebaby, ale oczywiście nikt tego nie jadł.
+        Pani z pierwszego piętra przysięga, że to była „sałatka”. Pani z drugiego przysięga, że w ogóle jej tam
+        nie było. Obie zamawiają teraz u Ciebie, każda pod innym nazwiskiem.
+      skutki:
+      - {typ: popyt, mnoznik: 1.04, rund: 2, opis: Dyskretni klienci z kamienicy}
+
+- id: spor_o_murek
+  park: blonia
+  tytul: Spór o murek
+  start: spor
+  sceny:
+    spor:
+      tekst: >-
+        Dwie rodziny prowadzące sąsiednie stoiska na Błoniach kłócą się o murek, który ktoś postawił „o dwie
+        cegły za daleko”. Spór toczy się rymem, z ukłonami i machaniem chustką, a kibicuje mu pół parku. Obie
+        strony chcą, żebyś rozsądził sprawę, najlepiej po ich stronie.
+      domyslna: sasiedzi
+      opcje:
+      - id: sedzia
+        tekst: Zostajesz sędzią i wydajesz wyrok w rymach
+        koszt: {czas: 2}
+        wynik: >-
+          Wyrok brzmi: „Cegła od cegły, a kebab od jednej i drugiej strony”. Obie strony uznają go za
+          sprawiedliwy, bo każda zrozumiała go na swoją korzyść.
+        nastepna:
+        - {scena: zgoda, za_ile_rund: 1, szansa: 0.6}
+        - {scena: dalszy_spor, za_ile_rund: 1, szansa: 0.4}
+      - id: poczestunek
+        tekst: Stawiasz obu rodzinom kebaby „na zgodę”
+        koszt: {czas: 2, porcje: 8}
+        wynik: >-
+          Z pełnymi ustami nikt nie może rymować, więc w parku robi się cicho. To najdłuższy rozejm
+          w historii murku.
+        skutki:
+        - {typ: popyt, mnoznik: 1.02, rund: 2, opis: Rozejm przy murku}
+      - id: sasiedzi
+        tekst: Mówisz, że to sprawa sąsiedzka, i odchodzisz
+        wynik: >-
+          Obie rodziny odprowadzają Cię wzrokiem, a ktoś woła: „Tchórz i zdrajca w jednym!”. Murek stoi
+          dalej tam, gdzie stał.
+    zgoda:
+      tekst: >-
+        Rodziny zawarły pokój i zamówiły wspólne wesele dzieci, którym nikt jeszcze o tym nie powiedział.
+        Wesele odbędzie się w parku, a catering to oczywiście Ty.
+      skutki:
+      - {typ: gotowka, kwota: 600, opis: Zaliczka na wesele z murkiem w tle}
+    dalszy_spor:
+      tekst: >-
+        Okazuje się, że wyrok zrozumiały dla obu stron naruszył interes trzeciej: sąsiadka z drugiej strony
+        murku też ma „swoje dwie cegły”. Pisze skargę do administratora parku i cytuje w niej Ciebie.
+      skutki:
+      - {typ: gotowka, kwota: -80, opis: Opłata za pismo w sprawie murku}
+
+- id: kulig_karczma
+  park: zalew
+  tytul: Kulig z karczmą
+  start: kulig
+  sceny:
+    kulig:
+      tekst: >-
+        Nad Zalewem Zemborzyckim zamarzła woda i ruszył kulig: sanie, pochodnie, grzane wino i pan Onufry, który
+        zna „każdą karczmę od Lublina po Kijów, a w każdej mu jeszcze winni”. Szuka kogoś, kto dowiezie na
+        postój coś ciepłego, bo wójt zapowiada, że „bez strawy nie ruszymy”.
+      domyslna: pomin
+      opcje:
+      - id: karczma
+        tekst: Rozstawiasz karczmę na lodzie i wydajesz ciepłe kebaby
+        koszt: {czas: 4, porcje: 20}
+        wynik: >-
+          Pan Onufry opowiada, jak jednym kebabem zatrzymał obleganie karczmy w Zamościu. Nikt mu nie wierzy,
+          ale wszyscy kupują kolejne porcje. Pochodnie dymią, sanie czekają.
+        nastepna:
+        - {scena: opowiesc, za_ile_rund: 1}
+      - id: termosy
+        tekst: Wysyłasz termosy z gorącą herbatą i obwarzankami
+        koszt: {gotowka: 70}
+        wynik: >-
+          Kulig dociera do końca trasy zaskakująco szybko, bo herbata wyszła, a pan Onufry nie miał czym
+          podpierać swoich opowieści.
+        skutki:
+        - {typ: popyt, mnoznik: 1.02, rund: 1, opis: Herbata na kuligu}
+      - id: pomin
+        tekst: Odmawiasz – lód jest za cienki na stoisko
+        wynik: >-
+          Pan Onufry mówi, że w jego czasach lód był grubszy, a odwaga jeszcze grubsza. Kulig rusza bez Ciebie
+          i bez przerwy na jedzenie.
+    opowiesc:
+      tekst: >-
+        Po kuligu pan Onufry opowiada w mieście o Twojej karczmie na lodzie. Z każdym razem staje się ona
+        większa, a kebab dłuższy. Według ostatniej wersji było tam czterdziestu gości i dwa niedźwiedzie.
+      skutki:
+      - {typ: popyt, mnoznik: 1.05, rund: 2, opis: Karczma na lodzie z opowieści pana Onufrego}
+
+- id: wachlarz
+  park: park_ludowy
+  tytul: Pan z lornetką i wachlarzem
+  start: lornetka
+  sceny:
+    lornetka:
+      tekst: >-
+        Na ławce w Parku Ludowym siedzi elegancki pan z lornetką, wpatrzony w drewnianą scenę teatrzyku. Kupuje
+        kebab „dla damy, która dzisiaj nie przyjdzie”, a potem kolejny, „bo być może jednak”. Nie wiadomo, czy
+        dama w ogóle istnieje, ale pan płaci z godnością kupca, który wie, ile co kosztuje.
+      domyslna: pomin
+      opcje:
+      - id: obsluga
+        tekst: Podajesz kebaby z ukłonem i „dla Pani” na serwetce
+        koszt: {czas: 2, porcje: 2}
+        wynik: >-
+          Pan odbiera serwetkę drżącą ręką i chowa ją do kieszeni. Zostawia napiwek, którego wysokość
+          sugeruje, że dama jednak istnieje.
+        skutki:
+        - {typ: gotowka, kwota: 150, opis: Napiwek od pana z lornetką}
+        nastepna:
+        - {scena: paczka, za_ile_rund: 1, szansa: 0.6}
+      - id: rada
+        tekst: Radzisz, żeby napisał do niej list
+        koszt: {czas: 3}
+        wynik: >-
+          Pan pisze list, trzy razy go drze i zamawia czwarty kebab. Podarte kartki zostawia Tobie
+          na pamiątkę.
+      - id: pomin
+        tekst: Nie wtrącasz się
+        wynik: >-
+          Pan z lornetką patrzy w dal, a w dali nic się nie dzieje. Być może właśnie o to chodzi.
+    paczka:
+      tekst: >-
+        Do lokalu wpada goniec z paczką: wachlarz z wytwornym napisem „Dla pana, który z daleka wiele ofiarował”.
+        Pan z lornetką prosi, żebyś go zatrzymał, „bo nie wypada przyjąć”. Za przechowanie płaci z góry
+        i zapowiada, że nie wróci.
+      skutki:
+      - {typ: gotowka, kwota: 300, opis: Przechowanie wachlarza}
+
+- id: doktor_z_walizka
+  park: ogrod_botaniczny
+  tytul: Doktor z walizką
+  start: ogrod
+  sceny:
+    ogrod:
+      tekst: >-
+        W Ogrodzie Botanicznym po alejkach chodzi doktor z podniszczoną walizką i zapisuje coś w notesie. Zauważa,
+        że kebab mógłby być lżejszy, a higiena kuchni powinna być „wyższa niż ideał, którego nikt nie osiągnął”.
+        Ma przy sobie wszystko, tylko nie własny dach nad głową ani czas na obiad.
+      domyslna: pomin
+      opcje:
+      - id: obiad
+        tekst: Zapraszasz go na obiad i słuchasz uwag
+        koszt: {czas: 3, porcje: 1}
+        wynik: >-
+          Doktor w pięć minut znajduje w Twojej kuchni trzy niedociągnięcia, a w kolejne pięć wymyśla
+          rozwiązania. Obiadu nie kończy, bo „ktoś w parku kaszle”.
+        nastepna:
+        - {scena: raport, za_ile_rund: 1}
+      - id: kanapka
+        tekst: Wciskasz mu kanapkę na drogę
+        koszt: {porcje: 1}
+        wynik: >-
+          Doktor mówi, że nie ma czasu, i znika za krzewem azalii. Kanapka znika razem z nim.
+      - id: pomin
+        tekst: Nie przerywasz mu obchodu
+        wynik: >-
+          Doktor kończy notes i idzie dalej. Kiedy mijasz go po godzinie, wciąż pisze to samo zdanie
+          na tej samej stronie.
+    raport:
+      tekst: >-
+        Doktor przysłał krótki raport: „Zalecam wietrzenie kuchni, mycie rąk co godzinę i unikanie sosu
+        z niewiadomych składników”. Do kuchni nikt nie wchodzi bez rękawic, a lokal jest podobno „czysty jak
+        szpital polowy”. Klienci widzą to i jedzą spokojniej.
+      skutki:
+      - {typ: popyt, mnoznik: 1.04, rund: 2, opis: Czysta kuchnia według doktora}
