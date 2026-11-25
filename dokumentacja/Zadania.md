@@ -6,12 +6,13 @@ Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej 
 majster) w nawiasach: numer z listy szefa albo „m” (majster).
 
 ## W toku
-- Z4 · seria `wnetrza`: osobne wnętrze dla każdego żetonu (projekt Fable 17.11, makiety w `_archiwum/fable-17.11/fable-wnetrza/`), PRL w holach, krytyka i poprawki wybrane przez szefa; majster: wnętrza wyglądają źle; podpisy na makietach przed wdrożeniem (wyko 04/wnetrza) Przegląd 24.11 gotowy (`wiedza/analizy/przeglad-wnetrz.md`, 15 poprawek P1–P15); szef wybrał A, B, C; teraz wątek A (wyko 04/nakladka), potem B i C.
 
 ## Następnie
 Podróż 04-wyglad-i-dzwiek (start 24.11):
 
 ## Zrobione w tej podróży
+- Z4 · seria `wnetrza`: osobne wnętrze dla każdego żetonu (projekt Fable 17.11, makiety w `_archiwum/fable-17.11/fable-wnetrza/`), PRL w holach, krytyka i poprawki wybrane przez szefa; majster: wnętrza wyglądają źle; podpisy na makietach przed wdrożeniem (wyko 04/wnetrza) Wątki A, B, C zrobione i scalone do `main` (25.11).
+- Z51 · dane piekarni: gazetka (1 pozycja, −10…20%) w `dane/dostawcy.yaml`, ceny pieczywa były od rundy 2 (25.11; testy swiat+aplikacja 349 passed)
 - Z11 · dźwięk: lekkie dźwięki domyślnie (dzwonek, skwierczenie, gwar, stempel), łatwe wyciszenie, MG wycisza klasę; bez muzyki z syntezatora; plus odgłosy tła zależne od miejsca (CC0), domyślnie dźwięki tak / tło nie (scalone do `podroz-04`; 6 nagrań czeka na Commons) Nagrania: 10 z 11 (24.11 szef pobrał 6 ostatnich); stempel nadal bez nagrania.
 - Z13 · wizyty wujka przy ladzie w ważnych momentach (04/wujek, gałąź `podroz-04`)
 - Z23 · prawo (reszta; część z 23.11 zrobiona w podróży 03): decyzje po przeglądzie z 16.11; notki edukacyjne w instrukcji (progi PIP, staż, ZUS, odsetki, lichwa art. 304, CEIDG/PIS, daty roku szkolnego); ekran „Nawiązania i źródła”; drobne (stopki, PDF zgodny z `.md`, ODbL, User-Agent, autorstwo grafik, dymki 16-latków); wyszukać możliwe prawdziwe nazwiska i firmy (Jakub Klimek-Ślęzak, Zenon Lupa, e-Księgi24.pl) i zmienić przy trafieniu; informacja o klubie w instrukcji MG; lista kontrolna przeglądu (stałe wspólne z dawnym projektem → 0, brak nazw z dawnej gry, `ikony_marek.js` bez prawdziwych logo, tabela nawiązań, wykaz grafik i fontów); rozmowa z prawnikiem (04/prawo, gałąź `podroz-04`; zostaje: rozmowa z prawnikiem)
@@ -21,7 +22,6 @@ Podróż 04-wyglad-i-dzwiek (start 24.11):
 - Z47 · kreator /mg/: „Rozlosuj uczniów po drużynach”, kartki z hasłami w podziale na drużyny, przyciski kroków przypięte do dołu (1366×768) (04/kreator, gałąź `podroz-04`)
 
 ## Zaplanowane
-- Z51 · dane piekarni (Piekarnia Koziołek): produkty i akcje w `dane/dostawcy.yaml`, żeby kafelki w jej wnętrzu nie były puste (z P14, 04/charakter)
 
 ### Lekkie poprawki
 

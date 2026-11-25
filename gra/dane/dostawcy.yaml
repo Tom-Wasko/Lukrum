@@ -20,7 +20,7 @@ wszyscy_od_miesiaca: styczen
 dostawcy:
   Piekarnia Koziołek:
     rodzaj: piekarnia
-    opis: Świeże bułki, pita i tortille – dowóz codziennie rano, osobna ilość na każdy dzień.
+    opis: Świeże bułki, pita i tortille – dowóz codziennie rano, osobna ilość na każdy dzień. Co tydzień jedno pieczywo taniej (wczorajszy wypiek).
     dni_dostaw:
     - 0
     - 1
@@ -31,6 +31,10 @@ dostawcy:
     - 6
     koszt_dostawy: 15
     darmowa_od: 150
+    gazetka:
+      pozycji: 1
+      rabat_min: 0.1
+      rabat_max: 0.2
   Biedronka:
     rodzaj: dyskont
     opis: Dobre ceny przy małych ilościach, gazetka z promocjami. Towar przywozisz sam.
