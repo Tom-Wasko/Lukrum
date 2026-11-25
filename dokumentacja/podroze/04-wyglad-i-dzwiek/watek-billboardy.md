@@ -25,3 +25,24 @@
 - **Archi:** archi-lukrum.
 
 ## Raport
+
+**Stan: zrobione** (gałąź `worktree-podroz-04-billboardy`, commity 8bbb3e4, 19df57e, 151f9dd; bez pusha).
+
+- **Dane:** 3 billboardy w `gra/dane/mapa/reklama.yaml` (`billboard_dmowskiego`, `billboard_kul`, `billboard_thatcher`, geo przy rondach), schemat `PunktBillboardu` w `silnik/schematy.py`. Bez nowych liczb gry.
+- **Widok:** `v.reklama.billboardy` (`silnik/rynek/reklama.py`) niepusty tylko, gdy trwa własna kampania billboardowa albo trwała cudza w poprzedniej rundzie (moja interpretacja „kanał działa w rundzie”).
+- **Mapa:** `lublin.js` (żeton `lm-billboard` z ikoną plakatu i plakietką ▤, karta opisu po kliknięciu, wpis w legendzie, waga 8), `mapa.css` (blok `.lm-billboard`). Stan nie samym kolorem (kształt + ▤).
+- **Opis dla gracza:** `INSTRUKCJA.md` (akapit przy agencjach reklamowych) i `README.md` (l. 13).
+- **Lokale botów:** potwierdzone zrzutami (`.lm-zajety` widoczne); zmian nie było.
+- **Uwaga:** billboardy widać dopiero po przybliżeniu mapy; przy pełnym oddaleniu mapa celowo pokazuje tylko własny lokal. Zrzuty „bez billboardów” zrobiono usunięciem węzłów DOM. Zrzuty (bar jasny, wysoka ciemny, telefon 390×844, z/bez, legenda i opis) były w `gra/_robocze/zrzuty/` (poza gitem).
+
+**Dowody**
+- `node --check lublin.js` → JS-OK
+- `silnik.dane sprawdz` → „Dane w porządku … (wersja 99fa63c690c7)”
+- `ruff check .` → All checks passed!
+- `pytest testy/rynek/test_reklama.py` → 11 passed (w tym `test_billboardy_na_mapie_tylko_przy_aktywnej_kampanii`, `@pytest.mark.dane_gry`)
+- `pytest testy/swiat testy/aplikacja` → 349 passed in 176.00s
+- pełne testy → **1 failed, 1027 passed in 388.06s**. Błąd: `testy/pieniadze/test_debet_i_przeglad.py::test_debet_w_rozegranej_grze_oplata_tylko_przy_minusie_na_koniec_tygodnia` (r. 7, bot „agresywny”). **Nie od moich zmian:** ten sam błąd na bazie f9b8726 (sprzed wątku). Do osobnego zadania. `test_mistrz_gry_widzi_klub` nie wrócił.
+
+**Sprzątanie:** `rm` w `_robocze/` zablokowane. Do ręcznego usunięcia (poza gitem): `_robocze/baza/` (tymczasowy worktree bazy; potem `git worktree prune`), `_robocze/billboardy/`, `_robocze/zrzuty-billboardy/`, `gra/_robocze/zrzuty/`. Serwer 8791 zatrzymany.
+
+**Propozycje:** naprawić test debetu (osobne zadanie).
