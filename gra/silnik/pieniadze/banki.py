@@ -507,6 +507,23 @@ def koniec_rundy(dane: Dane, firma: Firma, runda: int, ksiega: Ksiega, rachunek:
                                       "wycena": 0.0, "dlug": round(lea.rata * lea.pozostalo_rat, 2), "nadwyzka": 0.0})
         info["leasing"].append(wiersz)
 
+    oplata_debetu(dane, firma, ksiega, rachunek, info)
+
+    for lo in list(firma.lokaty):
+        if runda >= lo.od_rundy + lo.miesiecy - 1:
+            odsetki = round(lo.kwota * lo.oprocentowanie * lo.miesiecy / rwr, 2)
+            firma.lokaty.remove(lo)
+            rachunek.zapisz(firma, f"Zakończenie lokaty nr {lo.id} ({lo.bank})", lo.kwota, "lokaty")
+            ksieguj(firma, ksiega, rachunek, f"Odsetki od lokaty nr {lo.id} ({lo.bank})", odsetki, "przychod_pozostaly")
+            info["lokaty"].append({"lokata": lo.id, "bank": lo.bank, "kwota": lo.kwota, "odsetki": odsetki})
+    return info
+
+
+def oplata_debetu(dane: Dane, firma: Firma, ksiega: Ksiega, rachunek: Rachunek, info: dict) -> None:
+    """Opłata i odsetki za tydzień na minusie (wg salda końcowego). Wywoływana raz: z `koniec_rundy`, a gdy debet
+    powstał dopiero po nim (podatki, biuro) – jeszcze raz po ostatnim wyrównaniu gotówki, jeśli `info` nie ma "debet"."""
+    u, rwr = ustawienia(dane), dane.rund_w_roku
+    bank = banki(dane).get(firma.bank)
     if firma.debet > 0:   # tydzień kończy się na minusie (debet jest liczony po wyrównaniu salda na koniec tygodnia)
         w_limicie = min(firma.debet, limit_debetu(dane, firma))
         if w_limicie > 0:   # za zgodą: opłata i odsetki; ponad limit – odsetki karne
@@ -522,15 +539,6 @@ def koniec_rundy(dane: Dane, firma: Firma, runda: int, ksiega: Ksiega, rachunek:
         if firma.debet > w_limicie + EPS:
             ksieguj(firma, ksiega, rachunek, "Odsetki karne od debetu ponad limit" if w_limicie
                     else "Odsetki karne od debetu bez zgody banku", round((firma.debet - w_limicie) * u["stopa_karna"] / rwr, 2))
-
-    for lo in list(firma.lokaty):
-        if runda >= lo.od_rundy + lo.miesiecy - 1:
-            odsetki = round(lo.kwota * lo.oprocentowanie * lo.miesiecy / rwr, 2)
-            firma.lokaty.remove(lo)
-            rachunek.zapisz(firma, f"Zakończenie lokaty nr {lo.id} ({lo.bank})", lo.kwota, "lokaty")
-            ksieguj(firma, ksiega, rachunek, f"Odsetki od lokaty nr {lo.id} ({lo.bank})", odsetki, "przychod_pozostaly")
-            info["lokaty"].append({"lokata": lo.id, "bank": lo.bank, "kwota": lo.kwota, "odsetki": odsetki})
-    return info
 
 
 def debet_ponad_limit(dane: Dane, firma: Firma) -> float:
