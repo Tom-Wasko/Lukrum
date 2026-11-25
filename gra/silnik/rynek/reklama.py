@@ -269,11 +269,27 @@ def widok(dane: Dane, f: Firma, runda: int, rynek_poprzedni: dict | None, zamowi
             rodzaj = agencje(dane).get(k["agencja"], {}).get("rodzaj")
             if rodzaj and k.get("faza", "trwa") == "trwa":
                 konkurencja.setdefault(rodzaj, {}).setdefault(k["strefa"] or "miasto", []).append(n)
-    return {"model": R["model"], "agencje": lista,
+    return {"model": R["model"], "agencje": lista, "billboardy": billboardy(dane, ef["kampanie"].get(f.nazwa, []),
+                                                                         rynek_poprzedni, f.nazwa),
             "strefy": {z: s["nazwa"] for z, s in dane.mapa["strefy"].items()},
             "moje_strefy": sorted({dane.lokale[lok.id]["strefa"] for lok in f.lokale}),
             "trwajace": ef["kampanie"].get(f.nazwa, []), "zamowione": zamowione or [], "konkurencja": konkurencja,
             "internet": None if mi is None else {"model": mi, "prognoza": prognoza_internetu(dane, f, runda)}}
+
+
+def billboardy(dane: Dane, trwajace: list, rynek_poprzedni: dict | None, firma: str) -> list[dict]:
+    """Punkty billboardów na mapie – tylko tych kanałów, w których trwa kampania: własna w tej rundzie albo cudza
+    z poprzedniej (widać ją na mieście). Bez kampanii – pusta lista."""
+    czynne = {(k["agencja"], k["kanal"]) for k in trwajace if k.get("faza", "trwa") == "trwa"}
+    for n, x in ((rynek_poprzedni or {}).get("kampanie") or {}).items():
+        if n != firma:
+            czynne |= {(k["agencja"], k["kanal"]) for k in x["kampanie"] if k.get("faza", "trwa") == "trwa"}
+    wynik = []
+    for a, ag in agencje(dane).items():
+        for kid, kan in ag["kanaly"].items():
+            if (a, kid) in czynne:
+                wynik += [{**p, "agencja": a, "kanal": kid} for p in kan.get("punkty") or []]
+    return wynik
 
 
 def prognoza_internetu(dane: Dane, f: Firma, runda: int, rund: int = 4) -> dict:

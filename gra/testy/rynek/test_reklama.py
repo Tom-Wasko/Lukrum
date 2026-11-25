@@ -231,3 +231,18 @@ def test_strategia_nadpisuje_emisje_i_przerwe_kampanii():
     rundy = sorted(x.od_rundy for x in k if (x.agencja, x.kanal) == ("papier_przyjmie", "ulotki"))
     assert len(rundy) >= 2 and any(b - a == 1 for a, b in zip(rundy, rundy[1:]))   # bez przerwy – co rundę
     assert all(x.emisje == g.dane.boty["ustawienia"]["emisje_kampanii"] for x in s.firmy["Tani"].kampanie)
+
+
+@pytest.mark.dane_gry   # punkty billboardów są w dane/, nie w zamrożonej kopii
+def test_billboardy_na_mapie_tylko_przy_aktywnej_kampanii():
+    dane = dane_domyslne()
+    bill = {"agencja": "fala_koziolka", "kanal": "billboard", "strefa": "centrum", "faza": "trwa", "emisje": 3}
+    radio = {**bill, "kanal": "radio", "strefa": None}
+    assert rk.billboardy(dane, [], None, "A") == []                       # brak kampanii – brak billboardów
+    assert rk.billboardy(dane, [radio], None, "A") == []                  # inny kanał nie zapala billboardów
+    assert rk.billboardy(dane, [{**bill, "faza": "wygasa"}], None, "A") == []
+    wlasne = rk.billboardy(dane, [bill], None, "A")                       # własna kampania
+    assert len(wlasne) == 3 and all(p["geo"]["lat"] and p["geo"]["lon"] and p["opis"] for p in wlasne)
+    cudza = {"kampanie": {"B": {"wydatki": 1.0, "kampanie": [bill]}, "A": {"wydatki": 0, "kampanie": []}}}
+    assert rk.billboardy(dane, [], cudza, "A") == wlasne                  # cudza kampania z poprzedniej rundy
+    assert rk.billboardy(dane, [], {"kampanie": {"A": {"kampanie": [bill]}}}, "A") == []   # własna z przeszłości
