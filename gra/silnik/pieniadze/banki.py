@@ -525,6 +525,7 @@ def oplata_debetu(dane: Dane, firma: Firma, ksiega: Ksiega, rachunek: Rachunek, 
     u, rwr = ustawienia(dane), dane.rund_w_roku
     bank = banki(dane).get(firma.bank)
     if firma.debet > 0:   # tydzień kończy się na minusie (debet jest liczony po wyrównaniu salda na koniec tygodnia)
+        info["debet_naliczony"] = True   # znacznik: runda.py nie nalicza drugi raz
         w_limicie = min(firma.debet, limit_debetu(dane, firma))
         if w_limicie > 0:   # za zgodą: opłata i odsetki; ponad limit – odsetki karne
             d = bank["debet"]

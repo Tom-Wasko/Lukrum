@@ -287,7 +287,7 @@ def przelicz_runde(dane: Dane, stan: StanGry, decyzje: dict[str, dict], konfigur
         # udział inwestora ratunkowego w dochodzie netto – przed wyrównaniem gotówki (silnik/pieniadze/inwestor.py)
         udzial_inwestora = inw.koniec_rundy(f, r, round(ks.dochod - podatek, 2), rach)
         wyrownaj_gotowke(f, rach)
-        if f.debet > 0 and "debet" not in bank_koniec:   # minus powstał po rozliczeniu banku (podatki, biuro)
+        if f.debet > 0 and not bank_koniec.get("debet_naliczony"):   # minus powstał po rozliczeniu banku (podatki, biuro)
             bk.oplata_debetu(dane, f, ks, rach, bank_koniec)
             wyrownaj_gotowke(f, rach)
         if samodzielnie:   # dokumenty rundy – po ostatniej operacji (także debecie)

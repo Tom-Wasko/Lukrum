@@ -1035,7 +1035,7 @@ historie:
       tekst: >-
         Dwie rodziny prowadzące sąsiednie stoiska na Błoniach kłócą się o murek, który ktoś postawił „o dwie
         cegły za daleko”. Spór toczy się rymem, z ukłonami i machaniem chustką, a kibicuje mu pół parku. Obie
-        strony chcą, żebyś rozsądził sprawę, najlepiej po ich stronie.
+        strony chcą rozstrzygnięcia sprawy, najlepiej po ich stronie.
       domyslna: sasiedzi
       opcje:
       - id: sedzia
@@ -1148,7 +1148,7 @@ historie:
     paczka:
       tekst: >-
         Do lokalu wpada goniec z paczką: wachlarz z wytwornym napisem „Dla pana, który z daleka wiele ofiarował”.
-        Pan z lornetką prosi, żebyś go zatrzymał, „bo nie wypada przyjąć”. Za przechowanie płaci z góry
+        Pan z lornetką prosi o zatrzymanie tego, „bo nie wypada przyjąć”. Za przechowanie płaci z góry
         i zapowiada, że nie wróci.
       skutki:
       - {typ: gotowka, kwota: 300, opis: Przechowanie wachlarza}
