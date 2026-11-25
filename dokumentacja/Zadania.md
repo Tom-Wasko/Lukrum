@@ -1,5 +1,5 @@
 # Zadania
-Następny numer: Z52
+Następny numer: Z53
 
 Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej ważne. Zrobione dawniej:
 `historia/postep.md`. Pytania do zadań: `Stan.md`, „Czeka na szefa”. Uwagi z gier testowych 20 i 22.11 (szef,
@@ -11,6 +11,7 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 Podróż 04-wyglad-i-dzwiek (start 24.11):
 
 ## Zrobione w tej podróży
+- Z8 · billboardy Fali Koziołka na 3 rondach (widoczne tylko przy trwającej kampanii; żeton, opis, legenda), lokale botów potwierdzone na mapie (25.11; wątek 04/billboardy, 429 passed w rynek+swiat+aplikacja). Zostaje: przycisk „Stara mapa” do zdjęcia po teście z klasą
 - Z3 · seria `budynki`: pierzeja 5 banków, giełda osobno, redakcja: sceny i żetony powstały w wątkach A–C podróży 04 (25.11)
 - Z10 · nawiązania literackie: 5 nowych historii w parkach (Dulska, Zemsta, Trylogia, Lalka, Judym), klucz w INSTRUKCJI i /zrodla (25.11; wątek 04/nawiazania, testy zielone)
 - Z4 · seria `wnetrza`: osobne wnętrze dla każdego żetonu (projekt Fable 17.11, makiety w `_archiwum/fable-17.11/fable-wnetrza/`), PRL w holach, krytyka i poprawki wybrane przez szefa; majster: wnętrza wyglądają źle; podpisy na makietach przed wdrożeniem (wyko 04/wnetrza) Wątki A, B, C zrobione i scalone do `main` (25.11).
@@ -32,8 +33,8 @@ Podróż 04-wyglad-i-dzwiek (start 24.11):
 
 ### Mniej ważne
 - Z7 · mapa: położenia lokali w `lokale.yaml: geo` zamiast w `lublin.json`; odsyłacze dla twórców usunąć z `budynki.yaml`; opisy 11 punktów orientacyjnych i położenia Auchan/błonia/Lidl sprawdzić w źródłach; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html`
-- Z8 · boty i billboardy na mapie; przycisk „Stara mapa” do zdjęcia po teście z klasą
 - Z14 · wydarzenia dla filii, popyt z mapy (nastrój zespołu na twarzach zrobiony 25.11, wątek 04/nastroj: miny obsługi w kebabie z nastroju)
+- Z52 · naprawić test `pieniadze/test_debet_i_przeglad::test_debet_w_rozegranej_grze_oplata_tylko_przy_minusie_na_koniec_tygodnia` (pada w pełnym przebiegu, r. 7 bot „agresywny”; także na bazie sprzed Z8; osobno przechodzi)
 - Z22 · niezależny przegląd całości (kod, dane, teksty, zrzuty)
 - Z27 · wersja na telefon (układ razem z majstrem) i pilot w szkole do maja 2027
 - Z24 · nazwa w UPRP i znaki towarowe (zwłaszcza poza szkołami), publikacja za zgodą szefa
