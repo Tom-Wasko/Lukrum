@@ -32,7 +32,7 @@ Podróż 04-wyglad-i-dzwiek (start 24.11):
 - Z20 · zgłoszenie do „Zwolnieni z Teorii” z datą lekcji (31.03.2027, niepotwierdzone); `METODA.md` (jawność AI) po pobraniu regulaminu (`wiedza/analizy/regulamin-zwzt-a-ai.md`)
 
 ### Mniej ważne
-- Z7 · mapa: położenia lokali w `lokale.yaml: geo` zamiast w `lublin.json`; odsyłacze dla twórców usunąć z `budynki.yaml`; opisy 11 punktów orientacyjnych i położenia Auchan/błonia/Lidl sprawdzić w źródłach; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html`
+- Z7 · mapa (reszta): współrzędne OSM dla 10 punktów orientacyjnych i Auchan/błoni/Lidla porównać z `xy`/`geo` (próg 80 m; wymaga sieci, Nominatim był zablokowany); „zakrystia akustyczna” w katedrze i który most Lutosławskiego (opis „most”) do potwierdzenia; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html` (decyzja szefa). Zrobione 25.11: geo lokali w `lokale.yaml`, odsyłacze usunięte, opisy sprawdzone (poprawione Trybunał 1579 i Czwartek), raport w `podroze/04-wyglad-i-dzwiek/watek-punkty-zrodla.md`
 - Z14 · wydarzenia dla filii, popyt z mapy (nastrój zespołu na twarzach zrobiony 25.11, wątek 04/nastroj: miny obsługi w kebabie z nastroju)
 - Z52 · naprawić test `pieniadze/test_debet_i_przeglad::test_debet_w_rozegranej_grze_oplata_tylko_przy_minusie_na_koniec_tygodnia` (pada w pełnym przebiegu, r. 7 bot „agresywny”; także na bazie sprzed Z8; osobno przechodzi)
 - Z22 · niezależny przegląd całości (kod, dane, teksty, zrzuty)
