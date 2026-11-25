@@ -11,6 +11,7 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 Podróż 04-wyglad-i-dzwiek (start 24.11):
 
 ## Zrobione w tej podróży
+- Z52 · opłata za debet naliczana także, gdy minus powstaje po rozliczeniu banku (realny błąd silnika; `banki.py`, `runda.py`); pełny pytest 1027 passed (25.11)
 - Z8 · billboardy Fali Koziołka na 3 rondach (widoczne tylko przy trwającej kampanii; żeton, opis, legenda), lokale botów potwierdzone na mapie (25.11; wątek 04/billboardy, 429 passed w rynek+swiat+aplikacja). Zostaje: przycisk „Stara mapa” do zdjęcia po teście z klasą
 - Z3 · seria `budynki`: pierzeja 5 banków, giełda osobno, redakcja: sceny i żetony powstały w wątkach A–C podróży 04 (25.11)
 - Z10 · nawiązania literackie: 5 nowych historii w parkach (Dulska, Zemsta, Trylogia, Lalka, Judym), klucz w INSTRUKCJI i /zrodla (25.11; wątek 04/nawiazania, testy zielone)
@@ -34,7 +35,6 @@ Podróż 04-wyglad-i-dzwiek (start 24.11):
 ### Mniej ważne
 - Z7 · mapa (reszta): współrzędne OSM dla 10 punktów orientacyjnych i Auchan/błoni/Lidla porównać z `xy`/`geo` (próg 80 m; wymaga sieci, Nominatim był zablokowany); „zakrystia akustyczna” w katedrze i który most Lutosławskiego (opis „most”) do potwierdzenia; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html` (decyzja szefa). Zrobione 25.11: geo lokali w `lokale.yaml`, odsyłacze usunięte, opisy sprawdzone (poprawione Trybunał 1579 i Czwartek), raport w `podroze/04-wyglad-i-dzwiek/watek-punkty-zrodla.md`
 - Z14 · wydarzenia dla filii, popyt z mapy (nastrój zespołu na twarzach zrobiony 25.11, wątek 04/nastroj: miny obsługi w kebabie z nastroju)
-- Z52 · naprawić test `pieniadze/test_debet_i_przeglad::test_debet_w_rozegranej_grze_oplata_tylko_przy_minusie_na_koniec_tygodnia` (pada w pełnym przebiegu, r. 7 bot „agresywny”; także na bazie sprzed Z8; osobno przechodzi)
 - Z22 · niezależny przegląd całości (kod, dane, teksty, zrzuty)
 - Z27 · wersja na telefon (układ razem z majstrem) i pilot w szkole do maja 2027
 - Z24 · nazwa w UPRP i znaki towarowe (zwłaszcza poza szkołami), publikacja za zgodą szefa

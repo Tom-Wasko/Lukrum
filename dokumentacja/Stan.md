@@ -1,5 +1,5 @@
 # Stan
-Archi żył: 2026-11-25 11:37
+Archi żył: 2026-11-25 12:00
 Tryb: autonomiczny od 10:47, budżet do 17:00, koniec najpóźniej 17:00
 Tempo: żółw
 
