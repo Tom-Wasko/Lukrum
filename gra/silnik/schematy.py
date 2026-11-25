@@ -970,8 +970,17 @@ class PlikBiur(Plik):
 # --- mapa/reklama.yaml (agencje reklamowe) ---
 
 
+class PunktBillboardu(Schemat):
+    id: str = Field(pattern=r"^[a-z0-9_]+$")
+    nazwa: str
+    opis: str
+    strefa: str
+    geo: Geo   # rondo, przy którym stoi billboard (rzut jak w mapie: lublin.js)
+
+
 class KanalReklamy(Schemat):
     nazwa: str
+    punkty: list[PunktBillboardu] | None = None   # stałe punkty na mapie (kanał billboardowy)
     od_rundy: int = Field(ge=1)
     zasieg: Literal["strefa", "miasto"]
     strefy: list[str] | None = None      # tylko te strefy (brak – każda)
