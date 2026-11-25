@@ -37,7 +37,7 @@ Podróż 04-wyglad-i-dzwiek (start 24.11):
 - Z22 · niezależny przegląd całości (kod, dane, teksty, zrzuty)
 - Z27 · wersja na telefon (układ razem z majstrem) i pilot w szkole do maja 2027
 - Z24 · nazwa w UPRP i znaki towarowe (zwłaszcza poza szkołami), publikacja za zgodą szefa
-- Z39 · moduły panelu w jednym pliku (paczka), jeśli preload z 03/wydajnosc nie wystarczy przez hostuj/Cloudflare; najpierw zmierzyć
+- Z39 · moduły panelu w jednym pliku (paczka), jeśli preload z 03/wydajnosc nie wystarczy przez hostuj/Cloudflare; najpierw zmierzyć. Pomiar 25.11 (statyczny): app.js ładuje 75 modułów (1164 KB), łańcuch importów ma 11 poziomów; czas przez hostuj/Cloudflare niezmierzony; paczka wymaga kroku budowania (nowe narzędzie): decyzja szefa
 
 ## Odłożone
 - Z19 · (czeka na powrót kolegi) serwer szkoły: szef z kolegą ustawia LUKRUM na serwerze szkoły (FTP) 23.11; osoba od `manage.py zamykaj_rundy`, dane uczniów (RODO) i notka w instrukcji
