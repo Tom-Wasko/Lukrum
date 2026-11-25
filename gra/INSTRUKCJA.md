@@ -464,6 +464,8 @@ małej liczbie opinii, że stare opinie z czasem liczą się mniej, że przy kil
 klienci różnie znoszą czekanie. W Parku handlowym przy wyposażeniu widać, że kolejna sztuka daje mniej niż poprzednia.
 W HR, w profilu osoby, jest rozpiska jej nastroju (pensja, sprzęt, udogodnienia, szkolenia, przepracowanie) i próg, od
 którego zmęczenie zwiększa ryzyko pomyłek.
+W kebabie nastrój zespołu widać na twarzach: osoby przy ladzie i na kuchni są uśmiechnięte, gdy w zespole jest dobrze,
+zachmurzone, gdy jest źle, i zmęczone, gdy mają za dużo pracy. Opis słowami jest przy każdej postaci.
 
 W Parku handlowym działa sklep meblowy **„Meblościanka”**. Wystrój kupuje się w czterech grupach (ściany, szyld,
 dodatki, meble) i w jednym z kilku stylów. Styl działa tylko wtedy, gdy lubi go wystarczająco dużo gości z okolicy
