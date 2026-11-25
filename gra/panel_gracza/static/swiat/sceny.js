@@ -15,10 +15,10 @@ const u = (n, x, y, s = 1, extra = "") => {
   return `<use href="#g-${n}" x="${x}" y="${y}" width="${w * s}" height="${h * s}" ${extra}/>`;
 };
 // postać wklejona w całości (nie <use>), żeby każda mogła mieć własną minę (atrybut data-mina)
-function osobaSvg(n, cx, stopy, s, mina, i = 0) {
+function osobaSvg(n, cx, stopy, s, mina, i = 0, opis = "") {
   const sym = document.getElementById(`g-postacie-${n}`);
   return `<g class="wejscie" style="animation-delay:${i * 0.12}s"><svg x="${cx - 60 * s}" y="${stopy - 256 * s}" width="${120 * s}" height="${260 * s}"
-    viewBox="0 0 120 260" data-mina="${mina}">${sym ? sym.innerHTML : ""}</svg></g>`;
+    viewBox="0 0 120 260" data-mina="${mina}"${opis ? ` role="img" aria-label="${esc(opis)}"` : ""}>${opis ? `<title>${esc(opis)}</title>` : ""}${sym ? sym.innerHTML : ""}</svg></g>`;
 }
 const napis = (x, y, t, rozm, kolor, font, extra = "") =>
   `<text x="${x}" y="${y}" fill="${kolor}" style="font-family:var(--font-${font});font-size:${rozm}px" ${extra}>${esc(t)}</text>`;
@@ -90,8 +90,8 @@ export function scenaKebabu(d) {
   // obsługa za ladą, sprzęt
   s += u("wnetrze-drzwi-zaplecze", 1100, 140);
   const kuchnia = d.obsluga.filter((o) => o.miejsce === "kuchnia"), lada = d.obsluga.filter((o) => o.miejsce !== "kuchnia");
-  if (kuchnia[0]) s += osobaSvg("obsluga-kucharz", 900, 424, 0.88, kuchnia[0].mina);
-  if (lada[0]) s += osobaSvg("obsluga-kasjerka", 775, 424, 0.88, lada[0].mina);
+  if (kuchnia[0]) s += osobaSvg("obsluga-kucharz", 900, 424, 0.88, kuchnia[0].mina, 0, kuchnia[0].opis);
+  if (lada[0]) s += osobaSvg("obsluga-kasjerka", 775, 424, 0.88, lada[0].mina, 0, lada[0].opis);
   s += u(`wnetrze-rozen-${p}`, 955, 140) + u(`wnetrze-lada-${p}`, 625, 300) + u(`wnetrze-kasa-${p}`, 640, 276);
   s += u(`dekor-meble-${dk.meble}`, 40, 452);
   // tablica wyników tygodnia (podróż 03/wyniki): wyraźny przycisk między zdjęciami a ladą

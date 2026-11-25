@@ -13,7 +13,7 @@ Własne płaskie grafiki SVG do wnętrz kebaba, sklepu meblowego i paska. Stan: 
 - **Fonty.** Napisy w grafikach (np. „ZAPLECZE”) biorą krój z `--font-szyld` albo `--font-gruby`.
 - **Animacje.** Klasy do animowania w CSS strony: `.para` (para z rożna), `.neon` (świecące części),
   `.sekundnik` (zegar dworcowy), `.hak` (żuraw). Wyłącz je przy `prefers-reduced-motion`.
-- **Miny obsługi.** `obsluga-kasjerka.svg` i `obsluga-kucharz.svg` mają trzy grupy `.mina-dobra`, `.mina-zwykla`,
+- **Miny obsługi.** `obsluga-kasjerka.svg` i `obsluga-kucharz.svg` mają trzy grupy `.mina-dobra`, `.mina-zwykla`, `.mina-zla`,
   `.mina-zmeczona` (domyślnie widać zwykłą). Są też osobne pliki z jedną miną (`…-dobra.svg` itd.).
   Bywalcy i goście mają grupy `.mina-dobra`, `.mina-zwykla`, `.mina-zla`.
 - **Składanie sceny.** Scena lokalu ma 1220×612: ściana 1220×380 na górze, podłoga 1220×232 pod nią, na to
@@ -66,12 +66,14 @@ Pliki powstają ze skryptów w `narzedzia/grafiki/` (`postacie.py`, `wnetrza.py`
 | `postacie/gosc-sasiadka.svg` | 120×260 | Gość: sąsiadka z siatką (osiedla) |
 | `postacie/gosc-student.svg` | 120×260 | Gość: student w czapce, ze słuchawkami i plecakiem |
 | `postacie/gosc-turystka.svg` | 120×260 | Gość: turystka z aparatem (Stare Miasto) |
-| `postacie/obsluga-kasjerka.svg` | 120×260 | Obsługa: kasjerka, miny przełączane przez data-mina (dobra, zwykla, zmeczona) |
+| `postacie/obsluga-kasjerka.svg` | 120×260 | Obsługa: kasjerka, miny przełączane przez data-mina (dobra, zwykla, zla, zmeczona) |
 | `postacie/obsluga-kasjerka-dobra.svg` | 120×260 | Obsługa: kasjerka, mina „dobra” (plik z jedną miną) |
+| `postacie/obsluga-kasjerka-zla.svg` | 120×260 | Obsługa: kasjerka, mina „zla” (plik z jedną miną) |
 | `postacie/obsluga-kasjerka-zmeczona.svg` | 120×260 | Obsługa: kasjerka, mina „zmeczona” (plik z jedną miną) |
 | `postacie/obsluga-kasjerka-zwykla.svg` | 120×260 | Obsługa: kasjerka, mina „zwykla” (plik z jedną miną) |
-| `postacie/obsluga-kucharz.svg` | 120×260 | Obsługa: kucharz, miny przełączane przez data-mina (dobra, zwykla, zmeczona) |
+| `postacie/obsluga-kucharz.svg` | 120×260 | Obsługa: kucharz, miny przełączane przez data-mina (dobra, zwykla, zla, zmeczona) |
 | `postacie/obsluga-kucharz-dobra.svg` | 120×260 | Obsługa: kucharz, mina „dobra” (plik z jedną miną) |
+| `postacie/obsluga-kucharz-zla.svg` | 120×260 | Obsługa: kucharz, mina „zla” (plik z jedną miną) |
 | `postacie/obsluga-kucharz-zmeczona.svg` | 120×260 | Obsługa: kucharz, mina „zmeczona” (plik z jedną miną) |
 | `postacie/obsluga-kucharz-zwykla.svg` | 120×260 | Obsługa: kucharz, mina „zwykla” (plik z jedną miną) |
 | `postacie/sprzedawca.svg` | 120×260 | Sprzedawca w sklepie meblowym |
