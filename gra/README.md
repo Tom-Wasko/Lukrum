@@ -10,6 +10,7 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 ## Co jest w grze
 
 - **Mapa Lublina** z danych OpenStreetMap, z płynnym przybliżaniem. Budynki to żetony, kliknięcie otwiera wnętrze.
+  Gdy trwa kampania billboardowa, przy trzech rondach pojawiają się billboardy z opisem po kliknięciu.
 - **Miejsca zamiast zakładek:** Mój kebab, Stare Miasto, Hurtownie (okienko oferty jednego sklepu i działu), Park handlowy, Miasteczko akademickie, Kamienica
   bankowa, Kamienica rachmistrzów, Biurowiec przy Zana (winda z piętrami, piętro = oferta jednej agencji, portiernia = spis pięter), Urzędy, redakcja „Kuriera rankingowego”.
 - **Tłok i opinie:** pełna załoga (obciążenie ponad 85%) wydłuża kolejkę we wnętrzu kebaba („Tłok: duży ▲”) i lekko obniża

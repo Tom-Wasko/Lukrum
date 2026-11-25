@@ -93,6 +93,22 @@ agencje:
     kanaly:
       billboard:
         nazwa: Billboard przy rondzie
+        punkty:
+        - id: billboard_dmowskiego
+          nazwa: Billboard przy Rondzie Dmowskiego
+          opis: Duża tablica przy rondzie w centrum. Kampania „Fali Koziołka” jest tu widoczna dla kierowców i pieszych.
+          strefa: centrum
+          geo: {lat: 51.25092, lon: 22.5747}
+        - id: billboard_kul
+          nazwa: Billboard przy Rondzie 100-lecia KUL
+          opis: Tablica przy rondzie obok uczelni. Kampania „Fali Koziołka” trafia głównie do studiujących.
+          strefa: akademickie
+          geo: {lat: 51.25584, lon: 22.50721}
+        - id: billboard_thatcher
+          nazwa: Billboard przy Rondzie Thatcher
+          opis: Tablica przy rondzie na Czechowie. Kampania „Fali Koziołka” jest tu widoczna dla dojeżdżających do pracy.
+          strefa: czechow
+          geo: {lat: 51.28011, lon: 22.55296}
         od_rundy: 8
         zasieg: strefa
         emisja: dzień na billboardzie
