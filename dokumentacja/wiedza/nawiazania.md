@@ -43,7 +43,7 @@ Szczegóły biur: [Biura rachunkowe – pakiety](../funkcje/biura-rachunkowe-pak
 | Sklep ze sprzętem | „Konstruktorzy T&K” | Lem, *Cyberiada* (aluzja) | plan |
 | Hasło przyprawy | „Kto kontroluje przyprawę, kontroluje rynek” | Herbert, *Diuna* (aluzja) | plan |
 | Zdarzenie miejskie | Carnaval Sztukmistrzów | Lublin; Singer, *Sztukmistrz z Lublina* | plan |
-| Parki | zdarzenia z lektur: „bal” jak u Dulskiej, kulig, pojedynek na słowa | – | plan |
+| Parki | pięć historii z lektur (Z10, 25.11), opisy poniżej | patrz „Historie w parkach” | w grze |
 | Do dopisania | Zajdel (np. *Limes inferior*: punkty, klasy), Winnetou, inne lektury | – | pomysł |
 
 Kolumna „Stan” jest wpisana z notatek, a nie z gry. Przy najbliższej pracy nad tekstami trzeba ją sprawdzić w danych.
@@ -55,3 +55,18 @@ Cytaty bywalców są sprawdzone z Wolnymi Lekturami (14.11) i opisane przy zacze
 ## Ryzyka (otwarte w [Czeka na szefa](../Stan.md))
 Józio (Gombrowicz) i bank „Solaris” (Lem) korzystają z utworów jeszcze chronionych: zostają jako aluzje, dopóki autor
 nie zdecyduje inaczej.
+
+## Historie w parkach (Z10, 25.11)
+Pięć historii w `gra/dane/zdarzenia/parki.yaml`, wszystkie komiczne, z postaciami fikcyjnymi i bez podpisów w interfejsie.
+Lektury z domeny publicznej. Adresy Wolnych Lektur wpisane bez sprawdzenia (praca bez sieci): przy przeglądzie warto
+kliknąć każdy.
+
+| Historia (id) | Park | Nawiązanie | Źródło |
+|---|---|---|---|
+| Bal dobroczynny w altanie (`bal_pozorow`) | Ogród Saski | komitet pań dbający o pozory, kebab jako „sałatka”: Dulska | Zapolska, *Moralność pani Dulskiej*: https://wolnelektury.pl/katalog/lektura/moralnosc-pani-dulskiej/ |
+| Spór o murek (`spor_o_murek`) | Błonia | kłótnia sąsiadów o mur, rymowane obelgi, zgoda przez wesele | Fredro, *Zemsta*: https://wolnelektury.pl/katalog/lektura/zemsta/ |
+| Kulig z karczmą (`kulig_karczma`) | Zalew | gawędziarz pan Onufry i opowieści rosnące z każdym razem: Zagłoba | Sienkiewicz, *Ogniem i mieczem*: https://wolnelektury.pl/katalog/lektura/ogniem-i-mieczem-tom-pierwszy/ |
+| Pan z lornetką i wachlarzem (`wachlarz`) | Park Ludowy | kupiec zakochany w damie, która „nie przyjdzie”: Wokulski | Prus, *Lalka*: https://wolnelektury.pl/katalog/lektura/lalka-tom-pierwszy/ |
+| Doktor z walizką (`doktor_z_walizka`) | Ogród Botaniczny | doktor z ideałami higieny, bez dachu nad głową: Judym | Żeromski, *Ludzie bezdomni*: https://wolnelektury.pl/katalog/lektura/ludzie-bezdomni/ |
+
+Cytatów brak (postacie mówią własnymi słowami). Autorzy chronieni (Lem, Herbert, Gombrowicz, Zajdel) nie występują.

@@ -146,4 +146,27 @@ def test_widok_api(client, zbyszek):
     assert any(p["zakladka"] in ("mapa", "sprawy") for p in v["czas_wlasciciela"]["pozycje"])
 
 
+def test_kazda_historia_ma_domyslna_bez_czasu_i_dochodzi_do_konca():
+    """opcja domyślna nie kosztuje czasu właściciela; sceny docelowe istnieją, żadna scena nie jest martwa."""
+    for hid, h in zd.historie_parkow(_gra().dane).items():
+        sceny = h["sceny"]
+        assert h["start"] in sceny, hid
+        dosiegniete, kolejka = set(), [h["start"]]
+        while kolejka:
+            nazwa = kolejka.pop()
+            if nazwa in dosiegniete:
+                continue
+            dosiegniete.add(nazwa)
+            sc = sceny[nazwa]
+            opcje = {o["id"]: o for o in sc.get("opcje", [])}
+            if opcje:
+                assert sc["domyslna"] in opcje, (hid, nazwa)
+                assert not opcje[sc["domyslna"]].get("koszt", {}).get("czas"), (hid, nazwa)
+            for zrodlo in [sc, *opcje.values()]:
+                for n in zrodlo.get("nastepna", []):
+                    assert n["scena"] in sceny, (hid, nazwa, n["scena"])
+                    kolejka.append(n["scena"])
+        assert dosiegniete == set(sceny), (hid, set(sceny) - dosiegniete)
+
+
 pytestmark = pytest.mark.django_db
