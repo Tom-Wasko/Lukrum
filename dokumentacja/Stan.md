@@ -1,7 +1,7 @@
 # Stan
 Archi żył: 2026-11-25 07:31
 Tryb: autonomiczny od 07:31, budżet do 17:00 (nowe kroki do 15:35), koniec najpóźniej 17:00. Scalenia do `podroz-04`.
-Tempo: zwykły
+Tempo: żółw
 
 ## Podróż
 **04-wyglad-i-dzwiek**: plan zatwierdzony 23.11 wieczorem (`podroze/04-wyglad-i-dzwiek/plan.md`), **start 24.11 rano**
