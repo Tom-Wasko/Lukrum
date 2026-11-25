@@ -107,12 +107,11 @@
 .sw-scena .wn-pkt.hot:hover, .sw-scena .wn-pkt.hot:focus-visible { border: .18em solid var(--akcent); background: color-mix(in srgb, var(--akcent) 10%, transparent); }
 .sw-scena .wn-pkt.hot.zablokowane { background: none; border-color: transparent; }
 
-/* P10: ciemne palety – postacie i rekwizyty w ciemnej wersji, nie jasne wycinanki. Tylko zmienne. */
+/* P10: ciemne palety – postacie i rekwizyty w ciemnej wersji, nie jasne wycinanki. Wartości w motywy/zmienne.css. */
 [data-tryb="ciemny"] .sw-scena svg[data-mina] {
-  --g-kontur: color-mix(in srgb, var(--tusz) 78%, var(--papier));
-  --g-biel: #a9a79c; --g-skora: #b8906f; --g-skora3: #9d7658; --g-siwy: #8e8c84; --g-karta: #25302b;
+  --g-kontur: var(--g-kontur-ciemny);
+  --g-biel: var(--g-postac-biel); --g-skora: var(--g-postac-skora); --g-skora3: var(--g-postac-skora3); --g-siwy: var(--g-postac-siwy); --g-karta: var(--g-postac-karta);
 }
-[data-paleta="wysoka"][data-tryb="ciemny"] .sw-scena svg[data-mina] { --g-kontur: #ffffff; }
 [data-tryb="ciemny"] .sw-scena svg[data-mina] [stroke="var(--g-czern)"] { stroke: var(--g-kontur); }
-[data-tryb="ciemny"] .sw-scena svg:not([data-mina]) { --g-biel: #bdbbb0; }
-[data-paleta="wysoka"][data-tryb="ciemny"] .sw-scena .k, [data-paleta="wysoka"][data-tryb="ciemny"] .sw-scena .k1, [data-paleta="wysoka"][data-tryb="ciemny"] .sw-scena .k3 { stroke: #ffffff; }
+[data-tryb="ciemny"] .sw-scena svg:not([data-mina]) { --g-biel: var(--g-rekwizyt-biel); }
+[data-paleta="wysoka"][data-tryb="ciemny"] .sw-scena .k, [data-paleta="wysoka"][data-tryb="ciemny"] .sw-scena .k1, [data-paleta="wysoka"][data-tryb="ciemny"] .sw-scena .k3 { stroke: var(--g-kontur-ciemny); }

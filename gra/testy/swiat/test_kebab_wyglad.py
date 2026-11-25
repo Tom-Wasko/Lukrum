@@ -34,4 +34,5 @@ def test_ciemne_palety_maja_kontur_i_ciemne_wypelnienia_postaci():
     css = _css()
     assert '[data-tryb="ciemny"] .sw-scena svg[data-mina]' in css
     assert "--g-kontur" in css
-    assert re.search(r'\[data-paleta="wysoka"\]\[data-tryb="ciemny"\] \.sw-scena svg\[data-mina\] \{ --g-kontur: #ffffff', css)
+    zm = (SWIAT.parent / "motywy" / "zmienne.css").read_text(encoding="utf-8")
+    assert re.search(r'\[data-paleta="wysoka"\]\[data-tryb="ciemny"\] \{[^}]*--g-kontur-ciemny: #ffffff', zm)
