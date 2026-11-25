@@ -291,6 +291,7 @@ Wygląd tych elementów: [Wygląd](Wyglad.md). Kolejność prac: [Zadania](Zadan
 - 2026-11-24 (okienko) · Wzór okien 04/wzor zaakceptowany: „wszystkie są spoko”; reszta okien tym samym sposobem (każda rama swój język).
 
 - 25.11 · P14: uzupełnić dane piekarni (Z51); podróż 04 (wnętrza A, B, C) scalona do main i wypchnięta.
+- 25.11 (okienko) · Do /papa żółw 17:00 Archi robi sam wszystko, co nie wymaga szefa: Z51, drobne usterki szyldów, Z3, Z7, Z39. Z14 tylko nastrój na twarzach (bez mechaniki). Z8 robić (mapa: najpierw fetch i przegląd origin/maciex). Z22 recenzent na Sonnecie, raport do pliku. Z10 z źródłami, szef przegląda po powrocie. Z19, Z20, Z24, Z27 czekają na szefa.
 ## Archiego
 - 2026-11-22 · Archiwum lokalne to `_archiwum/` (folder już istniał), nie `archiwum/`; jest w `.gitignore`.
 - 2026-11-22 · `gra/AGENTS.md` zostaje jako przewodnik po kodzie (dla narzędzi majstra), `CLAUDE.md` go importuje.
