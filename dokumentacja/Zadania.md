@@ -1,5 +1,5 @@
 # Zadania
-Następny numer: Z51
+Następny numer: Z52
 
 Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej ważne. Zrobione dawniej:
 `historia/postep.md`. Pytania do zadań: `Stan.md`, „Czeka na szefa”. Uwagi z gier testowych 20 i 22.11 (szef,
@@ -21,6 +21,7 @@ Podróż 04-wyglad-i-dzwiek (start 24.11):
 - Z47 · kreator /mg/: „Rozlosuj uczniów po drużynach”, kartki z hasłami w podziale na drużyny, przyciski kroków przypięte do dołu (1366×768) (04/kreator, gałąź `podroz-04`)
 
 ## Zaplanowane
+- Z51 · dane piekarni (Piekarnia Koziołek): produkty i akcje w `dane/dostawcy.yaml`, żeby kafelki w jej wnętrzu nie były puste (z P14, 04/charakter)
 
 ### Lekkie poprawki
 

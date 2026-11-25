@@ -290,6 +290,7 @@ Wygląd tych elementów: [Wygląd](Wyglad.md). Kolejność prac: [Zadania](Zadan
 - 2026-11-24 · Reszta okien: **jeden wyko 04/okna**, bez dzielenia na dwóch (polecenie szefa).
 - 2026-11-24 (okienko) · Wzór okien 04/wzor zaakceptowany: „wszystkie są spoko”; reszta okien tym samym sposobem (każda rama swój język).
 
+- 25.11 · P14: uzupełnić dane piekarni (Z51); podróż 04 (wnętrza A, B, C) scalona do main i wypchnięta.
 ## Archiego
 - 2026-11-22 · Archiwum lokalne to `_archiwum/` (folder już istniał), nie `archiwum/`; jest w `.gitignore`.
 - 2026-11-22 · `gra/AGENTS.md` zostaje jako przewodnik po kodzie (dla narzędzi majstra), `CLAUDE.md` go importuje.
