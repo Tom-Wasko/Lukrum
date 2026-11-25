@@ -20,6 +20,7 @@ export default function (R) {
       s += R.osobaZa("obsluga-kasjerka", 1130, 400, 500, 0.95) + R.u("sklep-kasa", 1040, 330, 1.0) + R.kartka(1050, 180, 140, 70, ["DOWÓZ", "wtorek i piątek", "69 zł"], -2, 14);
       // pierwszy plan: zamrażarki skrzyniowe z mrożonkami, wózek platformowy
       s += R.zamrazarka(120, 600, 180, "MROŻONKI") + R.zamrazarka(310, 600, 180, "FRYTKI · FALAFEL") + R.wozekPlatf(640, 604);
+      s += R.stosSkrzynek(560, 604, 3, 80, "var(--g-drewno2)") + R.paletyRzad(900, 606, 2, "var(--g-drewno2)");
       return s;
     },
     punkty: () => [

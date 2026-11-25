@@ -21,6 +21,7 @@ export default function (R) {
       s += R.rampa(990, 170, 200, 250, "") + [["PON.", 1000], ["ŚR.", 1064], ["PT.", 1128]].map(([d, x]) => R.kartka(x, 116, 54, 34, [d], 0, 15)).join("");
       // pierwszy plan: waga platformowa, biurko zamówień z telefonem i zeszytem, magazynier
       s += R.waga(430, 560) + R.osoba("sprzedawca", 640, 606, 0.85) + R.biurko(720, 500, 220, 100) + R.telefon(750, 500, "var(--g-czern)") + R.papiery(830, 500, 5) + R.t(830, 566, "ZAMÓWIENIA", 15, { ls: 2 }) + R.wozekPlatf(190, 604);
+      s += R.stosSkrzynek(100, 604, 3, 90, "var(--g-drewno2)") + R.paletyRzad(260, 606, 2, "var(--g-drewno2)");
       return s;
     },
     punkty: () => [

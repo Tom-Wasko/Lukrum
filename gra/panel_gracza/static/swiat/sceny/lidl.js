@@ -23,6 +23,7 @@ export default function (R) {
       s += R.zamrazarka(420, 600, 190, "MROŻONKI") + R.zamrazarka(620, 600, 190, "FRYTKI");
       s += `<path class="k" d="M110 604v-140M84 604h52" stroke-width="5"/><rect class="k" x="64" y="456" width="92" height="104" fill="var(--g-biel)"/><rect x="64" y="456" width="92" height="28" fill="${MARKA}" class="k"/>` + R.t(110, 476, "GAZETKA", 13.5, { fill: "var(--papier)" }) + [0, 1, 2].map((i) => `<rect class="k1" x="${72 + i * 28}" y="494" width="22" height="26" fill="${R.KOL[i + 1]}"/>`).join("");
       s += R.osobaZa("obsluga-kasjerka", 1110, 500, 600, 0.9) + R.u("sklep-kasa", 1010, 440, 1.0) + R.osoba("gosc-student", 900, 606, 0.8, "dobra") + R.kosz(250, 566);
+      s += R.wiezaKoszykow(850, 606, 4, MARKA) + R.wycieraczka(1000, 612, 110);
       return s;
     },
     punkty: () => [
