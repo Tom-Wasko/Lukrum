@@ -229,7 +229,7 @@ def student():
 
 
 # ───────────── Obsługa i inni ─────────────
-MINY_OBS = ('dobra', 'zwykla', 'zmeczona')
+MINY_OBS = ('dobra', 'zwykla', 'zla', 'zmeczona')
 
 
 def kasjerka(jedna=None):
@@ -280,8 +280,8 @@ OS = [
     ('gosc-podrozny', podrozny, 'Gość: podróżny z walizką (Dworzec)'),
     ('gosc-sasiadka', sasiadka, 'Gość: sąsiadka z siatką (osiedla)'),
     ('gosc-student', student, 'Gość: student w czapce, ze słuchawkami i plecakiem'),
-    ('obsluga-kasjerka', kasjerka, 'Obsługa: kasjerka, miny przełączane przez data-mina (dobra, zwykla, zmeczona)'),
-    ('obsluga-kucharz', kucharz, 'Obsługa: kucharz, miny przełączane przez data-mina (dobra, zwykla, zmeczona)'),
+    ('obsluga-kasjerka', kasjerka, 'Obsługa: kasjerka, miny przełączane przez data-mina (dobra, zwykla, zla, zmeczona)'),
+    ('obsluga-kucharz', kucharz, 'Obsługa: kucharz, miny przełączane przez data-mina (dobra, zwykla, zla, zmeczona)'),
     ('sprzedawca', sprzedawca, 'Sprzedawca w sklepie meblowym'),
     ('budowlaniec', budowlaniec, 'Budowlaniec na działce'),
 ]

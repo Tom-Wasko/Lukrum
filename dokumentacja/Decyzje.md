@@ -303,3 +303,8 @@ Wygląd tych elementów: [Wygląd](Wyglad.md). Kolejność prac: [Zadania](Zadan
 - 2026-11-24 (szef, okienko) · Drużyna zostaje najwyżej 4 osoby; na teście 07.12 klasa gra w większej liczbie drużyn (7–8).
 - 2026-11-24 (szef, okienko) · `podroz-04` scalić do `main` i wypchnąć. 6 brakujących nagrań z Commons szef pobiera ręcznie w przeglądarce.
 - 2026-11-24 (szef, okienko) · Dokładka do podróży 04 (ok. 50% limitu 5 h): Z13 wujek (postać przy ladzie, więcej okazji, po 3 kwestie), Z4 start (tylko przegląd i krytyka wnętrz, poprawki wybiera szef), Z23 (notki w instrukcji, strona źródeł, drobne, lista kontrolna; bez wyszukiwania nazwisk).
+
+## Decyzje szefa 25.11 (po trybie autonomicznym)
+- Z53: położenia 3 billboardów sprawdzić w OSM; billboardy niezależne od strefy kampanii.
+- Z7 (ikona lokalu): później. Z39 (paczka ładowania): odłożone.
+- `podroz-04` scalić do `main` i wypchnąć.

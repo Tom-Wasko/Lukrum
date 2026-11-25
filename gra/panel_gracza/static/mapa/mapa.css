@@ -161,6 +161,11 @@
 .lm-plakietka, .lm-ile { position: absolute; right: -5px; top: -5px; display: grid; place-items: center; min-width: 16px; height: 16px; padding: 0 3px; box-sizing: border-box;
   font: 700 11px/1 var(--font-tekst); font-style: normal; color: var(--g-biel); background: var(--akcent); border: 1.5px solid var(--g-czern); border-radius: 8px; }
 .lm-plakietka.lm-uwaga { background: var(--strata); }
+/* billboard: żeton w tuszu i papierze, jak punkty orientacyjne; znak ▤ w plakietce, więc nie samym kolorem */
+.lm-billboard .zt * { stroke: var(--tusz); stroke-width: 1.3; }
+.lm-billboard .zt .c { fill: var(--tusz); }
+.lm-billboard .zt :is(.d, .n, .b, .u, .k, .w) { fill: color-mix(in srgb, var(--tusz) 22%, var(--papier)); }
+.lm-billboard .zt :is(.m, .j) { fill: var(--papier); }
 .lm-ocena { position: absolute; left: 0; top: calc(var(--rozm) * -0.86 - 18px); translate: -50% 0; padding: 0 5px; white-space: nowrap; display: none;
   font: 700 11px/1.4 var(--font-tekst); color: var(--g-czern); background: var(--g-biel); border: 1px solid var(--g-czern); border-radius: 8px; }
 

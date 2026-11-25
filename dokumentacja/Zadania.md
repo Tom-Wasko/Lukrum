@@ -1,5 +1,5 @@
 # Zadania
-Następny numer: Z52
+Następny numer: Z55
 
 Kolejność ustalona 22.11: najpierw lekkie poprawki, potem ważne, potem mniej ważne. Zrobione dawniej:
 `historia/postep.md`. Pytania do zadań: `Stan.md`, „Czeka na szefa”. Uwagi z gier testowych 20 i 22.11 (szef,
@@ -11,6 +11,10 @@ majster) w nawiasach: numer z listy szefa albo „m” (majster).
 Podróż 04-wyglad-i-dzwiek (start 24.11):
 
 ## Zrobione w tej podróży
+- Z52 · opłata za debet naliczana także, gdy minus powstaje po rozliczeniu banku (realny błąd silnika; `banki.py`, `runda.py`); pełny pytest 1027 passed (25.11)
+- Z8 · billboardy Fali Koziołka na 3 rondach (widoczne tylko przy trwającej kampanii; żeton, opis, legenda), lokale botów potwierdzone na mapie (25.11; wątek 04/billboardy, 429 passed w rynek+swiat+aplikacja). Zostaje: przycisk „Stara mapa” do zdjęcia po teście z klasą
+- Z3 · seria `budynki`: pierzeja 5 banków, giełda osobno, redakcja: sceny i żetony powstały w wątkach A–C podróży 04 (25.11)
+- Z10 · nawiązania literackie: 5 nowych historii w parkach (Dulska, Zemsta, Trylogia, Lalka, Judym), klucz w INSTRUKCJI i /zrodla (25.11; wątek 04/nawiazania, testy zielone)
 - Z4 · seria `wnetrza`: osobne wnętrze dla każdego żetonu (projekt Fable 17.11, makiety w `_archiwum/fable-17.11/fable-wnetrza/`), PRL w holach, krytyka i poprawki wybrane przez szefa; majster: wnętrza wyglądają źle; podpisy na makietach przed wdrożeniem (wyko 04/wnetrza) Wątki A, B, C zrobione i scalone do `main` (25.11).
 - Z51 · dane piekarni: gazetka (1 pozycja, −10…20%) w `dane/dostawcy.yaml`, ceny pieczywa były od rundy 2 (25.11; testy swiat+aplikacja 349 passed)
 - Z11 · dźwięk: lekkie dźwięki domyślnie (dzwonek, skwierczenie, gwar, stempel), łatwe wyciszenie, MG wycisza klasę; bez muzyki z syntezatora; plus odgłosy tła zależne od miejsca (CC0), domyślnie dźwięki tak / tło nie (scalone do `podroz-04`; 6 nagrań czeka na Commons) Nagrania: 10 z 11 (24.11 szef pobrał 6 ostatnich); stempel nadal bez nagrania.
@@ -26,18 +30,17 @@ Podróż 04-wyglad-i-dzwiek (start 24.11):
 ### Lekkie poprawki
 
 ### Ważne
-- Z3 · seria `budynki`: pierzeja 5 banków, giełda osobno, redakcja (Kamienica rachmistrzów i reklama w biurowcu przy Zana już są)
 - Z20 · zgłoszenie do „Zwolnieni z Teorii” z datą lekcji (31.03.2027, niepotwierdzone); `METODA.md` (jawność AI) po pobraniu regulaminu (`wiedza/analizy/regulamin-zwzt-a-ai.md`)
 
 ### Mniej ważne
-- Z7 · mapa: położenia lokali w `lokale.yaml: geo` zamiast w `lublin.json`; odsyłacze dla twórców usunąć z `budynki.yaml`; opisy 11 punktów orientacyjnych i położenia Auchan/błonia/Lidl sprawdzić w źródłach; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html`
-- Z8 · boty i billboardy na mapie; przycisk „Stara mapa” do zdjęcia po teście z klasą
-- Z14 · nastrój zespołu na twarzach, wydarzenia dla filii, popyt z mapy
-- Z10 · kolejne nawiązania literackie, zdarzenia z lektur w parkach
+- Z7 · mapa (reszta): współrzędne OSM dla 10 punktów orientacyjnych i Auchan/błoni/Lidla porównać z `xy`/`geo` (próg 80 m; wymaga sieci, Nominatim był zablokowany); „zakrystia akustyczna” w katedrze i który most Lutosławskiego (opis „most”) do potwierdzenia; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html` (decyzja szefa). Zrobione 25.11: geo lokali w `lokale.yaml`, odsyłacze usunięte, opisy sprawdzone (poprawione Trybunał 1579 i Czwartek), raport w `podroze/04-wyglad-i-dzwiek/watek-punkty-zrodla.md`
+- Z14 · wydarzenia dla filii, popyt z mapy (nastrój zespołu na twarzach zrobiony 25.11, wątek 04/nastroj: miny obsługi w kebabie z nastroju)
 - Z22 · niezależny przegląd całości (kod, dane, teksty, zrzuty)
+- Z53 · po przeglądzie Z22 (`podroze/04-wyglad-i-dzwiek/przeglad-z22.md`): położenia 3 billboardów w `reklama.yaml` do sprawdzenia w OSM + `zrodlo` (Rondo 100-lecia KUL ok. 3,7 km od centrum); billboardy niezależne od strefy kampanii (decyzja szefa); test nowej ścieżki debetu (Z52) + pomiar balansu; drobne: CSS `.lm-billboard`, mina „zmęczone osoby”, notatka `funkcje/` dla historii parkowych i billboardów
+- Z54 · przegląd pozostałych nowych historii (`parki.yaml`) pod kątem neutralności płciowej (2 formy męskie poprawione 25.11)
 - Z27 · wersja na telefon (układ razem z majstrem) i pilot w szkole do maja 2027
 - Z24 · nazwa w UPRP i znaki towarowe (zwłaszcza poza szkołami), publikacja za zgodą szefa
-- Z39 · moduły panelu w jednym pliku (paczka), jeśli preload z 03/wydajnosc nie wystarczy przez hostuj/Cloudflare; najpierw zmierzyć
+- Z39 · moduły panelu w jednym pliku (paczka), jeśli preload z 03/wydajnosc nie wystarczy przez hostuj/Cloudflare; najpierw zmierzyć. Pomiar 25.11 (statyczny): app.js ładuje 75 modułów (1164 KB), łańcuch importów ma 11 poziomów; czas przez hostuj/Cloudflare niezmierzony; paczka wymaga kroku budowania (nowe narzędzie): decyzja szefa
 
 ## Odłożone
 - Z19 · (czeka na powrót kolegi) serwer szkoły: szef z kolegą ustawia LUKRUM na serwerze szkoły (FTP) 23.11; osoba od `manage.py zamykaj_rundy`, dane uczniów (RODO) i notka w instrukcji

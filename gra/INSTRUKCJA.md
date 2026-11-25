@@ -445,6 +445,8 @@ ostatnie – już tak. Przed zmianą warto policzyć, czy oszczędność na doku
   wybiera się kanał, strefę i **liczbę emisji**. Cena emisji zależy od kanału i strefy, a od progów dochodzi rabat.
   Efekt się nasyca – pierwsze emisje dają najwięcej, a dalsze kosztują i prawie nic nie dodają. Kampanie się sumują, ale
   z sufitem, a firmy reklamujące się tak samo w jednej strefie zagłuszają się nawzajem.
+  Gdy w rundzie trwa kampania billboardowa, na mapie (po przybliżeniu) pojawiają się trzy billboardy „Fali Koziołka”
+  przy rondach: Dmowskiego, KUL i Thatcher. Kliknięcie billboardu pokazuje opis; wpis jest też w legendzie.
 - **Internet** (od tygodnia 7, „Lajk i Spółka”) – zamawia się tak samo, ale efekt rośnie przez kilka rund i gaśnie
   wolniej niż ulotki. Opłaca się zacząć wcześnie.
 
@@ -464,6 +466,8 @@ małej liczbie opinii, że stare opinie z czasem liczą się mniej, że przy kil
 klienci różnie znoszą czekanie. W Parku handlowym przy wyposażeniu widać, że kolejna sztuka daje mniej niż poprzednia.
 W HR, w profilu osoby, jest rozpiska jej nastroju (pensja, sprzęt, udogodnienia, szkolenia, przepracowanie) i próg, od
 którego zmęczenie zwiększa ryzyko pomyłek.
+W kebabie nastrój zespołu widać na twarzach: osoby przy ladzie i na kuchni są uśmiechnięte, gdy w zespole jest dobrze,
+zachmurzone, gdy jest źle, i zmęczone, gdy mają za dużo pracy. Opis słowami jest przy każdej postaci.
 
 W Parku handlowym działa sklep meblowy **„Meblościanka”**. Wystrój kupuje się w czterech grupach (ściany, szyld,
 dodatki, meble) i w jednym z kilku stylów. Styl działa tylko wtedy, gdy lubi go wystarczająco dużo gości z okolicy
@@ -704,6 +708,11 @@ polskiego). Dla prowadzących:
 | biuro Scrooge | „Opowieść wigilijna” | Charles Dickens |
 | biuro Asteroida 328 | „Mały Książę” | Antoine de Saint-Exupéry |
 | Kantor „U Harpagona” | „Skąpiec” | Molier |
+| Park: „Bal dobroczynny w altanie” (komitet pań pilnujący pozorów) | „Moralność pani Dulskiej” | Gabriela Zapolska |
+| Park: „Spór o murek” (kłótnia rymem o dwie cegły) | „Zemsta” | Aleksander Fredro |
+| Park: „Kulig z karczmą” (pan Onufry, gawędziarz) | Trylogia: „Ogniem i mieczem” | Henryk Sienkiewicz |
+| Park: „Pan z lornetką i wachlarzem” | „Lalka” | Bolesław Prus |
+| Park: „Doktor z walizką” | „Ludzie bezdomni” | Stefan Żeromski |
 
 Postacie są własnymi interpretacjami: mówią dzisiejszym językiem o cenach kebaba, a nie cytatami z książek.
 Mapa miasta korzysta z danych OpenStreetMap (© autorzy OpenStreetMap, licencja ODbL), a kroje pisma są na licencji

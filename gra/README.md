@@ -10,10 +10,13 @@ Gra powstaje jako pomoc do lekcji WOS i podstaw przedsiębiorczości.
 ## Co jest w grze
 
 - **Mapa Lublina** z danych OpenStreetMap, z płynnym przybliżaniem. Budynki to żetony, kliknięcie otwiera wnętrze.
+  Gdy trwa kampania billboardowa, przy trzech rondach pojawiają się billboardy z opisem po kliknięciu.
 - **Miejsca zamiast zakładek:** Mój kebab, Stare Miasto, Hurtownie (okienko oferty jednego sklepu i działu), Park handlowy, Miasteczko akademickie, Kamienica
   bankowa, Kamienica rachmistrzów, Biurowiec przy Zana (winda z piętrami, piętro = oferta jednej agencji, portiernia = spis pięter), Urzędy, redakcja „Kuriera rankingowego”.
 - **Tłok i opinie:** pełna załoga (obciążenie ponad 85%) wydłuża kolejkę we wnętrzu kebaba („Tłok: duży ▲”) i lekko obniża
   ocenę lokalu; wyposażenie ją podnosi. Skutki widać w księdze gości (`dokumentacja/funkcje/Tlok.md`).
+- **Miny zespołu:** osoby w kebabie mają minę zależną od nastroju zespołu (dobry, zwykły, zły, zmęczony); opis słowami
+  jest przy postaci (dla czytników ekranu).
 - **Zeszyt wujka:** kartki o stałej wysokości zamiast przewijania (Dalej/Wstecz, numer strony, ←/→, PageUp/PageDown, kółko); list (z ramką „Od tego tygodnia otwarte”, liczoną z harmonogramu gry) i lista kroków na każdy tydzień (treść w `dane/zeszyt.yaml`), strony „Gdzie co kupić” z liczbami
   z bieżących danych gry. Kroki odhacza gra: ze stanu firmy, decyzji i wizyt we wnętrzach (zapisuje serwer). Pierwszy
   niezrobiony krok ma znacznik „teraz”. Od tygodnia 2 zeszyt podaje **cel tygodnia** (`silnik/cele.py`, dane w

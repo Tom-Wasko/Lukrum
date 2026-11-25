@@ -26,3 +26,23 @@
 - **Archi:** archi-lukrum.
 
 ## Raport
+
+**Zrobione (commit 2e17f05, gałąź `worktree-podroz-04-nawiazania`):** pięć nowych historii w `gra/dane/zdarzenia/parki.yaml`
+(wszystkie komiczne, po 2–3 sceny, domyślna opcja bez czasu): `bal_pozorow` (Dulska, Ogród Saski), `spor_o_murek` (Zemsta, Błonia),
+`kulig_karczma` (Trylogia, Zalew), `wachlarz` (Lalka, Park Ludowy), `doktor_z_walizka` (Judym, Ogród Botaniczny).
+Lektury z domeny publicznej, bez cytatów, bez podpisów w interfejsie. Klucz: 5 wierszy w `gra/INSTRUKCJA.md`;
+notatka ze źródłami: `dokumentacja/wiedza/nawiazania.md` (sekcja „Historie w parkach”).
+Dodany test `test_kazda_historia_ma_domyslna_bez_czasu_i_dochodzi_do_konca` (`testy/swiat/test_zdarzenia.py`).
+
+**Dowody:**
+- `silnik.dane sprawdz` → „Dane w porządku”
+- `pytest testy/aplikacja/test_zrodla.py` → 5 passed
+- `pytest testy/swiat/test_zdarzenia.py` → 11 passed (z nowym testem)
+- pełne testy przed poprawką `zrodla.yaml` → 1 failed, 1027 passed (jedyny błąd: `test_zrodla`, już naprawiony; pełnego przebiegu nie powtarzałem)
+- `ruff check .` → All checks passed!
+
+**Uwagi dla Archiego:**
+- Poza briefem: dopisałem 5 pozycji w `gra/dane/zrodla.yaml` (strona /zrodla). Test `test_wszystkie_nawiazania_z_instrukcji_sa_w_danych` wymaga, by klucz w INSTRUKCJA.md i ten plik się zgadzały.
+- Adresy Wolnych Lektur wpisane bez sprawdzenia (praca bez sieci).
+- README bez zmian (gracz nie widzi podpisów).
+- Zostaje katalog `_robocze/nawiazania/` (poza gitem, usunięcie zablokowane): do skasowania ręcznie.
