@@ -1,7 +1,7 @@
 # Stan
 Archi żył: 2026-11-25 10:20
-Tryb: nadzorowany od 10:20
-Tempo: zwykły
+Tryb: autonomiczny od 10:47, budżet do 17:00, koniec najpóźniej 17:00
+Tempo: żółw
 
 ## Podróż
 **04-wyglad-i-dzwiek**: plan zatwierdzony 23.11 wieczorem (`podroze/04-wyglad-i-dzwiek/plan.md`), **start 24.11 rano**
