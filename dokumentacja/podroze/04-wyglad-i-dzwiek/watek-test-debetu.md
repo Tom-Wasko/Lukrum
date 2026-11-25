@@ -1,21 +1,23 @@
 # Wątek: test-debetu (podróż 04)
 
 ## Brief
-- **Najpierw przeczytaj:** `CLAUDE.md`, `gra/AGENTS.md`, `gra/testy/pieniadze/test_debet_i_przeglad.py` (test
-  `test_debet_w_rozegranej_grze_oplata_tylko_przy_minusie_na_koniec_tygodnia`) i kod debetu w `gra/silnik/` (grep „debet”).
-  Gałąź bazowa: `podroz-04`.
-- **Cel (Z52):** test pada w pełnym przebiegu `pytest` (zgłosili to wyko `nastroj` i `billboardy`, także na bazie sprzed
-  zmian), a osobno przechodzi. Znajdź przyczynę (zależność od kolejności testów, wspólny stan, losowość, ziarno, pamięć
-  podręczna modułu itp.) i napraw **u źródła** (w teście albo w kodzie, jeśli to realny błąd). Nie osłabiaj testu ani nie
-  usuwaj asercji; nie zmieniaj liczb gry ani danych.
-- **Jak badać:** pełny przebieg trwa ok. 7 min, więc zawężaj: uruchom plik, potem folder `testy/pieniadze`, potem pary
-  (`-p no:randomly`, `--lf`, `-x`), by zlokalizować test, który psuje stan. Wyniki długich poleceń do `_robocze/`
-  (`| tail -5`).
-- **Zasady:** zero wzmianek o innych grach; zmiana minimalna; jeśli przyczyną jest realny błąd silnika, opisz go w raporcie.
-- **Nie ruszaj:** mapy, panelu gracza, INSTRUKCJI i README.
-- **Testy:** dotknięte pliki; na koniec jeden pełny przebieg `pytest -q -p no:cacheprovider 2>&1 | tail -5` i `ruff check .`.
-- **Gotowe, gdy:** pełny przebieg bez tej porażki (wynik w raporcie), przyczyna opisana w 2–3 zdaniach.
-  (`test_kasyno::test_mistrz_gry_widzi_klub` bywa niestabilny: zgłoś, jeśli wróci, nie naprawiaj.)
-- **Archi:** archi-lukrum.
+Brief (Z52): znaleźć i naprawić u źródła porażkę testu
+`test_debet_w_rozegranej_grze_oplata_tylko_przy_minusie_na_koniec_tygodnia` w pełnym przebiegu `pytest`.
+Bez osłabiania testu i bez zmian liczb/danych. Pełna treść briefu: plik wątku w głównym checkoucie (nieskomitowany).
 
 ## Raport
+**Przyczyna (Z52):** realny błąd silnika, nie kolejność testów (w tym drzewie test padał też osobno, deterministycznie:
+runda 7, `agresywny`, debet 119,27). W `runda.py` opłata za tydzień na minusie liczyła się w `bk.koniec_rundy`, a minus
+mógł powstać dopiero po niej (podatki, biuro, drugie `wyrownaj_gotowke`), więc debet zostawał bez opłaty i odsetek.
+
+**Naprawa:** blok opłaty wydzielony do `banki.oplata_debetu`; `runda.py` wywołuje go ponownie po ostatnim wyrównaniu,
+gdy `f.debet > 0` i bank nie naliczył opłaty. Test i dane bez zmian.
+
+**Dowód:**
+- `pytest testy/pieniadze` → `57 passed in 16.19s`
+- pełny przebieg `pytest -q -p no:cacheprovider` → `1027 passed in 391.24s (0:06:31)`
+- `ruff check .` → `All checks passed!`
+
+**Uwagi:** worktree nie ma `.venv`, użyłem tego z głównego checkoutu. Plik wątku był tylko w głównym checkoucie
+(nieskomitowany), więc tu jest skrócona kopia z raportem. Zmiana wpływa na grę: firmy, które kończą tydzień na minusie
+przez podatki/biuro, płacą teraz opłatę i odsetki za debet (wcześniej uchodziły).
