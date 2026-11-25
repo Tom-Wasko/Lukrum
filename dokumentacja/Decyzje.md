@@ -1,6 +1,9 @@
 # Decyzje
 
 ## Szefa
+- 2026-11-25 (rano, okienko) · Wątek A wnętrz zaakceptowany, `podroz-04` do `main`. Radio na pulpicie ma być obrazkiem
+  w stylu pliku banknotów (nie ikonką): lampowe radio PRL, wysuwane jak banknoty. Wątki B i C wnętrz równolegle (drugi wyko).
+  Z39, Z8, Z14 dopiero, gdy któryś wyko skończy; tempo żółw, oszczędzamy tokeny.
 - 2026-11-24 (popołudnie, okienko) · Wnętrza (Z4): robimy wszystkie trzy wątki poprawek z przeglądu: A „nakładka” (P1, P3, P4, P11–P13), potem B „kebab i ciemna paleta” (P5, P10), potem C „charakter scen” (P2, P6–P9, P14, P15). `podroz-04` scalić do `main` i wypchnąć. Nagrania: szef pobiera sam z linków. `_robocze/wnetrza/` usunąć.
 - 2026-11-23 (wieczór, okienko) · Podróż 04 wygląd i dźwięk (Z49, Z11, Z50). Zawartość okien ma pasować do ramy
   danego okna: okna mają własne style (teczka, paragon, list, tablica…), bez jednego szablonu dla wszystkich, całość
