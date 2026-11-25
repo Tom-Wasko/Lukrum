@@ -33,11 +33,18 @@ const napisW = (x, y, t, rozm, szer, kolor, font, extra = "") => {
 export function hot(p, x, y, w, h) {
   const dane = (p.cel ? ` data-k="${esc(p.cel)}"` : "") + (p.miejsce ? ` data-m="${esc(p.miejsce)}"` : "") + (p.karta ? ` data-karta="${esc(p.karta)}"` : "")
     + (p.szukaj ? ` data-szukaj="${esc(p.szukaj)}"` : "") + (p.miejsce && p.odsyla ? ` data-odsyla="${esc(p.odsyla)}"` : "");
-  const stan = p.stan ? `<span class="stan ${p.klasaStanu || ""}">${esc(p.stan)}</span>` : "";
-  return `<button class="hot${y < 60 ? " podpis-dol" : ""}${p.zablokowane ? " zablokowane" : ""}" data-akcja="sw-hot"${dane} aria-label="${esc(p.etykieta)}${p.stan ? ` (${esc(p.stan)})` : ""}"
-    style="${pos(x, y, w, h)}"><span class="podpis" aria-hidden="true">${esc(p.etykieta)}</span>${stan}</button>`;
+  const stan = p.stan ? ` <i class="stan ${p.klasaStanu || ""}">(${esc(p.stan)})</i>` : "";
+  const gdzie = h >= 70 ? "wewn" : "srodek";
+  // szyld z nakładki (wn-pkt + wn-met); klasa hot zostaje dla podświetlenia z wujka i dla testów
+  return `<button class="wn-pkt hot${p.zablokowane ? " zamkniete zablokowane" : ""}" data-akcja="sw-hot"${dane} data-gdzie="${gdzie}" aria-label="${esc(p.etykieta)}${p.stan ? ` (${esc(p.stan)})` : ""}"
+    style="${pos(x, y, w, h)}"><span class="wn-met" aria-hidden="true">${p.zablokowane ? `<span class="wn-zn">×</span>` : ""}${esc(p.etykieta)}${stan}</span></button>`;
 }
 
+// pusta półka na rzeczy kupione w sklepie z dekoracjami: deska na wspornikach i tabliczka (bez ramki z kresek)
+const polkaPusta = (x, y, w) => `<g class="polka"><rect x="${x}" y="${y}" width="${w}" height="9" rx="2" fill="var(--g-drewno)" stroke="var(--tusz)" stroke-width="2"/>`
+  + `<path d="M${x + 14} ${y + 9} l0 14 l16 -14 M${x + w - 14} ${y + 9} l0 14 l-16 -14" fill="var(--g-drewno)" stroke="var(--tusz)" stroke-width="2" stroke-linejoin="round"/>`
+  + `<rect x="${x + w / 2 - 52}" y="${y - 30}" width="104" height="24" rx="3" fill="var(--g-karta)" stroke="var(--tusz)" stroke-width="2"/>`
+  + napis(x + w / 2, y - 13, "PÓŁKA PUSTA", 12, "var(--tusz)", "szyld", 'text-anchor="middle" letter-spacing="1.5"') + "</g>";
 const tloZwykle = () => u("dekor-sciana-podstawowy", 0, 0) + u("dekor-podloga-podstawowy", 0, 380);
 const ZNAK_DYMKU = `<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#g-ikony-dymek"/></svg>`;
 
@@ -67,7 +74,7 @@ export function scenaKebabu(d) {
   s += u(`dekor-szyld-${dk.szyld}`, 300, 60);
   s += napisW(430, 102, d.szyld, 25, 236, SZYLD_KOLOR[dk.szyld] || "var(--g-czern)", "gruby", `letter-spacing="1"${dk.szyld === "prl" ? ' class="neon"' : ""}`);
   s += u("wnetrze-portret-wujka", 310, 150);
-  if (dk.dodatki === "podstawowy") s += napis(481, 194, "MIEJSCE NA DODATKI", 13, "var(--tusz)", "szyld", 'text-anchor="middle" letter-spacing="1.5" opacity=".55"');
+  if (dk.dodatki === "podstawowy") s += polkaPusta(392, 190, 176);
   else s += u(`dekor-zdjecie-${dk.dodatki}`, 392, 152) + u(`dekor-plakat-${dk.dodatki}`, 505, 140) + u(`dekor-roslina-${dk.dodatki}`, 232, 294);
   // tablica z cenami (najwyżej 4 dania)
   const kreda = p === 3 ? "var(--g-czern)" : "var(--g-biel)";
