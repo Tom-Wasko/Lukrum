@@ -71,3 +71,6 @@ Platforma przyjmuje pliki (png/jpg/gif/pdf, ≤ 5 MB), z tytułem, datą (≤ 5 
 NBP 2019 odpada (starsze niż 5 lat). Gotowe pliki w Pobranych szefa:
 1. `dowod-1-mbank-pogadajmy-o-kasie-2024.pdf`: mBank, listopad 2024, s. 8: 63% rodziców uważa edukację finansową w szkołach za niewystarczającą; s. 9: test wiedzy na min. 80% zdał co trzeci nastolatek.
 2. `dowod-2-wib-edukacja-ekonomiczna-2025.pdf`: Fundacja WIB, maj 2025, s. 16: tylko 1/4 studentów I roku ocenia poziom nauczania przedmiotów ekonomicznych jako wysoki; 28% słaby wynik w teście wiedzy.
+3. `dowod-3-ibe-pisa-2022-umiejetnosci-finansowe.pdf`: IBE i MEN, 2024, s. 27: 15% polskich 15-latków poniżej 2. poziomu umiejętności finansowych; s. 7: najsłabsze wyniki w szkołach branżowych.
+4. `dowod-4-wib-gpw-poziom-wiedzy-finansowej-2025.pdf`: WIB i Fundacja GPW, marzec 2025, s. 6: 33% Polaków ocenia swoją wiedzę ekonomiczną jako małą, najniżej najmłodsi; s. 29: tylko 16% czerpie wiedzę ze szkoły lub uczelni.
+5. (propozycja) własna ankieta w szkole: pytania, wyniki z wykresami, wnioski (platforma to dopuszcza).
