@@ -17,7 +17,7 @@ Podróż 04-wyglad-i-dzwiek (start 24.11):
 ### Lekkie poprawki
 
 ### Ważne
-- Z20 · zgłoszenie do „Zwolnieni z Teorii” z datą lekcji (31.03.2027, niepotwierdzone); `METODA.md` (jawność AI) po pobraniu regulaminu (`wiedza/analizy/regulamin-zwzt-a-ai.md`)
+- Z20 · zgłoszenie do „Zwolnieni z Teorii” z datą lekcji (31.03.2027, niepotwierdzone); `METODA.md` (jawność AI) po pobraniu regulaminu (`wiedza/analizy/regulamin-zwzt-a-ai.md`) · **26.11: Inicjacja i Planowanie wysłane, w weryfikacji; poprawki od mentora do 16.12**
 
 ### Mniej ważne
 - Z7 · mapa (reszta): współrzędne OSM dla 10 punktów orientacyjnych i Auchan/błoni/Lidla porównać z `xy`/`geo` (próg 80 m; wymaga sieci, Nominatim był zablokowany); „zakrystia akustyczna” w katedrze i który most Lutosławskiego (opis „most”) do potwierdzenia; wybór ikony lokalu (6 wariantów, dziś 3) i usunięcie `/static/mapa/podglad_lokali.html` (decyzja szefa). Zrobione 25.11: geo lokali w `lokale.yaml`, odsyłacze usunięte, opisy sprawdzone (poprawione Trybunał 1579 i Czwartek), raport w `podroze/04-wyglad-i-dzwiek/watek-punkty-zrodla.md`
