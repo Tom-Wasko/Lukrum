@@ -73,4 +73,5 @@ NBP 2019 odpada (starsze niż 5 lat). Gotowe pliki w Pobranych szefa:
 2. `dowod-2-wib-edukacja-ekonomiczna-2025.pdf`: Fundacja WIB, maj 2025, s. 16: tylko 1/4 studentów I roku ocenia poziom nauczania przedmiotów ekonomicznych jako wysoki; 28% słaby wynik w teście wiedzy.
 3. `dowod-3-ibe-pisa-2022-umiejetnosci-finansowe.pdf`: IBE i MEN, 2024, s. 27: 15% polskich 15-latków poniżej 2. poziomu umiejętności finansowych; s. 7: najsłabsze wyniki w szkołach branżowych.
 4. `dowod-4-wib-gpw-poziom-wiedzy-finansowej-2025.pdf`: WIB i Fundacja GPW, marzec 2025, s. 6: 33% Polaków ocenia swoją wiedzę ekonomiczną jako małą, najniżej najmłodsi; s. 29: tylko 16% czerpie wiedzę ze szkoły lub uczelni.
-5. (propozycja) własna ankieta w szkole: pytania, wyniki z wykresami, wnioski (platforma to dopuszcza).
+5. `dowod-5-trampki-finanse-oczami-nastolatkow-2025.pdf`: Fundacja Trampki na Giełdzie (MEN), grudzień 2025, s. 27: ok. 80% młodych wie, że warto oszczędzać, a znacznie mniej to potrafi (luka między wiedzą a działaniem); s. 51: po 4 tygodniach praktyki odsetek „potrafię oszczędzać” wzrósł z 47% do 62%.
+6. Zapas: PAP MediaRoom 15.12.2025 (Santander „Kapitał nauki”), szef drukuje do PDF sam; albo własna ankieta w szkole.
