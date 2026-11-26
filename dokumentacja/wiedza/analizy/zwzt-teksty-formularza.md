@@ -20,20 +20,20 @@ Tworzymy LUKRUM: grę, w której klasa uczy się ekonomii przez działanie. Dru�
 ## Temat / format
 Edukacja · Projekt technologiczny
 
-## Beneficjenci (liczba: [250])
-1. Uczniowie szkół ponadpodstawowych z Lublina ([200] osób z [3] szkół). Potrzebują nauki ekonomii przez praktykę: chcą sprawdzić, co się stanie po podniesieniu ceny, wzięciu kredytu albo zatrudnieniu pracownika, bez ryzyka prawdziwych pieniędzy.
-2. Nauczyciele WOS oraz biznesu i zarządzania ([10] osób). Potrzebują darmowego, gotowego narzędzia i scenariuszy lekcji, które angażują całą klasę i pasują do podstawy programowej.
-3. Rodzice i społeczność szkolna ([40] osób na pokazie). Chcą wiedzieć, czego uczą się dzieci, i zobaczyć efekty.
+## Beneficjenci (liczba: [150])
+1. Uczniowie naszej szkoły ([120] osób z kilku klas). Potrzebują nauki ekonomii przez praktykę: chcą sprawdzić, co się stanie po podniesieniu ceny, wzięciu kredytu albo zatrudnieniu pracownika, bez ryzyka prawdziwych pieniędzy.
+2. Nauczyciele WOS oraz biznesu i zarządzania w naszej szkole ([3] osoby). Potrzebują darmowego, gotowego narzędzia i scenariuszy lekcji, które angażują całą klasę i pasują do podstawy programowej.
+3. Rodzice i społeczność szkolna ([30] osób na pokazie). Chcą wiedzieć, czego uczą się dzieci, i zobaczyć efekty.
 
 ## Cel SMART
-Do 15 marca 2027 r. co najmniej [200] uczniów z [3] szkół w Lublinie rozegra na lekcjach co najmniej 4 rundy gry LUKRUM, a średni wynik krótkiego testu wiedzy ekonomicznej po grze będzie o co najmniej 20% wyższy niż przed grą.
+Do 15 marca 2027 r. co najmniej [120] uczniów naszej szkoły rozegra na lekcjach co najmniej 4 rundy gry LUKRUM, a średni wynik krótkiego testu wiedzy ekonomicznej po grze będzie o co najmniej 20% wyższy niż przed grą.
 
 ## WBS i zadania
 1. Przygotowanie gry do lekcji (XII 2026): poprawki po testach, instrukcja dla ucznia i nauczyciela, test wiedzy (10 pytań) przed i po grze. Odp.: [imię].
 2. Lekcja pilotażowa (XII 2026): jedna klasa w [nasza szkoła] z opiekunem; zebranie opinii i poprawki. Odp.: [imię].
-3. Pozyskanie szkół i nauczycieli (I 2027): kontakt z [3] szkołami, spotkanie z nauczycielami, harmonogram lekcji. Odp.: [imię].
+3. Lekcje w kolejnych klasach (I 2027): spotkanie z nauczycielami naszej szkoły, wybór klas i harmonogram lekcji. Odp.: [imię].
 4. Partnerzy i patronaty (XII 2026 – I 2027): pisma do Urzędu Miasta Lublin, uczelni i lokalnych mediów. Odp.: [imię].
-5. Lekcje z grą (II – III 2027): cykl 5 lekcji w każdej klasie, pomoc nauczycielom, zbieranie wyników testów i liczby kont. Odp.: [cały zespół].
+5. Lekcje z grą (II – III 2027): cykl 5 lekcji w wybranych klasach, pomoc nauczycielom, zbieranie wyników testów i liczby kont. Odp.: [cały zespół].
 6. Komunikacja (XII 2026 – III 2027): profil projektu, relacje z lekcji, informacje do mediów. Odp.: [imię].
 7. Pokaz i podsumowanie (III 2027): pokaz gry dla szkoły i rodziców, film podsumowujący (do 3 min), formularz zakończenia. Odp.: [imię].
 
@@ -42,11 +42,11 @@ Do 15 marca 2027 r. co najmniej [200] uczniów z [3] szkół w Lublinie rozegra 
 - Strona gry: opis, instrukcja, scenariusze lekcji, źródła.
 - Strona i profil szkoły: zapowiedzi i relacje z lekcji.
 - Lokalne media (prasa, radio i portale w Lublinie): informacja o projekcie i pokazie.
-- Bezpośrednio: e-maile i spotkania z nauczycielami i dyrekcjami.
+- Bezpośrednio: spotkania z nauczycielami i dyrekcją naszej szkoły.
 Każdy materiał ma dopisek: „Projekt realizowany w ramach Olimpiady Zwolnieni z Teorii”.
 
-## Długi opis (limit 1000 znaków; wersja skrócona 868 znaków, z AI 951)
-LUKRUM (łac. lucrum – zysk) to symulacja biznesowa w przeglądarce, stworzona przez nasz zespół od zera jako pomoc do lekcji WOS oraz biznesu i zarządzania. Drużyny uczniów prowadzą lokale gastronomiczne na mapie Lublina: w hurtowni kupują towar, w banku biorą kredyt, w agencji pracy zatrudniają ludzi, w urzędzie płacą podatki. Runda to tydzień działania firmy; gra liczy klientów, sprzedaż, koszty i opinie, a wyniki pokazuje gazeta w grze. Uczniowie uczą się kosztów i cen, kredytu, podatków i ZUS, umów o pracę i skutków decyzji w czasie. Przy mechanikach są notki o prawdziwych przepisach, ze źródłami. Nauczyciel prowadzi grę w panelu mistrza gry i ma cykl pięciu lekcji po 45 minut. Przeprowadzimy lekcje w [3] lubelskich szkołach dla co najmniej [200] uczniów i zmierzymy efekt testem wiedzy przed i po grze. Po projekcie gra zostaje darmowa dla każdej szkoły.
+## Długi opis (limit 1000 znaków; wersja skrócona 838 znaków, z AI 920)
+LUKRUM (łac. lucrum – zysk) to symulacja biznesowa w przeglądarce, stworzona przez nasz zespół od zera jako pomoc do lekcji WOS oraz biznesu i zarządzania. Drużyny uczniów prowadzą lokale gastronomiczne na mapie Lublina: w hurtowni kupują towar, w banku biorą kredyt, w agencji pracy zatrudniają ludzi, w urzędzie płacą podatki. Runda to tydzień działania firmy; gra liczy klientów, sprzedaż, koszty i opinie, a wyniki pokazuje gazeta w grze. Uczniowie uczą się kosztów i cen, kredytu, podatków i ZUS, umów o pracę i skutków decyzji w czasie. Przy mechanikach są notki o prawdziwych przepisach, ze źródłami. Nauczyciel prowadzi grę w panelu mistrza gry i ma cykl pięciu lekcji po 45 minut. Przeprowadzimy lekcje z grą w naszej szkole i zmierzymy efekt testem wiedzy przed i po grze. Gra jest darmowa i może z niej skorzystać każda szkoła.
 (Opcjonalnie na końcu:) Kod pisaliśmy z pomocą narzędzi AI; pomysł, mechanika, treści i decyzje są nasze.
 
 ### Wersja pełna (za długa do formularza)
@@ -64,4 +64,4 @@ W ramach projektu przeprowadzimy lekcje z grą w [3] lubelskich szkołach dla co
 
 ## Budżet i partnerzy
 Budżet: projekt jest tani, bo gra działa na darmowych narzędziach i szkolnym serwerze. Planowane koszty: domena i hosting ok. [100] zł, druk instrukcji, plakatów i kart drużyn ok. [200] zł, materiały na pokaz ok. [100] zł; razem ok. [400] zł. Źródła: wkład własny zespołu, wsparcie rady rodziców lub samorządu uczniowskiego, kiermasz szkolny, lokalni przedsiębiorcy (sponsoring druku).
-Partnerzy (planowani): [nasza szkoła] (sala, sprzęt, opiekun), [2] inne lubelskie szkoły (lekcje z grą), Urząd Miasta Lublin (patronat), wydział ekonomiczny lubelskiej uczelni (konsultacja merytoryczna, patronat), lokalne media (patronat medialny).
+Partnerzy (planowani): [nasza szkoła] (sala, sprzęt, opiekun), Urząd Miasta Lublin (patronat), wydział ekonomiczny lubelskiej uczelni (konsultacja merytoryczna, patronat), lokalne media (patronat medialny).
