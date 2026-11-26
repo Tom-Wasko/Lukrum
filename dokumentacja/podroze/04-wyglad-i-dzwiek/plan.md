@@ -64,3 +64,13 @@ kolorem, zero wzmianek o innych grach, mechanika bez zmian (tylko wygląd), teks
 - `pytest` (pełne raz na wątek), `ruff`, `node --check` zmienionych modułów, `silnik.dane sprawdz`.
 - Dźwięk: test, że `dzwieki.yaml` ma źródło i licencję każdego pliku i że każde miejsce z `budynki.yaml` ma odgłos lub
   „cisza”; ręcznie w Chrome: wejście do kebaba → gwar, radio włączone → gwar cichnie, ⚙ wycisz → cisza.
+
+## Podsumowanie (zamknięta 26.11.2026)
+- **Zrobione:** Z49 (okna w stylu ramy), Z11 (dźwięki i gwar miejsca), Z50 (radio PRL), Z6 (kontrast, telefon), Z47 (kreator /mg/),
+  Z13 (wujek przy ladzie), Z23 (prawo: notki ze źródłami; zostaje rozmowa z prawnikiem), Z4 (wnętrza A, B, C), Z51 (piekarnia),
+  Z10 (nawiązania literackie w parkach), Z3 (seria budynków), Z8 (billboardy, lokale botów), Z52 (błąd debetu w silniku),
+  Z22 (niezależny przegląd: `przeglad-z22.md`), części Z14 (nastrój na twarzach) i Z7 (opisy punktów mapy).
+- **Odłożone / zostaje:** Z53 (billboardy w OSM, niezależne od strefy), Z54 (neutralność w `parki.yaml`), Z7 reszta (OSM, ikona lokalu),
+  Z14 reszta (filie, popyt z mapy), Z39 (paczka: odłożona przez szefa), stempel bez nagrania.
+- **Wynik:** `main` 0b36d41, pełne testy 1031 passed, `ruff` czysty; wypchnięte 25.11.
+- **Koszt** (`zuzycie.py --projekt . --od 2026-11-23`): wejście 10,9 mln, wyjście 1,9 mln tokenów (bez cache), cache odczyt 420 mln.

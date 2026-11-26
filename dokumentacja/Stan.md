@@ -1,45 +1,16 @@
 # Stan
-Archi żył: 2026-11-25 13:07
-Tryb: nadzorowany od 13:07
-Tempo: żółw
+Archi żył: 2026-11-26 17:17
+Tryb: komp od 17:17
 
 ## Podróż
-**04-wyglad-i-dzwiek**: plan zatwierdzony 23.11 wieczorem (`podroze/04-wyglad-i-dzwiek/plan.md`), **start 24.11 rano**
-po słowie szefa. Briefy gotowe: `watek-wzor.md` (Z49), `watek-dzwieki.md` (Z11). Ostatnia zamknięta: 03-okienka-i-rundy.
-
-24.11 06:40: maciex bez zmian; wyko 04/wzor (2a866f76) i 04/dzwieki (c8c0b414) pracują od 06:45; nagrania z Commons zaakceptowane (lista w Decyzje), Archi pobiera do worktree dzwieki.
-
-| Wątek | Zadania | Stan |
-|---|---|---|
-| 04/wzor | Z49 | scalony ae06cae (wzór przyjęty) |
-| 04/dzwieki | Z11 | scalony do `podroz-04` (4 nagrania gotowe, 6 czeka na Commons; 976 passed) |
-| 04/okna | Z49 | scalony do `podroz-04` 43f80fc (55 okien zgodne, 965 passed); galeria dla szefa |
-| 04/radio | Z50 | scalony do `podroz-04` 6b01743 (979 passed) |
-| 04/kontrast | Z6 | scalony do `podroz-04` 1f9d5f9 (979 passed) |
-| 04/kreator | Z47 | scalony do `podroz-04` 60d8ea9 (995 passed) |
-| 04/wujek | Z13 | scalony do `podroz-04` (1007 passed) |
-| 04/prawo | Z23 (reszta) | scalony do `podroz-04` (995 passed; notki ze źródłami) |
-| 04/wnetrza | Z4 (przegląd) | scalony do `podroz-04` (52 sceny, 15 poprawek) |
-| 04/nakladka | Z4 A | scalony do `main` 25.11 (f5a41a8, 448 passed) |
-| 04/kebab | Z4 B | scalony do main (f46a05a) |
-| 04/nastroj | Z14 (nastrój) | scalony do `podroz-04` 25.11 (miny na twarzach) |
-| 04/szyldy | usterki kebabu | scalony do `podroz-04` 3cf6565 (160 passed; „bloki w parku Rury” to nie usterka parku, pytanie do szefa) |
-| 04/billboardy | Z8 | scalony do `podroz-04` ac29b18 (429 passed; w pełnym przebiegu pada `test_debet…` → Z52) |
-| 04/charakter | Z4 C | scalony do main (f46a05a); P14 → Z51 |
+Brak podróży w toku. Ostatnia zamknięta: 04-wyglad-i-dzwiek (26.11, podsumowanie w `podroze/04-wyglad-i-dzwiek/plan.md`).
 
 ## Czeka na szefa
 - Radio jako lampowy odbiornik PRL obok banknotów (25.11, Archi); do obejrzenia w grze.
-- `podroz-04` scalona do `main` i wypchnięta 24.11 16:55 (1007 passed).
+- Z7: wybór ikony lokalu (6 wariantów w `/static/mapa/podglad_lokali.html`), potem usunięcie podglądu (szef: później).
+- Gałąź `wnetrza-cenniki` (`_robocze/wnetrza-cenniki`, 1 commit poza `main`) i zdalne `origin/podroz-03`, `origin/podroz-04` (scalone): usunąć?
 - Notki prawne w INSTRUKCJI (04/prawo, rozdz. „Prawo za mechanikami”) sprawdzone w serwisach prawnych i gov.pl, nie w Dz.U.; pokazać prawnikowi przed pokazem.
 - Serwer gry na porcie 8784 (pid 25996, po wątku 04/kontrast) nadal działa: wyko nie mógł go zatrzymać (blokada), zatrzymaj ręcznie.
 
 ## Od Pomocnika
 
-## Podsumowanie trybu autonomicznego (25.11, 10:47–12:35)
-Zrobione i scalone do `podroz-04` (pełne testy 1031 passed, `ruff` czysty): Z10, Z3, Z14 (nastrój), szyldy, Z8 (billboardy),
-Z7 (opisy punktów mapy), Z52 (realny błąd debetu w silniku), Z22 (przegląd: `podroze/04-wyglad-i-dzwiek/przeglad-z22.md`;
-poprawiono neutralność płciową w `parki.yaml` i znacznik naliczenia debetu).
-Czeka na szefa: wybór ikony lokalu (6 wariantów) i usunięcie `podglad_lokali.html` (Z7); paczka Z39; Z53 (billboardy:
-położenia w OSM, strefy kampanii); „bloki osiedla” w parku Rury; szyld „Tablica wyników” w palecie wysokiej ciemnej;
-Z19, Z20, Z24, Z27. `podroz-04` nie jest w `main` (bez push, czeka na powrót szefa).
-Do sprzątnięcia ręcznie: `_robocze/` (nawiazania, nakladka, charakter, baza, billboardy, zrzuty-billboardy), `gra/_robocze`, serwer 8784.
