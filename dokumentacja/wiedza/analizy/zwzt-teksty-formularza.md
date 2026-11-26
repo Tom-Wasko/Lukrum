@@ -65,3 +65,9 @@ W ramach projektu przeprowadzimy lekcje z grą w [3] lubelskich szkołach dla co
 ## Budżet i partnerzy
 Budżet: projekt jest tani, bo gra działa na darmowych narzędziach i szkolnym serwerze. Planowane koszty: domena i hosting ok. [100] zł, druk instrukcji, plakatów i kart drużyn ok. [200] zł, materiały na pokaz ok. [100] zł; razem ok. [400] zł. Źródła: wkład własny zespołu, wsparcie rady rodziców lub samorządu uczniowskiego, kiermasz szkolny, lokalni przedsiębiorcy (sponsoring druku).
 Partnerzy (planowani): [nasza szkoła] (sala, sprzęt, opiekun), Urząd Miasta Lublin (patronat), wydział ekonomiczny lubelskiej uczelni (konsultacja merytoryczna, patronat), lokalne media (patronat medialny).
+
+## Dowody problemu (pliki, stan 26.11)
+Platforma przyjmuje pliki (png/jpg/gif/pdf, ≤ 5 MB), z tytułem, datą (≤ 5 lat) i widocznym linkiem; punktuje liczbę źródeł.
+NBP 2019 odpada (starsze niż 5 lat). Gotowe pliki w Pobranych szefa:
+1. `dowod-1-mbank-pogadajmy-o-kasie-2024.pdf`: mBank, listopad 2024, s. 8: 63% rodziców uważa edukację finansową w szkołach za niewystarczającą; s. 9: test wiedzy na min. 80% zdał co trzeci nastolatek.
+2. `dowod-2-wib-edukacja-ekonomiczna-2025.pdf`: Fundacja WIB, maj 2025, s. 16: tylko 1/4 studentów I roku ocenia poziom nauczania przedmiotów ekonomicznych jako wysoki; 28% słaby wynik w teście wiedzy.
