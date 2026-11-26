@@ -45,7 +45,11 @@ Do 15 marca 2027 r. co najmniej [200] uczniów z [3] szkół w Lublinie rozegra 
 - Bezpośrednio: e-maile i spotkania z nauczycielami i dyrekcjami.
 Każdy materiał ma dopisek: „Projekt realizowany w ramach Olimpiady Zwolnieni z Teorii”.
 
-## Długi opis
+## Długi opis (limit 1000 znaków; wersja skrócona 868 znaków, z AI 951)
+LUKRUM (łac. lucrum – zysk) to symulacja biznesowa w przeglądarce, stworzona przez nasz zespół od zera jako pomoc do lekcji WOS oraz biznesu i zarządzania. Drużyny uczniów prowadzą lokale gastronomiczne na mapie Lublina: w hurtowni kupują towar, w banku biorą kredyt, w agencji pracy zatrudniają ludzi, w urzędzie płacą podatki. Runda to tydzień działania firmy; gra liczy klientów, sprzedaż, koszty i opinie, a wyniki pokazuje gazeta w grze. Uczniowie uczą się kosztów i cen, kredytu, podatków i ZUS, umów o pracę i skutków decyzji w czasie. Przy mechanikach są notki o prawdziwych przepisach, ze źródłami. Nauczyciel prowadzi grę w panelu mistrza gry i ma cykl pięciu lekcji po 45 minut. Przeprowadzimy lekcje w [3] lubelskich szkołach dla co najmniej [200] uczniów i zmierzymy efekt testem wiedzy przed i po grze. Po projekcie gra zostaje darmowa dla każdej szkoły.
+(Opcjonalnie na końcu:) Kod pisaliśmy z pomocą narzędzi AI; pomysł, mechanika, treści i decyzje są nasze.
+
+### Wersja pełna (za długa do formularza)
 LUKRUM to symulacja biznesowa w przeglądarce, stworzona przez nasz zespół od zera jako pomoc do lekcji WOS oraz biznesu i zarządzania. Nazwa pochodzi od łacińskiego „lucrum”, czyli zysk.
 
 Klasa dzieli się na drużyny, a każda prowadzi własny lokal gastronomiczny na mapie Lublina, zbudowanej z danych OpenStreetMap. Gracze chodzą po mieście i wchodzą do budynków: w hurtowni kupują towar, w banku biorą kredyt albo zakładają lokatę, w agencji pracy zatrudniają ludzi, w urzędzie załatwiają sprawy. Jedna runda to tydzień działania firmy. Po zamknięciu rundy przez nauczyciela gra przelicza tydzień dzień po dniu: klientów, sprzedaż, koszty, podatki i opinie gości. Wynik widać w gazecie w grze i w rankingu.
