@@ -308,3 +308,8 @@ Wygląd tych elementów: [Wygląd](Wyglad.md). Kolejność prac: [Zadania](Zadan
 - Z53: położenia 3 billboardów sprawdzić w OSM; billboardy niezależne od strefy kampanii.
 - Z7 (ikona lokalu): później. Z39 (paczka ładowania): odłożone.
 - `podroz-04` scalić do `main` i wypchnąć.
+
+## Decyzje szefa 26.11
+- Podróż 04 zamknięta. Na razie bez nowej podróży (szef wypełnia zgłoszenie do ZzT).
+- Zdalne gałęzie `podroz-03` i `podroz-04` usunięte z GitHuba.
+- Gałąź `wnetrza-cenniki`: pomysł jako Z55, gałąź zostaje do jego zrobienia (Archi).
